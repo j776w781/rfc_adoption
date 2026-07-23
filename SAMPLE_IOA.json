@@ -1,0 +1,7 @@
+{
+    "rfc": 8078,
+    "protocol": "DNSSEC",
+    "Subtypes": ["CDS", "CDNSKEY"],
+    "Fields": ["Algorithm"],
+    "Values": [0]
+}
