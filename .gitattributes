@@ -1,0 +1,20 @@
+# Shell scripts must keep LF endings. These are authored on Windows but run on
+# a Linux server, and a CRLF shebang fails with "bad interpreter: ...^M".
+*.sh text eol=lf
+scripts/* text eol=lf
+
+# Makefiles are tab- and newline-sensitive.
+Makefile text eol=lf
+*.mk text eol=lf
+
+# Keep pipeline inputs and artefacts byte-stable across platforms, so the
+# determinism guarantees hold when a run is compared between machines.
+*.json text eol=lf
+*.md   text eol=lf
+*.py   text eol=lf
+*.toml text eol=lf
+*.cfg  text eol=lf
+*.txt  text eol=lf
+
+# Parquet fixtures are binary; never touch them.
+*.parquet binary

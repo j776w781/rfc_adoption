@@ -101,6 +101,62 @@ def build_parser() -> argparse.ArgumentParser:
     )
     analyze.set_defaults(func=cmd_analyze)
 
+    scale = sub.add_parser(
+        "scale",
+        help=(
+            "Run a real, resumable analysis over the OpenINTEL S3 corpus across "
+            "many TLDs and dates."
+        ),
+        description=(
+            "Streams (or downloads) OpenINTEL partitions, pushes the checklist "
+            "match into DuckDB, and aggregates per RFC. Every partition is "
+            "checkpointed, so an interrupted run resumes instead of restarting. "
+            "Always try --dry-run first."
+        ),
+    )
+    _add_common_inputs(scale)
+    scale.add_argument(
+        "--sources",
+        required=True,
+        help="Comma-separated OpenINTEL sources, e.g. 'nu,se,nl'.",
+    )
+    scale.add_argument("--start", required=True, help="First measurement day, YYYY-MM-DD.")
+    scale.add_argument("--end", required=True, help="Last measurement day, YYYY-MM-DD.")
+    scale.add_argument(
+        "--basis", choices=("zonefile", "toplist"), default="zonefile",
+        help="OpenINTEL measurement basis (default: zonefile).",
+    )
+    scale.add_argument(
+        "--mode", choices=("stream", "download"), default="stream",
+        help="stream: query object.openintel.nl directly. download: fetch first.",
+    )
+    scale.add_argument("--cache-dir", type=Path, default=None, help="Cache for --mode download.")
+    scale.add_argument(
+        "--checkpoint-dir", type=Path, default=None,
+        help="Per-partition checkpoints (default: <out>/checkpoints).",
+    )
+    scale.add_argument("--threads", type=int, default=None, help="DuckDB threads.")
+    scale.add_argument(
+        "--memory-limit", default=None, help="DuckDB memory limit, e.g. '64GB'."
+    )
+    scale.add_argument(
+        "--max-partitions", type=int, default=None,
+        help="Stop after this many partitions (bounded trial run).",
+    )
+    scale.add_argument(
+        "--exemplars", type=int, default=5,
+        help="Exemplar observations kept per RFC and decision, for reasoning traces.",
+    )
+    scale.add_argument(
+        "--no-resume", action="store_true",
+        help="Recompute every partition, ignoring existing checkpoints.",
+    )
+    scale.add_argument(
+        "--dry-run", action="store_true",
+        help="Discover partitions and probe the schema, then stop without scanning.",
+    )
+    scale.set_defaults(func=cmd_scale)
+
     return parser
 
 
@@ -285,6 +341,124 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     _print_analysis_summary(result, verifications)
     _print_warnings(warnings)
     return 0
+
+
+def cmd_scale(args: argparse.Namespace) -> int:
+    """Real-corpus run: many partitions, SQL-pushdown matching, checkpointed."""
+    from .checklist_loader import (
+        load_checklist_db,
+        load_dictionary,
+        validate_checklist_db,
+        validate_dictionary,
+    )
+    from .exporters import export_analysis
+    from .openintel_source import AccessConfig, discover_partitions, probe_schema
+    from .report import render_report
+    from .scale_runner import ScaleRunConfig, run_scale_analysis
+    from .schema_checker import check_schema
+
+    warnings: list[str] = []
+    sources = [s.strip() for s in str(args.sources).split(",") if s.strip()]
+    if not sources:
+        raise PipelineError("--sources must name at least one OpenINTEL source.")
+
+    db = load_checklist_db(args.checklists)
+    dictionary = load_dictionary(args.dictionary)
+    for message in validate_checklist_db(db) + validate_dictionary(dictionary):
+        warn(warnings, message, LOGGER)
+
+    schema_report = check_schema(
+        db,
+        dictionary,
+        checklist_path=str(args.checklists),
+        dictionary_path=str(args.dictionary),
+        warnings=warnings,
+    )
+
+    if args.mode == "download" and args.cache_dir is None:
+        raise PipelineError("--mode download requires --cache-dir.")
+
+    access = AccessConfig(
+        mode=args.mode,
+        cache_dir=Path(args.cache_dir) if args.cache_dir else None,
+        threads=args.threads,
+        memory_limit=args.memory_limit,
+    )
+
+    out_dir = ensure_dir(args.out)
+    checkpoint_dir = Path(args.checkpoint_dir) if args.checkpoint_dir else out_dir / "checkpoints"
+
+    if args.dry_run:
+        # Everything that can be learned without scanning a single row: how much
+        # work the range actually is, and whether the real schema can answer the
+        # checklist at all. Both are cheap; discovering either three hours in is
+        # not.
+        partitions = discover_partitions(
+            access, sources, args.start, args.end, basis=args.basis
+        )
+        print(f"\n{len(partitions)} partition(s) match {args.start}..{args.end} for {', '.join(sources)}")
+        for partition in partitions[:15]:
+            print(f"  {partition.partition_id:<44} {len(partition.keys)} object(s)")
+        if len(partitions) > 15:
+            print(f"  ... and {len(partitions) - 15} more")
+        if partitions:
+            schema = probe_schema(partitions[0], access)
+            columns = [c["name"] for c in schema.get("columns", [])]
+            print(f"\nReal schema of {partitions[0].partition_id}: {len(columns)} columns")
+            _report_field_resolution(dictionary, schema_report, columns)
+        _print_warnings(warnings)
+        print("\nDry run only; nothing was scanned. Drop --dry-run to start.")
+        return 0
+
+    run_config = ScaleRunConfig(
+        sources=sources,
+        start=args.start,
+        end=args.end,
+        basis=args.basis,
+        out=out_dir,
+        checkpoint_dir=ensure_dir(checkpoint_dir),
+        access=access,
+        exemplars_per_group=args.exemplars,
+        max_partitions=args.max_partitions,
+        resume=not args.no_resume,
+    )
+
+    result = run_scale_analysis(
+        run_config, db, dictionary, schema_report, warnings=warnings
+    )
+    report_md = render_report(result, survey_markdown=_read_survey())
+    written = export_analysis(result, out_dir, report_md=report_md)
+
+    _print_written(written)
+    _print_analysis_summary(result, {})
+    _print_warnings(result.warnings or warnings)
+    return 0
+
+
+def _report_field_resolution(dictionary, schema_report, columns: Sequence[str]) -> None:
+    """Say which normalized fields the real corpus can actually supply."""
+    from .parquet_reader import resolve_column_candidates
+    from .schema_checker import queryable_field_names
+
+    needed = sorted(set(queryable_field_names(schema_report)) | set(config.ALWAYS_SELECT_FIELDS))
+    candidates = resolve_column_candidates(dictionary, needed, columns)
+    print("\nNormalized field resolution against the real schema:")
+    unresolved: list[str] = []
+    for field in sorted(candidates):
+        cols = candidates[field]
+        if cols:
+            print(f"  {field:<16} <- {', '.join(cols)}")
+        else:
+            unresolved.append(field)
+            print(f"  {field:<16} <- (nothing; will be all-null)")
+    if unresolved:
+        print(
+            "\nWarning: "
+            + ", ".join(unresolved)
+            + " cannot be supplied by this corpus. Indicators depending on them "
+            "will never match. Fix the dictionary's openintel_native_fields "
+            "before spending compute on this range."
+        )
 
 
 # --------------------------------------------------------------------------- #
