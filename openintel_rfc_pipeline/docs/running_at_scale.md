@@ -136,6 +136,69 @@ happens rather than letting the RFC disappear silently.
 
 ---
 
+## 4a. Throttling — use download mode for long runs
+
+OpenINTEL is a shared academic object store and returns **HTTP 503** under load.
+Your own `openIntelPlugin.py` already carries the clue in a comment: *"a small
+chunksize may trigger the request rate limiter"*. It limits on **request count**,
+not bytes — which decides the whole strategy.
+
+Stream mode is the worst case for that. DuckDB issues many small parallel HTTP
+range requests per Parquet row group, so a wide scan generates thousands of
+requests per object. Download mode issues one sequential GET per object in 64 MB
+chunks: a few hundred times fewer requests for the same bytes.
+
+Measured on this corpus (`.nu`, 2018-05-01, 2.6M rows after the prefilter):
+
+| Strategy | Per partition | Requests |
+| --- | --- | --- |
+| Stream | **71 s** | thousands of small ranges |
+| Download, cold | 13.9 s fetch + 21.4 s scan = **35 s** | one sequential GET |
+| Download, cached re-scan | **21.4 s** | none |
+
+Download mode is **2× faster cold, 3.3× faster on a re-scan, and far gentler**.
+For a multi-TLD multi-year run it is the right default, not the fallback:
+
+```bash
+./scripts/fetch_openintel.sh --sources nu,se --start 2015-01-01 --end 2021-12-31 --list
+./scripts/run_full_analysis.sh --mode download --cache-dir /big/volume \
+    --sources nu,se --start 2015-01-01 --end 2021-12-31 --pace-seconds 2
+```
+
+Thread count is **not** the lever people expect. Measured across a stream scan:
+
+| threads | 20 | 8 | 4 | 2 |
+| --- | --- | --- | --- | --- |
+| seconds | 5.6 | 5.8 | 5.9 | 5.9 |
+
+A 1.07× spread — the scan is network-bound, so `--threads 4` cuts request
+concurrency roughly fivefold at almost no cost in time. Worth doing if you must
+stream.
+
+### What the pipeline now does about it
+
+- **HTTP retries**: DuckDB's default budget is ~2 seconds. Raised to ~8.5 minutes
+  (`http_retries=10`, `wait=500ms`, `backoff=2`, `timeout=120s`).
+- **Partition-level retry**: when throttling exhausts even that and the query
+  fails, the partition is retried with a doubling wait
+  (`--partition-retries`, `--retry-wait`, default 5 attempts over ~7.5 minutes).
+  Transient failures (503/500/502/504, timeout, connection reset, "too many
+  requests") retry; a genuine error such as a binder failure raises immediately
+  rather than wasting the budget.
+- **`--pace-seconds`**: an optional gap between partitions. Correctness never
+  needs it; a multi-day unattended walk over infrastructure nobody is billing us
+  for is a good reason to use it anyway.
+- **Checkpointing**: if a partition ultimately fails, everything already done is
+  on disk and re-running resumes.
+
+### If you are still being throttled
+
+1. Switch to `--mode download` — the single biggest change.
+2. Add `--pace-seconds 5`.
+3. Drop `--threads` to 4.
+4. Raise `--retry-wait` to 120 so retries span a longer limiter window.
+5. Run overnight in Utwente's local time; the store is quieter.
+
 ## 5. A verified real result
 
 `--sources nu --start 2018-05-01 --end 2018-05-01`, 2,621,052 rows scanned in

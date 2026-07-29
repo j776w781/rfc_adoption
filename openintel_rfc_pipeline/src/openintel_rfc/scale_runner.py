@@ -178,6 +178,19 @@ class ScaleRunConfig:
     exemplars_per_group: int = 5
     max_partitions: int | None = None
     resume: bool = True
+
+    #: Partition-level retry. DuckDB retries individual HTTP requests, but a
+    #: store that is throttling hard exhausts those and fails the whole query;
+    #: without this a multi-day walk dies at an arbitrary partition. The waits
+    #: double from `partition_retry_wait_seconds`, so the default budget is
+    #: roughly 30+60+120+240 = 7.5 minutes before giving up on a partition.
+    partition_retries: int = 5
+    partition_retry_wait_seconds: float = 30.0
+
+    #: Optional gap between partitions. Zero by default: correctness never needs
+    #: it, but a long unattended walk over a shared academic object store is a
+    #: sustained load, and pacing is the cheapest way to be a good citizen.
+    pace_seconds: float = 0.0
     #: Recorded in the run manifest so an output directory names its own inputs.
     checklists: Path | str | None = None
     dictionary: Path | str | None = None
@@ -615,6 +628,82 @@ def build_aggregate_sql(
         "FROM exploded\n"
         "GROUP BY 1, 2, 3, 4, 5\n"
         "ORDER BY 1, 2, 3, 4, 5"
+    )
+
+
+#: Substrings identifying an error worth retrying: a shared object store under
+#: load, not a bug in the query. Matched case-insensitively against the message,
+#: because DuckDB surfaces HTTP failures as generic exceptions.
+_TRANSIENT_MARKERS: tuple[str, ...] = (
+    "503",
+    "500",
+    "502",
+    "504",
+    "service unavailable",
+    "slow down",
+    "too many requests",
+    "timeout",
+    "timed out",
+    "connection reset",
+    "connection closed",
+    "temporarily unavailable",
+    "could not establish connection",
+)
+
+
+def _is_transient(exc: BaseException) -> bool:
+    text = f"{type(exc).__name__}: {exc}".lower()
+    return any(marker in text for marker in _TRANSIENT_MARKERS)
+
+
+def _process_with_retry(
+    partition: Any,
+    *,
+    attempts: int,
+    base_wait: float,
+    warnings: list[str],
+    **kwargs: Any,
+) -> PartitionResult:
+    """Run one partition, retrying transient object-store failures.
+
+    DuckDB retries individual HTTP requests internally, but when a store is
+    throttling hard those retries are exhausted and the whole query fails. On a
+    multi-day walk that would abandon the run at an arbitrary point. Retrying at
+    the partition level, with a wait long enough for a rate limiter to relax,
+    turns a fatal error into a pause.
+
+    A non-transient failure is raised immediately: retrying a malformed query or
+    a genuinely missing object just wastes time and hides the real cause.
+    """
+    partition_id = getattr(partition, "partition_id", "?")
+    wait = max(float(base_wait), 0.0)
+    last: Exception | None = None
+
+    for attempt in range(1, max(int(attempts), 1) + 1):
+        try:
+            return process_partition(partition, warnings=warnings, **kwargs)
+        # Deliberately broad: the runner wraps DuckDB failures in PipelineError,
+        # but httpfs raises its own exception hierarchy and a raw HTTPException
+        # escaping here would defeat the whole point of retrying. Non-transient
+        # errors are re-raised untouched on the first attempt.
+        except Exception as exc:
+            last = exc
+            if not _is_transient(exc) or attempt >= attempts:
+                raise
+            LOGGER.warning(
+                "Partition %s failed with a transient error on attempt %d/%d "
+                "(%s); retrying in %.0fs.",
+                partition_id,
+                attempt,
+                attempts,
+                str(exc).splitlines()[0][:160],
+                wait,
+            )
+            time.sleep(wait)
+            wait *= 2
+
+    raise last if last is not None else PipelineError(  # pragma: no cover
+        f"Partition {partition_id} failed without an recorded error."
     )
 
 
@@ -1507,23 +1596,30 @@ def run_scale_analysis(
                 )
             assert compiled is not None  # set on the first iteration
 
-            result = process_partition(
+            result = _process_with_retry(
                 partition,
                 uris=uris,
                 connection=active,
                 compiled=compiled,
                 column_expr=column_expr,
                 checkpoint_dir=checkpoint_dir,
-                prefilter=compiled.prefilter,
                 exemplars_per_group=config.exemplars_per_group,
                 limit=config.limit_per_partition,
                 resume=config.resume,
                 warnings=collected,
+                attempts=config.partition_retries,
+                base_wait=config.partition_retry_wait_seconds,
             )
             results.append(result)
             scanned += result.rows_scanned
             matched += result.rows_matched
             _log_progress(index, len(discovered), scanned, matched, started)
+
+            # Optional politeness gap. OpenINTEL is a shared academic object
+            # store; a run that walks thousands of partitions back-to-back is a
+            # sustained load on infrastructure nobody is billing us for.
+            if config.pace_seconds and index < len(discovered):
+                time.sleep(config.pace_seconds)
 
         if compiled is not None:
             selectivity = matched / scanned if scanned else None

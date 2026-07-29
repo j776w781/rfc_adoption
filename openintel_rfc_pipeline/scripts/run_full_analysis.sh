@@ -24,6 +24,9 @@ CACHE_DIR=""
 DRY_RUN=0
 MAX_PARTITIONS=""
 NO_RESUME=0
+PARTITION_RETRIES=""
+RETRY_WAIT=""
+PACE_SECONDS=""
 CHECKLISTS="${PROJECT_ROOT}/data/rfc_checklists/dnssec_rfc_checklists.json"
 DICTIONARY="${PROJECT_ROOT}/data/openintel_dictionary/sample_openintel_dictionary.json"
 
@@ -44,6 +47,11 @@ Options:
   --checkpoint-dir DIR     Checkpoints (default: <out>/checkpoints)
   --cache-dir DIR          Local Parquet cache for --mode download
   --max-partitions N       Stop after N partitions (useful for a bounded trial)
+  --partition-retries N    Retries per partition on a 503/timeout (default: 5)
+  --retry-wait SECONDS     First retry wait; doubles thereafter (default: 30)
+  --pace-seconds SECONDS   Sleep between partitions. OpenINTEL is a shared
+                           academic store and rate-limits by request count;
+                           pacing a long walk makes throttling far less likely
   --threads N              DuckDB threads (default: all cores)
   --memory-limit SIZE      DuckDB memory limit, e.g. 64GB (default: 70% of RAM)
   --checklists PATH        RFC checklist DB
@@ -71,6 +79,9 @@ while [[ $# -gt 0 ]]; do
         --checkpoint-dir)  CHECKPOINT_DIR="${2:?}"; shift ;;
         --cache-dir)       CACHE_DIR="${2:?}"; shift ;;
         --max-partitions)  MAX_PARTITIONS="${2:?}"; shift ;;
+        --partition-retries) PARTITION_RETRIES="${2:?}"; shift ;;
+        --retry-wait)      RETRY_WAIT="${2:?}"; shift ;;
+        --pace-seconds)    PACE_SECONDS="${2:?}"; shift ;;
         --threads)         DUCKDB_THREADS="${2:?}"; export DUCKDB_THREADS; shift ;;
         --memory-limit)    DUCKDB_MEMORY_LIMIT="${2:?}"; export DUCKDB_MEMORY_LIMIT; shift ;;
         --checklists)      CHECKLISTS="${2:?}"; shift ;;
@@ -142,6 +153,9 @@ CMD=(python -m openintel_rfc.cli scale
 
 [[ -n "${CACHE_DIR}"      ]] && CMD+=(--cache-dir "${CACHE_DIR}")
 [[ -n "${MAX_PARTITIONS}" ]] && CMD+=(--max-partitions "${MAX_PARTITIONS}")
+[[ -n "${PARTITION_RETRIES}" ]] && CMD+=(--partition-retries "${PARTITION_RETRIES}")
+[[ -n "${RETRY_WAIT}"      ]] && CMD+=(--retry-wait "${RETRY_WAIT}")
+[[ -n "${PACE_SECONDS}"    ]] && CMD+=(--pace-seconds "${PACE_SECONDS}")
 [[ "${NO_RESUME}" == "1"  ]] && CMD+=(--no-resume)
 [[ "${DRY_RUN}"   == "1"  ]] && CMD+=(--dry-run)
 

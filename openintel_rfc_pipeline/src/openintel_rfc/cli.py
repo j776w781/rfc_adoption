@@ -153,6 +153,24 @@ def build_parser() -> argparse.ArgumentParser:
         help="Recompute every partition, ignoring existing checkpoints.",
     )
     scale.add_argument(
+        "--partition-retries", type=int, default=5,
+        help=(
+            "Retries per partition on a transient object-store failure (503, "
+            "timeout). Waits double from --retry-wait. Default: 5."
+        ),
+    )
+    scale.add_argument(
+        "--retry-wait", type=float, default=30.0,
+        help="Seconds before the first partition retry; doubles thereafter.",
+    )
+    scale.add_argument(
+        "--pace-seconds", type=float, default=0.0,
+        help=(
+            "Sleep this long between partitions. OpenINTEL is a shared academic "
+            "store; pacing a multi-day walk reduces the chance of being throttled."
+        ),
+    )
+    scale.add_argument(
         "--dry-run", action="store_true",
         help="Discover partitions and probe the schema, then stop without scanning.",
     )
@@ -429,6 +447,9 @@ def cmd_scale(args: argparse.Namespace) -> int:
         # inputs cannot be identified afterwards is not reproducible.
         checklists=str(args.checklists),
         dictionary=str(args.dictionary),
+        partition_retries=args.partition_retries,
+        partition_retry_wait_seconds=args.retry_wait,
+        pace_seconds=args.pace_seconds,
     )
 
     result = run_scale_analysis(
