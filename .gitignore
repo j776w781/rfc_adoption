@@ -216,3 +216,20 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local agent/assistant tooling (not part of the project)
+.claude/
+.claude*/
+CLAUDE.md
+CLAUDE.local.md
+AGENTS.md
+.mcp.json
+.aider*
+.cursor/
+.codeium/
+.continue/
+.github/copilot-instructions.md
+
+# Local scratch
+scratch/
+*.local.json
