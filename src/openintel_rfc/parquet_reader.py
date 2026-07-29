@@ -501,7 +501,18 @@ def _read_with_duckdb(
     try:
         import duckdb
     except ImportError as exc:
-        raise PipelineError("DuckDB is not installed.") from exc
+        # Not necessarily missing: it may be installed but unreachable from this
+        # interpreter's sys.path. That happens when a task runner drops the
+        # environment a user-site install depends on -- make on Windows does not
+        # export APPDATA, so Python cannot expand the user site-packages path and
+        # silently omits it. Saying "not installed" sends the reader to pip when
+        # the package is already there.
+        raise PipelineError(
+            f"DuckDB could not be imported ({exc}). It may not be installed, or it "
+            "may be installed somewhere this interpreter cannot see -- check "
+            "`python -c \"import duckdb\"` in the same environment that runs the "
+            "pipeline."
+        ) from exc
 
     projection = ", ".join(
         f"{_duckdb_expression(field, cols, dictionary)} AS {_quote_identifier(field)}"
@@ -531,7 +542,13 @@ def _read_with_pandas(
         import pyarrow as pa
         import pyarrow.parquet as pq
     except ImportError as exc:  # pragma: no cover - pyarrow is a hard requirement
-        raise PipelineError("pyarrow is not installed.") from exc
+        raise PipelineError(
+            f"pyarrow could not be imported ({exc}). This is the fallback reader, so "
+            "with DuckDB also unavailable there is no way to read Parquet at all. "
+            "Check `python -c \"import pyarrow\"` in the environment that runs the "
+            "pipeline; an installed package can still be unreachable if the "
+            "interpreter's sys.path differs from the shell's."
+        ) from exc
 
     # De-duplicated because two normalized fields may share one source column,
     # and one field may draw on several.

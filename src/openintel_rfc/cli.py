@@ -588,7 +588,15 @@ def _resolve_run_config(args: argparse.Namespace) -> RunConfig:
     if getattr(args, "config", None):
         config_path = Path(args.config)
         payload = dict(read_json(config_path))
-        base = config_path.resolve().parent.parent
+        # Relative paths in a run config are project-relative, which is how
+        # examples/sample_run_config.json is written ("data/rfc_checklists/...").
+        #
+        # Resolving them against the config file's own grandparent -- as this did
+        # -- only works when the file sits exactly one level under the root. A
+        # config at the root resolved outside the repository entirely, and one two
+        # levels down resolved into a sibling directory. PROJECT_ROOT is derived
+        # from the package location, so it is correct wherever the config lives.
+        base = config.PROJECT_ROOT
         for key in ("checklists", "dictionary", "parquet", "out"):
             value = payload.get(key)
             if isinstance(value, str) and not Path(value).is_absolute():

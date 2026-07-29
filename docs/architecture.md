@@ -109,14 +109,19 @@ Every module in `src/openintel_rfc/`, one line each.
 | `parquet_reader.py` | Resolves normalized field names to native OpenINTEL columns and reads a projected frame via DuckDB or the pyarrow/pandas fallback. |
 | `signal_extractor.py` | Converts the normalized frame into `ObservedSignal` records with minted IDs and per-row provenance. |
 | `matcher.py` | Evaluates conditions and indicators per (signal x RFC), applies the timestamp cutoff, computes the score breakdown, assigns the decision, and emits the reasoning trace. |
-| `ranking.py` | Aggregates per-signal matches into `RankedRFCCandidate` rows and flags pairs that are too close to separate. |
+| `ranking.py` | Owns the scoring formula (`score_match`) and the decision it implies; aggregates per-signal matches into `RankedRFCCandidate` rows and flags pairs too close to separate. |
+| `reasoning.py` | Builds the `ReasoningTrace`: per-condition explanations, the timestamp verdict, the itemized score breakdown with its arithmetic as readable steps, and the prose summary. Structured traces only — no hidden chain-of-thought. |
 | `review_queue.py` | Builds `ReviewItem` records from non-queryable indicators, ambiguity, partial matches, timestamp violations and close rankings. |
 | `llm_verifier.py` | Produces `LLMVerification` verdicts for review items. Ships a deterministic rule-based backend; an LLM backend implements the same interface. |
 | `timeline.py` | Builds per-RFC adoption timelines from valid matches only, bucketed monthly and yearly. |
 | `exporters.py` | Writes every JSON envelope and CSV artefact deterministically, using the names in `config.OUTPUT_FILES`. |
-| `report.py` | Renders the human-readable Markdown reports (`schema_check_report.md`, `report.md`). |
+| `report.py` | Renders the human-readable Markdown reports (`schema_check_report.md`, `report.md`), including the exact-vs-sampled framing a scale run needs. |
+| `dashboard_data.py` | The dashboard's only data-access layer. Loads an output directory into DataFrames that always carry their expected columns, empty when a file is missing, so pages never guard for absence and a partial directory shows warnings instead of a traceback. |
 | `tool_survey.py` | Curated open-source tool survey as data; renders `docs/open_source_tool_survey.md`. Performs no network access. |
-| `cli.py` | Argument parsing and orchestration for the `tool-survey`, `schema-check` and `analyze` subcommands. The only module that knows the run order. |
+| `openintel_source.py` | Discovers real S3 partitions anonymously and provides both access modes: DuckDB `httpfs` streaming and resumable boto3 download. Probes Parquet footers without reading data. No network at import time; boto3 is an optional dependency. |
+| `sql_compiler.py` | Compiles the checklist into SQL evaluated during the scan: the record-type prefilter, per-indicator predicates, and the publication-date cutoff. Enumerates each RFC's reachable evidence patterns and calls the real `ranking.score_match` for each, so the scoring formula never appears in SQL and the two engines cannot drift. |
+| `scale_runner.py` | Corpus-scale execution: one aggregating query per partition, per-partition checkpointing and resume, transient-failure retry, and deterministic exemplar sampling fed back through `matcher`/`reasoning` so every aggregate has a worked trace. |
+| `cli.py` | Argument parsing and orchestration for the `tool-survey`, `schema-check`, `analyze` and `scale` subcommands. The only module that knows the run order. |
 
 The Streamlit dashboard lives outside the package, in `dashboard/`, and reads
 the exported artefacts rather than importing pipeline internals. That boundary
@@ -127,6 +132,24 @@ a different checkout, and any coupling tighter than "file names in
 There is no `pipeline.py`. `cli.py` owns the run order, and each stage module
 is a pure function of its inputs. This keeps every stage independently testable
 without a fixture that constructs a whole pipeline object.
+
+### Two execution paths
+
+The table above describes the exhaustive path (`analyze`): read a Parquet file,
+build one `ObservedSignal` per row, one trace per (signal x RFC). That cannot
+survive the real corpus, where several TLDs over several years is order 10^10
+rows and 10^11 traces.
+
+`scale` therefore pushes matching into DuckDB (`sql_compiler`) and streams
+aggregates partition by partition (`scale_runner`), keeping only a bounded
+deterministic sample of observations to carry through the normal
+`matcher` -> `reasoning` path. Counts are exact; scores and traces are sampled.
+
+Both paths share `models`, `schema_checker`, `ranking`, `reasoning`, `timeline`,
+`review_queue`, `exporters` and `report` unchanged, which is what makes the
+cross-validation test meaningful: it asserts the SQL and Python engines agree on
+per-RFC counts, `first_seen` and scores over the same input. See
+`docs/running_at_scale.md`.
 
 ## 4. Module dependency graph
 
