@@ -799,8 +799,19 @@ def compile_checklist(
             )
 
         published = normalize_timestamp(entry.publication_date)
+        # Compare against the decoded expression, never the bare identifier.
+        #
+        # The scan projects `<decoded> AS "timestamp"`, but OpenINTEL's own
+        # column is *also* called `timestamp`, and DuckDB resolves a base-table
+        # column ahead of a lateral alias of the same name. Referencing the
+        # identifier here therefore reaches the raw epoch-millisecond BIGINT
+        # rather than the decoded TIMESTAMP. On a fixture whose timestamp column
+        # is already datetime64 that is invisible; against the real corpus it is
+        # a hard binder error -- and had the types happened to be comparable it
+        # would have silently compared milliseconds to a calendar date, which is
+        # the worst outcome available.
         timestamp_valid = (
-            f"({quote_identifier(TIMESTAMP_FIELD)} >= "
+            f"({timestamp_expr} >= "
             f"TIMESTAMP {quote_string(published.isoformat(sep=' '))})"
         )
         table = _decision_table(entry, indicators)

@@ -424,21 +424,48 @@ def _executive_summary(result: PipelineResult) -> list[str]:
     invalid = _timestamp_invalid_matches(result)
     high_severity = [item for item in result.review_items if item.severity == "high"]
 
+    if result.is_sampled:
+        # A scale run holds exemplars in `signals`, not the corpus. Reporting
+        # len(signals) here would describe a 2.6-million-row scan as "15
+        # observations", which is the most damaging sentence this report could
+        # contain: every count in section 7 is a real corpus aggregate.
+        stats = result.corpus_stats
+        scanned = int(stats.get("rows_scanned", 0))
+        matched = int(stats.get("rows_matched", 0))
+        partitions = int(stats.get("partitions", 0))
+        opening = (
+            f"This run scanned {scanned:,} OpenINTEL "
+            f"{_plural(scanned, 'row')} across {partitions} "
+            f"{_plural(partitions, 'partition')} against "
+            f"{result.schema_report.rfc_count} DNSSEC "
+            f"{_plural(result.schema_report.rfc_count, 'RFC')} "
+            f"({result.schema_report.indicator_count} indicators); "
+            f"{matched:,} {_plural(matched, 'row')} reached a rankable decision. "
+            f"The observation counts in section 7 are exact corpus aggregates. "
+            f"The {len(result.signals)} observations carried through sections 6 "
+            f"and 8 are a deterministic *sample*, kept so that every aggregate "
+            f"has a worked reasoning trace behind it -- their number is not a "
+            f"measurement of anything."
+        )
+    else:
+        opening = (
+            f"This run evaluated {len(result.signals)} normalized OpenINTEL "
+            f"{_plural(len(result.signals), 'observation')} against "
+            f"{result.schema_report.rfc_count} DNSSEC "
+            f"{_plural(result.schema_report.rfc_count, 'RFC')} "
+            f"({result.schema_report.indicator_count} indicators), producing "
+            f"{len(result.matches)} signal-by-RFC "
+            f"{_plural(len(result.matches), 'evaluation')} and "
+            f"{len(result.traces)} reasoning "
+            f"{_plural(len(result.traces), 'trace')}."
+        )
+
     lines = [
         "## 1. Executive Summary",
         "",
-        f"This run evaluated {len(result.signals)} normalized OpenINTEL "
-        f"{_plural(len(result.signals), 'observation')} against "
-        f"{result.schema_report.rfc_count} DNSSEC "
-        f"{_plural(result.schema_report.rfc_count, 'RFC')} "
-        f"({result.schema_report.indicator_count} indicators), producing "
-        f"{len(result.matches)} signal-by-RFC "
-        f"{_plural(len(result.matches), 'evaluation')} and "
-        f"{len(result.traces)} reasoning "
-        f"{_plural(len(result.traces), 'trace')}. Every score below is derived "
-        "from record-level observations and the RFC publication date; nothing "
-        "here is an assertion that an operator deliberately implemented a "
-        "specification.",
+        opening + " Every score below is derived from record-level observations "
+        "and the RFC publication date; nothing here is an assertion that an "
+        "operator deliberately implemented a specification.",
         "",
     ]
     if top is not None:
@@ -720,8 +747,17 @@ def _signals_section(result: PipelineResult) -> list[str]:
     lines = [
         "## 6. Observed OpenINTEL Signals",
         "",
-        f"{len(signals)} {_plural(len(signals), 'observation')} were normalized "
-        f"from the Parquet input"
+        (
+            f"{len(signals)} {_plural(len(signals), 'observation')} are shown "
+            f"below. These are a deterministic sample of the "
+            f"{int(result.corpus_stats.get('rows_scanned', 0)):,} rows scanned, "
+            f"not the corpus: the distributions in this section describe the "
+            f"sample and must not be read as corpus proportions. The exact "
+            f"per-RFC corpus counts are in section 7"
+            if result.is_sampled
+            else f"{len(signals)} {_plural(len(signals), 'observation')} were "
+            f"normalized from the Parquet input"
+        )
         + (f", covering {_date(first)} to {_date(last)}." if first else "."),
         "",
     ]

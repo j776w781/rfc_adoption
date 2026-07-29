@@ -309,6 +309,39 @@ streamlit run dashboard/app.py
 
 Or simply `make demo && make dashboard`.
 
+## Running against the real OpenINTEL corpus
+
+The commands above use the synthetic fixture. To analyse real measurements on a
+Linux server:
+
+```bash
+./scripts/setup.sh                        # deps, venv, verification, demo, tests
+
+# Costs seconds, scans nothing: reports partition count and whether the real
+# schema can actually answer the checklist. Always do this first.
+./scripts/run_full_analysis.sh --sources nu --start 2018-05-01 --end 2018-05-01 --dry-run
+
+# One real day end to end
+./scripts/run_full_analysis.sh --sources nu --start 2018-05-01 --end 2018-05-01
+
+# The real thing; runs for hours to days and is resumable
+tmux new -s openintel
+./scripts/run_full_analysis.sh --sources nu,se,nl --start 2015-01-01 --end 2021-12-31
+```
+
+The `scale` path streams from `object.openintel.nl` (or `--mode download`),
+pushes matching into DuckDB, checkpoints every partition so an interrupted run
+resumes, and produces **exact corpus aggregates** with a **deterministic sample**
+of observations carried through the full reasoning path so every aggregate has a
+worked trace behind it.
+
+A verified real result — `.nu`, 2018-05-01, 2,621,052 rows in ~72 s:
+RFC 5155 (NSEC3) 408,997 · RFC 4509 (SHA-256 DS) 131,626 · RFC 6605 (ECDSA)
+27,631 · RFC 7344 (CDS/CDNSKEY) 179 · RFC 4033 (base DNSSEC) 2,211,876.
+
+Read [`docs/running_at_scale.md`](docs/running_at_scale.md) before quoting any
+number from a scale run: counts are exact, but scores and traces are sampled.
+
 ### Outputs
 
 `schema-check` writes `queryable_indicators.json`, `non_queryable_indicators.json`,

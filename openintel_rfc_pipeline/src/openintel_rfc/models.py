@@ -684,6 +684,21 @@ class PipelineResult(_Base):
     review_items: list[ReviewItem] = Field(default_factory=list)
     timeline: list[AdoptionTimelineEntry] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
+    corpus_stats: dict[str, Any] = Field(
+        default_factory=dict,
+        description=(
+            "Set only by a sampled (scale) run. Records what was really scanned "
+            "-- rows_scanned, rows_matched, partitions, sampled=True -- so the "
+            "report can distinguish the exemplar count in `signals` from the "
+            "size of the corpus those exemplars stand for. Empty for an "
+            "exhaustive `analyze` run, where `signals` IS the measurement."
+        ),
+    )
+
+    @property
+    def is_sampled(self) -> bool:
+        """True when `signals` holds exemplars rather than the whole corpus."""
+        return bool(self.corpus_stats.get("sampled"))
 
 
 ReviewItem.model_rebuild()

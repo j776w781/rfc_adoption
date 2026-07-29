@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from datetime import date, datetime
 from pathlib import Path
 from typing import Sequence
 
@@ -412,8 +413,10 @@ def cmd_scale(args: argparse.Namespace) -> int:
 
     run_config = ScaleRunConfig(
         sources=sources,
-        start=args.start,
-        end=args.end,
+        # ScaleRunConfig declares these as dates and formats them into the run
+        # manifest; argparse hands over strings.
+        start=_parse_run_date(args.start, "--start"),
+        end=_parse_run_date(args.end, "--end"),
         basis=args.basis,
         out=out_dir,
         checkpoint_dir=ensure_dir(checkpoint_dir),
@@ -421,6 +424,11 @@ def cmd_scale(args: argparse.Namespace) -> int:
         exemplars_per_group=args.exemplars,
         max_partitions=args.max_partitions,
         resume=not args.no_resume,
+        # Recorded in run_manifest.json so a result can be traced back to the
+        # exact checklist and dictionary that produced it. A multi-day run whose
+        # inputs cannot be identified afterwards is not reproducible.
+        checklists=str(args.checklists),
+        dictionary=str(args.dictionary),
     )
 
     result = run_scale_analysis(
@@ -433,6 +441,20 @@ def cmd_scale(args: argparse.Namespace) -> int:
     _print_analysis_summary(result, {})
     _print_warnings(result.warnings or warnings)
     return 0
+
+
+def _parse_run_date(value: object, flag: str) -> date:
+    """Parse a CLI date, failing with the flag name rather than a ValueError."""
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    try:
+        return datetime.strptime(str(value).strip(), "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise PipelineError(
+            f"{flag} must be a date in YYYY-MM-DD form, got {value!r}."
+        ) from exc
 
 
 def _report_field_resolution(dictionary, schema_report, columns: Sequence[str]) -> None:
@@ -451,13 +473,32 @@ def _report_field_resolution(dictionary, schema_report, columns: Sequence[str]) 
         else:
             unresolved.append(field)
             print(f"  {field:<16} <- (nothing; will be all-null)")
-    if unresolved:
+    if not unresolved:
+        return
+
+    # Separate the two cases: a missing field an indicator actually tests is a
+    # reason to stop and fix the dictionary, whereas a missing metadata column
+    # only costs provenance detail. Reporting both with the same alarming
+    # wording trains the reader to ignore it.
+    indicator_fields = set(queryable_field_names(schema_report))
+    blocking = [name for name in unresolved if name in indicator_fields]
+    cosmetic = [name for name in unresolved if name not in indicator_fields]
+
+    if blocking:
         print(
             "\nWarning: "
-            + ", ".join(unresolved)
-            + " cannot be supplied by this corpus. Indicators depending on them "
-            "will never match. Fix the dictionary's openintel_native_fields "
-            "before spending compute on this range."
+            + ", ".join(sorted(blocking))
+            + " cannot be supplied by this corpus, and indicator conditions test "
+            "them. Those indicators can never match here. Fix the dictionary's "
+            "openintel_native_fields before spending compute on this range."
+        )
+    if cosmetic:
+        print(
+            "\nNote: "
+            + ", ".join(sorted(cosmetic))
+            + " cannot be supplied by this corpus. No indicator tests them, so "
+            "matching is unaffected; the column is only carried for provenance "
+            "and will read as null."
         )
 
 
