@@ -48,6 +48,7 @@ __all__ = [
     "ENGINES",
     "describe_parquet",
     "resolve_columns",
+    "resolve_column_candidates",
     "read_parquet",
     "read_many",
 ]
@@ -256,16 +257,74 @@ def _resolve_one(
     exact: set[str],
     case_insensitive: dict[str, str],
 ) -> str | None:
+    candidates = _resolve_all(dictionary, field, exact, case_insensitive)
+    return candidates[0] if candidates else None
+
+
+def _resolve_all(
+    dictionary: OpenINTELDictionary,
+    field: str,
+    exact: set[str],
+    case_insensitive: dict[str, str],
+) -> list[str]:
+    """Every column that could supply ``field``, in priority order."""
+    found: list[str] = []
+
+    def add(name: str) -> None:
+        if name not in found:
+            found.append(name)
+
     if field in exact:
-        return field
+        add(field)
 
     entry = dictionary.get(field)
     if entry is not None:
         for native in entry.openintel_native_fields:
             if native in exact:
-                return native
+                add(native)
 
-    return case_insensitive.get(field.lower())
+    fallback = case_insensitive.get(field.lower())
+    if fallback is not None:
+        add(fallback)
+
+    return found
+
+
+def resolve_column_candidates(
+    dictionary: OpenINTELDictionary,
+    needed_fields: Sequence[str],
+    parquet_columns: Sequence[str],
+) -> dict[str, list[str]]:
+    """Map each normalized field onto *every* column that could supply it.
+
+    This is what real OpenINTEL data requires and what
+    :func:`resolve_columns` cannot express. OpenINTEL does not carry one
+    ``algorithm`` column: it carries ``dnskey_algorithm``, ``ds_algorithm``,
+    ``rrsig_algorithm``, ``cds_algorithm``, ``cdnskey_algorithm`` and
+    ``nsec3param_hash_algorithm`` as separate columns, and populates only the
+    one matching each row's ``response_type``. Binding ``algorithm`` to the
+    first of those that exists would read NULL for every row of every other
+    record type -- so a CDS delete signal, the strongest RFC 8078 evidence
+    there is, would silently never match.
+
+    The reader therefore COALESCEs the candidates in priority order. The
+    columns are mutually exclusive per row in practice, so coalescing is
+    well-defined rather than a guess between competing values.
+    """
+    actual_columns = [str(name) for name in parquet_columns]
+    exact = set(actual_columns)
+
+    case_insensitive: dict[str, str] = {}
+    for name in actual_columns:
+        case_insensitive.setdefault(name.lower(), name)
+
+    resolved: dict[str, list[str]] = {}
+    for field in needed_fields:
+        name = str(field)
+        if name in resolved:
+            continue
+        resolved[name] = _resolve_all(dictionary, name, exact, case_insensitive)
+    return resolved
 
 
 # --------------------------------------------------------------------------- #
@@ -311,20 +370,33 @@ def read_parquet(
 
     fields = _selection_fields(dictionary, needed_fields)
     description = describe_parquet(file_path)
-    mapping = resolve_columns(
+    candidates = resolve_column_candidates(
         dictionary, fields, [column["name"] for column in description["columns"]]
     )
+    # First-candidate view, kept for the normalizer and for warning messages.
+    mapping = {field: (cols[0] if cols else None) for field, cols in candidates.items()}
 
-    for field, actual in mapping.items():
-        if actual is None:
+    for field, cols in candidates.items():
+        if not cols:
             warn(
                 collected,
                 f"Field '{field}' has no matching column in {file_path.name}; "
                 "it will be read as all-null.",
                 LOGGER,
             )
+        elif len(cols) > 1:
+            # Not a problem -- it is the normal shape of OpenINTEL data -- but
+            # worth stating, because it tells the reader which record types can
+            # contribute to this field.
+            LOGGER.info(
+                "Field '%s' coalesces %d columns in %s: %s",
+                field,
+                len(cols),
+                file_path.name,
+                ", ".join(cols),
+            )
 
-    if all(actual is None for actual in mapping.values()):
+    if all(not cols for cols in candidates.values()):
         raise PipelineError(
             f"None of the requested fields could be resolved against {file_path}. "
             f"Requested: {', '.join(fields)}. "
@@ -334,7 +406,7 @@ def read_parquet(
     frame: pd.DataFrame | None = None
     if engine in ("auto", "duckdb"):
         try:
-            frame = _read_with_duckdb(file_path, mapping, limit)
+            frame = _read_with_duckdb(file_path, candidates, dictionary, limit)
         except PipelineError as exc:
             if engine == "duckdb":
                 raise
@@ -346,13 +418,58 @@ def read_parquet(
             )
 
     if frame is None:
-        frame = _read_with_pandas(file_path, mapping, limit)
+        frame = _read_with_pandas(file_path, candidates, limit)
 
     return _normalize_frame(frame, dictionary, mapping, collected)
 
 
+#: DuckDB type each dictionary type is coerced to before coalescing. Candidate
+#: columns for one normalized field can legitimately differ in physical type
+#: across OpenINTEL measurement generations, and a bare COALESCE over mixed
+#: types is a hard error. TRY_CAST yields NULL instead of failing the scan.
+_DUCKDB_CAST_TYPES: dict[str, str] = {
+    "integer": "BIGINT",
+    "int": "BIGINT",
+    "long": "BIGINT",
+    "bigint": "BIGINT",
+    "float": "DOUBLE",
+    "double": "DOUBLE",
+    "number": "DOUBLE",
+    "string": "VARCHAR",
+    "str": "VARCHAR",
+    "text": "VARCHAR",
+    "boolean": "BOOLEAN",
+    "bool": "BOOLEAN",
+    # Datetime fields are deliberately absent. OpenINTEL stores `timestamp` as
+    # epoch milliseconds, and TRY_CAST(1525000000000 AS TIMESTAMP) is NULL, which
+    # would drop every row. The raw value is passed through and the unit is
+    # detected in `_coerce_epoch_integers`, so both engines agree.
+}
+
+
+def _duckdb_expression(
+    field: str, columns: Sequence[str], dictionary: OpenINTELDictionary
+) -> str:
+    """SQL expression selecting ``field`` from one or more candidate columns."""
+    entry = dictionary.get(field)
+    cast_type = _DUCKDB_CAST_TYPES.get((entry.type if entry else "").strip().lower())
+
+    def term(column: str) -> str:
+        quoted = _quote_identifier(column)
+        return f"TRY_CAST({quoted} AS {cast_type})" if cast_type else quoted
+
+    if len(columns) == 1:
+        return term(columns[0])
+    # Candidates are mutually exclusive per row in OpenINTEL (a row is one
+    # record type), so the first non-null is the value for that row.
+    return "COALESCE(" + ", ".join(term(c) for c in columns) + ")"
+
+
 def _read_with_duckdb(
-    file_path: Path, mapping: dict[str, str | None], limit: int | None
+    file_path: Path,
+    candidates: dict[str, list[str]],
+    dictionary: OpenINTELDictionary,
+    limit: int | None,
 ) -> pd.DataFrame:
     """Project the needed columns out of the file with DuckDB.
 
@@ -365,9 +482,9 @@ def _read_with_duckdb(
         raise PipelineError("DuckDB is not installed.") from exc
 
     projection = ", ".join(
-        f"{_quote_identifier(actual)} AS {_quote_identifier(field)}"
-        for field, actual in mapping.items()
-        if actual is not None
+        f"{_duckdb_expression(field, cols, dictionary)} AS {_quote_identifier(field)}"
+        for field, cols in candidates.items()
+        if cols
     )
     statement = (
         f"SELECT {projection} FROM read_parquet({_quote_path_literal(file_path)})"
@@ -385,7 +502,7 @@ def _read_with_duckdb(
 
 
 def _read_with_pandas(
-    file_path: Path, mapping: dict[str, str | None], limit: int | None
+    file_path: Path, candidates: dict[str, list[str]], limit: int | None
 ) -> pd.DataFrame:
     """Project the needed columns out of the file with pyarrow, then to pandas."""
     try:
@@ -394,11 +511,13 @@ def _read_with_pandas(
     except ImportError as exc:  # pragma: no cover - pyarrow is a hard requirement
         raise PipelineError("pyarrow is not installed.") from exc
 
-    # De-duplicated because two normalized fields may share one source column.
+    # De-duplicated because two normalized fields may share one source column,
+    # and one field may draw on several.
     wanted: list[str] = []
-    for actual in mapping.values():
-        if actual is not None and actual not in wanted:
-            wanted.append(actual)
+    for cols in candidates.values():
+        for actual in cols:
+            if actual not in wanted:
+                wanted.append(actual)
 
     try:
         if limit is None:
@@ -411,11 +530,16 @@ def _read_with_pandas(
 
     # Build the aliased frame explicitly instead of renaming, so that two fields
     # sharing one source column do not collide into a duplicate column name.
-    data = {
-        field: frame[actual].reset_index(drop=True)
-        for field, actual in mapping.items()
-        if actual is not None
-    }
+    # Several candidates are combined first-non-null, mirroring the DuckDB
+    # COALESCE so both engines return the same values.
+    data: dict[str, pd.Series] = {}
+    for field, cols in candidates.items():
+        if not cols:
+            continue
+        series = frame[cols[0]].reset_index(drop=True)
+        for extra in cols[1:]:
+            series = series.combine_first(frame[extra].reset_index(drop=True))
+        data[field] = series
     return pd.DataFrame(data)
 
 
@@ -538,8 +662,47 @@ def _normalize_frame(
     return normalized
 
 
+#: Upper bounds (exclusive) that identify the unit of an integer epoch column.
+#: A value below ~3e9 is plausible as seconds (year 2065); below ~3e12 as
+#: milliseconds; below ~3e15 as microseconds; anything larger is nanoseconds.
+_EPOCH_UNIT_BOUNDS: tuple[tuple[float, str], ...] = (
+    (3e9, "s"),
+    (3e12, "ms"),
+    (3e15, "us"),
+)
+
+
+def _coerce_epoch_integers(series: pd.Series) -> pd.Series | None:
+    """Convert an integer epoch column to datetimes, or return ``None``.
+
+    OpenINTEL exports ``timestamp`` as epoch **milliseconds**. pandas' default
+    integer interpretation is nanoseconds, which silently maps every real
+    measurement to 1970-01-01 -- and since the whole pipeline turns on comparing
+    observation dates against RFC publication dates, that failure mode is
+    catastrophic and completely silent. The unit is therefore detected from the
+    magnitude of the data rather than assumed.
+    """
+    if not pd.api.types.is_integer_dtype(series) and not pd.api.types.is_float_dtype(series):
+        return None
+    numeric = pd.to_numeric(series, errors="coerce")
+    finite = numeric.dropna()
+    if finite.empty:
+        return None
+    largest = float(finite.abs().max())
+    unit = "ns"
+    for bound, candidate in _EPOCH_UNIT_BOUNDS:
+        if largest < bound:
+            unit = candidate
+            break
+    return pd.to_datetime(numeric, unit=unit, errors="coerce")
+
+
 def _coerce_datetime(field: str, series: pd.Series, warnings: list[str]) -> pd.Series:
     """Coerce to naive-UTC ``datetime64[ns]``, warning if values are lost."""
+    epoch = _coerce_epoch_integers(series)
+    if epoch is not None:
+        return epoch.astype("datetime64[ns]")
+
     try:
         converted = pd.to_datetime(series, errors="raise")
     except (ValueError, TypeError, OverflowError) as exc:

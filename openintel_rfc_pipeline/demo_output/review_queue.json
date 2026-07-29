@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T16:28:51",
+  "generated_at": "2026-07-29T17:08:43",
   "pipeline": "openintel-rfc-adoption-matcher",
   "version": "0.1.0",
   "count": 40,
@@ -94,7 +94,7 @@
         "sig_0062",
         "sig_0068"
       ],
-      "suggested_action": "Confirm the Parquet reader resolves the missing field(s) for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm; `digest_type` is derived from the OpenINTEL column(s) ds_digest_type, cds_digest_type). If the column really is empty for this measurement generation, record RFC 8078 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 rather than unmatched - a partial match here is a measurement gap, not a negative result. If the data is there, the reader's alias resolution is dropping it. Treat this as high priority: RFC 8078 has very_high specificity, so its indicators are uniquely attributable and a near miss is likely a strong result being lost.",
+      "suggested_action": "Confirm the Parquet reader resolves the missing field(s) for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3_hash_algorithm, nsec3param_hash_algorithm; `digest_type` is derived from the OpenINTEL column(s) ds_digest_type, cds_digest_type). If the column really is empty for this measurement generation, record RFC 8078 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 rather than unmatched - a partial match here is a measurement gap, not a negative result. If the data is there, the reader's alias resolution is dropping it. Treat this as high priority: RFC 8078 has very_high specificity, so its indicators are uniquely attributable and a near miss is likely a strong result being lost.",
       "evidence": {
         "rfc_id": "RFC 8078",
         "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
@@ -118,7 +118,8 @@
             "rrsig_algorithm",
             "cds_algorithm",
             "cdnskey_algorithm",
-            "nsec3param_algorithm"
+            "nsec3_hash_algorithm",
+            "nsec3param_hash_algorithm"
           ],
           "digest_type": [
             "ds_digest_type",
@@ -1619,7 +1620,7 @@
         "sig_0062",
         "sig_0068"
       ],
-      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 6605 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 6605 adoption rates.",
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3_hash_algorithm, nsec3param_hash_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 6605 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 6605 adoption rates.",
       "evidence": {
         "rfc_id": "RFC 6605",
         "field": "algorithm",
@@ -1632,7 +1633,8 @@
           "rrsig_algorithm",
           "cds_algorithm",
           "cdnskey_algorithm",
-          "nsec3param_algorithm"
+          "nsec3_hash_algorithm",
+          "nsec3param_hash_algorithm"
         ],
         "field_available_from": "2010-01-01T00:00:00",
         "observation_count": 4,
@@ -1685,7 +1687,7 @@
         "sig_0062",
         "sig_0068"
       ],
-      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8078 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8078 adoption rates.",
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3_hash_algorithm, nsec3param_hash_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8078 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8078 adoption rates.",
       "evidence": {
         "rfc_id": "RFC 8078",
         "field": "algorithm",
@@ -1698,7 +1700,8 @@
           "rrsig_algorithm",
           "cds_algorithm",
           "cdnskey_algorithm",
-          "nsec3param_algorithm"
+          "nsec3_hash_algorithm",
+          "nsec3param_hash_algorithm"
         ],
         "field_available_from": "2010-01-01T00:00:00",
         "observation_count": 4,
@@ -1751,7 +1754,7 @@
         "sig_0062",
         "sig_0068"
       ],
-      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8080 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8080 adoption rates.",
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3_hash_algorithm, nsec3param_hash_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8080 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8080 adoption rates.",
       "evidence": {
         "rfc_id": "RFC 8080",
         "field": "algorithm",
@@ -1764,7 +1767,8 @@
           "rrsig_algorithm",
           "cds_algorithm",
           "cdnskey_algorithm",
-          "nsec3param_algorithm"
+          "nsec3_hash_algorithm",
+          "nsec3param_hash_algorithm"
         ],
         "field_available_from": "2010-01-01T00:00:00",
         "observation_count": 4,
@@ -1817,7 +1821,7 @@
         "sig_0062",
         "sig_0068"
       ],
-      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8624 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8624 adoption rates.",
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3_hash_algorithm, nsec3param_hash_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8624 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8624 adoption rates.",
       "evidence": {
         "rfc_id": "RFC 8624",
         "field": "algorithm",
@@ -1830,7 +1834,8 @@
           "rrsig_algorithm",
           "cds_algorithm",
           "cdnskey_algorithm",
-          "nsec3param_algorithm"
+          "nsec3_hash_algorithm",
+          "nsec3param_hash_algorithm"
         ],
         "field_available_from": "2010-01-01T00:00:00",
         "observation_count": 4,

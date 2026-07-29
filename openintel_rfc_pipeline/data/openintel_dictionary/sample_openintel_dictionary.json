@@ -45,7 +45,7 @@
       "type": "integer",
       "description": "DNSSEC algorithm number carried by the record (IANA DNSSEC Algorithm Numbers). Algorithm 0 in CDS/CDNSKEY is the RFC 8078 delete signal.",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["dnskey_algorithm", "ds_algorithm", "rrsig_algorithm", "cds_algorithm", "cdnskey_algorithm", "nsec3param_algorithm"],
+      "openintel_native_fields": ["dnskey_algorithm", "ds_algorithm", "rrsig_algorithm", "cds_algorithm", "cdnskey_algorithm", "nsec3_hash_algorithm", "nsec3param_hash_algorithm"],
       "nullable": true
     },
     {
@@ -69,7 +69,7 @@
       "type": "string",
       "description": "DNSKEY/NSEC3 flags field, rendered as a string. Only reliably exported in later measurement generations.",
       "available_from": "2016-01-01",
-      "openintel_native_fields": ["dnskey_flags", "nsec3param_flags", "cdnskey_flags"],
+      "openintel_native_fields": ["dnskey_flags", "cdnskey_flags", "nsec3_flags", "nsec3param_flags"],
       "nullable": true
     },
     {

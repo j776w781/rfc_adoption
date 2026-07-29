@@ -1,6 +1,6 @@
 # OpenINTEL RFC Adoption Analysis
 
-Generated: 2026-07-29T16:28:51  
+Generated: 2026-07-29T17:08:43  
 Pipeline: openintel-rfc-adoption-matcher 0.1.0  
 Observation window: 2010-06-15 to 2021-09-13
 
@@ -30,7 +30,7 @@ The highest-ranked candidate is **RFC 8078** (Managing DS Records from the Paren
 | Parquet engine | auto |
 | Row limit | none |
 | Minimum rankable score | 0 |
-| Generated at | 2026-07-29T16:28:51 |
+| Generated at | 2026-07-29T17:08:43 |
 | Pipeline | openintel-rfc-adoption-matcher 0.1.0 |
 
 The checklist database is the RFC signature source; the dictionary describes which normalized analysis fields the OpenINTEL corpus can supply and from which date each is reliably populated.
