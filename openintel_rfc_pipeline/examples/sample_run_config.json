@@ -1,0 +1,9 @@
+{
+  "checklists": "data/rfc_checklists/dnssec_rfc_checklists.json",
+  "dictionary": "data/openintel_dictionary/sample_openintel_dictionary.json",
+  "parquet": "data/sample_parquet/sample_openintel.parquet",
+  "out": "demo_output",
+  "limit": null,
+  "engine": "auto",
+  "min_score": 0.0
+}

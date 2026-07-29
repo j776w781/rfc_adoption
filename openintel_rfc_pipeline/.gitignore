@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Test / tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Generated demo artefacts are intentionally NOT ignored -- they are the
+# reviewable output of the pipeline and are committed with the prototype.
+# Dashboard-owned mutable state is ignored, since it is per-reviewer:
+demo_output/review_queue_status.json

@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openintel-rfc"
+version = "0.1.0"
+description = "Match OpenINTEL DNS/DNSSEC measurement data against RFC checklists with explainable reasoning traces."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "DNSSEC RFC adoption project" }]
+keywords = ["dns", "dnssec", "openintel", "rfc", "parquet", "measurement"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: Name Service (DNS)",
+]
+
+dependencies = [
+    "pandas>=2.0",
+    "pyarrow>=14.0",
+    "duckdb>=0.10",
+    "pydantic>=2.5",
+]
+
+[project.optional-dependencies]
+dashboard = ["streamlit>=1.30", "plotly>=5.18"]
+test = ["pytest>=7.4"]
+extras = ["polars>=0.20", "pandera>=0.18", "rich>=13.0", "networkx>=3.0"]
+
+[project.scripts]
+openintel-rfc = "openintel_rfc.cli:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

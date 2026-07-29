@@ -1,0 +1,16 @@
+# OpenINTEL RFC-adoption matching pipeline -- MVP dependencies.
+# Selected in docs/open_source_tool_survey.md; each line notes its pipeline role.
+
+pandas>=2.0            # DataFrame handling, CSV/JSON export, dashboard tables
+pyarrow>=14.0          # Parquet IO and Arrow interop (also pandas' parquet engine)
+duckdb>=0.10           # Default query engine: SQL with projection pushdown over Parquet
+pydantic>=2.5          # Typed models for checklists, signals, matches, reasoning traces
+streamlit>=1.30        # Multipage management + visualization dashboard
+plotly>=5.18           # Interactive charts inside the dashboard
+pytest>=7.4            # Test suite
+
+# --- Optional extras (not required for the demo; see the tool survey) ---
+# polars>=0.20         # Lazy Parquet scans if the corpus outgrows DuckDB single-node
+# pandera>=0.18        # DataFrame-level schema validation of extracted signals
+# rich>=13.0           # Prettier CLI output
+# networkx>=3.0        # RFC dependency/obsoletion graph analysis

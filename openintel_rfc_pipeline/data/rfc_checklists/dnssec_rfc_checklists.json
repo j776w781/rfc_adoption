@@ -1,0 +1,305 @@
+{
+  "checklist_version": "0.1.0",
+  "description": "DNSSEC RFC checklist / signature database. Each RFC lists observable indicators expressed as conditions over normalized OpenINTEL analysis fields.",
+  "notes": [
+    "publication_date is the RFC Editor publication month, normalized to the first day of that month.",
+    "specificity drives the ranking multiplier: very_high=1.5, high=1.25, medium=1.0, low=0.75.",
+    "An indicator marked required=true must match for the RFC to be considered a full match.",
+    "Indicators marked ambiguous=true are queryable but not uniquely attributable to the RFC; they are routed to the review queue."
+  ],
+  "rfcs": [
+    {
+      "rfc_id": "RFC 4033",
+      "title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "publication_date": "2005-03-01",
+      "protocol": "DNSSEC",
+      "specificity": "low",
+      "related_rfc_ids": ["RFC 4034", "RFC 4035"],
+      "description": "The DNSSECbis base specification trio. RFC 4033 gives the introduction and requirements, RFC 4034 defines the DNSKEY/DS/RRSIG/NSEC resource records, and RFC 4035 defines protocol modifications. Presence of any DNSSEC record proves base DNSSEC, but says nothing about which later RFC is in use, so confidence is deliberately low.",
+      "references": [
+        "https://www.rfc-editor.org/info/rfc4033",
+        "https://www.rfc-editor.org/info/rfc4034",
+        "https://www.rfc-editor.org/info/rfc4035"
+      ],
+      "notes": "Modelled as one combined entry because the three documents are published together and are not separable from record-level observations alone. A match here should be read as 'base DNSSEC deployed', not as adoption of a specific mechanism.",
+      "indicators": [
+        {
+          "id": "rfc4033_base_dnssec_record_present",
+          "description": "A core DNSSEC resource record type defined by RFC 4034 is present in the response.",
+          "required": true,
+          "weight": 4,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["DNSKEY", "DS", "RRSIG", "NSEC"]}
+          ],
+          "notes": "Broad indicator: any DNSSEC-signed zone produces these records."
+        },
+        {
+          "id": "rfc4033_dnssec_algorithm_present",
+          "description": "The record carries a DNSSEC algorithm number, confirming a signed delegation or key.",
+          "required": false,
+          "weight": 2,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "algorithm", "op": "exists", "value": null}
+          ]
+        },
+        {
+          "id": "rfc4033_dnssec_ok_negotiated",
+          "description": "The resolver negotiated DNSSEC by setting the DO bit in the query (RFC 4035 section 3.2.1).",
+          "required": false,
+          "weight": 3,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["DNSKEY", "DS", "RRSIG", "NSEC"]},
+            {"field": "dnssec_ok_flag", "op": "equals", "value": true}
+          ],
+          "notes": "INTENTIONALLY PARTIALLY QUERYABLE: 'dnssec_ok_flag' is not present in the sample OpenINTEL dictionary, so this indicator demonstrates partial-queryability handling."
+        }
+      ]
+    },
+    {
+      "rfc_id": "RFC 4509",
+      "title": "Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records",
+      "publication_date": "2006-05-01",
+      "protocol": "DNSSEC",
+      "specificity": "high",
+      "related_rfc_ids": [],
+      "description": "Registers digest type 2 (SHA-256) for DS records and requires validators to support it. An observed DS or CDS record with digest_type=2 is direct evidence of the mechanism this RFC introduced.",
+      "references": ["https://www.rfc-editor.org/info/rfc4509"],
+      "notes": "Digest type 2 is now the de-facto default, so a match indicates the mechanism is in use rather than that the operator made a deliberate recent choice.",
+      "indicators": [
+        {
+          "id": "rfc4509_ds_sha256_digest",
+          "description": "DS or CDS record using digest type 2 (SHA-256).",
+          "required": true,
+          "weight": 9,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["DS", "CDS"]},
+            {"field": "digest_type", "op": "equals", "value": 2}
+          ]
+        }
+      ]
+    },
+    {
+      "rfc_id": "RFC 5155",
+      "title": "DNS Security (DNSSEC) Hashed Authenticated Denial of Existence",
+      "publication_date": "2008-03-01",
+      "protocol": "DNSSEC",
+      "specificity": "very_high",
+      "related_rfc_ids": [],
+      "description": "Defines NSEC3 and NSEC3PARAM for hashed authenticated denial of existence, replacing plain NSEC zone-walking exposure. The NSEC3 and NSEC3PARAM record types exist only because of this RFC.",
+      "references": ["https://www.rfc-editor.org/info/rfc5155"],
+      "notes": "The record types are uniquely attributable to RFC 5155, which is why specificity is very_high.",
+      "indicators": [
+        {
+          "id": "rfc5155_nsec3_record_present",
+          "description": "NSEC3 or NSEC3PARAM resource record observed.",
+          "required": true,
+          "weight": 10,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["NSEC3", "NSEC3PARAM"]}
+          ]
+        },
+        {
+          "id": "rfc5155_nsec3_hash_algorithm",
+          "description": "NSEC3 hash algorithm field present (algorithm 1 = SHA-1, the only value defined by RFC 5155).",
+          "required": false,
+          "weight": 3,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["NSEC3", "NSEC3PARAM"]},
+            {"field": "algorithm", "op": "exists", "value": null}
+          ]
+        }
+      ]
+    },
+    {
+      "rfc_id": "RFC 6605",
+      "title": "Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC",
+      "publication_date": "2012-04-01",
+      "protocol": "DNSSEC",
+      "specificity": "high",
+      "related_rfc_ids": [],
+      "description": "Registers DNSSEC algorithms 13 (ECDSAP256SHA256) and 14 (ECDSAP384SHA384). Observing either algorithm number is direct evidence of this RFC's registrations being deployed.",
+      "references": ["https://www.rfc-editor.org/info/rfc6605"],
+      "notes": "Algorithm numbers are allocated by this RFC, so attribution is strong; specificity is high rather than very_high because the numbers also appear in later recommendation documents.",
+      "indicators": [
+        {
+          "id": "rfc6605_ecdsa_algorithm",
+          "description": "Record uses DNSSEC algorithm 13 or 14 (ECDSA P-256 / P-384).",
+          "required": true,
+          "weight": 9,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "algorithm", "op": "in", "value": [13, 14]}
+          ]
+        },
+        {
+          "id": "rfc6605_ecdsa_on_key_or_signature",
+          "description": "The ECDSA algorithm appears on a key, delegation or signature record rather than an unrelated record type.",
+          "required": false,
+          "weight": 3,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["DNSKEY", "DS", "RRSIG", "CDS", "CDNSKEY"]},
+            {"field": "algorithm", "op": "in", "value": [13, 14]}
+          ]
+        }
+      ]
+    },
+    {
+      "rfc_id": "RFC 7344",
+      "title": "Automating DNSSEC Delegation Trust Maintenance",
+      "publication_date": "2014-09-01",
+      "protocol": "DNSSEC",
+      "specificity": "high",
+      "related_rfc_ids": [],
+      "description": "Defines the CDS and CDNSKEY resource record types, which let a child zone signal desired DS records to its parent. Any CDS/CDNSKEY observation implies this RFC's record types are deployed.",
+      "references": ["https://www.rfc-editor.org/info/rfc7344"],
+      "notes": "RFC 8078 builds directly on these record types, so a CDS/CDNSKEY delete signal matches both RFCs; RFC 8078 must rank higher because it adds a further, more specific condition.",
+      "indicators": [
+        {
+          "id": "rfc7344_cds_cdnskey_present",
+          "description": "CDS or CDNSKEY resource record observed.",
+          "required": true,
+          "weight": 9,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["CDS", "CDNSKEY"]}
+          ]
+        },
+        {
+          "id": "rfc7344_cds_publishes_digest",
+          "description": "CDS record publishes a concrete digest type, i.e. the child is advertising a DS to publish rather than requesting deletion.",
+          "required": false,
+          "weight": 3,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "equals", "value": "CDS"},
+            {"field": "digest_type", "op": "greater_or_equal", "value": 1}
+          ]
+        }
+      ]
+    },
+    {
+      "rfc_id": "RFC 8078",
+      "title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+      "publication_date": "2017-03-01",
+      "protocol": "DNSSEC",
+      "specificity": "very_high",
+      "related_rfc_ids": ["RFC 7344"],
+      "description": "Defines the CDS/CDNSKEY delete signal: a CDS or CDNSKEY record with algorithm field 0 instructs the parent to remove all DS records for the child, taking the zone insecure.",
+      "references": ["https://www.rfc-editor.org/info/rfc8078"],
+      "notes": "Algorithm 0 is otherwise reserved and never valid, so a CDS/CDNSKEY with algorithm=0 is an unambiguous RFC 8078 delete signal.",
+      "indicators": [
+        {
+          "id": "rfc8078_cds_cdnskey_algorithm_zero",
+          "description": "CDS or CDNSKEY record with algorithm field 0 (the delete signal).",
+          "required": true,
+          "weight": 10,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["CDS", "CDNSKEY"]},
+            {"field": "algorithm", "op": "equals", "value": 0}
+          ]
+        },
+        {
+          "id": "rfc8078_delete_signal_digest_zero",
+          "description": "The delete signal also carries digest type 0, as shown in the RFC 8078 example record.",
+          "required": false,
+          "weight": 3,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["CDS", "CDNSKEY"]},
+            {"field": "digest_type", "op": "equals", "value": 0}
+          ]
+        }
+      ]
+    },
+    {
+      "rfc_id": "RFC 8080",
+      "title": "Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC",
+      "publication_date": "2017-02-01",
+      "protocol": "DNSSEC",
+      "specificity": "very_high",
+      "related_rfc_ids": [],
+      "description": "Registers DNSSEC algorithms 15 (Ed25519) and 16 (Ed448). These algorithm numbers exist solely because of this RFC.",
+      "references": ["https://www.rfc-editor.org/info/rfc8080"],
+      "notes": "Obsoleted by RFC 8624's recommendations but the algorithm registrations remain attributable here.",
+      "indicators": [
+        {
+          "id": "rfc8080_eddsa_algorithm",
+          "description": "Record uses DNSSEC algorithm 15 or 16 (Ed25519 / Ed448).",
+          "required": true,
+          "weight": 10,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "algorithm", "op": "in", "value": [15, 16]}
+          ]
+        },
+        {
+          "id": "rfc8080_eddsa_on_key_or_signature",
+          "description": "The EdDSA algorithm appears on a key, delegation or signature record.",
+          "required": false,
+          "weight": 3,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "rr_type", "op": "in", "value": ["DNSKEY", "DS", "RRSIG", "CDS", "CDNSKEY"]},
+            {"field": "algorithm", "op": "in", "value": [15, 16]}
+          ]
+        }
+      ]
+    },
+    {
+      "rfc_id": "RFC 8624",
+      "title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "publication_date": "2019-06-01",
+      "protocol": "DNSSEC",
+      "specificity": "low",
+      "related_rfc_ids": ["RFC 6605", "RFC 8080"],
+      "description": "Recommendation document: states which DNSSEC signing and validation algorithms MUST/SHOULD/MUST NOT be implemented. It registers nothing new, so its adoption is inferred from algorithm usage patterns rather than observed directly.",
+      "references": ["https://www.rfc-editor.org/info/rfc8624"],
+      "notes": "Recommendation-oriented. Any match here is an inference about operator policy, not proof of adoption, so all indicators are marked ambiguous.",
+      "indicators": [
+        {
+          "id": "rfc8624_recommended_signing_algorithm",
+          "description": "Zone signs with an algorithm RFC 8624 marks RECOMMENDED (13 ECDSAP256SHA256, 15 Ed25519).",
+          "required": true,
+          "weight": 5,
+          "ambiguous": true,
+          "conditions": [
+            {"field": "algorithm", "op": "in", "value": [13, 15]}
+          ],
+          "notes": "AMBIGUOUS BY CONSTRUCTION: the same observation is equally explained by RFC 6605 / RFC 8080 registrations."
+        },
+        {
+          "id": "rfc8624_avoids_deprecated_algorithm",
+          "description": "Zone avoids algorithms RFC 8624 marks MUST NOT / NOT RECOMMENDED for signing (1 RSAMD5, 3 DSA, 6 DSA-NSEC3-SHA1, 12 GOST).",
+          "required": false,
+          "weight": 3,
+          "ambiguous": true,
+          "conditions": [
+            {"field": "algorithm", "op": "exists", "value": null},
+            {"field": "algorithm", "op": "not_equals", "value": 1}
+          ],
+          "notes": "Absence of evidence over a single record cannot establish a zone-wide policy."
+        },
+        {
+          "id": "rfc8624_validator_algorithm_support",
+          "description": "Validating resolver implements the RFC 8624 mandatory-to-implement validation algorithm set.",
+          "required": false,
+          "weight": 6,
+          "ambiguous": false,
+          "conditions": [
+            {"field": "validator_algorithm_support", "op": "contains", "value": "ECDSAP256SHA256"},
+            {"field": "rr_type", "op": "in", "value": ["DNSKEY", "RRSIG"]}
+          ],
+          "notes": "INTENTIONALLY NON-QUERYABLE: 'validator_algorithm_support' describes resolver-side behaviour and is absent from the OpenINTEL dictionary. Included to exercise missing-field handling in the schema checker and review queue."
+        }
+      ]
+    }
+  ]
+}
