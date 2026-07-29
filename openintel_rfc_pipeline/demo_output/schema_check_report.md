@@ -1,6 +1,6 @@
 # OpenINTEL Schema Cross-Check
 
-Generated: 2026-07-29T16:02:43  
+Generated: 2026-07-29T16:22:33  
 Pipeline: openintel-rfc-adoption-matcher 0.1.0
 
 Every indicator in the RFC checklist is checked field by field against the OpenINTEL analysis dictionary *before* any measurement data is read. An indicator whose fields the corpus does not carry cannot be answered by this data source at any confidence level, and saying so explicitly is more useful than silently scoring it as a non-match.
@@ -24,7 +24,7 @@ Every indicator in the RFC checklist is checked field by field against the OpenI
 | non_queryable | 1 | 5.9% |
 | partially_queryable | 1 | 5.9% |
 
-Definitions: *queryable* — every field the indicator references exists in the dictionary; *partially_queryable* — some fields exist and at least one does not, so the indicator can only ever be partly evaluated; *non_queryable* — none of the discriminating fields exist; *ambiguous* — the fields exist but the observation is not uniquely attributable to the RFC.
+Definitions: *queryable* - every field the indicator references exists in the dictionary; *partially_queryable* - some fields exist and at least one does not, so the indicator can only ever be partly evaluated; *non_queryable* - none of the discriminating fields exist; *ambiguous* - the fields exist but the observation is not uniquely attributable to the RFC.
 
 ## 3. Indicator verdicts
 
@@ -72,7 +72,7 @@ Missing dictionary fields: `validator_algorithm_support`
 
 | Field | Type | Available from | Nullable | OpenINTEL columns |
 | --- | --- | --- | --- | --- |
-| algorithm | integer | 2010-01-01 | yes | dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey… |
+| algorithm | integer | 2010-01-01 | yes | dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey... |
 | digest_type | integer | 2010-01-01 | yes | ds_digest_type, cds_digest_type |
 | domain | string | 2010-01-01 | no | query_name, response_name |
 | flags | string | 2016-01-01 | yes | dnskey_flags, nsec3param_flags, cdnskey_flags |

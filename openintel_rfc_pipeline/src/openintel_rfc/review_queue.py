@@ -1178,7 +1178,15 @@ def _finalize(drafts: Sequence[_Draft]) -> list[ReviewItem]:
     deduped: dict[tuple[str, ...], ReviewItem] = {}
     for key, item in drafts:
         if key in deduped:
-            LOGGER.debug("Dropping duplicate review item for key %s", key)
+            # Dedup keys are built to be content-unique, so a collision means two
+            # genuinely different findings collapsed into one and a reviewer will
+            # never see the second. That is a bug worth surfacing, not a debug
+            # detail -- hence warning level rather than debug.
+            LOGGER.warning(
+                "Two distinct review items collided on dedup key %s; only the first is "
+                "kept, so a finding may be missing from the queue.",
+                key,
+            )
             continue
         deduped[key] = item
 

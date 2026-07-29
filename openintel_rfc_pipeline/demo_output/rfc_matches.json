@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T16:09:37",
+  "generated_at": "2026-07-29T16:22:34",
   "pipeline": "openintel-rfc-adoption-matcher",
   "version": "0.1.0",
   "count": 584,
@@ -815,9 +815,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -1080,9 +1078,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -1163,9 +1159,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -1272,9 +1266,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -1387,9 +1379,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -1609,9 +1599,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -1710,7 +1698,7 @@
       "signal_id": "sig_0002",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -1827,13 +1815,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 3028 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0002_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0002: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2011-02-15T03:43:30 predates RFC 8624's publication on 2019-06-01 by 3028 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0002: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2011-02-15T03:43:30 predates RFC 8624's publication on 2019-06-01 by 3028 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0003",
@@ -2646,9 +2632,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -2996,9 +2980,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -3105,9 +3087,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -3448,9 +3428,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -3549,7 +3527,7 @@
       "signal_id": "sig_0004",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -3666,13 +3644,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2930 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0004_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0004: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2011-05-24T01:47:52 predates RFC 8624's publication on 2019-06-01 by 2930 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0004: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2011-05-24T01:47:52 predates RFC 8624's publication on 2019-06-01 by 2930 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0005",
@@ -3919,9 +3895,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -4028,9 +4002,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -4371,9 +4343,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -4472,7 +4442,7 @@
       "signal_id": "sig_0005",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -4589,13 +4559,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2671 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0005_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0005: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2012-02-07T03:31:12 predates RFC 8624's publication on 2019-06-01 by 2671 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0005: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2012-02-07T03:31:12 predates RFC 8624's publication on 2019-06-01 by 2671 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0006",
@@ -4841,9 +4809,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -4950,9 +4916,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -5065,9 +5029,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -5287,9 +5249,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -5388,7 +5348,7 @@
       "signal_id": "sig_0006",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -5505,13 +5465,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2635 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0006_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0006: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2012-03-14T02:49:20 predates RFC 8624's publication on 2019-06-01 by 2635 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0006: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2012-03-14T02:49:20 predates RFC 8624's publication on 2019-06-01 by 2635 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0007",
@@ -6324,9 +6282,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -6589,9 +6545,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -6672,9 +6626,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -6781,9 +6733,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -6896,9 +6846,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -7118,9 +7066,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -7219,7 +7165,7 @@
       "signal_id": "sig_0008",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -7336,13 +7282,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2475 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0008_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0008: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2012-08-21T05:07:43 predates RFC 8624's publication on 2019-06-01 by 2475 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0008: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2012-08-21T05:07:43 predates RFC 8624's publication on 2019-06-01 by 2475 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0009",
@@ -7589,9 +7533,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -8138,7 +8080,7 @@
       "signal_id": "sig_0009",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -8255,13 +8197,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2363 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0009_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0009: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2012-12-11T01:11:09 predates RFC 8624's publication on 2019-06-01 by 2363 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0009: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2012-12-11T01:11:09 predates RFC 8624's publication on 2019-06-01 by 2363 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0010",
@@ -9074,9 +9014,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -9423,9 +9361,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -9532,9 +9468,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -9647,9 +9581,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -9869,9 +9801,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -9970,7 +9900,7 @@
       "signal_id": "sig_0011",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -10087,13 +10017,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2165 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0011_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0011: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2013-06-27T05:25:22 predates RFC 8624's publication on 2019-06-01 by 2165 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0011: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2013-06-27T05:25:22 predates RFC 8624's publication on 2019-06-01 by 2165 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0012",
@@ -10456,9 +10384,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -10793,9 +10719,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -11011,7 +10935,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 2160 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -11263,9 +11187,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -11372,9 +11294,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -11715,9 +11635,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -11816,7 +11734,7 @@
       "signal_id": "sig_0013",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -11933,13 +11851,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2097 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0013_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0013: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2013-09-03T02:47:48 predates RFC 8624's publication on 2019-06-01 by 2097 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0013: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2013-09-03T02:47:48 predates RFC 8624's publication on 2019-06-01 by 2097 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0014",
@@ -12101,9 +12017,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -12184,9 +12098,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -12293,9 +12205,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -12408,9 +12318,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -12630,9 +12538,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -12731,7 +12637,7 @@
       "signal_id": "sig_0014",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -12848,13 +12754,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 2034 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0014_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0014: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2013-11-05T02:08:51 predates RFC 8624's publication on 2019-06-01 by 2034 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0014: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2013-11-05T02:08:51 predates RFC 8624's publication on 2019-06-01 by 2034 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0015",
@@ -13100,9 +13004,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -13209,9 +13111,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -13324,9 +13224,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -13546,9 +13444,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -13647,7 +13543,7 @@
       "signal_id": "sig_0015",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -13764,13 +13660,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1969 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0015_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0015: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2014-01-09T05:43:02 predates RFC 8624's publication on 2019-06-01 by 1969 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0015: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2014-01-09T05:43:02 predates RFC 8624's publication on 2019-06-01 by 1969 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0016",
@@ -13932,9 +13826,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -14015,9 +13907,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -14124,9 +14014,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -14239,9 +14127,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -14461,9 +14347,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -14562,7 +14446,7 @@
       "signal_id": "sig_0016",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -14679,13 +14563,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1871 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0016_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0016: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2014-04-17T05:34:29 predates RFC 8624's publication on 2019-06-01 by 1871 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0016: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2014-04-17T05:34:29 predates RFC 8624's publication on 2019-06-01 by 1871 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0017",
@@ -15048,9 +14930,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -15385,9 +15265,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -15603,7 +15481,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 1839 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -15855,9 +15733,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -15964,9 +15840,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -16307,9 +16181,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -16408,7 +16280,7 @@
       "signal_id": "sig_0018",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -16525,13 +16397,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1811 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0018_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0018: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2014-06-16T01:47:01 predates RFC 8624's publication on 2019-06-01 by 1811 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0018: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2014-06-16T01:47:01 predates RFC 8624's publication on 2019-06-01 by 1811 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0019",
@@ -17344,9 +17214,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -17715,9 +17583,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -17798,9 +17664,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -17907,9 +17771,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -18120,7 +17982,7 @@
           "specificity_multiplier = 1.5 (RFC 8078 specificity=very_high)",
           "final_score = max(0, 11.5) * 1.5 = 17.25",
           "timestamp_penalty = 17.25 (the observation predates RFC 8078's publication date by 693 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)"
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)"
         ]
       },
       "trace_id": "trace_sig_0020_rfc8078",
@@ -18144,9 +18006,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -18245,7 +18105,7 @@
       "signal_id": "sig_0020",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -18362,13 +18222,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1515 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0020_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0020: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2015-04-08T00:49:32 predates RFC 8624's publication on 2019-06-01 by 1515 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0020: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2015-04-08T00:49:32 predates RFC 8624's publication on 2019-06-01 by 1515 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0021",
@@ -18614,9 +18472,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -18723,9 +18579,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -18838,9 +18692,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -19060,9 +18912,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -19161,7 +19011,7 @@
       "signal_id": "sig_0021",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -19278,13 +19128,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1501 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0021_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0021: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2015-04-22T04:34:59 predates RFC 8624's publication on 2019-06-01 by 1501 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0021: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2015-04-22T04:34:59 predates RFC 8624's publication on 2019-06-01 by 1501 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0022",
@@ -20097,9 +19945,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -20563,9 +20409,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -20900,9 +20744,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -21118,7 +20960,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 1374 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -21391,9 +21233,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -21474,9 +21314,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -21583,9 +21421,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -21796,7 +21632,7 @@
           "specificity_multiplier = 1.5 (RFC 8078 specificity=very_high)",
           "final_score = max(0, 11.5) * 1.5 = 17.25",
           "timestamp_penalty = 17.25 (the observation predates RFC 8078's publication date by 526 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)"
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)"
         ]
       },
       "trace_id": "trace_sig_0024_rfc8078",
@@ -21820,9 +21656,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -21921,7 +21755,7 @@
       "signal_id": "sig_0024",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -22038,13 +21872,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1348 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0024_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0024: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2015-09-22T05:06:26 predates RFC 8624's publication on 2019-06-01 by 1348 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0024: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2015-09-22T05:06:26 predates RFC 8624's publication on 2019-06-01 by 1348 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0025",
@@ -22291,9 +22123,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -22840,7 +22670,7 @@
       "signal_id": "sig_0025",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -22957,13 +22787,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1285 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0025_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0025: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2015-11-24T01:12:20 predates RFC 8624's publication on 2019-06-01 by 1285 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0025: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2015-11-24T01:12:20 predates RFC 8624's publication on 2019-06-01 by 1285 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0026",
@@ -23231,9 +23059,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -23314,9 +23140,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -23423,9 +23247,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -23636,7 +23458,7 @@
           "specificity_multiplier = 1.5 (RFC 8078 specificity=very_high)",
           "final_score = max(0, 11.5) * 1.5 = 17.25",
           "timestamp_penalty = 17.25 (the observation predates RFC 8078's publication date by 411 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)"
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)"
         ]
       },
       "trace_id": "trace_sig_0026_rfc8078",
@@ -23660,9 +23482,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -23761,7 +23581,7 @@
       "signal_id": "sig_0026",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -23878,13 +23698,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1233 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0026_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0026: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2016-01-15T04:12:13 predates RFC 8624's publication on 2019-06-01 by 1233 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0026: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2016-01-15T04:12:13 predates RFC 8624's publication on 2019-06-01 by 1233 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0027",
@@ -24247,9 +24065,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -24584,9 +24400,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -24802,7 +24616,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 1178 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -25054,9 +24868,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -25163,9 +24975,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -25506,9 +25316,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -25607,7 +25415,7 @@
       "signal_id": "sig_0028",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -25724,13 +25532,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1152 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0028_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0028: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2016-04-05T04:03:19 predates RFC 8624's publication on 2019-06-01 by 1152 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0028: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2016-04-05T04:03:19 predates RFC 8624's publication on 2019-06-01 by 1152 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0029",
@@ -25998,9 +25804,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -26081,9 +25885,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -26190,9 +25992,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -26403,7 +26203,7 @@
           "specificity_multiplier = 1.5 (RFC 8078 specificity=very_high)",
           "final_score = max(0, 11.5) * 1.5 = 17.25",
           "timestamp_penalty = 17.25 (the observation predates RFC 8078's publication date by 275 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)"
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)"
         ]
       },
       "trace_id": "trace_sig_0029_rfc8078",
@@ -26427,9 +26227,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -26528,7 +26326,7 @@
       "signal_id": "sig_0029",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -26645,13 +26443,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1097 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0029_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0029: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2016-05-30T02:02:59 predates RFC 8624's publication on 2019-06-01 by 1097 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0029: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2016-05-30T02:02:59 predates RFC 8624's publication on 2019-06-01 by 1097 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0030",
@@ -26897,9 +26693,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -27006,9 +26800,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -27121,9 +26913,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -27343,9 +27133,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -27444,7 +27232,7 @@
       "signal_id": "sig_0030",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -27561,13 +27349,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 1053 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0030_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0030: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2016-07-13T00:02:05 predates RFC 8624's publication on 2019-06-01 by 1053 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0030: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2016-07-13T00:02:05 predates RFC 8624's publication on 2019-06-01 by 1053 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0031",
@@ -28380,9 +28166,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -28751,9 +28535,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -28834,9 +28616,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -28943,9 +28723,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -29156,7 +28934,7 @@
           "specificity_multiplier = 1.5 (RFC 8078 specificity=very_high)",
           "final_score = max(0, 11.5) * 1.5 = 17.25",
           "timestamp_penalty = 17.25 (the observation predates RFC 8078's publication date by 119 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)"
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)"
         ]
       },
       "trace_id": "trace_sig_0032_rfc8078",
@@ -29180,9 +28958,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -29281,7 +29057,7 @@
       "signal_id": "sig_0032",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -29398,13 +29174,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 941 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0032_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0032: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2016-11-02T04:18:00 predates RFC 8624's publication on 2019-06-01 by 941 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0032: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2016-11-02T04:18:00 predates RFC 8624's publication on 2019-06-01 by 941 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0033",
@@ -29767,9 +29541,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -30104,9 +29876,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -30205,7 +29975,7 @@
       "signal_id": "sig_0033",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -30322,13 +30092,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 915 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0033_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0033: although algorithm=14 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2016-11-28T04:53:55 predates RFC 8624's publication on 2019-06-01 by 915 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0033: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 14) and algorithm=14 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=14 is not in [13, 15]. The observation on 2016-11-28T04:53:55 predates RFC 8624's publication on 2019-06-01 by 915 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0034",
@@ -30691,9 +30459,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -31028,9 +30794,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -31246,7 +31010,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 708 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -31498,9 +31262,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -31607,9 +31369,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -31950,9 +31710,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -32051,7 +31809,7 @@
       "signal_id": "sig_0035",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -32168,13 +31926,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 655 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0035_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0035: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2017-08-15T05:53:30 predates RFC 8624's publication on 2019-06-01 by 655 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0035: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2017-08-15T05:53:30 predates RFC 8624's publication on 2019-06-01 by 655 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0036",
@@ -32420,9 +32176,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -32529,9 +32283,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -32644,9 +32396,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -32866,9 +32616,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -32967,7 +32715,7 @@
       "signal_id": "sig_0036",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -33084,13 +32832,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 583 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0036_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0036: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2017-10-26T03:24:35 predates RFC 8624's publication on 2019-06-01 by 583 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0036: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2017-10-26T03:24:35 predates RFC 8624's publication on 2019-06-01 by 583 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0037",
@@ -33903,9 +33649,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -34369,9 +34113,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -34478,9 +34220,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -34924,7 +34664,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 509 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -35175,9 +34915,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -35284,9 +35022,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -35399,9 +35135,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -35621,9 +35355,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -35722,7 +35454,7 @@
       "signal_id": "sig_0039",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -35839,13 +35571,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 480 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0039_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0039: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2018-02-06T05:03:52 predates RFC 8624's publication on 2019-06-01 by 480 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0039: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2018-02-06T05:03:52 predates RFC 8624's publication on 2019-06-01 by 480 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0040",
@@ -36658,9 +36388,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -37124,9 +36852,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -37461,9 +37187,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -37562,7 +37286,7 @@
       "signal_id": "sig_0041",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -37679,13 +37403,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 418 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0041_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0041: although algorithm=14 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2018-04-09T04:50:52 predates RFC 8624's publication on 2019-06-01 by 418 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0041: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 14) and algorithm=14 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=14 is not in [13, 15]. The observation on 2018-04-09T04:50:52 predates RFC 8624's publication on 2019-06-01 by 418 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0042",
@@ -38073,9 +37795,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -38156,9 +37876,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -38265,9 +37983,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -38380,9 +38096,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -38481,7 +38195,7 @@
       "signal_id": "sig_0042",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -38598,13 +38312,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 396 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0042_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0042: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2018-05-01T04:39:40 predates RFC 8624's publication on 2019-06-01 by 396 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0042: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2018-05-01T04:39:40 predates RFC 8624's publication on 2019-06-01 by 396 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0043",
@@ -38992,9 +38704,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -39075,9 +38785,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -39184,9 +38892,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -39299,9 +39005,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -39400,7 +39104,7 @@
       "signal_id": "sig_0043",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -39517,13 +39221,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 352 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0043_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0043: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2018-06-14T03:31:02 predates RFC 8624's publication on 2019-06-01 by 352 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0043: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2018-06-14T03:31:02 predates RFC 8624's publication on 2019-06-01 by 352 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0044",
@@ -39886,9 +39588,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -39995,9 +39695,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -40441,7 +40139,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 291 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -40834,9 +40532,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -40917,9 +40613,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -41026,9 +40720,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -41141,9 +40833,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -41242,7 +40932,7 @@
       "signal_id": "sig_0045",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -41359,13 +41049,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 271 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0045_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0045: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2018-09-03T05:00:50 predates RFC 8624's publication on 2019-06-01 by 271 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0045: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2018-09-03T05:00:50 predates RFC 8624's publication on 2019-06-01 by 271 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0046",
@@ -41728,9 +41416,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -42065,9 +41751,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -42283,7 +41967,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 270 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -42676,9 +42360,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -42759,9 +42441,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -42868,9 +42548,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -42983,9 +42661,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -43084,7 +42760,7 @@
       "signal_id": "sig_0047",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -43201,13 +42877,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 193 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0047_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0047: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2018-11-20T00:04:12 predates RFC 8624's publication on 2019-06-01 by 193 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0047: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2018-11-20T00:04:12 predates RFC 8624's publication on 2019-06-01 by 193 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0048",
@@ -43369,9 +43043,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -43452,9 +43124,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -43561,9 +43231,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -43676,9 +43344,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -43898,9 +43564,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -43999,7 +43663,7 @@
       "signal_id": "sig_0048",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -44116,13 +43780,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 179 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0048_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0048: although algorithm=8 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2018-12-04T00:15:59 predates RFC 8624's publication on 2019-06-01 by 179 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0048: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 8) and algorithm=8 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=8 is not in [13, 15]. The observation on 2018-12-04T00:15:59 predates RFC 8624's publication on 2019-06-01 by 179 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0049",
@@ -44510,9 +44172,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -44593,9 +44253,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -44702,9 +44360,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -44817,9 +44473,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -44918,7 +44572,7 @@
       "signal_id": "sig_0049",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -45035,13 +44689,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 110 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0049_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0049: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2019-02-11T00:49:18 predates RFC 8624's publication on 2019-06-01 by 110 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0049: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2019-02-11T00:49:18 predates RFC 8624's publication on 2019-06-01 by 110 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0050",
@@ -45404,9 +45056,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -45513,9 +45163,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -45959,7 +45607,7 @@
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, 4.5) * 0.75 = 3.375",
           "timestamp_penalty = 3.375 (the observation predates RFC 8624's publication date by 68 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
+          "final_score = 0.0 (an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
@@ -46238,9 +45886,7 @@
       "missing_fields": [
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -46436,9 +46082,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -46558,9 +46202,7 @@
         "algorithm",
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8078_cds_cdnskey_algorithm_zero",
@@ -46682,9 +46324,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -47298,9 +46938,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -47381,9 +47019,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -47490,9 +47126,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -47605,9 +47239,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -47706,7 +47338,7 @@
       "signal_id": "sig_0052",
       "rfc_id": "RFC 8624",
       "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
-      "decision": "timestamp_invalid",
+      "decision": "partial_match",
       "score": 0.0,
       "confidence": "none",
       "timestamp_valid": false,
@@ -47823,13 +47455,11 @@
           "raw = 0.0 + 0.0 + 1.5 - 3.0 - 0.0 - 2.0 = -3.5",
           "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
           "final_score = max(0, -3.5) * 0.75 = 0.0",
-          "timestamp_penalty = 0.0 (the observation predates RFC 8624's publication date by 25 days, so the score is withheld)",
-          "final_score = 0.0 (timestamp_invalid: an observation cannot evidence adoption of an RFC that did not yet exist)",
           "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
         ]
       },
       "trace_id": "trace_sig_0052_rfc8624",
-      "reasoning_summary": "RFC 8624 cannot explain signal sig_0052: although algorithm=0 satisfy the optional indicator rfc8624_avoids_deprecated_algorithm, the observation on 2019-05-07T01:34:17 predates RFC 8624's publication on 2019-06-01 by 25 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score of 0.0 is forfeited and this is routed to the review queue. The withheld score derives from (0.0 required + 1.5 optional - 3.0 missing-required penalty - 2.0 ambiguity penalty) x 0.75 low specificity."
+      "reasoning_summary": "RFC 8624 partially matches signal sig_0052: the optional indicator rfc8624_avoids_deprecated_algorithm passed because algorithm is present (observed 0) and algorithm=0 differs from 1 as required. The required indicator rfc8624_recommended_signing_algorithm was not satisfied: algorithm=0 is not in [13, 15]. The observation on 2019-05-07T01:34:17 predates RFC 8624's publication on 2019-06-01 by 25 days. An observation cannot evidence adoption of an RFC that did not yet exist, so the score is forfeited. Score 0.0 (none): the penalties leave a raw total of -3.5, which is clamped to 0 before the 0.75 low specificity multiplier."
     },
     {
       "signal_id": "sig_0053",
@@ -48075,9 +47705,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -48184,9 +47812,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -48299,9 +47925,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -48521,9 +48145,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -49106,9 +48728,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -49215,9 +48835,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -50053,9 +49671,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -50136,9 +49752,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -50245,9 +49859,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -50360,9 +49972,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -50856,9 +50466,7 @@
       "missing_fields": [
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -51054,9 +50662,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -51176,9 +50782,7 @@
         "algorithm",
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8078_cds_cdnskey_algorithm_zero",
@@ -51300,9 +50904,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -52341,9 +51943,7 @@
         "rr_type",
         "validator_algorithm_support"
       ],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8624_recommended_signing_algorithm",
@@ -52691,9 +52291,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -52800,9 +52398,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -53143,9 +52739,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -53854,9 +53448,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -53963,9 +53555,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -54775,9 +54365,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -55112,9 +54700,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -55595,9 +55181,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -55678,9 +55262,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -55787,9 +55369,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -55902,9 +55482,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -56398,9 +55976,7 @@
       "missing_fields": [
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -56596,9 +56172,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -56718,9 +56292,7 @@
         "algorithm",
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8078_cds_cdnskey_algorithm_zero",
@@ -56842,9 +56414,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -57458,9 +57028,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -57541,9 +57109,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -57650,9 +57216,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -57765,9 +57329,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -58476,9 +58038,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -58585,9 +58145,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -59271,9 +58829,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -59608,9 +59164,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -60076,9 +59630,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -60185,9 +59737,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -60300,9 +59850,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -60522,9 +60070,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -61132,9 +60678,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -61215,9 +60759,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -61324,9 +60866,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -61439,9 +60979,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -61935,9 +61473,7 @@
       "missing_fields": [
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -62133,9 +61669,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -62255,9 +61789,7 @@
         "algorithm",
         "digest_type"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8078_cds_cdnskey_algorithm_zero",
@@ -62379,9 +61911,7 @@
       "missing_fields": [
         "algorithm"
       ],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -63096,9 +62626,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -63205,9 +62733,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -63916,9 +63442,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -63999,9 +63523,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -64108,9 +63630,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -64223,9 +63743,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -64691,9 +64209,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -64800,9 +64316,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -64915,9 +64429,7 @@
         "rfc7344_cds_publishes_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "digest_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc7344_cds_cdnskey_present",
@@ -65137,9 +64649,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -65747,9 +65257,7 @@
         "rfc4509_ds_sha256_digest"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc4509_ds_sha256_digest",
@@ -65830,9 +65338,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -65939,9 +65445,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",
@@ -66054,9 +65558,7 @@
         "rfc8080_eddsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc8080_eddsa_algorithm",
@@ -66639,9 +66141,7 @@
         "rfc5155_nsec3_record_present"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "algorithm"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc5155_nsec3_record_present",
@@ -66748,9 +66248,7 @@
         "rfc6605_ecdsa_on_key_or_signature"
       ],
       "missing_fields": [],
-      "matched_fields": [
-        "rr_type"
-      ],
+      "matched_fields": [],
       "indicator_evaluations": [
         {
           "indicator_id": "rfc6605_ecdsa_algorithm",

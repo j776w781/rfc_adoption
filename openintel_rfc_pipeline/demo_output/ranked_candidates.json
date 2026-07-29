@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T16:09:37",
+  "generated_at": "2026-07-29T16:22:34",
   "pipeline": "openintel-rfc-adoption-matcher",
   "version": "0.1.0",
   "count": 8,
@@ -14,7 +14,7 @@
       "score": 17.25,
       "aggregate_score": 207.0,
       "confidence": "very_high",
-      "supporting_signal_count": 16,
+      "supporting_signal_count": 12,
       "valid_match_count": 12,
       "partial_match_count": 4,
       "timestamp_invalid_count": 5,
@@ -58,7 +58,7 @@
         "trace_sig_0047_rfc8078",
         "trace_sig_0049_rfc8078"
       ],
-      "reasoning_summary": "RFC 8078 ranks first (score 17.25, very_high) on 16 supporting observations; strongest evidence is indicator rfc8078_cds_cdnskey_algorithm_zero matching rr_type=CDS and algorithm=0. A further 5 observations matched the indicators but were withheld from the score because they predate the RFC's publication date.",
+      "reasoning_summary": "RFC 8078 ranks first (score 17.25, very_high) on 12 supporting observations; strongest evidence is indicator rfc8078_cds_cdnskey_algorithm_zero matching rr_type=CDS and algorithm=0. A further 5 observations matched the indicators but were withheld from the score because they predate the RFC's publication date.",
       "score_breakdown": {
         "base_indicator_score": 10.0,
         "specificity_multiplier": 1.5,
@@ -396,7 +396,7 @@
       "score": 11.25,
       "aggregate_score": 112.5,
       "confidence": "high",
-      "supporting_signal_count": 14,
+      "supporting_signal_count": 10,
       "valid_match_count": 10,
       "partial_match_count": 4,
       "timestamp_invalid_count": 0,
@@ -411,10 +411,8 @@
       ],
       "domains": [
         "dnssec-demo.nl",
-        "dnssec-demo.org",
         "example.com",
         "example.net",
-        "example.nl",
         "example.org",
         "keyroll.nu",
         "signed-example.se"
@@ -441,7 +439,7 @@
         "trace_sig_0021_rfc4509",
         "trace_sig_0030_rfc4509"
       ],
-      "reasoning_summary": "RFC 4509 ranks sixth (score 11.25, high) on 14 supporting observations; strongest evidence is indicator rfc4509_ds_sha256_digest matching rr_type=DS and digest_type=2.",
+      "reasoning_summary": "RFC 4509 ranks sixth (score 11.25, high) on 10 supporting observations; strongest evidence is indicator rfc4509_ds_sha256_digest matching rr_type=DS and digest_type=2.",
       "score_breakdown": {
         "base_indicator_score": 9.0,
         "specificity_multiplier": 1.25,
@@ -475,7 +473,7 @@
       "score": 3.75,
       "aggregate_score": 157.5,
       "confidence": "low",
-      "supporting_signal_count": 69,
+      "supporting_signal_count": 42,
       "valid_match_count": 42,
       "partial_match_count": 27,
       "timestamp_invalid_count": 0,
@@ -490,7 +488,6 @@
         "rr_type"
       ],
       "domains": [
-        "delete-signal.nl",
         "dnssec-demo.nl",
         "dnssec-demo.org",
         "ecdsa-demo.com",
@@ -499,10 +496,8 @@
         "example.net",
         "example.nl",
         "example.org",
-        "hashed-denial.nu",
         "keyroll.nu",
         "legacy-sha1.com",
-        "rollover-test.net",
         "signed-example.se"
       ],
       "zones": [
@@ -527,7 +522,7 @@
         "trace_sig_0004_rfc4033",
         "trace_sig_0005_rfc4033"
       ],
-      "reasoning_summary": "RFC 4033 ranks seventh (score 3.75, low) on 69 supporting observations; strongest evidence is indicator rfc4033_base_dnssec_record_present matching rr_type=DS.",
+      "reasoning_summary": "RFC 4033 ranks seventh (score 3.75, low) on 42 supporting observations; strongest evidence is indicator rfc4033_base_dnssec_record_present matching rr_type=DS.",
       "score_breakdown": {
         "base_indicator_score": 4.0,
         "specificity_multiplier": 0.75,
@@ -561,12 +556,12 @@
       "score": 3.375,
       "aggregate_score": 13.5,
       "confidence": "low",
-      "supporting_signal_count": 17,
+      "supporting_signal_count": 4,
       "valid_match_count": 0,
-      "partial_match_count": 13,
-      "timestamp_invalid_count": 42,
-      "first_seen": null,
-      "last_seen": null,
+      "partial_match_count": 46,
+      "timestamp_invalid_count": 9,
+      "first_seen": "2019-11-06T00:30:08",
+      "last_seen": "2021-02-01T00:37:02",
       "matched_indicator_ids": [
         "rfc8624_avoids_deprecated_algorithm",
         "rfc8624_recommended_signing_algorithm"
@@ -575,41 +570,31 @@
         "algorithm"
       ],
       "domains": [
-        "delete-signal.nl",
-        "dnssec-demo.nl",
         "dnssec-demo.org",
         "ecdsa-demo.com",
         "eddsa-demo.se",
-        "example.com",
-        "example.net",
-        "example.nl",
-        "example.org",
-        "keyroll.nu",
-        "rollover-test.net"
+        "example.com"
       ],
       "zones": [
         "com",
-        "net",
-        "nl",
-        "nu",
         "org",
         "se"
       ],
       "example_signal_ids": [
-        "sig_0053",
-        "sig_0054",
-        "sig_0055",
-        "sig_0058",
-        "sig_0059"
+        "sig_0002",
+        "sig_0004",
+        "sig_0005",
+        "sig_0006",
+        "sig_0008"
       ],
       "example_trace_ids": [
-        "trace_sig_0053_rfc8624",
-        "trace_sig_0054_rfc8624",
-        "trace_sig_0055_rfc8624",
-        "trace_sig_0058_rfc8624",
-        "trace_sig_0059_rfc8624"
+        "trace_sig_0002_rfc8624",
+        "trace_sig_0004_rfc8624",
+        "trace_sig_0005_rfc8624",
+        "trace_sig_0006_rfc8624",
+        "trace_sig_0008_rfc8624"
       ],
-      "reasoning_summary": "RFC 8624 ranks eighth (score 3.375, low) on 17 supporting observations; strongest evidence is indicator rfc8624_recommended_signing_algorithm matching algorithm=15. The verdict is ambiguous: at least one matched indicator is not uniquely attributable to this RFC, so it is routed to the review queue. A further 42 observations matched the indicators but were withheld from the score because they predate the RFC's publication date.",
+      "reasoning_summary": "RFC 8624 ranks eighth (score 3.375, low) on 4 supporting observations; strongest evidence is indicator rfc8624_recommended_signing_algorithm matching algorithm=15. The verdict is ambiguous: at least one matched indicator is not uniquely attributable to this RFC, so it is routed to the review queue. A further 9 observations matched the indicators but were withheld from the score because they predate the RFC's publication date.",
       "score_breakdown": {
         "base_indicator_score": 5.0,
         "specificity_multiplier": 0.75,

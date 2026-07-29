@@ -550,11 +550,22 @@ def _uncertainty_notes(
         )
 
     if not timestamp_check.valid:
-        notes.append(
-            "The observation predates the RFC publication date by "
-            f"{abs(timestamp_check.days_after_publication)} days, so any score it would "
-            "have earned is withheld and the case needs human review."
-        )
+        days = abs(timestamp_check.days_after_publication)
+        if decision == "timestamp_invalid":
+            notes.append(
+                f"The observation predates the RFC publication date by {days} days, so "
+                "any score it would have earned is withheld and the case needs human "
+                "review."
+            )
+        else:
+            # Nothing was forfeited here and no timestamp review item is raised:
+            # the indicators failed on their own terms, and the date is merely
+            # additional context. Claiming a withheld score would be false.
+            notes.append(
+                f"The observation also predates the RFC publication date by {days} days, "
+                "but that is not why it was rejected: the indicator conditions did not "
+                "hold regardless of the date, so no score was withheld."
+            )
 
     if decision == "partial_match":
         notes.append(
@@ -606,7 +617,19 @@ def build_trace(
         e.indicator_id for e in indicator_evals if e.required and not e.skipped and not e.matched
     )
     missing_fields = unique_sorted(f for e in indicator_evals for f in e.missing_fields)
-    matched_fields = unique_sorted(c.field for c in matched_conditions)
+    # Only fields belonging to indicators that matched *overall*. Collecting
+    # every passing condition instead would put fields on `no_match` traces --
+    # 210 of them in the sample run -- under a name that reads as "the fields
+    # that carried the match", which is also how llm_verifier labels it to a
+    # model. A condition that passed inside an indicator that failed did not
+    # carry anything.
+    matched_fields = unique_sorted(
+        c.field
+        for e in indicator_evals
+        if e.matched
+        for c in e.conditions
+        if c.passed
+    )
 
     supporting_observation: dict[str, Any] = {
         "signal_id": signal.signal_id,

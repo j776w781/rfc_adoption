@@ -1171,10 +1171,20 @@ def _review_section(result: PipelineResult) -> list[str]:
 def _limitations_section(result: PipelineResult) -> list[str]:
     report = result.schema_report
     non_queryable = report.non_queryable_indicators
+    # Low specificity alone does not make an RFC "broad base-DNSSEC": a
+    # recommendation document such as RFC 8624 is also low, but for the opposite
+    # reason -- it registers nothing observable rather than matching everything.
+    # Those are covered by the ambiguity bullet below, so exclude any RFC whose
+    # indicators the schema check classified as ambiguous.
+    recommendation_rfcs = {
+        check.rfc_id
+        for check in result.schema_report.indicators
+        if check.queryability == "ambiguous"
+    }
     broad = [
         candidate.rfc_id
         for candidate in result.ranked_candidates
-        if candidate.specificity == "low"
+        if candidate.specificity == "low" and candidate.rfc_id not in recommendation_rfcs
     ]
     lines = [
         "## 13. Limitations",

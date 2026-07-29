@@ -1,6 +1,6 @@
 # OpenINTEL RFC Adoption Analysis
 
-Generated: 2026-07-29T16:09:37  
+Generated: 2026-07-29T16:22:34  
 Pipeline: openintel-rfc-adoption-matcher 0.1.0  
 Observation window: 2010-06-15 to 2021-09-13
 
@@ -10,11 +10,11 @@ This report identifies ranked RFC candidates that are consistent with the observ
 
 This run evaluated 73 normalized OpenINTEL observations against 8 DNSSEC RFCs (17 indicators), producing 584 signal-by-RFC evaluations and 584 reasoning traces. Every score below is derived from record-level observations and the RFC publication date; nothing here is an assertion that an operator deliberately implemented a specification.
 
-The highest-ranked candidate is **RFC 8078** (Managing DS Records from the Parent via CDS/CDNSKEY) with score 17.25 (very_high confidence), supported by 16 observations, first seen 2018-05-01.
+The highest-ranked candidate is **RFC 8078** (Managing DS Records from the Parent via CDS/CDNSKEY) with score 17.25 (very_high confidence), supported by 12 observations, first seen 2018-05-01.
 
 - Observation window: 2010-06-15 to 2021-09-13.
-- Valid matches: 113; partial: 48; ambiguous: 4; no match: 372.
-- Rejected on publication date (impossible timestamps): 47.
+- Valid matches: 113; partial: 81; ambiguous: 4; no match: 372.
+- Rejected on publication date (impossible timestamps): 14.
 - Ranked candidates emitted: 8.
 - Review queue: 40 items, 4 of high severity.
 - Warnings collected during the run: 10.
@@ -30,7 +30,7 @@ The highest-ranked candidate is **RFC 8078** (Managing DS Records from the Paren
 | Parquet engine | auto |
 | Row limit | none |
 | Minimum rankable score | 0 |
-| Generated at | 2026-07-29T16:09:37 |
+| Generated at | 2026-07-29T16:22:34 |
 | Pipeline | openintel-rfc-adoption-matcher 0.1.0 |
 
 The checklist database is the RFC signature source; the dictionary describes which normalized analysis fields the OpenINTEL corpus can supply and from which date each is reliably populated.
@@ -167,14 +167,14 @@ Each row is one record-level observation. A zone that publishes several records 
 
 | Rank | RFC | Title | Score | Confidence | Supporting observations | First seen |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | RFC 8078 | Managing DS Records from the Parent via CDS/CDNSKEY | 17.25 | very_high | 16 | 2018-05-01 |
+| 1 | RFC 8078 | Managing DS Records from the Parent via CDS/CDNSKEY | 17.25 | very_high | 12 | 2018-05-01 |
 | 2 | RFC 5155 | DNS Security (DNSSEC) Hashed Authenticated Denial of Existence | 17.25 | very_high | 10 | 2010-06-15 |
 | 3 | RFC 8080 | Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC | 17.25 | very_high | 8 | 2018-01-08 |
 | 4 | RFC 6605 | Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC | 13.125 | very_high | 10 | 2013-07-02 |
 | 5 | RFC 7344 | Automating DNSSEC Delegation Trust Maintenance | 11.25 | high | 21 | 2015-04-08 |
-| 6 | RFC 4509 | Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records | 11.25 | high | 14 | 2012-03-14 |
-| 7 | RFC 4033 | DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/... | 3.75 | low | 69 | 2011-02-15 |
-| 8 | RFC 8624 | Algorithm Implementation Requirements and Usage Guidance for DNSSEC | 3.375 | low | 17 | - |
+| 6 | RFC 4509 | Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records | 11.25 | high | 10 | 2012-03-14 |
+| 7 | RFC 4033 | DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/... | 3.75 | low | 42 | 2011-02-15 |
+| 8 | RFC 8624 | Algorithm Implementation Requirements and Usage Guidance for DNSSEC | 3.375 | low | 4 | 2019-11-06 |
 
 Score is the best per-signal score for that RFC, after the specificity multiplier (very_high 1.5, high 1.25, medium 1.0, low 0.75) has been applied. A broad RFC with many observations can therefore rank below a narrow RFC with one unambiguous observation, which is the intended behaviour: specificity is evidence.
 
@@ -189,7 +189,7 @@ Per-candidate evidence breakdown:
 | RFC 7344 | 11.25 | 236.25 | 21 | 0 | 0 | rfc7344_cds_cdnskey_present |
 | RFC 4509 | 11.25 | 112.5 | 10 | 4 | 0 | rfc4509_ds_sha256_digest |
 | RFC 4033 | 3.75 | 157.5 | 42 | 27 | 0 | rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present |
-| RFC 8624 | 3.375 | 13.5 | 0 | 13 | 42 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
+| RFC 8624 | 3.375 | 13.5 | 0 | 46 | 9 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
 
 ## 8. Reasoning Summary
 
@@ -199,8 +199,8 @@ Every one of the 584 signal-by-RFC evaluations carries a stored reasoning trace:
 | --- | --- | --- |
 | no_match | 372 | 63.7% |
 | valid_match | 113 | 19.3% |
-| partial_match | 48 | 8.2% |
-| timestamp_invalid | 47 | 8.0% |
+| partial_match | 81 | 13.9% |
+| timestamp_invalid | 14 | 2.4% |
 | ambiguous | 4 | 0.7% |
 
 Verbatim reasoning summaries from this run:
@@ -359,53 +359,20 @@ An observation that predates the RFC it appears to match cannot be evidence of t
 
 | Signal | RFC | Observed | RFC published | Forfeited score | Matched indicators |
 | --- | --- | --- | --- | --- | --- |
-| sig_0002 | RFC 8624 | 2011-02-15 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0004 | RFC 8624 | 2011-05-24 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0005 | RFC 8624 | 2012-02-07 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0006 | RFC 8624 | 2012-03-14 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0008 | RFC 8624 | 2012-08-21 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0009 | RFC 8624 | 2012-12-11 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0011 | RFC 8624 | 2013-06-27 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0012 | RFC 8624 | 2013-07-02 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0013 | RFC 8624 | 2013-09-03 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0014 | RFC 8624 | 2013-11-05 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0015 | RFC 8624 | 2014-01-09 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0016 | RFC 8624 | 2014-04-17 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0017 | RFC 8624 | 2014-05-19 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0018 | RFC 8624 | 2014-06-16 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0020 | RFC 8078 | 2015-04-08 | 2017-03-01 | 17.25 | rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero |
-| sig_0020 | RFC 8624 | 2015-04-08 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0021 | RFC 8624 | 2015-04-22 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0023 | RFC 8624 | 2015-08-27 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
 | sig_0024 | RFC 8078 | 2015-09-22 | 2017-03-01 | 17.25 | rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero |
-| sig_0024 | RFC 8624 | 2015-09-22 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0025 | RFC 8624 | 2015-11-24 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0026 | RFC 8078 | 2016-01-15 | 2017-03-01 | 17.25 | rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero |
-| sig_0026 | RFC 8624 | 2016-01-15 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0027 | RFC 8624 | 2016-03-10 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0028 | RFC 8624 | 2016-04-05 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0029 | RFC 8078 | 2016-05-30 | 2017-03-01 | 17.25 | rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero |
-| sig_0029 | RFC 8624 | 2016-05-30 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0030 | RFC 8624 | 2016-07-13 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0032 | RFC 8078 | 2016-11-02 | 2017-03-01 | 17.25 | rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero |
-| sig_0032 | RFC 8624 | 2016-11-02 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0033 | RFC 8624 | 2016-11-28 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0034 | RFC 8624 | 2017-06-23 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0035 | RFC 8624 | 2017-08-15 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0036 | RFC 8624 | 2017-10-26 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0038 | RFC 8624 | 2018-01-08 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0039 | RFC 8624 | 2018-02-06 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0041 | RFC 8624 | 2018-04-09 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0042 | RFC 8624 | 2018-05-01 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0043 | RFC 8624 | 2018-06-14 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0044 | RFC 8624 | 2018-08-14 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0045 | RFC 8624 | 2018-09-03 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0046 | RFC 8624 | 2018-09-04 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0047 | RFC 8624 | 2018-11-20 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0048 | RFC 8624 | 2018-12-04 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
-| sig_0049 | RFC 8624 | 2019-02-11 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 | sig_0050 | RFC 8624 | 2019-03-25 | 2019-06-01 | 3.375 | rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algori... |
-| sig_0052 | RFC 8624 | 2019-05-07 | 2019-06-01 | 0 | rfc8624_avoids_deprecated_algorithm |
 
 The forfeited score is what the match would have scored had the observation been dated after publication. It is recorded so that a reviewer can see how strong the rejected evidence was: a large forfeited score usually means the mechanism predates its own standardization, which is common - the RFC often documents existing practice - or that the checklist attributes the indicator to the wrong document.
 
@@ -416,27 +383,60 @@ A partial match means some but not all required indicators were satisfied. An am
 | Signal | RFC | Decision | Score | Missing fields | Why |
 | --- | --- | --- | --- | --- | --- |
 | sig_0001 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0001: the optional indicator rfc4... |
+| sig_0002 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0002: the optional indicator rfc8... |
 | sig_0003 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0003: the optional indicator rfc4... |
+| sig_0004 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0004: the optional indicator rfc8... |
+| sig_0005 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0005: the optional indicator rfc8... |
+| sig_0006 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0006: the optional indicator rfc8... |
 | sig_0007 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0007: the optional indicator rfc4... |
+| sig_0008 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0008: the optional indicator rfc8... |
+| sig_0009 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0009: the optional indicator rfc8... |
 | sig_0010 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0010: the optional indicator rfc4... |
+| sig_0011 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0011: the optional indicator rfc8... |
+| sig_0013 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0013: the optional indicator rfc8... |
+| sig_0014 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0014: the optional indicator rfc8... |
+| sig_0015 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0015: the optional indicator rfc8... |
+| sig_0016 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0016: the optional indicator rfc8... |
+| sig_0018 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0018: the optional indicator rfc8... |
 | sig_0019 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0019: the optional indicator rfc4... |
 | sig_0020 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0020: the optional indicator rfc4... |
+| sig_0020 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0020: the optional indicator rfc8... |
+| sig_0021 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0021: the optional indicator rfc8... |
 | sig_0022 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0022: the optional indicator rfc4... |
 | sig_0024 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0024: the optional indicator rfc4... |
+| sig_0024 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0024: the optional indicator rfc8... |
+| sig_0025 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0025: the optional indicator rfc8... |
 | sig_0026 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0026: the optional indicator rfc4... |
+| sig_0026 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0026: the optional indicator rfc8... |
+| sig_0028 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0028: the optional indicator rfc8... |
 | sig_0029 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0029: the optional indicator rfc4... |
+| sig_0029 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0029: the optional indicator rfc8... |
+| sig_0030 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0030: the optional indicator rfc8... |
 | sig_0031 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0031: the optional indicator rfc4... |
 | sig_0032 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0032: the optional indicator rfc4... |
+| sig_0032 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0032: the optional indicator rfc8... |
+| sig_0033 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0033: the optional indicator rfc8... |
+| sig_0035 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0035: the optional indicator rfc8... |
+| sig_0036 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0036: the optional indicator rfc8... |
 | sig_0037 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0037: the optional indicator rfc4... |
+| sig_0039 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0039: the optional indicator rfc8... |
 | sig_0040 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0040: the optional indicator rfc4... |
+| sig_0041 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0041: the optional indicator rfc8... |
 | sig_0042 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0042: the optional indicator rfc4... |
+| sig_0042 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0042: the optional indicator rfc8... |
 | sig_0043 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0043: the optional indicator rfc4... |
+| sig_0043 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0043: the optional indicator rfc8... |
 | sig_0045 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0045: the optional indicator rfc4... |
+| sig_0045 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0045: the optional indicator rfc8... |
 | sig_0047 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0047: the optional indicator rfc4... |
+| sig_0047 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0047: the optional indicator rfc8... |
+| sig_0048 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0048: the optional indicator rfc8... |
 | sig_0049 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0049: the optional indicator rfc4... |
+| sig_0049 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0049: the optional indicator rfc8... |
 | sig_0051 | RFC 4509 | partial_match | 0 | digest_type | RFC 4509 partially matches signal sig_0051. The required indicator rfc4... |
 | sig_0051 | RFC 8078 | partial_match | 0 | algorithm, digest_type | RFC 8078 partially matches signal sig_0051. The required indicator rfc8... |
 | sig_0052 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0052: the optional indicator rfc4... |
+| sig_0052 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0052: the optional indicator rfc8... |
 | sig_0053 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0053: the optional indicator rfc8... |
 | sig_0054 | RFC 8624 | partial_match | 0 | rr_type, validator_algorithm_support | RFC 8624 partially matches signal sig_0054: the optional indicator rfc8... |
 | sig_0055 | RFC 4033 | partial_match | 0 | dnssec_ok_flag | RFC 4033 partially matches signal sig_0055: the optional indicator rfc4... |
@@ -502,7 +502,7 @@ By type:
 | rev_0002 | partial_match | high | RFC 8078 | RFC 8078 matched partially on 4 observation(s): indicator(s) none match... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
 | rev_0003 | timestamp_invalid_match | high | RFC 4033, RFC 4509, RFC 6605, RFC 7344, RFC 8078, RFC 8080, RFC 8624 | 42 observation(s) matched RFC 8624 indicator(s) rfc8624_avoids_deprecat... | Verify the RFC 8624 publication_date 2019-06-01T00:00:00 in the checkli... |
 | rev_0004 | timestamp_invalid_match | high | RFC 7344, RFC 8078 | 5 observation(s) matched RFC 8078 indicator(s) rfc8078_cds_cdnskey_algo... | Verify the RFC 8078 publication_date 2017-03-01T00:00:00 in the checkli... |
-| rev_0005 | ambiguous_indicator | medium | RFC 6605, RFC 8080, RFC 8624 | Indicator rfc8624_avoids_deprecated_algorithm of RFC 8624 is ambiguous... | Decide attribution by hand for signal(s) sig_0053, sig_0054, sig_0055,... |
+| rev_0005 | ambiguous_indicator | medium | RFC 6605, RFC 8080, RFC 8624 | Indicator rfc8624_avoids_deprecated_algorithm of RFC 8624 is ambiguous... | Decide attribution by hand for signal(s) sig_0002, sig_0004, sig_0005,... |
 | rev_0006 | ambiguous_indicator | medium | RFC 6605, RFC 8080, RFC 8624 | Indicator rfc8624_recommended_signing_algorithm of RFC 8624 is ambiguou... | Decide attribution by hand for signal(s) sig_0059, sig_0060, sig_0064,... |
 | rev_0007 | close_ranking | medium | RFC 4033, RFC 8624 | RFC 4033 (score 3.75) and RFC 8624 (score 3.375) differ by 10.0%, insid... | Do not report RFC 4033 as the single best match. Compare the distinguis... |
 | rev_0008 | close_ranking | medium | RFC 4509, RFC 7344 | RFC 7344 (score 11.25) and RFC 4509 (score 11.25) differ by 0.0%, insid... | Do not report RFC 7344 as the single best match. Compare the distinguis... |
@@ -520,7 +520,7 @@ By type:
 | rev_0020 | missing_required_field | medium | RFC 8624 | Field `algorithm`, needed by required indicator(s) rfc8624_recommended_... | Confirm the Parquet reader resolves `algorithm` for these rows (`algori... |
 | rev_0021 | partial_match | medium | RFC 4033 | RFC 4033 matched partially on 27 observation(s): indicator(s) rfc4033_d... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
 | rev_0022 | partial_match | medium | RFC 4509 | RFC 4509 matched partially on 4 observation(s): indicator(s) none match... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
-| rev_0023 | partial_match | medium | RFC 8624 | RFC 8624 matched partially on 13 observation(s): indicator(s) rfc8624_a... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
+| rev_0023 | partial_match | medium | RFC 8624 | RFC 8624 matched partially on 46 observation(s): indicator(s) rfc8624_a... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
 | rev_0024 | partially_queryable_indicator | medium | RFC 4033 | Indicator rfc4033_dnssec_ok_negotiated (optional, weight 3.0) of RFC 40... | Add `dnssec_ok_flag` to the OpenINTEL analysis dictionary with an openi... |
 | rev_0025 | schema_inconsistency | low | - | Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_... | Resolve this warning before quoting counts from this run: it did not st... |
 
@@ -534,7 +534,7 @@ This pipeline does not prove RFC adoption by itself. It identifies ranked RFC ca
 - **A single Parquet file.** One file is one slice of one measurement campaign. It cannot support statements about global deployment, and an RFC absent from these results may simply be absent from this file.
 - **Record-level, not zone-level.** Each observation is one resource record. The pipeline never aggregates records into a zone-level verdict, so a zone that publishes many records is over-represented relative to one that publishes few, and per-zone policy claims (such as "this zone avoids deprecated algorithms") cannot be made from a single record.
 - **Indicators the corpus cannot express.** 1 indicator (rfc8624_validator_algorithm_support) references fields that do not exist in the OpenINTEL dictionary, typically resolver-side behaviour. They are neither confirmed nor refuted here.
-- **Broad base-DNSSEC RFCs match almost any signed zone.** RFC 4033 and its companions are matched by the presence of any DNSSEC record, so they will match nearly every signed zone regardless of what else the operator has deployed. Their low specificity multiplier deliberately keeps them below mechanism-specific RFCs (affected here: RFC 4033, RFC 8624); a match on them should be read as "this zone is signed", not as adoption of a specific mechanism.
+- **Broad base-DNSSEC RFCs match almost any signed zone.** RFC 4033 and its companions are matched by the presence of any DNSSEC record, so they will match nearly every signed zone regardless of what else the operator has deployed. Their low specificity multiplier deliberately keeps them below mechanism-specific RFCs (affected here: RFC 4033); a match on them should be read as "this zone is signed", not as adoption of a specific mechanism.
 - **Ambiguity is structural, not incidental.** Recommendation documents such as RFC 8624 register nothing observable of their own. Any match against them is an inference about operator policy drawn from algorithm choice, which is why those indicators are marked ambiguous and penalized.
 - **Timestamps bound possibility, not causation.** An observation dated after publication is consistent with the RFC; it does not show the operator acted because of the RFC, and many mechanisms were deployed before the document that describes them was published.
 

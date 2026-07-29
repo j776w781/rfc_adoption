@@ -52,6 +52,17 @@ __all__ = [
 #: to count (respectively: forfeited, and never tested).
 RANKABLE_DECISIONS: tuple[Decision, ...] = ("valid_match", "ambiguous", "partial_match")
 
+#: Decisions that count as *supporting evidence* for a candidate: every required
+#: indicator passed, and only the attribution is in question. Deliberately
+#: narrower than :data:`RANKABLE_DECISIONS`, which also admits ``partial_match``
+#: (always scored 0.0) so that partial evidence stays visible in the output
+#: without inflating observation counts or moving ``first_seen``.
+#:
+#: Must stay in step with ``timeline.DEFAULT_ADOPTION_DECISIONS`` -- if the two
+#: diverge, ``ranked_candidates.json`` and ``adoption_timeline.json`` will report
+#: different first-seen dates for the same RFC in the same run.
+ADOPTION_DECISIONS: tuple[Decision, ...] = ("valid_match", "ambiguous")
+
 #: Strength ordering used when several signals disagree about one RFC.
 _DECISION_STRENGTH: dict[str, int] = {"valid_match": 3, "ambiguous": 2, "partial_match": 1}
 
@@ -278,19 +289,36 @@ def score_match(
         f"final_score = max(0, {_num(raw)}) * {_num(multiplier)} = {_num(final_score)}",
     ]
 
+    # A decision of `non_queryable` means the corpus could not test the RFC's
+    # required indicators at all. There is no verdict in either direction, so
+    # there must be no score either: emitting one would let the dashboard and
+    # rfc_matches.csv show a confidence band for an RFC we never evaluated, and
+    # would contradict the trace's own prose ("no verdict is possible").
+    if decision == "non_queryable" and final_score:
+        steps.append(
+            f"final_score = 0.0 (non_queryable: {rfc.rfc_id}'s required indicators "
+            f"could not be tested against this corpus, so the {_num(final_score)} "
+            f"earned by testable optional indicators is not a verdict about the RFC)"
+        )
+        final_score = 0.0
+
     timestamp_penalty = 0.0
-    if not timestamp_check.valid and decision in RANKABLE_DECISIONS:
+    if not timestamp_check.valid and final_score:
+        # Applied to any decision that still carries a score, not just rankable
+        # ones: the contract's forfeit is unconditional, and gating it on the
+        # decision let a pre-publication `non_queryable` keep a positive score.
         timestamp_penalty = final_score
         final_score = 0.0
-        decision = "timestamp_invalid"
+        if decision in RANKABLE_DECISIONS:
+            decision = "timestamp_invalid"
         steps.append(
             f"timestamp_penalty = {_num(timestamp_penalty)} "
             f"(the observation predates {rfc.rfc_id}'s publication date by "
             f"{abs(timestamp_check.days_after_publication)} days, so the score is withheld)"
         )
         steps.append(
-            "final_score = 0.0 (timestamp_invalid: an observation cannot evidence "
-            "adoption of an RFC that did not yet exist)"
+            "final_score = 0.0 (an observation cannot evidence adoption of an RFC "
+            "that did not yet exist)"
         )
 
     if skipped:
@@ -476,6 +504,18 @@ def rank_candidates(
         valid = [m for m in rankable if m.decision == "valid_match"]
         partial = [m for m in rankable if m.decision == "partial_match"]
         invalid = [m for m in group if m.decision == "timestamp_invalid"]
+
+        # Observations that actually carry evidence for this RFC. `ambiguous`
+        # belongs here and `partial_match` does not: an ambiguous match had all
+        # its indicators pass (only the attribution is contested), whereas every
+        # partial match scores 0.0. Counting partials as "supporting" made
+        # RFC 4033 look like the second-best-evidenced candidate on 69
+        # observations, 27 of which contributed nothing.
+        #
+        # This is the same set `timeline.build_timeline` counts as adoption, so
+        # first_seen agrees between ranked_candidates.json and
+        # adoption_timeline.json instead of differing for ambiguous-only RFCs.
+        supporting = [m for m in rankable if m.decision in ADOPTION_DECISIONS]
         by_signal = sorted(rankable, key=lambda m: m.signal_id)
         examples = by_signal[:5]
 
@@ -496,18 +536,18 @@ def rank_candidates(
                 score=score,
                 aggregate_score=round_score(sum(m.score for m in rankable)),
                 confidence=confidence_for(score),
-                supporting_signal_count=len(rankable),
+                supporting_signal_count=len(supporting),
                 valid_match_count=len(valid),
                 partial_match_count=len(partial),
                 timestamp_invalid_count=len(invalid),
-                first_seen=min((m.observation_timestamp for m in valid), default=None),
-                last_seen=max((m.observation_timestamp for m in valid), default=None),
+                first_seen=min((m.observation_timestamp for m in supporting), default=None),
+                last_seen=max((m.observation_timestamp for m in supporting), default=None),
                 matched_indicator_ids=unique_sorted(
-                    i for m in rankable for i in m.matched_indicator_ids
+                    i for m in supporting for i in m.matched_indicator_ids
                 ),
-                matched_fields=unique_sorted(f for m in rankable for f in m.matched_fields),
-                domains=unique_sorted(m.domain for m in rankable),
-                zones=unique_sorted(m.zone for m in rankable),
+                matched_fields=unique_sorted(f for m in supporting for f in m.matched_fields),
+                domains=unique_sorted(m.domain for m in supporting),
+                zones=unique_sorted(m.zone for m in supporting),
                 example_signal_ids=[m.signal_id for m in examples],
                 example_trace_ids=[m.trace_id for m in examples],
                 reasoning_summary="",
