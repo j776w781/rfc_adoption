@@ -138,17 +138,50 @@ section "3. Python virtualenv"
 PY="$(find_python)" || die "No Python >= 3.10 found. Install it, or pass --python /path/to/python3.12"
 log "interpreter  : ${PY} ($(${PY} -c 'import platform;print(platform.python_version())'))"
 
-if [[ -x "${VENV_DIR}/bin/python" ]]; then
+warn_if_drvfs "${VENV_DIR}" "$@"
+
+if venv_is_usable "${VENV_DIR}"; then
     log "reusing existing virtualenv"
 else
-    "${PY}" -m venv "${VENV_DIR}" \
-        || die "Could not create a virtualenv. On Debian/Ubuntu: apt-get install python3-venv"
+    # A directory may be present but unusable: `python3 -m venv` on Debian/Ubuntu
+    # without python3-venv leaves behind bin/python symlinks, no activate script
+    # and no pip. Reusing that skeleton is what turns a clear "install
+    # python3-venv" failure into an opaque "bin/activate: No such file" on the
+    # next run, so it is removed rather than reused.
+    if [[ -d "${VENV_DIR}" ]]; then
+        warn "${VENV_DIR} exists but is not a working virtualenv; recreating it."
+        rm -rf "${VENV_DIR}"
+    fi
+
+    if ! "${PY}" -m venv "${VENV_DIR}" >>"${SETUP_LOG}" 2>&1; then
+        # Do not leave a partial skeleton behind to confuse the next run.
+        rm -rf "${VENV_DIR}"
+        die "Could not create a virtualenv with ${PY}.
+     On Debian/Ubuntu the venv module needs a separate package:
+         sudo apt install python3-venv
+     or, matching your interpreter exactly:
+         sudo apt install python$(${PY} -c 'import sys;print(f\"{sys.version_info.major}.{sys.version_info.minor}\")')-venv
+     Then re-run this script. Details in ${SETUP_LOG}"
+    fi
+
+    # Creation can report success and still produce something unusable.
+    if ! venv_is_usable "${VENV_DIR}"; then
+        rm -rf "${VENV_DIR}"
+        die "${PY} -m venv reported success but produced no usable virtualenv
+     (no activate script, or pip is absent). This is what a missing
+     python3-venv package looks like:
+         sudo apt install python3-venv
+     Then re-run this script. Details in ${SETUP_LOG}"
+    fi
     ok "created ${VENV_DIR}"
 fi
 
-# shellcheck disable=SC1091
-source "${VENV_DIR}/bin/activate"
-python -m pip install --quiet --upgrade pip setuptools wheel >>"${SETUP_LOG}" 2>&1
+VENV_ACTIVATE="$(venv_activate_script "${VENV_DIR}")" \
+    || die "No activate script in ${VENV_DIR} despite the usability check passing."
+# shellcheck disable=SC1090
+source "${VENV_ACTIVATE}"
+python -m pip install --quiet --upgrade pip setuptools wheel >>"${SETUP_LOG}" 2>&1 \
+    || die "Could not upgrade pip inside the virtualenv. Details in ${SETUP_LOG}"
 ok "pip $(python -m pip --version | awk '{print $2}')"
 
 # --------------------------------------------------------------------------- #

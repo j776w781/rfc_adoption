@@ -140,19 +140,76 @@ prepend_pythonpath() {
     fi
 }
 
+# Echo the activate script for a venv, whichever layout it uses, or nothing.
+venv_activate_script() {
+    local dir="$1" candidate
+    for candidate in "${dir}/bin/activate" "${dir}/Scripts/activate"; do
+        [[ -f "${candidate}" ]] && { echo "${candidate}"; return 0; }
+    done
+    return 1
+}
+
+# Echo the interpreter inside a venv, whichever layout it uses, or nothing.
+venv_python() {
+    local dir="$1" candidate
+    for candidate in "${dir}/bin/python" "${dir}/Scripts/python.exe" "${dir}/Scripts/python"; do
+        [[ -x "${candidate}" ]] && { echo "${candidate}"; return 0; }
+    done
+    return 1
+}
+
+# True when a venv is actually usable, not merely present.
+#
+# `python3 -m venv` on Debian/Ubuntu without the python3-venv package creates the
+# directory skeleton and the interpreter symlinks, then fails at ensurepip. What
+# is left behind has an executable bin/python and no activate script and no pip --
+# so testing for the interpreter alone reports a broken venv as reusable, and the
+# next run fails on `source .../bin/activate` instead of on the real cause.
+venv_is_usable() {
+    local dir="$1" py
+    venv_activate_script "${dir}" >/dev/null || return 1
+    py="$(venv_python "${dir}")" || return 1
+    "${py}" -c 'import pip' >/dev/null 2>&1
+}
+
+# Warn when a venv would live on a Windows drive mounted into WSL. pip on DrvFs is
+# very slow and its symlink and permission semantics are not Linux's, which is a
+# bad combination for something as symlink-heavy as a virtualenv.
+warn_if_drvfs() {
+    local dir="$1"
+    grep -qi microsoft /proc/version 2>/dev/null || return 0
+    case "${dir}" in
+        /mnt/[a-z]/*)
+            warn "${dir} is on a Windows drive mounted into WSL (DrvFs)."
+            warn "pip there is slow and virtualenv symlinks are unreliable. Prefer:"
+            warn "    VENV_DIR=\$HOME/.venvs/openintel $0 ${*:2}"
+            warn "The code can stay where it is; only the venv needs to move."
+            ;;
+    esac
+}
+
 activate_venv() {
     prepend_pythonpath "${PROJECT_ROOT}/src"
 
     # POSIX layout first, then the Windows/Git-Bash layout, so the scripts can be
     # exercised on a developer machine before they are trusted on the server.
     local activate
-    for activate in "${VENV_DIR}/bin/activate" "${VENV_DIR}/Scripts/activate"; do
-        if [[ -f "${activate}" ]]; then
-            # shellcheck disable=SC1090
-            source "${activate}"
-            return 0
-        fi
-    done
+    if activate="$(venv_activate_script "${VENV_DIR}")"; then
+        # shellcheck disable=SC1090
+        source "${activate}"
+        return 0
+    fi
+
+    # A venv directory that exists but has no activate script is the half-created
+    # Debian/Ubuntu case. Say so, rather than falling through to a message about
+    # the package being missing.
+    if [[ -d "${VENV_DIR}" ]]; then
+        warn "${VENV_DIR} exists but has no activate script, so it was never"
+        warn "created successfully. On Debian/Ubuntu that means the python3-venv"
+        warn "package is missing. Fix and recreate:"
+        warn "    sudo apt install python3-venv    # or python3.12-venv"
+        warn "    rm -rf ${VENV_DIR} && ./scripts/setup.sh"
+    fi
 
     # No venv. That is not automatically an error: conda, pyenv and system-wide
     # installs are all legitimate, and refusing to run would be obstructive. Only

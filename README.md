@@ -383,6 +383,33 @@ fails without it), runs the demo and runs the tests:
 ./scripts/setup.sh
 ```
 
+### Setup troubleshooting
+
+**`bin/activate: No such file or directory`** — `python3 -m venv` failed and left a
+skeleton behind. On Debian/Ubuntu the venv module needs a separate package:
+
+```bash
+sudo apt install python3-venv          # or python3.12-venv to match your interpreter
+rm -rf .venv && ./scripts/setup.sh
+```
+
+The tell-tale sign is a `.venv/bin/` containing only `python` symlinks — no
+`activate`, no `pip` — and an empty `site-packages`. `setup.sh` now detects and
+recreates such a venv rather than reusing it, and says which package to install.
+
+**Running under WSL on a `/mnt/<drive>/` path** — the code is fine there, but the
+*virtualenv* should not be. pip on DrvFs is slow and virtualenv symlinks are
+unreliable. Keep the checkout where it is and put the venv on the Linux
+filesystem:
+
+```bash
+VENV_DIR=$HOME/.venvs/openintel ./scripts/setup.sh
+VENV_DIR=$HOME/.venvs/openintel ./scripts/run_full_analysis.sh --sources nu \
+    --start 2018-05-01 --end 2018-05-01 --dry-run
+```
+
+`setup.sh` warns when it notices this.
+
 Python 3.10+. All commands below run from the repository root.
 The package lives under `src/`, so either `pip install -e .` or set `PYTHONPATH=src`
 (the `Makefile` and the scripts do this for you).
