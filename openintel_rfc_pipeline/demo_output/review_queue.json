@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T16:27:12",
+  "generated_at": "2026-07-29T16:28:51",
   "pipeline": "openintel-rfc-adoption-matcher",
   "version": "0.1.0",
   "count": 40,
@@ -80,7 +80,7 @@
       "item_id": "rev_0002",
       "item_type": "partial_match",
       "severity": "high",
-      "reason": "RFC 8078 matched partially on 4 observation(s): indicator(s) none matched but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not, capping the score at 0.0. Field(s) `algorithm`, `digest_type` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "reason": "RFC 8078 matched partially on 4 observation(s): no indicator matched outright and required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not, capping the score at 0.0. Field(s) `algorithm`, `digest_type` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
       "affected_rfc_ids": [
         "RFC 8078"
       ],
@@ -1870,7 +1870,7 @@
       "item_id": "rev_0021",
       "item_type": "partial_match",
       "severity": "medium",
-      "reason": "RFC 4033 matched partially on 27 observation(s): indicator(s) rfc4033_dnssec_algorithm_present matched but required indicator(s) rfc4033_base_dnssec_record_present did not, capping the score at 0.0. Field(s) `dnssec_ok_flag` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "reason": "RFC 4033 matched partially on 27 observation(s): indicator(s) rfc4033_dnssec_algorithm_present matched and required indicator(s) rfc4033_base_dnssec_record_present did not, capping the score at 0.0. Field(s) `dnssec_ok_flag` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
       "affected_rfc_ids": [
         "RFC 4033"
       ],
@@ -2006,7 +2006,7 @@
       "item_id": "rev_0022",
       "item_type": "partial_match",
       "severity": "medium",
-      "reason": "RFC 4509 matched partially on 4 observation(s): indicator(s) none matched but required indicator(s) rfc4509_ds_sha256_digest did not, capping the score at 0.0. Field(s) `digest_type` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "reason": "RFC 4509 matched partially on 4 observation(s): no indicator matched outright and required indicator(s) rfc4509_ds_sha256_digest did not, capping the score at 0.0. Field(s) `digest_type` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
       "affected_rfc_ids": [
         "RFC 4509"
       ],
@@ -2088,7 +2088,7 @@
       "item_id": "rev_0023",
       "item_type": "partial_match",
       "severity": "medium",
-      "reason": "RFC 8624 matched partially on 46 observation(s): indicator(s) rfc8624_avoids_deprecated_algorithm matched but required indicator(s) rfc8624_recommended_signing_algorithm did not, capping the score at 0.0. Field(s) `rr_type`, `validator_algorithm_support` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "reason": "RFC 8624 matched partially on 46 observation(s): indicator(s) rfc8624_avoids_deprecated_algorithm matched and required indicator(s) rfc8624_recommended_signing_algorithm did not, capping the score at 0.0. Field(s) `rr_type`, `validator_algorithm_support` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
       "affected_rfc_ids": [
         "RFC 8624"
       ],

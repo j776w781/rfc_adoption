@@ -637,9 +637,16 @@ def _partial_match_items(
                 "result being lost."
             )
 
+        # When nothing matched at all, "indicator(s) none matched but ..." reads
+        # as a typo. Say plainly that only corroborating evidence was found, or
+        # none, so the sentence stays true in both shapes.
+        if matched_ids:
+            matched_clause = f"indicator(s) {_joined(matched_ids)} matched"
+        else:
+            matched_clause = "no indicator matched outright"
         reason = (
-            f"{rfc_id} matched partially on {total} observation(s): indicator(s) "
-            f"{_joined(matched_ids)} matched but required indicator(s) "
+            f"{rfc_id} matched partially on {total} observation(s): {matched_clause} "
+            f"and required indicator(s) "
             f"{_joined(unmatched_required or failed_ids)} did not, capping the score at "
             f"{best_score}.{gap_clause}"
         )

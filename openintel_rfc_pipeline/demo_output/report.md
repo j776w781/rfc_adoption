@@ -1,6 +1,6 @@
 # OpenINTEL RFC Adoption Analysis
 
-Generated: 2026-07-29T16:27:12  
+Generated: 2026-07-29T16:28:51  
 Pipeline: openintel-rfc-adoption-matcher 0.1.0  
 Observation window: 2010-06-15 to 2021-09-13
 
@@ -30,7 +30,7 @@ The highest-ranked candidate is **RFC 8078** (Managing DS Records from the Paren
 | Parquet engine | auto |
 | Row limit | none |
 | Minimum rankable score | 0 |
-| Generated at | 2026-07-29T16:27:12 |
+| Generated at | 2026-07-29T16:28:51 |
 | Pipeline | openintel-rfc-adoption-matcher 0.1.0 |
 
 The checklist database is the RFC signature source; the dictionary describes which normalized analysis fields the OpenINTEL corpus can supply and from which date each is reliably populated.
@@ -499,7 +499,7 @@ By type:
 | Item | Type | Severity | RFCs | Reason | Suggested action |
 | --- | --- | --- | --- | --- | --- |
 | rev_0001 | non_queryable_indicator | high | RFC 8624 | Indicator rfc8624_validator_algorithm_support (optional, weight 6.0) of... | Add `validator_algorithm_support` to the OpenINTEL analysis dictionary... |
-| rev_0002 | partial_match | high | RFC 8078 | RFC 8078 matched partially on 4 observation(s): indicator(s) none match... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
+| rev_0002 | partial_match | high | RFC 8078 | RFC 8078 matched partially on 4 observation(s): no indicator matched ou... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
 | rev_0003 | timestamp_invalid_match | high | RFC 4033, RFC 4509, RFC 6605, RFC 7344, RFC 8078, RFC 8080, RFC 8624 | 42 observation(s) matched RFC 8624 indicator(s) rfc8624_avoids_deprecat... | Verify the RFC 8624 publication_date 2019-06-01T00:00:00 in the checkli... |
 | rev_0004 | timestamp_invalid_match | high | RFC 7344, RFC 8078 | 5 observation(s) matched RFC 8078 indicator(s) rfc8078_cds_cdnskey_algo... | Verify the RFC 8078 publication_date 2017-03-01T00:00:00 in the checkli... |
 | rev_0005 | ambiguous_indicator | medium | RFC 6605, RFC 8080, RFC 8624 | Indicator rfc8624_avoids_deprecated_algorithm of RFC 8624 is ambiguous... | Decide attribution by hand for signal(s) sig_0002, sig_0004, sig_0005,... |
@@ -519,7 +519,7 @@ By type:
 | rev_0019 | missing_required_field | medium | RFC 8080 | Field `algorithm`, needed by required indicator(s) rfc8080_eddsa_algori... | Confirm the Parquet reader resolves `algorithm` for these rows (`algori... |
 | rev_0020 | missing_required_field | medium | RFC 8624 | Field `algorithm`, needed by required indicator(s) rfc8624_recommended_... | Confirm the Parquet reader resolves `algorithm` for these rows (`algori... |
 | rev_0021 | partial_match | medium | RFC 4033 | RFC 4033 matched partially on 27 observation(s): indicator(s) rfc4033_d... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
-| rev_0022 | partial_match | medium | RFC 4509 | RFC 4509 matched partially on 4 observation(s): indicator(s) none match... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
+| rev_0022 | partial_match | medium | RFC 4509 | RFC 4509 matched partially on 4 observation(s): no indicator matched ou... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
 | rev_0023 | partial_match | medium | RFC 8624 | RFC 8624 matched partially on 46 observation(s): indicator(s) rfc8624_a... | Confirm the Parquet reader resolves the missing field(s) for these rows... |
 | rev_0024 | partially_queryable_indicator | medium | RFC 4033 | Indicator rfc4033_dnssec_ok_negotiated (optional, weight 3.0) of RFC 40... | Add `dnssec_ok_flag` to the OpenINTEL analysis dictionary with an openi... |
 | rev_0025 | schema_inconsistency | low | - | Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_... | Resolve this warning before quoting counts from this run: it did not st... |
