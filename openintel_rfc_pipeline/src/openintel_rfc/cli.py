@@ -404,6 +404,13 @@ def cmd_scale(args: argparse.Namespace) -> int:
         memory_limit=args.memory_limit,
     )
 
+    # Validate the source names before anything expensive. OpenINTEL publishes a
+    # specific set under each basis, and a typo or an unavailable source
+    # (".com" and ".nl" are not published) otherwise costs a full walk that
+    # silently finds nothing for that source -- which reads as "no adoption"
+    # rather than "no data".
+    _validate_sources(access, sources, args.basis, warnings)
+
     out_dir = ensure_dir(args.out)
     checkpoint_dir = Path(args.checkpoint_dir) if args.checkpoint_dir else out_dir / "checkpoints"
 
@@ -475,6 +482,35 @@ def cmd_scale(args: argparse.Namespace) -> int:
     _print_analysis_summary(result, {})
     _print_warnings(result.warnings or warnings)
     return 0
+
+
+def _validate_sources(
+    access: object, sources: Sequence[str], basis: str, warnings: list[str]
+) -> None:
+    """Fail early on a source OpenINTEL does not publish under this basis."""
+    from .openintel_source import list_sources
+
+    try:
+        available = list_sources(access, basis=basis)  # type: ignore[arg-type]
+    except PipelineError as exc:
+        # Listing is a convenience, not a precondition: an offline or restricted
+        # host should still be able to run against a cache.
+        warn(warnings, f"Could not list available OpenINTEL sources ({exc}).", LOGGER)
+        return
+
+    if not available:
+        return
+    unknown = [s for s in sources if s not in available]
+    if not unknown:
+        LOGGER.info("Sources %s are all published under basis=%s.", ", ".join(sources), basis)
+        return
+
+    raise PipelineError(
+        f"OpenINTEL does not publish {', '.join(unknown)} under basis={basis}. "
+        f"Available: {', '.join(available)}. "
+        "Refusing to start: a source with no objects produces no matches, which "
+        "is indistinguishable in the output from a source with no adoption."
+    )
 
 
 def _parse_run_date(value: object, flag: str) -> date:

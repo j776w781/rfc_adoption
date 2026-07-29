@@ -104,7 +104,7 @@ done
 
 cd "${PROJECT_ROOT}"
 activate_venv
-compute_tuning
+compute_tuning "${MODE}"
 ensure_log_dir
 
 CHECKPOINT_DIR="${CHECKPOINT_DIR:-${OUT}/checkpoints}"
@@ -135,7 +135,40 @@ print((b - a).days + 1)
 PY
 )"
     N_SOURCES="$(awk -F, '{print NF}' <<<"${SOURCES}")"
-    log "span         : ${DAYS} day(s) x ${N_SOURCES} source(s) = ~$(( DAYS * N_SOURCES )) partitions"
+    PARTITIONS=$(( DAYS * N_SOURCES ))
+    log "span         : ${DAYS} day(s) x ${N_SOURCES} source(s) = ~${PARTITIONS} partitions"
+
+    # Measured on a real partition: streaming costs ~71 s, downloading costs
+    # ~14 s to fetch plus ~21 s to scan locally, and a re-scan of the cache is
+    # ~21 s. Streaming also issues thousands of small range requests per object
+    # against a store that rate-limits on request count. Past a handful of
+    # partitions, download mode is both faster and far less likely to be
+    # throttled -- so say so before a long run rather than after it fails.
+    if [[ "${DRY_RUN}" == "0" && "${MODE}" == "stream" && "${PARTITIONS}" -gt 10 ]]; then
+        EST_STREAM_MIN=$(( PARTITIONS * 71 / 60 ))
+        EST_DOWNLOAD_MIN=$(( PARTITIONS * 35 / 60 ))
+        warn ""
+        warn "${PARTITIONS} partitions in stream mode is likely to be throttled and is"
+        warn "roughly twice as slow: ~${EST_STREAM_MIN} min streaming vs ~${EST_DOWNLOAD_MIN} min downloading"
+        warn "(and ~$(( PARTITIONS * 21 / 60 )) min for any later re-scan of the cache)."
+        warn "Consider:"
+        warn "  --mode download --cache-dir /path/on/a/large/volume --pace-seconds 2"
+        warn "See docs/running_at_scale.md section 4a. Continuing with stream mode."
+        warn ""
+    fi
+fi
+
+# Download mode needs real disk. A .nu day is ~370 MB and a .se day ~2 GB, so a
+# multi-year multi-source range is easily terabytes; refusing to start is kinder
+# than filling the volume at 3am.
+if [[ "${MODE}" == "download" ]]; then
+    CACHE_FREE_GB="$(free_space_gb "${CACHE_DIR}")"
+    log "cache free   : ${CACHE_FREE_GB} GB"
+    if [[ "${CACHE_FREE_GB}" -lt 20 ]]; then
+        warn "Only ${CACHE_FREE_GB} GB free at ${CACHE_DIR}. One OpenINTEL day is"
+        warn "0.4-2 GB per source; run ./scripts/fetch_openintel.sh --list first to"
+        warn "size the range, or point --cache-dir at a larger volume."
+    fi
 fi
 
 CMD=(python -m openintel_rfc.cli scale

@@ -191,6 +191,31 @@ stream.
 - **Checkpointing**: if a partition ultimately fails, everything already done is
   on disk and re-running resumes.
 
+### Sizing a range before you start
+
+Measured object sizes, `basis=zonefile`:
+
+| Source | Objects/day | Size/day |
+| --- | --- | --- |
+| `nu` | 1 | 0.37 GB |
+| `se` | 4 | 2.09 GB |
+
+Extrapolated to 2015-01-01..2021-12-31 (2,557 days):
+
+| Range | Partitions | Download size | Est. wall time (download) |
+| --- | --- | --- | --- |
+| `nu` | 2,557 | ~0.95 TB | ~25 h |
+| `nu,se` | 5,114 | ~6.3 TB | ~50 h |
+
+`./scripts/fetch_openintel.sh --list` reports the real total for your exact range
+and compares it against free space on the cache volume, refusing to start a
+download that will not fit. Do that before committing days of compute.
+
+`run_full_analysis.sh` also refuses to start on a source OpenINTEL does not
+publish. A source with no objects produces no matches, which in the output is
+indistinguishable from a source with no adoption -- so `--sources nu,se,nl` fails
+immediately rather than after three days of finding nothing for `nl`.
+
 ### If you are still being throttled
 
 1. Switch to `--mode download` — the single biggest change.

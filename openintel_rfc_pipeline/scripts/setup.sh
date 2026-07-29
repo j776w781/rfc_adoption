@@ -261,20 +261,38 @@ cat <<EOF
       source ${VENV_DIR}/bin/activate
       export PYTHONPATH=${PROJECT_ROOT}/src
 
-  Check what the real corpus looks like before committing compute:
+  1. See what the real corpus holds, without scanning anything:
       ./scripts/run_full_analysis.sh --sources nu --start 2018-05-01 --end 2018-05-01 --dry-run
 
-  Smoke-test one real TLD-day end to end:
+     This reports the available sources, the partition count, and whether the
+     real schema can actually answer the checklist. Do it before every new range.
+
+  2. Smoke-test one real TLD-day end to end (~1 minute):
       ./scripts/run_full_analysis.sh --sources nu --start 2018-05-01 --end 2018-05-01
 
-  Then the real run (use tmux — this takes hours to days, and it resumes):
-      tmux new -s openintel
-      ./scripts/run_full_analysis.sh --sources nu,se,nl --start 2015-01-01 --end 2021-12-31
+  3. Size the range you actually want, then fetch it:
+      ./scripts/fetch_openintel.sh --sources nu,se --start 2015-01-01 --end 2021-12-31 --list
+      ./scripts/fetch_openintel.sh --sources nu,se --start 2015-01-01 --end 2021-12-31 \\
+          --cache-dir /large/volume
 
-  Dashboard:
+  4. The real run. Use tmux: this takes hours to days, and it resumes.
+      tmux new -s openintel
+      ./scripts/run_full_analysis.sh --mode download --cache-dir /large/volume \\
+          --sources nu,se --start 2015-01-01 --end 2021-12-31 --pace-seconds 2
+
+     --mode download is deliberate, not a fallback. Measured on a real partition
+     it is ~2x faster than streaming cold and ~3.3x faster on a re-scan, and it
+     issues one sequential request per object instead of thousands of small range
+     reads against a store that rate-limits on request count. See
+     docs/running_at_scale.md section 4a.
+
+  5. Inspect the results:
       streamlit run dashboard/app.py --server.port 8501 --server.address 0.0.0.0
 
-  Tuning picked for this machine: threads=${DUCKDB_THREADS} memory_limit=${DUCKDB_MEMORY_LIMIT}
+  Tuning for this machine: memory_limit=${DUCKDB_MEMORY_LIMIT}, threads=${CORES}
+  local / ${STREAM_THREAD_CAP} when streaming (extra threads buy ~5% on a
+  network-bound scan and materially raise the chance of being throttled).
+
   Full setup log: ${SETUP_LOG}
 
 EOF

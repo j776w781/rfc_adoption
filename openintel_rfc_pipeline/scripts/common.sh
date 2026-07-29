@@ -73,7 +73,14 @@ memory_gb() {
 free_space_gb() {
     local target="$1"
     while [[ ! -d "${target}" && "${target}" != "/" ]]; do target="$(dirname "${target}")"; done
-    df -BG --output=avail "${target}" 2>/dev/null | tail -n1 | tr -dc '0-9' || echo 0
+    # `--output` is GNU coreutils only; fall back to POSIX df -P (1K blocks) so
+    # this still reports something useful on BusyBox, Alpine or macOS.
+    local gb
+    gb="$(df -BG --output=avail "${target}" 2>/dev/null | tail -n1 | tr -dc '0-9')"
+    if [[ -z "${gb}" ]]; then
+        gb="$(df -Pk "${target}" 2>/dev/null | awk 'NR==2 {printf "%d", $4/1048576}')"
+    fi
+    echo "${gb:-0}"
 }
 
 have_sudo() {
@@ -139,14 +146,33 @@ activate_venv() {
 # Tuning
 # --------------------------------------------------------------------------- #
 
-# DuckDB settings derived from the machine. Memory is capped at 70% of RAM so a
-# long scan cannot push the box into the OOM killer, which on a multi-day run is
-# the difference between a resumable checkpoint and losing the night's work.
+# Cap on threads in stream mode. Measured on a real partition, a remote scan
+# takes 5.6 s at 20 threads and 5.9 s at 2 -- a 1.07x spread, because the work is
+# network-bound. But each thread issues its own HTTP range requests, and
+# OpenINTEL rate-limits on request count, so the extra threads buy ~5% time and
+# cost a much higher chance of being throttled off the store entirely.
+STREAM_THREAD_CAP="${STREAM_THREAD_CAP:-8}"
+
+# DuckDB settings derived from the machine, and from how the data is being read.
+#
+# Memory is capped at 70% of RAM so a long scan cannot push the box into the OOM
+# killer, which on a multi-day run is the difference between a resumable
+# checkpoint and losing the night's work.
+#
+# Pass the access mode ("stream" or "download") to get an appropriate thread
+# count: a local scan is CPU-bound and wants every core, a remote one is not.
 compute_tuning() {
-    local cores mem
+    local mode="${1:-download}"
+    local cores mem default_threads
     cores="$(cpu_count)"
     mem="$(memory_gb)"
-    DUCKDB_THREADS="${DUCKDB_THREADS:-${cores}}"
+
+    default_threads="${cores}"
+    if [[ "${mode}" == "stream" ]] && [[ "${cores}" -gt "${STREAM_THREAD_CAP}" ]]; then
+        default_threads="${STREAM_THREAD_CAP}"
+    fi
+    DUCKDB_THREADS="${DUCKDB_THREADS:-${default_threads}}"
+
     if [[ "${mem}" -gt 0 ]]; then
         DUCKDB_MEMORY_LIMIT="${DUCKDB_MEMORY_LIMIT:-$(( mem * 70 / 100 ))GB}"
     else

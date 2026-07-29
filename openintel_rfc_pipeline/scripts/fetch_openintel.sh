@@ -87,11 +87,13 @@ python - <<'PY' 2>&1 | tee -a "${FETCH_LOG}"
 from __future__ import annotations
 
 import os
+import shutil
 import sys
 from pathlib import Path
 
 from openintel_rfc.openintel_source import (
     AccessConfig,
+    build_s3_client,
     discover_partitions,
     materialize,
 )
@@ -117,10 +119,42 @@ if not partitions:
 
 total_objects = sum(len(p.keys) for p in partitions)
 print(f"{len(partitions)} partition(s), {total_objects} object(s)")
+
+# Sizes come from the listing itself, not from a HEAD per object: knowing how
+# many terabytes a range is before starting is the whole point of --list, and
+# asking for it must not itself hammer the store.
+sizes: dict[str, int] = {}
+try:
+    client = build_s3_client(config)
+    paginator = client.get_paginator("list_objects_v2")
+    for partition in partitions:
+        total = 0
+        for page in paginator.paginate(Bucket=config.bucket, Prefix=partition.prefix):
+            for item in page.get("Contents", ()):
+                if item["Key"].endswith(".gz.parquet"):
+                    total += int(item.get("Size", 0))
+        sizes[partition.partition_id] = total
+except Exception as exc:  # listing sizes is informational, never fatal
+    print(f"  (could not determine object sizes: {exc})")
+
 for partition in partitions[:10]:
-    print(f"  {partition.partition_id:<40} {len(partition.keys)} object(s)")
+    size = sizes.get(partition.partition_id)
+    size_text = f"{size / 1e9:8.2f} GB" if size else "        ?"
+    print(f"  {partition.partition_id:<40} {len(partition.keys):>2} object(s) {size_text}")
 if len(partitions) > 10:
     print(f"  ... and {len(partitions) - 10} more")
+
+if sizes:
+    total_bytes = sum(sizes.values())
+    free_gb = shutil.disk_usage(config.cache_dir).free / 1e9
+    print(f"\n  total download size : {total_bytes / 1e9:,.1f} GB")
+    print(f"  free at cache dir   : {free_gb:,.1f} GB")
+    if total_bytes / 1e9 > free_gb * 0.9:
+        print("\n  WARNING: this range does not comfortably fit on the cache volume.")
+        print("  Narrow the range, or point --cache-dir at a larger filesystem.")
+        if os.environ["OPENINTEL_LIST_ONLY"] != "1" and os.environ["OPENINTEL_ASSUME_YES"] != "1":
+            print("  Re-run with --yes to download anyway.")
+            sys.exit(1)
 
 if os.environ["OPENINTEL_LIST_ONLY"] == "1":
     print("\n--list given; nothing downloaded.")
