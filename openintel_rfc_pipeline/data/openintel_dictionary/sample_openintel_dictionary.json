@@ -5,7 +5,9 @@
     "This is an ANALYSIS dictionary, not a verbatim copy of the OpenINTEL Parquet schema.",
     "Each field lists 'openintel_native_fields': the real OpenINTEL column names this analysis field is derived from.",
     "'available_from' is the earliest date on which the field is considered reliably populated in the measurement corpus.",
-    "Indicators referencing fields absent from this dictionary are classified non_queryable by the schema checker."
+    "Indicators referencing fields absent from this dictionary are classified non_queryable by the schema checker.",
+    "'openintel_native_fields' must list only columns that are genuine alternative sources of the same value: the reader COALESCEs them. The Hive partition columns year/month/day are deliberately NOT listed under 'timestamp' -- they are components of the partition path, not fallbacks for a measurement time, and on real S3 data DuckDB types year as BIGINT while month and day are VARCHAR, so coalescing them is both meaningless and a hard bind error.",
+    "'measurement_id' has no column in the real OpenINTEL corpus. It resolves in the synthetic sample only, and reads as null against real data."
   ],
   "fields": [
     {
@@ -13,7 +15,7 @@
       "type": "datetime",
       "description": "Measurement timestamp (UTC) at which the DNS response was observed.",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["timestamp", "year", "month", "day"],
+      "openintel_native_fields": ["timestamp"],
       "nullable": false
     },
     {

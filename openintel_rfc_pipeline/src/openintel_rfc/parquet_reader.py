@@ -452,11 +452,33 @@ def _duckdb_expression(
 ) -> str:
     """SQL expression selecting ``field`` from one or more candidate columns."""
     entry = dictionary.get(field)
-    cast_type = _DUCKDB_CAST_TYPES.get((entry.type if entry else "").strip().lower())
+    declared = (entry.type if entry else "").strip().lower()
+    cast_type = _DUCKDB_CAST_TYPES.get(declared)
 
     def term(column: str) -> str:
         quoted = _quote_identifier(column)
         return f"TRY_CAST({quoted} AS {cast_type})" if cast_type else quoted
+
+    # Datetime fields are never coalesced. They carry no TRY_CAST (OpenINTEL
+    # stores epoch milliseconds, which TRY_CAST to TIMESTAMP would null out), so
+    # a multi-candidate COALESCE would mix raw physical types and fail to bind.
+    # It is also meaningless: nothing is a legitimate "fallback" for a
+    # measurement time. Reading real S3 partitions is where this bites -- DuckDB
+    # exposes the Hive path columns year/month/day, typing year BIGINT and
+    # month/day VARCHAR, and COALESCE over those is a hard Binder Error.
+    if declared in _DATETIME_TYPES or field == "timestamp":
+        if len(columns) > 1:
+            LOGGER.warning(
+                "Field '%s' is a datetime with %d candidate columns (%s); using "
+                "'%s' only. Datetime fields are never coalesced -- fix the "
+                "dictionary's openintel_native_fields if this is not the right "
+                "column.",
+                field,
+                len(columns),
+                ", ".join(columns),
+                columns[0],
+            )
+        return term(columns[0])
 
     if len(columns) == 1:
         return term(columns[0])
