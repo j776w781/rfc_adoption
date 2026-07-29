@@ -1,7 +1,7 @@
 {
   "pipeline": "openintel-rfc-adoption-matcher",
   "version": "0.1.0",
-  "generated_at": "2026-07-30T00:40:19",
+  "generated_at": "2026-07-30T01:00:53",
   "engine": "auto",
   "inputs": {
     "checklists": "data/rfc_checklists/dnssec_rfc_checklists.json",
