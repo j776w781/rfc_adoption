@@ -203,10 +203,9 @@ def _page_index() -> None:
         column = left if position % 2 == 0 else right
         with column:
             with st.container(border=True):
-                try:
-                    st.page_link(path, label=f"{title}", icon=icon)
-                except Exception:  # pragma: no cover - page_link needs a real run
-                    st.markdown(f"{icon} **{title}**")
+                # Paths are relative to this entrypoint's directory, which is
+                # how Streamlit resolves pages in a `pages/` multipage app.
+                st.page_link(path, label=title, icon=icon)
                 st.caption(purpose)
 
 

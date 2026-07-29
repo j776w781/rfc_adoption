@@ -178,13 +178,105 @@ def _example_trace(bundle: DashboardBundle, row: pd.Series) -> dict[str, Any] | 
     return None
 
 
+def _scored_signals(bundle: DashboardBundle, rfc_id: str) -> pd.DataFrame:
+    """Non-``no_match`` evaluations of one RFC, best score first."""
+    matches = bundle.matches_df
+    if matches.empty:
+        return matches
+    subset = matches[
+        (matches["rfc_id"].astype(str) == rfc_id)
+        & (matches["decision"].astype("string") != "no_match")
+    ]
+    return subset.sort_values("score", ascending=False)
+
+
+def _closest_rival(bundle: DashboardBundle, options: list[str], first: str) -> int:
+    """Index of the RFC that competes with ``first`` on the most observations.
+
+    Rank 2 is not necessarily the interesting comparison: the informative rival
+    is the RFC that was evaluated against the *same* signals, because that is
+    where the score difference actually decides something. For the sample corpus
+    this puts RFC 7344 next to RFC 8078 — both fire on the same CDS records.
+    """
+    rivals = [name for name in options if name != first]
+    if not rivals:
+        return 0
+    own = set(_scored_signals(bundle, first).get("signal_id", pd.Series(dtype=str)))
+    if own:
+        overlaps = {
+            name: len(own & set(_scored_signals(bundle, name).get("signal_id", pd.Series(dtype=str))))
+            for name in rivals
+        }
+        best = max(overlaps, key=lambda name: overlaps[name])
+        if overlaps[best] > 0:
+            return options.index(best)
+    return options.index(rivals[0])
+
+
+def _shared_signal(bundle: DashboardBundle, first: str, second: str) -> str | None:
+    """A signal both RFCs were evaluated against, favouring the first's best."""
+    left = _scored_signals(bundle, first)
+    right = _scored_signals(bundle, second)
+    if left.empty or right.empty:
+        return None
+    shared = set(left["signal_id"].astype(str)) & set(right["signal_id"].astype(str))
+    if not shared:
+        return None
+    candidates = left[left["signal_id"].astype(str).isin(shared)]
+    return str(candidates.iloc[0]["signal_id"])
+
+
+def _trace_for_signal(
+    bundle: DashboardBundle, rfc_id: str, signal_id: str | None
+) -> dict[str, Any] | None:
+    if signal_id is None:
+        return None
+    matches = bundle.matches_df
+    row = matches[
+        (matches["rfc_id"].astype(str) == rfc_id)
+        & (matches["signal_id"].astype(str) == signal_id)
+    ]
+    if row.empty:
+        return None
+    return bundle.trace_by_id(str(row.iloc[0]["trace_id"]))
+
+
+def _close_ranking_note(bundle: DashboardBundle, first: str, second: str) -> None:
+    """Surface the review queue's own verdict on this pair, if it raised one."""
+    pair = {first, second}
+    for item in bundle.review_items:
+        if item.get("item_type") != "close_ranking":
+            continue
+        evidence = item.get("evidence") or {}
+        if {str(evidence.get("rfc_a")), str(evidence.get("rfc_b"))} != pair:
+            continue
+        st.warning(
+            f"The review queue flagged this pair as too close to call "
+            f"({item.get('item_id')}): {item.get('reason')}"
+        )
+        shared = evidence.get("shared_indicators") or []
+        only_a = evidence.get("indicators_only_in_a") or []
+        only_b = evidence.get("indicators_only_in_b") or []
+        st.caption(
+            "Shared indicators: "
+            + (", ".join(str(i) for i in shared) or "none")
+            + f". Only {evidence.get('rfc_a')}: "
+            + (", ".join(str(i) for i in only_a) or "none")
+            + f". Only {evidence.get('rfc_b')}: "
+            + (", ".join(str(i) for i in only_b) or "none")
+            + "."
+        )
+        return
+
+
 def _comparison(bundle: DashboardBundle, ranked: pd.DataFrame) -> None:
-    """Why one RFC outranks another, using a representative supporting trace."""
+    """Why one RFC outranks another, term by term."""
     st.subheader("Why one RFC outranks another")
     st.caption(
-        "Ranking is driven by the best single-signal score. Two candidates are "
-        "compared here through a representative supporting observation, so the "
-        "arithmetic that separates them is visible rather than asserted."
+        "Ranking is driven by the best single-signal score. Where both RFCs were "
+        "evaluated against the same observation, that observation is used for "
+        "both panels, so the arithmetic separating them is directly comparable "
+        "rather than asserted."
     )
     if len(ranked) < 2:
         no_rows("At least two ranked candidates are needed for a comparison.")
@@ -194,13 +286,28 @@ def _comparison(bundle: DashboardBundle, ranked: pd.DataFrame) -> None:
     options = list(ordered["rfc_id"].astype(str))
     picker = st.columns(2)
     first = picker[0].selectbox("Higher-ranked RFC", options, index=0, key="compare_a")
-    default_second = 1 if len(options) > 1 else 0
     second = picker[1].selectbox(
-        "Compared against", options, index=default_second, key="compare_b"
+        "Compared against",
+        options,
+        index=_closest_rival(bundle, options, first),
+        key="compare_b",
     )
     if first == second:
         no_rows("Pick two different RFCs to compare.")
         return
+
+    shared_signal = _shared_signal(bundle, first, second)
+    if shared_signal is not None:
+        st.markdown(
+            f"Both RFCs were evaluated against signal `{shared_signal}`. "
+            "Each panel below shows what that single observation earned for that RFC."
+        )
+    else:
+        st.markdown(
+            "These two RFCs share no observation, so each panel uses that "
+            "candidate's own representative supporting trace."
+        )
+    _close_ranking_note(bundle, first, second)
 
     panels = st.columns(2)
     for column, rfc_id in zip(panels, (first, second)):
@@ -228,12 +335,17 @@ def _comparison(bundle: DashboardBundle, ranked: pd.DataFrame) -> None:
             st.markdown("**Reasoning summary**")
             st.info(str(row.get("reasoning_summary") or "No summary recorded."))
 
-            trace = _example_trace(bundle, row)
+            trace = _trace_for_signal(bundle, rfc_id, shared_signal) or _example_trace(
+                bundle, row
+            )
             breakdown = _breakdown_frame(trace)
             if breakdown.empty:
                 st.caption("No example trace is available for this candidate.")
                 continue
-            st.markdown(f"**Score breakdown** (trace `{trace.get('trace_id')}`)")
+            st.markdown(
+                f"**Score breakdown** (trace `{trace.get('trace_id')}`, "
+                f"decision `{trace.get('decision')}`)"
+            )
             show_df(breakdown)
             steps = (trace.get("score_breakdown") or {}).get("steps") or []
             if steps:

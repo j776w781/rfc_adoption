@@ -346,7 +346,7 @@ def _queue(bundle: DashboardBundle, output_dir: Path) -> None:
         item = by_id.get(item_id)
         if item is None:  # pragma: no cover - frame and list come from one file
             continue
-        label = f"{row['severity'].upper()} — {item_id} — {row['item_type']}"
+        label = f"{str(row['severity']).upper()} — {item_id} — {row['item_type']}"
         with st.expander(label, expanded=False):
             _render_item(item, statuses, output_dir)
 
