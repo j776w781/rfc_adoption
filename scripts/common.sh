@@ -115,8 +115,33 @@ find_python() {
     return 1
 }
 
+# True when running under Git Bash / MSYS / Cygwin, where the shell speaks POSIX
+# paths but the Python being invoked is a native Windows build.
+is_windows_shell() {
+    case "${OSTYPE:-}" in msys*|cygwin*|win32) return 0 ;; esac
+    [[ -n "${MSYSTEM:-}" ]]
+}
+
+# Prepend a directory to PYTHONPATH using the separator and path form the *target*
+# interpreter expects.
+#
+# This is not pedantry. Windows Python splits PYTHONPATH on ';', not ':'. Joining
+# with ':' produces a single entry like "/e/proj/src:src" that does not exist, so
+# the package silently becomes unimportable -- and only when PYTHONPATH was
+# already set, which makes it look like an environment problem rather than a
+# quoting one. On Linux, the target, this is the plain ':' join it always was.
+prepend_pythonpath() {
+    local directory="$1"
+    if is_windows_shell; then
+        command -v cygpath >/dev/null 2>&1 && directory="$(cygpath -w "${directory}")"
+        export PYTHONPATH="${directory}${PYTHONPATH:+;${PYTHONPATH}}"
+    else
+        export PYTHONPATH="${directory}${PYTHONPATH:+:${PYTHONPATH}}"
+    fi
+}
+
 activate_venv() {
-    export PYTHONPATH="${PROJECT_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}"
+    prepend_pythonpath "${PROJECT_ROOT}/src"
 
     # POSIX layout first, then the Windows/Git-Bash layout, so the scripts can be
     # exercised on a developer machine before they are trusted on the server.
@@ -132,14 +157,25 @@ activate_venv() {
     # No venv. That is not automatically an error: conda, pyenv and system-wide
     # installs are all legitimate, and refusing to run would be obstructive. Only
     # fail if the package genuinely cannot be imported.
-    if python -c 'import openintel_rfc' >/dev/null 2>&1; then
+    #
+    # The check injects a relative 'src' rather than trusting PYTHONPATH to have
+    # survived the shell, so a path-separator or path-form problem is reported as
+    # itself instead of as "the package is missing". The caller has already cd'd
+    # to PROJECT_ROOT, so 'src' is correct on every platform.
+    if python -c "import sys; sys.path.insert(0, 'src'); import openintel_rfc" >/dev/null 2>&1; then
+        if ! python -c 'import openintel_rfc' >/dev/null 2>&1; then
+            warn "openintel_rfc is importable from ./src but not through PYTHONPATH"
+            warn "(currently '${PYTHONPATH:-unset}'). Something is mangling it; the"
+            warn "run would fail. Unset PYTHONPATH and retry, or use scripts/setup.sh."
+            die "Refusing to start with a PYTHONPATH the interpreter cannot use."
+        fi
         warn "No virtualenv at ${VENV_DIR}; using the ambient Python ($(command -v python))."
         return 0
     fi
 
-    die "No virtualenv at ${VENV_DIR} and openintel_rfc is not importable from the
-     ambient Python. Run scripts/setup.sh first, or activate the environment
-     you installed it into."
+    die "No virtualenv at ${VENV_DIR}, and openintel_rfc is not importable from the
+     ambient Python ($(command -v python)) even with ./src on the path. Run
+     scripts/setup.sh first, or activate the environment you installed it into."
 }
 
 # --------------------------------------------------------------------------- #
