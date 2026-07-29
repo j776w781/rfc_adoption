@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-29T16:27:12",
+  "generated_at": "2026-07-30T00:00:15",
   "checklist_path": "data\\rfc_checklists\\dnssec_rfc_checklists.json",
   "dictionary_path": "data\\openintel_dictionary\\sample_openintel_dictionary.json",
   "dictionary_field_count": 10,
@@ -684,7 +684,8 @@
         "rrsig_algorithm",
         "cds_algorithm",
         "cdnskey_algorithm",
-        "nsec3param_algorithm"
+        "nsec3_hash_algorithm",
+        "nsec3param_hash_algorithm"
       ],
       "nullable": true
     },
@@ -717,8 +718,9 @@
       "available_from": "2016-01-01T00:00:00",
       "openintel_native_fields": [
         "dnskey_flags",
-        "nsec3param_flags",
-        "cdnskey_flags"
+        "cdnskey_flags",
+        "nsec3_flags",
+        "nsec3param_flags"
       ],
       "nullable": true
     },
@@ -768,10 +770,7 @@
       "description": "Measurement timestamp (UTC) at which the DNS response was observed.",
       "available_from": "2010-01-01T00:00:00",
       "openintel_native_fields": [
-        "timestamp",
-        "year",
-        "month",
-        "day"
+        "timestamp"
       ],
       "nullable": false
     },

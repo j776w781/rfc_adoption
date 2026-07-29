@@ -233,3 +233,15 @@ AGENTS.md
 # Local scratch
 scratch/
 *.local.json
+
+# --- Project-specific ---
+# Generated demo artefacts are intentionally NOT ignored: they are the
+# reviewable output of the pipeline and are committed with the prototype.
+# Only per-reviewer mutable state and large real-corpus output are.
+*.py[cod]
+.venv/
+demo_output/review_queue_status.json
+verify_run/
+output_real/
+openintel_cache/
+logs/

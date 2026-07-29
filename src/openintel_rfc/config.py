@@ -17,7 +17,8 @@ from typing import Final
 #: ``.../src/openintel_rfc``
 PACKAGE_ROOT: Final[Path] = Path(__file__).resolve().parent
 
-#: ``.../openintel_rfc_pipeline`` (src/openintel_rfc -> src -> project root)
+#: Repository root (src/openintel_rfc -> src -> root). Derived from __file__ so
+#: it follows the package wherever the tree is placed.
 PROJECT_ROOT: Final[Path] = PACKAGE_ROOT.parent.parent
 
 DEFAULT_CHECKLIST_PATH: Final[Path] = (

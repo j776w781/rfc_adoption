@@ -1,7 +1,7 @@
 {
   "pipeline": "openintel-rfc-adoption-matcher",
   "version": "0.1.0",
-  "generated_at": "2026-07-29T18:08:00",
+  "generated_at": "2026-07-30T00:00:16",
   "engine": "auto",
   "inputs": {
     "checklists": "data\\rfc_checklists\\dnssec_rfc_checklists.json",
@@ -14,6 +14,7 @@
   "counts": {
     "rows": 73,
     "signals": 73,
+    "sampled": false,
     "matches": 584,
     "traces": 584,
     "ranked_candidates": 8,

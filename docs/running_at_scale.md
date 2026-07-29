@@ -12,7 +12,7 @@ that you can read its output correctly.
 ## 1. Server setup
 
 ```bash
-git clone <repo> && cd rfc_adoption/openintel_rfc_pipeline
+git clone <repo> && cd rfc_adoption
 ./scripts/setup.sh
 ```
 

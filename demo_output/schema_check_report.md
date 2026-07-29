@@ -1,6 +1,6 @@
 # OpenINTEL Schema Cross-Check
 
-Generated: 2026-07-29T16:27:12  
+Generated: 2026-07-30T00:00:15  
 Pipeline: openintel-rfc-adoption-matcher 0.1.0
 
 Every indicator in the RFC checklist is checked field by field against the OpenINTEL analysis dictionary *before* any measurement data is read. An indicator whose fields the corpus does not carry cannot be answered by this data source at any confidence level, and saying so explicitly is more useful than silently scoring it as a non-match.
@@ -75,12 +75,12 @@ Missing dictionary fields: `validator_algorithm_support`
 | algorithm | integer | 2010-01-01 | yes | dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey... |
 | digest_type | integer | 2010-01-01 | yes | ds_digest_type, cds_digest_type |
 | domain | string | 2010-01-01 | no | query_name, response_name |
-| flags | string | 2016-01-01 | yes | dnskey_flags, nsec3param_flags, cdnskey_flags |
+| flags | string | 2016-01-01 | yes | dnskey_flags, cdnskey_flags, nsec3_flags, nsec3param_flags |
 | key_tag | integer | 2010-01-01 | yes | ds_key_tag, rrsig_key_tag, cds_key_tag |
 | measurement_id | string | 2010-01-01 | yes | - |
 | rr_type | string | 2010-01-01 | no | response_type |
 | source | string | 2010-01-01 | yes | source |
-| timestamp | datetime | 2010-01-01 | no | timestamp, year, month, day |
+| timestamp | datetime | 2010-01-01 | no | timestamp |
 | zone | string | 2010-01-01 | no | source |
 
 Dictionary fields no indicator references: `domain`, `flags`, `key_tag`, `measurement_id`, `source`, `timestamp`, `zone`
