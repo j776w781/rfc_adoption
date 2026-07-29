@@ -325,6 +325,39 @@ Decisions: `valid_match`, `partial_match`, `no_match`, `timestamp_invalid`,
 The dashboard reads `demo_output/` by default and lets you point at another output
 directory from the sidebar.
 
+## Platform support
+
+| Component | Linux | Windows | macOS |
+| --- | --- | --- | --- |
+| Pipeline (`python -m openintel_rfc.cli …`) | yes | yes | yes |
+| Test suite (`pytest`) | yes | yes | yes |
+| Dashboard (`streamlit run dashboard/app.py`) | yes | yes | yes |
+| `scripts/*.sh` | **yes — the target** | via Git Bash | yes |
+
+The Python side is the portable contract and is verified on both Linux and
+Windows. The shell scripts are written for the Linux server; they do run under
+Git Bash, which is how they are exercised during development, but that is a
+convenience rather than a promise. Nothing in the pipeline requires them — they
+wrap the same CLI commands documented below.
+
+**Artefacts are byte-identical across platforms.** That is a deliberate property,
+not an accident, and three things are needed for it:
+
+- JSON and Markdown are written with explicit `newline="\n"`. `Path.write_text`
+  otherwise translates to CRLF on Windows, so the "two runs are byte-identical"
+  guarantee would have held per-machine and quietly failed across machines.
+- Paths recorded *inside* artefacts are normalized to forward slashes, so a run
+  does not report `data\rfc_checklists\x.json` on one OS and
+  `data/rfc_checklists/x.json` on another.
+- CSV keeps the RFC 4180 `\r\n` that `csv.writer` emits on every platform, and
+  `.gitattributes` marks `*.csv -text` so git does not rewrite it per checkout.
+
+Verified: two runs into the same directory produce 13 of 13 identical artefacts,
+including `report.md` and every CSV.
+
+If you are on Windows and `make` is unavailable, use the raw `python -m
+openintel_rfc.cli …` commands below; they are the same thing the Makefile runs.
+
 ## Documentation
 
 | Document | Read it when |
@@ -494,6 +527,17 @@ directory fully describes its own run and the dashboard needs no second command.
 pytest                      # 718 tests, fully offline
 pytest -m network           # opt-in; needs OPENINTEL_NETWORK_TESTS=1
 ```
+
+Beyond the unit suite there is a full-system gate that checks what pytest cannot
+reach on its own — the documented commands, engine equivalence, determinism across
+runs, every dashboard page, the shell scripts, and one real partition from
+OpenINTEL (self-skipping when offline):
+
+```bash
+make verify          # or: bash scripts/verify_all.sh
+```
+
+79 checks. It is Linux/Git-Bash only, since it drives the shell scripts.
 
 Covers the schema checker, signal extraction, matching, all seven condition
 operators including the missing-value rule, the timestamp cutoff from five angles,

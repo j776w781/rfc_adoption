@@ -13,7 +13,7 @@ SURVEY      ?= docs/open_source_tool_survey.md
 
 export PYTHONPATH := src
 
-.PHONY: help install sample survey schema-check analyze demo dashboard test clean
+.PHONY: help install sample survey schema-check analyze demo dashboard test verify clean
 
 help:
 	@echo "install       Install runtime + test dependencies"
@@ -24,6 +24,8 @@ help:
 	@echo "demo          sample + survey + schema-check + analyze"
 	@echo "dashboard     Launch the Streamlit dashboard"
 	@echo "test          Run the pytest suite"
+	@echo "verify        Full-system check: deps, tests, demo, engine equivalence,"
+	@echo "              determinism, dashboard, scripts, live OpenINTEL run"
 	@echo "clean         Remove generated demo output"
 
 install:
@@ -56,6 +58,12 @@ dashboard:
 
 test:
 	$(PY) -m pytest
+
+# Everything the pytest suite cannot cover on its own: the documented commands,
+# engine equivalence, determinism across runs, the dashboard pages, the shell
+# scripts, and a real partition from OpenINTEL. Live checks self-skip offline.
+verify:
+	bash scripts/verify_all.sh
 
 clean:
 	$(PY) -c "import pathlib, shutil; d = pathlib.Path('$(OUT)'); [p.unlink() for p in d.glob('*') if p.is_file() and p.name != '.gitkeep']" || true

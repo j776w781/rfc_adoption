@@ -20,7 +20,7 @@ from typing import Sequence
 
 from . import config
 from .models import PipelineResult, RunConfig
-from .utils import PipelineError, ensure_dir, get_logger, iso, now, warn
+from .utils import PipelineError, ensure_dir, get_logger, iso, now, posix_path, warn
 
 LOGGER = get_logger("openintel_rfc.cli")
 
@@ -241,8 +241,8 @@ def cmd_schema_check(args: argparse.Namespace) -> int:
     report = check_schema(
         db,
         dictionary,
-        checklist_path=str(args.checklists),
-        dictionary_path=str(args.dictionary),
+        checklist_path=posix_path(args.checklists),
+        dictionary_path=posix_path(args.dictionary),
         warnings=warnings,
     )
 
@@ -291,8 +291,8 @@ def cmd_analyze(args: argparse.Namespace) -> int:
     schema_report = check_schema(
         db,
         dictionary,
-        checklist_path=str(run_config.checklists),
-        dictionary_path=str(run_config.dictionary),
+        checklist_path=posix_path(run_config.checklists),
+        dictionary_path=posix_path(run_config.dictionary),
         warnings=warnings,
     )
     needed_fields = sorted(
@@ -389,8 +389,8 @@ def cmd_scale(args: argparse.Namespace) -> int:
     schema_report = check_schema(
         db,
         dictionary,
-        checklist_path=str(args.checklists),
-        dictionary_path=str(args.dictionary),
+        checklist_path=posix_path(args.checklists),
+        dictionary_path=posix_path(args.dictionary),
         warnings=warnings,
     )
 
@@ -452,8 +452,8 @@ def cmd_scale(args: argparse.Namespace) -> int:
         # Recorded in run_manifest.json so a result can be traced back to the
         # exact checklist and dictionary that produced it. A multi-day run whose
         # inputs cannot be identified afterwards is not reproducible.
-        checklists=str(args.checklists),
-        dictionary=str(args.dictionary),
+        checklists=posix_path(args.checklists),
+        dictionary=posix_path(args.dictionary),
         partition_retries=args.partition_retries,
         partition_retry_wait_seconds=args.retry_wait,
         pace_seconds=args.pace_seconds,
@@ -619,10 +619,10 @@ def _resolve_run_config(args: argparse.Namespace) -> RunConfig:
         payload.setdefault(key, supplied if supplied is not None else default)
 
     return RunConfig(
-        checklists=str(payload["checklists"]),
-        dictionary=str(payload["dictionary"]),
-        parquet=str(payload["parquet"]) if payload.get("parquet") else None,
-        out=str(payload["out"]),
+        checklists=posix_path(payload["checklists"]),
+        dictionary=posix_path(payload["dictionary"]),
+        parquet=posix_path(payload["parquet"]) if payload.get("parquet") else None,
+        out=posix_path(payload["out"]),
         limit=payload.get("limit"),  # type: ignore[arg-type]
         engine=str(payload.get("engine", "auto")),  # type: ignore[arg-type]
         min_score=float(payload.get("min_score", 0.0)),  # type: ignore[arg-type]

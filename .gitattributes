@@ -16,5 +16,10 @@ Makefile text eol=lf
 *.cfg  text eol=lf
 *.txt  text eol=lf
 
+# CSV is written by csv.writer, which emits RFC 4180 CRLF on every platform.
+# Declaring it -text stops git from rewriting those endings per-checkout, so a
+# CSV produced on Linux and on Windows stay byte-identical.
+*.csv -text
+
 # Parquet fixtures are binary; never touch them.
 *.parquet binary

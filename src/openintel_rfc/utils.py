@@ -19,6 +19,7 @@ from pydantic import BaseModel
 from . import config
 
 __all__ = [
+    "posix_path",
     "PipelineError",
     "get_logger",
     "warn",
@@ -132,7 +133,7 @@ def write_json(path: str | Path, payload: Any, *, indent: int = 2) -> Path:
     file_path = Path(path)
     ensure_dir(file_path.parent)
     text = json.dumps(to_jsonable(payload), indent=indent, ensure_ascii=False)
-    file_path.write_text(text + "\n", encoding="utf-8")
+    file_path.write_text(text + "\n", encoding="utf-8", newline="\n")
     return file_path
 
 
@@ -141,8 +142,24 @@ def write_text(path: str | Path, text: str) -> Path:
     ensure_dir(file_path.parent)
     if not text.endswith("\n"):
         text += "\n"
-    file_path.write_text(text, encoding="utf-8")
+    file_path.write_text(text, encoding="utf-8", newline="\n")
     return file_path
+
+
+def posix_path(value: str | Path | None) -> str:
+    """Render a path with forward slashes, whatever platform produced it.
+
+    Paths get recorded *inside* artefacts -- `run_manifest.json` names its inputs,
+    `report.md` tabulates them -- and a run on Windows would otherwise write
+    ``data\\rfc_checklists\\x.json`` where Linux writes ``data/rfc_checklists/x.json``.
+    That silently breaks the pipeline's determinism guarantee across machines, and
+    it is the kind of difference that only shows up when someone diffs two
+    supposedly identical runs. Forward slashes are accepted by open() on Windows
+    too, so normalizing costs nothing.
+    """
+    if value is None:
+        return ""
+    return str(value).replace("\\", "/")
 
 
 # --------------------------------------------------------------------------- #

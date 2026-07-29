@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-30T00:14:42",
+  "generated_at": "2026-07-30T00:40:19",
   "pipeline": "openintel-rfc-adoption-matcher",
   "version": "0.1.0",
   "count": 40,
@@ -2313,7 +2313,7 @@
       "item_id": "rev_0025",
       "item_type": "schema_inconsistency",
       "severity": "low",
-      "reason": "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+      "reason": "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
       "affected_rfc_ids": [],
       "affected_fields": [],
       "affected_signal_ids": [],
@@ -2321,7 +2321,7 @@
       "evidence": {
         "source": "schema_report_warning",
         "scope": "",
-        "warning": "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+        "warning": "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
         "fields_mentioned": [],
         "field_availability": {},
         "rfc_ids_mentioned": []
@@ -2334,7 +2334,7 @@
       "item_id": "rev_0026",
       "item_type": "schema_inconsistency",
       "severity": "low",
-      "reason": "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+      "reason": "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
       "affected_rfc_ids": [],
       "affected_fields": [],
       "affected_signal_ids": [],
@@ -2342,7 +2342,7 @@
       "evidence": {
         "source": "schema_report_warning",
         "scope": "",
-        "warning": "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+        "warning": "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
         "fields_mentioned": [],
         "field_availability": {},
         "rfc_ids_mentioned": []
