@@ -212,7 +212,8 @@ section "H. Shell scripts"
 for f in scripts/*.sh; do
     check "bash -n $(basename "$f")" "ok" "$(bash -n "$f" 2>/dev/null && echo ok || echo SYNTAX_ERROR)"
 done
-check "scripts executable in git index" "4" "$(git ls-files -s scripts/ | grep -c 100755)"
+SH_COUNT="$(git ls-files scripts/ | grep -c '\.sh$')"
+check "every script executable in git index" "$SH_COUNT" "$(git ls-files -s scripts/ | grep -c 100755)"
 check "scripts have no CR bytes in index" "0" \
   "$(for f in $(git ls-files scripts/); do git show ":$f" | tr -d '\n' | tr -cd '\r'; done | wc -c | tr -d ' ')"
 
@@ -279,7 +280,7 @@ import csv,glob
 for f in glob.glob('demo_output/*.csv'):
     list(csv.DictReader(open(f,newline='',encoding='utf-8')))
 print('ok')" 2>&1 | tail -1)"
-check "no stale path references (tracked)" "0" "$(git grep -Il 'openintel_rfc_pipeline' -- . | wc -l | tr -d ' ')"
+check "no stale path references (tracked)" "0"   "$(git grep -Il 'openintel_rfc_pipeline' -- . ':!scripts/verify_all.sh' | wc -l | tr -d ' ')"
 git checkout -- demo_output 2>/dev/null || true
 check "working tree clean (after restoring demo_output)" "clean" "$([[ -z "$(git status --porcelain)" ]] && echo clean || echo DIRTY)"
 
