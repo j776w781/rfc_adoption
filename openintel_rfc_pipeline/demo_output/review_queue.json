@@ -1,0 +1,2766 @@
+{
+  "generated_at": "2026-07-29T16:09:37",
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "count": 40,
+  "review_items": [
+    {
+      "item_id": "rev_0001",
+      "item_type": "non_queryable_indicator",
+      "severity": "high",
+      "reason": "Indicator rfc8624_validator_algorithm_support (optional, weight 6.0) of RFC 8624 cannot be evaluated at all: field(s) `validator_algorithm_support` are absent from the OpenINTEL analysis dictionary, so no observation can ever match it. Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+      "affected_rfc_ids": [
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "validator_algorithm_support"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "Add `validator_algorithm_support` to the OpenINTEL analysis dictionary with an openintel_native_fields mapping to the real Parquet column(s) that carry it, or rewrite indicator rfc8624_validator_algorithm_support to rely only on fields the corpus exports (algorithm, digest_type, domain, flags, key_tag, measurement_id, rr_type, source, timestamp, zone). Until then RFC 8624 scores are systematically 6.0 lower than the checklist intends.",
+      "evidence": {
+        "rfc_id": "RFC 8624",
+        "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+        "rfc_publication_date": "2019-06-01T00:00:00",
+        "indicator_id": "rfc8624_validator_algorithm_support",
+        "indicator_description": "Validating resolver implements the RFC 8624 mandatory-to-implement validation algorithm set.",
+        "required": false,
+        "weight": 6.0,
+        "queryability": "non_queryable",
+        "missing_fields": [
+          "validator_algorithm_support"
+        ],
+        "present_fields": [
+          "rr_type"
+        ],
+        "schema_reasoning": "Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+        "schema_warnings": [],
+        "condition_checks": [
+          {
+            "field": "validator_algorithm_support",
+            "op": "contains",
+            "expected": "ECDSAP256SHA256",
+            "field_exists": false,
+            "field_type": null,
+            "type_compatible": true,
+            "available_from": "",
+            "explanation": "Condition `validator_algorithm_support contains ECDSAP256SHA256` of RFC 8624 cannot be evaluated because the OpenINTEL dictionary defines no field named validator_algorithm_support; at match time the condition is recorded with field_present=False, fails, and validator_algorithm_support is reported in the match's missing_fields. No similarly named field exists in the dictionary either."
+          },
+          {
+            "field": "rr_type",
+            "op": "in",
+            "expected": [
+              "DNSKEY",
+              "RRSIG"
+            ],
+            "field_exists": true,
+            "field_type": "string",
+            "type_compatible": true,
+            "available_from": "2010-01-01T00:00:00",
+            "explanation": "Condition `rr_type in [DNSKEY, RRSIG]` of RFC 8624 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+          }
+        ],
+        "dictionary_fields_available": [
+          "algorithm",
+          "digest_type",
+          "domain",
+          "flags",
+          "key_tag",
+          "measurement_id",
+          "rr_type",
+          "source",
+          "timestamp",
+          "zone"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0002",
+      "item_type": "partial_match",
+      "severity": "high",
+      "reason": "RFC 8078 matched partially on 4 observation(s): indicator(s) none matched but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not, capping the score at 0.0. Field(s) `algorithm`, `digest_type` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 8078"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "digest_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves the missing field(s) for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm; `digest_type` is derived from the OpenINTEL column(s) ds_digest_type, cds_digest_type). If the column really is empty for this measurement generation, record RFC 8078 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 rather than unmatched - a partial match here is a measurement gap, not a negative result. If the data is there, the reader's alias resolution is dropping it. Treat this as high priority: RFC 8078 has very_high specificity, so its indicators are uniquely attributable and a near miss is likely a strong result being lost.",
+      "evidence": {
+        "rfc_id": "RFC 8078",
+        "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+        "rfc_specificity": "very_high",
+        "matched_indicator_ids": [],
+        "unmatched_required_indicator_ids": [
+          "rfc8078_cds_cdnskey_algorithm_zero"
+        ],
+        "failed_indicator_ids": [
+          "rfc8078_cds_cdnskey_algorithm_zero",
+          "rfc8078_delete_signal_digest_zero"
+        ],
+        "missing_fields": [
+          "algorithm",
+          "digest_type"
+        ],
+        "missing_field_native_columns": {
+          "algorithm": [
+            "dnskey_algorithm",
+            "ds_algorithm",
+            "rrsig_algorithm",
+            "cds_algorithm",
+            "cdnskey_algorithm",
+            "nsec3param_algorithm"
+          ],
+          "digest_type": [
+            "ds_digest_type",
+            "cds_digest_type"
+          ]
+        },
+        "best_score": 0.0,
+        "representative_signal_id": "sig_0068",
+        "representative_trace_id": "trace_sig_0068_rfc8078",
+        "observation_count": 4,
+        "affected_signal_id_count": 4,
+        "affected_signal_ids_truncated": false,
+        "listed_signal_ids": [
+          "sig_0051",
+          "sig_0056",
+          "sig_0062",
+          "sig_0068"
+        ],
+        "earliest_observation": "2019-04-12T04:22:56",
+        "latest_observation": "2020-11-30T05:42:21",
+        "domains": [
+          "dnssec-demo.org",
+          "example.com",
+          "example.nl",
+          "keyroll.nu"
+        ],
+        "zones": [
+          "com",
+          "nl",
+          "nu",
+          "org"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc8078",
+        "trace_sig_0056_rfc8078",
+        "trace_sig_0062_rfc8078",
+        "trace_sig_0068_rfc8078"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0068 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 8078",
+        "signal_id": "sig_0068",
+        "trace_id": "trace_sig_0068_rfc8078",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0003",
+      "item_type": "timestamp_invalid_match",
+      "severity": "high",
+      "reason": "42 observation(s) matched RFC 8624 indicator(s) rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algorithm but were recorded before RFC 8624 was published on 2019-06-01T00:00:00; the earliest, sig_0002 at 2011-02-15T03:43:30, is 3027 day(s) early. A combined score of 30.375 was forfeited, so these observations currently count as evidence for nothing.",
+      "affected_rfc_ids": [
+        "RFC 4033",
+        "RFC 4509",
+        "RFC 6605",
+        "RFC 7344",
+        "RFC 8078",
+        "RFC 8080",
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [
+        "sig_0002",
+        "sig_0004",
+        "sig_0005",
+        "sig_0006",
+        "sig_0008",
+        "sig_0009",
+        "sig_0011",
+        "sig_0012",
+        "sig_0013",
+        "sig_0014",
+        "sig_0015",
+        "sig_0016",
+        "sig_0017",
+        "sig_0018",
+        "sig_0020",
+        "sig_0021",
+        "sig_0023",
+        "sig_0024",
+        "sig_0025",
+        "sig_0026"
+      ],
+      "suggested_action": "Verify the RFC 8624 publication_date 2019-06-01T00:00:00 in the checklist against the RFC Editor record, then verify that the observation timestamps (earliest 2011-02-15T03:43:30) are real measurement times rather than partition dates or epoch-unit errors. If both are correct, these records genuinely predate RFC 8624. The same signal(s) already produced a valid match for RFC 4033, RFC 4509, RFC 6605, RFC 7344, RFC 8078, RFC 8080, which is where this evidence belongs.",
+      "evidence": {
+        "rfc_id": "RFC 8624",
+        "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+        "rfc_publication_date": "2019-06-01T00:00:00",
+        "earliest_observation": "2011-02-15T03:43:30",
+        "latest_observation": "2019-05-07T01:34:17",
+        "max_days_before_publication": 3027,
+        "forfeited_score_total": 30.375,
+        "max_forfeited_score": 3.375,
+        "matched_indicator_ids": [
+          "rfc8624_avoids_deprecated_algorithm",
+          "rfc8624_recommended_signing_algorithm"
+        ],
+        "affected_signal_id_count": 42,
+        "affected_signal_ids_truncated": true,
+        "alternative_valid_rfc_ids": [
+          "RFC 4033",
+          "RFC 4509",
+          "RFC 6605",
+          "RFC 7344",
+          "RFC 8078",
+          "RFC 8080"
+        ],
+        "observations": [
+          {
+            "signal_id": "sig_0002",
+            "observation_timestamp": "2011-02-15T03:43:30",
+            "days_before_publication": 3027,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "legacy-sha1.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0002_rfc8624"
+          },
+          {
+            "signal_id": "sig_0004",
+            "observation_timestamp": "2011-05-24T01:47:52",
+            "days_before_publication": 2929,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0004_rfc8624"
+          },
+          {
+            "signal_id": "sig_0005",
+            "observation_timestamp": "2012-02-07T03:31:12",
+            "days_before_publication": 2670,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0005_rfc8624"
+          },
+          {
+            "signal_id": "sig_0006",
+            "observation_timestamp": "2012-03-14T02:49:20",
+            "days_before_publication": 2634,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0006_rfc8624"
+          },
+          {
+            "signal_id": "sig_0008",
+            "observation_timestamp": "2012-08-21T05:07:43",
+            "days_before_publication": 2474,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "legacy-sha1.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0008_rfc8624"
+          },
+          {
+            "signal_id": "sig_0009",
+            "observation_timestamp": "2012-12-11T01:11:09",
+            "days_before_publication": 2362,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.org",
+            "zone": "org",
+            "trace_id": "trace_sig_0009_rfc8624"
+          },
+          {
+            "signal_id": "sig_0011",
+            "observation_timestamp": "2013-06-27T05:25:22",
+            "days_before_publication": 2164,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.net",
+            "zone": "net",
+            "trace_id": "trace_sig_0011_rfc8624"
+          },
+          {
+            "signal_id": "sig_0012",
+            "observation_timestamp": "2013-07-02T04:40:21",
+            "days_before_publication": 2159,
+            "forfeited_score": 3.375,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm",
+              "rfc8624_recommended_signing_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "ecdsa-demo.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0012_rfc8624"
+          },
+          {
+            "signal_id": "sig_0013",
+            "observation_timestamp": "2013-09-03T02:47:48",
+            "days_before_publication": 2096,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.nl",
+            "zone": "nl",
+            "trace_id": "trace_sig_0013_rfc8624"
+          },
+          {
+            "signal_id": "sig_0014",
+            "observation_timestamp": "2013-11-05T02:08:51",
+            "days_before_publication": 2033,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.net",
+            "zone": "net",
+            "trace_id": "trace_sig_0014_rfc8624"
+          },
+          {
+            "signal_id": "sig_0015",
+            "observation_timestamp": "2014-01-09T05:43:02",
+            "days_before_publication": 1968,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "dnssec-demo.nl",
+            "zone": "nl",
+            "trace_id": "trace_sig_0015_rfc8624"
+          },
+          {
+            "signal_id": "sig_0016",
+            "observation_timestamp": "2014-04-17T05:34:29",
+            "days_before_publication": 1870,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.org",
+            "zone": "org",
+            "trace_id": "trace_sig_0016_rfc8624"
+          },
+          {
+            "signal_id": "sig_0017",
+            "observation_timestamp": "2014-05-19T01:01:22",
+            "days_before_publication": 1838,
+            "forfeited_score": 3.375,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm",
+              "rfc8624_recommended_signing_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "ecdsa-demo.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0017_rfc8624"
+          },
+          {
+            "signal_id": "sig_0018",
+            "observation_timestamp": "2014-06-16T01:47:01",
+            "days_before_publication": 1810,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "signed-example.se",
+            "zone": "se",
+            "trace_id": "trace_sig_0018_rfc8624"
+          },
+          {
+            "signal_id": "sig_0020",
+            "observation_timestamp": "2015-04-08T00:49:32",
+            "days_before_publication": 1514,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0020_rfc8624"
+          },
+          {
+            "signal_id": "sig_0021",
+            "observation_timestamp": "2015-04-22T04:34:59",
+            "days_before_publication": 1500,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "signed-example.se",
+            "zone": "se",
+            "trace_id": "trace_sig_0021_rfc8624"
+          },
+          {
+            "signal_id": "sig_0023",
+            "observation_timestamp": "2015-08-27T05:52:06",
+            "days_before_publication": 1373,
+            "forfeited_score": 3.375,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm",
+              "rfc8624_recommended_signing_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.nl",
+            "zone": "nl",
+            "trace_id": "trace_sig_0023_rfc8624"
+          },
+          {
+            "signal_id": "sig_0024",
+            "observation_timestamp": "2015-09-22T05:06:26",
+            "days_before_publication": 1347,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "delete-signal.nl",
+            "zone": "nl",
+            "trace_id": "trace_sig_0024_rfc8624"
+          },
+          {
+            "signal_id": "sig_0025",
+            "observation_timestamp": "2015-11-24T01:12:20",
+            "days_before_publication": 1284,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "example.net",
+            "zone": "net",
+            "trace_id": "trace_sig_0025_rfc8624"
+          },
+          {
+            "signal_id": "sig_0026",
+            "observation_timestamp": "2016-01-15T04:12:13",
+            "days_before_publication": 1232,
+            "forfeited_score": 0.0,
+            "matched_indicator_ids": [
+              "rfc8624_avoids_deprecated_algorithm"
+            ],
+            "matched_fields": [
+              "algorithm"
+            ],
+            "domain": "dnssec-demo.org",
+            "zone": "org",
+            "trace_id": "trace_sig_0026_rfc8624"
+          }
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0002_rfc8624",
+        "trace_sig_0004_rfc8624",
+        "trace_sig_0005_rfc8624",
+        "trace_sig_0006_rfc8624",
+        "trace_sig_0008_rfc8624",
+        "trace_sig_0009_rfc8624",
+        "trace_sig_0011_rfc8624",
+        "trace_sig_0012_rfc8624",
+        "trace_sig_0013_rfc8624",
+        "trace_sig_0014_rfc8624",
+        "trace_sig_0015_rfc8624",
+        "trace_sig_0016_rfc8624",
+        "trace_sig_0017_rfc8624",
+        "trace_sig_0018_rfc8624",
+        "trace_sig_0020_rfc8624",
+        "trace_sig_0021_rfc8624",
+        "trace_sig_0023_rfc8624",
+        "trace_sig_0024_rfc8624",
+        "trace_sig_0025_rfc8624",
+        "trace_sig_0026_rfc8624"
+      ],
+      "verification": {
+        "verification_status": "rejected",
+        "explanation": "Rejected: signal sig_0050 was observed on 2019-03-25T01:41:39, which is 68 day(s) before RFC 8624 was published on 2019-06-01T00:00:00, so the observation cannot be evidence of a mechanism that did not yet exist, forfeiting the score of 3.375 the indicators would otherwise have earned; the matched indicator(s) rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algorithm should be attributed to an earlier RFC instead.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 8624",
+        "signal_id": "sig_0050",
+        "trace_id": "trace_sig_0050_rfc8624",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0004",
+      "item_type": "timestamp_invalid_match",
+      "severity": "high",
+      "reason": "5 observation(s) matched RFC 8078 indicator(s) rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero but were recorded before RFC 8078 was published on 2017-03-01T00:00:00; the earliest, sig_0020 at 2015-04-08T00:49:32, is 692 day(s) early. A combined score of 86.25 was forfeited, so these observations currently count as evidence for nothing.",
+      "affected_rfc_ids": [
+        "RFC 7344",
+        "RFC 8078"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "digest_type",
+        "rr_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0020",
+        "sig_0024",
+        "sig_0026",
+        "sig_0029",
+        "sig_0032"
+      ],
+      "suggested_action": "Verify the RFC 8078 publication_date 2017-03-01T00:00:00 in the checklist against the RFC Editor record, then verify that the observation timestamps (earliest 2015-04-08T00:49:32) are real measurement times rather than partition dates or epoch-unit errors. If both are correct, these records genuinely predate RFC 8078. The same signal(s) already produced a valid match for RFC 7344, which is where this evidence belongs.",
+      "evidence": {
+        "rfc_id": "RFC 8078",
+        "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+        "rfc_publication_date": "2017-03-01T00:00:00",
+        "earliest_observation": "2015-04-08T00:49:32",
+        "latest_observation": "2016-11-02T04:18:00",
+        "max_days_before_publication": 692,
+        "forfeited_score_total": 86.25,
+        "max_forfeited_score": 17.25,
+        "matched_indicator_ids": [
+          "rfc8078_cds_cdnskey_algorithm_zero",
+          "rfc8078_delete_signal_digest_zero"
+        ],
+        "affected_signal_id_count": 5,
+        "affected_signal_ids_truncated": false,
+        "alternative_valid_rfc_ids": [
+          "RFC 7344"
+        ],
+        "observations": [
+          {
+            "signal_id": "sig_0020",
+            "observation_timestamp": "2015-04-08T00:49:32",
+            "days_before_publication": 692,
+            "forfeited_score": 17.25,
+            "matched_indicator_ids": [
+              "rfc8078_cds_cdnskey_algorithm_zero",
+              "rfc8078_delete_signal_digest_zero"
+            ],
+            "matched_fields": [
+              "algorithm",
+              "digest_type",
+              "rr_type"
+            ],
+            "domain": "example.com",
+            "zone": "com",
+            "trace_id": "trace_sig_0020_rfc8078"
+          },
+          {
+            "signal_id": "sig_0024",
+            "observation_timestamp": "2015-09-22T05:06:26",
+            "days_before_publication": 525,
+            "forfeited_score": 17.25,
+            "matched_indicator_ids": [
+              "rfc8078_cds_cdnskey_algorithm_zero",
+              "rfc8078_delete_signal_digest_zero"
+            ],
+            "matched_fields": [
+              "algorithm",
+              "digest_type",
+              "rr_type"
+            ],
+            "domain": "delete-signal.nl",
+            "zone": "nl",
+            "trace_id": "trace_sig_0024_rfc8078"
+          },
+          {
+            "signal_id": "sig_0026",
+            "observation_timestamp": "2016-01-15T04:12:13",
+            "days_before_publication": 410,
+            "forfeited_score": 17.25,
+            "matched_indicator_ids": [
+              "rfc8078_cds_cdnskey_algorithm_zero",
+              "rfc8078_delete_signal_digest_zero"
+            ],
+            "matched_fields": [
+              "algorithm",
+              "digest_type",
+              "rr_type"
+            ],
+            "domain": "dnssec-demo.org",
+            "zone": "org",
+            "trace_id": "trace_sig_0026_rfc8078"
+          },
+          {
+            "signal_id": "sig_0029",
+            "observation_timestamp": "2016-05-30T02:02:59",
+            "days_before_publication": 274,
+            "forfeited_score": 17.25,
+            "matched_indicator_ids": [
+              "rfc8078_cds_cdnskey_algorithm_zero",
+              "rfc8078_delete_signal_digest_zero"
+            ],
+            "matched_fields": [
+              "algorithm",
+              "digest_type",
+              "rr_type"
+            ],
+            "domain": "example.nl",
+            "zone": "nl",
+            "trace_id": "trace_sig_0029_rfc8078"
+          },
+          {
+            "signal_id": "sig_0032",
+            "observation_timestamp": "2016-11-02T04:18:00",
+            "days_before_publication": 118,
+            "forfeited_score": 17.25,
+            "matched_indicator_ids": [
+              "rfc8078_cds_cdnskey_algorithm_zero",
+              "rfc8078_delete_signal_digest_zero"
+            ],
+            "matched_fields": [
+              "algorithm",
+              "digest_type",
+              "rr_type"
+            ],
+            "domain": "keyroll.nu",
+            "zone": "nu",
+            "trace_id": "trace_sig_0032_rfc8078"
+          }
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0020_rfc8078",
+        "trace_sig_0024_rfc8078",
+        "trace_sig_0026_rfc8078",
+        "trace_sig_0029_rfc8078",
+        "trace_sig_0032_rfc8078"
+      ],
+      "verification": {
+        "verification_status": "rejected",
+        "explanation": "Rejected: signal sig_0032 was observed on 2016-11-02T04:18:00, which is 119 day(s) before RFC 8078 was published on 2017-03-01T00:00:00, so the observation cannot be evidence of a mechanism that did not yet exist, forfeiting the score of 17.25 the indicators would otherwise have earned; the matched indicator(s) rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero should be attributed to an earlier RFC instead.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 8078",
+        "signal_id": "sig_0032",
+        "trace_id": "trace_sig_0032_rfc8078",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0005",
+      "item_type": "ambiguous_indicator",
+      "severity": "medium",
+      "reason": "Indicator rfc8624_avoids_deprecated_algorithm of RFC 8624 is ambiguous (Zone avoids algorithms RFC 8624 marks MUST NOT / NOT RECOMMENDED for signing (1 RSAMD5, 3 DSA, 6 DSA-NSEC3-SHA1, 12 GOST)): the same observation is equally well explained by another RFC, so a match here is an inference about the operator, not proof of adoption. It drove 17 match(es) in this run. Indicator rfc8624_avoids_deprecated_algorithm is ambiguous: every field it references exists in the OpenINTEL dictionary (algorithm (integer)), so it can be evaluated, but the checklist marks it ambiguous because the same observation is equally well explained by other RFCs, so a match is not uniquely attributable to RFC 8624.",
+      "affected_rfc_ids": [
+        "RFC 6605",
+        "RFC 8080",
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [
+        "sig_0053",
+        "sig_0054",
+        "sig_0055",
+        "sig_0058",
+        "sig_0059",
+        "sig_0060",
+        "sig_0061",
+        "sig_0063",
+        "sig_0064",
+        "sig_0065",
+        "sig_0066",
+        "sig_0067",
+        "sig_0069",
+        "sig_0070",
+        "sig_0071",
+        "sig_0072",
+        "sig_0073"
+      ],
+      "suggested_action": "Decide attribution by hand for signal(s) sig_0053, sig_0054, sig_0055, sig_0058, sig_0059, sig_0060, sig_0061, sig_0063, sig_0064, sig_0065, sig_0066, sig_0067, sig_0069, sig_0070, sig_0071, sig_0072, sig_0073: the observation is also consistent with the competing explanation(s) RFC 6605, RFC 8080. Either add a condition to rfc8624_avoids_deprecated_algorithm that only RFC 8624 can explain, or keep 'ambiguous' out of build_timeline's include_decisions so these observations are excluded from RFC 8624's adoption counts instead of inflating them.",
+      "evidence": {
+        "rfc_id": "RFC 8624",
+        "indicator_id": "rfc8624_avoids_deprecated_algorithm",
+        "indicator_description": "Zone avoids algorithms RFC 8624 marks MUST NOT / NOT RECOMMENDED for signing (1 RSAMD5, 3 DSA, 6 DSA-NSEC3-SHA1, 12 GOST).",
+        "indicator_required": false,
+        "indicator_weight": 3.0,
+        "checklist_notes": "Absence of evidence over a single record cannot establish a zone-wide policy.",
+        "related_rfc_ids": [
+          "RFC 6605",
+          "RFC 8080"
+        ],
+        "schema_queryability_reasoning": "Indicator rfc8624_avoids_deprecated_algorithm is ambiguous: every field it references exists in the OpenINTEL dictionary (algorithm (integer)), so it can be evaluated, but the checklist marks it ambiguous because the same observation is equally well explained by other RFCs, so a match is not uniquely attributable to RFC 8624.",
+        "match_count": 17,
+        "affected_signal_ids_truncated": false,
+        "example_scores": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          3.375,
+          3.375,
+          0.0,
+          0.0,
+          3.375,
+          0.0,
+          0.0,
+          0.0,
+          3.375,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0053_rfc8624",
+        "trace_sig_0054_rfc8624",
+        "trace_sig_0055_rfc8624",
+        "trace_sig_0058_rfc8624",
+        "trace_sig_0059_rfc8624",
+        "trace_sig_0060_rfc8624",
+        "trace_sig_0061_rfc8624",
+        "trace_sig_0063_rfc8624",
+        "trace_sig_0064_rfc8624",
+        "trace_sig_0065_rfc8624",
+        "trace_sig_0066_rfc8624",
+        "trace_sig_0067_rfc8624",
+        "trace_sig_0069_rfc8624",
+        "trace_sig_0070_rfc8624",
+        "trace_sig_0071_rfc8624",
+        "trace_sig_0072_rfc8624",
+        "trace_sig_0073_rfc8624"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0006",
+      "item_type": "ambiguous_indicator",
+      "severity": "medium",
+      "reason": "Indicator rfc8624_recommended_signing_algorithm of RFC 8624 is ambiguous (Zone signs with an algorithm RFC 8624 marks RECOMMENDED (13 ECDSAP256SHA256, 15 Ed25519)): the same observation is equally well explained by another RFC, so a match here is an inference about the operator, not proof of adoption. It drove 4 match(es) in this run. Indicator rfc8624_recommended_signing_algorithm is ambiguous: every field it references exists in the OpenINTEL dictionary (algorithm (integer)), so it can be evaluated, but the checklist marks it ambiguous because the same observation is equally well explained by other RFCs, so a match is not uniquely attributable to RFC 8624.",
+      "affected_rfc_ids": [
+        "RFC 6605",
+        "RFC 8080",
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [
+        "sig_0059",
+        "sig_0060",
+        "sig_0064",
+        "sig_0069"
+      ],
+      "suggested_action": "Decide attribution by hand for signal(s) sig_0059, sig_0060, sig_0064, sig_0069: the observation is also consistent with the competing explanation(s) RFC 6605, RFC 8080. Either add a condition to rfc8624_recommended_signing_algorithm that only RFC 8624 can explain, or keep 'ambiguous' out of build_timeline's include_decisions so these observations are excluded from RFC 8624's adoption counts instead of inflating them.",
+      "evidence": {
+        "rfc_id": "RFC 8624",
+        "indicator_id": "rfc8624_recommended_signing_algorithm",
+        "indicator_description": "Zone signs with an algorithm RFC 8624 marks RECOMMENDED (13 ECDSAP256SHA256, 15 Ed25519).",
+        "indicator_required": true,
+        "indicator_weight": 5.0,
+        "checklist_notes": "AMBIGUOUS BY CONSTRUCTION: the same observation is equally explained by RFC 6605 / RFC 8080 registrations.",
+        "related_rfc_ids": [
+          "RFC 6605",
+          "RFC 8080"
+        ],
+        "schema_queryability_reasoning": "Indicator rfc8624_recommended_signing_algorithm is ambiguous: every field it references exists in the OpenINTEL dictionary (algorithm (integer)), so it can be evaluated, but the checklist marks it ambiguous because the same observation is equally well explained by other RFCs, so a match is not uniquely attributable to RFC 8624.",
+        "match_count": 4,
+        "affected_signal_ids_truncated": false,
+        "example_scores": [
+          3.375,
+          3.375,
+          3.375,
+          3.375
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0059_rfc8624",
+        "trace_sig_0060_rfc8624",
+        "trace_sig_0064_rfc8624",
+        "trace_sig_0069_rfc8624"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0007",
+      "item_type": "close_ranking",
+      "severity": "medium",
+      "reason": "RFC 4033 (score 3.75) and RFC 8624 (score 3.375) differ by 10.0%, inside the 15.0% tolerance for declaring a winner, so the top-ranked RFC for these observations is not separable on score alone. They share no matched indicators at all, so the near-tie comes from the weights and specificity multipliers rather than from common evidence.",
+      "affected_rfc_ids": [
+        "RFC 4033",
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0001",
+        "sig_0002",
+        "sig_0003",
+        "sig_0004",
+        "sig_0005",
+        "sig_0053",
+        "sig_0054",
+        "sig_0055",
+        "sig_0058",
+        "sig_0059"
+      ],
+      "suggested_action": "Do not report RFC 4033 as the single best match. Compare the distinguishing indicators (only RFC 4033: rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present; only RFC 8624: rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algorithm) against signal(s) sig_0001, sig_0002, sig_0003, sig_0004, sig_0005, sig_0053, sig_0054, sig_0055, sig_0058, sig_0059, and confirm the fields those indicators read were actually populated - an unpopulated field is what usually collapses the gap between two RFCs. Then either add a discriminating condition to the checklist, or report both candidates with their scores and let the reader see the ambiguity.",
+      "evidence": {
+        "rfc_a": "RFC 4033",
+        "rfc_b": "RFC 8624",
+        "score_a": 3.75,
+        "score_b": 3.375,
+        "relative_difference": 0.1,
+        "tolerance": 0.15,
+        "specificity_a": "low",
+        "specificity_b": "low",
+        "indicators_only_in_a": [
+          "rfc4033_base_dnssec_record_present",
+          "rfc4033_dnssec_algorithm_present"
+        ],
+        "indicators_only_in_b": [
+          "rfc8624_avoids_deprecated_algorithm",
+          "rfc8624_recommended_signing_algorithm"
+        ],
+        "shared_indicators": [],
+        "supporting_signal_count_a": 69,
+        "supporting_signal_count_b": 17,
+        "derived_locally": false
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0001_rfc4033",
+        "trace_sig_0002_rfc4033",
+        "trace_sig_0003_rfc4033",
+        "trace_sig_0004_rfc4033",
+        "trace_sig_0005_rfc4033",
+        "trace_sig_0053_rfc8624",
+        "trace_sig_0054_rfc8624",
+        "trace_sig_0055_rfc8624",
+        "trace_sig_0058_rfc8624",
+        "trace_sig_0059_rfc8624"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0008",
+      "item_type": "close_ranking",
+      "severity": "medium",
+      "reason": "RFC 7344 (score 11.25) and RFC 4509 (score 11.25) differ by 0.0%, inside the 15.0% tolerance for declaring a winner, so the top-ranked RFC for these observations is not separable on score alone. They share no matched indicators at all, so the near-tie comes from the weights and specificity multipliers rather than from common evidence.",
+      "affected_rfc_ids": [
+        "RFC 4509",
+        "RFC 7344"
+      ],
+      "affected_fields": [
+        "digest_type",
+        "rr_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0006",
+        "sig_0011",
+        "sig_0015",
+        "sig_0020",
+        "sig_0021",
+        "sig_0024",
+        "sig_0026",
+        "sig_0029",
+        "sig_0030",
+        "sig_0032"
+      ],
+      "suggested_action": "Do not report RFC 7344 as the single best match. Compare the distinguishing indicators (only RFC 7344: rfc7344_cds_cdnskey_present; only RFC 4509: rfc4509_ds_sha256_digest) against signal(s) sig_0006, sig_0011, sig_0015, sig_0020, sig_0021, sig_0024, sig_0026, sig_0029, sig_0030, sig_0032, and confirm the fields those indicators read were actually populated - an unpopulated field is what usually collapses the gap between two RFCs. Then either add a discriminating condition to the checklist, or report both candidates with their scores and let the reader see the ambiguity.",
+      "evidence": {
+        "rfc_a": "RFC 7344",
+        "rfc_b": "RFC 4509",
+        "score_a": 11.25,
+        "score_b": 11.25,
+        "relative_difference": 0.0,
+        "tolerance": 0.15,
+        "specificity_a": "high",
+        "specificity_b": "high",
+        "indicators_only_in_a": [
+          "rfc7344_cds_cdnskey_present"
+        ],
+        "indicators_only_in_b": [
+          "rfc4509_ds_sha256_digest"
+        ],
+        "shared_indicators": [],
+        "supporting_signal_count_a": 21,
+        "supporting_signal_count_b": 14,
+        "derived_locally": false
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0006_rfc4509",
+        "trace_sig_0011_rfc4509",
+        "trace_sig_0015_rfc4509",
+        "trace_sig_0020_rfc7344",
+        "trace_sig_0021_rfc4509",
+        "trace_sig_0024_rfc7344",
+        "trace_sig_0026_rfc7344",
+        "trace_sig_0029_rfc7344",
+        "trace_sig_0030_rfc4509",
+        "trace_sig_0032_rfc7344"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0009",
+      "item_type": "close_ranking",
+      "severity": "medium",
+      "reason": "RFC 8078 (score 17.25) and RFC 5155 (score 17.25) differ by 0.0%, inside the 15.0% tolerance for declaring a winner, so the top-ranked RFC for these observations is not separable on score alone. They share no matched indicators at all, so the near-tie comes from the weights and specificity multipliers rather than from common evidence.",
+      "affected_rfc_ids": [
+        "RFC 5155",
+        "RFC 8078"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "digest_type",
+        "rr_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0001",
+        "sig_0003",
+        "sig_0007",
+        "sig_0010",
+        "sig_0019",
+        "sig_0042",
+        "sig_0043",
+        "sig_0045",
+        "sig_0047",
+        "sig_0049"
+      ],
+      "suggested_action": "Do not report RFC 8078 as the single best match. Compare the distinguishing indicators (only RFC 8078: rfc8078_cds_cdnskey_algorithm_zero, rfc8078_delete_signal_digest_zero; only RFC 5155: rfc5155_nsec3_hash_algorithm, rfc5155_nsec3_record_present) against signal(s) sig_0001, sig_0003, sig_0007, sig_0010, sig_0019, sig_0042, sig_0043, sig_0045, sig_0047, sig_0049, and confirm the fields those indicators read were actually populated - an unpopulated field is what usually collapses the gap between two RFCs. Then either add a discriminating condition to the checklist, or report both candidates with their scores and let the reader see the ambiguity.",
+      "evidence": {
+        "rfc_a": "RFC 8078",
+        "rfc_b": "RFC 5155",
+        "score_a": 17.25,
+        "score_b": 17.25,
+        "relative_difference": 0.0,
+        "tolerance": 0.15,
+        "specificity_a": "very_high",
+        "specificity_b": "very_high",
+        "indicators_only_in_a": [
+          "rfc8078_cds_cdnskey_algorithm_zero",
+          "rfc8078_delete_signal_digest_zero"
+        ],
+        "indicators_only_in_b": [
+          "rfc5155_nsec3_hash_algorithm",
+          "rfc5155_nsec3_record_present"
+        ],
+        "shared_indicators": [],
+        "supporting_signal_count_a": 16,
+        "supporting_signal_count_b": 10,
+        "derived_locally": false
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0001_rfc5155",
+        "trace_sig_0003_rfc5155",
+        "trace_sig_0007_rfc5155",
+        "trace_sig_0010_rfc5155",
+        "trace_sig_0019_rfc5155",
+        "trace_sig_0042_rfc8078",
+        "trace_sig_0043_rfc8078",
+        "trace_sig_0045_rfc8078",
+        "trace_sig_0047_rfc8078",
+        "trace_sig_0049_rfc8078"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0010",
+      "item_type": "close_ranking",
+      "severity": "medium",
+      "reason": "RFC 5155 (score 17.25) and RFC 8080 (score 17.25) differ by 0.0%, inside the 15.0% tolerance for declaring a winner, so the top-ranked RFC for these observations is not separable on score alone. They share no matched indicators at all, so the near-tie comes from the weights and specificity multipliers rather than from common evidence.",
+      "affected_rfc_ids": [
+        "RFC 5155",
+        "RFC 8080"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0001",
+        "sig_0003",
+        "sig_0007",
+        "sig_0010",
+        "sig_0019",
+        "sig_0038",
+        "sig_0044",
+        "sig_0050",
+        "sig_0054",
+        "sig_0059"
+      ],
+      "suggested_action": "Do not report RFC 5155 as the single best match. Compare the distinguishing indicators (only RFC 5155: rfc5155_nsec3_hash_algorithm, rfc5155_nsec3_record_present; only RFC 8080: rfc8080_eddsa_algorithm, rfc8080_eddsa_on_key_or_signature) against signal(s) sig_0001, sig_0003, sig_0007, sig_0010, sig_0019, sig_0038, sig_0044, sig_0050, sig_0054, sig_0059, and confirm the fields those indicators read were actually populated - an unpopulated field is what usually collapses the gap between two RFCs. Then either add a discriminating condition to the checklist, or report both candidates with their scores and let the reader see the ambiguity.",
+      "evidence": {
+        "rfc_a": "RFC 5155",
+        "rfc_b": "RFC 8080",
+        "score_a": 17.25,
+        "score_b": 17.25,
+        "relative_difference": 0.0,
+        "tolerance": 0.15,
+        "specificity_a": "very_high",
+        "specificity_b": "very_high",
+        "indicators_only_in_a": [
+          "rfc5155_nsec3_hash_algorithm",
+          "rfc5155_nsec3_record_present"
+        ],
+        "indicators_only_in_b": [
+          "rfc8080_eddsa_algorithm",
+          "rfc8080_eddsa_on_key_or_signature"
+        ],
+        "shared_indicators": [],
+        "supporting_signal_count_a": 10,
+        "supporting_signal_count_b": 8,
+        "derived_locally": false
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0001_rfc5155",
+        "trace_sig_0003_rfc5155",
+        "trace_sig_0007_rfc5155",
+        "trace_sig_0010_rfc5155",
+        "trace_sig_0019_rfc5155",
+        "trace_sig_0038_rfc8080",
+        "trace_sig_0044_rfc8080",
+        "trace_sig_0050_rfc8080",
+        "trace_sig_0054_rfc8080",
+        "trace_sig_0059_rfc8080"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0011",
+      "item_type": "close_ranking",
+      "severity": "medium",
+      "reason": "RFC 6605 (score 13.125) and RFC 7344 (score 11.25) differ by 14.29%, inside the 15.0% tolerance for declaring a winner, so the top-ranked RFC for these observations is not separable on score alone. They share no matched indicators at all, so the near-tie comes from the weights and specificity multipliers rather than from common evidence.",
+      "affected_rfc_ids": [
+        "RFC 6605",
+        "RFC 7344"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0012",
+        "sig_0017",
+        "sig_0020",
+        "sig_0023",
+        "sig_0024",
+        "sig_0026",
+        "sig_0027",
+        "sig_0029",
+        "sig_0032",
+        "sig_0033"
+      ],
+      "suggested_action": "Do not report RFC 6605 as the single best match. Compare the distinguishing indicators (only RFC 6605: rfc6605_ecdsa_algorithm, rfc6605_ecdsa_on_key_or_signature; only RFC 7344: rfc7344_cds_cdnskey_present) against signal(s) sig_0012, sig_0017, sig_0020, sig_0023, sig_0024, sig_0026, sig_0027, sig_0029, sig_0032, sig_0033, and confirm the fields those indicators read were actually populated - an unpopulated field is what usually collapses the gap between two RFCs. Then either add a discriminating condition to the checklist, or report both candidates with their scores and let the reader see the ambiguity.",
+      "evidence": {
+        "rfc_a": "RFC 6605",
+        "rfc_b": "RFC 7344",
+        "score_a": 13.125,
+        "score_b": 11.25,
+        "relative_difference": 0.1429,
+        "tolerance": 0.15,
+        "specificity_a": "high",
+        "specificity_b": "high",
+        "indicators_only_in_a": [
+          "rfc6605_ecdsa_algorithm",
+          "rfc6605_ecdsa_on_key_or_signature"
+        ],
+        "indicators_only_in_b": [
+          "rfc7344_cds_cdnskey_present"
+        ],
+        "shared_indicators": [],
+        "supporting_signal_count_a": 10,
+        "supporting_signal_count_b": 21,
+        "derived_locally": false
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0012_rfc6605",
+        "trace_sig_0017_rfc6605",
+        "trace_sig_0020_rfc7344",
+        "trace_sig_0023_rfc6605",
+        "trace_sig_0024_rfc7344",
+        "trace_sig_0026_rfc7344",
+        "trace_sig_0027_rfc6605",
+        "trace_sig_0029_rfc7344",
+        "trace_sig_0032_rfc7344",
+        "trace_sig_0033_rfc6605"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0012",
+      "item_type": "llm_review_recommended",
+      "severity": "medium",
+      "reason": "The deterministic verifier returned needs_manual_review for 69 trace(s) on RFC 4033 (decisions: partial_match, valid_match). Representative verdict: Manual review required: signal sig_0001 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 4033"
+      ],
+      "affected_fields": [
+        "dnssec_ok_flag"
+      ],
+      "affected_signal_ids": [
+        "sig_0001",
+        "sig_0002",
+        "sig_0003",
+        "sig_0004",
+        "sig_0005",
+        "sig_0006",
+        "sig_0007",
+        "sig_0008",
+        "sig_0009",
+        "sig_0010",
+        "sig_0011",
+        "sig_0012",
+        "sig_0013",
+        "sig_0014",
+        "sig_0015",
+        "sig_0016",
+        "sig_0017",
+        "sig_0018",
+        "sig_0019",
+        "sig_0020"
+      ],
+      "suggested_action": "Open trace(s) trace_sig_0001_rfc4033, trace_sig_0002_rfc4033, trace_sig_0003_rfc4033, trace_sig_0004_rfc4033, trace_sig_0005_rfc4033, trace_sig_0006_rfc4033, trace_sig_0007_rfc4033, trace_sig_0008_rfc4033, trace_sig_0009_rfc4033, trace_sig_0010_rfc4033, trace_sig_0011_rfc4033, trace_sig_0012_rfc4033, trace_sig_0013_rfc4033, trace_sig_0014_rfc4033, trace_sig_0015_rfc4033, trace_sig_0016_rfc4033, trace_sig_0017_rfc4033, trace_sig_0018_rfc4033, trace_sig_0019_rfc4033, trace_sig_0020_rfc4033 in reasoning_traces.json and settle them by hand: for each, decide whether the recorded field values really identify RFC 4033 or merely something consistent with it, then mark the item accepted or rejected. Recording the outcome here is what stops the same observations being re-litigated next run. If this volume is unmanageable, wire a real LLM backend (see openintel_rfc.llm_verifier.register_verifier) rather than relaxing the checklist.",
+      "evidence": {
+        "rfc_id": "RFC 4033",
+        "backend": "deterministic",
+        "trace_count": 69,
+        "trace_ids_truncated": true,
+        "affected_signal_id_count": 69,
+        "decisions": [
+          "partial_match",
+          "valid_match"
+        ],
+        "representative_trace_id": "trace_sig_0001_rfc4033",
+        "representative_explanation": "Manual review required: signal sig_0001 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "explanations": [
+          "Manual review required: signal sig_0001 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0002 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: signal sig_0003 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0004 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0005 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0006 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: signal sig_0007 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0008 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0009 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: signal sig_0010 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0011 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0012 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0013 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0014 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0015 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0016 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0017 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: every required indicator of RFC 4033 matched signal sig_0018 (rfc4033_base_dnssec_record_present, rfc4033_dnssec_algorithm_present), but the score of 3.75 yields only low confidence, below the auto-accept levels (high, very_high); confirm by hand that the observed field values algorithm, rr_type really identify this RFC rather than a broader DNSSEC deployment.",
+          "Manual review required: signal sig_0019 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0020 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data."
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0001_rfc4033",
+        "trace_sig_0002_rfc4033",
+        "trace_sig_0003_rfc4033",
+        "trace_sig_0004_rfc4033",
+        "trace_sig_0005_rfc4033",
+        "trace_sig_0006_rfc4033",
+        "trace_sig_0007_rfc4033",
+        "trace_sig_0008_rfc4033",
+        "trace_sig_0009_rfc4033",
+        "trace_sig_0010_rfc4033",
+        "trace_sig_0011_rfc4033",
+        "trace_sig_0012_rfc4033",
+        "trace_sig_0013_rfc4033",
+        "trace_sig_0014_rfc4033",
+        "trace_sig_0015_rfc4033",
+        "trace_sig_0016_rfc4033",
+        "trace_sig_0017_rfc4033",
+        "trace_sig_0018_rfc4033",
+        "trace_sig_0019_rfc4033",
+        "trace_sig_0020_rfc4033"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0001 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 4033",
+        "signal_id": "sig_0001",
+        "trace_id": "trace_sig_0001_rfc4033",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0013",
+      "item_type": "llm_review_recommended",
+      "severity": "medium",
+      "reason": "The deterministic verifier returned needs_manual_review for 4 trace(s) on RFC 4509 (decisions: partial_match). Representative verdict: Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 4509"
+      ],
+      "affected_fields": [
+        "digest_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Open trace(s) trace_sig_0051_rfc4509, trace_sig_0056_rfc4509, trace_sig_0062_rfc4509, trace_sig_0068_rfc4509 in reasoning_traces.json and settle them by hand: for each, decide whether the recorded field values really identify RFC 4509 or merely something consistent with it, then mark the item accepted or rejected. Recording the outcome here is what stops the same observations being re-litigated next run. If this volume is unmanageable, wire a real LLM backend (see openintel_rfc.llm_verifier.register_verifier) rather than relaxing the checklist.",
+      "evidence": {
+        "rfc_id": "RFC 4509",
+        "backend": "deterministic",
+        "trace_count": 4,
+        "trace_ids_truncated": false,
+        "affected_signal_id_count": 4,
+        "decisions": [
+          "partial_match"
+        ],
+        "representative_trace_id": "trace_sig_0051_rfc4509",
+        "representative_explanation": "Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "explanations": [
+          "Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0056 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0062 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0068 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data."
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc4509",
+        "trace_sig_0056_rfc4509",
+        "trace_sig_0062_rfc4509",
+        "trace_sig_0068_rfc4509"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 4509",
+        "signal_id": "sig_0051",
+        "trace_id": "trace_sig_0051_rfc4509",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0014",
+      "item_type": "llm_review_recommended",
+      "severity": "medium",
+      "reason": "The deterministic verifier returned needs_manual_review for 4 trace(s) on RFC 8078 (decisions: partial_match). Representative verdict: Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 8078"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "digest_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Open trace(s) trace_sig_0051_rfc8078, trace_sig_0056_rfc8078, trace_sig_0062_rfc8078, trace_sig_0068_rfc8078 in reasoning_traces.json and settle them by hand: for each, decide whether the recorded field values really identify RFC 8078 or merely something consistent with it, then mark the item accepted or rejected. Recording the outcome here is what stops the same observations being re-litigated next run. If this volume is unmanageable, wire a real LLM backend (see openintel_rfc.llm_verifier.register_verifier) rather than relaxing the checklist.",
+      "evidence": {
+        "rfc_id": "RFC 8078",
+        "backend": "deterministic",
+        "trace_count": 4,
+        "trace_ids_truncated": false,
+        "affected_signal_id_count": 4,
+        "decisions": [
+          "partial_match"
+        ],
+        "representative_trace_id": "trace_sig_0051_rfc8078",
+        "representative_explanation": "Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "explanations": [
+          "Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0056 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0062 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0068 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data."
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc8078",
+        "trace_sig_0056_rfc8078",
+        "trace_sig_0062_rfc8078",
+        "trace_sig_0068_rfc8078"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0051 matched 0 indicator(s) of RFC 8078 (none) but required indicator(s) rfc8078_cds_cdnskey_algorithm_zero did not match, scoring 0.0. Field(s) algorithm, digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 8078",
+        "signal_id": "sig_0051",
+        "trace_id": "trace_sig_0051_rfc8078",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0015",
+      "item_type": "llm_review_recommended",
+      "severity": "medium",
+      "reason": "The deterministic verifier returned needs_manual_review for 17 trace(s) on RFC 8624 (decisions: ambiguous, partial_match). Representative verdict: Manual review required: signal sig_0053 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "rr_type",
+        "validator_algorithm_support"
+      ],
+      "affected_signal_ids": [
+        "sig_0053",
+        "sig_0054",
+        "sig_0055",
+        "sig_0058",
+        "sig_0059",
+        "sig_0060",
+        "sig_0061",
+        "sig_0063",
+        "sig_0064",
+        "sig_0065",
+        "sig_0066",
+        "sig_0067",
+        "sig_0069",
+        "sig_0070",
+        "sig_0071",
+        "sig_0072",
+        "sig_0073"
+      ],
+      "suggested_action": "Open trace(s) trace_sig_0053_rfc8624, trace_sig_0054_rfc8624, trace_sig_0055_rfc8624, trace_sig_0058_rfc8624, trace_sig_0059_rfc8624, trace_sig_0060_rfc8624, trace_sig_0061_rfc8624, trace_sig_0063_rfc8624, trace_sig_0064_rfc8624, trace_sig_0065_rfc8624, trace_sig_0066_rfc8624, trace_sig_0067_rfc8624, trace_sig_0069_rfc8624, trace_sig_0070_rfc8624, trace_sig_0071_rfc8624, trace_sig_0072_rfc8624, trace_sig_0073_rfc8624 in reasoning_traces.json and settle them by hand: for each, decide whether the recorded field values really identify RFC 8624 or merely something consistent with it, then mark the item accepted or rejected. Recording the outcome here is what stops the same observations being re-litigated next run. If this volume is unmanageable, wire a real LLM backend (see openintel_rfc.llm_verifier.register_verifier) rather than relaxing the checklist.",
+      "evidence": {
+        "rfc_id": "RFC 8624",
+        "backend": "deterministic",
+        "trace_count": 17,
+        "trace_ids_truncated": false,
+        "affected_signal_id_count": 17,
+        "decisions": [
+          "ambiguous",
+          "partial_match"
+        ],
+        "representative_trace_id": "trace_sig_0053_rfc8624",
+        "representative_explanation": "Manual review required: signal sig_0053 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "explanations": [
+          "Manual review required: signal sig_0053 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0054 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0055 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0058 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: every required indicator of RFC 8624 matched signal sig_0059 observed on 2019-11-06T00:30:08, but indicator(s) rfc8624_recommended_signing_algorithm, rfc8624_avoids_deprecated_algorithm are flagged ambiguous in the checklist, meaning the same field values (algorithm) are equally well explained by another RFC; attribution has to be settled by a human, not by the score.",
+          "Manual review required: every required indicator of RFC 8624 matched signal sig_0060 observed on 2019-12-16T04:38:09, but indicator(s) rfc8624_recommended_signing_algorithm, rfc8624_avoids_deprecated_algorithm are flagged ambiguous in the checklist, meaning the same field values (algorithm) are equally well explained by another RFC; attribution has to be settled by a human, not by the score.",
+          "Manual review required: signal sig_0061 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0063 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: every required indicator of RFC 8624 matched signal sig_0064 observed on 2020-05-18T02:49:00, but indicator(s) rfc8624_recommended_signing_algorithm, rfc8624_avoids_deprecated_algorithm are flagged ambiguous in the checklist, meaning the same field values (algorithm) are equally well explained by another RFC; attribution has to be settled by a human, not by the score.",
+          "Manual review required: signal sig_0065 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0066 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0067 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: every required indicator of RFC 8624 matched signal sig_0069 observed on 2021-02-01T00:37:02, but indicator(s) rfc8624_recommended_signing_algorithm, rfc8624_avoids_deprecated_algorithm are flagged ambiguous in the checklist, meaning the same field values (algorithm) are equally well explained by another RFC; attribution has to be settled by a human, not by the score.",
+          "Manual review required: signal sig_0070 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0071 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0072 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+          "Manual review required: signal sig_0073 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data."
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0053_rfc8624",
+        "trace_sig_0054_rfc8624",
+        "trace_sig_0055_rfc8624",
+        "trace_sig_0058_rfc8624",
+        "trace_sig_0059_rfc8624",
+        "trace_sig_0060_rfc8624",
+        "trace_sig_0061_rfc8624",
+        "trace_sig_0063_rfc8624",
+        "trace_sig_0064_rfc8624",
+        "trace_sig_0065_rfc8624",
+        "trace_sig_0066_rfc8624",
+        "trace_sig_0067_rfc8624",
+        "trace_sig_0069_rfc8624",
+        "trace_sig_0070_rfc8624",
+        "trace_sig_0071_rfc8624",
+        "trace_sig_0072_rfc8624",
+        "trace_sig_0073_rfc8624"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0053 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 8624",
+        "signal_id": "sig_0053",
+        "trace_id": "trace_sig_0053_rfc8624",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0016",
+      "item_type": "missing_required_field",
+      "severity": "medium",
+      "reason": "Field `digest_type`, needed by required indicator(s) rfc4509_ds_sha256_digest of RFC 4509, was absent from 41 observation(s) between 2010-06-15T00:00:25 and 2021-09-13T02:37:53, so those observations could not be evaluated for RFC 4509 at all.",
+      "affected_rfc_ids": [
+        "RFC 4509"
+      ],
+      "affected_fields": [
+        "digest_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0001",
+        "sig_0003",
+        "sig_0004",
+        "sig_0005",
+        "sig_0007",
+        "sig_0009",
+        "sig_0010",
+        "sig_0012",
+        "sig_0013",
+        "sig_0017",
+        "sig_0018",
+        "sig_0019",
+        "sig_0022",
+        "sig_0023",
+        "sig_0025",
+        "sig_0027",
+        "sig_0028",
+        "sig_0031",
+        "sig_0033",
+        "sig_0034"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves `digest_type` for these rows (`digest_type` is derived from the OpenINTEL column(s) ds_digest_type, cds_digest_type); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 4509 as unevaluable for signal(s) sig_0001, sig_0003, sig_0004, sig_0005, sig_0007, sig_0009, sig_0010, sig_0012, sig_0013, sig_0017, sig_0018, sig_0019, sig_0022, sig_0023, sig_0025, sig_0027, sig_0028, sig_0031, sig_0033, sig_0034 instead of unmatched, and exclude them from the denominator when quoting RFC 4509 adoption rates.",
+      "evidence": {
+        "rfc_id": "RFC 4509",
+        "field": "digest_type",
+        "required_indicator_ids": [
+          "rfc4509_ds_sha256_digest"
+        ],
+        "openintel_native_fields": [
+          "ds_digest_type",
+          "cds_digest_type"
+        ],
+        "field_available_from": "2010-01-01T00:00:00",
+        "observation_count": 41,
+        "affected_signal_id_count": 41,
+        "affected_signal_ids_truncated": true,
+        "listed_signal_ids": [
+          "sig_0001",
+          "sig_0003",
+          "sig_0004",
+          "sig_0005",
+          "sig_0007",
+          "sig_0009",
+          "sig_0010",
+          "sig_0012",
+          "sig_0013",
+          "sig_0017",
+          "sig_0018",
+          "sig_0019",
+          "sig_0022",
+          "sig_0023",
+          "sig_0025",
+          "sig_0027",
+          "sig_0028",
+          "sig_0031",
+          "sig_0033",
+          "sig_0034"
+        ],
+        "earliest_observation": "2010-06-15T00:00:25",
+        "latest_observation": "2021-09-13T02:37:53",
+        "domains": [
+          "dnssec-demo.nl",
+          "dnssec-demo.org",
+          "ecdsa-demo.com",
+          "eddsa-demo.se",
+          "example.com",
+          "example.net",
+          "example.nl",
+          "example.org",
+          "hashed-denial.nu",
+          "keyroll.nu",
+          "signed-example.se"
+        ],
+        "zones": [
+          "com",
+          "net",
+          "nl",
+          "nu",
+          "org",
+          "se"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0001_rfc4509",
+        "trace_sig_0003_rfc4509",
+        "trace_sig_0004_rfc4509",
+        "trace_sig_0005_rfc4509",
+        "trace_sig_0007_rfc4509",
+        "trace_sig_0009_rfc4509",
+        "trace_sig_0010_rfc4509",
+        "trace_sig_0012_rfc4509",
+        "trace_sig_0013_rfc4509",
+        "trace_sig_0017_rfc4509",
+        "trace_sig_0018_rfc4509",
+        "trace_sig_0019_rfc4509",
+        "trace_sig_0022_rfc4509",
+        "trace_sig_0023_rfc4509",
+        "trace_sig_0025_rfc4509",
+        "trace_sig_0027_rfc4509",
+        "trace_sig_0028_rfc4509",
+        "trace_sig_0031_rfc4509",
+        "trace_sig_0033_rfc4509",
+        "trace_sig_0034_rfc4509"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0017",
+      "item_type": "missing_required_field",
+      "severity": "medium",
+      "reason": "Field `algorithm`, needed by required indicator(s) rfc6605_ecdsa_algorithm of RFC 6605, was absent from 4 observation(s) between 2019-04-12T04:22:56 and 2020-11-30T05:42:21, so those observations could not be evaluated for RFC 6605 at all.",
+      "affected_rfc_ids": [
+        "RFC 6605"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 6605 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 6605 adoption rates.",
+      "evidence": {
+        "rfc_id": "RFC 6605",
+        "field": "algorithm",
+        "required_indicator_ids": [
+          "rfc6605_ecdsa_algorithm"
+        ],
+        "openintel_native_fields": [
+          "dnskey_algorithm",
+          "ds_algorithm",
+          "rrsig_algorithm",
+          "cds_algorithm",
+          "cdnskey_algorithm",
+          "nsec3param_algorithm"
+        ],
+        "field_available_from": "2010-01-01T00:00:00",
+        "observation_count": 4,
+        "affected_signal_id_count": 4,
+        "affected_signal_ids_truncated": false,
+        "listed_signal_ids": [
+          "sig_0051",
+          "sig_0056",
+          "sig_0062",
+          "sig_0068"
+        ],
+        "earliest_observation": "2019-04-12T04:22:56",
+        "latest_observation": "2020-11-30T05:42:21",
+        "domains": [
+          "dnssec-demo.org",
+          "example.com",
+          "example.nl",
+          "keyroll.nu"
+        ],
+        "zones": [
+          "com",
+          "nl",
+          "nu",
+          "org"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc6605",
+        "trace_sig_0056_rfc6605",
+        "trace_sig_0062_rfc6605",
+        "trace_sig_0068_rfc6605"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0018",
+      "item_type": "missing_required_field",
+      "severity": "medium",
+      "reason": "Field `algorithm`, needed by required indicator(s) rfc8078_cds_cdnskey_algorithm_zero of RFC 8078, was absent from 4 observation(s) between 2019-04-12T04:22:56 and 2020-11-30T05:42:21, so those observations could not be evaluated for RFC 8078 at all.",
+      "affected_rfc_ids": [
+        "RFC 8078"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8078 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8078 adoption rates.",
+      "evidence": {
+        "rfc_id": "RFC 8078",
+        "field": "algorithm",
+        "required_indicator_ids": [
+          "rfc8078_cds_cdnskey_algorithm_zero"
+        ],
+        "openintel_native_fields": [
+          "dnskey_algorithm",
+          "ds_algorithm",
+          "rrsig_algorithm",
+          "cds_algorithm",
+          "cdnskey_algorithm",
+          "nsec3param_algorithm"
+        ],
+        "field_available_from": "2010-01-01T00:00:00",
+        "observation_count": 4,
+        "affected_signal_id_count": 4,
+        "affected_signal_ids_truncated": false,
+        "listed_signal_ids": [
+          "sig_0051",
+          "sig_0056",
+          "sig_0062",
+          "sig_0068"
+        ],
+        "earliest_observation": "2019-04-12T04:22:56",
+        "latest_observation": "2020-11-30T05:42:21",
+        "domains": [
+          "dnssec-demo.org",
+          "example.com",
+          "example.nl",
+          "keyroll.nu"
+        ],
+        "zones": [
+          "com",
+          "nl",
+          "nu",
+          "org"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc8078",
+        "trace_sig_0056_rfc8078",
+        "trace_sig_0062_rfc8078",
+        "trace_sig_0068_rfc8078"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0019",
+      "item_type": "missing_required_field",
+      "severity": "medium",
+      "reason": "Field `algorithm`, needed by required indicator(s) rfc8080_eddsa_algorithm of RFC 8080, was absent from 4 observation(s) between 2019-04-12T04:22:56 and 2020-11-30T05:42:21, so those observations could not be evaluated for RFC 8080 at all.",
+      "affected_rfc_ids": [
+        "RFC 8080"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8080 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8080 adoption rates.",
+      "evidence": {
+        "rfc_id": "RFC 8080",
+        "field": "algorithm",
+        "required_indicator_ids": [
+          "rfc8080_eddsa_algorithm"
+        ],
+        "openintel_native_fields": [
+          "dnskey_algorithm",
+          "ds_algorithm",
+          "rrsig_algorithm",
+          "cds_algorithm",
+          "cdnskey_algorithm",
+          "nsec3param_algorithm"
+        ],
+        "field_available_from": "2010-01-01T00:00:00",
+        "observation_count": 4,
+        "affected_signal_id_count": 4,
+        "affected_signal_ids_truncated": false,
+        "listed_signal_ids": [
+          "sig_0051",
+          "sig_0056",
+          "sig_0062",
+          "sig_0068"
+        ],
+        "earliest_observation": "2019-04-12T04:22:56",
+        "latest_observation": "2020-11-30T05:42:21",
+        "domains": [
+          "dnssec-demo.org",
+          "example.com",
+          "example.nl",
+          "keyroll.nu"
+        ],
+        "zones": [
+          "com",
+          "nl",
+          "nu",
+          "org"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc8080",
+        "trace_sig_0056_rfc8080",
+        "trace_sig_0062_rfc8080",
+        "trace_sig_0068_rfc8080"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0020",
+      "item_type": "missing_required_field",
+      "severity": "medium",
+      "reason": "Field `algorithm`, needed by required indicator(s) rfc8624_recommended_signing_algorithm of RFC 8624, was absent from 4 observation(s) between 2019-04-12T04:22:56 and 2020-11-30T05:42:21, so those observations could not be evaluated for RFC 8624 at all.",
+      "affected_rfc_ids": [
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves `algorithm` for these rows (`algorithm` is derived from the OpenINTEL column(s) dnskey_algorithm, ds_algorithm, rrsig_algorithm, cds_algorithm, cdnskey_algorithm, nsec3param_algorithm); a missing alias in the reader looks exactly like a missing value here. If the column is genuinely empty for this measurement generation, report RFC 8624 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 instead of unmatched, and exclude them from the denominator when quoting RFC 8624 adoption rates.",
+      "evidence": {
+        "rfc_id": "RFC 8624",
+        "field": "algorithm",
+        "required_indicator_ids": [
+          "rfc8624_recommended_signing_algorithm"
+        ],
+        "openintel_native_fields": [
+          "dnskey_algorithm",
+          "ds_algorithm",
+          "rrsig_algorithm",
+          "cds_algorithm",
+          "cdnskey_algorithm",
+          "nsec3param_algorithm"
+        ],
+        "field_available_from": "2010-01-01T00:00:00",
+        "observation_count": 4,
+        "affected_signal_id_count": 4,
+        "affected_signal_ids_truncated": false,
+        "listed_signal_ids": [
+          "sig_0051",
+          "sig_0056",
+          "sig_0062",
+          "sig_0068"
+        ],
+        "earliest_observation": "2019-04-12T04:22:56",
+        "latest_observation": "2020-11-30T05:42:21",
+        "domains": [
+          "dnssec-demo.org",
+          "example.com",
+          "example.nl",
+          "keyroll.nu"
+        ],
+        "zones": [
+          "com",
+          "nl",
+          "nu",
+          "org"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc8624",
+        "trace_sig_0056_rfc8624",
+        "trace_sig_0062_rfc8624",
+        "trace_sig_0068_rfc8624"
+      ],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0021",
+      "item_type": "partial_match",
+      "severity": "medium",
+      "reason": "RFC 4033 matched partially on 27 observation(s): indicator(s) rfc4033_dnssec_algorithm_present matched but required indicator(s) rfc4033_base_dnssec_record_present did not, capping the score at 0.0. Field(s) `dnssec_ok_flag` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 4033"
+      ],
+      "affected_fields": [
+        "dnssec_ok_flag"
+      ],
+      "affected_signal_ids": [
+        "sig_0001",
+        "sig_0003",
+        "sig_0007",
+        "sig_0010",
+        "sig_0019",
+        "sig_0020",
+        "sig_0022",
+        "sig_0024",
+        "sig_0026",
+        "sig_0029",
+        "sig_0031",
+        "sig_0032",
+        "sig_0037",
+        "sig_0040",
+        "sig_0042",
+        "sig_0043",
+        "sig_0045",
+        "sig_0047",
+        "sig_0049",
+        "sig_0052"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves the missing field(s) for these rows (`dnssec_ok_flag` lists no openintel_native_fields in the dictionary, so the Parquet reader has no column to resolve it from). If the column really is empty for this measurement generation, record RFC 4033 as unevaluable for signal(s) sig_0001, sig_0003, sig_0007, sig_0010, sig_0019, sig_0020, sig_0022, sig_0024, sig_0026, sig_0029, sig_0031, sig_0032, sig_0037, sig_0040, sig_0042, sig_0043, sig_0045, sig_0047, sig_0049, sig_0052 rather than unmatched - a partial match here is a measurement gap, not a negative result. If the data is there, the reader's alias resolution is dropping it.",
+      "evidence": {
+        "rfc_id": "RFC 4033",
+        "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+        "rfc_specificity": "low",
+        "matched_indicator_ids": [
+          "rfc4033_dnssec_algorithm_present"
+        ],
+        "unmatched_required_indicator_ids": [
+          "rfc4033_base_dnssec_record_present"
+        ],
+        "failed_indicator_ids": [
+          "rfc4033_base_dnssec_record_present",
+          "rfc4033_dnssec_ok_negotiated"
+        ],
+        "missing_fields": [
+          "dnssec_ok_flag"
+        ],
+        "missing_field_native_columns": {
+          "dnssec_ok_flag": []
+        },
+        "best_score": 0.0,
+        "representative_signal_id": "sig_0072",
+        "representative_trace_id": "trace_sig_0072_rfc4033",
+        "observation_count": 27,
+        "affected_signal_id_count": 27,
+        "affected_signal_ids_truncated": true,
+        "listed_signal_ids": [
+          "sig_0001",
+          "sig_0003",
+          "sig_0007",
+          "sig_0010",
+          "sig_0019",
+          "sig_0020",
+          "sig_0022",
+          "sig_0024",
+          "sig_0026",
+          "sig_0029",
+          "sig_0031",
+          "sig_0032",
+          "sig_0037",
+          "sig_0040",
+          "sig_0042",
+          "sig_0043",
+          "sig_0045",
+          "sig_0047",
+          "sig_0049",
+          "sig_0052"
+        ],
+        "earliest_observation": "2010-06-15T00:00:25",
+        "latest_observation": "2021-07-26T03:55:19",
+        "domains": [
+          "delete-signal.nl",
+          "dnssec-demo.org",
+          "example.com",
+          "example.nl",
+          "hashed-denial.nu",
+          "keyroll.nu",
+          "rollover-test.net",
+          "signed-example.se"
+        ],
+        "zones": [
+          "com",
+          "net",
+          "nl",
+          "nu",
+          "org",
+          "se"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0001_rfc4033",
+        "trace_sig_0003_rfc4033",
+        "trace_sig_0007_rfc4033",
+        "trace_sig_0010_rfc4033",
+        "trace_sig_0019_rfc4033",
+        "trace_sig_0020_rfc4033",
+        "trace_sig_0022_rfc4033",
+        "trace_sig_0024_rfc4033",
+        "trace_sig_0026_rfc4033",
+        "trace_sig_0029_rfc4033",
+        "trace_sig_0031_rfc4033",
+        "trace_sig_0032_rfc4033",
+        "trace_sig_0037_rfc4033",
+        "trace_sig_0040_rfc4033",
+        "trace_sig_0042_rfc4033",
+        "trace_sig_0043_rfc4033",
+        "trace_sig_0045_rfc4033",
+        "trace_sig_0047_rfc4033",
+        "trace_sig_0049_rfc4033",
+        "trace_sig_0052_rfc4033"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0072 matched 1 indicator(s) of RFC 4033 (rfc4033_dnssec_algorithm_present) but required indicator(s) rfc4033_base_dnssec_record_present did not match, scoring 0.0. Field(s) dnssec_ok_flag were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 4033",
+        "signal_id": "sig_0072",
+        "trace_id": "trace_sig_0072_rfc4033",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0022",
+      "item_type": "partial_match",
+      "severity": "medium",
+      "reason": "RFC 4509 matched partially on 4 observation(s): indicator(s) none matched but required indicator(s) rfc4509_ds_sha256_digest did not, capping the score at 0.0. Field(s) `digest_type` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 4509"
+      ],
+      "affected_fields": [
+        "digest_type"
+      ],
+      "affected_signal_ids": [
+        "sig_0051",
+        "sig_0056",
+        "sig_0062",
+        "sig_0068"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves the missing field(s) for these rows (`digest_type` is derived from the OpenINTEL column(s) ds_digest_type, cds_digest_type). If the column really is empty for this measurement generation, record RFC 4509 as unevaluable for signal(s) sig_0051, sig_0056, sig_0062, sig_0068 rather than unmatched - a partial match here is a measurement gap, not a negative result. If the data is there, the reader's alias resolution is dropping it.",
+      "evidence": {
+        "rfc_id": "RFC 4509",
+        "rfc_title": "Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records",
+        "rfc_specificity": "high",
+        "matched_indicator_ids": [],
+        "unmatched_required_indicator_ids": [
+          "rfc4509_ds_sha256_digest"
+        ],
+        "failed_indicator_ids": [
+          "rfc4509_ds_sha256_digest"
+        ],
+        "missing_fields": [
+          "digest_type"
+        ],
+        "missing_field_native_columns": {
+          "digest_type": [
+            "ds_digest_type",
+            "cds_digest_type"
+          ]
+        },
+        "best_score": 0.0,
+        "representative_signal_id": "sig_0068",
+        "representative_trace_id": "trace_sig_0068_rfc4509",
+        "observation_count": 4,
+        "affected_signal_id_count": 4,
+        "affected_signal_ids_truncated": false,
+        "listed_signal_ids": [
+          "sig_0051",
+          "sig_0056",
+          "sig_0062",
+          "sig_0068"
+        ],
+        "earliest_observation": "2019-04-12T04:22:56",
+        "latest_observation": "2020-11-30T05:42:21",
+        "domains": [
+          "dnssec-demo.org",
+          "example.com",
+          "example.nl",
+          "keyroll.nu"
+        ],
+        "zones": [
+          "com",
+          "nl",
+          "nu",
+          "org"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0051_rfc4509",
+        "trace_sig_0056_rfc4509",
+        "trace_sig_0062_rfc4509",
+        "trace_sig_0068_rfc4509"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0068 matched 0 indicator(s) of RFC 4509 (none) but required indicator(s) rfc4509_ds_sha256_digest did not match, scoring 0.0. Field(s) digest_type were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 4509",
+        "signal_id": "sig_0068",
+        "trace_id": "trace_sig_0068_rfc4509",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0023",
+      "item_type": "partial_match",
+      "severity": "medium",
+      "reason": "RFC 8624 matched partially on 13 observation(s): indicator(s) rfc8624_avoids_deprecated_algorithm matched but required indicator(s) rfc8624_recommended_signing_algorithm did not, capping the score at 0.0. Field(s) `rr_type`, `validator_algorithm_support` were absent from the observation(s), so the pipeline cannot distinguish non-adoption from missing data.",
+      "affected_rfc_ids": [
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "rr_type",
+        "validator_algorithm_support"
+      ],
+      "affected_signal_ids": [
+        "sig_0053",
+        "sig_0054",
+        "sig_0055",
+        "sig_0058",
+        "sig_0061",
+        "sig_0063",
+        "sig_0065",
+        "sig_0066",
+        "sig_0067",
+        "sig_0070",
+        "sig_0071",
+        "sig_0072",
+        "sig_0073"
+      ],
+      "suggested_action": "Confirm the Parquet reader resolves the missing field(s) for these rows (`rr_type` is derived from the OpenINTEL column(s) response_type; `validator_algorithm_support` lists no openintel_native_fields in the dictionary, so the Parquet reader has no column to resolve it from). If the column really is empty for this measurement generation, record RFC 8624 as unevaluable for signal(s) sig_0053, sig_0054, sig_0055, sig_0058, sig_0061, sig_0063, sig_0065, sig_0066, sig_0067, sig_0070, sig_0071, sig_0072, sig_0073 rather than unmatched - a partial match here is a measurement gap, not a negative result. If the data is there, the reader's alias resolution is dropping it.",
+      "evidence": {
+        "rfc_id": "RFC 8624",
+        "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+        "rfc_specificity": "low",
+        "matched_indicator_ids": [
+          "rfc8624_avoids_deprecated_algorithm"
+        ],
+        "unmatched_required_indicator_ids": [
+          "rfc8624_recommended_signing_algorithm"
+        ],
+        "failed_indicator_ids": [
+          "rfc8624_recommended_signing_algorithm"
+        ],
+        "missing_fields": [
+          "rr_type",
+          "validator_algorithm_support"
+        ],
+        "missing_field_native_columns": {
+          "rr_type": [
+            "response_type"
+          ],
+          "validator_algorithm_support": []
+        },
+        "best_score": 0.0,
+        "representative_signal_id": "sig_0073",
+        "representative_trace_id": "trace_sig_0073_rfc8624",
+        "observation_count": 13,
+        "affected_signal_id_count": 13,
+        "affected_signal_ids_truncated": false,
+        "listed_signal_ids": [
+          "sig_0053",
+          "sig_0054",
+          "sig_0055",
+          "sig_0058",
+          "sig_0061",
+          "sig_0063",
+          "sig_0065",
+          "sig_0066",
+          "sig_0067",
+          "sig_0070",
+          "sig_0071",
+          "sig_0072",
+          "sig_0073"
+        ],
+        "earliest_observation": "2019-06-18T02:56:02",
+        "latest_observation": "2021-09-13T02:37:53",
+        "domains": [
+          "delete-signal.nl",
+          "dnssec-demo.nl",
+          "dnssec-demo.org",
+          "eddsa-demo.se",
+          "example.com",
+          "example.net",
+          "example.nl",
+          "example.org",
+          "keyroll.nu",
+          "rollover-test.net"
+        ],
+        "zones": [
+          "com",
+          "net",
+          "nl",
+          "nu",
+          "org",
+          "se"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [
+        "trace_sig_0053_rfc8624",
+        "trace_sig_0054_rfc8624",
+        "trace_sig_0055_rfc8624",
+        "trace_sig_0058_rfc8624",
+        "trace_sig_0061_rfc8624",
+        "trace_sig_0063_rfc8624",
+        "trace_sig_0065_rfc8624",
+        "trace_sig_0066_rfc8624",
+        "trace_sig_0067_rfc8624",
+        "trace_sig_0070_rfc8624",
+        "trace_sig_0071_rfc8624",
+        "trace_sig_0072_rfc8624",
+        "trace_sig_0073_rfc8624"
+      ],
+      "verification": {
+        "verification_status": "needs_manual_review",
+        "explanation": "Manual review required: signal sig_0073 matched 1 indicator(s) of RFC 8624 (rfc8624_avoids_deprecated_algorithm) but required indicator(s) rfc8624_recommended_signing_algorithm did not match, scoring 0.0. Field(s) rr_type, validator_algorithm_support were absent from the observation, so the pipeline cannot distinguish non-adoption from missing data.",
+        "backend": "deterministic",
+        "rfc_id": "RFC 8624",
+        "signal_id": "sig_0073",
+        "trace_id": "trace_sig_0073_rfc8624",
+        "confidence": "none"
+      }
+    },
+    {
+      "item_id": "rev_0024",
+      "item_type": "partially_queryable_indicator",
+      "severity": "medium",
+      "reason": "Indicator rfc4033_dnssec_ok_negotiated (optional, weight 3.0) of RFC 4033 is only partially queryable: it uses present field(s) `rr_type` but also missing field(s) `dnssec_ok_flag`, and because an indicator's conditions are ANDed it can never match. Indicator rfc4033_dnssec_ok_negotiated is partially queryable: rr_type (string) exists in the OpenINTEL dictionary but dnssec_ok_flag does not, so every condition on dnssec_ok_flag fails with field_present=False. The surviving field rr_type is also relied on by other RFC 4033 indicators, so the part that can be evaluated still carries evidence for RFC 4033.",
+      "affected_rfc_ids": [
+        "RFC 4033"
+      ],
+      "affected_fields": [
+        "dnssec_ok_flag"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "Add `dnssec_ok_flag` to the OpenINTEL analysis dictionary with an openintel_native_fields mapping to the real Parquet column(s) that carry it, or rewrite indicator rfc4033_dnssec_ok_negotiated to rely only on fields the corpus exports (algorithm, digest_type, domain, flags, key_tag, measurement_id, rr_type, source, timestamp, zone). Until then the indicator's weight of 3.0 is unreachable and every RFC 4033 score is low by that amount.",
+      "evidence": {
+        "rfc_id": "RFC 4033",
+        "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+        "rfc_publication_date": "2005-03-01T00:00:00",
+        "indicator_id": "rfc4033_dnssec_ok_negotiated",
+        "indicator_description": "The resolver negotiated DNSSEC by setting the DO bit in the query (RFC 4035 section 3.2.1).",
+        "required": false,
+        "weight": 3.0,
+        "queryability": "partially_queryable",
+        "missing_fields": [
+          "dnssec_ok_flag"
+        ],
+        "present_fields": [
+          "rr_type"
+        ],
+        "schema_reasoning": "Indicator rfc4033_dnssec_ok_negotiated is partially queryable: rr_type (string) exists in the OpenINTEL dictionary but dnssec_ok_flag does not, so every condition on dnssec_ok_flag fails with field_present=False. The surviving field rr_type is also relied on by other RFC 4033 indicators, so the part that can be evaluated still carries evidence for RFC 4033.",
+        "schema_warnings": [
+          "Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+        ],
+        "condition_checks": [
+          {
+            "field": "rr_type",
+            "op": "in",
+            "expected": [
+              "DNSKEY",
+              "DS",
+              "RRSIG",
+              "NSEC"
+            ],
+            "field_exists": true,
+            "field_type": "string",
+            "type_compatible": true,
+            "available_from": "2010-01-01T00:00:00",
+            "explanation": "Condition `rr_type in [DNSKEY, DS, RRSIG, NSEC]` of RFC 4033 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string. Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+          },
+          {
+            "field": "dnssec_ok_flag",
+            "op": "equals",
+            "expected": true,
+            "field_exists": false,
+            "field_type": null,
+            "type_compatible": true,
+            "available_from": "",
+            "explanation": "Condition `dnssec_ok_flag equals true` of RFC 4033 cannot be evaluated because the OpenINTEL dictionary defines no field named dnssec_ok_flag; at match time the condition is recorded with field_present=False, fails, and dnssec_ok_flag is reported in the match's missing_fields. No similarly named field exists in the dictionary either."
+          }
+        ],
+        "dictionary_fields_available": [
+          "algorithm",
+          "digest_type",
+          "domain",
+          "flags",
+          "key_tag",
+          "measurement_id",
+          "rr_type",
+          "source",
+          "timestamp",
+          "zone"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0025",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+      "affected_rfc_ids": [],
+      "affected_fields": [],
+      "affected_signal_ids": [],
+      "suggested_action": "Resolve this warning before quoting counts from this run: it did not stop the pipeline, but warnings recorded here mark places where a result may be an artefact of the schema or the reader rather than of the measurement.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+        "fields_mentioned": [],
+        "field_availability": {},
+        "rfc_ids_mentioned": []
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0026",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+      "affected_rfc_ids": [],
+      "affected_fields": [],
+      "affected_signal_ids": [],
+      "suggested_action": "Resolve this warning before quoting counts from this run: it did not stop the pipeline, but warnings recorded here mark places where a result may be an artefact of the schema or the reader rather than of the measurement.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from data\\openintel_dictionary\\sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+        "fields_mentioned": [],
+        "field_availability": {},
+        "rfc_ids_mentioned": []
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0027",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "Dictionary fields `domain` (from 2010-01-01), `flags` (from 2016-01-01), `key_tag` (from 2010-01-01), `measurement_id` (from 2010-01-01), `source` (from 2010-01-01), `timestamp` (from 2010-01-01), `zone` (from 2010-01-01) become available after the earliest RFC in this checklist was published. No indicator references them today, but any future indicator built on them will inherit that lower bound.",
+      "affected_rfc_ids": [],
+      "affected_fields": [
+        "domain",
+        "flags",
+        "key_tag",
+        "measurement_id",
+        "source",
+        "timestamp",
+        "zone"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `domain` from 2010-01-01T00:00:00; `flags` from 2016-01-01T00:00:00; `key_tag` from 2010-01-01T00:00:00; `measurement_id` from 2010-01-01T00:00:00; `source` from 2010-01-01T00:00:00; `timestamp` from 2010-01-01T00:00:00; `zone` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "Dictionary fields `domain` (from 2010-01-01), `flags` (from 2016-01-01), `key_tag` (from 2010-01-01), `measurement_id` (from 2010-01-01), `source` (from 2010-01-01), `timestamp` (from 2010-01-01), `zone` (from 2010-01-01) become available after the earliest RFC in this checklist was published. No indicator references them today, but any future indicator built on them will inherit that lower bound.",
+        "fields_mentioned": [
+          "domain",
+          "flags",
+          "key_tag",
+          "measurement_id",
+          "source",
+          "timestamp",
+          "zone"
+        ],
+        "field_availability": {
+          "domain": "2010-01-01T00:00:00",
+          "flags": "2016-01-01T00:00:00",
+          "key_tag": "2010-01-01T00:00:00",
+          "measurement_id": "2010-01-01T00:00:00",
+          "source": "2010-01-01T00:00:00",
+          "timestamp": "2010-01-01T00:00:00",
+          "zone": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": []
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0028",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "Dictionary field 'measurement_id' lists no openintel_native_fields, so the Parquet reader has no real OpenINTEL column to resolve it from; it will only be populated if a column of exactly that name exists.",
+      "affected_rfc_ids": [],
+      "affected_fields": [
+        "measurement_id"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "Re-check the dictionary entry for `measurement_id` (type, nullability and openintel_native_fields) against the real OpenINTEL schema, then re-run schema-check. This does not stop matching, but it silently reduces recall for every indicator that uses the field.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "Dictionary field 'measurement_id' lists no openintel_native_fields, so the Parquet reader has no real OpenINTEL column to resolve it from; it will only be populated if a column of exactly that name exists.",
+        "fields_mentioned": [
+          "measurement_id"
+        ],
+        "field_availability": {
+          "measurement_id": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": []
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0029",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "rfc4033_dnssec_algorithm_present: Field `algorithm` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+      "affected_rfc_ids": [
+        "RFC 4033"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `algorithm` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "indicator_warning",
+        "scope": "rfc4033_dnssec_algorithm_present",
+        "warning": "Field `algorithm` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "fields_mentioned": [
+          "algorithm"
+        ],
+        "field_availability": {
+          "algorithm": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 4033"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0030",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "RFC 4033 was published 2005-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4033 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+      "affected_rfc_ids": [
+        "RFC 4033"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `algorithm` from 2010-01-01T00:00:00; `rr_type` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "RFC 4033 was published 2005-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4033 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+        "fields_mentioned": [
+          "algorithm",
+          "rr_type"
+        ],
+        "field_availability": {
+          "algorithm": "2010-01-01T00:00:00",
+          "rr_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 4033"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0031",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "rfc4033_base_dnssec_record_present: Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+      "affected_rfc_ids": [
+        "RFC 4033"
+      ],
+      "affected_fields": [
+        "rr_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `rr_type` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "indicator_warning",
+        "scope": "rfc4033_base_dnssec_record_present",
+        "warning": "Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "fields_mentioned": [
+          "rr_type"
+        ],
+        "field_availability": {
+          "rr_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 4033"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0032",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "RFC 4033 lists related RFC 'RFC 4034', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+      "affected_rfc_ids": [
+        "RFC 4033",
+        "RFC 4034"
+      ],
+      "affected_fields": [],
+      "affected_signal_ids": [],
+      "suggested_action": "Resolve this warning before quoting counts from this run: it did not stop the pipeline, but warnings recorded here mark places where a result may be an artefact of the schema or the reader rather than of the measurement.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "RFC 4033 lists related RFC 'RFC 4034', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+        "fields_mentioned": [],
+        "field_availability": {},
+        "rfc_ids_mentioned": [
+          "RFC 4033",
+          "RFC 4034"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0033",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "RFC 4033 lists related RFC 'RFC 4035', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+      "affected_rfc_ids": [
+        "RFC 4033",
+        "RFC 4035"
+      ],
+      "affected_fields": [],
+      "affected_signal_ids": [],
+      "suggested_action": "Resolve this warning before quoting counts from this run: it did not stop the pipeline, but warnings recorded here mark places where a result may be an artefact of the schema or the reader rather than of the measurement.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "RFC 4033 lists related RFC 'RFC 4035', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+        "fields_mentioned": [],
+        "field_availability": {},
+        "rfc_ids_mentioned": [
+          "RFC 4033",
+          "RFC 4035"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0034",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "rfc4509_ds_sha256_digest: Field `digest_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field.",
+      "affected_rfc_ids": [
+        "RFC 4509"
+      ],
+      "affected_fields": [
+        "digest_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `digest_type` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "indicator_warning",
+        "scope": "rfc4509_ds_sha256_digest",
+        "warning": "Field `digest_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "fields_mentioned": [
+          "digest_type"
+        ],
+        "field_availability": {
+          "digest_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 4509"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0035",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "RFC 4509 was published 2006-05-01, but the OpenINTEL fields its indicators rely on only become available later: `digest_type` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4509 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+      "affected_rfc_ids": [
+        "RFC 4509"
+      ],
+      "affected_fields": [
+        "digest_type",
+        "rr_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `digest_type` from 2010-01-01T00:00:00; `rr_type` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "RFC 4509 was published 2006-05-01, but the OpenINTEL fields its indicators rely on only become available later: `digest_type` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4509 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+        "fields_mentioned": [
+          "digest_type",
+          "rr_type"
+        ],
+        "field_availability": {
+          "digest_type": "2010-01-01T00:00:00",
+          "rr_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 4509"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0036",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "rfc4509_ds_sha256_digest: Field `rr_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field.",
+      "affected_rfc_ids": [
+        "RFC 4509"
+      ],
+      "affected_fields": [
+        "rr_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `rr_type` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "indicator_warning",
+        "scope": "rfc4509_ds_sha256_digest",
+        "warning": "Field `rr_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "fields_mentioned": [
+          "rr_type"
+        ],
+        "field_availability": {
+          "rr_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 4509"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0037",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "rfc5155_nsec3_hash_algorithm: Field `algorithm` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+      "affected_rfc_ids": [
+        "RFC 5155"
+      ],
+      "affected_fields": [
+        "algorithm"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `algorithm` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "indicator_warning",
+        "scope": "rfc5155_nsec3_hash_algorithm",
+        "warning": "Field `algorithm` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "fields_mentioned": [
+          "algorithm"
+        ],
+        "field_availability": {
+          "algorithm": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 5155"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0038",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "RFC 5155 was published 2008-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 5155 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+      "affected_rfc_ids": [
+        "RFC 5155"
+      ],
+      "affected_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `algorithm` from 2010-01-01T00:00:00; `rr_type` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "RFC 5155 was published 2008-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 5155 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+        "fields_mentioned": [
+          "algorithm",
+          "rr_type"
+        ],
+        "field_availability": {
+          "algorithm": "2010-01-01T00:00:00",
+          "rr_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 5155"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0039",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "rfc5155_nsec3_hash_algorithm: Field `rr_type` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+      "affected_rfc_ids": [
+        "RFC 5155"
+      ],
+      "affected_fields": [
+        "rr_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "The dictionary marks `rr_type` from 2010-01-01T00:00:00. Either restrict the analysis window to on or after that date, or annotate results before it as unknown rather than negative - an RFC published earlier than its indicator fields became available cannot be measured over the whole period.",
+      "evidence": {
+        "source": "indicator_warning",
+        "scope": "rfc5155_nsec3_hash_algorithm",
+        "warning": "Field `rr_type` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "fields_mentioned": [
+          "rr_type"
+        ],
+        "field_availability": {
+          "rr_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 5155"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    },
+    {
+      "item_id": "rev_0040",
+      "item_type": "schema_inconsistency",
+      "severity": "low",
+      "reason": "Indicator rfc8624_validator_algorithm_support of RFC 8624 is non-queryable against this dictionary and will be skipped during matching: Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+      "affected_rfc_ids": [
+        "RFC 8624"
+      ],
+      "affected_fields": [
+        "rr_type"
+      ],
+      "affected_signal_ids": [],
+      "suggested_action": "Re-check the dictionary entry for `rr_type` (type, nullability and openintel_native_fields) against the real OpenINTEL schema, then re-run schema-check. This does not stop matching, but it silently reduces recall for every indicator that uses the field.",
+      "evidence": {
+        "source": "schema_report_warning",
+        "scope": "",
+        "warning": "Indicator rfc8624_validator_algorithm_support of RFC 8624 is non-queryable against this dictionary and will be skipped during matching: Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+        "fields_mentioned": [
+          "rr_type"
+        ],
+        "field_availability": {
+          "rr_type": "2010-01-01T00:00:00"
+        },
+        "rfc_ids_mentioned": [
+          "RFC 8624"
+        ]
+      },
+      "status": "unresolved",
+      "trace_ids": [],
+      "verification": null
+    }
+  ]
+}

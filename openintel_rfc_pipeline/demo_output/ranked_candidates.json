@@ -1,0 +1,638 @@
+{
+  "generated_at": "2026-07-29T16:09:37",
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "count": 8,
+  "candidates": [
+    {
+      "rank": 1,
+      "rfc_id": "RFC 8078",
+      "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+      "specificity": "very_high",
+      "rfc_publication_date": "2017-03-01T00:00:00",
+      "decision": "valid_match",
+      "score": 17.25,
+      "aggregate_score": 207.0,
+      "confidence": "very_high",
+      "supporting_signal_count": 16,
+      "valid_match_count": 12,
+      "partial_match_count": 4,
+      "timestamp_invalid_count": 5,
+      "first_seen": "2018-05-01T04:39:40",
+      "last_seen": "2021-07-26T03:55:19",
+      "matched_indicator_ids": [
+        "rfc8078_cds_cdnskey_algorithm_zero",
+        "rfc8078_delete_signal_digest_zero"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "digest_type",
+        "rr_type"
+      ],
+      "domains": [
+        "delete-signal.nl",
+        "dnssec-demo.org",
+        "example.com",
+        "example.nl",
+        "keyroll.nu",
+        "rollover-test.net"
+      ],
+      "zones": [
+        "com",
+        "net",
+        "nl",
+        "nu",
+        "org"
+      ],
+      "example_signal_ids": [
+        "sig_0042",
+        "sig_0043",
+        "sig_0045",
+        "sig_0047",
+        "sig_0049"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0042_rfc8078",
+        "trace_sig_0043_rfc8078",
+        "trace_sig_0045_rfc8078",
+        "trace_sig_0047_rfc8078",
+        "trace_sig_0049_rfc8078"
+      ],
+      "reasoning_summary": "RFC 8078 ranks first (score 17.25, very_high) on 16 supporting observations; strongest evidence is indicator rfc8078_cds_cdnskey_algorithm_zero matching rr_type=CDS and algorithm=0. A further 5 observations matched the indicators but were withheld from the score because they predate the RFC's publication date.",
+      "score_breakdown": {
+        "base_indicator_score": 10.0,
+        "specificity_multiplier": 1.5,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 17.25,
+        "steps": [
+          "base_indicator_score = 10.0 (matched required indicators: rfc8078_cds_cdnskey_algorithm_zero)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc8078_delete_signal_digest_zero)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 10.0 + 0.0 + 1.5 - 0.0 - 0.0 - 0.0 = 11.5",
+          "specificity_multiplier = 1.5 (RFC 8078 specificity=very_high)",
+          "final_score = max(0, 11.5) * 1.5 = 17.25"
+        ]
+      }
+    },
+    {
+      "rank": 2,
+      "rfc_id": "RFC 5155",
+      "rfc_title": "DNS Security (DNSSEC) Hashed Authenticated Denial of Existence",
+      "specificity": "very_high",
+      "rfc_publication_date": "2008-03-01T00:00:00",
+      "decision": "valid_match",
+      "score": 17.25,
+      "aggregate_score": 172.5,
+      "confidence": "very_high",
+      "supporting_signal_count": 10,
+      "valid_match_count": 10,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2010-06-15T00:00:25",
+      "last_seen": "2019-09-17T02:45:42",
+      "matched_indicator_ids": [
+        "rfc5155_nsec3_hash_algorithm",
+        "rfc5155_nsec3_record_present"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "dnssec-demo.org",
+        "example.com",
+        "example.nl",
+        "hashed-denial.nu",
+        "signed-example.se"
+      ],
+      "zones": [
+        "com",
+        "nl",
+        "nu",
+        "org",
+        "se"
+      ],
+      "example_signal_ids": [
+        "sig_0001",
+        "sig_0003",
+        "sig_0007",
+        "sig_0010",
+        "sig_0019"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0001_rfc5155",
+        "trace_sig_0003_rfc5155",
+        "trace_sig_0007_rfc5155",
+        "trace_sig_0010_rfc5155",
+        "trace_sig_0019_rfc5155"
+      ],
+      "reasoning_summary": "RFC 5155 ranks second (score 17.25, very_high) on 10 supporting observations; strongest evidence is indicator rfc5155_nsec3_record_present matching rr_type=NSEC3.",
+      "score_breakdown": {
+        "base_indicator_score": 10.0,
+        "specificity_multiplier": 1.5,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 17.25,
+        "steps": [
+          "base_indicator_score = 10.0 (matched required indicators: rfc5155_nsec3_record_present)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc5155_nsec3_hash_algorithm)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 10.0 + 0.0 + 1.5 - 0.0 - 0.0 - 0.0 = 11.5",
+          "specificity_multiplier = 1.5 (RFC 5155 specificity=very_high)",
+          "final_score = max(0, 11.5) * 1.5 = 17.25"
+        ]
+      }
+    },
+    {
+      "rank": 3,
+      "rfc_id": "RFC 8080",
+      "rfc_title": "Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC",
+      "specificity": "very_high",
+      "rfc_publication_date": "2017-02-01T00:00:00",
+      "decision": "valid_match",
+      "score": 17.25,
+      "aggregate_score": 138.0,
+      "confidence": "very_high",
+      "supporting_signal_count": 8,
+      "valid_match_count": 8,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2018-01-08T00:40:20",
+      "last_seen": "2021-09-13T02:37:53",
+      "matched_indicator_ids": [
+        "rfc8080_eddsa_algorithm",
+        "rfc8080_eddsa_on_key_or_signature"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "dnssec-demo.nl",
+        "dnssec-demo.org",
+        "eddsa-demo.se",
+        "example.com",
+        "keyroll.nu"
+      ],
+      "zones": [
+        "com",
+        "nl",
+        "nu",
+        "org",
+        "se"
+      ],
+      "example_signal_ids": [
+        "sig_0038",
+        "sig_0044",
+        "sig_0050",
+        "sig_0054",
+        "sig_0059"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0038_rfc8080",
+        "trace_sig_0044_rfc8080",
+        "trace_sig_0050_rfc8080",
+        "trace_sig_0054_rfc8080",
+        "trace_sig_0059_rfc8080"
+      ],
+      "reasoning_summary": "RFC 8080 ranks third (score 17.25, very_high) on 8 supporting observations; strongest evidence is indicator rfc8080_eddsa_algorithm matching algorithm=15.",
+      "score_breakdown": {
+        "base_indicator_score": 10.0,
+        "specificity_multiplier": 1.5,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 17.25,
+        "steps": [
+          "base_indicator_score = 10.0 (matched required indicators: rfc8080_eddsa_algorithm)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc8080_eddsa_on_key_or_signature)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 10.0 + 0.0 + 1.5 - 0.0 - 0.0 - 0.0 = 11.5",
+          "specificity_multiplier = 1.5 (RFC 8080 specificity=very_high)",
+          "final_score = max(0, 11.5) * 1.5 = 17.25"
+        ]
+      }
+    },
+    {
+      "rank": 4,
+      "rfc_id": "RFC 6605",
+      "rfc_title": "Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC",
+      "specificity": "high",
+      "rfc_publication_date": "2012-04-01T00:00:00",
+      "decision": "valid_match",
+      "score": 13.125,
+      "aggregate_score": 131.25,
+      "confidence": "very_high",
+      "supporting_signal_count": 10,
+      "valid_match_count": 10,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2013-07-02T04:40:21",
+      "last_seen": "2020-07-21T03:35:31",
+      "matched_indicator_ids": [
+        "rfc6605_ecdsa_algorithm",
+        "rfc6605_ecdsa_on_key_or_signature"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "dnssec-demo.nl",
+        "ecdsa-demo.com",
+        "example.net",
+        "example.nl",
+        "example.org",
+        "signed-example.se"
+      ],
+      "zones": [
+        "com",
+        "net",
+        "nl",
+        "org",
+        "se"
+      ],
+      "example_signal_ids": [
+        "sig_0012",
+        "sig_0017",
+        "sig_0023",
+        "sig_0027",
+        "sig_0033"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0012_rfc6605",
+        "trace_sig_0017_rfc6605",
+        "trace_sig_0023_rfc6605",
+        "trace_sig_0027_rfc6605",
+        "trace_sig_0033_rfc6605"
+      ],
+      "reasoning_summary": "RFC 6605 ranks fourth (score 13.125, very_high) on 10 supporting observations; strongest evidence is indicator rfc6605_ecdsa_algorithm matching algorithm=13.",
+      "score_breakdown": {
+        "base_indicator_score": 9.0,
+        "specificity_multiplier": 1.25,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 13.125,
+        "steps": [
+          "base_indicator_score = 9.0 (matched required indicators: rfc6605_ecdsa_algorithm)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc6605_ecdsa_on_key_or_signature)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 9.0 + 0.0 + 1.5 - 0.0 - 0.0 - 0.0 = 10.5",
+          "specificity_multiplier = 1.25 (RFC 6605 specificity=high)",
+          "final_score = max(0, 10.5) * 1.25 = 13.125"
+        ]
+      }
+    },
+    {
+      "rank": 5,
+      "rfc_id": "RFC 7344",
+      "rfc_title": "Automating DNSSEC Delegation Trust Maintenance",
+      "specificity": "high",
+      "rfc_publication_date": "2014-09-01T00:00:00",
+      "decision": "valid_match",
+      "score": 11.25,
+      "aggregate_score": 236.25,
+      "confidence": "high",
+      "supporting_signal_count": 21,
+      "valid_match_count": 21,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2015-04-08T00:49:32",
+      "last_seen": "2021-07-26T03:55:19",
+      "matched_indicator_ids": [
+        "rfc7344_cds_cdnskey_present"
+      ],
+      "matched_fields": [
+        "rr_type"
+      ],
+      "domains": [
+        "delete-signal.nl",
+        "dnssec-demo.org",
+        "example.com",
+        "example.nl",
+        "keyroll.nu",
+        "rollover-test.net"
+      ],
+      "zones": [
+        "com",
+        "net",
+        "nl",
+        "nu",
+        "org"
+      ],
+      "example_signal_ids": [
+        "sig_0020",
+        "sig_0024",
+        "sig_0026",
+        "sig_0029",
+        "sig_0032"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0020_rfc7344",
+        "trace_sig_0024_rfc7344",
+        "trace_sig_0026_rfc7344",
+        "trace_sig_0029_rfc7344",
+        "trace_sig_0032_rfc7344"
+      ],
+      "reasoning_summary": "RFC 7344 ranks fifth (score 11.25, high) on 21 supporting observations; strongest evidence is indicator rfc7344_cds_cdnskey_present matching rr_type=CDS.",
+      "score_breakdown": {
+        "base_indicator_score": 9.0,
+        "specificity_multiplier": 1.25,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 0.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 11.25,
+        "steps": [
+          "base_indicator_score = 9.0 (matched required indicators: rfc7344_cds_cdnskey_present)",
+          "optional_match_bonus = 0.0 = 0.0 x 0.5 (matched optional indicators: none)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 9.0 + 0.0 + 0.0 - 0.0 - 0.0 - 0.0 = 9.0",
+          "specificity_multiplier = 1.25 (RFC 7344 specificity=high)",
+          "final_score = max(0, 9.0) * 1.25 = 11.25"
+        ]
+      }
+    },
+    {
+      "rank": 6,
+      "rfc_id": "RFC 4509",
+      "rfc_title": "Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records",
+      "specificity": "high",
+      "rfc_publication_date": "2006-05-01T00:00:00",
+      "decision": "valid_match",
+      "score": 11.25,
+      "aggregate_score": 112.5,
+      "confidence": "high",
+      "supporting_signal_count": 14,
+      "valid_match_count": 10,
+      "partial_match_count": 4,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2012-03-14T02:49:20",
+      "last_seen": "2021-05-11T04:40:19",
+      "matched_indicator_ids": [
+        "rfc4509_ds_sha256_digest"
+      ],
+      "matched_fields": [
+        "digest_type",
+        "rr_type"
+      ],
+      "domains": [
+        "dnssec-demo.nl",
+        "dnssec-demo.org",
+        "example.com",
+        "example.net",
+        "example.nl",
+        "example.org",
+        "keyroll.nu",
+        "signed-example.se"
+      ],
+      "zones": [
+        "com",
+        "net",
+        "nl",
+        "nu",
+        "org",
+        "se"
+      ],
+      "example_signal_ids": [
+        "sig_0006",
+        "sig_0011",
+        "sig_0015",
+        "sig_0021",
+        "sig_0030"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0006_rfc4509",
+        "trace_sig_0011_rfc4509",
+        "trace_sig_0015_rfc4509",
+        "trace_sig_0021_rfc4509",
+        "trace_sig_0030_rfc4509"
+      ],
+      "reasoning_summary": "RFC 4509 ranks sixth (score 11.25, high) on 14 supporting observations; strongest evidence is indicator rfc4509_ds_sha256_digest matching rr_type=DS and digest_type=2.",
+      "score_breakdown": {
+        "base_indicator_score": 9.0,
+        "specificity_multiplier": 1.25,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 0.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 11.25,
+        "steps": [
+          "base_indicator_score = 9.0 (matched required indicators: rfc4509_ds_sha256_digest)",
+          "optional_match_bonus = 0.0 = 0.0 x 0.5 (matched optional indicators: none)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 9.0 + 0.0 + 0.0 - 0.0 - 0.0 - 0.0 = 9.0",
+          "specificity_multiplier = 1.25 (RFC 4509 specificity=high)",
+          "final_score = max(0, 9.0) * 1.25 = 11.25"
+        ]
+      }
+    },
+    {
+      "rank": 7,
+      "rfc_id": "RFC 4033",
+      "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "specificity": "low",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "decision": "valid_match",
+      "score": 3.75,
+      "aggregate_score": 157.5,
+      "confidence": "low",
+      "supporting_signal_count": 69,
+      "valid_match_count": 42,
+      "partial_match_count": 27,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2011-02-15T03:43:30",
+      "last_seen": "2021-09-13T02:37:53",
+      "matched_indicator_ids": [
+        "rfc4033_base_dnssec_record_present",
+        "rfc4033_dnssec_algorithm_present"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "delete-signal.nl",
+        "dnssec-demo.nl",
+        "dnssec-demo.org",
+        "ecdsa-demo.com",
+        "eddsa-demo.se",
+        "example.com",
+        "example.net",
+        "example.nl",
+        "example.org",
+        "hashed-denial.nu",
+        "keyroll.nu",
+        "legacy-sha1.com",
+        "rollover-test.net",
+        "signed-example.se"
+      ],
+      "zones": [
+        "com",
+        "net",
+        "nl",
+        "nu",
+        "org",
+        "se"
+      ],
+      "example_signal_ids": [
+        "sig_0001",
+        "sig_0002",
+        "sig_0003",
+        "sig_0004",
+        "sig_0005"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0001_rfc4033",
+        "trace_sig_0002_rfc4033",
+        "trace_sig_0003_rfc4033",
+        "trace_sig_0004_rfc4033",
+        "trace_sig_0005_rfc4033"
+      ],
+      "reasoning_summary": "RFC 4033 ranks seventh (score 3.75, low) on 69 supporting observations; strongest evidence is indicator rfc4033_base_dnssec_record_present matching rr_type=DS.",
+      "score_breakdown": {
+        "base_indicator_score": 4.0,
+        "specificity_multiplier": 0.75,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 3.75,
+        "steps": [
+          "base_indicator_score = 4.0 (matched required indicators: rfc4033_base_dnssec_record_present)",
+          "optional_match_bonus = 1.0 = 2.0 x 0.5 (matched optional indicators: rfc4033_dnssec_algorithm_present)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 4.0 + 0.0 + 1.0 - 0.0 - 0.0 - 0.0 = 5.0",
+          "specificity_multiplier = 0.75 (RFC 4033 specificity=low)",
+          "final_score = max(0, 5.0) * 0.75 = 3.75"
+        ]
+      }
+    },
+    {
+      "rank": 8,
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "specificity": "low",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "decision": "ambiguous",
+      "score": 3.375,
+      "aggregate_score": 13.5,
+      "confidence": "low",
+      "supporting_signal_count": 17,
+      "valid_match_count": 0,
+      "partial_match_count": 13,
+      "timestamp_invalid_count": 42,
+      "first_seen": null,
+      "last_seen": null,
+      "matched_indicator_ids": [
+        "rfc8624_avoids_deprecated_algorithm",
+        "rfc8624_recommended_signing_algorithm"
+      ],
+      "matched_fields": [
+        "algorithm"
+      ],
+      "domains": [
+        "delete-signal.nl",
+        "dnssec-demo.nl",
+        "dnssec-demo.org",
+        "ecdsa-demo.com",
+        "eddsa-demo.se",
+        "example.com",
+        "example.net",
+        "example.nl",
+        "example.org",
+        "keyroll.nu",
+        "rollover-test.net"
+      ],
+      "zones": [
+        "com",
+        "net",
+        "nl",
+        "nu",
+        "org",
+        "se"
+      ],
+      "example_signal_ids": [
+        "sig_0053",
+        "sig_0054",
+        "sig_0055",
+        "sig_0058",
+        "sig_0059"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0053_rfc8624",
+        "trace_sig_0054_rfc8624",
+        "trace_sig_0055_rfc8624",
+        "trace_sig_0058_rfc8624",
+        "trace_sig_0059_rfc8624"
+      ],
+      "reasoning_summary": "RFC 8624 ranks eighth (score 3.375, low) on 17 supporting observations; strongest evidence is indicator rfc8624_recommended_signing_algorithm matching algorithm=15. The verdict is ambiguous: at least one matched indicator is not uniquely attributable to this RFC, so it is routed to the review queue. A further 42 observations matched the indicators but were withheld from the score because they predate the RFC's publication date.",
+      "score_breakdown": {
+        "base_indicator_score": 5.0,
+        "specificity_multiplier": 0.75,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 2.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 3.375,
+        "steps": [
+          "base_indicator_score = 5.0 (matched required indicators: rfc8624_recommended_signing_algorithm)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc8624_avoids_deprecated_algorithm)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 2.0 (applied: matched indicators flagged ambiguous: rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algorithm)",
+          "raw = 5.0 + 0.0 + 1.5 - 0.0 - 0.0 - 2.0 = 4.5",
+          "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
+          "final_score = max(0, 4.5) * 0.75 = 3.375",
+          "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
+        ]
+      }
+    }
+  ]
+}
