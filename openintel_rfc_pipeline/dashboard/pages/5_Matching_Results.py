@@ -29,7 +29,6 @@ import plotly.express as px  # noqa: E402
 import streamlit as st  # noqa: E402
 
 from _shared import (  # noqa: E402
-    CONFIDENCE_ORDER,
     DECISION_COLORS,
     DECISION_ORDER,
     DashboardBundle,

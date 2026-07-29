@@ -26,7 +26,6 @@ import streamlit as st  # noqa: E402
 
 from _shared import (  # noqa: E402
     DOCS_DIR,
-    PROJECT_ROOT,
     human_size,
     load_bundle,
     no_rows,

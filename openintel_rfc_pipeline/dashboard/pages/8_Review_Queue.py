@@ -33,7 +33,6 @@ from _shared import (  # noqa: E402
     REVIEW_STATUS_COLORS,
     REVIEW_STATUS_ORDER,
     REVIEW_STATUSES,
-    SEVERITY_COLORS,
     SEVERITY_ORDER,
     DashboardBundle,
     badge,
