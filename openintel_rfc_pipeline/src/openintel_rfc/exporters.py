@@ -618,10 +618,16 @@ def build_run_manifest(result: PipelineResult, written: Mapping[str, Path]) -> d
             "min_score": run_config.min_score,
         },
         "counts": {
-            # One signal is extracted per usable Parquet row, so the signal count
-            # is also the row count that survived normalization.
-            "rows": len(result.signals),
+            # For an exhaustive run one signal is extracted per usable Parquet
+            # row, so the signal count is also the row count. For a sampled
+            # (scale) run it is emphatically not: `signals` holds exemplars, and
+            # reporting their number as "rows" would understate a multi-million
+            # row scan by five orders of magnitude.
+            "rows": int(
+                result.corpus_stats.get("rows_scanned", len(result.signals))
+            ),
             "signals": len(result.signals),
+            "sampled": result.is_sampled,
             "matches": len(result.matches),
             "traces": len(result.traces),
             "ranked_candidates": len(result.ranked_candidates),

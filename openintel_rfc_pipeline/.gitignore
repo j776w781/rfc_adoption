@@ -20,3 +20,9 @@ venv/
 # reviewable output of the pipeline and are committed with the prototype.
 # Dashboard-owned mutable state is ignored, since it is per-reviewer:
 demo_output/review_queue_status.json
+
+# Local verification runs and real-corpus output (large, machine-specific)
+verify_run/
+output_real/
+openintel_cache/
+logs/

@@ -268,6 +268,18 @@ class AccessConfig:
     threads: int | None = None
     memory_limit: str | None = None
 
+    # HTTP resilience. DuckDB's defaults (3 retries, 100 ms base, backoff 4)
+    # exhaust in roughly two seconds, which is tuned for a flaky link rather
+    # than for a shared public object store that rate-limits. OpenINTEL returns
+    # 503 under load, and on a multi-day run a two-second retry budget turns a
+    # transient throttle into an aborted partition. These defaults retry for
+    # about eight minutes before giving up; the checkpoint then makes a resume
+    # cheap if it still fails.
+    http_retries: int = 10
+    http_retry_wait_ms: int = 500
+    http_retry_backoff: float = 2.0
+    http_timeout_seconds: int = 120
+
     def __post_init__(self) -> None:
         mode = str(self.mode).strip().lower()
         if mode not in MODES:
@@ -898,7 +910,45 @@ def configure_duckdb_s3(connection: Any, config: AccessConfig) -> None:
             SECRET_NAME,
         )
 
+    _apply_http_resilience(connection, config)
     _apply_runtime_settings(connection, config)
+
+
+def _apply_http_resilience(
+    connection: duckdb.DuckDBPyConnection, config: AccessConfig
+) -> None:
+    """Widen DuckDB's HTTP retry budget for a long run against a shared store.
+
+    OpenINTEL is a public, shared object store and returns 503 under load. Out
+    of the box DuckDB gives up after about two seconds of retrying, so a routine
+    throttle aborts the partition. Each setting is applied independently and a
+    build that does not recognise one is not an error -- the names have changed
+    across DuckDB versions, and losing a tuning knob is not worth failing a run
+    that would otherwise work.
+    """
+    settings = {
+        "http_retries": int(config.http_retries),
+        "http_retry_wait_ms": int(config.http_retry_wait_ms),
+        "http_retry_backoff": float(config.http_retry_backoff),
+        "http_timeout": int(config.http_timeout_seconds),
+    }
+    applied: list[str] = []
+    for name, value in settings.items():
+        try:
+            connection.execute(f"SET {name}={value}")
+        except Exception as exc:  # unknown on this build; keep going
+            LOGGER.debug("DuckDB rejected SET %s=%s (%s)", name, value, exc)
+            continue
+        applied.append(f"{name}={value}")
+
+    if applied:
+        LOGGER.info("HTTP resilience: %s.", ", ".join(applied))
+    else:  # pragma: no cover - only on a build with none of these settings
+        LOGGER.warning(
+            "This DuckDB build accepted none of the HTTP retry settings; a "
+            "transient 503 from the object store will abort the partition. "
+            "Completed partitions are still checkpointed, so a re-run resumes."
+        )
 
 
 def open_duckdb(config: AccessConfig) -> duckdb.DuckDBPyConnection:

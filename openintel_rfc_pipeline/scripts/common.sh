@@ -109,11 +109,30 @@ find_python() {
 }
 
 activate_venv() {
-    [[ -f "${VENV_DIR}/bin/activate" ]] \
-        || die "No virtualenv at ${VENV_DIR}. Run scripts/setup.sh first."
-    # shellcheck disable=SC1091
-    source "${VENV_DIR}/bin/activate"
     export PYTHONPATH="${PROJECT_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}"
+
+    # POSIX layout first, then the Windows/Git-Bash layout, so the scripts can be
+    # exercised on a developer machine before they are trusted on the server.
+    local activate
+    for activate in "${VENV_DIR}/bin/activate" "${VENV_DIR}/Scripts/activate"; do
+        if [[ -f "${activate}" ]]; then
+            # shellcheck disable=SC1090
+            source "${activate}"
+            return 0
+        fi
+    done
+
+    # No venv. That is not automatically an error: conda, pyenv and system-wide
+    # installs are all legitimate, and refusing to run would be obstructive. Only
+    # fail if the package genuinely cannot be imported.
+    if python -c 'import openintel_rfc' >/dev/null 2>&1; then
+        warn "No virtualenv at ${VENV_DIR}; using the ambient Python ($(command -v python))."
+        return 0
+    fi
+
+    die "No virtualenv at ${VENV_DIR} and openintel_rfc is not importable from the
+     ambient Python. Run scripts/setup.sh first, or activate the environment
+     you installed it into."
 }
 
 # --------------------------------------------------------------------------- #

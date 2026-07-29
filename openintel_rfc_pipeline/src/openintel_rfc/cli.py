@@ -437,6 +437,19 @@ def cmd_scale(args: argparse.Namespace) -> int:
     report_md = render_report(result, survey_markdown=_read_survey())
     written = export_analysis(result, out_dir, report_md=report_md)
 
+    # Also emit the schema-check artefacts. A scale run is a long unattended job
+    # on a server; requiring a separate `schema-check` invocation afterwards just
+    # to populate the dashboard's Schema Check page is friction that will be
+    # forgotten, and the report is already computed above at no extra cost.
+    from .exporters import export_schema_check
+    from .report import render_schema_check_report
+
+    written.update(
+        export_schema_check(
+            schema_report, out_dir, report_md=render_schema_check_report(schema_report)
+        )
+    )
+
     _print_written(written)
     _print_analysis_summary(result, {})
     _print_warnings(result.warnings or warnings)
@@ -493,12 +506,15 @@ def _report_field_resolution(dictionary, schema_report, columns: Sequence[str]) 
             "openintel_native_fields before spending compute on this range."
         )
     if cosmetic:
+        plural = len(cosmetic) > 1
         print(
             "\nNote: "
             + ", ".join(sorted(cosmetic))
-            + " cannot be supplied by this corpus. No indicator tests them, so "
-            "matching is unaffected; the column is only carried for provenance "
-            "and will read as null."
+            + (" cannot be supplied by this corpus. No indicator tests "
+               + ("them" if plural else "it")
+               + ", so matching is unaffected; "
+               + ("those columns are" if plural else "the column is")
+               + " only carried for provenance and will read as null.")
         )
 
 

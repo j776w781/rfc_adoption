@@ -433,19 +433,28 @@ def _executive_summary(result: PipelineResult) -> list[str]:
         scanned = int(stats.get("rows_scanned", 0))
         matched = int(stats.get("rows_matched", 0))
         partitions = int(stats.get("partitions", 0))
+        # `scanned` counts rows that passed the DNSSEC record-type prefilter,
+        # not every row in the partitions. Calling it "scanned" without saying
+        # so invites the reader to treat it as the corpus size, and makes the
+        # matched/scanned ratio look vacuous when it is necessarily near 100%
+        # (a row only survives the prefilter if it is a DNSSEC record).
+        ratio = f" ({matched / scanned:.1%} of them)" if scanned else ""
         opening = (
-            f"This run scanned {scanned:,} OpenINTEL "
+            f"This run evaluated {scanned:,} OpenINTEL "
             f"{_plural(scanned, 'row')} across {partitions} "
             f"{_plural(partitions, 'partition')} against "
             f"{result.schema_report.rfc_count} DNSSEC "
             f"{_plural(result.schema_report.rfc_count, 'RFC')} "
             f"({result.schema_report.indicator_count} indicators); "
-            f"{matched:,} {_plural(matched, 'row')} reached a rankable decision. "
-            f"The observation counts in section 7 are exact corpus aggregates. "
-            f"The {len(result.signals)} observations carried through sections 6 "
-            f"and 8 are a deterministic *sample*, kept so that every aggregate "
-            f"has a worked reasoning trace behind it -- their number is not a "
-            f"measurement of anything."
+            f"{matched:,}{ratio} reached a rankable decision. That row count is "
+            f"what survived the DNSSEC record-type prefilter, not the size of "
+            f"the partitions: rows of other record types are excluded before any "
+            f"indicator is evaluated, which is what makes a corpus this size "
+            f"tractable. The observation counts in section 7 are exact "
+            f"aggregates over those rows. The {len(result.signals)} observations "
+            f"carried through sections 6 and 8 are a deterministic *sample*, "
+            f"kept so that every aggregate has a worked reasoning trace behind "
+            f"it -- their number is not a measurement of anything."
         )
     else:
         opening = (
