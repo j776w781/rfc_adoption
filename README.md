@@ -249,6 +249,10 @@ Shipped RFCs: **4033** (with 4034/4035, base DNSSEC), **4509** (SHA-256 DS diges
 **5155** (NSEC3), **6605** (ECDSA), **7344** (CDS/CDNSKEY), **8078** (delete signal),
 **8080** (EdDSA), **8624** (algorithm recommendations).
 
+To add an RFC, follow [`docs/adding_an_rfc.md`](docs/adding_an_rfc.md) — a worked
+example covering the observability judgement, the entry format, verification
+against real data, and what to do when the field you need is not in the dictionary.
+
 Two indicators are intentionally *not* satisfiable by the shipped dictionary, so the
 missing-field paths are exercised by the demo rather than only by tests:
 `rfc8624_validator_algorithm_support` (non-queryable) and
@@ -409,6 +413,7 @@ openintel_rfc.cli …` commands below; they are the same thing the Makefile runs
 | --- | --- |
 | this README | orientation, the demo, interpreting output |
 | [`docs/running_at_scale.md`](docs/running_at_scale.md) | **before any real-corpus run** — exact vs sampled, throttling, sizing |
+| [`docs/adding_an_rfc.md`](docs/adding_an_rfc.md) | **extending the checklist** — worked example, end to end |
 | [`docs/architecture.md`](docs/architecture.md) | data flow, module map, extension points |
 | [`docs/open_source_tool_survey.md`](docs/open_source_tool_survey.md) | why each dependency was chosen, and what was rejected |
 
