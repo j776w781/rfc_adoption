@@ -224,6 +224,86 @@ immediately rather than after three days of finding nothing for `nl`.
 4. Raise `--retry-wait` to 120 so retries span a longer limiter window.
 5. Run overnight in Utwente's local time; the store is quieter.
 
+## 4b. Splitting a run across several machines
+
+Supported, and **verified byte-equivalent to a single run**. Nothing special is
+needed: the unit of work is one partition (one source-day), each partition writes
+its own self-contained checkpoint, and the merge is the same code path a
+single-machine run already takes. Sharding does not take a different route
+through the pipeline, which is why the results are identical rather than merely
+close.
+
+Split by **date range**, by **source**, or both — the ranges only have to be
+disjoint:
+
+```bash
+# machine 1
+./scripts/run_full_analysis.sh --sources nu,se --start 2015-01-01 --end 2017-12-31 \
+    --mode download --cache-dir /large/volume --out /out/shard1
+
+# machine 2
+./scripts/run_full_analysis.sh --sources nu,se --start 2018-01-01 --end 2019-12-31 \
+    --mode download --cache-dir /large/volume --out /out/shard2
+
+# machine 3
+./scripts/run_full_analysis.sh --sources nu,se --start 2020-01-01 --end 2021-12-31 \
+    --mode download --cache-dir /large/volume --out /out/shard3
+```
+
+Then gather the checkpoints on one machine and run the **whole** range against
+them. Every partition is already checkpointed, so nothing is rescanned and the
+run is a merge:
+
+```bash
+mkdir -p /out/final/checkpoints
+rsync -a machine1:/out/shard1/checkpoints/ /out/final/checkpoints/
+rsync -a machine2:/out/shard2/checkpoints/ /out/final/checkpoints/
+rsync -a machine3:/out/shard3/checkpoints/ /out/final/checkpoints/
+
+./scripts/run_full_analysis.sh --sources nu,se --start 2015-01-01 --end 2021-12-31 \
+    --checkpoint-dir /out/final/checkpoints --out /out/final
+```
+
+The log will show `reusing checkpoint` for every partition.
+
+### Only checkpoints move, not data
+
+A checkpoint is the partition's aggregate, not its rows:
+
+| | 3 `.nu` partitions | extrapolated to `nu,se` 2015-2021 |
+| --- | --- | --- |
+| source data scanned | 1.1 GB | ~6.3 TB |
+| checkpoints to ship | **49 KB** | **~82 MB** |
+
+Roughly 23,000:1. Ship the checkpoints; leave the Parquet cache where it was
+downloaded.
+
+### Rules that actually matter
+
+1. **Every machine must use the same checklist and dictionary.** This is enforced,
+   not assumed: each checkpoint records `checklist_version` and a `scan_sql_sha1`
+   of the compiled scan, and the merge rejects any checkpoint whose fingerprint
+   differs, with the reason *"it was produced by a different compiled scan …, so
+   its aggregates answer a different question"*. Rejected partitions are
+   **recomputed**, so a mismatched shard turns a merge into a full rescan rather
+   than into a wrong answer. Sync `data/` across machines before starting.
+2. **Copy the whole `checkpoints/` directory**, including its `exemplars/`
+   subdirectory. The exemplars are what give the merged run its reasoning traces.
+3. **Keep ranges disjoint.** Overlap is harmless — a partition's checkpoint is
+   deterministic, so a duplicate is identical — but it is wasted compute.
+4. **The merge still lists partitions from S3**, so the merging machine needs
+   network access even though it reads no measurement data.
+5. `distinct_domains` remains a lower bound, exactly as in a single-machine run.
+   Sharding does not make it worse: a single run merges per-partition checkpoints
+   too.
+
+### Verified
+
+Two shards (`2018-05-01` and `2018-05-02..03`) merged against a single run of
+`2018-05-01..03` produce identical `ranked_candidates` (rank, score, confidence,
+supporting counts, first/last seen), identical `adoption_timeline`, and identical
+manifest row totals.
+
 ## 5. A verified real result
 
 `--sources nu --start 2018-05-01 --end 2018-05-01`, 2,621,052 rows scanned in

@@ -498,6 +498,19 @@ Thread count is not the lever it looks like: 20/8/4/2 threads measured 5.6/5.8/5
 on a remote scan — the work is network-bound. Stream mode therefore caps threads at
 8 by default; local scans get every core.
 
+### Splitting across machines
+
+Give each machine a disjoint date range (or a disjoint set of sources), then
+gather the checkpoints and run the whole range against them — every partition is
+already done, so it becomes a merge. **Verified byte-equivalent to a single run**,
+because sharding uses the same merge path a single-machine run already takes.
+
+Only checkpoints move: **~49 KB per 3 partitions, ~82 MB for a 6.3 TB run**. Each
+one records the checklist version and a fingerprint of the compiled scan, so a
+shard produced with a different checklist is rejected and recomputed rather than
+silently merged. See [`docs/running_at_scale.md`](docs/running_at_scale.md)
+section 4b.
+
 ### Sizing a run
 
 | Source | Objects/day | Size/day | 2015–2021 (2,557 days) |
