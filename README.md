@@ -45,6 +45,51 @@ a cross-validation test asserts the two engines produce identical per-RFC counts
 number from a `scale` run.** Its counts are exact; its scores and reasoning traces
 come from a bounded sample.
 
+## Quickstart
+
+Everything below runs from the repository root. The rest of this README explains
+*why*; this section is just how to operate it.
+
+**Try it offline (about a minute, no network, no credentials):**
+
+```bash
+pip install -r requirements.txt
+make demo          # sample data -> tool survey -> schema-check -> analyze
+less demo_output/report.md
+make dashboard     # http://localhost:8501
+```
+
+**Run it against real OpenINTEL data (Linux server):**
+
+```bash
+./scripts/setup.sh                                   # ~5 min, installs + self-verifies
+
+# Costs seconds, scans nothing. Do this for every new range.
+./scripts/run_full_analysis.sh --sources nu --start 2018-05-01 --end 2018-05-01 --dry-run
+
+# One real day, end to end. ~35 s. Prove the path before scaling it.
+./scripts/run_full_analysis.sh --sources nu --start 2018-05-01 --end 2018-05-01
+
+# The real run. Hours to days, resumable. See "Operating a long run" below.
+tmux new -s openintel
+./scripts/run_full_analysis.sh --mode download --cache-dir /large/volume \
+    --sources nu,se --start 2015-01-01 --end 2021-12-31 --pace-seconds 2
+```
+
+**Where to look afterwards:**
+
+| Question | File |
+| --- | --- |
+| What did this run conclude? | `report.md` — start here, it is written to be read top to bottom |
+| Which RFCs ranked, with what evidence? | `ranked_candidates.json` (§7 of the report) |
+| *Why* did RFC X match, or not? | `reasoning_traces.json`, or dashboard page 6 |
+| When did each RFC first appear? | `adoption_timeline.json` (§9) |
+| What should a human check? | `review_queue.json` (§12), high severity first |
+| What did the run actually read? | `run_manifest.json` — inputs, row counts, warnings |
+
+`make verify` runs an 80-check full-system gate if you want to confirm the
+install before trusting a result.
+
 ## Project goal
 
 Given three inputs:
@@ -510,6 +555,57 @@ one records the checklist version and a fingerprint of the compiled scan, so a
 shard produced with a different checklist is rejected and recomputed rather than
 silently merged. See [`docs/running_at_scale.md`](docs/running_at_scale.md)
 section 4b.
+
+### Operating a long run
+
+A multi-year run takes hours to days. It is designed to be left alone and to
+survive interruption, but you need to know three things.
+
+**Logs.** Every run writes a timestamped log to `logs/`, in addition to stdout.
+The script prints the path when it starts.
+
+```bash
+tail -f logs/analysis-*.log | grep -E "Partition|Progress"
+```
+
+Progress lines report rows scanned, rows matched, elapsed time and an ETA:
+
+```
+Partition zonefile/nu/2018-05-01: 2621052 rows scanned, 2621052 matched (100.0000%), 30 aggregate rows, 75 exemplars, 19.97s
+Progress 1/3 partitions | 2621052 rows scanned | 2621052 matched | 1m17s elapsed | ETA 2m35s
+```
+
+"matched" counts rows that reached a rankable decision, out of those that passed
+the DNSSEC record-type prefilter — so it is near 100% by construction and is not
+a measure of how much of the corpus is DNSSEC.
+
+**Expected pace**, measured on real data — use it to sanity-check the ETA:
+
+| | per partition |
+| --- | --- |
+| stream mode | ~71 s |
+| download mode, cold | ~35 s (14 s fetch + 21 s scan) |
+| download mode, cached | ~21 s |
+
+One `.nu` day is one partition; one `.se` day is one partition of four objects.
+
+**If it dies — network drop, OOM, power, `Ctrl-C`:** re-run the *same command*.
+Completed partitions are checkpointed, so it resumes rather than restarting, and
+you lose at most the partition in flight.
+
+```bash
+# identical to the original invocation; finished partitions are skipped
+./scripts/run_full_analysis.sh --mode download --cache-dir /large/volume \
+    --sources nu,se --start 2015-01-01 --end 2021-12-31 --pace-seconds 2
+```
+
+The log shows `reusing checkpoint` for work already done. Use `--no-resume` only
+when you *want* everything recomputed — after changing the checklist, for
+instance, though a changed checklist invalidates the checkpoints automatically.
+
+Transient object-store failures are retried inside the run (~8.5 minutes of HTTP
+retries, then up to 5 partition-level retries with doubling waits), so a routine
+503 pauses the run rather than ending it.
 
 ### Sizing a run
 
