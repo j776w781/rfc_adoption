@@ -1,0 +1,27 @@
+{
+  "partition_id": "zonefile/nu/2023-01-11",
+  "source": "nu",
+  "basis": "zonefile",
+  "date": "2023-01-11",
+  "object_count": 1,
+  "rows_scanned": 2442995,
+  "rows_matched": 2442995,
+  "aggregate_rows": 36,
+  "exemplar_rows": 85,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 9.199,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG"
+  ],
+  "checklist_version": "0.1.0",
+  "scan_sql_sha1": "75cf739eef60134ece8c08289e7cb6b3f62d3127",
+  "complete": true,
+  "completed_at": "2026-08-05T18:06:12"
+}

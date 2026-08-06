@@ -1,0 +1,27 @@
+{
+  "partition_id": "zonefile/se/2018-01-19",
+  "source": "se",
+  "basis": "zonefile",
+  "date": "2018-01-19",
+  "object_count": 4,
+  "rows_scanned": 14675681,
+  "rows_matched": 14675681,
+  "aggregate_rows": 30,
+  "exemplar_rows": 75,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 41.327,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG"
+  ],
+  "checklist_version": "0.1.0",
+  "scan_sql_sha1": "1d937ce9d2a108c38aade14a9c788d0b0a7168dd",
+  "complete": true,
+  "completed_at": "2026-08-06T06:25:10"
+}

@@ -1,0 +1,27 @@
+{
+  "partition_id": "zonefile/gov/2021-05-26",
+  "source": "gov",
+  "basis": "zonefile",
+  "date": "2021-05-26",
+  "object_count": 1,
+  "rows_scanned": 28575,
+  "rows_matched": 28575,
+  "aggregate_rows": 33,
+  "exemplar_rows": 80,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 0.686,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG"
+  ],
+  "checklist_version": "0.1.0",
+  "scan_sql_sha1": "4d5fb103574b371515ddbb28cf1665f2ec53084a",
+  "complete": true,
+  "completed_at": "2026-08-05T12:37:34"
+}
