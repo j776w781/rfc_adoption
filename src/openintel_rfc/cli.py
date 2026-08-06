@@ -176,6 +176,32 @@ def build_parser() -> argparse.ArgumentParser:
     )
     scale.set_defaults(func=cmd_scale)
 
+    merge = sub.add_parser(
+        "merge",
+        help="Build the final report from existing checkpoints, without scanning.",
+        description=(
+            "Merges partition checkpoints that were already computed -- by an "
+            "earlier run, or by several machines working on different date "
+            "ranges -- into one set of artefacts. Reads no measurement data and "
+            "makes no network calls, so it also works where 'scale' would try to "
+            "rediscover and rescan partitions that are absent from the range."
+        ),
+    )
+    _add_common_inputs(merge)
+    merge.add_argument(
+        "--checkpoint-dir", type=Path, required=True,
+        help="Directory of checkpoints. Searched recursively unless --flat.",
+    )
+    merge.add_argument(
+        "--flat", action="store_true",
+        help="Only look in the top level, not in per-shard subdirectories.",
+    )
+    merge.add_argument(
+        "--min-score", type=float, default=config.MIN_RANKABLE_SCORE,
+        help="Drop ranked candidates scoring at or below this value.",
+    )
+    merge.set_defaults(func=cmd_merge)
+
     return parser
 
 
@@ -481,6 +507,122 @@ def cmd_scale(args: argparse.Namespace) -> int:
     _print_written(written)
     _print_analysis_summary(result, {})
     _print_warnings(result.warnings or warnings)
+    return 0
+
+
+def cmd_merge(args: argparse.Namespace) -> int:
+    """Assemble final artefacts from checkpoints alone -- no scanning, no network."""
+    from .checklist_loader import (
+        load_checklist_db,
+        load_dictionary,
+        validate_checklist_db,
+        validate_dictionary,
+    )
+    from .exporters import export_analysis, export_schema_check
+    from .models import PipelineResult, RunConfig
+    from .report import render_report, render_schema_check_report
+    from .scale_runner import (
+        aggregates_to_candidates,
+        aggregates_to_timeline,
+        merge_checkpoints,
+    )
+    from .schema_checker import check_schema
+
+    warnings: list[str] = []
+    db = load_checklist_db(args.checklists)
+    dictionary = load_dictionary(args.dictionary)
+    for message in validate_checklist_db(db) + validate_dictionary(dictionary):
+        warn(warnings, message, LOGGER)
+
+    schema_report = check_schema(
+        db,
+        dictionary,
+        checklist_path=posix_path(args.checklists),
+        dictionary_path=posix_path(args.dictionary),
+        warnings=warnings,
+    )
+
+    checkpoint_dir = Path(args.checkpoint_dir)
+    aggregates = merge_checkpoints(checkpoint_dir, recursive=not args.flat)
+    for message in aggregates.warnings:
+        warn(warnings, message, LOGGER)
+    if not aggregates.partition_ids:
+        raise PipelineError(
+            f"No usable checkpoints under {checkpoint_dir}. Expected files named "
+            "<partition>.parquet with a matching <partition>.status.json marked "
+            "complete."
+        )
+    LOGGER.info(
+        "Merged %d partition(s), %s row(s) scanned.",
+        len(aggregates.partition_ids),
+        f"{aggregates.rows_scanned:,}",
+    )
+
+    candidates = aggregates_to_candidates(
+        aggregates, db, schema_report=schema_report,
+        min_score=args.min_score, warnings=warnings,
+    )
+    timeline = aggregates_to_timeline(
+        aggregates, db, schema_report=schema_report, warnings=warnings
+    )
+    signals, matches, traces = aggregates.evidence(
+        db, schema_report=schema_report, warnings=warnings
+    )
+
+    out_dir = ensure_dir(args.out)
+    result = PipelineResult(
+        generated_at=now(),
+        run_config=RunConfig(
+            checklists=posix_path(args.checklists),
+            dictionary=posix_path(args.dictionary),
+            parquet=None,
+            out=posix_path(out_dir),
+            min_score=args.min_score,
+        ),
+        schema_report=schema_report,
+        signals=signals,
+        matches=matches,
+        ranked_candidates=candidates,
+        traces=traces,
+        review_items=[],
+        timeline=timeline,
+        warnings=warnings,
+        corpus_stats={
+            "sampled": True,
+            "rows_scanned": int(aggregates.rows_scanned),
+            "rows_matched": int(aggregates.rows_matched),
+            "partitions": len(aggregates.partition_ids),
+            "exemplar_signals": len(signals),
+            "sources": sorted({p.split("/")[1] for p in aggregates.partition_ids if "/" in p}),
+        },
+    )
+
+    from .llm_verifier import get_verifier
+    from .ranking import close_ranking_pairs
+    from .review_queue import build_review_queue
+
+    result.review_items = build_review_queue(
+        schema_report=schema_report,
+        matches=matches,
+        traces=traces,
+        ranked=candidates,
+        db=db,
+        verifier=get_verifier(),
+        warnings=warnings,
+        close_pairs=close_ranking_pairs(candidates),
+    )
+
+    report_md = render_report(result, survey_markdown=_read_survey())
+    written = export_analysis(result, out_dir, report_md=report_md)
+    written.update(
+        export_schema_check(
+            schema_report, out_dir, report_md=render_schema_check_report(schema_report)
+        )
+    )
+
+    _print_written(written)
+    _print_analysis_summary(result, {})
+    _print_warnings(result.warnings)
     return 0
 
 

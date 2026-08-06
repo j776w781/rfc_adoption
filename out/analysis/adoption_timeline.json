@@ -1,0 +1,6572 @@
+{
+  "generated_at": "2026-08-06T20:39:57",
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "count": 8,
+  "timeline": [
+    {
+      "rfc_id": "RFC 4033",
+      "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "first_seen": "2018-01-01T00:09:46",
+      "last_seen": "2026-04-29T06:32:27",
+      "days_from_publication_to_first_seen": 4689,
+      "observation_count": 2323653512,
+      "distinct_domains": 2939647,
+      "distinct_zones": 0,
+      "domains": [
+        "123-nonexistant-dnsjedi-456.smalsparet.nu.",
+        "apps2grow.se.",
+        "bospararna.nu.",
+        "brtisverige.nu.",
+        "diamantduk.se.",
+        "holgersen.nu.",
+        "krossnassf.se.",
+        "leer-kracht.nu.",
+        "logistikbalsta.nu.",
+        "saltniklas.nu.",
+        "selark.se.",
+        "xn--bstaspelautomaterna-gwb.nu.",
+        "xn--mklarnett-v2a.se.",
+        "xn--smfdder-fxa6o.nu.",
+        "xn--strmstad-p4a.nu.",
+        "xn--vrbazzar-9za.se.",
+        "zzptoday.nu."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2018-01",
+          "count": 411512014,
+          "domains": 2864058,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-02",
+          "count": 58403375,
+          "domains": 478516,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-03",
+          "count": 64097630,
+          "domains": 479538,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-04",
+          "count": 64217822,
+          "domains": 520890,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-05",
+          "count": 67012440,
+          "domains": 520918,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-06",
+          "count": 60481862,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-07",
+          "count": 62986185,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-08",
+          "count": 62980844,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-09",
+          "count": 61030415,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-10",
+          "count": 63691687,
+          "domains": 488493,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-11",
+          "count": 59421730,
+          "domains": 506123,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-12",
+          "count": 52064678,
+          "domains": 436436,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-01",
+          "count": 46793011,
+          "domains": 420578,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-02",
+          "count": 47259046,
+          "domains": 438583,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-03",
+          "count": 53474040,
+          "domains": 450498,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-04",
+          "count": 17822997,
+          "domains": 436505,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-05",
+          "count": 755170,
+          "domains": 3562,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-06",
+          "count": 731389,
+          "domains": 3529,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-07",
+          "count": 753668,
+          "domains": 3529,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-08",
+          "count": 748711,
+          "domains": 3529,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-09",
+          "count": 724319,
+          "domains": 3562,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-10",
+          "count": 754461,
+          "domains": 3562,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-11",
+          "count": 754153,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-12",
+          "count": 784836,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-01",
+          "count": 784381,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-02",
+          "count": 744945,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-03",
+          "count": 788252,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-04",
+          "count": 747560,
+          "domains": 3631,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-05",
+          "count": 773820,
+          "domains": 3631,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-06",
+          "count": 744218,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-07",
+          "count": 775890,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-08",
+          "count": 784896,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-09",
+          "count": 101558,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-01",
+          "count": 196192370,
+          "domains": 2939647,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-02",
+          "count": 57422169,
+          "domains": 514470,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-03",
+          "count": 63292628,
+          "domains": 509318,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-04",
+          "count": 60649772,
+          "domains": 509318,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-05",
+          "count": 60389937,
+          "domains": 504098,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-06",
+          "count": 60433501,
+          "domains": 504098,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-07",
+          "count": 62414495,
+          "domains": 508933,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-08",
+          "count": 62747031,
+          "domains": 508975,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-09",
+          "count": 60124627,
+          "domains": 509003,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-10",
+          "count": 62129987,
+          "domains": 505047,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-11",
+          "count": 60816661,
+          "domains": 524734,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-12",
+          "count": 62394398,
+          "domains": 524734,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-01",
+          "count": 32400898,
+          "domains": 574234,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-02",
+          "count": 902295,
+          "domains": 6779,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-03",
+          "count": 1000398,
+          "domains": 6810,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-04",
+          "count": 978851,
+          "domains": 6810,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-05",
+          "count": 996676,
+          "domains": 6989,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-06",
+          "count": 987540,
+          "domains": 7113,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-07",
+          "count": 1030127,
+          "domains": 7113,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-08",
+          "count": 995412,
+          "domains": 7113,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-09",
+          "count": 995666,
+          "domains": 7388,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-10",
+          "count": 1025123,
+          "domains": 7972,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-11",
+          "count": 985599,
+          "domains": 7738,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-12",
+          "count": 1038585,
+          "domains": 7900,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-01",
+          "count": 63369035,
+          "domains": 440378,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-02",
+          "count": 59023883,
+          "domains": 440099,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-03",
+          "count": 7081825,
+          "domains": 434860,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-04",
+          "count": 1063973,
+          "domains": 8101,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-05",
+          "count": 1123876,
+          "domains": 8346,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-06",
+          "count": 1087370,
+          "domains": 8346,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-07",
+          "count": 1091065,
+          "domains": 8938,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-08",
+          "count": 1143576,
+          "domains": 8938,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-09",
+          "count": 1312286,
+          "domains": 8938,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-10",
+          "count": 2350303,
+          "domains": 9154,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-11",
+          "count": 879910,
+          "domains": 9154,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-12",
+          "count": 1117310,
+          "domains": 9499,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-01",
+          "count": 1328734,
+          "domains": 9593,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-02",
+          "count": 1209364,
+          "domains": 9589,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-03",
+          "count": 1352350,
+          "domains": 9589,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-04",
+          "count": 1271903,
+          "domains": 9589,
+          "mean_score": 3.75
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 1087900682,
+          "domains": 2864058,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019",
+          "count": 171355801,
+          "domains": 450498,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020",
+          "count": 6245520,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021",
+          "count": 869007576,
+          "domains": 2939647,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023",
+          "count": 43337170,
+          "domains": 574234,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024",
+          "count": 140644412,
+          "domains": 440378,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026",
+          "count": 5162351,
+          "domains": 9593,
+          "mean_score": 3.75
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-01",
+          "count": 411512014,
+          "domains": 2864058,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-02",
+          "count": 58403375,
+          "domains": 478516,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-03",
+          "count": 64097630,
+          "domains": 479538,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-04",
+          "count": 64217822,
+          "domains": 520890,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-05",
+          "count": 67012440,
+          "domains": 520918,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-06",
+          "count": 60481862,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-07",
+          "count": 62986185,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-08",
+          "count": 62980844,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-09",
+          "count": 61030415,
+          "domains": 481328,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-10",
+          "count": 63691687,
+          "domains": 488493,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-11",
+          "count": 59421730,
+          "domains": 506123,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2018-12",
+          "count": 52064678,
+          "domains": 436436,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-01",
+          "count": 46793011,
+          "domains": 420578,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-02",
+          "count": 47259046,
+          "domains": 438583,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-03",
+          "count": 53474040,
+          "domains": 450498,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-04",
+          "count": 17822997,
+          "domains": 436505,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-05",
+          "count": 755170,
+          "domains": 3562,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-06",
+          "count": 731389,
+          "domains": 3529,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-07",
+          "count": 753668,
+          "domains": 3529,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-08",
+          "count": 748711,
+          "domains": 3529,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-09",
+          "count": 724319,
+          "domains": 3562,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-10",
+          "count": 754461,
+          "domains": 3562,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-11",
+          "count": 754153,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2019-12",
+          "count": 784836,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-01",
+          "count": 784381,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-02",
+          "count": 744945,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-03",
+          "count": 788252,
+          "domains": 3596,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-04",
+          "count": 747560,
+          "domains": 3631,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-05",
+          "count": 773820,
+          "domains": 3631,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-06",
+          "count": 744218,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-07",
+          "count": 775890,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-08",
+          "count": 784896,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2020-09",
+          "count": 101558,
+          "domains": 3720,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-01",
+          "count": 196192370,
+          "domains": 2939647,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-02",
+          "count": 57422169,
+          "domains": 514470,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-03",
+          "count": 63292628,
+          "domains": 509318,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-04",
+          "count": 60649772,
+          "domains": 509318,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-05",
+          "count": 60389937,
+          "domains": 504098,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-06",
+          "count": 60433501,
+          "domains": 504098,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-07",
+          "count": 62414495,
+          "domains": 508933,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-08",
+          "count": 62747031,
+          "domains": 508975,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-09",
+          "count": 60124627,
+          "domains": 509003,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-10",
+          "count": 62129987,
+          "domains": 505047,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-11",
+          "count": 60816661,
+          "domains": 524734,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2021-12",
+          "count": 62394398,
+          "domains": 524734,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-01",
+          "count": 32400898,
+          "domains": 574234,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-02",
+          "count": 902295,
+          "domains": 6779,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-03",
+          "count": 1000398,
+          "domains": 6810,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-04",
+          "count": 978851,
+          "domains": 6810,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-05",
+          "count": 996676,
+          "domains": 6989,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-06",
+          "count": 987540,
+          "domains": 7113,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-07",
+          "count": 1030127,
+          "domains": 7113,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-08",
+          "count": 995412,
+          "domains": 7113,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-09",
+          "count": 995666,
+          "domains": 7388,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-10",
+          "count": 1025123,
+          "domains": 7972,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-11",
+          "count": 985599,
+          "domains": 7738,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2023-12",
+          "count": 1038585,
+          "domains": 7900,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-01",
+          "count": 63369035,
+          "domains": 440378,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-02",
+          "count": 59023883,
+          "domains": 440099,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-03",
+          "count": 7081825,
+          "domains": 434860,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-04",
+          "count": 1063973,
+          "domains": 8101,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-05",
+          "count": 1123876,
+          "domains": 8346,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-06",
+          "count": 1087370,
+          "domains": 8346,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-07",
+          "count": 1091065,
+          "domains": 8938,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-08",
+          "count": 1143576,
+          "domains": 8938,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-09",
+          "count": 1312286,
+          "domains": 8938,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-10",
+          "count": 2350303,
+          "domains": 9154,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-11",
+          "count": 879910,
+          "domains": 9154,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2024-12",
+          "count": 1117310,
+          "domains": 9499,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-01",
+          "count": 1328734,
+          "domains": 9593,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-02",
+          "count": 1209364,
+          "domains": 9589,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-03",
+          "count": 1352350,
+          "domains": 9589,
+          "mean_score": 3.75
+        },
+        {
+          "period": "2026-04",
+          "count": 1271903,
+          "domains": 9589,
+          "mean_score": 3.75
+        }
+      ],
+      "notes": "2323653512 observation(s) counted for RFC 4033 (decisions counted: valid_match, ambiguous), spanning 2018-01-01T00:09:46 to 2026-04-29T06:32:27. Also observed but not counted: 431834750 partial_match. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (2939647) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 536703841, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 17 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 4509",
+      "rfc_title": "Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records",
+      "rfc_publication_date": "2006-05-01T00:00:00",
+      "first_seen": "2018-01-01T00:09:46",
+      "last_seen": "2026-04-29T06:32:27",
+      "days_from_publication_to_first_seen": 4263,
+      "observation_count": 135810997,
+      "distinct_domains": 954024,
+      "distinct_zones": 0,
+      "domains": [
+        "bcvwd.gov.",
+        "diamantduk.se.",
+        "landimaging.gov.",
+        "logistikbalsta.nu.",
+        "xn--strmstad-p4a.nu.",
+        "xn--vrbazzar-9za.se.",
+        "zzptoday.nu."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2018-01",
+          "count": 26799778,
+          "domains": 946089,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-02",
+          "count": 3286657,
+          "domains": 111779,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-03",
+          "count": 3676778,
+          "domains": 116913,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-04",
+          "count": 3752792,
+          "domains": 116157,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-05",
+          "count": 3964639,
+          "domains": 120115,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-06",
+          "count": 3631789,
+          "domains": 116157,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-07",
+          "count": 3750843,
+          "domains": 115074,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-08",
+          "count": 3744899,
+          "domains": 110900,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-09",
+          "count": 3621606,
+          "domains": 107978,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-10",
+          "count": 3659943,
+          "domains": 109988,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-11",
+          "count": 3263739,
+          "domains": 114709,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-12",
+          "count": 2709766,
+          "domains": 97726,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-01",
+          "count": 2602601,
+          "domains": 86344,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-02",
+          "count": 2384246,
+          "domains": 86644,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-03",
+          "count": 2704328,
+          "domains": 87254,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-04",
+          "count": 908754,
+          "domains": 87254,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-05",
+          "count": 47993,
+          "domains": 1199,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-06",
+          "count": 46431,
+          "domains": 1184,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-07",
+          "count": 47780,
+          "domains": 1184,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-08",
+          "count": 47254,
+          "domains": 1184,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-09",
+          "count": 45749,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-10",
+          "count": 48207,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-11",
+          "count": 48512,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-12",
+          "count": 51768,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-01",
+          "count": 52223,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-02",
+          "count": 49606,
+          "domains": 1148,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-03",
+          "count": 52822,
+          "domains": 1148,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-04",
+          "count": 50383,
+          "domains": 1148,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-05",
+          "count": 52096,
+          "domains": 1108,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-06",
+          "count": 49464,
+          "domains": 1108,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-07",
+          "count": 51202,
+          "domains": 1102,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-08",
+          "count": 51804,
+          "domains": 1203,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-09",
+          "count": 6685,
+          "domains": 1211,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-01",
+          "count": 11897373,
+          "domains": 954024,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-02",
+          "count": 3164121,
+          "domains": 120628,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-03",
+          "count": 3494632,
+          "domains": 120628,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-04",
+          "count": 3362528,
+          "domains": 118317,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-05",
+          "count": 3349689,
+          "domains": 118349,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-06",
+          "count": 3354705,
+          "domains": 118349,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-07",
+          "count": 3465573,
+          "domains": 112945,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-08",
+          "count": 3465588,
+          "domains": 112982,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-09",
+          "count": 3348523,
+          "domains": 112982,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-10",
+          "count": 3469349,
+          "domains": 112982,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-11",
+          "count": 3352419,
+          "domains": 107136,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-12",
+          "count": 3445541,
+          "domains": 107145,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-01",
+          "count": 1828613,
+          "domains": 123612,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-02",
+          "count": 59556,
+          "domains": 1483,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-03",
+          "count": 65484,
+          "domains": 1596,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-04",
+          "count": 63057,
+          "domains": 1666,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-05",
+          "count": 65854,
+          "domains": 1715,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-06",
+          "count": 65594,
+          "domains": 1715,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-07",
+          "count": 69571,
+          "domains": 1747,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-08",
+          "count": 67382,
+          "domains": 1763,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-09",
+          "count": 65358,
+          "domains": 1634,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-10",
+          "count": 67678,
+          "domains": 1706,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-11",
+          "count": 66590,
+          "domains": 1676,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-12",
+          "count": 69925,
+          "domains": 1676,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-01",
+          "count": 3674633,
+          "domains": 128942,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-02",
+          "count": 3447425,
+          "domains": 128886,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-03",
+          "count": 428450,
+          "domains": 119603,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-04",
+          "count": 76960,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-05",
+          "count": 82764,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-06",
+          "count": 81498,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-07",
+          "count": 83571,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-08",
+          "count": 88143,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-09",
+          "count": 101070,
+          "domains": 1606,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-10",
+          "count": 181044,
+          "domains": 1606,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-11",
+          "count": 67916,
+          "domains": 1606,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-12",
+          "count": 85236,
+          "domains": 1609,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-01",
+          "count": 109022,
+          "domains": 2447,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-02",
+          "count": 99275,
+          "domains": 2447,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-03",
+          "count": 111142,
+          "domains": 2479,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-04",
+          "count": 105008,
+          "domains": 2423,
+          "mean_score": 11.25
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 65863229,
+          "domains": 946089,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019",
+          "count": 8983623,
+          "domains": 87254,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020",
+          "count": 416285,
+          "domains": 1211,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021",
+          "count": 49170041,
+          "domains": 954024,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023",
+          "count": 2554662,
+          "domains": 123612,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024",
+          "count": 8398710,
+          "domains": 128942,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026",
+          "count": 424447,
+          "domains": 2479,
+          "mean_score": 11.25
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-01",
+          "count": 26799778,
+          "domains": 946089,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-02",
+          "count": 3286657,
+          "domains": 111779,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-03",
+          "count": 3676778,
+          "domains": 116913,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-04",
+          "count": 3752792,
+          "domains": 116157,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-05",
+          "count": 3964639,
+          "domains": 120115,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-06",
+          "count": 3631789,
+          "domains": 116157,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-07",
+          "count": 3750843,
+          "domains": 115074,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-08",
+          "count": 3744899,
+          "domains": 110900,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-09",
+          "count": 3621606,
+          "domains": 107978,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-10",
+          "count": 3659943,
+          "domains": 109988,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-11",
+          "count": 3263739,
+          "domains": 114709,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2018-12",
+          "count": 2709766,
+          "domains": 97726,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-01",
+          "count": 2602601,
+          "domains": 86344,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-02",
+          "count": 2384246,
+          "domains": 86644,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-03",
+          "count": 2704328,
+          "domains": 87254,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-04",
+          "count": 908754,
+          "domains": 87254,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-05",
+          "count": 47993,
+          "domains": 1199,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-06",
+          "count": 46431,
+          "domains": 1184,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-07",
+          "count": 47780,
+          "domains": 1184,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-08",
+          "count": 47254,
+          "domains": 1184,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-09",
+          "count": 45749,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-10",
+          "count": 48207,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-11",
+          "count": 48512,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2019-12",
+          "count": 51768,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-01",
+          "count": 52223,
+          "domains": 1192,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-02",
+          "count": 49606,
+          "domains": 1148,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-03",
+          "count": 52822,
+          "domains": 1148,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-04",
+          "count": 50383,
+          "domains": 1148,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-05",
+          "count": 52096,
+          "domains": 1108,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-06",
+          "count": 49464,
+          "domains": 1108,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-07",
+          "count": 51202,
+          "domains": 1102,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-08",
+          "count": 51804,
+          "domains": 1203,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2020-09",
+          "count": 6685,
+          "domains": 1211,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-01",
+          "count": 11897373,
+          "domains": 954024,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-02",
+          "count": 3164121,
+          "domains": 120628,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-03",
+          "count": 3494632,
+          "domains": 120628,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-04",
+          "count": 3362528,
+          "domains": 118317,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-05",
+          "count": 3349689,
+          "domains": 118349,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-06",
+          "count": 3354705,
+          "domains": 118349,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-07",
+          "count": 3465573,
+          "domains": 112945,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-08",
+          "count": 3465588,
+          "domains": 112982,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-09",
+          "count": 3348523,
+          "domains": 112982,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-10",
+          "count": 3469349,
+          "domains": 112982,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-11",
+          "count": 3352419,
+          "domains": 107136,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2021-12",
+          "count": 3445541,
+          "domains": 107145,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-01",
+          "count": 1828613,
+          "domains": 123612,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-02",
+          "count": 59556,
+          "domains": 1483,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-03",
+          "count": 65484,
+          "domains": 1596,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-04",
+          "count": 63057,
+          "domains": 1666,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-05",
+          "count": 65854,
+          "domains": 1715,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-06",
+          "count": 65594,
+          "domains": 1715,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-07",
+          "count": 69571,
+          "domains": 1747,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-08",
+          "count": 67382,
+          "domains": 1763,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-09",
+          "count": 65358,
+          "domains": 1634,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-10",
+          "count": 67678,
+          "domains": 1706,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-11",
+          "count": 66590,
+          "domains": 1676,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2023-12",
+          "count": 69925,
+          "domains": 1676,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-01",
+          "count": 3674633,
+          "domains": 128942,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-02",
+          "count": 3447425,
+          "domains": 128886,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-03",
+          "count": 428450,
+          "domains": 119603,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-04",
+          "count": 76960,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-05",
+          "count": 82764,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-06",
+          "count": 81498,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-07",
+          "count": 83571,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-08",
+          "count": 88143,
+          "domains": 1648,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-09",
+          "count": 101070,
+          "domains": 1606,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-10",
+          "count": 181044,
+          "domains": 1606,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-11",
+          "count": 67916,
+          "domains": 1606,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2024-12",
+          "count": 85236,
+          "domains": 1609,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-01",
+          "count": 109022,
+          "domains": 2447,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-02",
+          "count": 99275,
+          "domains": 2447,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-03",
+          "count": 111142,
+          "domains": 2479,
+          "mean_score": 11.25
+        },
+        {
+          "period": "2026-04",
+          "count": 105008,
+          "domains": 2423,
+          "mean_score": 11.25
+        }
+      ],
+      "notes": "135810997 observation(s) counted for RFC 4509 (decisions counted: valid_match, ambiguous), spanning 2018-01-01T00:09:46 to 2026-04-29T06:32:27. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (954024) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 132604291, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 7 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 5155",
+      "rfc_title": "DNS Security (DNSSEC) Hashed Authenticated Denial of Existence",
+      "rfc_publication_date": "2008-03-01T00:00:00",
+      "first_seen": "2018-01-01T00:09:46",
+      "last_seen": "2026-04-29T06:31:27",
+      "days_from_publication_to_first_seen": 3593,
+      "observation_count": 429544241,
+      "distinct_domains": 1551219,
+      "distinct_zones": 0,
+      "domains": [
+        "123-nonexistant-dnsjedi-456.vasaloppslager.se.",
+        "klickmonster.nu.",
+        "xn--lundsdyksllskap-8kb.se."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2018-01",
+          "count": 76976543,
+          "domains": 1551219,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-02",
+          "count": 10928903,
+          "domains": 246860,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-03",
+          "count": 11933285,
+          "domains": 248066,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-04",
+          "count": 11885924,
+          "domains": 283859,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-05",
+          "count": 12773700,
+          "domains": 287115,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-06",
+          "count": 12310466,
+          "domains": 287115,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-07",
+          "count": 12718774,
+          "domains": 280544,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-08",
+          "count": 12696104,
+          "domains": 280544,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-09",
+          "count": 12268102,
+          "domains": 274260,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-10",
+          "count": 12650641,
+          "domains": 299512,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-11",
+          "count": 11996238,
+          "domains": 306055,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-12",
+          "count": 10975327,
+          "domains": 290600,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-01",
+          "count": 9512690,
+          "domains": 201018,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-02",
+          "count": 8691071,
+          "domains": 203983,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-03",
+          "count": 9773199,
+          "domains": 203951,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-04",
+          "count": 3223502,
+          "domains": 189773,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-05",
+          "count": 91313,
+          "domains": 1710,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-06",
+          "count": 87955,
+          "domains": 1657,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-07",
+          "count": 91786,
+          "domains": 1657,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-08",
+          "count": 87566,
+          "domains": 1657,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-09",
+          "count": 83359,
+          "domains": 1608,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-10",
+          "count": 85722,
+          "domains": 1581,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-11",
+          "count": 86819,
+          "domains": 1639,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-12",
+          "count": 91604,
+          "domains": 1745,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-01",
+          "count": 92003,
+          "domains": 1745,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-02",
+          "count": 85926,
+          "domains": 1714,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-03",
+          "count": 89115,
+          "domains": 1714,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-04",
+          "count": 80770,
+          "domains": 1571,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-05",
+          "count": 83307,
+          "domains": 1632,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-06",
+          "count": 82106,
+          "domains": 1575,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-07",
+          "count": 86125,
+          "domains": 1575,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-08",
+          "count": 86200,
+          "domains": 1568,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-09",
+          "count": 11122,
+          "domains": 1568,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-01",
+          "count": 35355425,
+          "domains": 1428369,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-02",
+          "count": 10457695,
+          "domains": 200002,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-03",
+          "count": 11554236,
+          "domains": 200054,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-04",
+          "count": 11135980,
+          "domains": 197695,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-05",
+          "count": 11126957,
+          "domains": 197695,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-06",
+          "count": 11125137,
+          "domains": 197725,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-07",
+          "count": 11477324,
+          "domains": 197725,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-08",
+          "count": 11470834,
+          "domains": 197674,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-09",
+          "count": 11048345,
+          "domains": 197674,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-10",
+          "count": 11395680,
+          "domains": 201906,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-11",
+          "count": 11006703,
+          "domains": 205276,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-12",
+          "count": 11321553,
+          "domains": 205333,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-01",
+          "count": 5117398,
+          "domains": 219612,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-02",
+          "count": 84940,
+          "domains": 1608,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-03",
+          "count": 94286,
+          "domains": 1677,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-04",
+          "count": 88526,
+          "domains": 1692,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-05",
+          "count": 83774,
+          "domains": 1538,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-06",
+          "count": 82708,
+          "domains": 1482,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-07",
+          "count": 86039,
+          "domains": 1512,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-08",
+          "count": 83645,
+          "domains": 1536,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-09",
+          "count": 84391,
+          "domains": 1512,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-10",
+          "count": 86667,
+          "domains": 1503,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-11",
+          "count": 84040,
+          "domains": 1527,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-12",
+          "count": 89396,
+          "domains": 1503,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-01",
+          "count": 10328076,
+          "domains": 219987,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-02",
+          "count": 9686315,
+          "domains": 220023,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-03",
+          "count": 1084525,
+          "domains": 212372,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-04",
+          "count": 86703,
+          "domains": 1527,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-05",
+          "count": 86854,
+          "domains": 1509,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-06",
+          "count": 82667,
+          "domains": 1509,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-07",
+          "count": 82594,
+          "domains": 1485,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-08",
+          "count": 86311,
+          "domains": 1485,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-09",
+          "count": 98667,
+          "domains": 1482,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-10",
+          "count": 175592,
+          "domains": 1506,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-11",
+          "count": 65961,
+          "domains": 1506,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-12",
+          "count": 84354,
+          "domains": 1530,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-01",
+          "count": 88964,
+          "domains": 1424,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-02",
+          "count": 80083,
+          "domains": 1382,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-03",
+          "count": 86938,
+          "domains": 1382,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-04",
+          "count": 80691,
+          "domains": 1362,
+          "mean_score": 17.25
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 210114007,
+          "domains": 1551219,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019",
+          "count": 31906586,
+          "domains": 203983,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020",
+          "count": 696674,
+          "domains": 1745,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021",
+          "count": 158475869,
+          "domains": 1428369,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023",
+          "count": 6065810,
+          "domains": 219612,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024",
+          "count": 21948619,
+          "domains": 220023,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026",
+          "count": 336676,
+          "domains": 1424,
+          "mean_score": 17.25
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-01",
+          "count": 76976543,
+          "domains": 1551219,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-02",
+          "count": 10928903,
+          "domains": 246860,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-03",
+          "count": 11933285,
+          "domains": 248066,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-04",
+          "count": 11885924,
+          "domains": 283859,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-05",
+          "count": 12773700,
+          "domains": 287115,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-06",
+          "count": 12310466,
+          "domains": 287115,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-07",
+          "count": 12718774,
+          "domains": 280544,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-08",
+          "count": 12696104,
+          "domains": 280544,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-09",
+          "count": 12268102,
+          "domains": 274260,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-10",
+          "count": 12650641,
+          "domains": 299512,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-11",
+          "count": 11996238,
+          "domains": 306055,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-12",
+          "count": 10975327,
+          "domains": 290600,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-01",
+          "count": 9512690,
+          "domains": 201018,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-02",
+          "count": 8691071,
+          "domains": 203983,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-03",
+          "count": 9773199,
+          "domains": 203951,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-04",
+          "count": 3223502,
+          "domains": 189773,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-05",
+          "count": 91313,
+          "domains": 1710,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-06",
+          "count": 87955,
+          "domains": 1657,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-07",
+          "count": 91786,
+          "domains": 1657,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-08",
+          "count": 87566,
+          "domains": 1657,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-09",
+          "count": 83359,
+          "domains": 1608,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-10",
+          "count": 85722,
+          "domains": 1581,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-11",
+          "count": 86819,
+          "domains": 1639,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-12",
+          "count": 91604,
+          "domains": 1745,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-01",
+          "count": 92003,
+          "domains": 1745,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-02",
+          "count": 85926,
+          "domains": 1714,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-03",
+          "count": 89115,
+          "domains": 1714,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-04",
+          "count": 80770,
+          "domains": 1571,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-05",
+          "count": 83307,
+          "domains": 1632,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-06",
+          "count": 82106,
+          "domains": 1575,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-07",
+          "count": 86125,
+          "domains": 1575,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-08",
+          "count": 86200,
+          "domains": 1568,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-09",
+          "count": 11122,
+          "domains": 1568,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-01",
+          "count": 35355425,
+          "domains": 1428369,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-02",
+          "count": 10457695,
+          "domains": 200002,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-03",
+          "count": 11554236,
+          "domains": 200054,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-04",
+          "count": 11135980,
+          "domains": 197695,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-05",
+          "count": 11126957,
+          "domains": 197695,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-06",
+          "count": 11125137,
+          "domains": 197725,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-07",
+          "count": 11477324,
+          "domains": 197725,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-08",
+          "count": 11470834,
+          "domains": 197674,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-09",
+          "count": 11048345,
+          "domains": 197674,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-10",
+          "count": 11395680,
+          "domains": 201906,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-11",
+          "count": 11006703,
+          "domains": 205276,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-12",
+          "count": 11321553,
+          "domains": 205333,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-01",
+          "count": 5117398,
+          "domains": 219612,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-02",
+          "count": 84940,
+          "domains": 1608,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-03",
+          "count": 94286,
+          "domains": 1677,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-04",
+          "count": 88526,
+          "domains": 1692,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-05",
+          "count": 83774,
+          "domains": 1538,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-06",
+          "count": 82708,
+          "domains": 1482,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-07",
+          "count": 86039,
+          "domains": 1512,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-08",
+          "count": 83645,
+          "domains": 1536,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-09",
+          "count": 84391,
+          "domains": 1512,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-10",
+          "count": 86667,
+          "domains": 1503,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-11",
+          "count": 84040,
+          "domains": 1527,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-12",
+          "count": 89396,
+          "domains": 1503,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-01",
+          "count": 10328076,
+          "domains": 219987,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-02",
+          "count": 9686315,
+          "domains": 220023,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-03",
+          "count": 1084525,
+          "domains": 212372,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-04",
+          "count": 86703,
+          "domains": 1527,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-05",
+          "count": 86854,
+          "domains": 1509,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-06",
+          "count": 82667,
+          "domains": 1509,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-07",
+          "count": 82594,
+          "domains": 1485,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-08",
+          "count": 86311,
+          "domains": 1485,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-09",
+          "count": 98667,
+          "domains": 1482,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-10",
+          "count": 175592,
+          "domains": 1506,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-11",
+          "count": 65961,
+          "domains": 1506,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-12",
+          "count": 84354,
+          "domains": 1530,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-01",
+          "count": 88964,
+          "domains": 1424,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-02",
+          "count": 80083,
+          "domains": 1382,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-03",
+          "count": 86938,
+          "domains": 1382,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-04",
+          "count": 80691,
+          "domains": 1362,
+          "mean_score": 17.25
+        }
+      ],
+      "notes": "429544241 observation(s) counted for RFC 5155 (decisions counted: valid_match, ambiguous), spanning 2018-01-01T00:09:46 to 2026-04-29T06:31:27. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (1551219) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 258521282, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 3 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 6605",
+      "rfc_title": "Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC",
+      "rfc_publication_date": "2012-04-01T00:00:00",
+      "first_seen": "2018-01-01T00:10:26",
+      "last_seen": "2026-04-29T06:32:27",
+      "days_from_publication_to_first_seen": 2101,
+      "observation_count": 549969844,
+      "distinct_domains": 1189221,
+      "distinct_zones": 0,
+      "domains": [
+        "123-nonexistant-dnsjedi-456.smalsparet.nu.",
+        "bcvwd.gov.",
+        "bospararna.nu.",
+        "brtisverige.nu.",
+        "falmouthma.gov.",
+        "fantastiskafonster.nu.",
+        "holgersen.nu.",
+        "landimaging.gov.",
+        "selark.se.",
+        "xn--mklarnett-v2a.se.",
+        "xn--smfdder-fxa6o.nu.",
+        "zzptoday.nu."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2018-01",
+          "count": 15425166,
+          "domains": 132228,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-02",
+          "count": 778890,
+          "domains": 5414,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-03",
+          "count": 901219,
+          "domains": 5599,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-04",
+          "count": 837304,
+          "domains": 5832,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-05",
+          "count": 926667,
+          "domains": 5840,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-06",
+          "count": 987730,
+          "domains": 6521,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-07",
+          "count": 1024133,
+          "domains": 7424,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-08",
+          "count": 1118681,
+          "domains": 7977,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-09",
+          "count": 1268654,
+          "domains": 8714,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-10",
+          "count": 2076384,
+          "domains": 124018,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-11",
+          "count": 4696458,
+          "domains": 131593,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-12",
+          "count": 4312694,
+          "domains": 108947,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-01",
+          "count": 4800014,
+          "domains": 152427,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-02",
+          "count": 8603976,
+          "domains": 156095,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-03",
+          "count": 10182874,
+          "domains": 167360,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-04",
+          "count": 3424888,
+          "domains": 167374,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-05",
+          "count": 49585,
+          "domains": 377,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-06",
+          "count": 51118,
+          "domains": 395,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-07",
+          "count": 54234,
+          "domains": 385,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-08",
+          "count": 56472,
+          "domains": 422,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-09",
+          "count": 58880,
+          "domains": 477,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-10",
+          "count": 66755,
+          "domains": 534,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-11",
+          "count": 71892,
+          "domains": 537,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-12",
+          "count": 76110,
+          "domains": 537,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-01",
+          "count": 78582,
+          "domains": 563,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-02",
+          "count": 76067,
+          "domains": 563,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-03",
+          "count": 83961,
+          "domains": 605,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-04",
+          "count": 93435,
+          "domains": 605,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-05",
+          "count": 98719,
+          "domains": 605,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-06",
+          "count": 99629,
+          "domains": 749,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-07",
+          "count": 111797,
+          "domains": 800,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-08",
+          "count": 115226,
+          "domains": 854,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-09",
+          "count": 15112,
+          "domains": 854,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-01",
+          "count": 81848969,
+          "domains": 1189221,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-02",
+          "count": 23593711,
+          "domains": 243805,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-03",
+          "count": 26303921,
+          "domains": 256700,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-04",
+          "count": 25653637,
+          "domains": 260779,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-05",
+          "count": 25728599,
+          "domains": 260666,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-06",
+          "count": 25782019,
+          "domains": 266416,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-07",
+          "count": 26712228,
+          "domains": 260640,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-08",
+          "count": 29539856,
+          "domains": 266170,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-09",
+          "count": 28761433,
+          "domains": 268047,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-10",
+          "count": 29812849,
+          "domains": 268054,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-11",
+          "count": 29403537,
+          "domains": 273611,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-12",
+          "count": 30191106,
+          "domains": 273680,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-01",
+          "count": 17302794,
+          "domains": 344500,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-02",
+          "count": 300782,
+          "domains": 2718,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-03",
+          "count": 339723,
+          "domains": 2825,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-04",
+          "count": 339859,
+          "domains": 2912,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-05",
+          "count": 371009,
+          "domains": 2949,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-06",
+          "count": 399754,
+          "domains": 3180,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-07",
+          "count": 435167,
+          "domains": 3394,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-08",
+          "count": 427648,
+          "domains": 3570,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-09",
+          "count": 437648,
+          "domains": 3962,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-10",
+          "count": 463823,
+          "domains": 4538,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-11",
+          "count": 463555,
+          "domains": 4636,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-12",
+          "count": 488862,
+          "domains": 4797,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-01",
+          "count": 35227994,
+          "domains": 310675,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-02",
+          "count": 32919192,
+          "domains": 310622,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-03",
+          "count": 3891317,
+          "domains": 307932,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-04",
+          "count": 548975,
+          "domains": 4974,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-05",
+          "count": 612150,
+          "domains": 6072,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-06",
+          "count": 637738,
+          "domains": 6072,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-07",
+          "count": 645739,
+          "domains": 6602,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-08",
+          "count": 683323,
+          "domains": 6780,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-09",
+          "count": 792189,
+          "domains": 6780,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-10",
+          "count": 1434852,
+          "domains": 6967,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-11",
+          "count": 547879,
+          "domains": 6967,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-12",
+          "count": 698900,
+          "domains": 7165,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-01",
+          "count": 908359,
+          "domains": 8196,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-02",
+          "count": 837697,
+          "domains": 8468,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-03",
+          "count": 951464,
+          "domains": 8468,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-04",
+          "count": 906281,
+          "domains": 8839,
+          "mean_score": 13.125
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 34353980,
+          "domains": 132228,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019",
+          "count": 27496798,
+          "domains": 167374,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020",
+          "count": 772528,
+          "domains": 854,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021",
+          "count": 383331865,
+          "domains": 1189221,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023",
+          "count": 21770624,
+          "domains": 344500,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024",
+          "count": 78640248,
+          "domains": 310675,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026",
+          "count": 3603801,
+          "domains": 8839,
+          "mean_score": 13.125
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-01",
+          "count": 15425166,
+          "domains": 132228,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-02",
+          "count": 778890,
+          "domains": 5414,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-03",
+          "count": 901219,
+          "domains": 5599,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-04",
+          "count": 837304,
+          "domains": 5832,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-05",
+          "count": 926667,
+          "domains": 5840,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-06",
+          "count": 987730,
+          "domains": 6521,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-07",
+          "count": 1024133,
+          "domains": 7424,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-08",
+          "count": 1118681,
+          "domains": 7977,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-09",
+          "count": 1268654,
+          "domains": 8714,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-10",
+          "count": 2076384,
+          "domains": 124018,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-11",
+          "count": 4696458,
+          "domains": 131593,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-12",
+          "count": 4312694,
+          "domains": 108947,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-01",
+          "count": 4800014,
+          "domains": 152427,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-02",
+          "count": 8603976,
+          "domains": 156095,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-03",
+          "count": 10182874,
+          "domains": 167360,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-04",
+          "count": 3424888,
+          "domains": 167374,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-05",
+          "count": 49585,
+          "domains": 377,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-06",
+          "count": 51118,
+          "domains": 395,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-07",
+          "count": 54234,
+          "domains": 385,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-08",
+          "count": 56472,
+          "domains": 422,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-09",
+          "count": 58880,
+          "domains": 477,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-10",
+          "count": 66755,
+          "domains": 534,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-11",
+          "count": 71892,
+          "domains": 537,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-12",
+          "count": 76110,
+          "domains": 537,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-01",
+          "count": 78582,
+          "domains": 563,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-02",
+          "count": 76067,
+          "domains": 563,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-03",
+          "count": 83961,
+          "domains": 605,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-04",
+          "count": 93435,
+          "domains": 605,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-05",
+          "count": 98719,
+          "domains": 605,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-06",
+          "count": 99629,
+          "domains": 749,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-07",
+          "count": 111797,
+          "domains": 800,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-08",
+          "count": 115226,
+          "domains": 854,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-09",
+          "count": 15112,
+          "domains": 854,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-01",
+          "count": 81848969,
+          "domains": 1189221,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-02",
+          "count": 23593711,
+          "domains": 243805,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-03",
+          "count": 26303921,
+          "domains": 256700,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-04",
+          "count": 25653637,
+          "domains": 260779,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-05",
+          "count": 25728599,
+          "domains": 260666,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-06",
+          "count": 25782019,
+          "domains": 266416,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-07",
+          "count": 26712228,
+          "domains": 260640,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-08",
+          "count": 29539856,
+          "domains": 266170,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-09",
+          "count": 28761433,
+          "domains": 268047,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-10",
+          "count": 29812849,
+          "domains": 268054,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-11",
+          "count": 29403537,
+          "domains": 273611,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-12",
+          "count": 30191106,
+          "domains": 273680,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-01",
+          "count": 17302794,
+          "domains": 344500,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-02",
+          "count": 300782,
+          "domains": 2718,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-03",
+          "count": 339723,
+          "domains": 2825,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-04",
+          "count": 339859,
+          "domains": 2912,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-05",
+          "count": 371009,
+          "domains": 2949,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-06",
+          "count": 399754,
+          "domains": 3180,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-07",
+          "count": 435167,
+          "domains": 3394,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-08",
+          "count": 427648,
+          "domains": 3570,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-09",
+          "count": 437648,
+          "domains": 3962,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-10",
+          "count": 463823,
+          "domains": 4538,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-11",
+          "count": 463555,
+          "domains": 4636,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-12",
+          "count": 488862,
+          "domains": 4797,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-01",
+          "count": 35227994,
+          "domains": 310675,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-02",
+          "count": 32919192,
+          "domains": 310622,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-03",
+          "count": 3891317,
+          "domains": 307932,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-04",
+          "count": 548975,
+          "domains": 4974,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-05",
+          "count": 612150,
+          "domains": 6072,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-06",
+          "count": 637738,
+          "domains": 6072,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-07",
+          "count": 645739,
+          "domains": 6602,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-08",
+          "count": 683323,
+          "domains": 6780,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-09",
+          "count": 792189,
+          "domains": 6780,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-10",
+          "count": 1434852,
+          "domains": 6967,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-11",
+          "count": 547879,
+          "domains": 6967,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-12",
+          "count": 698900,
+          "domains": 7165,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-01",
+          "count": 908359,
+          "domains": 8196,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-02",
+          "count": 837697,
+          "domains": 8468,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-03",
+          "count": 951464,
+          "domains": 8468,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-04",
+          "count": 906281,
+          "domains": 8839,
+          "mean_score": 13.125
+        }
+      ],
+      "notes": "549969844 observation(s) counted for RFC 6605 (decisions counted: valid_match, ambiguous), spanning 2018-01-01T00:10:26 to 2026-04-29T06:32:27. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (1189221) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 159647476, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 12 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 7344",
+      "rfc_title": "Automating DNSSEC Delegation Trust Maintenance",
+      "rfc_publication_date": "2014-09-01T00:00:00",
+      "first_seen": "2018-01-01T00:11:12",
+      "last_seen": "2026-04-29T06:32:27",
+      "days_from_publication_to_first_seen": 1218,
+      "observation_count": 2290509,
+      "distinct_domains": 2663,
+      "distinct_zones": 0,
+      "domains": [
+        "bcvwd.gov.",
+        "bowen.nu.",
+        "charlesmixcounty.gov.",
+        "cottagecitymd.gov.",
+        "dlan.nu.",
+        "falmouthma.gov.",
+        "fantastiskafonster.nu.",
+        "landimaging.gov.",
+        "newrussiatownship-oh.gov."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2018-01",
+          "count": 27610,
+          "domains": 483,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-02",
+          "count": 4373,
+          "domains": 86,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-03",
+          "count": 6220,
+          "domains": 127,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-04",
+          "count": 8333,
+          "domains": 173,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-05",
+          "count": 10273,
+          "domains": 181,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-06",
+          "count": 10464,
+          "domains": 184,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-07",
+          "count": 11208,
+          "domains": 193,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-08",
+          "count": 11448,
+          "domains": 195,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-09",
+          "count": 11230,
+          "domains": 205,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-10",
+          "count": 12052,
+          "domains": 224,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-11",
+          "count": 12778,
+          "domains": 237,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-12",
+          "count": 13585,
+          "domains": 240,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-01",
+          "count": 14284,
+          "domains": 249,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-02",
+          "count": 16530,
+          "domains": 346,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-03",
+          "count": 22317,
+          "domains": 391,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-04",
+          "count": 10792,
+          "domains": 391,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-05",
+          "count": 5295,
+          "domains": 89,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-06",
+          "count": 5206,
+          "domains": 92,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-07",
+          "count": 5497,
+          "domains": 92,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-08",
+          "count": 5682,
+          "domains": 92,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-09",
+          "count": 5459,
+          "domains": 97,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-10",
+          "count": 5706,
+          "domains": 98,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-11",
+          "count": 5678,
+          "domains": 104,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-12",
+          "count": 5993,
+          "domains": 108,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-01",
+          "count": 6114,
+          "domains": 110,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-02",
+          "count": 5858,
+          "domains": 110,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-03",
+          "count": 6597,
+          "domains": 138,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-04",
+          "count": 7986,
+          "domains": 138,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-05",
+          "count": 8333,
+          "domains": 140,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-06",
+          "count": 8350,
+          "domains": 140,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-07",
+          "count": 8788,
+          "domains": 141,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-08",
+          "count": 9134,
+          "domains": 150,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-09",
+          "count": 1206,
+          "domains": 159,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-01",
+          "count": 90618,
+          "domains": 2663,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-02",
+          "count": 35548,
+          "domains": 638,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-03",
+          "count": 39840,
+          "domains": 657,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-04",
+          "count": 37694,
+          "domains": 630,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-05",
+          "count": 36270,
+          "domains": 647,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-06",
+          "count": 41048,
+          "domains": 658,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-07",
+          "count": 43357,
+          "domains": 664,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-08",
+          "count": 44354,
+          "domains": 703,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-09",
+          "count": 43544,
+          "domains": 713,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-10",
+          "count": 50474,
+          "domains": 810,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-11",
+          "count": 51613,
+          "domains": 813,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-12",
+          "count": 51762,
+          "domains": 811,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-01",
+          "count": 51894,
+          "domains": 1544,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-02",
+          "count": 19145,
+          "domains": 337,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-03",
+          "count": 21624,
+          "domains": 373,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-04",
+          "count": 20585,
+          "domains": 389,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-05",
+          "count": 22288,
+          "domains": 433,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-06",
+          "count": 25632,
+          "domains": 475,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-07",
+          "count": 28614,
+          "domains": 485,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-08",
+          "count": 28472,
+          "domains": 485,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-09",
+          "count": 29413,
+          "domains": 475,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-10",
+          "count": 31430,
+          "domains": 498,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-11",
+          "count": 31765,
+          "domains": 579,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-12",
+          "count": 33547,
+          "domains": 599,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-01",
+          "count": 145588,
+          "domains": 2135,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-02",
+          "count": 137883,
+          "domains": 2182,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-03",
+          "count": 47883,
+          "domains": 2186,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-04",
+          "count": 39146,
+          "domains": 681,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-05",
+          "count": 44770,
+          "domains": 721,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-06",
+          "count": 45010,
+          "domains": 728,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-07",
+          "count": 45986,
+          "domains": 733,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-08",
+          "count": 49089,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-09",
+          "count": 57133,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-10",
+          "count": 103778,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-11",
+          "count": 38982,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-12",
+          "count": 49937,
+          "domains": 788,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-01",
+          "count": 66635,
+          "domains": 1051,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-02",
+          "count": 61362,
+          "domains": 1087,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-03",
+          "count": 69864,
+          "domains": 1167,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-04",
+          "count": 66553,
+          "domains": 1167,
+          "mean_score": 13.125
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 139574,
+          "domains": 483,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019",
+          "count": 108439,
+          "domains": 391,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020",
+          "count": 62366,
+          "domains": 159,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021",
+          "count": 566122,
+          "domains": 2663,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023",
+          "count": 344409,
+          "domains": 1544,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024",
+          "count": 805185,
+          "domains": 2186,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026",
+          "count": 264414,
+          "domains": 1167,
+          "mean_score": 13.125
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-01",
+          "count": 27610,
+          "domains": 483,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-02",
+          "count": 4373,
+          "domains": 86,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-03",
+          "count": 6220,
+          "domains": 127,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-04",
+          "count": 8333,
+          "domains": 173,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-05",
+          "count": 10273,
+          "domains": 181,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-06",
+          "count": 10464,
+          "domains": 184,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-07",
+          "count": 11208,
+          "domains": 193,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-08",
+          "count": 11448,
+          "domains": 195,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-09",
+          "count": 11230,
+          "domains": 205,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-10",
+          "count": 12052,
+          "domains": 224,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-11",
+          "count": 12778,
+          "domains": 237,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2018-12",
+          "count": 13585,
+          "domains": 240,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-01",
+          "count": 14284,
+          "domains": 249,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-02",
+          "count": 16530,
+          "domains": 346,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-03",
+          "count": 22317,
+          "domains": 391,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-04",
+          "count": 10792,
+          "domains": 391,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-05",
+          "count": 5295,
+          "domains": 89,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-06",
+          "count": 5206,
+          "domains": 92,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-07",
+          "count": 5497,
+          "domains": 92,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-08",
+          "count": 5682,
+          "domains": 92,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-09",
+          "count": 5459,
+          "domains": 97,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-10",
+          "count": 5706,
+          "domains": 98,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-11",
+          "count": 5678,
+          "domains": 104,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2019-12",
+          "count": 5993,
+          "domains": 108,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-01",
+          "count": 6114,
+          "domains": 110,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-02",
+          "count": 5858,
+          "domains": 110,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-03",
+          "count": 6597,
+          "domains": 138,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-04",
+          "count": 7986,
+          "domains": 138,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-05",
+          "count": 8333,
+          "domains": 140,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-06",
+          "count": 8350,
+          "domains": 140,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-07",
+          "count": 8788,
+          "domains": 141,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-08",
+          "count": 9134,
+          "domains": 150,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2020-09",
+          "count": 1206,
+          "domains": 159,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-01",
+          "count": 90618,
+          "domains": 2663,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-02",
+          "count": 35548,
+          "domains": 638,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-03",
+          "count": 39840,
+          "domains": 657,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-04",
+          "count": 37694,
+          "domains": 630,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-05",
+          "count": 36270,
+          "domains": 647,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-06",
+          "count": 41048,
+          "domains": 658,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-07",
+          "count": 43357,
+          "domains": 664,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-08",
+          "count": 44354,
+          "domains": 703,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-09",
+          "count": 43544,
+          "domains": 713,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-10",
+          "count": 50474,
+          "domains": 810,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-11",
+          "count": 51613,
+          "domains": 813,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2021-12",
+          "count": 51762,
+          "domains": 811,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-01",
+          "count": 51894,
+          "domains": 1544,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-02",
+          "count": 19145,
+          "domains": 337,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-03",
+          "count": 21624,
+          "domains": 373,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-04",
+          "count": 20585,
+          "domains": 389,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-05",
+          "count": 22288,
+          "domains": 433,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-06",
+          "count": 25632,
+          "domains": 475,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-07",
+          "count": 28614,
+          "domains": 485,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-08",
+          "count": 28472,
+          "domains": 485,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-09",
+          "count": 29413,
+          "domains": 475,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-10",
+          "count": 31430,
+          "domains": 498,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-11",
+          "count": 31765,
+          "domains": 579,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2023-12",
+          "count": 33547,
+          "domains": 599,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-01",
+          "count": 145588,
+          "domains": 2135,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-02",
+          "count": 137883,
+          "domains": 2182,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-03",
+          "count": 47883,
+          "domains": 2186,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-04",
+          "count": 39146,
+          "domains": 681,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-05",
+          "count": 44770,
+          "domains": 721,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-06",
+          "count": 45010,
+          "domains": 728,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-07",
+          "count": 45986,
+          "domains": 733,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-08",
+          "count": 49089,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-09",
+          "count": 57133,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-10",
+          "count": 103778,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-11",
+          "count": 38982,
+          "domains": 775,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2024-12",
+          "count": 49937,
+          "domains": 788,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-01",
+          "count": 66635,
+          "domains": 1051,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-02",
+          "count": 61362,
+          "domains": 1087,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-03",
+          "count": 69864,
+          "domains": 1167,
+          "mean_score": 13.125
+        },
+        {
+          "period": "2026-04",
+          "count": 66553,
+          "domains": 1167,
+          "mean_score": 13.125
+        }
+      ],
+      "notes": "2290509 observation(s) counted for RFC 7344 (decisions counted: valid_match, ambiguous), spanning 2018-01-01T00:11:12 to 2026-04-29T06:32:27. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (2663) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 1085820, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 9 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 8078",
+      "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+      "rfc_publication_date": "2017-03-01T00:00:00",
+      "first_seen": "2018-08-29T01:42:01",
+      "last_seen": "2026-04-29T06:28:26",
+      "days_from_publication_to_first_seen": 546,
+      "observation_count": 165951,
+      "distinct_domains": 325,
+      "distinct_zones": 0,
+      "domains": [
+        "bowen.nu.",
+        "charlesmixcounty.gov.",
+        "cottagecitymd.gov.",
+        "dlan.nu.",
+        "newrussiatownship-oh.gov."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2018-08",
+          "count": 6,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-09",
+          "count": 60,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-10",
+          "count": 62,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-11",
+          "count": 100,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-12",
+          "count": 202,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-01",
+          "count": 422,
+          "domains": 10,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-02",
+          "count": 540,
+          "domains": 15,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-03",
+          "count": 602,
+          "domains": 14,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-04",
+          "count": 202,
+          "domains": 12,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-08",
+          "count": 58,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-09",
+          "count": 60,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-10",
+          "count": 66,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-11",
+          "count": 120,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-12",
+          "count": 124,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-01",
+          "count": 124,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-02",
+          "count": 124,
+          "domains": 3,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-03",
+          "count": 246,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-04",
+          "count": 240,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-05",
+          "count": 248,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-06",
+          "count": 292,
+          "domains": 5,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-07",
+          "count": 310,
+          "domains": 5,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-08",
+          "count": 408,
+          "domains": 9,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-09",
+          "count": 74,
+          "domains": 10,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-01",
+          "count": 9270,
+          "domains": 325,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-02",
+          "count": 4148,
+          "domains": 78,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-03",
+          "count": 4762,
+          "domains": 82,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-04",
+          "count": 4406,
+          "domains": 80,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-05",
+          "count": 4306,
+          "domains": 84,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-06",
+          "count": 4574,
+          "domains": 84,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-07",
+          "count": 4918,
+          "domains": 85,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-08",
+          "count": 5134,
+          "domains": 88,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-09",
+          "count": 5136,
+          "domains": 86,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-10",
+          "count": 5342,
+          "domains": 89,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-11",
+          "count": 5382,
+          "domains": 95,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-12",
+          "count": 5864,
+          "domains": 97,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-01",
+          "count": 3722,
+          "domains": 101,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-02",
+          "count": 1262,
+          "domains": 23,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-03",
+          "count": 1396,
+          "domains": 23,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-04",
+          "count": 1326,
+          "domains": 23,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-05",
+          "count": 1561,
+          "domains": 27,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-06",
+          "count": 1748,
+          "domains": 29,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-07",
+          "count": 1972,
+          "domains": 27,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-08",
+          "count": 2032,
+          "domains": 30,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-09",
+          "count": 2220,
+          "domains": 34,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-10",
+          "count": 2438,
+          "domains": 37,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-11",
+          "count": 2438,
+          "domains": 39,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-12",
+          "count": 2662,
+          "domains": 45,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-01",
+          "count": 8580,
+          "domains": 143,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-02",
+          "count": 8414,
+          "domains": 149,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-03",
+          "count": 3648,
+          "domains": 153,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-04",
+          "count": 3046,
+          "domains": 52,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-05",
+          "count": 3244,
+          "domains": 54,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-06",
+          "count": 3192,
+          "domains": 56,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-07",
+          "count": 3310,
+          "domains": 56,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-08",
+          "count": 3466,
+          "domains": 58,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-09",
+          "count": 4088,
+          "domains": 60,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-10",
+          "count": 7390,
+          "domains": 58,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-11",
+          "count": 2738,
+          "domains": 58,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-12",
+          "count": 3604,
+          "domains": 61,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-01",
+          "count": 4554,
+          "domains": 75,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-02",
+          "count": 4220,
+          "domains": 78,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-03",
+          "count": 4964,
+          "domains": 81,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-04",
+          "count": 4784,
+          "domains": 81,
+          "mean_score": 17.25
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 430,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019",
+          "count": 2194,
+          "domains": 15,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020",
+          "count": 2066,
+          "domains": 10,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021",
+          "count": 63242,
+          "domains": 325,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023",
+          "count": 24777,
+          "domains": 101,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024",
+          "count": 54720,
+          "domains": 153,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026",
+          "count": 18522,
+          "domains": 81,
+          "mean_score": 17.25
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-08",
+          "count": 6,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-09",
+          "count": 60,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-10",
+          "count": 62,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-11",
+          "count": 100,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2018-12",
+          "count": 202,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-01",
+          "count": 422,
+          "domains": 10,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-02",
+          "count": 540,
+          "domains": 15,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-03",
+          "count": 602,
+          "domains": 14,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-04",
+          "count": 202,
+          "domains": 12,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-08",
+          "count": 58,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-09",
+          "count": 60,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-10",
+          "count": 66,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-11",
+          "count": 120,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2019-12",
+          "count": 124,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-01",
+          "count": 124,
+          "domains": 2,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-02",
+          "count": 124,
+          "domains": 3,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-03",
+          "count": 246,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-04",
+          "count": 240,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-05",
+          "count": 248,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-06",
+          "count": 292,
+          "domains": 5,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-07",
+          "count": 310,
+          "domains": 5,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-08",
+          "count": 408,
+          "domains": 9,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2020-09",
+          "count": 74,
+          "domains": 10,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-01",
+          "count": 9270,
+          "domains": 325,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-02",
+          "count": 4148,
+          "domains": 78,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-03",
+          "count": 4762,
+          "domains": 82,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-04",
+          "count": 4406,
+          "domains": 80,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-05",
+          "count": 4306,
+          "domains": 84,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-06",
+          "count": 4574,
+          "domains": 84,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-07",
+          "count": 4918,
+          "domains": 85,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-08",
+          "count": 5134,
+          "domains": 88,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-09",
+          "count": 5136,
+          "domains": 86,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-10",
+          "count": 5342,
+          "domains": 89,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-11",
+          "count": 5382,
+          "domains": 95,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-12",
+          "count": 5864,
+          "domains": 97,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-01",
+          "count": 3722,
+          "domains": 101,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-02",
+          "count": 1262,
+          "domains": 23,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-03",
+          "count": 1396,
+          "domains": 23,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-04",
+          "count": 1326,
+          "domains": 23,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-05",
+          "count": 1561,
+          "domains": 27,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-06",
+          "count": 1748,
+          "domains": 29,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-07",
+          "count": 1972,
+          "domains": 27,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-08",
+          "count": 2032,
+          "domains": 30,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-09",
+          "count": 2220,
+          "domains": 34,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-10",
+          "count": 2438,
+          "domains": 37,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-11",
+          "count": 2438,
+          "domains": 39,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-12",
+          "count": 2662,
+          "domains": 45,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-01",
+          "count": 8580,
+          "domains": 143,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-02",
+          "count": 8414,
+          "domains": 149,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-03",
+          "count": 3648,
+          "domains": 153,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-04",
+          "count": 3046,
+          "domains": 52,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-05",
+          "count": 3244,
+          "domains": 54,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-06",
+          "count": 3192,
+          "domains": 56,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-07",
+          "count": 3310,
+          "domains": 56,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-08",
+          "count": 3466,
+          "domains": 58,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-09",
+          "count": 4088,
+          "domains": 60,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-10",
+          "count": 7390,
+          "domains": 58,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-11",
+          "count": 2738,
+          "domains": 58,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-12",
+          "count": 3604,
+          "domains": 61,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-01",
+          "count": 4554,
+          "domains": 75,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-02",
+          "count": 4220,
+          "domains": 78,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-03",
+          "count": 4964,
+          "domains": 81,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2026-04",
+          "count": 4784,
+          "domains": 81,
+          "mean_score": 17.25
+        }
+      ],
+      "notes": "165951 observation(s) counted for RFC 8078 (decisions counted: valid_match, ambiguous), spanning 2018-08-29T01:42:01 to 2026-04-29T06:28:26. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (325) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 81475, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 5 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "first_seen": "2019-06-01T00:14:44",
+      "last_seen": "2026-04-29T06:32:27",
+      "days_from_publication_to_first_seen": 0,
+      "observation_count": 495136786,
+      "distinct_domains": 1217448,
+      "distinct_zones": 0,
+      "domains": [
+        "123-nonexistant-dnsjedi-456.smalsparet.nu.",
+        "apps2grow.se.",
+        "bcvwd.gov.",
+        "bospararna.nu.",
+        "brtisverige.nu.",
+        "falmouthma.gov.",
+        "fantastiskafonster.nu.",
+        "holgersen.nu.",
+        "krossnassf.se.",
+        "xn--smfdder-fxa6o.nu.",
+        "zzptoday.nu."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2019-06",
+          "count": 51118,
+          "domains": 395,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-07",
+          "count": 54234,
+          "domains": 385,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-08",
+          "count": 56472,
+          "domains": 422,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-09",
+          "count": 58880,
+          "domains": 477,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-10",
+          "count": 66755,
+          "domains": 534,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-11",
+          "count": 71892,
+          "domains": 537,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-12",
+          "count": 76110,
+          "domains": 537,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-01",
+          "count": 78582,
+          "domains": 563,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-02",
+          "count": 76067,
+          "domains": 563,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-03",
+          "count": 83961,
+          "domains": 605,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-04",
+          "count": 93423,
+          "domains": 605,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-05",
+          "count": 98679,
+          "domains": 605,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-06",
+          "count": 99569,
+          "domains": 749,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-07",
+          "count": 111735,
+          "domains": 800,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-08",
+          "count": 115164,
+          "domains": 854,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-09",
+          "count": 15104,
+          "domains": 854,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-01",
+          "count": 87316023,
+          "domains": 1217448,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-02",
+          "count": 24071338,
+          "domains": 257978,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-03",
+          "count": 26764670,
+          "domains": 256700,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-04",
+          "count": 25816169,
+          "domains": 260779,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-05",
+          "count": 25727735,
+          "domains": 260666,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-06",
+          "count": 25779150,
+          "domains": 266416,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-07",
+          "count": 26709161,
+          "domains": 260640,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-08",
+          "count": 29536619,
+          "domains": 266170,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-09",
+          "count": 28758361,
+          "domains": 268047,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-10",
+          "count": 29810232,
+          "domains": 268054,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-11",
+          "count": 29401020,
+          "domains": 273611,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-12",
+          "count": 30188808,
+          "domains": 273680,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-01",
+          "count": 17348227,
+          "domains": 344500,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-02",
+          "count": 300642,
+          "domains": 2718,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-03",
+          "count": 339568,
+          "domains": 2825,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-04",
+          "count": 339709,
+          "domains": 2912,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-05",
+          "count": 370856,
+          "domains": 2949,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-06",
+          "count": 399604,
+          "domains": 3180,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-07",
+          "count": 435013,
+          "domains": 3394,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-08",
+          "count": 427498,
+          "domains": 3570,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-09",
+          "count": 437498,
+          "domains": 3962,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-10",
+          "count": 463668,
+          "domains": 4538,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-11",
+          "count": 463405,
+          "domains": 4636,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-12",
+          "count": 488710,
+          "domains": 4797,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-01",
+          "count": 35225583,
+          "domains": 310675,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-02",
+          "count": 32917147,
+          "domains": 310622,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-03",
+          "count": 3890964,
+          "domains": 307932,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-04",
+          "count": 548825,
+          "domains": 4974,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-05",
+          "count": 611995,
+          "domains": 6072,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-06",
+          "count": 637588,
+          "domains": 6072,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-07",
+          "count": 645590,
+          "domains": 6602,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-08",
+          "count": 683169,
+          "domains": 6780,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-09",
+          "count": 792014,
+          "domains": 6780,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-10",
+          "count": 1434542,
+          "domains": 6967,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-11",
+          "count": 547764,
+          "domains": 6967,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-12",
+          "count": 698755,
+          "domains": 7165,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-01",
+          "count": 907739,
+          "domains": 8196,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-02",
+          "count": 837137,
+          "domains": 8468,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-03",
+          "count": 950844,
+          "domains": 8468,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-04",
+          "count": 905701,
+          "domains": 8839,
+          "mean_score": 3.375
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2019",
+          "count": 435461,
+          "domains": 537,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020",
+          "count": 772284,
+          "domains": 854,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021",
+          "count": 389879286,
+          "domains": 1217448,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023",
+          "count": 21814398,
+          "domains": 344500,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024",
+          "count": 78633936,
+          "domains": 310675,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026",
+          "count": 3601421,
+          "domains": 8839,
+          "mean_score": 3.375
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2019-06",
+          "count": 51118,
+          "domains": 395,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-07",
+          "count": 54234,
+          "domains": 385,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-08",
+          "count": 56472,
+          "domains": 422,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-09",
+          "count": 58880,
+          "domains": 477,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-10",
+          "count": 66755,
+          "domains": 534,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-11",
+          "count": 71892,
+          "domains": 537,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2019-12",
+          "count": 76110,
+          "domains": 537,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-01",
+          "count": 78582,
+          "domains": 563,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-02",
+          "count": 76067,
+          "domains": 563,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-03",
+          "count": 83961,
+          "domains": 605,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-04",
+          "count": 93423,
+          "domains": 605,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-05",
+          "count": 98679,
+          "domains": 605,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-06",
+          "count": 99569,
+          "domains": 749,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-07",
+          "count": 111735,
+          "domains": 800,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-08",
+          "count": 115164,
+          "domains": 854,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2020-09",
+          "count": 15104,
+          "domains": 854,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-01",
+          "count": 87316023,
+          "domains": 1217448,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-02",
+          "count": 24071338,
+          "domains": 257978,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-03",
+          "count": 26764670,
+          "domains": 256700,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-04",
+          "count": 25816169,
+          "domains": 260779,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-05",
+          "count": 25727735,
+          "domains": 260666,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-06",
+          "count": 25779150,
+          "domains": 266416,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-07",
+          "count": 26709161,
+          "domains": 260640,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-08",
+          "count": 29536619,
+          "domains": 266170,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-09",
+          "count": 28758361,
+          "domains": 268047,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-10",
+          "count": 29810232,
+          "domains": 268054,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-11",
+          "count": 29401020,
+          "domains": 273611,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2021-12",
+          "count": 30188808,
+          "domains": 273680,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-01",
+          "count": 17348227,
+          "domains": 344500,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-02",
+          "count": 300642,
+          "domains": 2718,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-03",
+          "count": 339568,
+          "domains": 2825,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-04",
+          "count": 339709,
+          "domains": 2912,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-05",
+          "count": 370856,
+          "domains": 2949,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-06",
+          "count": 399604,
+          "domains": 3180,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-07",
+          "count": 435013,
+          "domains": 3394,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-08",
+          "count": 427498,
+          "domains": 3570,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-09",
+          "count": 437498,
+          "domains": 3962,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-10",
+          "count": 463668,
+          "domains": 4538,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-11",
+          "count": 463405,
+          "domains": 4636,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2023-12",
+          "count": 488710,
+          "domains": 4797,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-01",
+          "count": 35225583,
+          "domains": 310675,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-02",
+          "count": 32917147,
+          "domains": 310622,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-03",
+          "count": 3890964,
+          "domains": 307932,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-04",
+          "count": 548825,
+          "domains": 4974,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-05",
+          "count": 611995,
+          "domains": 6072,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-06",
+          "count": 637588,
+          "domains": 6072,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-07",
+          "count": 645590,
+          "domains": 6602,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-08",
+          "count": 683169,
+          "domains": 6780,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-09",
+          "count": 792014,
+          "domains": 6780,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-10",
+          "count": 1434542,
+          "domains": 6967,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-11",
+          "count": 547764,
+          "domains": 6967,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2024-12",
+          "count": 698755,
+          "domains": 7165,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-01",
+          "count": 907739,
+          "domains": 8196,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-02",
+          "count": 837137,
+          "domains": 8468,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-03",
+          "count": 950844,
+          "domains": 8468,
+          "mean_score": 3.375
+        },
+        {
+          "period": "2026-04",
+          "count": 905701,
+          "domains": 8839,
+          "mean_score": 3.375
+        }
+      ],
+      "notes": "495136786 observation(s) counted for RFC 8624 (decisions counted: valid_match, ambiguous), spanning 2019-06-01T00:14:44 to 2026-04-29T06:32:27. Also observed but not counted: 1736968879 partial_match, 61401575 timestamp_invalid. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (1217448) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 133989663, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 11 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 8080",
+      "rfc_title": "Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC",
+      "rfc_publication_date": "2017-02-01T00:00:00",
+      "first_seen": "2021-01-01T00:05:45",
+      "last_seen": "2024-11-07T06:35:41",
+      "days_from_publication_to_first_seen": 1430,
+      "observation_count": 6642303,
+      "distinct_domains": 53365,
+      "distinct_zones": 0,
+      "domains": [
+        "apps2grow.se.",
+        "krossnassf.se."
+      ],
+      "zones": [],
+      "monthly_counts": [
+        {
+          "period": "2021-01",
+          "count": 5473847,
+          "domains": 53365,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-02",
+          "count": 480612,
+          "domains": 3692,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-03",
+          "count": 464182,
+          "domains": 3692,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-04",
+          "count": 165876,
+          "domains": 2808,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-05",
+          "count": 2646,
+          "domains": 51,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-06",
+          "count": 659,
+          "domains": 6,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-07",
+          "count": 465,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-08",
+          "count": 465,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-09",
+          "count": 450,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-10",
+          "count": 496,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-11",
+          "count": 480,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-12",
+          "count": 496,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-01",
+          "count": 48237,
+          "domains": 1323,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-01",
+          "count": 1655,
+          "domains": 7,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-02",
+          "count": 1537,
+          "domains": 7,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-03",
+          "count": 159,
+          "domains": 7,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-10",
+          "count": 34,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-11",
+          "count": 7,
+          "domains": 1,
+          "mean_score": 17.25
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2021",
+          "count": 6590674,
+          "domains": 53365,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023",
+          "count": 48237,
+          "domains": 1323,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024",
+          "count": 3392,
+          "domains": 7,
+          "mean_score": 17.25
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2021-01",
+          "count": 5473847,
+          "domains": 53365,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-02",
+          "count": 480612,
+          "domains": 3692,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-03",
+          "count": 464182,
+          "domains": 3692,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-04",
+          "count": 165876,
+          "domains": 2808,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-05",
+          "count": 2646,
+          "domains": 51,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-06",
+          "count": 659,
+          "domains": 6,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-07",
+          "count": 465,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-08",
+          "count": 465,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-09",
+          "count": 450,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-10",
+          "count": 496,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-11",
+          "count": 480,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2021-12",
+          "count": 496,
+          "domains": 4,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2023-01",
+          "count": 48237,
+          "domains": 1323,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-01",
+          "count": 1655,
+          "domains": 7,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-02",
+          "count": 1537,
+          "domains": 7,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-03",
+          "count": 159,
+          "domains": 7,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-10",
+          "count": 34,
+          "domains": 1,
+          "mean_score": 17.25
+        },
+        {
+          "period": "2024-11",
+          "count": 7,
+          "domains": 1,
+          "mean_score": 17.25
+        }
+      ],
+      "notes": "6642303 observation(s) counted for RFC 8080 (decisions counted: valid_match, ambiguous), spanning 2021-01-01T00:05:45 to 2024-11-07T06:35:41. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (53365) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 924542, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 2 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    }
+  ]
+}

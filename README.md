@@ -555,6 +555,11 @@ gather the checkpoints and run the whole range against them — every partition 
 already done, so it becomes a merge. **Verified byte-equivalent to a single run**,
 because sharding uses the same merge path a single-machine run already takes.
 
+Gather them anywhere and run `python -m openintel_rfc.cli merge --checkpoint-dir
+DIR --out DIR`, which reads checkpoints only -- no network, no rescanning, and it
+searches per-shard subdirectories. Use `merge` rather than `scale` here: `scale`
+rediscovers the range and would scan every partition the shards did not cover.
+
 Only checkpoints move: **~49 KB per 3 partitions, ~82 MB for a 6.3 TB run**. Each
 one records the checklist version and a fingerprint of the compiled scan, so a
 shard produced with a different checklist is rejected and recomputed rather than

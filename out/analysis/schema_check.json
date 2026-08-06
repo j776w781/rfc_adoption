@@ -1,0 +1,809 @@
+{
+  "generated_at": "2026-08-06T20:39:44",
+  "checklist_path": "E:/Documents/University/year2/DNSSEC/rfc_adoption/data/rfc_checklists/dnssec_rfc_checklists.json",
+  "dictionary_path": "E:/Documents/University/year2/DNSSEC/rfc_adoption/data/openintel_dictionary/sample_openintel_dictionary.json",
+  "dictionary_field_count": 10,
+  "rfc_count": 8,
+  "indicator_count": 17,
+  "counts_by_queryability": {
+    "queryable": 13,
+    "partially_queryable": 1,
+    "ambiguous": 2,
+    "non_queryable": 1
+  },
+  "indicators": [
+    {
+      "rfc_id": "RFC 4033",
+      "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "indicator_id": "rfc4033_base_dnssec_record_present",
+      "indicator_description": "A core DNSSEC resource record type defined by RFC 4034 is present in the response.",
+      "required": true,
+      "weight": 4.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc4033_base_dnssec_record_present is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "DNSKEY",
+            "DS",
+            "RRSIG",
+            "NSEC"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [DNSKEY, DS, RRSIG, NSEC]` of RFC 4033 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string. Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+        }
+      ],
+      "present_fields": [
+        "rr_type"
+      ],
+      "missing_fields": [],
+      "warnings": [
+        "Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+      ]
+    },
+    {
+      "rfc_id": "RFC 4033",
+      "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "indicator_id": "rfc4033_dnssec_algorithm_present",
+      "indicator_description": "The record carries a DNSSEC algorithm number, confirming a signed delegation or key.",
+      "required": false,
+      "weight": 2.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc4033_dnssec_algorithm_present is queryable because all fields it references exist in the OpenINTEL dictionary: algorithm (integer).",
+      "condition_checks": [
+        {
+          "field": "algorithm",
+          "op": "exists",
+          "expected": null,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm exists` of RFC 4033 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer. Field `algorithm` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+        }
+      ],
+      "present_fields": [
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": [
+        "Field `algorithm` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+      ]
+    },
+    {
+      "rfc_id": "RFC 4033",
+      "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "indicator_id": "rfc4033_dnssec_ok_negotiated",
+      "indicator_description": "The resolver negotiated DNSSEC by setting the DO bit in the query (RFC 4035 section 3.2.1).",
+      "required": false,
+      "weight": 3.0,
+      "queryability": "partially_queryable",
+      "reasoning": "Indicator rfc4033_dnssec_ok_negotiated is partially queryable: rr_type (string) exists in the OpenINTEL dictionary but dnssec_ok_flag does not, so every condition on dnssec_ok_flag fails with field_present=False. The surviving field rr_type is also relied on by other RFC 4033 indicators, so the part that can be evaluated still carries evidence for RFC 4033.",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "DNSKEY",
+            "DS",
+            "RRSIG",
+            "NSEC"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [DNSKEY, DS, RRSIG, NSEC]` of RFC 4033 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string. Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+        },
+        {
+          "field": "dnssec_ok_flag",
+          "op": "equals",
+          "expected": true,
+          "field_exists": false,
+          "field_type": null,
+          "available_from": null,
+          "type_compatible": true,
+          "explanation": "Condition `dnssec_ok_flag equals true` of RFC 4033 cannot be evaluated because the OpenINTEL dictionary defines no field named dnssec_ok_flag; at match time the condition is recorded with field_present=False, fails, and dnssec_ok_flag is reported in the match's missing_fields. No similarly named field exists in the dictionary either."
+        }
+      ],
+      "present_fields": [
+        "rr_type"
+      ],
+      "missing_fields": [
+        "dnssec_ok_flag"
+      ],
+      "warnings": [
+        "Field `rr_type` is only available from 2010-01-01, which is after RFC 4033's publication date 2005-03-01; adoption before 2010-01-01 cannot be observed through this field."
+      ]
+    },
+    {
+      "rfc_id": "RFC 4509",
+      "rfc_title": "Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records",
+      "rfc_publication_date": "2006-05-01T00:00:00",
+      "indicator_id": "rfc4509_ds_sha256_digest",
+      "indicator_description": "DS or CDS record using digest type 2 (SHA-256).",
+      "required": true,
+      "weight": 9.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc4509_ds_sha256_digest is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string), digest_type (integer).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "DS",
+            "CDS"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [DS, CDS]` of RFC 4509 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string. Field `rr_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field."
+        },
+        {
+          "field": "digest_type",
+          "op": "equals",
+          "expected": 2,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `digest_type equals 2` of RFC 4509 can be evaluated because the OpenINTEL dictionary defines the field digest_type with type integer. Field `digest_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field."
+        }
+      ],
+      "present_fields": [
+        "rr_type",
+        "digest_type"
+      ],
+      "missing_fields": [],
+      "warnings": [
+        "Field `rr_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "Field `digest_type` is only available from 2010-01-01, which is after RFC 4509's publication date 2006-05-01; adoption before 2010-01-01 cannot be observed through this field."
+      ]
+    },
+    {
+      "rfc_id": "RFC 5155",
+      "rfc_title": "DNS Security (DNSSEC) Hashed Authenticated Denial of Existence",
+      "rfc_publication_date": "2008-03-01T00:00:00",
+      "indicator_id": "rfc5155_nsec3_hash_algorithm",
+      "indicator_description": "NSEC3 hash algorithm field present (algorithm 1 = SHA-1, the only value defined by RFC 5155).",
+      "required": false,
+      "weight": 3.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc5155_nsec3_hash_algorithm is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string), algorithm (integer).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "NSEC3",
+            "NSEC3PARAM"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [NSEC3, NSEC3PARAM]` of RFC 5155 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string. Field `rr_type` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field."
+        },
+        {
+          "field": "algorithm",
+          "op": "exists",
+          "expected": null,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm exists` of RFC 5155 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer. Field `algorithm` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field."
+        }
+      ],
+      "present_fields": [
+        "rr_type",
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": [
+        "Field `rr_type` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field.",
+        "Field `algorithm` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field."
+      ]
+    },
+    {
+      "rfc_id": "RFC 5155",
+      "rfc_title": "DNS Security (DNSSEC) Hashed Authenticated Denial of Existence",
+      "rfc_publication_date": "2008-03-01T00:00:00",
+      "indicator_id": "rfc5155_nsec3_record_present",
+      "indicator_description": "NSEC3 or NSEC3PARAM resource record observed.",
+      "required": true,
+      "weight": 10.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc5155_nsec3_record_present is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "NSEC3",
+            "NSEC3PARAM"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [NSEC3, NSEC3PARAM]` of RFC 5155 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string. Field `rr_type` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field."
+        }
+      ],
+      "present_fields": [
+        "rr_type"
+      ],
+      "missing_fields": [],
+      "warnings": [
+        "Field `rr_type` is only available from 2010-01-01, which is after RFC 5155's publication date 2008-03-01; adoption before 2010-01-01 cannot be observed through this field."
+      ]
+    },
+    {
+      "rfc_id": "RFC 6605",
+      "rfc_title": "Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC",
+      "rfc_publication_date": "2012-04-01T00:00:00",
+      "indicator_id": "rfc6605_ecdsa_algorithm",
+      "indicator_description": "Record uses DNSSEC algorithm 13 or 14 (ECDSA P-256 / P-384).",
+      "required": true,
+      "weight": 9.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc6605_ecdsa_algorithm is queryable because all fields it references exist in the OpenINTEL dictionary: algorithm (integer).",
+      "condition_checks": [
+        {
+          "field": "algorithm",
+          "op": "in",
+          "expected": [
+            13,
+            14
+          ],
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm in [13, 14]` of RFC 6605 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        }
+      ],
+      "present_fields": [
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 6605",
+      "rfc_title": "Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC",
+      "rfc_publication_date": "2012-04-01T00:00:00",
+      "indicator_id": "rfc6605_ecdsa_on_key_or_signature",
+      "indicator_description": "The ECDSA algorithm appears on a key, delegation or signature record rather than an unrelated record type.",
+      "required": false,
+      "weight": 3.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc6605_ecdsa_on_key_or_signature is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string), algorithm (integer).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "DNSKEY",
+            "DS",
+            "RRSIG",
+            "CDS",
+            "CDNSKEY"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [DNSKEY, DS, RRSIG, CDS, CDNSKEY]` of RFC 6605 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        },
+        {
+          "field": "algorithm",
+          "op": "in",
+          "expected": [
+            13,
+            14
+          ],
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm in [13, 14]` of RFC 6605 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        }
+      ],
+      "present_fields": [
+        "rr_type",
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 7344",
+      "rfc_title": "Automating DNSSEC Delegation Trust Maintenance",
+      "rfc_publication_date": "2014-09-01T00:00:00",
+      "indicator_id": "rfc7344_cds_cdnskey_present",
+      "indicator_description": "CDS or CDNSKEY resource record observed.",
+      "required": true,
+      "weight": 9.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc7344_cds_cdnskey_present is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "CDS",
+            "CDNSKEY"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [CDS, CDNSKEY]` of RFC 7344 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        }
+      ],
+      "present_fields": [
+        "rr_type"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 7344",
+      "rfc_title": "Automating DNSSEC Delegation Trust Maintenance",
+      "rfc_publication_date": "2014-09-01T00:00:00",
+      "indicator_id": "rfc7344_cds_publishes_digest",
+      "indicator_description": "CDS record publishes a concrete digest type, i.e. the child is advertising a DS to publish rather than requesting deletion.",
+      "required": false,
+      "weight": 3.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc7344_cds_publishes_digest is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string), digest_type (integer).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "equals",
+          "expected": "CDS",
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type equals CDS` of RFC 7344 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        },
+        {
+          "field": "digest_type",
+          "op": "greater_or_equal",
+          "expected": 1,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `digest_type greater_or_equal 1` of RFC 7344 can be evaluated because the OpenINTEL dictionary defines the field digest_type with type integer."
+        }
+      ],
+      "present_fields": [
+        "rr_type",
+        "digest_type"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 8078",
+      "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+      "rfc_publication_date": "2017-03-01T00:00:00",
+      "indicator_id": "rfc8078_cds_cdnskey_algorithm_zero",
+      "indicator_description": "CDS or CDNSKEY record with algorithm field 0 (the delete signal).",
+      "required": true,
+      "weight": 10.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc8078_cds_cdnskey_algorithm_zero is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string), algorithm (integer).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "CDS",
+            "CDNSKEY"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [CDS, CDNSKEY]` of RFC 8078 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        },
+        {
+          "field": "algorithm",
+          "op": "equals",
+          "expected": 0,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm equals 0` of RFC 8078 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        }
+      ],
+      "present_fields": [
+        "rr_type",
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 8078",
+      "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+      "rfc_publication_date": "2017-03-01T00:00:00",
+      "indicator_id": "rfc8078_delete_signal_digest_zero",
+      "indicator_description": "The delete signal also carries digest type 0, as shown in the RFC 8078 example record.",
+      "required": false,
+      "weight": 3.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc8078_delete_signal_digest_zero is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string), digest_type (integer).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "CDS",
+            "CDNSKEY"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [CDS, CDNSKEY]` of RFC 8078 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        },
+        {
+          "field": "digest_type",
+          "op": "equals",
+          "expected": 0,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `digest_type equals 0` of RFC 8078 can be evaluated because the OpenINTEL dictionary defines the field digest_type with type integer."
+        }
+      ],
+      "present_fields": [
+        "rr_type",
+        "digest_type"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 8080",
+      "rfc_title": "Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC",
+      "rfc_publication_date": "2017-02-01T00:00:00",
+      "indicator_id": "rfc8080_eddsa_algorithm",
+      "indicator_description": "Record uses DNSSEC algorithm 15 or 16 (Ed25519 / Ed448).",
+      "required": true,
+      "weight": 10.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc8080_eddsa_algorithm is queryable because all fields it references exist in the OpenINTEL dictionary: algorithm (integer).",
+      "condition_checks": [
+        {
+          "field": "algorithm",
+          "op": "in",
+          "expected": [
+            15,
+            16
+          ],
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm in [15, 16]` of RFC 8080 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        }
+      ],
+      "present_fields": [
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 8080",
+      "rfc_title": "Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC",
+      "rfc_publication_date": "2017-02-01T00:00:00",
+      "indicator_id": "rfc8080_eddsa_on_key_or_signature",
+      "indicator_description": "The EdDSA algorithm appears on a key, delegation or signature record.",
+      "required": false,
+      "weight": 3.0,
+      "queryability": "queryable",
+      "reasoning": "Indicator rfc8080_eddsa_on_key_or_signature is queryable because all fields it references exist in the OpenINTEL dictionary: rr_type (string), algorithm (integer).",
+      "condition_checks": [
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "DNSKEY",
+            "DS",
+            "RRSIG",
+            "CDS",
+            "CDNSKEY"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [DNSKEY, DS, RRSIG, CDS, CDNSKEY]` of RFC 8080 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        },
+        {
+          "field": "algorithm",
+          "op": "in",
+          "expected": [
+            15,
+            16
+          ],
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm in [15, 16]` of RFC 8080 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        }
+      ],
+      "present_fields": [
+        "rr_type",
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "indicator_id": "rfc8624_avoids_deprecated_algorithm",
+      "indicator_description": "Zone avoids algorithms RFC 8624 marks MUST NOT / NOT RECOMMENDED for signing (1 RSAMD5, 3 DSA, 6 DSA-NSEC3-SHA1, 12 GOST).",
+      "required": false,
+      "weight": 3.0,
+      "queryability": "ambiguous",
+      "reasoning": "Indicator rfc8624_avoids_deprecated_algorithm is ambiguous: every field it references exists in the OpenINTEL dictionary (algorithm (integer)), so it can be evaluated, but the checklist marks it ambiguous because the same observation is equally well explained by other RFCs, so a match is not uniquely attributable to RFC 8624.",
+      "condition_checks": [
+        {
+          "field": "algorithm",
+          "op": "exists",
+          "expected": null,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm exists` of RFC 8624 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        },
+        {
+          "field": "algorithm",
+          "op": "not_equals",
+          "expected": 1,
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm not_equals 1` of RFC 8624 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        }
+      ],
+      "present_fields": [
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "indicator_id": "rfc8624_recommended_signing_algorithm",
+      "indicator_description": "Zone signs with an algorithm RFC 8624 marks RECOMMENDED (13 ECDSAP256SHA256, 15 Ed25519).",
+      "required": true,
+      "weight": 5.0,
+      "queryability": "ambiguous",
+      "reasoning": "Indicator rfc8624_recommended_signing_algorithm is ambiguous: every field it references exists in the OpenINTEL dictionary (algorithm (integer)), so it can be evaluated, but the checklist marks it ambiguous because the same observation is equally well explained by other RFCs, so a match is not uniquely attributable to RFC 8624.",
+      "condition_checks": [
+        {
+          "field": "algorithm",
+          "op": "in",
+          "expected": [
+            13,
+            15
+          ],
+          "field_exists": true,
+          "field_type": "integer",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `algorithm in [13, 15]` of RFC 8624 can be evaluated because the OpenINTEL dictionary defines the field algorithm with type integer."
+        }
+      ],
+      "present_fields": [
+        "algorithm"
+      ],
+      "missing_fields": [],
+      "warnings": []
+    },
+    {
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "indicator_id": "rfc8624_validator_algorithm_support",
+      "indicator_description": "Validating resolver implements the RFC 8624 mandatory-to-implement validation algorithm set.",
+      "required": false,
+      "weight": 6.0,
+      "queryability": "non_queryable",
+      "reasoning": "Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+      "condition_checks": [
+        {
+          "field": "validator_algorithm_support",
+          "op": "contains",
+          "expected": "ECDSAP256SHA256",
+          "field_exists": false,
+          "field_type": null,
+          "available_from": null,
+          "type_compatible": true,
+          "explanation": "Condition `validator_algorithm_support contains ECDSAP256SHA256` of RFC 8624 cannot be evaluated because the OpenINTEL dictionary defines no field named validator_algorithm_support; at match time the condition is recorded with field_present=False, fails, and validator_algorithm_support is reported in the match's missing_fields. No similarly named field exists in the dictionary either."
+        },
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "DNSKEY",
+            "RRSIG"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [DNSKEY, RRSIG]` of RFC 8624 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        }
+      ],
+      "present_fields": [
+        "rr_type"
+      ],
+      "missing_fields": [
+        "validator_algorithm_support"
+      ],
+      "warnings": []
+    }
+  ],
+  "dictionary_fields": [
+    {
+      "name": "algorithm",
+      "type": "integer",
+      "description": "DNSSEC algorithm number carried by the record (IANA DNSSEC Algorithm Numbers). Algorithm 0 in CDS/CDNSKEY is the RFC 8078 delete signal.",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "dnskey_algorithm",
+        "ds_algorithm",
+        "rrsig_algorithm",
+        "cds_algorithm",
+        "cdnskey_algorithm",
+        "nsec3_hash_algorithm",
+        "nsec3param_hash_algorithm"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "digest_type",
+      "type": "integer",
+      "description": "DS/CDS digest type (1 = SHA-1, 2 = SHA-256, 4 = SHA-384).",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "ds_digest_type",
+        "cds_digest_type"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "Fully qualified domain name that was queried.",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "query_name",
+        "response_name"
+      ],
+      "nullable": false
+    },
+    {
+      "name": "flags",
+      "type": "string",
+      "description": "DNSKEY/NSEC3 flags field, rendered as a string. Only reliably exported in later measurement generations.",
+      "available_from": "2016-01-01T00:00:00",
+      "openintel_native_fields": [
+        "dnskey_flags",
+        "cdnskey_flags",
+        "nsec3_flags",
+        "nsec3param_flags"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "key_tag",
+      "type": "integer",
+      "description": "DNSSEC key tag identifying the key a DS/RRSIG/CDS record refers to.",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "ds_key_tag",
+        "rrsig_key_tag",
+        "cds_key_tag"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "measurement_id",
+      "type": "string",
+      "description": "Opaque identifier of the individual measurement run or object the row came from.",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [],
+      "nullable": true
+    },
+    {
+      "name": "rr_type",
+      "type": "string",
+      "description": "DNS resource record type of the observed response record (DNSKEY, DS, RRSIG, NSEC, NSEC3, NSEC3PARAM, CDS, CDNSKEY, ...).",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "response_type"
+      ],
+      "nullable": false
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "description": "OpenINTEL measurement source / partition identifier (e.g. the zone file or top list the name was drawn from).",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "source"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "timestamp",
+      "type": "datetime",
+      "description": "Measurement timestamp (UTC) at which the DNS response was observed.",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "timestamp"
+      ],
+      "nullable": false
+    },
+    {
+      "name": "zone",
+      "type": "string",
+      "description": "Zone or TLD the measurement partition belongs to.",
+      "available_from": "2010-01-01T00:00:00",
+      "openintel_native_fields": [
+        "source"
+      ],
+      "nullable": false
+    }
+  ],
+  "unused_dictionary_fields": [
+    "domain",
+    "flags",
+    "key_tag",
+    "measurement_id",
+    "source",
+    "timestamp",
+    "zone"
+  ],
+  "warnings": [
+    "RFC 4033 lists related RFC 'RFC 4034', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+    "RFC 4033 lists related RFC 'RFC 4035', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+    "Dictionary field 'measurement_id' lists no openintel_native_fields, so the Parquet reader has no real OpenINTEL column to resolve it from; it will only be populated if a column of exactly that name exists.",
+    "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from E:/Documents/University/year2/DNSSEC/rfc_adoption/data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+    "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from E:/Documents/University/year2/DNSSEC/rfc_adoption/data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+    "Indicator rfc8624_validator_algorithm_support of RFC 8624 is non-queryable against this dictionary and will be skipped during matching: Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+    "RFC 4033 was published 2005-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4033 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+    "RFC 4509 was published 2006-05-01, but the OpenINTEL fields its indicators rely on only become available later: `digest_type` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4509 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+    "RFC 5155 was published 2008-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 5155 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+    "Dictionary fields `domain` (from 2010-01-01), `flags` (from 2016-01-01), `key_tag` (from 2010-01-01), `measurement_id` (from 2010-01-01), `source` (from 2010-01-01), `timestamp` (from 2010-01-01), `zone` (from 2010-01-01) become available after the earliest RFC in this checklist was published. No indicator references them today, but any future indicator built on them will inherit that lower bound."
+  ]
+}

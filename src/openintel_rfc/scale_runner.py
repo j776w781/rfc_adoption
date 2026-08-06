@@ -910,7 +910,7 @@ def _split_partition_frame(
 # --------------------------------------------------------------------------- #
 
 
-def merge_checkpoints(checkpoint_dir: Path) -> AggregateTable:
+def merge_checkpoints(checkpoint_dir: Path, *, recursive: bool = False) -> AggregateTable:
     """Merge every readable partition checkpoint into one aggregate table.
 
     Counts and first/last-seen merge exactly. Distinct-domain and distinct-zone
@@ -935,9 +935,45 @@ def merge_checkpoints(checkpoint_dir: Path) -> AggregateTable:
     partition_ids: list[str] = []
     exemplars_per_group = 0
 
-    for checkpoint_path in sorted(directory.glob(f"*{CHECKPOINT_SUFFIX}")):
+    # A sharded run is usually gathered as one subdirectory per machine or per
+    # year, so `recursive` walks those instead of forcing the operator to flatten
+    # thousands of files by hand. The same partition appearing in two shards is
+    # deduplicated on its id: a partition's checkpoint is deterministic, so the
+    # copies are interchangeable, but counting one twice would silently double
+    # that day's observations.
+    if recursive:
+        # Exemplar files share the partition's name and the .parquet suffix but
+        # live under `exemplars/`, and are loaded from beside their aggregate.
+        # Treating them as checkpoints would double the file count and emit a
+        # "no status file" warning for every partition.
+        found = sorted(
+            path
+            for path in directory.rglob(f"*{CHECKPOINT_SUFFIX}")
+            if EXEMPLAR_DIRNAME not in path.parts
+        )
+        seen: dict[str, Path] = {}
+        duplicates: list[str] = []
+        for path in found:
+            key = path.name[: -len(CHECKPOINT_SUFFIX)]
+            if key in seen:
+                duplicates.append(key)
+                continue
+            seen[key] = path
+        if duplicates:
+            warn(
+                warnings,
+                f"{len(duplicates)} partition(s) appeared in more than one shard and were "
+                f"counted once each (e.g. {', '.join(sorted(duplicates)[:3])}). A "
+                "partition checkpoint is deterministic, so the duplicates are "
+                "interchangeable; counting one twice would inflate that day's counts.",
+            )
+        candidate_paths = [seen[k] for k in sorted(seen)]
+    else:
+        candidate_paths = sorted(directory.glob(f"*{CHECKPOINT_SUFFIX}"))
+
+    for checkpoint_path in candidate_paths:
         partition_id = checkpoint_path.name[: -len(CHECKPOINT_SUFFIX)]
-        status_path = directory / f"{partition_id}{STATUS_SUFFIX}"
+        status_path = checkpoint_path.parent / f"{partition_id}{STATUS_SUFFIX}"
         status = _read_status(status_path)
         if status is None or not status.get("complete"):
             warn(
@@ -972,7 +1008,14 @@ def merge_checkpoints(checkpoint_dir: Path) -> AggregateTable:
             exemplars_per_group, int(status.get("exemplars_per_group", 0) or 0)
         )
 
-        exemplar_path = directory / EXEMPLAR_DIRNAME / f"{partition_id}{CHECKPOINT_SUFFIX}"
+        # Resolve exemplars beside their own aggregate, not beside the root. In a
+        # recursive merge each shard carries its own exemplars/ directory, and
+        # looking under the root silently finds none -- which costs every trace,
+        # every score and the whole ranking while the aggregate counts still look
+        # healthy.
+        exemplar_path = (
+            checkpoint_path.parent / EXEMPLAR_DIRNAME / f"{partition_id}{CHECKPOINT_SUFFIX}"
+        )
         if exemplar_path.is_file():
             try:
                 exemplar_frames.append(pd.read_parquet(exemplar_path))
