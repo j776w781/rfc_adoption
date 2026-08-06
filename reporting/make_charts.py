@@ -1,0 +1,201 @@
+"""Render the deck's charts from the merged checkpoints.
+
+Palette and mark rules follow the dataviz reference instance; the three
+categorical slots used here were validated all-pairs in light mode.
+"""
+from __future__ import annotations
+
+import collections
+import json
+import sys
+from pathlib import Path
+
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
+
+sys.path.insert(0, "src")
+from openintel_rfc.scale_runner import merge_checkpoints
+
+OUT = Path(sys.argv[1]); OUT.mkdir(parents=True, exist_ok=True)
+
+# --- palette (dataviz reference instance, light mode) ----------------------- #
+SURFACE   = "#fcfcfb"
+INK       = "#0b0b0b"
+INK_2     = "#52514e"
+MUTED     = "#898781"
+GRID      = "#e1e0d9"
+BASELINE  = "#c3c2b7"
+S1, S2, S3 = "#2a78d6", "#eb6834", "#1baf7a"   # blue, orange, aqua
+CRITICAL  = "#d03b3b"
+
+plt.rcParams.update({
+    "font.family": ["Segoe UI", "DejaVu Sans", "sans-serif"],
+    "figure.facecolor": SURFACE, "axes.facecolor": SURFACE,
+    "savefig.facecolor": SURFACE, "text.color": INK,
+    "axes.labelcolor": INK_2, "xtick.color": MUTED, "ytick.color": MUTED,
+    "axes.edgecolor": BASELINE, "axes.linewidth": 0.8,
+    "xtick.labelsize": 12, "ytick.labelsize": 12,
+})
+
+
+def style(ax, ygrid=True):
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+    ax.spines["left"].set_color(BASELINE)
+    ax.spines["bottom"].set_color(BASELINE)
+    if ygrid:
+        ax.set_axisbelow(True)
+        ax.grid(axis="y", color=GRID, linewidth=0.8, linestyle="-")
+    ax.tick_params(length=0)
+
+
+def save(fig, name):
+    fig.savefig(OUT / name, dpi=200, bbox_inches="tight", pad_inches=0.25)
+    plt.close(fig)
+    print(f"  wrote {name}")
+
+
+# --- data ------------------------------------------------------------------- #
+agg = merge_checkpoints(Path("out/final/checkpoints"), recursive=True)
+scanned_sy = collections.defaultdict(int)
+scanned_s = collections.defaultdict(int)
+for r in agg.rows:
+    if r.rfc_id == "*" and r.decision == "scanned":
+        scanned_sy[(r.source, r.year_month[:4])] += r.count
+        scanned_s[r.source] += r.count
+
+per_sy = collections.defaultdict(int)
+per_s = collections.defaultdict(int)
+for r in agg.rows:
+    if r.rfc_id != "*" and r.indicator_id == "*" and r.decision in ("valid_match", "ambiguous"):
+        per_sy[(r.source, r.year_month[:4], r.rfc_id)] += r.count
+        per_s[(r.source, r.rfc_id)] += r.count
+
+days = collections.Counter()
+for p in Path("out/final/checkpoints").rglob("*.status.json"):
+    d = json.loads(p.read_text()); days[(d["source"], d["date"][:4])] += 1
+
+YEARS = ["2018", "2019", "2020", "2021", "2023", "2024", "2026"]
+
+
+def share(src, year, rfc):
+    tot = scanned_sy.get((src, year), 0)
+    return per_sy.get((src, year, rfc), 0) / tot * 100 if tot else None
+
+
+# --- 1. ECDSA migration: the headline --------------------------------------- #
+fig, ax = plt.subplots(figsize=(11, 5.4))
+for src, color, label in (("gov", S1, ".gov"), ("nu", S2, ".nu")):
+    xs = [i for i, y in enumerate(YEARS) if share(src, y, "RFC 6605") is not None]
+    ys = [share(src, YEARS[i], "RFC 6605") for i in xs]
+    ax.plot(xs, ys, color=color, linewidth=2.4, marker="o", markersize=9,
+            markerfacecolor=color, markeredgecolor=SURFACE, markeredgewidth=2,
+            label=label, zorder=3)
+    # Selective direct label: the endpoint only.
+    ax.annotate(f"{label}  {ys[-1]:.0f}%", (xs[-1], ys[-1]), textcoords="offset points",
+                xytext=(12, -4), color=INK, fontsize=14, fontweight="bold")
+style(ax)
+ax.set_xticks(range(len(YEARS)))
+ax.set_xticklabels(YEARS)
+ax.set_ylim(0, 72)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
+ax.set_ylabel("share of the zone's DNSSEC records", color=INK_2, fontsize=12, labelpad=10)
+ax.set_xlim(-0.3, len(YEARS) - 0.3 + 0.9)
+ax.legend(frameon=False, loc="upper left", fontsize=13, labelcolor=INK_2)
+save(fig, "ecdsa_migration.png")
+
+# --- 2. Cross-zone comparison, held at a COMMON year ------------------------ #
+# 2021 is the only year all three sources were measured. Comparing each zone's
+# latest year instead would put .gov 2026 beside .se 2021 and read the ECDSA
+# migration -- which is steep -- as a difference between zones.
+COMMON = "2021"
+rfcs = [("RFC 6605", "ECDSA"), ("RFC 5155", "NSEC3"), ("RFC 4509", "SHA-256 DS"),
+        ("RFC 7344", "CDS/CDNSKEY"), ("RFC 8080", "EdDSA")]
+fig, ax = plt.subplots(figsize=(11, 5.4))
+h = 0.26
+for i, (src, color, label) in enumerate((("gov", S1, ".gov"), ("nu", S2, ".nu"), ("se", S3, ".se"))):
+    vals = [share(src, COMMON, r) or 0 for r, _ in rfcs]
+    pos = [j + (i - 1) * (h + 0.02) for j in range(len(rfcs))]
+    bars = ax.barh(pos, vals, height=h, color=color,
+                   label=f"{label}  ({days[(src, COMMON)]} days)", zorder=3)
+    for b, v in zip(bars, vals):
+        if v >= 0.5:
+            ax.annotate(f"{v:.1f}%", (v, b.get_y() + b.get_height() / 2),
+                        xytext=(6, 0), textcoords="offset points",
+                        va="center", color=INK_2, fontsize=11)
+style(ax, ygrid=False)
+ax.set_axisbelow(True)
+ax.grid(axis="x", color=GRID, linewidth=0.8)
+ax.set_yticks(range(len(rfcs)))
+ax.set_yticklabels([f"{lbl}" + chr(10) + f"{rfc}" for rfc, lbl in rfcs], fontsize=12, color=INK)
+ax.invert_yaxis()
+ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
+ax.set_xlabel(f"share of that zone's DNSSEC records, {COMMON}", color=INK_2,
+              fontsize=12, labelpad=10)
+ax.set_xlim(0, 52)
+ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="lower right")
+save(fig, "landscape.png")
+
+# --- 3. .gov delegation automation ------------------------------------------ #
+fig, ax = plt.subplots(figsize=(11, 5.0))
+gov_years = [y for y in YEARS if scanned_sy.get(("gov", y))]
+xs = range(len(gov_years))
+for rfc, color, label in (("RFC 7344", S1, "CDS/CDNSKEY published  (RFC 7344)"),
+                          ("RFC 8078", S2, "delete signal  (RFC 8078)")):
+    ys = [share("gov", y, rfc) or 0 for y in gov_years]
+    ax.plot(xs, ys, color=color, linewidth=2.4, marker="o", markersize=9,
+            markerfacecolor=color, markeredgecolor=SURFACE, markeredgewidth=2,
+            label=label, zorder=3)
+    ax.annotate(f"{ys[-1]:.2f}%", (list(xs)[-1], ys[-1]), textcoords="offset points",
+                xytext=(12, -4), color=INK, fontsize=13, fontweight="bold")
+style(ax)
+ax.set_xticks(list(xs)); ax.set_xticklabels(gov_years)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
+ax.set_ylabel("share of .gov DNSSEC records", color=INK_2, fontsize=12, labelpad=10)
+ax.set_xlim(-0.3, len(gov_years) - 1 + 1.0)
+ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="upper left")
+save(fig, "gov_automation.png")
+
+# --- 4. NSEC3 decline against ECDSA rise (one axis, both are % of records) --- #
+fig, ax = plt.subplots(figsize=(11, 5.0))
+for rfc, color, label in (("RFC 6605", S1, "ECDSA  (RFC 6605)"),
+                          ("RFC 5155", S2, "NSEC3  (RFC 5155)")):
+    ys = [share("gov", y, rfc) or 0 for y in gov_years]
+    ax.plot(xs, ys, color=color, linewidth=2.4, marker="o", markersize=9,
+            markerfacecolor=color, markeredgecolor=SURFACE, markeredgewidth=2,
+            label=label, zorder=3)
+    ax.annotate(f"{ys[-1]:.1f}%", (list(xs)[-1], ys[-1]), textcoords="offset points",
+                xytext=(12, -4), color=INK, fontsize=13, fontweight="bold")
+style(ax)
+ax.set_xticks(list(xs)); ax.set_xticklabels(gov_years)
+ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
+ax.set_ylabel("share of .gov DNSSEC records", color=INK_2, fontsize=12, labelpad=10)
+ax.set_xlim(-0.3, len(gov_years) - 1 + 1.0)
+ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="upper left")
+save(fig, "nsec3_vs_ecdsa.png")
+
+# --- 5. Panel balance: why totals mislead ----------------------------------- #
+fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.2))
+srcs = ["gov", "nu", "se"]
+d = [sum(days[(s, y)] for y in YEARS) for s in srcs]
+rws = [scanned_s[s] for s in srcs]
+for ax, vals, title, fmt in (
+    (a1, d, "Days measured", lambda v: f"{v:,}"),
+    (a2, rws, "DNSSEC records", lambda v: f"{v/1e6:,.0f}M"),
+):
+    tot = sum(vals)
+    bars = ax.bar([f".{s}" for s in srcs], vals, color=[S1, S2, S3], width=0.55, zorder=3)
+    for b, v in zip(bars, vals):
+        ax.annotate(f"{fmt(v)}\n{v/tot:.0%}", (b.get_x() + b.get_width()/2, v),
+                    xytext=(0, 6), textcoords="offset points", ha="center",
+                    color=INK_2, fontsize=11)
+    style(ax)
+    ax.set_title(title, color=INK, fontsize=14, pad=14, loc="left")
+    ax.set_yticks([])
+    ax.set_ylim(0, max(vals) * 1.28)
+    ax.tick_params(axis="x", labelsize=13, colors=INK)
+save(fig, "panel_balance.png")
+
+print("charts done")
