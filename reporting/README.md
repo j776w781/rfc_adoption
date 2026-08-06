@@ -7,9 +7,18 @@ rather than to a number typed into a slide.
 ```bash
 export PYTHONPATH=src
 python -m openintel_rfc.cli merge --checkpoint-dir out/final/checkpoints --out out/analysis
+python reporting/adoption_dates.py                  # per-RFC dates -> out/analysis/
+python reporting/nsec3_compliance.py                # the only step needing network
 python reporting/make_charts.py reporting/charts
 python reporting/make_deck.py  reporting/charts out/analysis/dnssec_rfc_adoption.pptx
 ```
+
+`nsec3_compliance.py` queries S3 for one day per zone, because `nsec3_iterations`
+was never projected into the checkpoints -- no checklist indicator references it.
+It writes `reporting/nsec3_compliance.json`, and the chart reads that file, so
+everything after it builds offline. Its percentages are over **distinct names**
+rather than records, unlike the rest of the deck: one large signed zone publishing
+thousands of NSEC3 records would otherwise decide a whole TLD's conformance rate.
 
 ## Conventions the charts follow
 

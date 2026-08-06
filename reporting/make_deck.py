@@ -173,9 +173,9 @@ stat_row(s, [
 ], color=CRITICAL)
 rule(s, Inches(4.9))
 textbox(s, M, Inches(5.2), W - 2 * M, Inches(1.3),
-        "Registries consolidated on ECDSA instead. A newer, smaller, faster algorithm with IETF backing\n"
-        "is not sufficient for adoption — ECDSA arrived first and was good enough.\n"
-        ".se is the only zone with a measurable EdDSA presence.",
+        "Registries consolidated on ECDSA instead. ECDSA solved a real operational problem — smaller\n"
+        "keys mean smaller responses, less fragmentation, less amplification. EdDSA solved nothing\n"
+        "that ECDSA had not already solved, and being newer and better was not enough on its own.",
         14, INK2, spacing=1.4)
 footnote(s, "RFC 8080 (algorithms 15/16), published February 2017. Counts across the full 2.76 billion records.")
 
@@ -246,36 +246,55 @@ items = [
      "Observation counts are exact aggregates. Scores derive from 29 worked examples, ~1 per 95M rows."),
     ("Presence is not conformance.",
      "A matching record shows the mechanism is deployed, not that the operator read the RFC."),
+    ("Resolver-side issues are invisible.",
+     "KeyTrap (CVE-2023-50387) cites RFC 4033/34/35 — 84% of this data — but is fixed in resolver "
+     "code. Forward DNS sees what zones publish, not what resolvers do."),
 ]
-y = Inches(2.5)
+y = Inches(2.45)
 for head, body in items:
     textbox(s, M, y, Inches(4.4), Inches(0.5), head, 15, INK, bold=True)
-    textbox(s, M + Inches(4.7), y, W - 2 * M - Inches(4.7), Inches(0.8), body, 14, INK2,
-            spacing=1.3)
-    y += Inches(1.02)
+    textbox(s, M + Inches(4.7), y, W - 2 * M - Inches(4.7), Inches(0.78), body, 14, INK2,
+            spacing=1.25)
+    y += Inches(0.84)
 footnote(s, "The pipeline identifies ranked RFC candidates consistent with observable signals; it does not prove adoption.")
+
+# ------------------------------------------------ 9b. the measurable gap -----
+s = slide()
+header(s, "The gap", "The most urgent DNSSEC RFC is not in this analysis",
+       "RFC 5155 lets a zone publish NSEC3 with an unbounded iteration count — the root cause of "
+       "CVE-2023-50868, a resolver CPU-exhaustion attack. RFC 9276 is the fix, it is observable "
+       "here, and the checklist does not track it.")
+chart(s, "nsec3_compliance.png", top=Inches(2.62), height=Inches(3.55))
+textbox(s, M, Inches(6.32), W - 2 * M, Inches(0.4),
+        "Highest iteration count seen: .gov 100 · .nu 423 · .se 250.  RFC 9276 says zero.",
+        13, CRITICAL, bold=True)
+footnote(s, "Spot measurement: one day per zone (.gov 2026-04-28, .nu 2024-03-03, .se 2021-01-11), "
+            "weighted by distinct names. The .se day predates RFC 9276, so it is not a judgement of .se.")
 
 # --------------------------------------------------------- 10. next ----------
 s = slide()
 header(s, "Next", "What would make this publishable",
-       "Three gaps, in the order they change the conclusions.")
+       "Four gaps, in the order they change the conclusions.")
 items = [
-    ("1", "Aggregate to zone level",
+    ("1", "Track RFC 9276",
+     "The only measurable RFC here that fixes an exploited CVE, and the one the checklist misses. "
+     "One checklist entry plus a rescan."),
+    ("2", "Aggregate to zone level",
      "Turns “share of records” into “share of zones” — the number a reader assumes they are already seeing."),
-    ("2", "Fill 2022 and 2025, and sample .se properly",
+    ("3", "Fill 2022 and 2025, and sample .se properly",
      ".se is the largest zone and the worst covered at 39 days. The ECDSA curve needs the missing years."),
-    ("3", "Exact scoring in SQL",
+    ("4", "Exact scoring in SQL",
      "Removes the sampled-ranking caveat so scores are as exact as the counts already are."),
 ]
-y = Inches(2.55)
+y = Inches(2.5)
 for num, head, body in items:
     textbox(s, M, y - Inches(0.06), Inches(0.6), Inches(0.6), num, 26, BLUE, bold=True)
     textbox(s, M + Inches(0.72), y, Inches(4.6), Inches(0.5), head, 16, INK, bold=True)
-    textbox(s, M + Inches(5.5), y, W - 2 * M - Inches(5.5), Inches(0.9), body, 14, INK2,
-            spacing=1.3)
-    y += Inches(1.25)
-rule(s, Inches(6.35))
-textbox(s, M, Inches(6.6), W - 2 * M, Inches(0.5),
+    textbox(s, M + Inches(5.5), y, W - 2 * M - Inches(5.5), Inches(0.86), body, 14, INK2,
+            spacing=1.25)
+    y += Inches(1.0)
+rule(s, Inches(6.62))
+textbox(s, M, Inches(6.84), W - 2 * M, Inches(0.4),
         "Every figure in this deck is reproducible: openintel-rfc merge --checkpoint-dir out/final/checkpoints",
         12, MUTED)
 

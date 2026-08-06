@@ -1,0 +1,252 @@
+{
+  "measurement": "spot",
+  "note": "One measured day per zone, not the corpus. Percentages are over distinct names, not records.",
+  "high_iterations_threshold": 10,
+  "rfc9276_published": "2022-08-01",
+  "zones": [
+    {
+      "source": "gov",
+      "date": "2026-04-28",
+      "total_records": 2781,
+      "total_names": 1592,
+      "iterations": {
+        "0": {
+          "records": 1518,
+          "names": 869
+        },
+        "1": {
+          "records": 279,
+          "names": 160
+        },
+        "7": {
+          "records": 36,
+          "names": 18
+        },
+        "10": {
+          "records": 629,
+          "names": 367
+        },
+        "12": {
+          "records": 82,
+          "names": 42
+        },
+        "15": {
+          "records": 7,
+          "names": 4
+        },
+        "50": {
+          "records": 227,
+          "names": 130
+        },
+        "100": {
+          "records": 3,
+          "names": 2
+        }
+      },
+      "pct_conformant": 54.6,
+      "pct_high": 34.2,
+      "max_iterations": 100,
+      "predates_rfc9276": false
+    },
+    {
+      "source": "nu",
+      "date": "2024-03-03",
+      "total_records": 331109,
+      "total_names": 194173,
+      "iterations": {
+        "0": {
+          "records": 55775,
+          "names": 33653
+        },
+        "1": {
+          "records": 215432,
+          "names": 120479
+        },
+        "2": {
+          "records": 6,
+          "names": 4
+        },
+        "3": {
+          "records": 86,
+          "names": 44
+        },
+        "5": {
+          "records": 44316,
+          "names": 31528
+        },
+        "6": {
+          "records": 2,
+          "names": 2
+        },
+        "7": {
+          "records": 9472,
+          "names": 4738
+        },
+        "8": {
+          "records": 250,
+          "names": 146
+        },
+        "9": {
+          "records": 30,
+          "names": 18
+        },
+        "10": {
+          "records": 4925,
+          "names": 3072
+        },
+        "16": {
+          "records": 482,
+          "names": 284
+        },
+        "20": {
+          "records": 97,
+          "names": 60
+        },
+        "21": {
+          "records": 7,
+          "names": 4
+        },
+        "33": {
+          "records": 1,
+          "names": 1
+        },
+        "50": {
+          "records": 72,
+          "names": 44
+        },
+        "75": {
+          "records": 3,
+          "names": 2
+        },
+        "81": {
+          "records": 4,
+          "names": 2
+        },
+        "100": {
+          "records": 139,
+          "names": 84
+        },
+        "150": {
+          "records": 6,
+          "names": 6
+        },
+        "423": {
+          "records": 4,
+          "names": 2
+        }
+      },
+      "pct_conformant": 17.3,
+      "pct_high": 1.8,
+      "max_iterations": 423,
+      "predates_rfc9276": false
+    },
+    {
+      "source": "se",
+      "date": "2021-01-11",
+      "total_records": 2165959,
+      "total_names": 1336345,
+      "iterations": {
+        "0": {
+          "records": 35,
+          "names": 15
+        },
+        "1": {
+          "records": 1444120,
+          "names": 734031
+        },
+        "3": {
+          "records": 487,
+          "names": 256
+        },
+        "5": {
+          "records": 569784,
+          "names": 516222
+        },
+        "7": {
+          "records": 64905,
+          "names": 32477
+        },
+        "8": {
+          "records": 3197,
+          "names": 1780
+        },
+        "9": {
+          "records": 4,
+          "names": 2
+        },
+        "10": {
+          "records": 13797,
+          "names": 8946
+        },
+        "11": {
+          "records": 28,
+          "names": 16
+        },
+        "12": {
+          "records": 1,
+          "names": 1
+        },
+        "15": {
+          "records": 904,
+          "names": 640
+        },
+        "16": {
+          "records": 142,
+          "names": 90
+        },
+        "17": {
+          "records": 3,
+          "names": 1
+        },
+        "18": {
+          "records": 3,
+          "names": 2
+        },
+        "20": {
+          "records": 65057,
+          "names": 39775
+        },
+        "42": {
+          "records": 4,
+          "names": 2
+        },
+        "50": {
+          "records": 989,
+          "names": 603
+        },
+        "75": {
+          "records": 76,
+          "names": 53
+        },
+        "81": {
+          "records": 11,
+          "names": 8
+        },
+        "100": {
+          "records": 2388,
+          "names": 1410
+        },
+        "127": {
+          "records": 4,
+          "names": 3
+        },
+        "128": {
+          "records": 6,
+          "names": 4
+        },
+        "150": {
+          "records": 10,
+          "names": 6
+        },
+        "250": {
+          "records": 4,
+          "names": 2
+        }
+      },
+      "pct_conformant": 0.0,
+      "pct_high": 3.9,
+      "max_iterations": 250,
+      "predates_rfc9276": true
+    }
+  ]
+}

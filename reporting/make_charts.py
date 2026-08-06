@@ -231,4 +231,42 @@ for ax, vals, title, fmt in (
     ax.tick_params(axis="x", labelsize=13, colors=INK)
 save(fig, "panel_balance.png")
 
+# --- 6. RFC 9276 conformance (spot measurement) ----------------------------- #
+# Two non-overlapping buckets of one distribution, so grouped and never stacked:
+# they do not sum to the whole, because iterations 1-9 sit between them.
+compliance_path = Path("reporting/nsec3_compliance.json")
+if not compliance_path.is_file():
+    print("  skipped nsec3_compliance.png -- run reporting/nsec3_compliance.py first "
+          "(it is the only step that needs network)")
+else:
+    payload = json.loads(compliance_path.read_text(encoding="utf-8"))
+    zones = payload["zones"]
+    threshold = payload["high_iterations_threshold"]
+    series = [
+        ("0 iterations - RFC 9276 conformant", "pct_conformant", S1),
+        (f"{threshold} or more iterations", "pct_high", S2),
+    ]
+    fig, ax = plt.subplots(figsize=(11, 4.6))
+    h = 0.32
+    for i, (label, key, color) in enumerate(series):
+        vals = [z[key] for z in zones]
+        pos = [j + (i - 0.5) * (h + 0.03) for j in range(len(zones))]
+        bars = ax.barh(pos, vals, height=h, color=color, label=label, zorder=3)
+        for b, v in zip(bars, vals):
+            ax.annotate(f"{v:.1f}%", (v, b.get_y() + b.get_height() / 2),
+                        xytext=(7, 0), textcoords="offset points", va="center",
+                        color=INK, fontsize=12, fontweight="bold")
+    style(ax, ygrid=False)
+    ax.set_axisbelow(True)
+    ax.grid(axis="x", color=GRID, linewidth=0.8)
+    ax.set_yticks(range(len(zones)))
+    ax.set_yticklabels([f".{z['source']}" for z in zones], fontsize=14, color=INK)
+    ax.invert_yaxis()
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
+    ax.set_xlabel("share of that zone's NSEC3-signed names", color=INK_2,
+                  fontsize=12, labelpad=10)
+    ax.set_xlim(0, max(z["pct_conformant"] for z in zones) * 1.35 + 8)
+    ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="lower right")
+    save(fig, "nsec3_compliance.png")
+
 print("charts done")
