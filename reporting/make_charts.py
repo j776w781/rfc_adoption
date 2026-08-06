@@ -73,9 +73,18 @@ for r in agg.rows:
         per_sy[(r.source, r.year_month[:4], r.rfc_id)] += r.count
         per_s[(r.source, r.rfc_id)] += r.count
 
+# Near-empty partitions are excluded from the day counts. OpenINTEL published an
+# object for .gov on 2021-04-27..05-10 carrying ~6 rows instead of ~29,000 -- a
+# measurement outage on their side, not a scan failure, so the checkpoint is
+# legitimately "complete". Counting them as full days would depress every per-day
+# rate for that year by ~4% while contributing no records.
+_status = [json.loads(p.read_text())
+           for p in Path("out/final/checkpoints").rglob("*.status.json")]
+NEAR_EMPTY = {(r["source"], r["date"]) for r in _status if r["rows_scanned"] < 100}
 days = collections.Counter()
-for p in Path("out/final/checkpoints").rglob("*.status.json"):
-    d = json.loads(p.read_text()); days[(d["source"], d["date"][:4])] += 1
+for d in _status:
+    if (d["source"], d["date"]) not in NEAR_EMPTY:
+        days[(d["source"], d["date"][:4])] += 1
 
 YEARS = ["2018", "2019", "2020", "2021", "2023", "2024", "2026"]
 

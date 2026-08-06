@@ -1,0 +1,9 @@
+rfc_id,title,published,first_seen,first_seen_lag_days,median_obs,median_obs_lag_days,mean_obs,mean_obs_lag_days,median_rate,median_rate_lag_days,mean_rate,mean_rate_lag_days,last_seen,observations,months_seen,first_seen_censored
+RFC 4033,DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035),2005-03-01,2018-01-01,4689,2019-02-15,5099,2020-01-08,5426,2019-04-15,5158,2020-03-18,5496,2026-04-29,2323653512,73,corpus start
+RFC 4509,Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records,2006-05-01,2018-01-01,4263,2019-01-15,4642,2019-12-26,4987,2019-04-15,4732,2020-03-15,5067,2026-04-29,135810997,73,corpus start
+RFC 5155,DNS Security (DNSSEC) Hashed Authenticated Denial of Existence,2008-03-01,2018-01-01,3593,2019-01-15,3972,2019-12-02,4293,2019-03-15,4031,2020-01-27,4349,2026-04-29,429544241,73,corpus start
+RFC 6605,Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC,2012-04-01,2018-01-01,2101,2021-07-15,3392,2021-08-16,3424,2021-07-15,3392,2021-10-07,3476,2026-04-29,549969844,73,corpus start
+RFC 7344,Automating DNSSEC Delegation Trust Maintenance,2014-09-01,2018-01-01,1218,2023-10-15,3331,2023-01-18,3061,2024-01-15,3423,2023-06-28,3222,2026-04-29,2290509,73,corpus start
+RFC 8080,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,2017-02-01,2021-01-01,1430,2021-01-15,1444,2021-01-30,1459,2021-01-15,1444,2021-02-03,1463,2024-11-07,6642303,18,after a coverage gap
+RFC 8078,Managing DS Records from the Parent via CDS/CDNSKEY,2017-03-01,2018-08-29,546,2023-09-15,2389,2023-03-28,2218,2024-01-15,2511,2023-09-03,2377,2026-04-29,165951,63,no
+RFC 8624,Algorithm Implementation Requirements and Usage Guidance for DNSSEC,2019-06-01,2019-06-01,0,2021-08-15,806,2021-12-22,935,2021-08-15,806,2022-02-04,979,2026-04-29,495136786,56,no

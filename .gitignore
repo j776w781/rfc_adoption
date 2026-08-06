@@ -245,3 +245,6 @@ verify_run/
 output_real/
 openintel_cache/
 logs/
+
+# Office lock files, created while a document is open
+~$*

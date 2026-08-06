@@ -138,11 +138,14 @@ s = slide()
 header(s, "Read this first", "The three zones are not equally sampled",
        "Totals across all zones are dominated by whichever large zone happened to be measured. "
        "Every later chart is normalised within a zone.")
-chart(s, "panel_balance.png", top=Inches(2.5), height=Inches(3.5))
-textbox(s, M, Inches(6.2), W - 2 * M, Inches(0.6),
+chart(s, "panel_balance.png", top=Inches(2.42), height=Inches(3.1))
+textbox(s, M, Inches(5.68), W - 2 * M, Inches(0.4),
         ".gov is 70% of the days but 2.6% of the records.  .se is 1.2% of the days but 20.6% of the records.",
         13, CRITICAL, bold=True)
-footnote(s, "2020 and 2026 contain .gov only — an all-zone time series would show a collapse that is purely sampling.")
+textbox(s, M, Inches(6.10), W - 2 * M, Inches(0.62),
+        "Spans are truncated, not holed: .gov 2020 stops 4 Sep, .nu 2019 stops 10 Apr, .se 2021 is 11 days. "
+        "Within each span coverage is 99.6% complete.", 11, MUTED, spacing=1.25)
+footnote(s, "14 .gov days (27 Apr–10 May 2021) returned near-empty objects and are excluded from per-day rates.")
 
 # --------------------------------------------------------- 4. THE headline ----
 s = slide()
@@ -190,6 +193,45 @@ header(s, "What shares hide", "NSEC3 did not decline. It stood still.",
        "at ~2,900 for eight years. The share moved because the denominator grew 79%.")
 chart(s, "growth_vs_baseline.png", top=Inches(2.45), height=Inches(3.95))
 footnote(s, "Per-day rates remove the shared denominator. Only growth above the zone's own 1.8x baseline is adoption.")
+
+# ------------------------------------------- 8b. adoption dates vs publication --
+s = slide()
+header(s, "Adoption dates", "When each RFC actually shows up",
+       "Only three rows carry a real time-to-adoption. The rest were already deployed "
+       "when measurement began, so their lag is a lower bound, not a delay.")
+cols = ["RFC", "Published", "First seen", "Lag", "Median", "Last seen", "Observations"]
+data = [
+    ("RFC 4033", "2005-03", "2018-01 *", "> 12.8y", "2019-04", "2026-04", "2,323,653,512"),
+    ("RFC 4509", "2006-05", "2018-01 *", "> 11.7y", "2019-04", "2026-04", "135,810,997"),
+    ("RFC 5155", "2008-03", "2018-01 *", "> 9.8y",  "2019-03", "2026-04", "429,544,241"),
+    ("RFC 6605", "2012-04", "2018-01 *", "> 5.8y",  "2021-07", "2026-04", "549,969,844"),
+    ("RFC 7344", "2014-09", "2018-01 *", "> 3.3y",  "2024-01", "2026-04", "2,290,509"),
+    ("RFC 8080", "2017-02", "2021-01 *", "< 3.9y",  "2021-01", "2024-11", "6,642,303"),
+    ("RFC 8078", "2017-03", "2018-08",   "1.5y",    "2024-01", "2026-04", "165,951"),
+    ("RFC 8624", "2019-06", "2019-06",   "0.0y",    "2021-08", "2026-04", "495,136,786"),
+]
+widths = [Inches(1.5), Inches(1.35), Inches(1.5), Inches(1.1), Inches(1.3),
+          Inches(1.3), Inches(2.6)]
+y0 = Inches(2.52)
+x = M
+for c, wdt in zip(cols, widths):
+    textbox(s, x, y0, wdt, Inches(0.3), c, 11, MUTED, bold=True)
+    x += wdt
+rule(s, y0 + Inches(0.32), w=sum(widths, Inches(0)))
+yy = y0 + Inches(0.46)
+for row in data:
+    x = M
+    uncensored = "*" not in row[2]
+    for j, (cell, wdt) in enumerate(zip(row, widths)):
+        col = INK if (uncensored and j in (2, 3)) else INK2
+        textbox(s, x, yy, wdt, Inches(0.32), cell, 12,
+                col, bold=uncensored and j in (2, 3))
+        x += wdt
+    yy += Inches(0.40)
+textbox(s, M, yy + Inches(0.04), W - 2 * M, Inches(0.4),
+        "*  first sighting censored by the start of the corpus (lower bound) or by a "
+        "coverage gap (upper bound).", 11, MUTED)
+footnote(s, "Median is rate-weighted: each month counts by records per measurement day, so unevenly sampled months do not dominate.")
 
 # --------------------------------------------------- 9. what this is not ------
 s = slide()
