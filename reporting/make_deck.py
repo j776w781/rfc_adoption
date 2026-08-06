@@ -147,7 +147,7 @@ footnote(s, "2020 and 2026 contain .gov only — an all-zone time series would s
 # --------------------------------------------------------- 4. THE headline ----
 s = slide()
 header(s, "The headline", "ECDSA replaced RSA as the default",
-       "A clean, monotonic migration over eight years — the clearest adoption signal in the corpus.")
+       "Monotonic over eight years, and real growth rather than composition: 1,035 to 30,284 records per day in .gov, a 29x rise against a 1.8x baseline.")
 chart(s, "ecdsa_migration.png", top=Inches(2.3), height=Inches(4.3))
 footnote(s, "RFC 6605 (algorithms 13/14), share of each zone's own DNSSEC records. 2022 and 2025 not measured.")
 
@@ -183,13 +183,13 @@ header(s, "Operational outlier", ".gov automates delegation; the ccTLDs do not",
 chart(s, "gov_automation.png", top=Inches(2.4), height=Inches(4.05))
 footnote(s, ".gov holds 56% of all delete signals and 64% of all CDS/CDNSKEY records while being 2.6% of the data.")
 
-# --------------------------------------------------------- 8. NSEC3 ----------
+# ------------------------------------------------ 8. what shares hide --------
 s = slide()
-header(s, "Second-order effect", "NSEC3 recedes as ECDSA advances",
-       "Modern signing shifts the trade-off: NSEC3's zone-walking defence is worth less "
-       "when the algorithm is cheap.")
-chart(s, "nsec3_vs_ecdsa.png", top=Inches(2.4), height=Inches(4.05))
-footnote(s, "Both series are shares of the same denominator (.gov DNSSEC records), so they sit on one axis.")
+header(s, "What shares hide", "NSEC3 did not decline. It stood still.",
+       "Its share of .gov records fell 10.9% to 5.8% — but per measurement day it held flat "
+       "at ~2,900 for eight years. The share moved because the denominator grew 79%.")
+chart(s, "growth_vs_baseline.png", top=Inches(2.45), height=Inches(3.95))
+footnote(s, "Per-day rates remove the shared denominator. Only growth above the zone's own 1.8x baseline is adoption.")
 
 # --------------------------------------------------- 9. what this is not ------
 s = slide()

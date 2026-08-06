@@ -158,23 +158,47 @@ ax.set_xlim(-0.3, len(gov_years) - 1 + 1.0)
 ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="upper left")
 save(fig, "gov_automation.png")
 
-# --- 4. NSEC3 decline against ECDSA rise (one axis, both are % of records) --- #
-fig, ax = plt.subplots(figsize=(11, 5.0))
-for rfc, color, label in (("RFC 6605", S1, "ECDSA  (RFC 6605)"),
-                          ("RFC 5155", S2, "NSEC3  (RFC 5155)")):
-    ys = [share("gov", y, rfc) or 0 for y in gov_years]
-    ax.plot(xs, ys, color=color, linewidth=2.4, marker="o", markersize=9,
-            markerfacecolor=color, markeredgecolor=SURFACE, markeredgewidth=2,
-            label=label, zorder=3)
-    ax.annotate(f"{ys[-1]:.1f}%", (list(xs)[-1], ys[-1]), textcoords="offset points",
-                xytext=(12, -4), color=INK, fontsize=13, fontweight="bold")
-style(ax)
-ax.set_xticks(list(xs)); ax.set_xticklabels(gov_years)
-ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
-ax.set_ylabel("share of .gov DNSSEC records", color=INK_2, fontsize=12, labelpad=10)
-ax.set_xlim(-0.3, len(gov_years) - 1 + 1.0)
-ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="upper left")
-save(fig, "nsec3_vs_ecdsa.png")
+# --- 4. Growth vs the zone's own baseline ----------------------------------- #
+# Shares mislead here. NSEC3's share of .gov records falls 10.9% -> 5.8%, but its
+# per-day count is flat: the share moved because the denominator grew 79%, not
+# because NSEC3 retreated. Comparing each mechanism's per-day growth against the
+# zone's own baseline growth removes the shared denominator entirely.
+def per_day(rfc, year):
+    d = days[("gov", year)]
+    return per_sy.get(("gov", year, rfc), 0) / d if d else 0
+
+first_y, last_y = "2018", "2026"
+baseline = (scanned_sy[("gov", last_y)] / days[("gov", last_y)]) /            (scanned_sy[("gov", first_y)] / days[("gov", first_y)])
+
+mechs = [("RFC 6605", "ECDSA"), ("RFC 7344", "CDS/CDNSKEY"),
+         ("RFC 4509", "SHA-256 DS"), ("RFC 5155", "NSEC3")]
+growth = [(lbl, per_day(r, last_y) / per_day(r, first_y)) for r, lbl in mechs
+          if per_day(r, first_y)]
+
+fig, ax = plt.subplots(figsize=(11, 4.8))
+pos = range(len(growth))
+bars = ax.barh(list(pos), [g for _, g in growth], height=0.5, color=S1, zorder=3)
+for b, (lbl, g) in zip(bars, growth):
+    ax.annotate(f"{g:.1f}x", (g, b.get_y() + b.get_height()/2), xytext=(8, 0),
+                textcoords="offset points", va="center", color=INK,
+                fontsize=13, fontweight="bold")
+ax.axvline(baseline, color=CRITICAL, linewidth=2, zorder=4)
+# Anchor the reference label in axes coordinates so it cannot fall outside the
+# plot: an unexplained red rule is worse than no rule at all.
+# Park the reference label in the empty band between the two short bars: on top
+# of a bar it reads as that bar's label, and red-on-blue is unreadable anyway.
+ax.text(baseline + 0.6, 2.55,
+        "the zone's own record count" + chr(10)
+        + f"grew {baseline:.1f}x over the same period",
+        color=CRITICAL, fontsize=12, fontweight="bold", va="center", ha="left")
+style(ax, ygrid=False)
+ax.set_axisbelow(True); ax.grid(axis="x", color=GRID, linewidth=0.8)
+ax.set_yticks(list(pos)); ax.set_yticklabels([l for l, _ in growth], fontsize=13, color=INK)
+ax.invert_yaxis()
+ax.set_xlabel("growth in records per measurement day, 2018 to 2026", color=INK_2,
+              fontsize=12, labelpad=10)
+ax.set_xlim(0, max(g for _, g in growth) * 1.18)
+save(fig, "growth_vs_baseline.png")
 
 # --- 5. Panel balance: why totals mislead ----------------------------------- #
 fig, (a1, a2) = plt.subplots(1, 2, figsize=(11, 4.2))
