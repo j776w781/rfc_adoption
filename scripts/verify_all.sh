@@ -123,11 +123,14 @@ print(f"limitation={'yes' if lim in open('demo_output/report.md',encoding='utf-8
 PY
 get() { grep -oP "(?<=^$1=).*" "$TMP/expect.txt"; }
 check "observed signals"            "73"       "$(get signals)"
-check "reasoning traces (73x8)"     "584"      "$(get traces)"
-check "ranked candidates"           "8"        "$(get candidates)"
-check "review items"                "40"       "$(get review)"
-check "valid matches"               "113"      "$(get valid)"
-check "timestamp-invalid"           "14"       "$(get tsinvalid)"
+# One trace per (signal x RFC). Checklist 0.2.0 carries 30 RFCs, so 73 x 30.
+check "reasoning traces (73x30)"    "2190"     "$(get traces)"
+check "ranked candidates"           "11"       "$(get candidates)"
+check "review items"                "105"      "$(get review)"
+check "valid matches"               "179"      "$(get valid)"
+# Rose with the checklist: the added algorithm RFCs are older than several of the
+# sample observations, and an observation predating its RFC is withheld by design.
+check "timestamp-invalid"           "120"      "$(get tsinvalid)"
 check "rank 1 is RFC 8078"          "RFC 8078" "$(get rank1)"
 check "RFC 8078 score"              "17.25"    "$(get rfc8078)"
 check "RFC 7344 score"              "11.25"    "$(get rfc7344)"

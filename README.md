@@ -530,9 +530,26 @@ no adoption.
 
 ### Prefer `--mode download` for anything large
 
-OpenINTEL rate-limits on **request count**, not bytes. Streaming issues thousands
-of small parallel HTTP range requests per object; downloading issues one sequential
-64 MB-chunked GET. Measured on a real partition:
+OpenINTEL rate-limits on **request count**, not bytes, and the budget is small.
+Measured directly against `object.openintel.nl` (nginx `limit_req` in front of the
+object store):
+
+| Concurrent requests | Throughput | Succeeded | Rejected |
+| --- | --- | --- | --- |
+| 1 | 1.10 req/s | 8/8 | 0 |
+| 4 | 1.02 req/s | 32/32 | 0 |
+| 5 | 1.02 req/s | 40/40 | 0 |
+| 6 | 3.63 req/s | 14/48 | **34 × HTTP 503** |
+
+Concurrency 1–5 is *queued and delayed* to exactly one request per second and never
+fails. The sixth overflows the burst queue and is rejected. So the budget is
+**≈1 request/second with a burst of ≈5** — and the useful response is to stay under
+it, not to retry harder.
+
+A scan is not request-hungry on its own: DuckDB coalesces row-group reads well, so a
+485 MB `.se` object costs **6 requests** with the prefilter pushed down, and a small
+`.gov` day costs 2–3. Downloading issues one sequential 64 MB-chunked GET. Measured
+on a real partition:
 
 | Strategy | Per partition |
 | --- | --- |
@@ -546,7 +563,238 @@ to stream a large range.
 
 Thread count is not the lever it looks like: 20/8/4/2 threads measured 5.6/5.8/5.9/5.9 s
 on a remote scan — the work is network-bound. Stream mode therefore caps threads at
-8 by default; local scans get every core.
+**4** by default (one below the measured burst ceiling of 5, leaving headroom for the
+retry that follows a throttle); local scans get every core.
+
+## What the checklist covers, and what it admits it cannot
+
+Checklist `0.2.0` carries **30 DNSSEC RFCs / 50 indicators**. Publication dates and
+RFC Editor status come from `rfc-index.xml`; algorithm and DS digest numbers from
+the IANA registries. Nothing is written from memory.
+
+```bash
+openintel-rfc schema-check --out out/schema
+python reporting/rfc_classification.py out/schema/schema_check.json     data/rfc_checklists/dnssec_rfc_checklists.json out/classification
+# -> rfc_classification.md / .csv / .json
+```
+
+Every RFC is placed on three **independent** axes, because they answer different
+questions and conflating them is how a report ends up asserting things it cannot
+support.
+
+**What a match means** — `signal_type`:
+
+| | Count | A match means |
+| --- | --- | --- |
+| `adoption` | 20 | the mechanism is deployed |
+| `non_conformance` | 2 | a **deprecated** mechanism is still published (RFC 9905 SHA-1, RFC 9906 ECC-GOST) |
+| `meta` | 8 | a process or resolver-side document; nothing a zone publishes bears on it |
+
+A `non_conformance` match is bad news. Counting it as adoption inverts the finding.
+
+**Whether this corpus can answer it** — verdict:
+
+| Verdict | Count |
+| --- | --- |
+| measurable | 19 |
+| partly measurable | 2 |
+| ambiguous only | 4 |
+| not measurable here | 5 |
+
+**When an answer could first exist** — `observable_from`. Eight RFCs are
+**left-censored**: published before the corpus carries the fields their indicators
+need, so a first-seen date is an upper bound on the lag, never a measurement.
+
+Each verdict ships with the sentence that justifies it. For instance RFC 9615
+(automatic bootstrapping) is *not measurable here* because its signature is an
+owner-name pattern (`_signal` labels) and `domain` is **provenance, not evidence**:
+it says which observation this is, not what the zone published. That is a property
+of the signal model, and the report says so rather than quietly returning zero.
+
+## Nightly collection on a server
+
+```bash
+15 3 * * *  /path/to/rfc_adoption/scripts/nightly.sh >> /var/log/rfc-nightly.log 2>&1
+```
+
+Four stages — ingest the RIPE reverse zones, mirror new OpenINTEL partitions, scan
+whatever is on disk, re-derive the classification and charts. Every stage is
+resumable and **a failing stage does not stop the ones after it**: a night when the
+reverse archive is unreachable still scans and reports on what is already local.
+One status line per stage lands in `<data-root>/logs/status-<run>.txt`, so a
+failure shows up in a log tail rather than by reading thousands of lines.
+
+```bash
+./scripts/nightly.sh --dry-run                        # what it would do
+./scripts/nightly.sh --backfill 2009-03-24..2026-08-01 # one-time history, monthly
+./scripts/nightly.sh --shards 3 --shard 0             # split across machines
+```
+
+`--lookback` (default 4 days) is what makes a missed night self-healing rather than
+a permanent hole: both feeds publish with a lag, and re-running only costs the work
+that did not finish. The scan stages read local files only, so they can never be
+throttled.
+
+## A second corpus: RIPE reverse-delegation zones
+
+OpenINTEL gives this project three forward zones over 2018–2026. The RIPE NCC's
+[historical reverse-DNS zone archive](https://data-store.ripe.net/datasets/reverse-dns-zones/in-addr.arpa/)
+adds a second, independent corpus with two properties the first one cannot have:
+
+**It starts in 2009.** Every first-seen date in the OpenINTEL analysis is
+left-censored at 2018-01-01, which is why that side can only publish *upper bounds*
+on adoption lag. This archive predates five of the eight RFCs in the checklist.
+
+**It has a real denominator.** A zone file lists every delegation, so "how many
+delegations exist" and "how many carry a DS" are both directly countable — where
+the OpenINTEL analysis can only report a share of *records*, and its slides have to
+keep saying "record-level, not zone-level".
+
+```bash
+# ~209 monthly snapshots, 2009→2026, about 1.1 GB of Parquet. Resumable.
+openintel-rfc ingest-reverse --monthly     --start 2009-03-24 --end 2026-08-01 --cache-dir out/reverse/corpus
+
+# the existing checklists match it unchanged
+openintel-rfc scale --basis reverse --local-corpus --mode download     --sources afrinic,apnic,arin,lacnic,ripe     --start 2009-03-24 --end 2026-08-01     --cache-dir out/reverse/corpus --out out/reverse/analysis
+
+python reporting/reverse_adoption.py out/reverse/corpus     out/reverse/analysis/checkpoints reporting/charts
+```
+
+The ingester writes Parquet in OpenINTEL's **native column names**, so once the rows
+exist the existing checklist compiler, matcher, scorer and timeline work on them
+unmodified — RFC 4509 / 6605 / 8080 mean exactly what they already mean elsewhere.
+Despite the dataset's name it carries `ip6.arpa` zones too, and all five RIRs'
+zonelets rather than only RIPE's.
+
+**Two traps this corpus sets, both handled and both worth knowing about.**
+
+*The archive has gaps, and one kind is invisible.* Some days 404; others are
+published as **zero-byte files served with HTTP 200**. Both are treated as gaps —
+the day is *absent from the corpus rather than empty* — and warned about. Of 209
+monthly snapshots, 199 exist: 8 unpublished, 2 zero-byte.
+
+*The archive's composition changes.* APNIC contributed zonelets from 2009 until
+2024-12-01; from 2025-01-01 its directory is empty, removing ~530,000 delegations
+from the denominator in one step. Charting the raw total puts a jump there that
+reads as adoption and is not. `reporting/reverse_adoption.py` therefore computes the
+headline series over the RIRs present on **every** measured day, plots the
+all-RIRs series beside it, and annotates the break.
+
+`--local-corpus` discovers partitions from `--cache-dir` instead of listing the
+object store. It is required here — the store never hosted this corpus — and it is
+worth using for a full OpenINTEL mirror too, where discovery otherwise spends one
+LIST per partition-day confirming what is already on local disk.
+
+Four other historical sources were assessed (DNS-OARC DITL, the OARC root-zone
+archive, Tony Finch's `saveroot`, and stats.dnssec-tools.org). Two are closed to
+non-members and one needs a 4.7 GB clone; see
+[`docs/additional_corpora.md`](docs/additional_corpora.md) for what each would add
+and what it would take to get in.
+
+### Mirror once, scan many times
+
+The request limiter is not the bottleneck people assume it is. Measured against the
+real corpus this project scans:
+
+| | |
+| --- | --- |
+| Objects | 7,261 |
+| Total size | **2.07 TB** (`.se` 1.49 TB · `.nu` 567 GB · `.gov` 15.8 GB) |
+| Requests to mirror it | 7,261 — **~2 hours** of the ~1 req/s budget |
+| Requests to stream it | ~43,000 — ~12 hours, **paid again every run** |
+| Time to move 2.07 TB | 144 h at 4 MB/s · 23 h at 25 MB/s · 5.8 h at 100 MB/s |
+
+So the request budget buys the whole corpus in an afternoon. **Bandwidth is the
+constraint, not the rate limit** — and the way to stop paying either one repeatedly
+is to fetch once and scan locally:
+
+```bash
+# once, per machine, in parallel with the others
+openintel-rfc mirror --sources gov,nu,se --start 2018-01-01 --end 2026-04-30     --cache-dir /large/volume/openintel --shards 4 --shard 0
+
+# thereafter: no network, no limiter, re-runnable as often as the checklist changes
+openintel-rfc scale --sources gov,nu,se --start 2018-01-01 --end 2026-04-30     --mode download --cache-dir /large/volume/openintel --out out/run
+```
+
+Measured on `.gov` days, streaming vs scanning a mirror: **14.2 s → 3.5 s per
+partition**, identical row counts, and zero requests to Utwente.
+
+`mirror` writes exactly the layout `--mode download --cache-dir` reads, is resumable
+(an object whose local size matches the store's is skipped), and verifies each
+transfer against the size the store reports — a short copy is discarded rather than
+left for a later scan to read as a legitimately small day.
+
+### Splitting a mirror across machines
+
+Two things break naive sharding here.
+
+**The corpus is wildly unbalanced.** `.se` is 1.49 TB and `.gov` is 15.8 GB, so
+"one machine per year" hands one machine 750 GB and another 2 GB. `--shards` splits
+on **bytes**, using longest-processing-time-first bin packing, and prints the spread
+before it starts:
+
+```
+ shard   objects         size
+     0     1,815      517.6 GB
+     1     1,816      517.5 GB
+...
+```
+
+The split is deterministic — same objects, same shard count, same assignment on
+every machine — so the machines need no coordinator, no shared filesystem and no
+lock. Nothing is fetched twice, nothing is missed, and a machine that dies resumes
+on exactly its own share.
+
+**Extra machines only help if they have their own network path.** The limiter is
+keyed per client address, so two VMs behind one NAT share one budget *and* one
+uplink and will not beat one machine. Two hosts on different links roughly double.
+Nothing in the tool can detect this; `--shards` is a declaration about your network,
+not a discovery.
+
+To check what a given host actually gets, time a single object:
+
+```bash
+curl -s -o /dev/null -w '%{speed_download} B/s
+'   "https://object.openintel.nl/openintel-public/fdns/basis=zonefile/source=gov/year=2018/month=01/day=01/"*
+```
+
+### If you shard, tell the pipeline
+
+The limiter is **per endpoint, not per process**. Running four shards that are each
+individually polite puts four times the budget on one bucket, and the burst queue
+stays saturated — which is what turns a throttle into a run that quietly stops
+covering days. Pass the shard count so each process takes its share:
+
+```bash
+# four shards, one per year: each paces for a quarter of the budget
+./scripts/run_full_analysis.sh --sources gov --start 2018-01-01 --end 2018-12-31     --shards 4 --checkpoint-dir out/checkpoints/2018 &
+# ...three more, same --shards 4
+```
+
+The gap between partitions is adaptive: it starts at `--pace-seconds` (0.5 s by
+default, × the shard count), doubles each time the store pushes back, and decays
+back toward the floor as partitions succeed. `--max-pace-seconds` (60 s) caps it, so
+a store that never relaxes surfaces as a slow run rather than an invisible stall.
+
+A throttled run says so in its warnings, including how far the gap widened. Take it
+seriously: **partitions that exhaust their retry budget are absent from the
+checkpoints, not empty**, so a throttled run can under-cover a date range without any
+count looking wrong. Re-run with `--resume` to fill the gaps.
+
+### A 403 is not always a permissions problem
+
+Two different failures both arrive as HTTP 403, and they want opposite responses:
+
+| Body | Meaning | What the pipeline does |
+| --- | --- | --- |
+| nginx HTML error page | the address is being blocked for load | retried with jittered backoff, like a 503 |
+| `<Error><Code>AccessDenied</Code>` XML | the request was **signed**, and refused | fails immediately with an explanation |
+
+The bucket is public and the pipeline reads it anonymously, so the second case means
+stray AWS credentials were picked up and used to sign the request — check
+`AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` / `AWS_SESSION_TOKEN`,
+`~/.aws/credentials`, and any instance profile on the host. That failure is identical
+on every request, so retrying it only buries the one line that explains the run.
 
 ### Splitting across machines
 
@@ -614,8 +862,10 @@ when you *want* everything recomputed — after changing the checklist, for
 instance, though a changed checklist invalidates the checkpoints automatically.
 
 Transient object-store failures are retried inside the run (~8.5 minutes of HTTP
-retries, then up to 5 partition-level retries with doubling waits), so a routine
-503 pauses the run rather than ending it.
+retries, then up to 5 partition-level retries with doubling, **jittered** waits), so a
+routine 503 or a load-shedding 403 pauses the run rather than ending it. The jitter
+matters for sharded runs: without it, shards that fail together sleep for the same
+number of seconds and collide again on return.
 
 ### Sizing a run
 

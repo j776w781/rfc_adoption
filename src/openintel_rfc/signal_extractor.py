@@ -62,6 +62,20 @@ SIGNAL_FIELDS: tuple[str, ...] = (
     "digest_type",
     "key_tag",
     "flags",
+    # Added with checklist 0.2.0. Every one of these is *record content* -- what
+    # the zone published -- which is what makes it matchable. A field that is not
+    # listed here is invisible to the Python matcher even when the dictionary
+    # defines it and the SQL path can read the column, and the two engines then
+    # disagree about indicators that use it.
+    "nsec3_iterations",
+    "nsec3_salt",
+    "nsec3_flags",
+    "dnskey_protocol",
+    "rsa_key_bitsize",
+    "rrsig_type_covered",
+    "tlsa_usage",
+    "tlsa_selector",
+    "tlsa_matchtype",
 )
 
 #: Columns promoted to top-level attributes of :class:`ObservedSignal`.

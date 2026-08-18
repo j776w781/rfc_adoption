@@ -27,6 +27,8 @@ NO_RESUME=0
 PARTITION_RETRIES=""
 RETRY_WAIT=""
 PACE_SECONDS=""
+MAX_PACE_SECONDS=""
+SHARDS=""
 CHECKLISTS="${PROJECT_ROOT}/data/rfc_checklists/dnssec_rfc_checklists.json"
 DICTIONARY="${PROJECT_ROOT}/data/openintel_dictionary/sample_openintel_dictionary.json"
 
@@ -49,9 +51,15 @@ Options:
   --max-partitions N       Stop after N partitions (useful for a bounded trial)
   --partition-retries N    Retries per partition on a 503/timeout (default: 5)
   --retry-wait SECONDS     First retry wait; doubles thereafter (default: 30)
-  --pace-seconds SECONDS   Sleep between partitions. OpenINTEL is a shared
-                           academic store and rate-limits by request count;
-                           pacing a long walk makes throttling far less likely
+  --pace-seconds SECONDS   Smallest gap between partitions (default: 0.5). The
+                           gap is adaptive: it widens when the store pushes back
+                           and relaxes when it stops
+  --max-pace-seconds SECS  Ceiling for that adaptive gap (default: 60)
+  --shards N               How many processes share the store's budget with this
+                           one, INCLUDING this one. Set it whenever you run more
+                           than one shard at a time: the limiter is ~1 request
+                           per second per endpoint, not per process, so N shards
+                           each pacing for the whole budget is N times over it
   --threads N              DuckDB threads (default: all cores)
   --memory-limit SIZE      DuckDB memory limit, e.g. 64GB (default: 70% of RAM)
   --checklists PATH        RFC checklist DB
@@ -82,6 +90,8 @@ while [[ $# -gt 0 ]]; do
         --partition-retries) PARTITION_RETRIES="${2:?}"; shift ;;
         --retry-wait)      RETRY_WAIT="${2:?}"; shift ;;
         --pace-seconds)    PACE_SECONDS="${2:?}"; shift ;;
+        --max-pace-seconds) MAX_PACE_SECONDS="${2:?}"; shift ;;
+        --shards)          SHARDS="${2:?}"; shift ;;
         --threads)         DUCKDB_THREADS="${2:?}"; export DUCKDB_THREADS; shift ;;
         --memory-limit)    DUCKDB_MEMORY_LIMIT="${2:?}"; export DUCKDB_MEMORY_LIMIT; shift ;;
         --checklists)      CHECKLISTS="${2:?}"; shift ;;
@@ -189,6 +199,8 @@ CMD=(python -m openintel_rfc.cli scale
 [[ -n "${PARTITION_RETRIES}" ]] && CMD+=(--partition-retries "${PARTITION_RETRIES}")
 [[ -n "${RETRY_WAIT}"      ]] && CMD+=(--retry-wait "${RETRY_WAIT}")
 [[ -n "${PACE_SECONDS}"    ]] && CMD+=(--pace-seconds "${PACE_SECONDS}")
+[[ -n "${MAX_PACE_SECONDS}" ]] && CMD+=(--max-pace-seconds "${MAX_PACE_SECONDS}")
+[[ -n "${SHARDS}"          ]] && CMD+=(--shards "${SHARDS}")
 [[ "${NO_RESUME}" == "1"  ]] && CMD+=(--no-resume)
 [[ "${DRY_RUN}"   == "1"  ]] && CMD+=(--dry-run)
 

@@ -216,6 +216,14 @@ def _render_condition(condition: IndicatorCondition) -> str:
     return f"{condition.field} {condition.op} {format_value(condition.value)}"
 
 
+#: Dictionary fields the matcher treats as provenance rather than as evidence.
+#: Mirrors ``signal_extractor.PROVENANCE_FIELDS`` minus ``timestamp``, which has
+#: its own publication-date machinery and is never used as an indicator condition.
+NON_EVIDENTIAL_FIELDS: frozenset[str] = frozenset(
+    {"domain", "zone", "source", "measurement_id"}
+)
+
+
 def _describe_field(name: str, dictionary: OpenINTELDictionary) -> str:
     """Render a field as ``name (type)`` when known, else just ``name``."""
     field = dictionary.get(name)
@@ -344,6 +352,32 @@ def check_condition(
     rendered = _render_condition(condition)
     field = dictionary.get(condition.field)
 
+    # A provenance field says where an observation came from, not what the zone
+    # published, so the matcher never exposes it as evidence. The SQL path reads
+    # it as an ordinary column and would happily answer a condition on it, which
+    # is exactly how the two engines came to disagree about RFC 9615. Refusing it
+    # here keeps both paths on the same answer -- and the answer is honest: an
+    # owner-name pattern is not something this signal model can testify to.
+    if condition.field in NON_EVIDENTIAL_FIELDS:
+        explanation = (
+            f"Condition `{rendered}` of {rfc.rfc_id} cannot be evaluated: "
+            f"{condition.field} is provenance, not evidence. It identifies which "
+            "observation this is, and the matcher deliberately does not expose it "
+            "as a testable field, so an indicator resting on it can never match. "
+            "An owner-name or measurement-identity signature needs a different "
+            "corpus, not a different condition."
+        )
+        return ConditionSchemaCheck(
+            field=condition.field,
+            op=condition.op,
+            expected=condition.value,
+            field_exists=False,
+            field_type=None,
+            available_from=None,
+            type_compatible=True,
+            explanation=explanation,
+        )
+
     if field is None:
         suggestion = _suggest_field(condition.field, dictionary)
         hint = (
@@ -467,8 +501,14 @@ def check_indicator(
         check_condition(condition, dictionary, rfc) for condition in indicator.conditions
     ]
 
-    present = [name for name in indicator.fields_used if dictionary.has(name)]
-    missing = [name for name in indicator.fields_used if not dictionary.has(name)]
+    # A provenance field is defined in the dictionary but is not evidence, so it
+    # counts as missing here: the matcher never exposes it, and an indicator that
+    # rests on one can never match however well-formed it looks.
+    def usable(name: str) -> bool:
+        return dictionary.has(name) and name not in NON_EVIDENTIAL_FIELDS
+
+    present = [name for name in indicator.fields_used if usable(name)]
+    missing = [name for name in indicator.fields_used if not usable(name)]
     present_described = [_describe_field(name, dictionary) for name in present]
 
     queryability, rule = _classify(rfc, indicator, present, missing)

@@ -297,3 +297,84 @@ alongside the new one if you want to compare.
 - [ ] Test added pinning the score
 - [ ] `pytest` and `make verify` green, with expected totals updated
 - [ ] `checklist_version` bumped if any `scale` output exists
+
+
+## The four questions the pipeline asks (checklist 0.2.0)
+
+Adding an RFC is answering these in order. The tooling answers the last two for
+you and writes down why, which is what makes the result explainable rather than
+asserted.
+
+### 1. What does a match *mean*? (`signal_type`)
+
+Not every RFC is an adoption story, and treating them alike inverts a third of
+the corpus.
+
+| `signal_type` | A match means | Examples |
+| --- | --- | --- |
+| `adoption` | the mechanism is deployed | RFC 6605 (ECDSA), RFC 9276 (NSEC3 params) |
+| `non_conformance` | a **deprecated** mechanism is still published | RFC 9905 (SHA-1 sigs), RFC 9906 (ECC-GOST) |
+| `meta` | the document defines a process or resolver behaviour | RFC 9904, RFC 8198, RFC 7583 |
+
+A `non_conformance` match is bad news. Counting it as adoption would report a
+zone that ignored a deprecation as a zone that adopted something.
+
+### 2. Is the field *evidence*, or is it *provenance*?
+
+`domain`, `zone`, `source` and `measurement_id` identify **which observation this
+is**. The matcher deliberately does not expose them as testable fields, so an
+indicator resting on one can never match — and `schema-check` now says exactly
+that instead of calling it queryable.
+
+This is not a technicality. It is why RFC 9615 (bootstrapping via `_signal`
+labels) and RFC 7672 (SMTP DANE at `_25._tcp`) classify as unmeasurable here:
+their signature is an **owner-name pattern**, and this signal model testifies to
+record content, not to names. Wanting them measured means changing the signal
+model, not the condition.
+
+The SQL path would happily answer a condition on `domain` — it is just a column —
+which is how the two engines came to disagree. If you add a field, decide which
+side of this line it falls on, or the engines will silently diverge.
+
+### 3. Can this corpus answer it? (`schema-check`)
+
+```bash
+openintel-rfc schema-check --out out/schema
+python reporting/rfc_classification.py out/schema/schema_check.json     data/rfc_checklists/dnssec_rfc_checklists.json out/classification
+```
+
+Every indicator lands on `queryable`, `partially_queryable`, `ambiguous` or
+`non_queryable`, each with the sentence that justifies it. The per-RFC roll-up in
+`rfc_classification.md` adds the verdict a person reads: **measurable**, **partly
+measurable**, **ambiguous only**, **not measurable here**.
+
+An RFC classifying as "not measurable here" is a *result*, not a failure. Eight
+of the thirty do, and the report says which field made each one unanswerable.
+
+### 4. When could an answer first exist? (`observable_from`)
+
+An RFC published before the fields its indicators need is **left-censored**: a
+first-seen date is an upper bound on the lag, never a measurement of it. Eight of
+the thirty are, and `rfc_classification.md` flags each with ⚠ and the date the
+corpus could first have seen it.
+
+## What adding an RFC costs
+
+Adding an entry changes `checklist_version`, which **invalidates every existing
+checkpoint** — by design, so a result can never mix two checklists. Plan on a
+rescan. For a local corpus that is cheap (the reverse corpus rescans in about an
+hour); for a streamed OpenINTEL range it is the full walk again, which is one
+more reason to mirror rather than stream.
+
+Two things worth re-running afterwards, because they are the ones that catch a
+badly specified indicator:
+
+```bash
+pytest tests/test_scale_runner.py -k "agree"   # the two engines must still match
+bash scripts/verify_all.sh                     # end-to-end gate
+```
+
+The engine-agreement tests are not ceremony. They are what surfaced both real
+bugs found while extending the checklist to 30 RFCs: a provenance field being
+answerable in SQL but not in Python, and a zero-scoring `ambiguous` match keeping
+an adoption verdict on an observation that predated its own RFC.

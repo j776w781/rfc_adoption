@@ -1,5 +1,5 @@
 {
-  "dictionary_version": "0.1.0",
+  "dictionary_version": "0.2.0",
   "source": "Derived from the public OpenINTEL data dictionary (https://openintel.nl/background/dictionary/), reduced to a DNSSEC-relevant analysis view.",
   "notes": [
     "This is an ANALYSIS dictionary, not a verbatim copy of the OpenINTEL Parquet schema.",
@@ -7,7 +7,8 @@
     "'available_from' is the earliest date on which the field is considered reliably populated in the measurement corpus.",
     "Indicators referencing fields absent from this dictionary are classified non_queryable by the schema checker.",
     "'openintel_native_fields' must list only columns that are genuine alternative sources of the same value: the reader COALESCEs them. The Hive partition columns year/month/day are deliberately NOT listed under 'timestamp' -- they are components of the partition path, not fallbacks for a measurement time, and on real S3 data DuckDB types year as BIGINT while month and day are VARCHAR, so coalescing them is both meaningless and a hard bind error.",
-    "'measurement_id' has no column in the real OpenINTEL corpus. It resolves in the synthetic sample only, and reads as null against real data."
+    "'measurement_id' has no column in the real OpenINTEL corpus. It resolves in the synthetic sample only, and reads as null against real data.",
+    "0.2.0 adds the NSEC3 parameter, DNSKEY format, RSA key size and TLSA columns needed to evidence RFC 9276, RFC 4034, RFC 5155 opt-out and the DANE RFCs. Every added field maps to a column verified present in the 93-column OpenINTEL forward-DNS schema."
   ],
   "fields": [
     {
@@ -15,7 +16,9 @@
       "type": "datetime",
       "description": "Measurement timestamp (UTC) at which the DNS response was observed.",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["timestamp"],
+      "openintel_native_fields": [
+        "timestamp"
+      ],
       "nullable": false
     },
     {
@@ -23,7 +26,10 @@
       "type": "string",
       "description": "Fully qualified domain name that was queried.",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["query_name", "response_name"],
+      "openintel_native_fields": [
+        "query_name",
+        "response_name"
+      ],
       "nullable": false
     },
     {
@@ -31,7 +37,9 @@
       "type": "string",
       "description": "Zone or TLD the measurement partition belongs to.",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["source"],
+      "openintel_native_fields": [
+        "source"
+      ],
       "nullable": false
     },
     {
@@ -39,7 +47,9 @@
       "type": "string",
       "description": "DNS resource record type of the observed response record (DNSKEY, DS, RRSIG, NSEC, NSEC3, NSEC3PARAM, CDS, CDNSKEY, ...).",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["response_type"],
+      "openintel_native_fields": [
+        "response_type"
+      ],
       "nullable": false
     },
     {
@@ -47,7 +57,15 @@
       "type": "integer",
       "description": "DNSSEC algorithm number carried by the record (IANA DNSSEC Algorithm Numbers). Algorithm 0 in CDS/CDNSKEY is the RFC 8078 delete signal.",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["dnskey_algorithm", "ds_algorithm", "rrsig_algorithm", "cds_algorithm", "cdnskey_algorithm", "nsec3_hash_algorithm", "nsec3param_hash_algorithm"],
+      "openintel_native_fields": [
+        "dnskey_algorithm",
+        "ds_algorithm",
+        "rrsig_algorithm",
+        "cds_algorithm",
+        "cdnskey_algorithm",
+        "nsec3_hash_algorithm",
+        "nsec3param_hash_algorithm"
+      ],
       "nullable": true
     },
     {
@@ -55,7 +73,10 @@
       "type": "integer",
       "description": "DS/CDS digest type (1 = SHA-1, 2 = SHA-256, 4 = SHA-384).",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["ds_digest_type", "cds_digest_type"],
+      "openintel_native_fields": [
+        "ds_digest_type",
+        "cds_digest_type"
+      ],
       "nullable": true
     },
     {
@@ -63,7 +84,11 @@
       "type": "integer",
       "description": "DNSSEC key tag identifying the key a DS/RRSIG/CDS record refers to.",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["ds_key_tag", "rrsig_key_tag", "cds_key_tag"],
+      "openintel_native_fields": [
+        "ds_key_tag",
+        "rrsig_key_tag",
+        "cds_key_tag"
+      ],
       "nullable": true
     },
     {
@@ -71,7 +96,12 @@
       "type": "string",
       "description": "DNSKEY/NSEC3 flags field, rendered as a string. Only reliably exported in later measurement generations.",
       "available_from": "2016-01-01",
-      "openintel_native_fields": ["dnskey_flags", "cdnskey_flags", "nsec3_flags", "nsec3param_flags"],
+      "openintel_native_fields": [
+        "dnskey_flags",
+        "cdnskey_flags",
+        "nsec3_flags",
+        "nsec3param_flags"
+      ],
       "nullable": true
     },
     {
@@ -79,7 +109,9 @@
       "type": "string",
       "description": "OpenINTEL measurement source / partition identifier (e.g. the zone file or top list the name was drawn from).",
       "available_from": "2010-01-01",
-      "openintel_native_fields": ["source"],
+      "openintel_native_fields": [
+        "source"
+      ],
       "nullable": true
     },
     {
@@ -88,6 +120,101 @@
       "description": "Opaque identifier of the individual measurement run or object the row came from.",
       "available_from": "2010-01-01",
       "openintel_native_fields": [],
+      "nullable": true
+    },
+    {
+      "name": "nsec3_iterations",
+      "type": "integer",
+      "description": "NSEC3 iteration count (RFC 5155 s3.2, a 16-bit field, 0-65535). Every extra iteration is another SHA-1 pass a validating resolver must perform on a negative answer, which is the root cause of CVE-2023-50868. RFC 9276 recommends 0.",
+      "available_from": "2010-01-01",
+      "openintel_native_fields": [
+        "nsec3_iterations",
+        "nsec3param_iterations"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "nsec3_salt",
+      "type": "string",
+      "description": "NSEC3 salt as published. RFC 9276 recommends an empty salt: it adds no security against a modern attacker and costs a zone re-salt to change.",
+      "available_from": "2010-01-01",
+      "openintel_native_fields": [
+        "nsec3_salt",
+        "nsec3param_salt"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "nsec3_flags",
+      "type": "integer",
+      "description": "NSEC3 flags as an integer. Bit 0 is Opt-Out (RFC 5155 s6): when set, unsigned delegations may be skipped in the hash chain. Distinct from the generic `flags` field, which is a string coalesced across DNSKEY/CDNSKEY/NSEC3 and cannot be compared numerically.",
+      "available_from": "2010-01-01",
+      "openintel_native_fields": [
+        "nsec3_flags",
+        "nsec3param_flags"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "dnskey_protocol",
+      "type": "integer",
+      "description": "DNSKEY/CDNSKEY protocol octet. RFC 4034 s2.1.2 fixes it at 3, so this evidences the RFC 4034 record format specifically rather than DNSSEC in general.",
+      "available_from": "2010-01-01",
+      "openintel_native_fields": [
+        "dnskey_protocol",
+        "cdnskey_protocol"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "rsa_key_bitsize",
+      "type": "integer",
+      "description": "Modulus size of an RSA DNSKEY/CDNSKEY in bits. Carries the operational key-strength signal RFC 6781 discusses; null for every non-RSA algorithm, which is itself informative.",
+      "available_from": "2010-01-01",
+      "openintel_native_fields": [
+        "dnskey_pk_rsa_bitsize",
+        "cdnskey_pk_rsa_bitsize"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "rrsig_type_covered",
+      "type": "string",
+      "description": "RR type an RRSIG covers (RFC 4034 s3.1.1). Present only on RRSIG records, so it evidences the RFC 4034 signature record format directly.",
+      "available_from": "2010-01-01",
+      "openintel_native_fields": [
+        "rrsig_type_covered"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "tlsa_usage",
+      "type": "integer",
+      "description": "TLSA certificate usage (RFC 6698 s2.1.1): 0 PKIX-TA, 1 PKIX-EE, 2 DANE-TA, 3 DANE-EE. RFC 7671 gives operational guidance that favours 2 and 3.",
+      "available_from": "2012-08-01",
+      "openintel_native_fields": [
+        "tlsa_usage"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "tlsa_selector",
+      "type": "integer",
+      "description": "TLSA selector (RFC 6698 s2.1.2): 0 full certificate, 1 SubjectPublicKeyInfo.",
+      "available_from": "2012-08-01",
+      "openintel_native_fields": [
+        "tlsa_selector"
+      ],
+      "nullable": true
+    },
+    {
+      "name": "tlsa_matchtype",
+      "type": "integer",
+      "description": "TLSA matching type (RFC 6698 s2.1.3): 0 exact, 1 SHA-256, 2 SHA-512.",
+      "available_from": "2012-08-01",
+      "openintel_native_fields": [
+        "tlsa_matchtype"
+      ],
       "nullable": true
     }
   ]

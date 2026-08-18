@@ -91,10 +91,13 @@ def test_the_queue_includes_timestamp_invalid_matches(mixed_run) -> None:
 def test_the_queue_includes_non_queryable_indicators(mixed_run) -> None:
     non_queryable = _of_type(mixed_run["items"], "non_queryable_indicator")
 
-    assert len(non_queryable) == 1
-    item = non_queryable[0]
+    # Checklist 0.2.0 carries the process and resolver-side RFCs too, each of which
+    # is non-queryable by construction, so the queue holds one per such indicator.
+    # The assertion that matters is that the RFC 8624 case is still surfaced with
+    # the field that made it unanswerable.
+    assert len(non_queryable) >= 1
+    item = next(i for i in non_queryable if i.affected_rfc_ids == ["RFC 8624"])
     assert item.severity == "high"
-    assert item.affected_rfc_ids == ["RFC 8624"]
     assert item.affected_fields == ["validator_algorithm_support"]
     assert "cannot be evaluated at all" in item.reason
     assert "openintel_native_fields" in item.suggested_action
@@ -104,10 +107,9 @@ def test_the_queue_includes_non_queryable_indicators(mixed_run) -> None:
 def test_the_queue_includes_partially_queryable_indicators(mixed_run) -> None:
     partial = _of_type(mixed_run["items"], "partially_queryable_indicator")
 
-    assert len(partial) == 1
-    item = partial[0]
+    assert len(partial) >= 1
+    item = next(i for i in partial if i.affected_rfc_ids == ["RFC 4033"])
     assert item.severity == "medium"
-    assert item.affected_rfc_ids == ["RFC 4033"]
     assert item.affected_fields == ["dnssec_ok_flag"]
     assert "only partially queryable" in item.reason
 

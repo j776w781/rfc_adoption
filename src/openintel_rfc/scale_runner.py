@@ -61,6 +61,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import random
 import time
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass, field
@@ -70,7 +71,12 @@ from typing import Any
 
 import pandas as pd
 
-from .config import ALWAYS_SELECT_FIELDS
+from .config import (
+    ALWAYS_SELECT_FIELDS,
+    DEFAULT_MAX_PACE_SECONDS,
+    DEFAULT_PACE_SECONDS,
+    OPENINTEL_REQUESTS_PER_SECOND,
+)
 from .models import (
     AdoptionTimelineEntry,
     ObservedSignal,
@@ -152,6 +158,70 @@ AGGREGATE_COLUMNS: tuple[str, ...] = (
 
 
 # --------------------------------------------------------------------------- #
+# Staying under the store's request budget
+# --------------------------------------------------------------------------- #
+
+
+@dataclass
+class ThrottleGovernor:
+    """Adaptive gap between partitions: fast backoff, slow relief.
+
+    A fixed `--pace-seconds` cannot be right for both halves of a run. Too small
+    and a busy period collapses into a 503 storm; too large and thousands of
+    quiet partitions each pay for a busy period that may never come. So the pace
+    responds to evidence: every throttled partition doubles it, every clean one
+    decays it back toward the floor.
+
+    ``shards`` divides the budget. N processes sharing one bucket may each spend
+    only 1/N of it, so the floor is multiplied by N -- the failure the overnight
+    run hit was N shards each being individually polite while the aggregate was N
+    times over.
+    """
+
+    floor_seconds: float = DEFAULT_PACE_SECONDS
+    ceiling_seconds: float = DEFAULT_MAX_PACE_SECONDS
+    shards: int = 1
+    #: How much a throttled partition multiplies the gap by.
+    backoff_factor: float = 2.0
+    #: How much a clean partition shrinks it by. Deliberately far slower than the
+    #: backoff: recovering faster than the store forgets re-triggers the limiter.
+    recovery_factor: float = 0.9
+
+    throttle_events: int = field(default=0, init=False)
+    _delay: float = field(default=0.0, init=False)
+
+    def __post_init__(self) -> None:
+        self.shards = max(int(self.shards), 1)
+        self.floor_seconds = max(float(self.floor_seconds), 0.0)
+        self.ceiling_seconds = max(float(self.ceiling_seconds), self._floor)
+        self._delay = self._floor
+
+    @property
+    def _floor(self) -> float:
+        return self.floor_seconds * self.shards
+
+    @property
+    def delay(self) -> float:
+        """Seconds to wait before starting the next partition."""
+        return self._delay
+
+    def on_throttled(self) -> None:
+        self.throttle_events += 1
+        # max(..., 1/rate) so the first throttle produces a real gap even when
+        # the run was configured with no pacing at all.
+        widened = max(self._delay * self.backoff_factor,
+                      self.shards / OPENINTEL_REQUESTS_PER_SECOND)
+        self._delay = min(widened, self.ceiling_seconds)
+
+    def on_success(self) -> None:
+        self._delay = max(self._floor, self._delay * self.recovery_factor)
+
+    def wait(self) -> None:
+        if self._delay > 0:
+            time.sleep(self._delay)
+
+
+# --------------------------------------------------------------------------- #
 # Configuration and partition handles
 # --------------------------------------------------------------------------- #
 
@@ -187,10 +257,17 @@ class ScaleRunConfig:
     partition_retries: int = 5
     partition_retry_wait_seconds: float = 30.0
 
-    #: Optional gap between partitions. Zero by default: correctness never needs
-    #: it, but a long unattended walk over a shared academic object store is a
-    #: sustained load, and pacing is the cheapest way to be a good citizen.
-    pace_seconds: float = 0.0
+    #: Floor for the gap between partitions. The store allows about one request
+    #: per second with a burst of about five (see `ThrottleGovernor`), so this is
+    #: not merely politeness -- a run with no gap at all overflows the burst queue
+    #: and is rejected. The gap is adaptive: this is the smallest it ever gets.
+    pace_seconds: float = DEFAULT_PACE_SECONDS
+    #: Largest the adaptive gap may grow to before the run is simply stuck.
+    max_pace_seconds: float = DEFAULT_MAX_PACE_SECONDS
+    #: How many processes are sharing the store's budget with this one. A sharded
+    #: run must declare it: N shards each pacing for the whole budget is N times
+    #: over it, which is what made the overnight run collapse into 503s.
+    shards: int = 1
     #: Recorded in the run manifest so an output directory names its own inputs.
     checklists: Path | str | None = None
     dictionary: Path | str | None = None
@@ -634,13 +711,24 @@ def build_aggregate_sql(
 #: Substrings identifying an error worth retrying: a shared object store under
 #: load, not a bug in the query. Matched case-insensitively against the message,
 #: because DuckDB surfaces HTTP failures as generic exceptions.
+#:
+#: ``403`` is here because of what the endpoint actually does. nginx fronts the
+#: object store and rejects an overflowing ``limit_req`` queue with 503, but an
+#: address it has decided to block gets 403 -- with nginx's own HTML body, not
+#: the store's XML. Neither says the request was malformed, so both are worth
+#: waiting out. Distinguishing them from a genuine permission failure is
+#: `_PERMANENT_AUTH_MARKERS`' job, and it is consulted first.
 _TRANSIENT_MARKERS: tuple[str, ...] = (
-    "503",
+    "403",
+    "429",
     "500",
     "502",
+    "503",
     "504",
+    "forbidden",
     "service unavailable",
     "slow down",
+    "slowdown",
     "too many requests",
     "timeout",
     "timed out",
@@ -650,8 +738,50 @@ _TRANSIENT_MARKERS: tuple[str, ...] = (
     "could not establish connection",
 )
 
+#: Substrings identifying a *permission* failure rather than load. The bucket is
+#: public and this client is meant to send no credentials at all; when one leaks
+#: in -- ``AWS_ACCESS_KEY_ID`` in the environment, an instance profile on the
+#: server, a stale ``~/.aws/credentials`` -- botocore and DuckDB sign every
+#: request and the store refuses every one of them with a 403 carrying an
+#: ``AccessDenied`` XML body.
+#:
+#: That failure is immediate, total and permanent, so it must not be retried:
+#: spending the 7.5-minute budget per partition on it turns a one-line
+#: misconfiguration into an overnight run that produces nothing and explains
+#: nothing. Checked before `_TRANSIENT_MARKERS` because these messages carry
+#: "403" too.
+_PERMANENT_AUTH_MARKERS: tuple[str, ...] = (
+    "accessdenied",
+    "access denied",
+    "signaturedoesnotmatch",
+    "invalidaccesskeyid",
+    "invalid access key",
+    "expiredtoken",
+    "tokenrefreshrequired",
+)
+
+#: What to tell an operator who hit the permanent case. It names the thing to
+#: look at, because "AccessDenied" on a public bucket is otherwise baffling.
+_ANONYMOUS_ACCESS_HELP = (
+    "The object store refused the request as unauthorised. This bucket is public "
+    "and the pipeline reads it anonymously, so this almost always means stray AWS "
+    "credentials were picked up and used to sign the request. Check "
+    "AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY / AWS_SESSION_TOKEN in the "
+    "environment, ~/.aws/credentials, and any instance profile on this host; "
+    "unset them for this run. Retrying cannot help: the credential is wrong on "
+    "every request, not just this one."
+)
+
+
+def _is_auth_failure(exc: BaseException) -> bool:
+    """True when the store rejected the *identity*, not the load."""
+    text = f"{type(exc).__name__}: {exc}".lower()
+    return any(marker in text for marker in _PERMANENT_AUTH_MARKERS)
+
 
 def _is_transient(exc: BaseException) -> bool:
+    if _is_auth_failure(exc):
+        return False
     text = f"{type(exc).__name__}: {exc}".lower()
     return any(marker in text for marker in _TRANSIENT_MARKERS)
 
@@ -662,6 +792,8 @@ def _process_with_retry(
     attempts: int,
     base_wait: float,
     warnings: list[str],
+    governor: "ThrottleGovernor | None" = None,
+    _process: Any = None,
     **kwargs: Any,
 ) -> PartitionResult:
     """Run one partition, retrying transient object-store failures.
@@ -672,35 +804,65 @@ def _process_with_retry(
     the partition level, with a wait long enough for a rate limiter to relax,
     turns a fatal error into a pause.
 
+    Waits are jittered. A sharded run is several processes drawing on one
+    ``limit_req`` bucket; if they fail together and each sleeps exactly the same
+    number of seconds, they return together and knock each other over again.
+    Equal jitter -- half the backoff plus a random half -- keeps the growth while
+    breaking the lockstep.
+
+    ``governor``, when given, learns from what happened: a throttled partition
+    widens the gap before the next one, a clean partition narrows it back toward
+    the configured floor.
+
     A non-transient failure is raised immediately: retrying a malformed query or
-    a genuinely missing object just wastes time and hides the real cause.
+    a genuinely missing object just wastes time and hides the real cause. A
+    credential failure is raised with an explanation, because "AccessDenied" on a
+    deliberately public bucket is otherwise baffling.
+
+    ``_process`` is a test seam; production callers leave it unset.
     """
+    run = _process if _process is not None else process_partition
     partition_id = getattr(partition, "partition_id", "?")
     wait = max(float(base_wait), 0.0)
     last: Exception | None = None
 
     for attempt in range(1, max(int(attempts), 1) + 1):
         try:
-            return process_partition(partition, warnings=warnings, **kwargs)
+            result = run(partition, warnings=warnings, **kwargs)
         # Deliberately broad: the runner wraps DuckDB failures in PipelineError,
         # but httpfs raises its own exception hierarchy and a raw HTTPException
         # escaping here would defeat the whole point of retrying. Non-transient
         # errors are re-raised untouched on the first attempt.
         except Exception as exc:
             last = exc
-            if not _is_transient(exc) or attempt >= attempts:
+            if _is_auth_failure(exc):
+                raise PipelineError(
+                    f"Partition {partition_id}: {_ANONYMOUS_ACCESS_HELP} "
+                    f"Original error: {exc}"
+                ) from exc
+            if not _is_transient(exc):
                 raise
+            if governor is not None:
+                governor.on_throttled()
+            if attempt >= attempts:
+                raise
+            # Equal jitter: keep the doubling, lose the synchronisation.
+            delay = wait / 2 + random.uniform(0.0, wait / 2) if wait > 0 else 0.0
             LOGGER.warning(
                 "Partition %s failed with a transient error on attempt %d/%d "
-                "(%s); retrying in %.0fs.",
+                "(%s); retrying in %.1fs.",
                 partition_id,
                 attempt,
                 attempts,
                 str(exc).splitlines()[0][:160],
-                wait,
+                delay,
             )
-            time.sleep(wait)
+            time.sleep(delay)
             wait *= 2
+        else:
+            if governor is not None:
+                governor.on_success()
+            return result
 
     raise last if last is not None else PipelineError(  # pragma: no cover
         f"Partition {partition_id} failed without an recorded error."
@@ -1607,6 +1769,20 @@ def run_scale_analysis(
         )
         checkpoint_dir = ensure_dir(config.checkpoint_dir)
 
+        governor = ThrottleGovernor(
+            floor_seconds=config.pace_seconds,
+            ceiling_seconds=config.max_pace_seconds,
+            shards=config.shards,
+        )
+        LOGGER.info(
+            "Pacing: %.2fs between partitions (floor %.2fs x %d shard(s)), "
+            "widening to at most %.0fs while the store pushes back.",
+            governor.delay,
+            config.pace_seconds,
+            governor.shards,
+            governor.ceiling_seconds,
+        )
+
         column_expr: dict[str, str] = {}
         compiled: CompiledChecklist | None = None
         results: list[PartitionResult] = []
@@ -1641,6 +1817,7 @@ def run_scale_analysis(
 
             result = _process_with_retry(
                 partition,
+                governor=governor,
                 uris=uris,
                 connection=active,
                 compiled=compiled,
@@ -1658,11 +1835,26 @@ def run_scale_analysis(
             matched += result.rows_matched
             _log_progress(index, len(discovered), scanned, matched, started)
 
-            # Optional politeness gap. OpenINTEL is a shared academic object
-            # store; a run that walks thousands of partitions back-to-back is a
-            # sustained load on infrastructure nobody is billing us for.
-            if config.pace_seconds and index < len(discovered):
-                time.sleep(config.pace_seconds)
+            # Adaptive gap. OpenINTEL is a shared academic object store behind a
+            # ~1 req/s limiter, so this is what keeps the run inside the budget
+            # instead of discovering the edge of it a thousand times.
+            if index < len(discovered):
+                governor.wait()
+
+        # A throttled run is not a wrong run, but it is a slower and more fragile
+        # one, and the next operator should not have to guess that it happened.
+        if governor.throttle_events:
+            warn(
+                collected,
+                f"The object store throttled this run {governor.throttle_events} "
+                f"time(s); the gap between partitions widened to "
+                f"{governor.delay:.1f}s in response. Partitions that exhausted "
+                "their retry budget are absent from the checkpoints rather than "
+                "empty, so a throttled run can under-cover a date range without "
+                "any count looking wrong. Re-run with --resume to fill the gaps, "
+                "and raise --pace-seconds or --shards if it recurs.",
+                LOGGER,
+            )
 
         if compiled is not None:
             selectivity = matched / scanned if scanned else None

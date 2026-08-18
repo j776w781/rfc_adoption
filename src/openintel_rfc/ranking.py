@@ -303,14 +303,26 @@ def score_match(
         final_score = 0.0
 
     timestamp_penalty = 0.0
-    if not timestamp_check.valid and final_score:
-        # Applied to any decision that still carries a score, not just rankable
-        # ones: the contract's forfeit is unconditional, and gating it on the
-        # decision let a pre-publication `non_queryable` keep a positive score.
-        timestamp_penalty = final_score
-        final_score = 0.0
+    if not timestamp_check.valid:
+        # Two separate consequences, and they must not be gated on each other.
+        #
+        # The *decision* changes for any rankable verdict, score or no score. An
+        # RFC whose evidence scores zero -- an `ambiguous` indicator whose weight
+        # the ambiguity penalty cancels out, for instance -- still claims adoption
+        # when it says `ambiguous`, and an observation predating publication may
+        # never claim that. Gating this on `final_score` let exactly that through:
+        # RFC 6840 matched a 2010 record and kept an `ambiguous` decision three
+        # years before it was published, which then set first_seen in the scale
+        # path. The Python timeline's redundant timestamp filter hid it there.
+        #
+        # The *forfeit* is recorded only where there was something to forfeit, so
+        # an evaluation that fails on the evidence alone stays `no_match` rather
+        # than being relabelled as though the date decided it.
         if decision in RANKABLE_DECISIONS:
             decision = "timestamp_invalid"
+    if not timestamp_check.valid and final_score:
+        timestamp_penalty = final_score
+        final_score = 0.0
         steps.append(
             f"timestamp_penalty = {_num(timestamp_penalty)} "
             f"(the observation predates {rfc.rfc_id}'s publication date by "

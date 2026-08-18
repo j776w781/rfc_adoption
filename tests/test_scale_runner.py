@@ -140,7 +140,7 @@ def _signal_key(signal: ObservedSignal) -> tuple[Any, ...]:
 # --------------------------------------------------------------------------- #
 
 
-def test_sql_and_python_agree_on_decision_counts(scale_result, python_matches):
+def test_sql_and_python_agree_on_decision_counts(scale_result, python_matches, checklist_db):
     """Every (rfc_id, decision) group must have the same size in both engines."""
     _result, aggregates, _warnings, _root = scale_result
     _signals, matches = python_matches
@@ -160,8 +160,10 @@ def test_sql_and_python_agree_on_decision_counts(scale_result, python_matches):
     }
     assert not disagreements, f"per-(rfc_id, decision) counts differ: {disagreements}"
 
-    # Sanity floor: the comparison must actually have compared something.
-    assert sum(py_counts.values()) == 73 * 8
+    # Sanity floor: the comparison must actually have compared something. Derived
+    # from the checklist rather than hard-coded, so adding an RFC does not look
+    # like a regression.
+    assert sum(py_counts.values()) == 73 * len(checklist_db.rfcs)
 
 
 def test_sql_and_python_agree_on_first_seen(scale_result, python_matches):

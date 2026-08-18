@@ -1,0 +1,28 @@
+{
+  "partition_id": "reverse/ripe/2026-02-01",
+  "source": "ripe",
+  "basis": "reverse",
+  "date": "2026-02-01",
+  "object_count": 1,
+  "rows_scanned": 659,
+  "rows_matched": 659,
+  "aggregate_rows": 60,
+  "exemplar_rows": 189,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 5.578,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG",
+    "TLSA"
+  ],
+  "checklist_version": "0.2.0",
+  "scan_sql_sha1": "ec523dccbaa2eb3500cafc1cd7ec0814c685e960",
+  "complete": true,
+  "completed_at": "2026-08-18T17:44:56"
+}

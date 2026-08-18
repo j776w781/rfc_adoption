@@ -289,15 +289,31 @@ def test_rfc8080_outranks_rfc8624_for_algorithm_fifteen(
 def test_base_dnssec_records_rank_low_and_only_reach_rfc4033(
     signal_factory, checklist_db, schema_report
 ) -> None:
-    """Contract case 7: an algorithm-8 DNSKEY is base DNSSEC and nothing more."""
+    """Contract case 7: an algorithm-8 DNSKEY is base DNSSEC, and specifically RSA/SHA-2.
+
+    Checklist 0.2.0 named the algorithm that case 7 always carried: algorithm 8 is
+    RSASHA256, which RFC 5702 defines. So the observation now evidences a specific
+    algorithm RFC as well as the base, and RFC 5702 -- being the specific one --
+    must outrank RFC 4033. What must NOT happen is a competing *algorithm* RFC
+    appearing: an algorithm-8 record is not evidence of ECDSA or EdDSA.
+    """
     signals = [signal_factory("2011-05-24", rr_type="DNSKEY", algorithm=8)]
 
     matches, _ = match_all(signals, checklist_db, schema_report)
     ranked = rank_candidates(matches, checklist_db)
+    ids = [candidate.rfc_id for candidate in ranked]
 
-    assert [candidate.rfc_id for candidate in ranked] == ["RFC 4033"]
-    assert ranked[0].confidence in {"low", "medium"}
-    assert ranked[0].score == pytest.approx(3.75)
+    assert "RFC 5702" in ids, "algorithm 8 is RSASHA256, which RFC 5702 defines"
+    assert "RFC 4033" in ids, "it is still base DNSSEC"
+    assert ids.index("RFC 5702") < ids.index("RFC 4033"), (
+        "the specific algorithm RFC must outrank the base"
+    )
+    for wrong in ("RFC 6605", "RFC 8080", "RFC 5933", "RFC 9558", "RFC 9563"):
+        assert wrong not in ids, f"algorithm 8 is not evidence of {wrong}"
+
+    base = next(c for c in ranked if c.rfc_id == "RFC 4033")
+    assert base.confidence in {"low", "medium"}
+    assert base.score == pytest.approx(3.75)
 
 
 # --------------------------------------------------------------------------- #

@@ -122,3 +122,26 @@ PIPELINE_VERSION: Final[str] = "0.1.0"
 
 #: Fixed timestamp used for deterministic output when OPENINTEL_RFC_DETERMINISTIC=1.
 DETERMINISTIC_TIMESTAMP_ENV: Final[str] = "OPENINTEL_RFC_DETERMINISTIC"
+
+# --------------------------------------------------------------------------- #
+# Object-store request budget
+# --------------------------------------------------------------------------- #
+
+#: Measured against object.openintel.nl, not assumed. nginx fronts the object
+#: store with a ``limit_req`` leaky bucket: at concurrency 1-5 every request
+#: succeeds and throughput is pinned at 1.0-1.1 req/s however many are in flight
+#: (they are queued and delayed); at concurrency 6 the queue overflows and 34 of
+#: 48 requests come back 503. So the budget is about one request per second with
+#: a burst of about five.
+OPENINTEL_REQUESTS_PER_SECOND: Final[float] = 1.0
+
+#: Default floor for the gap between partitions. Small, because the per-partition
+#: request cost is small -- DuckDB coalesces row-group reads well, 6 requests for
+#: a 485 MB object with the prefilter pushed down. The point is to leave headroom
+#: in the burst queue, not to throttle the run to a crawl.
+DEFAULT_PACE_SECONDS: Final[float] = 0.5
+
+#: Ceiling for the adaptive gap. Past a minute between partitions the run has
+#: stopped being slow and started being stuck, and that should be visible rather
+#: than absorbed.
+DEFAULT_MAX_PACE_SECONDS: Final[float] = 60.0

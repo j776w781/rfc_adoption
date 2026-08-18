@@ -57,6 +57,7 @@ __all__ = [
     "ToolSurvey",
     "RunConfig",
     "PipelineResult",
+    "SignalType",
     "SPECIFICITY_MULTIPLIERS",
     "CONFIDENCE_THRESHOLDS",
 ]
@@ -77,6 +78,22 @@ ConditionOp = Literal[
 ]
 
 Specificity = Literal["very_high", "high", "medium", "low"]
+
+#: What a match against an RFC actually *means*. Without this the report reads
+#: every match as adoption, which is wrong for a third of the DNSSEC corpus:
+#:
+#: ``adoption``
+#:     The mechanism the RFC defines is deployed. RFC 6605 matched means ECDSA
+#:     is in use.
+#: ``non_conformance``
+#:     The RFC *deprecates* something and the deprecated thing is still there.
+#:     RFC 9905 matched means SHA-1 signatures are still being published --
+#:     evidence against conformance, not for it. Counting these as adoption
+#:     would invert the conclusion.
+#: ``meta``
+#:     The RFC defines a process or a roadmap rather than an on-the-wire
+#:     mechanism. Nothing in a zone file can evidence it either way.
+SignalType = Literal["adoption", "non_conformance", "meta"]
 
 Queryability = Literal["queryable", "partially_queryable", "non_queryable", "ambiguous"]
 
@@ -177,6 +194,15 @@ class RFCChecklistEntry(_Base):
     publication_date: datetime
     protocol: str = "DNSSEC"
     specificity: Specificity = "medium"
+    #: Whether a match evidences adoption, non-conformance, or nothing on the wire.
+    signal_type: SignalType = "adoption"
+    #: RFC Editor status at the time the checklist was written, verbatim
+    #: ("PROPOSED STANDARD", "HISTORIC", "BEST CURRENT PRACTICE", ...). A HISTORIC
+    #: RFC still being matched is a finding in itself.
+    status: str = ""
+    #: RFCs that obsolete this one, if any. Recorded so a report can say that the
+    #: document behind a match has since been replaced.
+    obsoleted_by: list[str] = Field(default_factory=list)
     description: str = ""
     related_rfc_ids: list[str] = Field(default_factory=list)
     references: list[str] = Field(default_factory=list)

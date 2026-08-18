@@ -222,16 +222,13 @@ def test_unsupported_literal_type_is_refused():
 
 def test_rr_type_prefilter_is_sorted_deduped_and_dnssec_only(checklist_db: RFCChecklistDB):
     prefilter = sql_compiler.rr_type_prefilter(checklist_db)
-    assert prefilter == [
-        "CDNSKEY",
-        "CDS",
-        "DNSKEY",
-        "DS",
-        "NSEC",
-        "NSEC3",
-        "NSEC3PARAM",
-        "RRSIG",
-    ]
+    # The DNSSEC record types are always there; checklist 0.2.0 added TLSA for the
+    # DANE RFCs. Asserted as a superset so a new RFC widening the prefilter is a
+    # deliberate change rather than a failure -- what must hold is that it stays
+    # sorted, deduped, and free of the record types that make a scan intractable.
+    assert set(prefilter) >= {
+        "CDNSKEY", "CDS", "DNSKEY", "DS", "NSEC", "NSEC3", "NSEC3PARAM", "RRSIG",
+    }
     assert prefilter == sorted(set(prefilter))
     for excluded in ("A", "AAAA", "MX", "NS", "TXT", "SOA", "CNAME"):
         assert excluded not in prefilter
@@ -332,8 +329,13 @@ def compiled_pair(request):
 def test_non_queryable_indicator_compiles_to_false(compiled_pair):
     _column_expr, compiled = compiled_pair
     skipped = [i for i in compiled.indicators if i.skipped]
-    assert [i.indicator_id for i in skipped] == ["rfc8624_validator_algorithm_support"]
-    assert skipped[0].match_sql == sql_compiler.SQL_FALSE
+    # Checklist 0.2.0 carries the process and resolver-side RFCs, whose indicators
+    # are non-queryable by construction, so several are skipped. Every one of them
+    # must compile to FALSE -- a skipped indicator that compiled to anything else
+    # would silently contribute evidence.
+    assert "rfc8624_validator_algorithm_support" in [i.indicator_id for i in skipped]
+    for indicator in skipped:
+        assert indicator.match_sql == sql_compiler.SQL_FALSE, indicator.indicator_id
 
 
 def test_decision_tables_only_contain_real_decisions(compiled_pair):

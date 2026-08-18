@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Sequence
 
 from . import config
+from .config import DEFAULT_MAX_PACE_SECONDS, DEFAULT_PACE_SECONDS
 from .models import PipelineResult, RunConfig
 from .utils import PipelineError, ensure_dir, get_logger, iso, now, posix_path, warn
 
@@ -124,8 +125,11 @@ def build_parser() -> argparse.ArgumentParser:
     scale.add_argument("--start", required=True, help="First measurement day, YYYY-MM-DD.")
     scale.add_argument("--end", required=True, help="Last measurement day, YYYY-MM-DD.")
     scale.add_argument(
-        "--basis", choices=("zonefile", "toplist"), default="zonefile",
-        help="OpenINTEL measurement basis (default: zonefile).",
+        "--basis", choices=("zonefile", "toplist", "reverse"), default="zonefile",
+        help=(
+            "Measurement basis (default: zonefile). 'reverse' selects a corpus "
+            "built by 'ingest-reverse' and requires --local-corpus."
+        ),
     )
     scale.add_argument(
         "--mode", choices=("stream", "download"), default="stream",
@@ -164,10 +168,39 @@ def build_parser() -> argparse.ArgumentParser:
         help="Seconds before the first partition retry; doubles thereafter.",
     )
     scale.add_argument(
-        "--pace-seconds", type=float, default=0.0,
+        "--pace-seconds", type=float, default=DEFAULT_PACE_SECONDS,
         help=(
-            "Sleep this long between partitions. OpenINTEL is a shared academic "
-            "store; pacing a multi-day walk reduces the chance of being throttled."
+            "Smallest gap between partitions. OpenINTEL sits behind a limiter "
+            "measured at about one request per second with a burst of five, so "
+            "this is what keeps a run inside the budget rather than discovering "
+            "the edge of it. The gap is adaptive -- it widens when the store "
+            f"pushes back and relaxes when it stops. Default: {DEFAULT_PACE_SECONDS}."
+        ),
+    )
+    scale.add_argument(
+        "--max-pace-seconds", type=float, default=DEFAULT_MAX_PACE_SECONDS,
+        help=(
+            "Ceiling for the adaptive gap. Past this the run is stuck rather than "
+            f"slow, and that should be visible. Default: {DEFAULT_MAX_PACE_SECONDS}."
+        ),
+    )
+    scale.add_argument(
+        "--shards", type=int, default=1,
+        help=(
+            "How many processes are sharing the store's budget with this one, "
+            "including this one. A sharded run MUST set it: the limiter is per "
+            "endpoint, not per process, so N shards each pacing for the whole "
+            "budget is N times over it. Default: 1."
+        ),
+    )
+    scale.add_argument(
+        "--local-corpus", action="store_true",
+        help=(
+            "Discover partitions from --cache-dir instead of listing the object "
+            "store. Required for a corpus the store does not host (see "
+            "'ingest-reverse'), and worth it for a full mirror too: discovery "
+            "otherwise costs one LIST per partition-day even when every byte is "
+            "already local."
         ),
     )
     scale.add_argument(
@@ -175,6 +208,84 @@ def build_parser() -> argparse.ArgumentParser:
         help="Discover partitions and probe the schema, then stop without scanning.",
     )
     scale.set_defaults(func=cmd_scale)
+
+    mirror = sub.add_parser(
+        "mirror",
+        help="Download the objects a run needs, once, so later scans are local.",
+        description=(
+            "Copies OpenINTEL objects to local disk in the layout "
+            "'--mode download --cache-dir' expects. One request per object, paid "
+            "once: mirroring the 2.07 TB this project scans costs about 7,261 "
+            "requests (two hours of the store's ~1 req/s budget), after which "
+            "every scan is local and costs the store nothing. Split across "
+            "machines with --shard/--shards; the split balances bytes, not days, "
+            "because .se is 1.49 TB of the corpus and .gov is 15.8 GB."
+        ),
+    )
+    mirror.add_argument("--sources", required=True,
+                        help="Comma-separated sources, e.g. gov,nu,se.")
+    mirror.add_argument("--start", required=True, help="First day, YYYY-MM-DD.")
+    mirror.add_argument("--end", required=True, help="Last day, YYYY-MM-DD.")
+    mirror.add_argument("--basis", default="zonefile", choices=["zonefile", "toplist"])
+    mirror.add_argument("--cache-dir", type=Path, required=True,
+                        help="Destination. Pass the same path to 'scale --cache-dir'.")
+    mirror.add_argument(
+        "--shards", type=int, default=1,
+        help=(
+            "Total machines sharing this mirror. Extra machines only help when "
+            "they have their own network path: two hosts behind one NAT share "
+            "one request budget and one uplink. Default: 1."
+        ),
+    )
+    mirror.add_argument(
+        "--shard", type=int, default=0,
+        help="Which shard THIS machine fetches, 0-based. Default: 0.",
+    )
+    mirror.add_argument(
+        "--pace-seconds", type=float, default=DEFAULT_PACE_SECONDS,
+        help="Smallest gap between objects; widens if the store pushes back.",
+    )
+    mirror.add_argument(
+        "--plan-only", action="store_true",
+        help="Print the shard balance and the byte totals, then stop.",
+    )
+    mirror.add_argument(
+        "--dry-run", action="store_true",
+        help="Report what would be fetched without writing anything.",
+    )
+    mirror.set_defaults(func=cmd_mirror)
+
+    ingest = sub.add_parser(
+        "ingest-reverse",
+        help="Build a local corpus from RIPE's historical reverse-DNS zones.",
+        description=(
+            "Downloads RIPE NCC's daily reverse-delegation archive (in-addr.arpa "
+            "and ip6.arpa, carrying all five RIRs' zonelets), parses the DS and "
+            "delegation records out of it, and writes Parquet in OpenINTEL's "
+            "native column names so the existing checklists match it unchanged. "
+            "The archive starts 2009-03-24, nine years before the OpenINTEL "
+            "window, and unlike OpenINTEL it yields a true zone-level denominator: "
+            "every delegation is listed, so 'share of delegations signed' is "
+            "directly countable."
+        ),
+    )
+    ingest.add_argument("--start", required=True, help="First day, YYYY-MM-DD.")
+    ingest.add_argument("--end", required=True, help="Last day, YYYY-MM-DD.")
+    ingest.add_argument("--cache-dir", type=Path, required=True,
+                        help="Where the Parquet corpus is written.")
+    ingest.add_argument("--download-dir", type=Path, default=None,
+                        help="Scratch for tarballs (default: <cache-dir>/_archives).")
+    ingest.add_argument(
+        "--monthly", action="store_true",
+        help=(
+            "One day per month instead of every day. 17 years of dailies is 6,108 "
+            "tarballs and several hundred GB; monthly is ~210 and still resolves an "
+            "adoption curve to the month."
+        ),
+    )
+    ingest.add_argument("--keep-archives", action="store_true",
+                        help="Keep the .tar.bz2 files after parsing.")
+    ingest.set_defaults(func=cmd_ingest_reverse)
 
     merge = sub.add_parser(
         "merge",
@@ -483,10 +594,32 @@ def cmd_scale(args: argparse.Namespace) -> int:
         partition_retries=args.partition_retries,
         partition_retry_wait_seconds=args.retry_wait,
         pace_seconds=args.pace_seconds,
+        max_pace_seconds=args.max_pace_seconds,
+        shards=args.shards,
     )
 
+    # A local corpus is discovered from disk. That is required for a basis the
+    # object store never hosted (see 'ingest-reverse'), and it also spares a
+    # fully mirrored run one LIST per partition-day just to confirm what is
+    # already there.
+    partitions = None
+    if args.local_corpus:
+        from .openintel_source import discover_local_partitions
+
+        if args.cache_dir is None:
+            raise PipelineError("--local-corpus requires --cache-dir.")
+        partitions = discover_local_partitions(
+            args.cache_dir, sources,
+            _parse_run_date(args.start, "--start"),
+            _parse_run_date(args.end, "--end"),
+            basis=args.basis, warnings=warnings,
+        )
+        LOGGER.info("Local corpus: %d partition(s) under %s",
+                    len(partitions), args.cache_dir)
+
     result = run_scale_analysis(
-        run_config, db, dictionary, schema_report, warnings=warnings
+        run_config, db, dictionary, schema_report,
+        warnings=warnings, partitions=partitions,
     )
     report_md = render_report(result, survey_markdown=_read_survey())
     written = export_analysis(result, out_dir, report_md=report_md)
@@ -508,6 +641,107 @@ def cmd_scale(args: argparse.Namespace) -> int:
     _print_analysis_summary(result, {})
     _print_warnings(result.warnings or warnings)
     return 0
+
+
+def cmd_mirror(args: argparse.Namespace) -> int:
+    """Mirror this machine's share of the corpus.
+
+    Deliberately does no analysis. Fetching and scanning have completely
+    different failure modes and completely different reruns -- a mirror is
+    interrupted and resumed, an analysis is re-run whenever the checklist changes
+    -- and coupling them is what made the store part of the inner loop.
+    """
+    from .mirror import describe_plan, list_objects, mirror_objects, plan_shards
+    from .openintel_source import AccessConfig, build_s3_client
+    from .scale_runner import ThrottleGovernor
+
+    sources = [s.strip() for s in str(args.sources).split(",") if s.strip()]
+    if not sources:
+        raise PipelineError("--mirror --sources must name at least one source.")
+    if not 0 <= args.shard < max(args.shards, 1):
+        raise PipelineError(
+            f"--shard {args.shard} is outside --shards {args.shards}; shards are "
+            f"0-based, so the valid range is 0..{max(args.shards, 1) - 1}."
+        )
+
+    access = AccessConfig(mode="download", cache_dir=args.cache_dir)
+    client = build_s3_client(access)
+
+    LOGGER.info("Listing objects for %s between %s and %s",
+                ", ".join(sources), args.start, args.end)
+    objects = list_objects(access, sources=sources, start=args.start, end=args.end,
+                           basis=args.basis, client=client)
+    if not objects:
+        LOGGER.warning("No objects matched; nothing to mirror.")
+        return 0
+
+    total = sum(o.size for o in objects)
+    LOGGER.info("Corpus: %d object(s), %.1f GB", len(objects), total / 1e9)
+
+    buckets = plan_shards(objects, args.shards)
+    if args.shards > 1 or args.plan_only:
+        LOGGER.info("Shard plan:%s%s", chr(10), describe_plan(buckets))
+
+    mine = buckets[args.shard]
+    share = sum(o.size for o in mine)
+    LOGGER.info("This machine (shard %d of %d): %d object(s), %.1f GB",
+                args.shard, args.shards, len(mine), share / 1e9)
+
+    if args.plan_only:
+        return 0
+
+    report = mirror_objects(
+        mine,
+        config=access,
+        cache_dir=args.cache_dir,
+        governor=ThrottleGovernor(floor_seconds=args.pace_seconds),
+        client=client,
+        dry_run=args.dry_run,
+    )
+    print(report.describe())
+    if not report.complete:
+        # Not a hard failure: a mirror is resumable, and the useful next action is
+        # to run it again rather than to start over.
+        print(
+            f"{report.failed} object(s) did not transfer. Re-run the same command; "
+            "objects already present are skipped."
+        )
+        return 1
+    return 0
+
+
+def cmd_ingest_reverse(args: argparse.Namespace) -> int:
+    """Build the RIPE reverse-delegation corpus on local disk."""
+    from .openintel_source import date_range
+    from .reverse_zones import ingest_range, monthly_days
+
+    start, end = _parse_run_date(args.start, "--start"), _parse_run_date(args.end, "--end")
+    days = monthly_days(start, end) if args.monthly else date_range(start, end)
+    download_dir = args.download_dir or (args.cache_dir / "_archives")
+
+    LOGGER.info("Ingesting %d day(s) of reverse-DNS zones into %s",
+                len(days), args.cache_dir)
+    warnings: list[str] = []
+    reports = ingest_range(
+        days,
+        cache_dir=args.cache_dir,
+        download_dir=download_dir,
+        keep_archive=args.keep_archives,
+        warnings=warnings,
+    )
+
+    delegations = sum(r.delegations for r in reports)
+    signed = sum(r.signed_delegations for r in reports)
+    print(
+        f"ingested {len(reports)}/{len(days)} day(s): "
+        f"{sum(r.rows for r in reports):,} rows, "
+        f"{sum(r.ds_records for r in reports):,} DS records, "
+        f"{delegations:,} delegation-days, "
+        f"{signed / delegations * 100 if delegations else 0:.3f}% signed"
+    )
+    for message in warnings[:10]:
+        print(f"  warning: {message}")
+    return 0 if reports else 1
 
 
 def cmd_merge(args: argparse.Namespace) -> int:

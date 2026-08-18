@@ -1,0 +1,754 @@
+{
+  "generated_at": "2026-08-18T17:45:37",
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "count": 9,
+  "candidates": [
+    {
+      "rank": 1,
+      "rfc_id": "RFC 5933",
+      "rfc_title": "Use of GOST Signature Algorithms in DNSKEY and RRSIG Resource Records for DNSSEC",
+      "specificity": "very_high",
+      "rfc_publication_date": "2010-07-01T00:00:00",
+      "decision": "valid_match",
+      "score": 18.0,
+      "aggregate_score": 48.0,
+      "confidence": "very_high",
+      "supporting_signal_count": 702,
+      "valid_match_count": 702,
+      "partial_match_count": 19865,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2013-01-01T00:00:00",
+      "last_seen": "2015-09-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc5933_ecc_gost_algorithm",
+        "rfc5933_gost_ds_digest"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "digest_type",
+        "rr_type"
+      ],
+      "domains": [
+        "180.130.188.in-addr.arpa",
+        "221.35.185.in-addr.arpa"
+      ],
+      "zones": [
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0005",
+        "sig_0006",
+        "sig_0007",
+        "sig_0012",
+        "sig_0017"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0005_rfc5933",
+        "trace_sig_0006_rfc5933",
+        "trace_sig_0007_rfc5933",
+        "trace_sig_0012_rfc5933",
+        "trace_sig_0017_rfc5933"
+      ],
+      "reasoning_summary": "RFC 5933 ranks first (score 18.0, very_high) on 3 supporting observations; strongest evidence is indicator rfc5933_ecc_gost_algorithm matching algorithm=12. Corpus total: 702 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 3 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 10.0,
+        "specificity_multiplier": 1.5,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 2.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 18.0,
+        "steps": [
+          "base_indicator_score = 10.0 (matched required indicators: rfc5933_ecc_gost_algorithm)",
+          "optional_match_bonus = 2.0 = 4.0 x 0.5 (matched optional indicators: rfc5933_gost_ds_digest)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 10.0 + 0.0 + 2.0 - 0.0 - 0.0 - 0.0 = 12.0",
+          "specificity_multiplier = 1.5 (RFC 5933 specificity=very_high)",
+          "final_score = max(0, 12.0) * 1.5 = 18.0"
+        ]
+      }
+    },
+    {
+      "rank": 2,
+      "rfc_id": "RFC 8080",
+      "rfc_title": "Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC",
+      "specificity": "very_high",
+      "rfc_publication_date": "2017-02-01T00:00:00",
+      "decision": "valid_match",
+      "score": 17.25,
+      "aggregate_score": 86.25,
+      "confidence": "very_high",
+      "supporting_signal_count": 823,
+      "valid_match_count": 823,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2022-09-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc8080_eddsa_algorithm",
+        "rfc8080_eddsa_on_key_or_signature"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "237.243.173.in-addr.arpa",
+        "248.97.98.in-addr.arpa",
+        "250.34.174.in-addr.arpa",
+        "88.148.in-addr.arpa"
+      ],
+      "zones": [
+        "arin"
+      ],
+      "example_signal_ids": [
+        "sig_0020",
+        "sig_0027",
+        "sig_0028",
+        "sig_0029",
+        "sig_0033"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0020_rfc8080",
+        "trace_sig_0027_rfc8080",
+        "trace_sig_0028_rfc8080",
+        "trace_sig_0029_rfc8080",
+        "trace_sig_0033_rfc8080"
+      ],
+      "reasoning_summary": "RFC 8080 ranks second (score 17.25, very_high) on 5 supporting observations; strongest evidence is indicator rfc8080_eddsa_algorithm matching algorithm=15. Corpus total: 823 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 5 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 10.0,
+        "specificity_multiplier": 1.5,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 17.25,
+        "steps": [
+          "base_indicator_score = 10.0 (matched required indicators: rfc8080_eddsa_algorithm)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc8080_eddsa_on_key_or_signature)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 10.0 + 0.0 + 1.5 - 0.0 - 0.0 - 0.0 = 11.5",
+          "specificity_multiplier = 1.5 (RFC 8080 specificity=very_high)",
+          "final_score = max(0, 11.5) * 1.5 = 17.25"
+        ]
+      }
+    },
+    {
+      "rank": 3,
+      "rfc_id": "RFC 5702",
+      "rfc_title": "Use of SHA-2 Algorithms with RSA in DNSKEY and RRSIG Resource Records for DNSSEC",
+      "specificity": "high",
+      "rfc_publication_date": "2009-10-01T00:00:00",
+      "decision": "valid_match",
+      "score": 13.125,
+      "aggregate_score": 118.125,
+      "confidence": "very_high",
+      "supporting_signal_count": 983357,
+      "valid_match_count": 983357,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2010-04-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc5702_rsa_sha2_algorithm",
+        "rfc5702_rsa_sha2_on_dnssec_record"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "118.219.in-addr.arpa",
+        "144.126.202.in-addr.arpa",
+        "234.217.102.in-addr.arpa",
+        "235.217.102.in-addr.arpa",
+        "241.223.102.in-addr.arpa",
+        "244.159.134.in-addr.arpa",
+        "35.116.in-addr.arpa",
+        "69.126.149.in-addr.arpa"
+      ],
+      "zones": [
+        "afrinic",
+        "apnic",
+        "arin",
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0008",
+        "sig_0011",
+        "sig_0014",
+        "sig_0024",
+        "sig_0030"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0008_rfc5702",
+        "trace_sig_0011_rfc5702",
+        "trace_sig_0014_rfc5702",
+        "trace_sig_0024_rfc5702",
+        "trace_sig_0030_rfc5702"
+      ],
+      "reasoning_summary": "RFC 5702 ranks fourth (score 13.125, very_high) on 9 supporting observations; strongest evidence is indicator rfc5702_rsa_sha2_algorithm matching algorithm=8. Corpus total: 983357 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 9 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 9.0,
+        "specificity_multiplier": 1.25,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 13.125,
+        "steps": [
+          "base_indicator_score = 9.0 (matched required indicators: rfc5702_rsa_sha2_algorithm)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc5702_rsa_sha2_on_dnssec_record)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 9.0 + 0.0 + 1.5 - 0.0 - 0.0 - 0.0 = 10.5",
+          "specificity_multiplier = 1.25 (RFC 5702 specificity=high)",
+          "final_score = max(0, 10.5) * 1.25 = 13.125"
+        ]
+      }
+    },
+    {
+      "rank": 4,
+      "rfc_id": "RFC 6605",
+      "rfc_title": "Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC",
+      "specificity": "high",
+      "rfc_publication_date": "2012-04-01T00:00:00",
+      "decision": "valid_match",
+      "score": 13.125,
+      "aggregate_score": 157.5,
+      "confidence": "very_high",
+      "supporting_signal_count": 502557,
+      "valid_match_count": 502557,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2015-12-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc6605_ecdsa_algorithm",
+        "rfc6605_ecdsa_on_key_or_signature"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "0.8.6.c.6.0.6.2.ip6.arpa",
+        "122.201.122.in-addr.arpa",
+        "164.68.103.in-addr.arpa",
+        "165.89.45.in-addr.arpa",
+        "63.82.172.in-addr.arpa",
+        "70.119.199.in-addr.arpa",
+        "72.252.23.in-addr.arpa",
+        "77.201.122.in-addr.arpa",
+        "94.111.27.in-addr.arpa",
+        "94.201.122.in-addr.arpa",
+        "97.201.122.in-addr.arpa",
+        "98.201.122.in-addr.arpa"
+      ],
+      "zones": [
+        "apnic",
+        "arin",
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0009",
+        "sig_0012",
+        "sig_0013",
+        "sig_0015",
+        "sig_0016"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0009_rfc6605",
+        "trace_sig_0012_rfc6605",
+        "trace_sig_0013_rfc6605",
+        "trace_sig_0015_rfc6605",
+        "trace_sig_0016_rfc6605"
+      ],
+      "reasoning_summary": "RFC 6605 ranks third (score 13.125, very_high) on 12 supporting observations; strongest evidence is indicator rfc6605_ecdsa_algorithm matching algorithm=13. Corpus total: 502557 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 12 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 9.0,
+        "specificity_multiplier": 1.25,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 13.125,
+        "steps": [
+          "base_indicator_score = 9.0 (matched required indicators: rfc6605_ecdsa_algorithm)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc6605_ecdsa_on_key_or_signature)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 9.0 + 0.0 + 1.5 - 0.0 - 0.0 - 0.0 = 10.5",
+          "specificity_multiplier = 1.25 (RFC 6605 specificity=high)",
+          "final_score = max(0, 10.5) * 1.25 = 13.125"
+        ]
+      }
+    },
+    {
+      "rank": 5,
+      "rfc_id": "RFC 4509",
+      "rfc_title": "Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records",
+      "specificity": "high",
+      "rfc_publication_date": "2006-05-01T00:00:00",
+      "decision": "valid_match",
+      "score": 11.25,
+      "aggregate_score": 135.0,
+      "confidence": "high",
+      "supporting_signal_count": 1079660,
+      "valid_match_count": 1079660,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2009-04-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc4509_ds_sha256_digest"
+      ],
+      "matched_fields": [
+        "digest_type",
+        "rr_type"
+      ],
+      "domains": [
+        "11.6.199.in-addr.arpa",
+        "218.171.104.in-addr.arpa",
+        "232.159.169.in-addr.arpa",
+        "248.97.98.in-addr.arpa",
+        "250.34.174.in-addr.arpa",
+        "4.191.64.in-addr.arpa",
+        "63.82.172.in-addr.arpa",
+        "69.126.149.in-addr.arpa",
+        "70.119.199.in-addr.arpa",
+        "88.148.in-addr.arpa",
+        "98.201.122.in-addr.arpa"
+      ],
+      "zones": [
+        "afrinic",
+        "apnic",
+        "arin",
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0009",
+        "sig_0010",
+        "sig_0013",
+        "sig_0020",
+        "sig_0022"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0009_rfc4509",
+        "trace_sig_0010_rfc4509",
+        "trace_sig_0013_rfc4509",
+        "trace_sig_0020_rfc4509",
+        "trace_sig_0022_rfc4509"
+      ],
+      "reasoning_summary": "RFC 4509 ranks fifth (score 11.25, high) on 12 supporting observations; strongest evidence is indicator rfc4509_ds_sha256_digest matching rr_type=DS and digest_type=2. Corpus total: 1079660 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 12 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 9.0,
+        "specificity_multiplier": 1.25,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 0.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 11.25,
+        "steps": [
+          "base_indicator_score = 9.0 (matched required indicators: rfc4509_ds_sha256_digest)",
+          "optional_match_bonus = 0.0 = 0.0 x 0.5 (matched optional indicators: none)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 9.0 + 0.0 + 0.0 - 0.0 - 0.0 - 0.0 = 9.0",
+          "specificity_multiplier = 1.25 (RFC 4509 specificity=high)",
+          "final_score = max(0, 9.0) * 1.25 = 11.25"
+        ]
+      }
+    },
+    {
+      "rank": 6,
+      "rfc_id": "RFC 3110",
+      "rfc_title": "RSA/SHA-1 SIGs and RSA KEYs in the Domain Name System (DNS)",
+      "specificity": "high",
+      "rfc_publication_date": "2001-05-01T00:00:00",
+      "decision": "valid_match",
+      "score": 11.25,
+      "aggregate_score": 78.75,
+      "confidence": "high",
+      "supporting_signal_count": 241967,
+      "valid_match_count": 241967,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2009-04-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc3110_rsasha1_algorithm"
+      ],
+      "matched_fields": [
+        "algorithm"
+      ],
+      "domains": [
+        "0.119.203.in-addr.arpa",
+        "100.50.194.in-addr.arpa",
+        "11.6.199.in-addr.arpa",
+        "141.70.192.in-addr.arpa",
+        "204.195.199.in-addr.arpa",
+        "218.171.104.in-addr.arpa",
+        "90.74.212.in-addr.arpa"
+      ],
+      "zones": [
+        "apnic",
+        "arin",
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0001",
+        "sig_0002",
+        "sig_0004",
+        "sig_0010",
+        "sig_0026"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0001_rfc3110",
+        "trace_sig_0002_rfc3110",
+        "trace_sig_0004_rfc3110",
+        "trace_sig_0010_rfc3110",
+        "trace_sig_0026_rfc3110"
+      ],
+      "reasoning_summary": "RFC 3110 ranks sixth (score 11.25, high) on 7 supporting observations; strongest evidence is indicator rfc3110_rsasha1_algorithm matching algorithm=5. Corpus total: 241967 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 7 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 9.0,
+        "specificity_multiplier": 1.25,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 0.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 11.25,
+        "steps": [
+          "base_indicator_score = 9.0 (matched required indicators: rfc3110_rsasha1_algorithm)",
+          "optional_match_bonus = 0.0 = 0.0 x 0.5 (matched optional indicators: none)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 9.0 + 0.0 + 0.0 - 0.0 - 0.0 - 0.0 = 9.0",
+          "specificity_multiplier = 1.25 (RFC 3110 specificity=high)",
+          "final_score = max(0, 9.0) * 1.25 = 11.25"
+        ]
+      }
+    },
+    {
+      "rank": 7,
+      "rfc_id": "RFC 4033",
+      "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "specificity": "low",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "decision": "valid_match",
+      "score": 3.75,
+      "aggregate_score": 146.25,
+      "confidence": "low",
+      "supporting_signal_count": 1875584,
+      "valid_match_count": 1875584,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2009-04-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc4033_base_dnssec_record_present",
+        "rfc4033_dnssec_algorithm_present"
+      ],
+      "matched_fields": [
+        "algorithm",
+        "rr_type"
+      ],
+      "domains": [
+        "0.119.203.in-addr.arpa",
+        "0.8.6.c.6.0.6.2.ip6.arpa",
+        "100.50.194.in-addr.arpa",
+        "11.6.199.in-addr.arpa",
+        "113.94.81.in-addr.arpa",
+        "118.219.in-addr.arpa",
+        "122.201.122.in-addr.arpa",
+        "141.70.192.in-addr.arpa",
+        "144.126.202.in-addr.arpa",
+        "164.68.103.in-addr.arpa",
+        "165.89.45.in-addr.arpa",
+        "180.130.188.in-addr.arpa",
+        "204.195.199.in-addr.arpa",
+        "218.171.104.in-addr.arpa",
+        "221.35.185.in-addr.arpa",
+        "232.159.169.in-addr.arpa",
+        "234.217.102.in-addr.arpa",
+        "235.217.102.in-addr.arpa",
+        "237.243.173.in-addr.arpa",
+        "241.223.102.in-addr.arpa",
+        "244.159.134.in-addr.arpa",
+        "248.97.98.in-addr.arpa",
+        "250.34.174.in-addr.arpa",
+        "35.116.in-addr.arpa",
+        "4.191.64.in-addr.arpa",
+        "63.82.172.in-addr.arpa",
+        "69.126.149.in-addr.arpa",
+        "70.119.199.in-addr.arpa",
+        "72.252.23.in-addr.arpa",
+        "77.201.122.in-addr.arpa",
+        "88.148.in-addr.arpa",
+        "90.74.212.in-addr.arpa",
+        "94.111.27.in-addr.arpa",
+        "94.201.122.in-addr.arpa",
+        "97.201.122.in-addr.arpa",
+        "98.201.122.in-addr.arpa"
+      ],
+      "zones": [
+        "afrinic",
+        "apnic",
+        "arin",
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0001",
+        "sig_0002",
+        "sig_0003",
+        "sig_0004",
+        "sig_0005"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0001_rfc4033",
+        "trace_sig_0002_rfc4033",
+        "trace_sig_0003_rfc4033",
+        "trace_sig_0004_rfc4033",
+        "trace_sig_0005_rfc4033"
+      ],
+      "reasoning_summary": "RFC 4033 ranks seventh (score 3.75, low) on 39 supporting observations; strongest evidence is indicator rfc4033_base_dnssec_record_present matching rr_type=DS. Corpus total: 1875584 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 39 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 4.0,
+        "specificity_multiplier": 0.75,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 3.75,
+        "steps": [
+          "base_indicator_score = 4.0 (matched required indicators: rfc4033_base_dnssec_record_present)",
+          "optional_match_bonus = 1.0 = 2.0 x 0.5 (matched optional indicators: rfc4033_dnssec_algorithm_present)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 4.0 + 0.0 + 1.0 - 0.0 - 0.0 - 0.0 = 5.0",
+          "specificity_multiplier = 0.75 (RFC 4033 specificity=low)",
+          "final_score = max(0, 5.0) * 0.75 = 3.75"
+        ]
+      }
+    },
+    {
+      "rank": 8,
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "specificity": "low",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "decision": "ambiguous",
+      "score": 3.375,
+      "aggregate_score": 47.25,
+      "confidence": "low",
+      "supporting_signal_count": 443137,
+      "valid_match_count": 0,
+      "partial_match_count": 796344,
+      "timestamp_invalid_count": 636103,
+      "first_seen": "2019-06-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc8624_avoids_deprecated_algorithm",
+        "rfc8624_recommended_signing_algorithm"
+      ],
+      "matched_fields": [
+        "algorithm"
+      ],
+      "domains": [
+        "0.8.6.c.6.0.6.2.ip6.arpa",
+        "122.201.122.in-addr.arpa",
+        "164.68.103.in-addr.arpa",
+        "248.97.98.in-addr.arpa",
+        "250.34.174.in-addr.arpa",
+        "63.82.172.in-addr.arpa",
+        "70.119.199.in-addr.arpa",
+        "72.252.23.in-addr.arpa",
+        "77.201.122.in-addr.arpa",
+        "88.148.in-addr.arpa",
+        "94.111.27.in-addr.arpa",
+        "94.201.122.in-addr.arpa",
+        "97.201.122.in-addr.arpa"
+      ],
+      "zones": [
+        "apnic",
+        "arin",
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0011",
+        "sig_0012",
+        "sig_0013",
+        "sig_0014",
+        "sig_0015"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0011_rfc8624",
+        "trace_sig_0012_rfc8624",
+        "trace_sig_0013_rfc8624",
+        "trace_sig_0014_rfc8624",
+        "trace_sig_0015_rfc8624"
+      ],
+      "reasoning_summary": "RFC 8624 ranks eighth (score 3.375, low) on 14 supporting observations; strongest evidence is indicator rfc8624_recommended_signing_algorithm matching algorithm=13. The verdict is ambiguous: at least one matched indicator is not uniquely attributable to this RFC, so it is routed to the review queue. A further 10 observations matched the indicators but were withheld from the score because they predate the RFC's publication date. Corpus total: 443137 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 14 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 5.0,
+        "specificity_multiplier": 0.75,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 1.5,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 2.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 3.375,
+        "steps": [
+          "base_indicator_score = 5.0 (matched required indicators: rfc8624_recommended_signing_algorithm)",
+          "optional_match_bonus = 1.5 = 3.0 x 0.5 (matched optional indicators: rfc8624_avoids_deprecated_algorithm)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 2.0 (applied: matched indicators flagged ambiguous: rfc8624_avoids_deprecated_algorithm, rfc8624_recommended_signing_algorithm)",
+          "raw = 5.0 + 0.0 + 1.5 - 0.0 - 0.0 - 2.0 = 4.5",
+          "specificity_multiplier = 0.75 (RFC 8624 specificity=low)",
+          "final_score = max(0, 4.5) * 0.75 = 3.375",
+          "note: 1 indicator (rfc8624_validator_algorithm_support) could not be tested against the OpenINTEL corpus and was excluded from every term above, neither earning weight nor incurring a penalty"
+        ]
+      }
+    },
+    {
+      "rank": 9,
+      "rfc_id": "RFC 4034",
+      "rfc_title": "Resource Records for the DNS Security Extensions",
+      "specificity": "medium",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "decision": "valid_match",
+      "score": 3.0,
+      "aggregate_score": 117.0,
+      "confidence": "low",
+      "supporting_signal_count": 1875584,
+      "valid_match_count": 1875584,
+      "partial_match_count": 0,
+      "timestamp_invalid_count": 0,
+      "first_seen": "2009-04-01T00:00:00",
+      "last_seen": "2026-08-01T00:00:00",
+      "matched_indicator_ids": [
+        "rfc4034_core_record_present"
+      ],
+      "matched_fields": [
+        "rr_type"
+      ],
+      "domains": [
+        "0.119.203.in-addr.arpa",
+        "0.8.6.c.6.0.6.2.ip6.arpa",
+        "100.50.194.in-addr.arpa",
+        "11.6.199.in-addr.arpa",
+        "113.94.81.in-addr.arpa",
+        "118.219.in-addr.arpa",
+        "122.201.122.in-addr.arpa",
+        "141.70.192.in-addr.arpa",
+        "144.126.202.in-addr.arpa",
+        "164.68.103.in-addr.arpa",
+        "165.89.45.in-addr.arpa",
+        "180.130.188.in-addr.arpa",
+        "204.195.199.in-addr.arpa",
+        "218.171.104.in-addr.arpa",
+        "221.35.185.in-addr.arpa",
+        "232.159.169.in-addr.arpa",
+        "234.217.102.in-addr.arpa",
+        "235.217.102.in-addr.arpa",
+        "237.243.173.in-addr.arpa",
+        "241.223.102.in-addr.arpa",
+        "244.159.134.in-addr.arpa",
+        "248.97.98.in-addr.arpa",
+        "250.34.174.in-addr.arpa",
+        "35.116.in-addr.arpa",
+        "4.191.64.in-addr.arpa",
+        "63.82.172.in-addr.arpa",
+        "69.126.149.in-addr.arpa",
+        "70.119.199.in-addr.arpa",
+        "72.252.23.in-addr.arpa",
+        "77.201.122.in-addr.arpa",
+        "88.148.in-addr.arpa",
+        "90.74.212.in-addr.arpa",
+        "94.111.27.in-addr.arpa",
+        "94.201.122.in-addr.arpa",
+        "97.201.122.in-addr.arpa",
+        "98.201.122.in-addr.arpa"
+      ],
+      "zones": [
+        "afrinic",
+        "apnic",
+        "arin",
+        "ripe"
+      ],
+      "example_signal_ids": [
+        "sig_0001",
+        "sig_0002",
+        "sig_0003",
+        "sig_0004",
+        "sig_0005"
+      ],
+      "example_trace_ids": [
+        "trace_sig_0001_rfc4034",
+        "trace_sig_0002_rfc4034",
+        "trace_sig_0003_rfc4034",
+        "trace_sig_0004_rfc4034",
+        "trace_sig_0005_rfc4034"
+      ],
+      "reasoning_summary": "RFC 4034 ranks ninth (score 3.0, low) on 39 supporting observations; strongest evidence is indicator rfc4034_core_record_present matching rr_type=DS. Corpus total: 1875584 observation(s), counted exactly. The score, the reasoning trace, the example signal ids and the domain and zone lists above come from 39 sampled exemplar observation(s) (up to 5 per (RFC, decision) per partition), not from the whole corpus. Read them as evidence that the aggregate is what it claims to be, not as the aggregate itself; and read the score as the best of the sampled observations, which is a lower bound on the best score in the corpus.",
+      "score_breakdown": {
+        "base_indicator_score": 3.0,
+        "specificity_multiplier": 1.0,
+        "required_match_bonus": 0.0,
+        "optional_match_bonus": 0.0,
+        "missing_required_penalty": 0.0,
+        "partial_match_penalty": 0.0,
+        "ambiguity_penalty": 0.0,
+        "timestamp_penalty": 0.0,
+        "final_score": 3.0,
+        "steps": [
+          "base_indicator_score = 3.0 (matched required indicators: rfc4034_core_record_present)",
+          "optional_match_bonus = 0.0 = 0.0 x 0.5 (matched optional indicators: none)",
+          "required_match_bonus = 0.0 (not awarded: 1 evaluable required indicator(s), the bonus needs at least 2)",
+          "missing_required_penalty = 0.0 = 3.0 x 0 (required indicators evaluated but not matched: none)",
+          "partial_match_penalty = 0.0 (not applied: every evaluable required indicator matched)",
+          "ambiguity_penalty = 0.0 (not applied: no matched indicator is flagged ambiguous)",
+          "raw = 3.0 + 0.0 + 0.0 - 0.0 - 0.0 - 0.0 = 3.0",
+          "specificity_multiplier = 1.0 (RFC 4034 specificity=medium)",
+          "final_score = max(0, 3.0) * 1.0 = 3.0"
+        ]
+      }
+    }
+  ]
+}

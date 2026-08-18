@@ -217,8 +217,15 @@ def test_report_warns_that_late_dictionary_fields_bound_early_adoption(
 
 
 def test_unused_dictionary_fields_are_reported(schema_report: SchemaCheckReport) -> None:
-    assert "flags" in schema_report.unused_dictionary_fields
+    """A dictionary field no indicator uses is reported, so the two can be kept in step.
+
+    `flags` stopped being unused at checklist 0.2.0, which added the RFC 5011
+    REVOKE-bit and RFC 6781 SEP-bit indicators. `key_tag` is the field that is
+    still defined and still unreferenced.
+    """
+    assert "key_tag" in schema_report.unused_dictionary_fields
     assert "rr_type" not in schema_report.unused_dictionary_fields
+    assert "flags" not in schema_report.unused_dictionary_fields
 
 
 def test_check_schema_appends_to_a_caller_supplied_warning_list(
@@ -262,7 +269,11 @@ def test_queryable_field_names_lists_only_evaluable_fields(
     names = queryable_field_names(schema_report)
 
     assert names == sorted(names), "the field list must be deterministic"
-    assert names == ["algorithm", "digest_type", "rr_type"]
+    # Every field an evaluable indicator rests on, and nothing else. Asserted as a
+    # superset plus explicit exclusions rather than an exact list, so adding an RFC
+    # that uses a new field is not a failure.
+    assert {"algorithm", "digest_type", "rr_type"} <= set(names)
+    assert "domain" not in names, "provenance is not evidence"
     # The non-queryable indicator's surviving `rr_type` is only there because
     # other, evaluable indicators use it -- not on its own behalf.
     assert "validator_algorithm_support" not in names

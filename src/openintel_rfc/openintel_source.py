@@ -81,6 +81,8 @@ __all__ = [
     "AccessConfig",
     "Partition",
     "build_s3_client",
+    "discover_local_partitions",
+    "LocalPartition",
     "cache_paths",
     "configure_duckdb_s3",
     "date_range",
@@ -111,7 +113,10 @@ DEFAULT_REGION: str = "nl-utwente"
 FDNS_BASE: str = "fdns"
 
 #: Measurement bases published under :data:`FDNS_BASE`.
-BASES: tuple[str, ...] = ("zonefile", "toplist")
+#: ``reverse`` is not an OpenINTEL basis. It labels the RIPE reverse-delegation
+#: corpus built by ``reverse_zones``, and exists here so the two can share one
+#: cache directory and one scan path without colliding.
+BASES: tuple[str, ...] = ("zonefile", "toplist", "reverse")
 
 #: Suffix every measurement object carries.
 OBJECT_SUFFIX: str = ".gz.parquet"
@@ -371,6 +376,19 @@ class Partition:
         """One line a human can read in a progress log."""
         objects = f"{self.object_count} object(s)" if self.keys else "no listed objects"
         return f"{self.partition_id} ({objects}) at {self.prefix}"
+
+
+@dataclass(frozen=True)
+class LocalPartition(Partition):
+    """A partition whose objects are already on disk.
+
+    Carries ``paths`` so the runner reads them directly instead of asking the
+    object store to materialise anything. That is what makes a scan over a mirror
+    -- or over a corpus the store never hosted, like the RIPE reverse zones --
+    genuinely offline rather than merely cached.
+    """
+
+    paths: tuple[str, ...] = field(default=())
 
 
 def partition_prefix(basis: str, source: str, day: Any) -> str:
@@ -673,6 +691,78 @@ def discover_partitions(
 # --------------------------------------------------------------------------- #
 # Locating a partition's data
 # --------------------------------------------------------------------------- #
+
+
+
+def discover_local_partitions(
+    cache_dir: Path | str,
+    sources: str | Sequence[str],
+    start: Any,
+    end: Any,
+    *,
+    basis: str = "zonefile",
+    warnings: list[str] | None = None,
+) -> list[Partition]:
+    """Enumerate partitions from a cache directory, touching no network.
+
+    :func:`discover_partitions` lists the object store even in download mode, so a
+    fully mirrored corpus still spends one LIST per partition-day -- about 3,100
+    requests, an hour of the store's budget, to learn what is already on disk. It
+    also cannot see a corpus the store does not host at all, which is exactly the
+    case for the RIPE reverse-delegation zones.
+
+    The layout read here is the one ``cache_paths`` writes, so a mirror and an
+    ingested corpus are both discoverable the same way.
+    """
+    collected = warnings if warnings is not None else []
+    root = Path(cache_dir)
+    safe_basis = _validate_component(basis, "basis")
+
+    requested = [sources] if isinstance(sources, str) else [str(x) for x in sources]
+    if not requested:
+        raise PipelineError("discover_local_partitions requires at least one source.")
+    safe_sources = sorted({_validate_component(name, "source") for name in requested})
+
+    partitions: list[Partition] = []
+    missing = 0
+    for source in safe_sources:
+        for day in date_range(start, end):
+            directory = root / safe_basis / source / day.isoformat()
+            if not directory.is_dir():
+                missing += 1
+                continue
+            objects = sorted(
+                path for path in directory.iterdir()
+                if path.is_file() and path.suffix == ".parquet"
+            )
+            if not objects:
+                missing += 1
+                continue
+            partitions.append(
+                LocalPartition(
+                    source=source,
+                    basis=safe_basis,
+                    date=day,
+                    prefix=partition_prefix(safe_basis, source, day),
+                    keys=tuple(path.name for path in objects),
+                    paths=tuple(path.as_posix() for path in objects),
+                )
+            )
+
+    if missing:
+        warn(
+            collected,
+            f"{missing} source-day(s) in the requested range have no objects under "
+            f"{root}; they are absent from this run rather than empty. Ingest or "
+            "mirror them if the range is meant to be complete.",
+            LOGGER,
+        )
+    if not partitions:
+        raise PipelineError(
+            f"No local partitions found under {root} for {', '.join(safe_sources)} "
+            f"in {start}..{end} (basis={safe_basis}). Check --cache-dir and --basis."
+        )
+    return partitions
 
 
 def _partition_cache_dir(partition: Partition, config: AccessConfig) -> Path:

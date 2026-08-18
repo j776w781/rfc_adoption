@@ -231,9 +231,11 @@ for ax, vals, title, fmt in (
     ax.tick_params(axis="x", labelsize=13, colors=INK)
 save(fig, "panel_balance.png")
 
-# --- 6. RFC 9276 conformance (spot measurement) ----------------------------- #
-# Two non-overlapping buckets of one distribution, so grouped and never stacked:
-# they do not sum to the whole, because iterations 1-9 sit between them.
+# --- 6. NSEC3 iteration buckets (spot measurement) -------------------------- #
+# Ordered buckets of one distribution that partition the population, so: stacked,
+# and an ordinal blue ramp (light 0 -> dark >=10) rather than categorical hues.
+# An earlier version showed only "0" and ">=10" as grouped bars, which silently
+# dropped iterations 1-9 -- for .se that was 96% of the names.
 compliance_path = Path("reporting/nsec3_compliance.json")
 if not compliance_path.is_file():
     print("  skipped nsec3_compliance.png -- run reporting/nsec3_compliance.py first "
@@ -241,32 +243,44 @@ if not compliance_path.is_file():
 else:
     payload = json.loads(compliance_path.read_text(encoding="utf-8"))
     zones = payload["zones"]
-    threshold = payload["high_iterations_threshold"]
-    series = [
-        ("0 iterations - RFC 9276 conformant", "pct_conformant", S1),
-        (f"{threshold} or more iterations", "pct_high", S2),
-    ]
-    fig, ax = plt.subplots(figsize=(11, 4.6))
-    h = 0.32
-    for i, (label, key, color) in enumerate(series):
-        vals = [z[key] for z in zones]
-        pos = [j + (i - 0.5) * (h + 0.03) for j in range(len(zones))]
-        bars = ax.barh(pos, vals, height=h, color=color, label=label, zorder=3)
-        for b, v in zip(bars, vals):
-            ax.annotate(f"{v:.1f}%", (v, b.get_y() + b.get_height() / 2),
-                        xytext=(7, 0), textcoords="offset points", va="center",
-                        color=INK, fontsize=12, fontweight="bold")
+    RAMP = ["#86b6ef", "#2a78d6", "#104281"]      # ordinal, validated light mode
+    LABELS = ["0 iterations", "1-9 iterations", "10 or more iterations"]
+
+    def buckets(zone):
+        hist = {int(k): v["names"] for k, v in zone["iterations"].items() if k != "null"}
+        total = zone["total_names"]
+        zero = hist.get(0, 0)
+        low = sum(v for k, v in hist.items() if 1 <= k <= 9)
+        high = sum(v for k, v in hist.items() if k >= 10)
+        assert zero + low + high == total, f"buckets must partition {zone['source']}"
+        return [zero / total * 100, low / total * 100, high / total * 100]
+
+    fig, ax = plt.subplots(figsize=(11, 4.4))
+    ypos = list(range(len(zones)))
+    for zi, zone in enumerate(zones):
+        left = 0.0
+        for bi, value in enumerate(buckets(zone)):
+            # 2px surface gap between segments instead of a border.
+            ax.barh(zi, value, left=left, height=0.46, color=RAMP[bi], zorder=3,
+                    edgecolor=SURFACE, linewidth=1.6,
+                    label=LABELS[bi] if zi == 0 else None)
+            if value >= 7:      # only label where the text actually fits
+                ax.annotate(f"{value:.1f}%", (left + value / 2, zi), ha="center",
+                            va="center", color="#ffffff" if bi else INK,
+                            fontsize=12, fontweight="bold", zorder=4)
+            left += value
     style(ax, ygrid=False)
     ax.set_axisbelow(True)
     ax.grid(axis="x", color=GRID, linewidth=0.8)
-    ax.set_yticks(range(len(zones)))
+    ax.set_yticks(ypos)
     ax.set_yticklabels([f".{z['source']}" for z in zones], fontsize=14, color=INK)
     ax.invert_yaxis()
+    ax.set_xlim(0, 100)
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
-    ax.set_xlabel("share of that zone's NSEC3-signed names", color=INK_2,
-                  fontsize=12, labelpad=10)
-    ax.set_xlim(0, max(z["pct_conformant"] for z in zones) * 1.35 + 8)
-    ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="lower right")
+    ax.set_xlabel("share of that zone's NSEC3-signed names (buckets sum to 100%)",
+                  color=INK_2, fontsize=12, labelpad=10)
+    ax.legend(frameon=False, fontsize=12, labelcolor=INK_2, loc="upper center",
+              bbox_to_anchor=(0.5, -0.22), ncol=3)
     save(fig, "nsec3_compliance.png")
 
 print("charts done")

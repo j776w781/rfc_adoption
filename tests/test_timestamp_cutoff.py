@@ -340,3 +340,64 @@ def test_the_pre_publication_cds_rows_are_attributed_to_rfc7344_not_rfc8078(
 
     assert rfc8078_invalid, "the fixture contains CDS delete signals from before 2017-03"
     assert rfc8078_invalid <= rfc7344_valid
+
+
+def test_a_zero_scoring_match_still_fails_the_publication_cutoff():
+    """A verdict that claims adoption must never survive predating its RFC.
+
+    The forfeit used to be gated on there being a score to forfeit, which is right
+    for the *penalty* and wrong for the *decision*. An RFC whose only indicator is
+    ambiguous can match, score zero once the ambiguity penalty cancels its weight,
+    and still return `ambiguous` -- a claim of adoption. RFC 6840 did exactly that
+    against a 2010 observation, three years before it was published, and set
+    first_seen in the scale path; the Python timeline's redundant timestamp filter
+    masked it there, so only the two engines disagreeing revealed it.
+    """
+    from datetime import datetime
+
+    from openintel_rfc.models import (
+        IndicatorEvaluation,
+        RFCChecklistEntry,
+        RFCIndicator,
+        IndicatorCondition,
+        TimestampCheck,
+    )
+    from openintel_rfc.ranking import score_match
+
+    rfc = RFCChecklistEntry(
+        rfc_id="RFC 6840",
+        title="Clarifications",
+        publication_date=datetime(2013, 2, 1),
+        specificity="low",
+        indicators=[
+            RFCIndicator(
+                id="only",
+                description="ambiguous and weightless once penalised",
+                required=True,
+                weight=2,
+                ambiguous=True,
+                conditions=[IndicatorCondition(field="rr_type", op="equals", value="DNSKEY")],
+            )
+        ],
+    )
+    evaluation = IndicatorEvaluation(
+        indicator_id="only", indicator_description="", required=True, weight=2,
+        ambiguous=True, queryability="ambiguous", matched=True, skipped=False,
+        conditions=[], missing_fields=[], explanation="",
+    )
+    published = datetime(2013, 2, 1)
+    observed = datetime(2010, 6, 15)
+    check = TimestampCheck(
+        observation_timestamp=observed,
+        rfc_publication_date=published,
+        valid=False,
+        days_after_publication=(observed - published).days,
+        explanation="",
+    )
+
+    breakdown, decision = score_match(rfc, [evaluation], check)
+    assert breakdown.final_score == 0.0
+    assert decision == "timestamp_invalid", (
+        "a pre-publication observation kept an adoption-claiming decision because "
+        "its score happened to be zero"
+    )

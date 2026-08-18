@@ -1,0 +1,246 @@
+{
+  "corpus": "RIPE reverse-DNS delegation zones",
+  "measured_days": 199,
+  "window": [
+    "2009-04-01",
+    "2026-08-01"
+  ],
+  "denominator": "delegations (zone-level), not records",
+  "stable_panel": [
+    "afrinic",
+    "arin",
+    "lacnic",
+    "ripe"
+  ],
+  "excluded_from_panel": [
+    "apnic"
+  ],
+  "panel_note": "APNIC contributed zonelets until 2024-12-01 and its directory is empty from 2025-01-01. The headline share is computed over the RIRs present on every measured day, so the 2025 step is not read as adoption.",
+  "signed_share_stable_first": 0.021873712375942985,
+  "signed_share_stable_last": 1.0115255787803565,
+  "signed_share_first": {
+    "delegations": 1011762,
+    "signed_delegations": 172,
+    "ds_records": 350,
+    "signed_share": 0.00017000045465237872
+  },
+  "signed_share_last": {
+    "delegations": 839524,
+    "signed_delegations": 8492,
+    "ds_records": 13410,
+    "signed_share": 0.010115255787803566
+  },
+  "first_observation": [
+    [
+      "RFC 3110",
+      "2001-05",
+      "2009-04",
+      "<=7.9y",
+      "corpus-start censored"
+    ],
+    [
+      "RFC 4033",
+      "2005-03",
+      "2009-04",
+      "<=4.1y",
+      "corpus-start censored"
+    ],
+    [
+      "RFC 4034",
+      "2005-03",
+      "2009-04",
+      "<=4.1y",
+      "corpus-start censored"
+    ],
+    [
+      "RFC 4035",
+      "2005-03",
+      "not observed",
+      "",
+      "meta"
+    ],
+    [
+      "RFC 4509",
+      "2006-05",
+      "2009-04",
+      "<=2.9y",
+      "corpus-start censored"
+    ],
+    [
+      "RFC 5011",
+      "2007-09",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 5155",
+      "2008-03",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 5702",
+      "2009-10",
+      "2010-04",
+      "0.5y",
+      "observable"
+    ],
+    [
+      "RFC 5933",
+      "2010-07",
+      "2013-01",
+      "2.5y",
+      "observable"
+    ],
+    [
+      "RFC 6605",
+      "2012-04",
+      "2015-12",
+      "3.7y",
+      "observable"
+    ],
+    [
+      "RFC 6698",
+      "2012-08",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 6781",
+      "2012-12",
+      "not observed",
+      "",
+      "meta"
+    ],
+    [
+      "RFC 6840",
+      "2013-02",
+      "2013-02",
+      "0.0y",
+      "observable"
+    ],
+    [
+      "RFC 7344",
+      "2014-09",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 7583",
+      "2015-10",
+      "not observed",
+      "",
+      "meta"
+    ],
+    [
+      "RFC 7671",
+      "2015-10",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 7672",
+      "2015-10",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 8078",
+      "2017-03",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 8080",
+      "2017-02",
+      "2022-09",
+      "5.6y",
+      "observable"
+    ],
+    [
+      "RFC 8198",
+      "2017-07",
+      "not observed",
+      "",
+      "meta"
+    ],
+    [
+      "RFC 8624",
+      "2019-06",
+      "2019-06",
+      "0.0y",
+      "observable"
+    ],
+    [
+      "RFC 9077",
+      "2021-07",
+      "not observed",
+      "",
+      "meta"
+    ],
+    [
+      "RFC 9276",
+      "2022-08",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 9364",
+      "2023-02",
+      "2023-02",
+      "0.0y",
+      "observable"
+    ],
+    [
+      "RFC 9558",
+      "2024-04",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 9563",
+      "2024-12",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 9615",
+      "2024-07",
+      "not observed",
+      "",
+      "adoption"
+    ],
+    [
+      "RFC 9904",
+      "2025-11",
+      "not observed",
+      "",
+      "meta"
+    ],
+    [
+      "RFC 9905",
+      "2025-11",
+      "not observed",
+      "",
+      "non_conformance"
+    ],
+    [
+      "RFC 9906",
+      "2025-11",
+      "not observed",
+      "",
+      "non_conformance"
+    ]
+  ],
+  "note": "A DS in the parent proves the delegation is signed, not that the child validates. Reverse DNS is a different population from forward DNS."
+}

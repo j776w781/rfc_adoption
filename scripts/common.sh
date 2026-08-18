@@ -244,7 +244,13 @@ activate_venv() {
 # network-bound. But each thread issues its own HTTP range requests, and
 # OpenINTEL rate-limits on request count, so the extra threads buy ~5% time and
 # cost a much higher chance of being throttled off the store entirely.
-STREAM_THREAD_CAP="${STREAM_THREAD_CAP:-8}"
+#
+# The cap is 4 because the limit was measured rather than guessed. Against
+# object.openintel.nl, concurrency 1-5 is queued and delayed to ~1.0 req/s with
+# a 100% success rate; concurrency 6 overflows nginx's burst queue and 34 of 48
+# requests come back 503. Four leaves a request of headroom for the retry that
+# follows a throttle, which is exactly when the queue is least able to take it.
+STREAM_THREAD_CAP="${STREAM_THREAD_CAP:-4}"
 
 # DuckDB settings derived from the machine, and from how the data is being read.
 #
