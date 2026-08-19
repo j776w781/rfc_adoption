@@ -37,8 +37,10 @@ about DNSSEC — and this notebook is mostly about telling those two cases apart
 
 **Read this first if you read nothing else:** section 3 is a real agreement worth
 reporting, section 4 is a 10x apparent disagreement that turns out to be an
-artefact of what each side counts, and section 5 is the thing the reverse corpus
-can do that the forward one structurally cannot.
+artefact of what each side counts, section 5 is what the reverse corpus can do
+that the forward one structurally cannot, and sections 6-7 are the structure the
+pooled numbers hide — including the largest single effect in the data, which is
+that IPv6 delegations are ten times more likely to be signed than IPv4 ones.
 """)
 
 # ============================================================== setup ========
@@ -348,11 +350,22 @@ makes "what fraction of **zones** are signed" directly countable — the questio
 the forward corpus cannot answer, and the reason its slides have to keep saying
 *record-level, not zone-level*.
 
-One caveat is load-bearing: **APNIC stops contributing to the archive in January
-2025**, taking ~530,000 delegations out of the denominator in a single step. Left
-alone that produces a jump that reads exactly like an adoption surge. The headline
-series below is therefore computed over only the RIRs that report on *every*
-measured day, with the all-RIRs series drawn beside it and the break marked.
+Two composition breaks are load-bearing, and the second one is easy to miss:
+
+- **APNIC stops contributing in January 2025**, taking ~530,000 delegations out of
+  the denominator in a single step.
+- **RIPE changes publication format in October 2015**, from bulk `legacy/` zone
+  files to `1.0/` inter-RIR zonelets, and its delegation count falls **97.4%**
+  (695,476 → 17,836) without ever hitting zero. A panel rule that only drops RIRs
+  reporting *nothing* keeps this one, and inherits the step.
+
+So the rule used here is stricter: a RIR joins the panel only if it reports on
+every measured day **and** never steps by more than 25% between consecutive
+measurements. That leaves AFRINIC and ARIN — 89% of the 2026 delegations, and no
+discontinuity.
+
+Because the level depends on which panel you pick, the cell below reports all
+three rather than choosing one.
 """)
 
 code(r"""
@@ -363,9 +376,23 @@ RIRS = ("afrinic", "apnic", "arin", "lacnic", "ripe")
 def n(day, rir, key):
     return int(day["per_rir"].get(rir, {}).get(key, 0))
 
-STABLE = tuple(r for r in RIRS if all(n(d, r, "delegations") > 0 for d in summaries))
+# Largest single-step change in each RIR's delegation count. A step this size is a
+# change in what the archive publishes, not in what operators deployed.
+def worst_step(rir):
+    vals = [n(d, rir, "delegations") for d in summaries]
+    return max((abs(b - a) / a for a, b in zip(vals, vals[1:]) if a), default=0.0)
+
+STEP_LIMIT = 0.25
+steps = {r: worst_step(r) for r in RIRS}
+REPORTS_ALWAYS = tuple(r for r in RIRS if all(n(d, r, "delegations") > 0 for d in summaries))
+STABLE = tuple(r for r in REPORTS_ALWAYS if steps[r] <= STEP_LIMIT)
 DROPPED = tuple(r for r in RIRS if r not in STABLE)
 dates = [datetime.date.fromisoformat(s["date"]) for s in summaries]
+
+print("largest single-step change in delegations, per RIR:")
+for r in RIRS:
+    flag = "" if r in STABLE else "   <- excluded from the strict panel"
+    print(f"  {r:8} {steps[r] * 100:6.1f}%{flag}")
 
 def series(rirs):
     sig = [sum(n(d, r, "signed_delegations") for r in rirs) for d in summaries]
@@ -374,20 +401,23 @@ def series(rirs):
 
 share_stable, sig_stable, tot_stable = series(STABLE)
 share_all, _, _ = series(RIRS)
+share_nonzero, _, tot_nonzero = series(REPORTS_ALWAYS)
 
 fig, ax = plt.subplots(figsize=(11.5, 5.2))
 ax.plot(dates, share_stable, color=FWD, lw=2.4, zorder=4,
-        label=f"stable panel ({', '.join('.' + r for r in STABLE)})")
+        label=f"strict panel ({', '.join('.' + r for r in STABLE)})")
 ax.fill_between(dates, share_stable, color=FWD, alpha=0.10, zorder=2)
-ax.plot(dates, share_all, color=MUTED, lw=1.5, ls="--", zorder=3,
-        label="all RIRs reporting that day (composition changes)")
+ax.plot(dates, share_nonzero, color=REV, lw=1.6, ls="--", zorder=3,
+        label=f"reports-every-day panel ({', '.join('.' + r for r in REPORTS_ALWAYS)})")
+ax.plot(dates, share_all, color=MUTED, lw=1.3, ls=":", zorder=3,
+        label="all RIRs reporting that day")
 
-brk = next(d for d, s in zip(dates, summaries)
-           if any(n(s, r, "delegations") == 0 for r in DROPPED))
-ax.axvline(brk, color=CRITICAL, lw=1.2, alpha=0.65, zorder=1)
-ax.annotate(f"{', '.join('.' + r for r in DROPPED)} leaves the archive",
-            (brk, 0.12), xytext=(-10, 0), textcoords="offset points",
-            ha="right", color=CRITICAL, fontsize=10)
+for rir, when, note in ((".ripe", "2015-10-01", ".ripe changes format (-97%)"),
+                        (".apnic", "2025-01-01", ".apnic leaves the archive")):
+    d = datetime.date.fromisoformat(when)
+    ax.axvline(d, color=CRITICAL, lw=1.1, alpha=0.55, zorder=1)
+    ax.annotate(note, (d, 0.06), xytext=(-8, 0), textcoords="offset points",
+                ha="right", color=CRITICAL, fontsize=9.5)
 
 style(ax); pct(ax)
 ax.set_ylabel("share of reverse delegations that are signed", color=INK_2, labelpad=10)
@@ -399,10 +429,18 @@ ax.annotate(f"{share_stable[-1]:.2f}%\n{sig_stable[-1]:,} of {tot_stable[-1]:,}"
 ax.legend(frameon=False, fontsize=10.5, labelcolor=INK_2, loc="upper left")
 save(fig, "03_zone_level_share"); plt.show()
 
-print(f"{summaries[0]['date']}: {share_stable[0]:.3f}%  ->  "
-      f"{summaries[-1]['date']}: {share_stable[-1]:.3f}%")
-print(f"crossed 1% in {next(d for d, s in zip(dates, share_stable) if s >= 1.0)}")
-print(f"excluded from the panel: {', '.join(DROPPED) or 'none'}")
+print()
+print(f"Zone-level signed share on {summaries[-1]['date']}, by panel:")
+for label, values, totals in (("strict (no step > 25%)", share_stable, tot_stable),
+                              ("reports every day", share_nonzero, tot_nonzero),
+                              ("all RIRs that day", share_all, None)):
+    crossed = next((d for d, v in zip(dates, values) if v and v >= 1.0), None)
+    tot = f"{totals[-1]:,} delegations" if totals else ""
+    print(f"  {label:24} {values[-1]:5.3f}%   crosses 1%: "
+          f"{str(crossed) if crossed else 'not yet':12} {tot}")
+print()
+print("The level is panel-dependent (0.88-1.01%); the trend is not.")
+print("Reporting a single number without the panel would be over-claiming.")
 """)
 
 md(r"""
@@ -576,6 +614,238 @@ print(f"RSA/SHA-1 (deprecated by RFC 9905 in Nov 2025): "
 print("Still non-zero, which is what RFC 9905 non-conformance will measure.")
 """)
 
+# ======================================================= family / region =====
+md(r"""
+## 6. Who is actually signing: address family and region
+
+The pooled numbers hide two large structural differences. Both are computed from
+the corpus directly; the queries live in `notebooks/build_crossref_notebook.py`
+and their results are cached in `out/analysis/crossref_*.json`.
+
+### 6a. IPv6 reverse delegations are an order of magnitude more likely to be signed
+
+This is the sharpest split in the data.
+""")
+
+code(r"""
+# Per day, per RIR, per address family -- so the same strict panel from section 5a
+# can be applied. Without that, APNIC's 2025 departure puts a 3-point vertical jump
+# in the IPv6 series that has nothing to do with anyone signing anything.
+raw = pd.DataFrame(json.loads((ROOT / "out/analysis/crossref_family_rir.json").read_text()))
+fam = (raw[raw.source.isin(STABLE)]
+       .groupby(["day", "fam"], as_index=False)[["delegations", "signed"]].sum())
+fam["pct"] = fam.signed / fam.delegations * 100
+fam["date"] = pd.to_datetime(fam.day)
+print(f"panel: {', '.join(STABLE)}  ({len(fam)//2} measured days)")
+
+fig, ax = plt.subplots(figsize=(11.5, 5.2))
+for key, label, colour in (("ip6", "ip6.arpa (IPv6)", "#2a78d6"),
+                           ("ip4", "in-addr.arpa (IPv4)", "#eb6834")):
+    sub = fam[fam.fam == key].sort_values("date")
+    ax.plot(sub.date, sub.pct, lw=2.4, color=colour, label=label, zorder=3)
+    ax.annotate(f"{label.split()[0]}  {sub.pct.iloc[-1]:.2f}%",
+                (sub.date.iloc[-1], sub.pct.iloc[-1]), xytext=(8, 0),
+                textcoords="offset points", va="center", color=colour,
+                fontsize=10.5, fontweight="bold")
+
+style(ax); pct(ax)
+ax.set_xlim(fam.date.min(), fam.date.max() + pd.Timedelta(days=1500))
+ax.set_ylabel("share of delegations that are signed", color=INK_2, labelpad=10)
+ax.set_title("IPv6 reverse delegations are far more likely to be DNSSEC-signed",
+             color=INK, fontweight="bold", loc="left", pad=14)
+ax.annotate(f"strict panel only ({', '.join('.' + r for r in STABLE)}), so the "
+            "series carries no composition break",
+            (0, -0.16), xycoords="axes fraction", color=MUTED, fontsize=9)
+ax.legend(frameon=False, fontsize=11, labelcolor=INK_2, loc="upper left")
+save(fig, "06_ipv4_vs_ipv6"); plt.show()
+
+last = fam[fam.day == fam.day.max()].set_index("fam")
+ratio = last.loc["ip6", "pct"] / last.loc["ip4", "pct"]
+print(f"{fam.day.max()}:")
+print(f"  ip6.arpa      {last.loc['ip6','signed']:>6,} of {last.loc['ip6','delegations']:>8,}"
+      f"  = {last.loc['ip6','pct']:.3f}%")
+print(f"  in-addr.arpa  {last.loc['ip4','signed']:>6,} of {last.loc['ip4','delegations']:>8,}"
+      f"  = {last.loc['ip4','pct']:.3f}%")
+print()
+print(f"  IPv6 delegations are {ratio:.1f}x more likely to be signed,")
+print(f"  yet are only {last.loc['ip6','delegations'] / last.delegations.sum() * 100:.1f}%"
+      f" of all reverse delegations.")
+""")
+
+md(r"""
+The gap is not new and it is not closing: IPv6 pulls away steadily from about 2015
+onward, and the ratio on the latest measured day is 9.9x. Both series are computed
+on the strict panel from section 5a, so neither carries the APNIC break — on the
+full set that break alone puts a three-point vertical jump in the IPv6 line.
+
+The natural reading is **selection, not causation**. A network that has deployed
+IPv6 reverse DNS at all has already done a piece of discretionary, modern DNS
+work, and the same operators are the ones who sign. IPv6 delegations are also far
+newer on average, provisioned by tooling that had DNSSEC support from the start,
+where IPv4 reverse zones carry decades of legacy delegation.
+
+Two things this does **not** say.
+
+*It is not a large share of anything.* IPv6 is 0.7% of reverse delegations, so it
+contributes almost nothing to the overall figure. This is a statement about *who
+signs*, not about how much of the reverse tree is signed.
+
+*It is not a smooth population curve.* The panel holds only ~5,600 IPv6
+delegations, and the 2026 figure rests on **454 signed** ones. The visible step in
+October 2014 is real signing rather than a composition change — the denominator
+moves smoothly from 2,724 to 2,756 while the signed count jumps from 1 to 31 — but
+that is one operator signing a batch. At this population size individual operators
+move the line, so the *level* is solid and the *shape* should not be
+over-interpreted.
+
+### 6b. A six-fold spread between regions
+""")
+
+code(r"""
+rir = pd.DataFrame(json.loads((ROOT / "out/analysis/crossref_rir.json").read_text()))
+latest = rir[rir.day == rir.day.max()].sort_values("pct", ascending=False)
+
+fig, ax = plt.subplots(figsize=(10.5, 3.8))
+colours = ["#2a78d6" if r in STABLE else "#898781" for r in latest.source]
+ax.barh(range(len(latest)), latest.pct, color=colours, height=0.6, zorder=3)
+for i, (_, r) in enumerate(latest.iterrows()):
+    ax.annotate(f"{r.pct:.2f}%   ({r.signed:,} of {r.deleg:,})", (r.pct, i),
+                xytext=(8, 0), textcoords="offset points", va="center",
+                color=INK_2, fontsize=10)
+ax.set_yticks(range(len(latest)))
+ax.set_yticklabels([f".{s}" for s in latest.source], fontsize=11)
+ax.invert_yaxis()
+style(ax, axis="x"); ax.set_xlim(0, 7.4)
+ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}%"))
+ax.set_title(f"Signed share of reverse delegations by RIR, {rir.day.max()}",
+             color=INK, fontweight="bold", loc="left", pad=12)
+ax.annotate("grey = excluded from the strict panel (a composition break in its series)",
+            (0, -0.30), xycoords="axes fraction", color=MUTED, fontsize=9)
+save(fig, "07_by_rir"); plt.show()
+
+print(f"spread: {latest.pct.max() / latest.pct.min():.1f}x between "
+      f".{latest.iloc[0].source} and .{latest.iloc[-1].source}")
+print(f"but .{latest.iloc[-1].source} holds "
+      f"{latest.iloc[-1].deleg / latest.deleg.sum() * 100:.0f}% of all delegations, "
+      f"so it dominates every pooled figure in this notebook.")
+""")
+
+md(r"""
+LACNIC leads at 5.2% and ARIN trails at 0.84% — but ARIN holds 84% of the
+delegations, so **the pooled number is essentially ARIN's number**. Any
+"reverse DNS is N% signed" claim is really a claim about North American address
+space unless it says otherwise.
+
+Two of the four carry the composition breaks from section 5a, which is why they
+are greyed: LACNIC's delegation count steps 40% in 2011 and RIPE's falls 97% in
+2015. Their *levels* on the latest day are measured directly and are fine to
+quote; it is their *trends* that the breaks make unreliable.
+""")
+
+# ========================================================= algorithms ========
+md(r"""
+## 7. Two things the algorithm data says that adoption curves do not
+
+### 7a. "SHA-1" means two different things, and only one is deprecated
+
+RFC 9905 (Nov 2025) deprecates the SHA-1 **signature algorithms** — RSASHA1 (5)
+and RSASHA1-NSEC3-SHA1 (7). It does *not* deprecate **DS digest type 1**, which is
+also SHA-1 and which IANA still lists as RECOMMENDED for validation.
+
+The corpus separates them and they sit at very different levels, so conflating
+them would misstate the RFC 9905 exposure by about 3x.
+""")
+
+code(r"""
+digest = pd.DataFrame(json.loads((ROOT / "out/analysis/crossref_digest.json").read_text()))
+NAMES = {1: "SHA-1", 2: "SHA-256", 3: "GOST R 34.11-94", 4: "SHA-384",
+         5: "GOST 2012", 6: "SM3"}
+digest["name"] = digest.digest.map(NAMES).fillna(digest.digest.astype(str))
+pivot = digest.pivot_table(index="yr", columns="name", values="n", aggfunc="sum").fillna(0)
+pivot = pivot.div(pivot.sum(axis=1), axis=0) * 100
+
+fig, ax = plt.subplots(figsize=(11.5, 5.0))
+cols = {"SHA-256": "#2a78d6", "SHA-1": "#d03b3b",
+        "SHA-384": "#1baf7a", "GOST R 34.11-94": "#eb6834"}
+for name in ("SHA-256", "SHA-1", "SHA-384", "GOST R 34.11-94"):
+    if name not in pivot.columns:
+        continue
+    xs = [int(y) for y in pivot.index]
+    ax.plot(xs, pivot[name].values, lw=2.3, color=cols[name], marker="o", ms=5,
+            mfc=cols[name], mec=SURFACE, mew=1.5, label=name, zorder=3)
+    ax.annotate(f"{name}  {pivot[name].iloc[-1]:.1f}%", (xs[-1], pivot[name].iloc[-1]),
+                xytext=(8, 0), textcoords="offset points", va="center",
+                color=cols[name], fontsize=10, fontweight="bold")
+style(ax); pct(ax); years(ax, [int(y) for y in pivot.index])
+ax.set_xlim(2008.5, 2032)
+ax.set_ylabel("share of DS records", color=INK_2, labelpad=10)
+ax.set_title("DS digest algorithms in reverse delegations", color=INK,
+             fontweight="bold", loc="left", pad=14)
+ax.legend(frameon=False, fontsize=10, labelcolor=INK_2, loc="center left",
+          bbox_to_anchor=(0.02, 0.58))
+save(fig, "08_ds_digest_types"); plt.show()
+
+sig_sha1 = by_year(rev, "RFC 3110").iloc[-1]
+dig_sha1 = pivot["SHA-1"].iloc[-1]
+gost = pivot["GOST R 34.11-94"].iloc[-1] if "GOST R 34.11-94" in pivot.columns else 0.0
+print(f"In {pivot.index[-1]}:")
+print(f"  SHA-1 DS *digest* (type 1)           {dig_sha1:5.1f}%   NOT deprecated by RFC 9905")
+print(f"  RSA/SHA-1 *signature* algorithm (5)  {sig_sha1:5.1f}%   IS deprecated by RFC 9905")
+print()
+print(f"  GOST R 34.11-94, retired by RFC 9906 (Nov 2025): {gost:.2f}% "
+      f"- already effectively gone")
+""")
+
+md(r"""
+Two consequences worth carrying into the deck:
+
+- **RFC 9905's real exposure in this corpus is ~5%, not ~15%.** The larger number
+  is the DS digest, which the RFC does not touch.
+- **RFC 9906 arrived after the thing it retires had already died.** GOST R
+  34.11-94 is at 0.1% of DS records, down from 2.9% in 2018. The deprecation
+  documents an ending rather than causing one — itself a finding about how
+  algorithm retirement actually works.
+
+### 7b. Algorithm rollovers are visible, and rare
+""")
+
+code(r"""
+roll = pd.DataFrame(json.loads((ROOT / "out/analysis/crossref_rollover.json").read_text()))
+
+fig, ax = plt.subplots(figsize=(11, 4.4))
+xs = [int(y) for y in roll.yr]
+ax.bar(xs, roll.pct, color="#2a78d6", width=0.62, zorder=3)
+peak = roll.loc[roll.pct.idxmax()]
+ax.annotate(f"peak {peak.pct:.2f}% in {peak.yr}", (int(peak.yr), peak.pct),
+            xytext=(0, 8), textcoords="offset points", ha="center",
+            color=INK, fontsize=10, fontweight="bold")
+style(ax); pct(ax); years(ax, xs)
+ax.set_ylim(0, peak.pct * 1.25)
+ax.set_ylabel("share of signed delegations", color=INK_2, labelpad=10)
+ax.set_title("Delegations publishing two or more DS algorithms at once",
+             color=INK, fontweight="bold", loc="left", pad=14)
+save(fig, "09_algorithm_rollover"); plt.show()
+
+print("A delegation carrying 2+ distinct DS algorithms is mid-rollover: the old")
+print("algorithm is still trusted while the new one is introduced.")
+print()
+for i in (0, len(roll) // 2, len(roll) - 1):
+    r = roll.iloc[i]
+    print(f"  {r.yr}: {r.pct:5.2f}%  ({int(r.multi):,} of {int(r.signed_days):,} "
+          f"signed delegation-days)")
+""")
+
+md(r"""
+Around 1% of signed delegations are mid-rollover on any given day, peaking at
+1.58% in 2023 — the years when ECDSA adoption was steepest (section 5c). The
+signal is small, but it is the only *direct* evidence of operator activity in this
+corpus: everything else measures a state, this measures a transition in progress.
+
+It also bounds how fast the mix can move. If ~1% of delegations are rolling at any
+time, an ecosystem-wide algorithm change is a decade-scale event by construction —
+consistent with the 3.7-year and 5.6-year adoption lags measured in section 5b.
+""")
+
 # =========================================================== conclusion ======
 md(r"""
 ## 6. What this cross-reference establishes
@@ -592,8 +862,11 @@ operators, different collection:
 
 **Only the reverse corpus can say:**
 
-3. **Zone-level deployment is ~1.0%** and only crossed 1% this year — against
-   seventeen years of availability.
+3. **Zone-level deployment is 0.88–1.01%**, depending on which RIRs form the
+   panel, after seventeen years. Whether it has "crossed 1%" is *inside* that
+   uncertainty — the strict panel says no, the looser one says yes this year — so
+   the threshold is not a claim worth making. The trend is robust; the level needs
+   its panel stated.
 4. **Measured, uncensored adoption lags**: 0.5 y (RSA/SHA-2) → 5.6 y (EdDSA),
    monotonically increasing.
 5. **The SHA-1 retirement is nearly complete but not finished.** RSA/SHA-1 fell
@@ -602,9 +875,29 @@ operators, different collection:
    `non_conformance` signal now measures — and the reverse corpus is the only
    place we can watch it go to zero.
 
+**Structure the pooled numbers hide:**
+
+6. **IPv6 reverse delegations are 9.9x more likely to be signed than IPv4 ones**
+   (8.16% vs 0.83% on the strict panel), a gap that widens from 2015 onward.
+   Almost certainly selection — operators who deploy IPv6 reverse DNS are the
+   operators who sign — and it is the sharpest split in the data. It rests on 454
+   signed delegations, so quote the ratio, not the curve's shape.
+7. **A 6.2x spread between RIRs** (LACNIC 5.2%, ARIN 0.84%), and ARIN holds 85% of
+   delegations. Every pooled figure here is substantially a statement about North
+   American address space.
+8. **"SHA-1" is two different things.** The SHA-1 *DS digest* sits at 15.3% and is
+   not deprecated; the RSA/SHA-1 *signature algorithm* sits at 4.9% and is what
+   RFC 9905 deprecates. Conflating them misstates the exposure by 3x.
+9. **RFC 9906 retired an algorithm that was already gone** — GOST R 34.11-94 is at
+   0.07% of DS records. Deprecation here documented an ending rather than causing
+   one.
+10. **~1% of signed delegations are mid-rollover** on any day, peaking at 1.58% in
+    2023. The only direct evidence of operator *activity* in this corpus, and it
+    bounds how fast the algorithm mix can move.
+
 **A methodological result worth carrying forward:**
 
-6. Indicators scoped by `rr_type` are **not** comparable across corpora with
+11. Indicators scoped by `rr_type` are **not** comparable across corpora with
    different record-type composition — RFC 4509 shows a 10x gap that is entirely
    denominator, not behaviour. Indicators scoped by *algorithm* compare cleanly.
    Any future cross-corpus claim should state which kind it is.
@@ -616,9 +909,15 @@ operators, different collection:
   forward-only, and nothing here corroborates them.
 - The forward side is three zones. Its agreement with the reverse corpus on ECDSA
   raises confidence, but does not make `.gov`/`.nu`/`.se` representative.
-- APNIC's departure from the archive in 2025 is handled by the stable-panel
-  construction above, but if it returns, the panel should be recomputed rather
-  than extended.
+- Three of the five RIRs have a composition break in their series (APNIC leaves
+  in 2025, RIPE reformats in 2015, LACNIC steps 40% in 2011). The strict panel
+  handles this by dropping them, at the cost of leaning almost entirely on ARIN.
+  A better treatment would splice the RIPE series across its format change rather
+  than discarding it; that needs someone who knows what the `legacy/` bulk zones
+  contained relative to the `1.0/` zonelets.
+- The IPv6 result is a correlation with no causal test behind it. Confirming the
+  selection story would mean checking whether the *same operators* run both, which
+  needs delegation-to-operator attribution this corpus does not carry.
 """)
 
 code(r"""
