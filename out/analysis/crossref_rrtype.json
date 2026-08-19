@@ -1,0 +1,39 @@
+{
+  "gov 2018-01-01": {
+    "rr_type_distribution": {
+      "NSEC": 218,
+      "NSEC3PARAM": 854,
+      "DNSKEY": 3284,
+      "DS": 2684,
+      "CDS": 1,
+      "RRSIG": 15502,
+      "NSEC3": 2064,
+      "CDNSKEY": 1
+    },
+    "sha256_ds": 1345,
+    "all_ds": 2685,
+    "all_dnssec": 24608,
+    "rfc4509_over_all_dnssec": 5.47,
+    "rfc4509_over_ds_only": 50.09,
+    "days": 1
+  },
+  "gov 2026-08": {
+    "rr_type_distribution": {
+      "RRSIG": 102992,
+      "CDNSKEY": 3703,
+      "NSEC3": 5554,
+      "NSEC": 4943,
+      "NSEC3PARAM": 2171,
+      "DNSKEY": 17768,
+      "DS": 8050,
+      "CDS": 3892
+    },
+    "sha256_ds": 7582,
+    "all_ds": 11942,
+    "all_dnssec": 149073,
+    "rfc4509_over_all_dnssec": 5.09,
+    "rfc4509_over_ds_only": 63.49,
+    "days": 3
+  },
+  "_note": "Record-type composition of the OpenINTEL forward corpus, measured from locally mirrored .gov partitions. Used to turn the RFC 4509 denominator argument from a schematic into a measurement. .gov only, so it bounds the effect rather than characterising the whole forward corpus."
+}

@@ -264,7 +264,7 @@ adoption reached both populations, and by 2026 it had reached them equally.**
 md(r"""
 ## 4. Where they appear to disagree — and why they don't
 
-RFC 4509 (SHA-256 in DS records) looks like a flat contradiction: ~7% in forward
+RFC 4509 (SHA-256 in DS records) looks like a flat contradiction: ~5% in forward
 DNS, ~79% in reverse in 2026 - a 10x gap.
 
 It is an artefact, and a completely predictable one. RFC 4509's indicator is
@@ -282,8 +282,13 @@ by the ratio of DS records to all DNSSEC records.
 Contrast that with ECDSA in section 3, whose indicator is scoped to an algorithm
 rather than to a record type, and which therefore compares cleanly.
 
-The right-hand panel is *schematic*: these aggregates carry no record-type
-breakdown, so it shows the mechanism rather than the measured proportions.
+The cell below settles it rather than asserting it: recomputing the forward figure
+**over DS records only** — the denominator the reverse side has by construction —
+brings the two to within **1.1 percentage points in 2018** (50.1% vs 49.0%). The
+10x gap was about 9x denominator.
+
+The residual difference in 2026 (63.5% vs 78.5%) is *real*: reverse-DNS operators
+moved to SHA-256 faster than `.gov` did. That is a finding. The 10x was not.
 
 **The rule this gives us:** an indicator scoped by `rr_type` is only comparable
 across corpora whose scanned populations have the same record-type composition.
@@ -309,34 +314,54 @@ ax1.set_title("RFC 4509 as reported: a 10x gap", color=INK, fontweight="bold",
 ax1.set_ylabel("share of scanned records", color=INK_2, labelpad=10)
 ax1.legend(frameon=False, fontsize=9.5, labelcolor=INK_2, loc="center left")
 
-# The mechanism, drawn. SCHEMATIC: the aggregates carry no rr_type breakdown, so
-# the forward bar's split is illustrative of the shape, not a measured proportion.
+# The mechanism, measured. The aggregates carry no rr_type breakdown, so this is
+# computed from locally mirrored .gov Parquet and cached in crossref_rrtype.json.
+comp = json.loads((ROOT / "out/analysis/crossref_rrtype.json").read_text())
+recent = comp["gov 2026-08"]
+dist = recent["rr_type_distribution"]
+total = sum(dist.values())
+ds_share = (dist.get("DS", 0) + dist.get("CDS", 0)) / total * 100
+
 ax2.barh([1], [100], color=REV, height=0.42, zorder=3)
 ax2.barh([0], [100], color=GRID, height=0.42, zorder=2)
-ax2.barh([0], [7], color=FWD, height=0.42, zorder=3)
+ax2.barh([0], [ds_share], color=FWD, height=0.42, zorder=3)
 ax2.set_yticks([0, 1])
-ax2.set_yticklabels(["OpenINTEL\nforward", "RIPE\nreverse"], fontsize=10)
+ax2.set_yticklabels(["OpenINTEL" + chr(10) + "forward (.gov)",
+                     "RIPE" + chr(10) + "reverse"], fontsize=10)
 ax2.annotate("DS records: 100% of the denominator", (50, 1), ha="center", va="center",
              color="white", fontsize=10, fontweight="bold", zorder=4)
-ax2.annotate("DS", (3.5, 0), ha="center", va="center", color="white",
-             fontsize=9, fontweight="bold", zorder=4)
-ax2.annotate("DNSKEY / RRSIG / NSEC / NSEC3 - unreachable by this indicator",
-             (54, 0), ha="center", va="center", color=INK_2, fontsize=9.5, zorder=4)
+ax2.annotate(f"DS {ds_share:.0f}%", (ds_share / 2, 0), ha="center", va="center",
+             color="white", fontsize=9, fontweight="bold", zorder=4)
+ax2.annotate(f"RRSIG / DNSKEY / NSEC3 / NSEC - {100 - ds_share:.0f}% of the"
+             + chr(10) + "denominator, unreachable by this indicator",
+             ((100 + ds_share) / 2, 0), ha="center", va="center",
+             color=INK_2, fontsize=9.5, zorder=4)
 style(ax2, axis="x")
 ax2.set_xlim(0, 100); ax2.set_xticks([])
 for side in ("left", "bottom"):
     ax2.spines[side].set_visible(False)
-ax2.set_title("Why (schematic): what each denominator contains", color=INK,
+ax2.set_title("Why: what each denominator contains", color=INK,
               fontweight="bold", loc="left", pad=12)
-ax2.annotate("schematic - the forward split is illustrative, not measured",
+ax2.annotate("measured from mirrored .gov partitions, not schematic",
              (0, -0.42), xycoords="axes fraction", color=MUTED, fontsize=9)
 fig.tight_layout()
 save(fig, "02_denominator_artefact"); plt.show()
 
 print(f"apparent gap in {common[-1]}: {d_rev[common[-1]] / d_fwd[common[-1]]:.1f}x")
-print("This is not a disagreement about DNSSEC. It is the same number over two")
-print("different denominators, and only one of them contains records the")
-print("indicator is able to match.")
+print()
+print("Recomputed over DS records only, which is what the reverse side measures")
+print("by construction:")
+print()
+print(f"  {'':16} {'as reported':>12} {'DS-only':>10} {'RIPE reverse':>14}")
+for year, key in (("2018", "gov 2018-01-01"), ("2026", "gov 2026-08")):
+    c = comp[key]
+    print(f"  {'forward .gov ' + year:16} {c['rfc4509_over_all_dnssec']:11.2f}% "
+          f"{c['rfc4509_over_ds_only']:9.2f}% {d_rev[year]:13.2f}%")
+gap18 = abs(comp["gov 2018-01-01"]["rfc4509_over_ds_only"] - d_rev["2018"])
+print()
+print(f"In 2018 the normalised figures agree to {gap18:.1f} percentage points.")
+print("The 10x gap was ~9x denominator. What remains in 2026 is a real difference")
+print("between the two populations, not an artefact.")
 """)
 
 # ============================================================ zone level =====
