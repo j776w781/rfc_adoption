@@ -179,12 +179,7 @@ for index, partition in enumerate(partitions, start=1):
                 token in str(exc).lower()
                 for token in (
                     "503",
-                    "500",
-                    "502",
-                    "504",
-                    "slow down",
                     "timeout",
-                    "connection reset",
                     "service unavailable",
                 )
             )

@@ -490,7 +490,15 @@ def list_partition_keys(
                 break
 
             except Exception as exc:
-                if attempt == 9:
+
+                text = str(exc).lower()
+                transient = (
+                    "503" in text
+                    or "service unavailable" in text
+                    or "slow down" in text
+                )
+
+                if not transient or attempt == 9:
                     raise PipelineError(
                                     f"Listing s3://{config.bucket}/{prefix} at {config.endpoint_url} failed: {exc}"
                                 ) from exc
