@@ -170,12 +170,13 @@ for index, partition in enumerate(partitions, start=1):
     for attempt in range(10):
         try:
             paths = materialize(partition, config, warnings=warnings)
+            time.sleep(1)
             done += len(paths)
             print(f"[{index}/{len(partitions)}] {partition.partition_id}: {len(paths)} file(s)")
             break
         except Exception as exc:
             transient = any(
-                token in str(exec).lower()
+                token in str(exc).lower()
                 for token in (
                     "503",
                     "500",
@@ -191,6 +192,10 @@ for index, partition in enumerate(partitions, start=1):
             if not transient or attempt == 9:
                 raise
             
+            print(
+                f"Retry {attempt+1}/10 for "
+                f"{partition.partition_id} after: {exc}"
+            )
             time.sleep(wait)
             wait *= 2
 
