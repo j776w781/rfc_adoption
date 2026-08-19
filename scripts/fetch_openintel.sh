@@ -89,6 +89,7 @@ from __future__ import annotations
 import os
 import shutil
 import sys
+import time
 from pathlib import Path
 
 from openintel_rfc.openintel_source import (
@@ -163,9 +164,35 @@ if os.environ["OPENINTEL_LIST_ONLY"] == "1":
 warnings: list[str] = []
 done = 0
 for index, partition in enumerate(partitions, start=1):
-    paths = materialize(partition, config, warnings=warnings)
-    done += len(paths)
-    print(f"[{index}/{len(partitions)}] {partition.partition_id}: {len(paths)} file(s)")
+
+    wait = 30
+
+    for attempt in range(1,10):
+        try:
+            paths = materialize(partition, config, warnings=warnings)
+            done += len(paths)
+            print(f"[{index}/{len(partitions)}] {partition.partition_id}: {len(paths)} file(s)")
+            break
+        except Exception as exc:
+            transient = any(
+                token in str(exec).lower()
+                for token in (
+                    "503",
+                    "500",
+                    "502",
+                    "504",
+                    "slow down",
+                    "timeout",
+                    "connection reset",
+                    "service unavailable",
+                )
+            )
+
+            if not transient or attempt == 9:
+                raise
+            
+            time.sleep(wait)
+            wait *= 2
 
 print(f"\nMaterialized {done} file(s) under {config.cache_dir}")
 for message in warnings:
