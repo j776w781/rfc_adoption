@@ -483,8 +483,8 @@ def list_partition_keys(
                 f"Listing s3://{config.bucket}/{prefix} at {config.endpoint_url} failed: {exc}"
             ) from exc
         '''
-
-        for attempt in range(5):
+        wait = 30
+        for attempt in range(10):
             try:
                 response = s3.list_objects_v2(...)
                 break
