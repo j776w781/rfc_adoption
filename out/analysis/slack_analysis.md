@@ -63,9 +63,19 @@ The two corpora share no infrastructure, no operator population and no collectio
 
 *Where they appear to disagree — and don't*
 
-RFC 4509 (SHA-256 DS) reads ~7% forward vs ~79% reverse. A 10x gap that is *entirely denominator*: that indicator only matches DS records, and on the reverse side every scanned row *is* a DS record, while the forward denominator is diluted by DNSKEY/RRSIG/NSEC/NSEC3 it can never match. Contrast ECDSA, scoped by algorithm rather than record type, which compares cleanly.
+RFC 4509 (SHA-256 DS) reads ~5% forward vs ~79% reverse — a 10x gap. It's an artefact of what each side counts, and I measured it rather than hand-waving: that indicator can only match a DS record, and on the reverse side *every* scanned row is a DS record, while on the forward side DS+CDS are only *8%* of the denominator (the other 92% is RRSIG/DNSKEY/NSEC3/NSEC, which the indicator can never match).
 
-The rule that falls out — worth keeping: *indicators scoped by record type are not comparable across corpora with different record-type composition; indicators scoped by algorithm are.*
+Recomputing the forward figure over DS records only — the denominator the reverse side has by construction:
+
+```
+                     as reported    DS-only    RIPE reverse
+  forward .gov 2018        5.47%     50.09%          48.99%
+  forward .gov 2026        5.09%     63.49%          78.54%
+```
+
+*In 2018 the two agree to 1.1 percentage points.* The 10x was about 9x denominator. What's left in 2026 (63.5% vs 78.5%) is real — reverse-DNS operators moved to SHA-256 faster than .gov did — and that *is* a finding. The 10x wasn't.
+
+The rule that falls out — worth keeping: *indicators scoped by record type are not comparable across corpora with different record-type composition; indicators scoped by algorithm are.* (Caveat: the forward composition is measured on .gov only, so it bounds the effect rather than characterising the whole forward corpus.)
 
 *What only your data can give*
 
@@ -79,7 +89,7 @@ The rule that falls out — worth keeping: *indicators scoped by record type are
 
 • *IPv6 reverse delegations are 9.9x more likely to be signed than IPv4 ones* — 8.16% vs 0.83%. This was the sharpest split in the whole dataset and I'd never have looked if you hadn't flagged that the archive carries ip6.arpa. My reading is selection rather than causation: an operator who deployed IPv6 reverse DNS has already done discretionary modern DNS work, and those are the same people who sign. Caveat: it rests on 454 signed delegations, so quote the ratio, not the curve's shape.
 • *A 6.2x spread between RIRs* — LACNIC 5.2%, AFRINIC 1.6%, RIPE 0.99%, ARIN 0.84%. But ARIN holds 85% of delegations, so *every pooled figure we quote is substantially a statement about North American address space.* Probably worth saying out loud in the deck.
-• *"SHA-1" means two different things.* The DS *digest* (type 1) is at 15.3% and RFC 9905 doesn't touch it; the *signature algorithm* is at 4.9% and is what's deprecated. Conflating them misstates our exposure by 3x.
+• *"SHA-1" is two different mechanisms.* The DS *digest* (type 1) is at 15.3%; the *signature algorithm* (5/7) is at 4.9%. RFC 9905 closes both to new deployment — MUST NOT create new DS records with a SHA-1 digest, MUST NOT create new DNSKEY/RRSIG with 5 or 7 — while keeping validation support for each. They need different fixes (replace the DS at the parent vs reissue the child's keys), so we should report them as two numbers rather than one "SHA-1 exposure".
 • *RFC 9906 retired something already dead* — GOST R 34.11-94 is at 0.07%, down from 2.9% in 2018. The deprecation documented an ending rather than causing one, which is itself interesting about how algorithm retirement works.
 • *~1% of signed delegations are mid-rollover* (publishing 2+ DS algorithms at once), peaking 1.58% in 2023. It's the only *direct* evidence of operator activity in the corpus — everything else measures a state, this measures a transition — and it bounds how fast the mix can move, which fits those 3.7y/5.6y lags.
 

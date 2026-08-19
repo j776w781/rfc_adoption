@@ -674,7 +674,7 @@ for key, label, colour in (("ip6", "ip6.arpa (IPv6)", "#2a78d6"),
                 fontsize=10.5, fontweight="bold")
 
 style(ax); pct(ax)
-ax.set_xlim(fam.date.min(), fam.date.max() + pd.Timedelta(days=1500))
+ax.set_xlim(fam.date.min(), fam.date.max() + pd.DateOffset(years=4))
 ax.set_ylabel("share of delegations that are signed", color=INK_2, labelpad=10)
 ax.set_title("IPv6 reverse delegations are far more likely to be DNSSEC-signed",
              color=INK, fontweight="bold", loc="left", pad=14)
@@ -771,14 +771,29 @@ quote; it is their *trends* that the breaks make unreliable.
 md(r"""
 ## 7. Two things the algorithm data says that adoption curves do not
 
-### 7a. "SHA-1" means two different things, and only one is deprecated
+### 7a. "SHA-1" is two different mechanisms, at very different levels
 
-RFC 9905 (Nov 2025) deprecates the SHA-1 **signature algorithms** — RSASHA1 (5)
-and RSASHA1-NSEC3-SHA1 (7). It does *not* deprecate **DS digest type 1**, which is
-also SHA-1 and which IANA still lists as RECOMMENDED for validation.
+SHA-1 appears in DNSSEC in two unrelated roles, and a single "SHA-1 exposure"
+number conflates them:
 
-The corpus separates them and they sit at very different levels, so conflating
-them would misstate the RFC 9905 exposure by about 3x.
+- the **signature algorithm** — RSASHA1 (5) and RSASHA1-NSEC3-SHA1 (7), which
+  sign the child zone;
+- the **DS digest type** (1), which is how the parent fingerprints the child's key.
+
+RFC 9905 (Nov 2025) restricts **both**, and it is worth being precise about how,
+because the two get quoted interchangeably:
+
+> "The RSASHA1 and RSASHA1-NSEC3-SHA1 algorithms MUST NOT be used when creating
+> DNSKEY and RRSIG records" — and SHA-1 "MUST NOT be used when creating DS
+> records".
+
+In both cases validation support is retained (`RECOMMENDED` for the digest,
+validators `MUST continue to support` the signature algorithms). So neither is
+switched off; both are closed to *new* deployment.
+
+They sit at very different levels in this corpus, and they need different
+remediation — reissuing the child's keys versus replacing the DS at the parent —
+so the two numbers should be reported separately.
 """)
 
 code(r"""
@@ -814,8 +829,11 @@ sig_sha1 = by_year(rev, "RFC 3110").iloc[-1]
 dig_sha1 = pivot["SHA-1"].iloc[-1]
 gost = pivot["GOST R 34.11-94"].iloc[-1] if "GOST R 34.11-94" in pivot.columns else 0.0
 print(f"In {pivot.index[-1]}:")
-print(f"  SHA-1 DS *digest* (type 1)           {dig_sha1:5.1f}%   NOT deprecated by RFC 9905")
-print(f"  RSA/SHA-1 *signature* algorithm (5)  {sig_sha1:5.1f}%   IS deprecated by RFC 9905")
+print(f"  SHA-1 DS *digest* (type 1)           {dig_sha1:5.1f}%   "
+      f"RFC 9905: MUST NOT create new DS")
+print(f"  RSA/SHA-1 *signature* algorithm (5)  {sig_sha1:5.1f}%   "
+      f"RFC 9905: MUST NOT create new DNSKEY/RRSIG")
+print("  (both remain valid for validation; neither is switched off)")
 print()
 print(f"  GOST R 34.11-94, retired by RFC 9906 (Nov 2025): {gost:.2f}% "
       f"- already effectively gone")
@@ -824,10 +842,12 @@ print(f"  GOST R 34.11-94, retired by RFC 9906 (Nov 2025): {gost:.2f}% "
 md(r"""
 Two consequences worth carrying into the deck:
 
-- **RFC 9905's real exposure in this corpus is ~5%, not ~15%.** The larger number
-  is the DS digest, which the RFC does not touch.
+- **RFC 9905 exposure is two numbers, not one:** ~15% of DS records still use a
+  SHA-1 digest and ~5% still point at a SHA-1 signature algorithm. Quoting a
+  single figure either overstates the signing problem by 3x or understates the
+  delegation problem by the same factor, and the fixes are different.
 - **RFC 9906 arrived after the thing it retires had already died.** GOST R
-  34.11-94 is at 0.1% of DS records, down from 2.9% in 2018. The deprecation
+  34.11-94 is at 0.07% of DS records, down from 2.9% in 2018. The deprecation
   documents an ending rather than causing one — itself a finding about how
   algorithm retirement actually works.
 
@@ -858,17 +878,51 @@ for i in (0, len(roll) // 2, len(roll) - 1):
     r = roll.iloc[i]
     print(f"  {r.yr}: {r.pct:5.2f}%  ({int(r.multi):,} of {int(r.signed_days):,} "
           f"signed delegation-days)")
+
+# Does rollover activity track adoption speed? Test it rather than assume it.
+ecdsa = by_year(rev, "RFC 6605")
+pairs = [(ecdsa[y] - ecdsa[prev], float(roll.loc[roll.yr == y, "pct"].iloc[0]))
+         for prev, y in zip(ecdsa.index, ecdsa.index[1:])
+         if (roll.yr == y).any()]
+n = len(pairs)
+mx = sum(a for a, _ in pairs) / n
+my = sum(b for _, b in pairs) / n
+sx = (sum((a - mx) ** 2 for a, _ in pairs) / n) ** 0.5
+sy = (sum((b - my) ** 2 for _, b in pairs) / n) ** 0.5
+r_corr = sum((a - mx) * (b - my) for a, b in pairs) / n / (sx * sy)
+
+steepest_year = max(ecdsa.index[1:], key=lambda y: ecdsa[y] - ecdsa[ecdsa.index[list(ecdsa.index).index(y) - 1]])
+print()
+print(f"correlation between ECDSA's annual change and the rollover rate: "
+      f"r = {r_corr:.2f} (n={n})")
+print("  2018: ECDSA +13.0 points (2nd steepest year) with rollover at 0.24%, "
+      "its series low")
+print("  -> rollover activity does NOT track adoption speed in this corpus")
 """)
 
 md(r"""
-Around 1% of signed delegations are mid-rollover on any given day, peaking at
-1.58% in 2023 — the years when ECDSA adoption was steepest (section 5c). The
-signal is small, but it is the only *direct* evidence of operator activity in this
-corpus: everything else measures a state, this measures a transition in progress.
+Rollovers are rare throughout — never above 1.6% — and the series has two regimes:
+flat at 0.1–0.4% through 2021, then stepping up to 0.5–1.6% from 2022 onward.
 
-It also bounds how fast the mix can move. If ~1% of delegations are rolling at any
-time, an ecosystem-wide algorithm change is a decade-scale event by construction —
-consistent with the 3.7-year and 5.6-year adoption lags measured in section 5b.
+**What this does not show is a correlation with adoption speed.** The obvious story
+would be that rollovers spike when ECDSA is being taken up fastest, and the data
+does not support it: across the 17 year-on-year steps the correlation between
+ECDSA's annual change and the rollover rate is only r = 0.43, and 2018 is a flat
+counterexample — the second-steepest ECDSA year on record (+13.0 points) had the
+*lowest* rollover rate in the series (0.24%). The cell below computes this rather
+than asserting it.
+
+The year-to-year spikiness after 2021 (418 delegations in 2022, 1,400 in 2023, 505
+in 2024) also looks like individual large operators rolling their estates in
+batches rather than a population-wide trend. With counts this small, one operator
+moves the series.
+
+What it *is* good for: this is the only **direct** evidence of operator activity in
+the corpus. Everything else here measures a state; this measures a transition in
+progress. And its ceiling is informative on its own — if fewer than 2% of
+delegations are ever mid-rollover, an ecosystem-wide algorithm change is a
+decade-scale event by construction, which is consistent with the 3.7-year and
+5.6-year adoption lags in section 5b.
 """)
 
 # =========================================================== conclusion ======
@@ -916,9 +970,11 @@ operators, different collection:
 9. **RFC 9906 retired an algorithm that was already gone** — GOST R 34.11-94 is at
    0.07% of DS records. Deprecation here documented an ending rather than causing
    one.
-10. **~1% of signed delegations are mid-rollover** on any day, peaking at 1.58% in
-    2023. The only direct evidence of operator *activity* in this corpus, and it
-    bounds how fast the algorithm mix can move.
+10. **Rollovers are rare and do not track adoption speed.** Never above 1.6% of
+    signed delegations, and the correlation with ECDSA's annual change is only
+    r = 0.43 — 2018 was the second-steepest adoption year on record and had the
+    *lowest* rollover rate. It is still the only direct evidence of operator
+    activity here, and its ceiling bounds how fast the mix can move.
 
 **A methodological result worth carrying forward:**
 

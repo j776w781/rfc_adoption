@@ -1,3 +1,11 @@
+> **SUPERSEDED — see `slack_analysis.md`.**
+> The claim below that the signed share of reverse delegations "crossed 1% this
+> year" is **wrong**. A second composition break in the RIPE archive (RIPE
+> changes publication format in Oct 2015, its delegation count falls 97.4%) was
+> not being excluded from the panel. The corrected figure is **0.88–1.01%
+> depending on the panel**, and whether it has crossed 1% is inside that
+> uncertainty. Everything else in this message still stands.
+
 Hi, just wanted to give a bit of an update from my side of things so we can maybe do a run on the pipeline before the meeting on Thursday.
 
 *What I changed*
