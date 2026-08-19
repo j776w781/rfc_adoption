@@ -1,0 +1,37 @@
+{
+  "date": "2012-08-01",
+  "basis": "reverse",
+  "per_rir": {
+    "afrinic": {
+      "delegations": 19822,
+      "signed_delegations": 15,
+      "ds_records": 52
+    },
+    "apnic": {
+      "delegations": 361526,
+      "signed_delegations": 94,
+      "ds_records": 350
+    },
+    "arin": {
+      "delegations": 442862,
+      "signed_delegations": 137,
+      "ds_records": 853
+    },
+    "lacnic": {
+      "delegations": 1445,
+      "signed_delegations": 0,
+      "ds_records": 0
+    },
+    "ripe": {
+      "delegations": 597443,
+      "signed_delegations": 639,
+      "ds_records": 1996
+    }
+  },
+  "totals": {
+    "delegations": 1423098,
+    "signed_delegations": 885,
+    "ds_records": 3251,
+    "signed_share": 0.0006218826813051525
+  }
+}

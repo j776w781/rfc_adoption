@@ -257,6 +257,11 @@ logs/
 # stored. Its *analysis* is committed, like out/final/, because that is what a
 # reviewer reads. The raw tarballs and per-run logs are scratch either way.
 out/reverse/corpus/
+# ...except the per-day summaries. They are ~200 small JSON files carrying the
+# delegation and signed-delegation counts, they are the denominator the notebook
+# charts, and without them the notebook cannot run from a clean clone.
+!out/reverse/corpus/reverse/_summary/
+!out/reverse/corpus/reverse/_summary/*.json
 out/reverse/_arch_*/
 out/reverse/logs/
 out/schema/

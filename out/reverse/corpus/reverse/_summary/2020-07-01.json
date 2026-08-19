@@ -1,0 +1,37 @@
+{
+  "date": "2020-07-01",
+  "basis": "reverse",
+  "per_rir": {
+    "afrinic": {
+      "delegations": 40200,
+      "signed_delegations": 456,
+      "ds_records": 859
+    },
+    "apnic": {
+      "delegations": 500119,
+      "signed_delegations": 3420,
+      "ds_records": 7170
+    },
+    "arin": {
+      "delegations": 625916,
+      "signed_delegations": 2103,
+      "ds_records": 4955
+    },
+    "lacnic": {
+      "delegations": 20618,
+      "signed_delegations": 15,
+      "ds_records": 52
+    },
+    "ripe": {
+      "delegations": 38368,
+      "signed_delegations": 248,
+      "ds_records": 341
+    }
+  },
+  "totals": {
+    "delegations": 1225221,
+    "signed_delegations": 6242,
+    "ds_records": 13377,
+    "signed_share": 0.005094591098259008
+  }
+}
