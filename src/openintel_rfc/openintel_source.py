@@ -486,12 +486,14 @@ def list_partition_keys(
         wait = 30
         for attempt in range(10):
             try:
-                response = s3.list_objects_v2(...)
+                response = s3.list_objects_v2(**request)
                 break
 
             except Exception as exc:
-                if attempt == 4:
-                    raise
+                if attempt == 9:
+                    raise PipelineError(
+                                    f"Listing s3://{config.bucket}/{prefix} at {config.endpoint_url} failed: {exc}"
+                                ) from exc
 
                 time.sleep(wait)
                 wait *= 2

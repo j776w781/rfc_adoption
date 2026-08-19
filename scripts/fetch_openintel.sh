@@ -167,7 +167,7 @@ for index, partition in enumerate(partitions, start=1):
 
     wait = 30
 
-    for attempt in range(1,10):
+    for attempt in range(10):
         try:
             paths = materialize(partition, config, warnings=warnings)
             done += len(paths)
