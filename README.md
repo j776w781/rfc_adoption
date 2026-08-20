@@ -568,7 +568,7 @@ retry that follows a throttle); local scans get every core.
 
 ## What the checklist covers, and what it admits it cannot
 
-Checklist `0.2.0` carries **30 DNSSEC RFCs / 50 indicators**. Publication dates and
+Checklist `0.2.1` carries **30 DNSSEC RFCs / 50 indicators**. Publication dates and
 RFC Editor status come from `rfc-index.xml`; algorithm and DS digest numbers from
 the IANA registries. Nothing is written from memory.
 
@@ -598,8 +598,8 @@ A `non_conformance` match is bad news. Counting it as adoption inverts the findi
 | --- | --- |
 | measurable | 19 |
 | partly measurable | 2 |
-| ambiguous only | 4 |
-| not measurable here | 5 |
+| ambiguous only | 2 |
+| not measurable here | 7 |
 
 **When an answer could first exist** — `observable_from`. Eight RFCs are
 **left-censored**: published before the corpus carries the fields their indicators

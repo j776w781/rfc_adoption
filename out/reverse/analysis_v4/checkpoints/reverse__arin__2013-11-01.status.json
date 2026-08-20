@@ -1,0 +1,28 @@
+{
+  "partition_id": "reverse/arin/2013-11-01",
+  "source": "arin",
+  "basis": "reverse",
+  "date": "2013-11-01",
+  "object_count": 1,
+  "rows_scanned": 1416,
+  "rows_matched": 1416,
+  "aggregate_rows": 49,
+  "exemplar_rows": 178,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 5.609,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG",
+    "TLSA"
+  ],
+  "checklist_version": "0.2.1",
+  "scan_sql_sha1": "0e57a7a487fe5ef2975f7c0932a9b5a1994ebb46",
+  "complete": true,
+  "completed_at": "2026-08-20T09:14:28"
+}

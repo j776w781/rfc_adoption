@@ -1,12 +1,13 @@
 {
-  "checklist_version": "0.2.0",
+  "checklist_version": "0.2.1",
   "description": "DNSSEC RFC checklist / signature database. Each RFC lists observable indicators expressed as conditions over normalized OpenINTEL analysis fields.",
   "notes": [
     "publication_date is the RFC Editor publication month, normalized to the first day of that month.",
     "specificity drives the ranking multiplier: very_high=1.5, high=1.25, medium=1.0, low=0.75.",
     "An indicator marked required=true must match for the RFC to be considered a full match.",
     "Indicators marked ambiguous=true are queryable but not uniquely attributable to the RFC; they are routed to the review queue.",
-    "0.2.0 extends the set from 8 to 30 DNSSEC RFCs. Publication dates and RFC Editor status come from rfc-index.xml; algorithm and DS digest numbers from the IANA registries. Entries carry signal_type: 'adoption' means the mechanism is deployed, 'non_conformance' means a deprecated mechanism is still present (RFC 9905, RFC 9906), and 'meta' means the document defines a process or resolver behaviour that no zone file can evidence."
+    "0.2.0 extends the set from 8 to 30 DNSSEC RFCs. Publication dates and RFC Editor status come from rfc-index.xml; algorithm and DS digest numbers from the IANA registries. Entries carry signal_type: 'adoption' means the mechanism is deployed, 'non_conformance' means a deprecated mechanism is still present (RFC 9905, RFC 9906), and 'meta' means the document defines a process or resolver behaviour that no zone file can evidence.",
+    "0.2.1 removes the matching indicators from RFC 6840 and RFC 9364. Both matched 'any DNSSEC record' -- the evidence RFC 4033 already claims -- and between them attributed 2,453,373 observations (25.9% of matched rows) plus two first-seen dates to documents whose real requirements were never tested. The two are unanswerable for different reasons, and the entries now say which: RFC 6840's section 5.11 rules ARE visible in published zone data but need algorithm-set comparisons across the DS/DNSKEY/RRSIG records at one name, which a per-record indicator model cannot express; RFC 9364 defines no mechanism of its own at all."
   ],
   "rfcs": [
     {
@@ -682,28 +683,22 @@
       "references": [
         "https://www.rfc-editor.org/info/rfc6840"
       ],
-      "notes": "No distinct observable signature; classified as meta by construction.",
+      "notes": "Not measurable *here*, for a specific and fixable reason. Its section 5.11 mandatory-algorithm rules are genuinely visible in published zone data, but they are set comparisons across the DS, DNSKEY and RRSIG records at one name, and this pipeline's indicators are per-record predicates. An earlier version of this entry matched 'any DNSSEC record', which is the evidence RFC 4033 already claims; it attributed 1.8 million observations and a first-seen date to a document whose actual requirements were never tested.",
       "indicators": [
         {
-          "id": "rfc6840_clarified_dnssec_present",
-          "description": "Base DNSSEC records are present, which RFC 6840 clarifies handling of.",
+          "id": "rfc6840_mandatory_algorithm_rules",
+          "description": "Section 5.11: every algorithm in the DS RRset has a DNSKEY, and the zone is signed with every algorithm in the DNSKEY RRset.",
           "required": true,
-          "weight": 2,
-          "ambiguous": true,
+          "weight": 7,
+          "ambiguous": false,
           "conditions": [
             {
-              "field": "rr_type",
-              "op": "in",
-              "value": [
-                "DNSKEY",
-                "DS",
-                "RRSIG",
-                "NSEC",
-                "NSEC3"
-              ]
+              "field": "name_algorithm_set_consistency",
+              "op": "exists",
+              "value": null
             }
           ],
-          "notes": "Indistinguishable from plain RFC 4033/4034 deployment. Ambiguous so it can never outrank the RFC actually evidenced."
+          "notes": "RFC 6840 s5.11 IS observable from published records -- 'a signed zone MUST include a DNSKEY for each algorithm present in the zone's DS RRset', and 'the zone MUST also be signed with each algorithm present in the DNSKEY RRset'. Checking it needs the DS, DNSKEY and RRSIG algorithm *sets* at one owner name compared against each other. This pipeline evaluates one record at a time, so it cannot express a set comparison across records: the field named here is a per-name aggregate that no per-record projection can supply. That is a limit of the indicator model, not of the corpus, and it is the concrete thing to build if RFC 6840 is wanted."
         }
       ]
     },
@@ -1242,28 +1237,22 @@
       "references": [
         "https://www.rfc-editor.org/info/rfc9364"
       ],
-      "notes": "Defines no mechanism; included so the corpus of DNSSEC RFCs is complete.",
+      "notes": "A BCP roadmap over the other DNSSEC documents. It defines no mechanism, so there is nothing of its own to observe -- unlike RFC 6840, this one is not a pipeline limitation. Kept for completeness of the RFC set.",
       "indicators": [
         {
-          "id": "rfc9364_dnssec_deployed",
-          "description": "DNSSEC is deployed at all, which is what the BCP describes.",
+          "id": "rfc9364_bcp_profile_declared",
+          "description": "A deployment declared conformance to the DNSSEC BCP profile that RFC 9364 assembles.",
           "required": true,
-          "weight": 2,
-          "ambiguous": true,
+          "weight": 5,
+          "ambiguous": false,
           "conditions": [
             {
-              "field": "rr_type",
-              "op": "in",
-              "value": [
-                "DNSKEY",
-                "DS",
-                "RRSIG",
-                "NSEC",
-                "NSEC3"
-              ]
+              "field": "declared_standards_profile",
+              "op": "exists",
+              "value": null
             }
           ],
-          "notes": "Indistinguishable from RFC 4033; ambiguous so it never outranks it."
+          "notes": "Unanswerable by construction rather than by pipeline limitation. RFC 9364 is BCP 237: it names the documents that constitute DNSSEC and defines no protocol element of its own, so anything measurable about it is really one of the RFCs it cites. The previous indicator matched any DNSSEC record and attributed 641,000 observations to it."
         }
       ]
     },

@@ -14,7 +14,7 @@ Each RFC now carries two independent labels. *What a match means:*
 • `non_conformance` (2) — a *deprecated* mechanism is still being published. A match is bad news.
 • `meta` (8) — a process or resolver-side document that no zone file can evidence
 
-*And whether our data can answer it at all:* measurable (19), partly measurable (2), ambiguous only (4), not measurable here (5). Plus 8 flagged left-censored — published before our corpus can see the fields they need, so their "first seen" is an upper bound, not a measurement.
+*And whether our data can answer it at all:* measurable (19), partly measurable (2), ambiguous only (2), not measurable here (7). Plus 8 flagged left-censored — published before our corpus can see the fields they need, so their "first seen" is an upper bound, not a measurement.
 
 The 22 added, grouped by how they're detected:
 
@@ -45,7 +45,9 @@ _Carried for completeness but not measurable from what we have — this is the h
 • *RFC 7583* — key rollover timing. Needs intent inferred across time.
 • *RFC 9904* — the algorithm-guidance process doc. Nothing on the wire.
 • *RFC 9615* — automatic bootstrapping. Signature is a `_signal` owner-name label, same limitation as 7672.
-• *RFC 6840, 6781, 9364* — clarifications, operational practice, the BCP roadmap. All match things indistinguishable from plain DNSSEC, so they're marked ambiguous and can never outrank the RFC actually being evidenced.
+• *RFC 6840* — clarifications. This one is *not* "defines nothing observable", which is what I first assumed and had to correct: its section 5.11 mandatory-algorithm rules genuinely are visible in published data ("a signed zone MUST include a DNSKEY for each algorithm present in the zone's DS RRset"). The blocker is our indicator model — that's a comparison of *algorithm sets* across the DS, DNSKEY and RRSIG records at one name, and our indicators are per-record predicates. So it's a pipeline limitation with a concrete fix, and I've recorded it as such rather than writing it off.
+• *RFC 9364* — the BCP roadmap. This one really does define no mechanism of its own; anything measurable about it is one of the RFCs it cites.
+• *RFC 6781* — operational practice. Only weakly visible via the DNSKEY SEP bit, which is common practice independent of the document, so it's marked ambiguous and can never outrank the RFC actually being evidenced.
 • *RFC 9077* — NSEC/NSEC3 TTLs. Partly measurable; we'd need the record TTL, which isn't in the schema.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━

@@ -1,0 +1,28 @@
+{
+  "partition_id": "reverse/apnic/2017-06-01",
+  "source": "apnic",
+  "basis": "reverse",
+  "date": "2017-06-01",
+  "object_count": 1,
+  "rows_scanned": 6145,
+  "rows_matched": 6145,
+  "aggregate_rows": 49,
+  "exemplar_rows": 175,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 5.547,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG",
+    "TLSA"
+  ],
+  "checklist_version": "0.2.1",
+  "scan_sql_sha1": "4c86bb8cf9b926cd1c3633f045d70a987685b860",
+  "complete": true,
+  "completed_at": "2026-08-20T09:01:15"
+}

@@ -126,11 +126,13 @@ check "observed signals"            "73"       "$(get signals)"
 # One trace per (signal x RFC). Checklist 0.2.0 carries 30 RFCs, so 73 x 30.
 check "reasoning traces (73x30)"    "2190"     "$(get traces)"
 check "ranked candidates"           "11"       "$(get candidates)"
-check "review items"                "105"      "$(get review)"
+check "review items"                "107"      "$(get review)"
 check "valid matches"               "179"      "$(get valid)"
-# Rose with the checklist: the added algorithm RFCs are older than several of the
-# sample observations, and an observation predating its RFC is withheld by design.
-check "timestamp-invalid"           "120"      "$(get tsinvalid)"
+# Checklist 0.2.1 dropped the matching indicators from RFC 6840 and RFC 9364, which
+# had matched every DNSSEC record including those predating their own publication.
+# Removing them removes 55 timestamp_invalid decisions along with the 2.45M phantom
+# matches they were generating.
+check "timestamp-invalid"           "65"       "$(get tsinvalid)"
 check "rank 1 is RFC 8078"          "RFC 8078" "$(get rank1)"
 check "RFC 8078 score"              "17.25"    "$(get rfc8078)"
 check "RFC 7344 score"              "11.25"    "$(get rfc7344)"

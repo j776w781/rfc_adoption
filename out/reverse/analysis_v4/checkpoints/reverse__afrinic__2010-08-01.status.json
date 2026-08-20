@@ -1,0 +1,28 @@
+{
+  "partition_id": "reverse/afrinic/2010-08-01",
+  "source": "afrinic",
+  "basis": "reverse",
+  "date": "2010-08-01",
+  "object_count": 1,
+  "rows_scanned": 0,
+  "rows_matched": 0,
+  "aggregate_rows": 0,
+  "exemplar_rows": 0,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 6.641,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG",
+    "TLSA"
+  ],
+  "checklist_version": "0.2.1",
+  "scan_sql_sha1": "3600d89309c35b83b9a274a65242f404e7088cd0",
+  "complete": true,
+  "completed_at": "2026-08-19T23:50:26"
+}

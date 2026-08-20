@@ -80,6 +80,11 @@ for entry in sorted(db["rfcs"], key=lambda r: int(r["rfc_id"].split()[1])):
     reason = next((i["reasoning"] for i in basis
                    if RANK[i["queryability"]] == best), "no indicators defined")
 
+    # The schema checker's reason is mechanical ("this field is not in the
+    # dictionary"). The checklist's own note is where the *why* lives -- whether a
+    # field is missing because the corpus cannot carry it, because the RFC defines
+    # nothing observable, or because the indicator model cannot express the test.
+    # A reader needs the second one, so carry both.
     rows.append({
         "rfc_id": rfc_id,
         "title": entry["title"],
@@ -94,6 +99,7 @@ for entry in sorted(db["rfcs"], key=lambda r: int(r["rfc_id"].split()[1])):
         "observable_from": available,
         "left_censored": censored,
         "reason": " ".join(reason.split()),
+        "note": " ".join((entry.get("notes") or "").split()),
     })
 
 OUT.mkdir(parents=True, exist_ok=True)
@@ -168,9 +174,15 @@ if censored:
         lines.append(f"| {r['rfc_id']} | {r['published']} | {r['observable_from']} |")
     lines.append("")
 
-lines += ["## Why each verdict was reached", ""]
+lines += ["## Why each verdict was reached", "",
+          "The first line under each RFC is the checker's mechanical finding. The "
+          "second, where present, is the checklist's own account of *why* — which is "
+          "usually the part that matters.", ""]
 for r in rows:
-    lines += [f"**{r['rfc_id']}** — {r['verdict']}  ", f"{r['reason']}", ""]
+    lines += [f"**{r['rfc_id']}** — {r['verdict']}  ", f"{r['reason']}"]
+    if r["note"]:
+        lines += ["", f"> {r['note']}"]
+    lines.append("")
 
 (OUT / "rfc_classification.md").write_text("\n".join(lines) + "\n",
                                            encoding="utf-8", newline="\n")

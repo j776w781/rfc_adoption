@@ -1,0 +1,28 @@
+{
+  "partition_id": "reverse/lacnic/2015-06-01",
+  "source": "lacnic",
+  "basis": "reverse",
+  "date": "2015-06-01",
+  "object_count": 1,
+  "rows_scanned": 0,
+  "rows_matched": 0,
+  "aggregate_rows": 0,
+  "exemplar_rows": 0,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 7.75,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG",
+    "TLSA"
+  ],
+  "checklist_version": "0.2.1",
+  "scan_sql_sha1": "02e756c1518579b666a10c2696d6db7ef6e9d259",
+  "complete": true,
+  "completed_at": "2026-08-20T09:37:28"
+}

@@ -1,0 +1,28 @@
+{
+  "partition_id": "reverse/arin/2020-10-01",
+  "source": "arin",
+  "basis": "reverse",
+  "date": "2020-10-01",
+  "object_count": 1,
+  "rows_scanned": 4498,
+  "rows_matched": 4498,
+  "aggregate_rows": 55,
+  "exemplar_rows": 184,
+  "exemplars_per_group": 5,
+  "elapsed_seconds": 5.843,
+  "prefilter": [
+    "CDNSKEY",
+    "CDS",
+    "DNSKEY",
+    "DS",
+    "NSEC",
+    "NSEC3",
+    "NSEC3PARAM",
+    "RRSIG",
+    "TLSA"
+  ],
+  "checklist_version": "0.2.1",
+  "scan_sql_sha1": "2b9b7e1f559ee77ed1d744cb8d16b51af9f2b5fa",
+  "complete": true,
+  "completed_at": "2026-08-20T09:22:24"
+}
