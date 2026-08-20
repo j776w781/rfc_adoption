@@ -165,12 +165,12 @@ warnings: list[str] = []
 done = 0
 for index, partition in enumerate(partitions, start=1):
 
-    wait = 30
+    wait = 60
 
-    for attempt in range(10):
+    for attempt in range(15):
         try:
             paths = materialize(partition, config, warnings=warnings)
-            time.sleep(1)
+            time.sleep(30)
             done += len(paths)
             print(f"[{index}/{len(partitions)}] {partition.partition_id}: {len(paths)} file(s)")
             break
