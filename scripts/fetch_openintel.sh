@@ -170,7 +170,7 @@ for index, partition in enumerate(partitions, start=1):
     for attempt in range(15):
         try:
             paths = materialize(partition, config, warnings=warnings)
-            time.sleep(30)
+            time.sleep(20)
             done += len(paths)
             print(f"[{index}/{len(partitions)}] {partition.partition_id}: {len(paths)} file(s)")
             break
