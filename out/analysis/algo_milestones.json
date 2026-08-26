@@ -1,0 +1,90 @@
+[
+  {
+    "alg": 5,
+    "name": "RSASHA1",
+    "rfc": "RFC 3110",
+    "published": "2001-05",
+    "first": "2011-05",
+    "t1": "2011-05",
+    "t10": "2011-05",
+    "t50": "2011-05",
+    "current_share": 1.521
+  },
+  {
+    "alg": 7,
+    "name": "RSASHA1-NSEC3",
+    "rfc": "RFC 5155",
+    "published": "2008-03",
+    "first": "2011-05",
+    "t1": "2011-05",
+    "t10": "2011-08",
+    "t50": null,
+    "current_share": 6.456
+  },
+  {
+    "alg": 8,
+    "name": "RSASHA256",
+    "rfc": "RFC 5702",
+    "published": "2009-10",
+    "first": "2011-05",
+    "t1": "2011-05",
+    "t10": "2012-06",
+    "t50": "2014-02",
+    "current_share": 22.3
+  },
+  {
+    "alg": 10,
+    "name": "RSASHA512",
+    "rfc": "RFC 5702",
+    "published": "2009-10",
+    "first": "2012-02",
+    "t1": "2014-08",
+    "t10": null,
+    "t50": null,
+    "current_share": 0.372
+  },
+  {
+    "alg": 13,
+    "name": "ECDSAP256",
+    "rfc": "RFC 6605",
+    "published": "2012-04",
+    "first": "2015-12",
+    "t1": "2018-06",
+    "t10": "2019-03",
+    "t50": "2023-08",
+    "current_share": 67.955
+  },
+  {
+    "alg": 14,
+    "name": "ECDSAP384",
+    "rfc": "RFC 6605",
+    "published": "2012-04",
+    "first": "2016-04",
+    "t1": "2018-09",
+    "t10": null,
+    "t50": null,
+    "current_share": 2.747
+  },
+  {
+    "alg": 15,
+    "name": "Ed25519",
+    "rfc": "RFC 8080",
+    "published": "2017-02",
+    "first": "2022-09",
+    "t1": null,
+    "t10": null,
+    "t50": null,
+    "current_share": 0.341
+  },
+  {
+    "alg": 16,
+    "name": "Ed448",
+    "rfc": "RFC 8080",
+    "published": "2017-02",
+    "first": "2022-12",
+    "t1": null,
+    "t10": null,
+    "t50": null,
+    "current_share": 0.031
+  }
+]

@@ -1,0 +1,263 @@
+{
+  "generated_at": "2026-07-30T01:03:33",
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "count": 15,
+  "signals": [
+    {
+      "signal_id": "sig_0001",
+      "source": "nu",
+      "timestamp": "2018-05-01T00:14:47",
+      "domain": "membranes.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "CDNSKEY",
+        "algorithm": 13,
+        "digest_type": null,
+        "key_tag": null,
+        "flags": "257"
+      },
+      "row_index": 0,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0002",
+      "source": "nu",
+      "timestamp": "2018-05-01T00:57:25",
+      "domain": "xn--h-1fa.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "DS",
+        "algorithm": 8,
+        "digest_type": 2,
+        "key_tag": 12412,
+        "flags": null
+      },
+      "row_index": 1,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0003",
+      "source": "nu",
+      "timestamp": "2018-05-01T01:20:45",
+      "domain": "kax.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "DS",
+        "algorithm": 8,
+        "digest_type": 2,
+        "key_tag": 12412,
+        "flags": null
+      },
+      "row_index": 2,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0004",
+      "source": "nu",
+      "timestamp": "2018-05-01T01:25:38",
+      "domain": "brolaugh.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "CDNSKEY",
+        "algorithm": 13,
+        "digest_type": null,
+        "key_tag": null,
+        "flags": "257"
+      },
+      "row_index": 3,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0005",
+      "source": "nu",
+      "timestamp": "2018-05-01T01:51:02",
+      "domain": "123-nonexistant-dnsjedi-456.derooij.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "NSEC3",
+        "algorithm": 1,
+        "digest_type": null,
+        "key_tag": null,
+        "flags": "0"
+      },
+      "row_index": 4,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0006",
+      "source": "nu",
+      "timestamp": "2018-05-01T02:12:41",
+      "domain": "123-nonexistant-dnsjedi-456.zopuur.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "NSEC3",
+        "algorithm": 1,
+        "digest_type": null,
+        "key_tag": null,
+        "flags": "1"
+      },
+      "row_index": 5,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0007",
+      "source": "nu",
+      "timestamp": "2018-05-01T02:22:08",
+      "domain": "kx.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "CDS",
+        "algorithm": 13,
+        "digest_type": 2,
+        "key_tag": 2371,
+        "flags": null
+      },
+      "row_index": 6,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0008",
+      "source": "nu",
+      "timestamp": "2018-05-01T02:56:21",
+      "domain": "parkbuurt.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "RRSIG",
+        "algorithm": 13,
+        "digest_type": null,
+        "key_tag": 21330,
+        "flags": null
+      },
+      "row_index": 7,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0009",
+      "source": "nu",
+      "timestamp": "2018-05-01T03:11:17",
+      "domain": "www.andasdjupt.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "RRSIG",
+        "algorithm": 13,
+        "digest_type": null,
+        "key_tag": 30274,
+        "flags": null
+      },
+      "row_index": 8,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0010",
+      "source": "nu",
+      "timestamp": "2018-05-01T03:39:18",
+      "domain": "skreastrand.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "CDNSKEY",
+        "algorithm": 13,
+        "digest_type": null,
+        "key_tag": null,
+        "flags": "257"
+      },
+      "row_index": 9,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0011",
+      "source": "nu",
+      "timestamp": "2018-05-01T04:29:18",
+      "domain": "wahlstroem.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "RRSIG",
+        "algorithm": 8,
+        "digest_type": null,
+        "key_tag": 46114,
+        "flags": null
+      },
+      "row_index": 10,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0012",
+      "source": "nu",
+      "timestamp": "2018-05-01T04:41:02",
+      "domain": "matildas.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "CDS",
+        "algorithm": 13,
+        "digest_type": 2,
+        "key_tag": 2371,
+        "flags": null
+      },
+      "row_index": 11,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0013",
+      "source": "nu",
+      "timestamp": "2018-05-01T04:53:49",
+      "domain": "sbr.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "DS",
+        "algorithm": 8,
+        "digest_type": 2,
+        "key_tag": 226,
+        "flags": null
+      },
+      "row_index": 12,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0014",
+      "source": "nu",
+      "timestamp": "2018-05-01T05:00:56",
+      "domain": "rubb-stubb.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "DS",
+        "algorithm": 8,
+        "digest_type": 2,
+        "key_tag": 12412,
+        "flags": null
+      },
+      "row_index": 13,
+      "origin_file": "scale_exemplars"
+    },
+    {
+      "signal_id": "sig_0015",
+      "source": "nu",
+      "timestamp": "2018-05-01T05:21:19",
+      "domain": "mysko.nu.",
+      "zone": "nu",
+      "measurement_id": null,
+      "fields": {
+        "rr_type": "DS",
+        "algorithm": 8,
+        "digest_type": 2,
+        "key_tag": 23434,
+        "flags": null
+      },
+      "row_index": 14,
+      "origin_file": "scale_exemplars"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+signal_id,timestamp,domain,zone,rr_type,algorithm,digest_type,key_tag,flags,source,measurement_id,row_index,origin_file
+sig_0001,2018-05-01T00:14:47,membranes.nu.,nu,CDNSKEY,13,,,257,nu,,0,scale_exemplars
+sig_0002,2018-05-01T00:57:25,xn--h-1fa.nu.,nu,DS,8,2,12412,,nu,,1,scale_exemplars
+sig_0003,2018-05-01T01:20:45,kax.nu.,nu,DS,8,2,12412,,nu,,2,scale_exemplars
+sig_0004,2018-05-01T01:25:38,brolaugh.nu.,nu,CDNSKEY,13,,,257,nu,,3,scale_exemplars
+sig_0005,2018-05-01T01:51:02,123-nonexistant-dnsjedi-456.derooij.nu.,nu,NSEC3,1,,,0,nu,,4,scale_exemplars
+sig_0006,2018-05-01T02:12:41,123-nonexistant-dnsjedi-456.zopuur.nu.,nu,NSEC3,1,,,1,nu,,5,scale_exemplars
+sig_0007,2018-05-01T02:22:08,kx.nu.,nu,CDS,13,2,2371,,nu,,6,scale_exemplars
+sig_0008,2018-05-01T02:56:21,parkbuurt.nu.,nu,RRSIG,13,,21330,,nu,,7,scale_exemplars
+sig_0009,2018-05-01T03:11:17,www.andasdjupt.nu.,nu,RRSIG,13,,30274,,nu,,8,scale_exemplars
+sig_0010,2018-05-01T03:39:18,skreastrand.nu.,nu,CDNSKEY,13,,,257,nu,,9,scale_exemplars
+sig_0011,2018-05-01T04:29:18,wahlstroem.nu.,nu,RRSIG,8,,46114,,nu,,10,scale_exemplars
+sig_0012,2018-05-01T04:41:02,matildas.nu.,nu,CDS,13,2,2371,,nu,,11,scale_exemplars
+sig_0013,2018-05-01T04:53:49,sbr.nu.,nu,DS,8,2,226,,nu,,12,scale_exemplars
+sig_0014,2018-05-01T05:00:56,rubb-stubb.nu.,nu,DS,8,2,12412,,nu,,13,scale_exemplars
+sig_0015,2018-05-01T05:21:19,mysko.nu.,nu,DS,8,2,23434,,nu,,14,scale_exemplars

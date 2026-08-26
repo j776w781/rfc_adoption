@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-07-30T01:02:27",
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "count": 1,
+  "indicators": [
+    {
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "indicator_id": "rfc8624_validator_algorithm_support",
+      "indicator_description": "Validating resolver implements the RFC 8624 mandatory-to-implement validation algorithm set.",
+      "required": false,
+      "weight": 6.0,
+      "queryability": "non_queryable",
+      "reasoning": "Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+      "condition_checks": [
+        {
+          "field": "validator_algorithm_support",
+          "op": "contains",
+          "expected": "ECDSAP256SHA256",
+          "field_exists": false,
+          "field_type": null,
+          "available_from": null,
+          "type_compatible": true,
+          "explanation": "Condition `validator_algorithm_support contains ECDSAP256SHA256` of RFC 8624 cannot be evaluated because the OpenINTEL dictionary defines no field named validator_algorithm_support; at match time the condition is recorded with field_present=False, fails, and validator_algorithm_support is reported in the match's missing_fields. No similarly named field exists in the dictionary either."
+        },
+        {
+          "field": "rr_type",
+          "op": "in",
+          "expected": [
+            "DNSKEY",
+            "RRSIG"
+          ],
+          "field_exists": true,
+          "field_type": "string",
+          "available_from": "2010-01-01T00:00:00",
+          "type_compatible": true,
+          "explanation": "Condition `rr_type in [DNSKEY, RRSIG]` of RFC 8624 can be evaluated because the OpenINTEL dictionary defines the field rr_type with type string."
+        }
+      ],
+      "present_fields": [
+        "rr_type"
+      ],
+      "missing_fields": [
+        "validator_algorithm_support"
+      ],
+      "warnings": []
+    }
+  ]
+}

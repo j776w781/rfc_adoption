@@ -1,0 +1,293 @@
+{
+  "generated_at": "2026-07-30T01:03:33",
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "count": 8,
+  "timeline": [
+    {
+      "rfc_id": "RFC 4033",
+      "rfc_title": "DNS Security Introduction and Requirements (DNSSEC base: RFC 4033/4034/4035)",
+      "rfc_publication_date": "2005-03-01T00:00:00",
+      "first_seen": "2018-05-01T00:05:17",
+      "last_seen": "2018-05-01T05:26:58",
+      "days_from_publication_to_first_seen": 4809,
+      "observation_count": 2211876,
+      "distinct_domains": 517471,
+      "distinct_zones": 1,
+      "domains": [
+        "kax.nu.",
+        "mysko.nu.",
+        "parkbuurt.nu.",
+        "rubb-stubb.nu.",
+        "sbr.nu.",
+        "wahlstroem.nu.",
+        "www.andasdjupt.nu.",
+        "xn--h-1fa.nu."
+      ],
+      "zones": [
+        "nu"
+      ],
+      "monthly_counts": [
+        {
+          "period": "2018-05",
+          "count": 2211876,
+          "domains": 517471,
+          "mean_score": 3.75
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 2211876,
+          "domains": 517471,
+          "mean_score": 3.75
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-05",
+          "count": 2211876,
+          "domains": 517471,
+          "mean_score": 3.75
+        }
+      ],
+      "notes": "2211876 observation(s) counted for RFC 4033 (decisions counted: valid_match, ambiguous), spanning 2018-05-01T00:05:17 to 2018-05-01T05:26:58. Also observed but not counted: 409176 partial_match. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (517471) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 517471, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 8 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 4509",
+      "rfc_title": "Use of SHA-256 in DNSSEC Delegation Signer (DS) Resource Records",
+      "rfc_publication_date": "2006-05-01T00:00:00",
+      "first_seen": "2018-05-01T00:05:17",
+      "last_seen": "2018-05-01T05:26:58",
+      "days_from_publication_to_first_seen": 4383,
+      "observation_count": 131626,
+      "distinct_domains": 115019,
+      "distinct_zones": 1,
+      "domains": [
+        "kax.nu.",
+        "kx.nu.",
+        "matildas.nu.",
+        "mysko.nu.",
+        "rubb-stubb.nu.",
+        "sbr.nu.",
+        "xn--h-1fa.nu."
+      ],
+      "zones": [
+        "nu"
+      ],
+      "monthly_counts": [
+        {
+          "period": "2018-05",
+          "count": 131626,
+          "domains": 115019,
+          "mean_score": 11.25
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 131626,
+          "domains": 115019,
+          "mean_score": 11.25
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-05",
+          "count": 131626,
+          "domains": 115019,
+          "mean_score": 11.25
+        }
+      ],
+      "notes": "131626 observation(s) counted for RFC 4509 (decisions counted: valid_match, ambiguous), spanning 2018-05-01T00:05:17 to 2018-05-01T05:26:58. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (115019) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 115019, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 7 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 5155",
+      "rfc_title": "DNS Security (DNSSEC) Hashed Authenticated Denial of Existence",
+      "rfc_publication_date": "2008-03-01T00:00:00",
+      "first_seen": "2018-05-01T00:05:17",
+      "last_seen": "2018-05-01T05:26:58",
+      "days_from_publication_to_first_seen": 3713,
+      "observation_count": 408997,
+      "distinct_domains": 281985,
+      "distinct_zones": 1,
+      "domains": [
+        "123-nonexistant-dnsjedi-456.derooij.nu.",
+        "123-nonexistant-dnsjedi-456.zopuur.nu."
+      ],
+      "zones": [
+        "nu"
+      ],
+      "monthly_counts": [
+        {
+          "period": "2018-05",
+          "count": 408997,
+          "domains": 281985,
+          "mean_score": 17.25
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 408997,
+          "domains": 281985,
+          "mean_score": 17.25
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-05",
+          "count": 408997,
+          "domains": 281985,
+          "mean_score": 17.25
+        }
+      ],
+      "notes": "408997 observation(s) counted for RFC 5155 (decisions counted: valid_match, ambiguous), spanning 2018-05-01T00:05:17 to 2018-05-01T05:26:58. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (281985) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 281985, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 2 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 6605",
+      "rfc_title": "Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC",
+      "rfc_publication_date": "2012-04-01T00:00:00",
+      "first_seen": "2018-05-01T00:05:18",
+      "last_seen": "2018-05-01T05:26:58",
+      "days_from_publication_to_first_seen": 2221,
+      "observation_count": 27631,
+      "distinct_domains": 5532,
+      "distinct_zones": 1,
+      "domains": [
+        "brolaugh.nu.",
+        "kx.nu.",
+        "matildas.nu.",
+        "membranes.nu.",
+        "parkbuurt.nu.",
+        "skreastrand.nu.",
+        "www.andasdjupt.nu."
+      ],
+      "zones": [
+        "nu"
+      ],
+      "monthly_counts": [
+        {
+          "period": "2018-05",
+          "count": 27631,
+          "domains": 5532,
+          "mean_score": 13.125
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 27631,
+          "domains": 5532,
+          "mean_score": 13.125
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-05",
+          "count": 27631,
+          "domains": 5532,
+          "mean_score": 13.125
+        }
+      ],
+      "notes": "27631 observation(s) counted for RFC 6605 (decisions counted: valid_match, ambiguous), spanning 2018-05-01T00:05:18 to 2018-05-01T05:26:58. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (5532) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 5532, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 7 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 7344",
+      "rfc_title": "Automating DNSSEC Delegation Trust Maintenance",
+      "rfc_publication_date": "2014-09-01T00:00:00",
+      "first_seen": "2018-05-01T00:08:01",
+      "last_seen": "2018-05-01T05:25:01",
+      "days_from_publication_to_first_seen": 1338,
+      "observation_count": 179,
+      "distinct_domains": 100,
+      "distinct_zones": 1,
+      "domains": [
+        "brolaugh.nu.",
+        "kx.nu.",
+        "matildas.nu.",
+        "membranes.nu.",
+        "skreastrand.nu."
+      ],
+      "zones": [
+        "nu"
+      ],
+      "monthly_counts": [
+        {
+          "period": "2018-05",
+          "count": 179,
+          "domains": 100,
+          "mean_score": 13.125
+        }
+      ],
+      "yearly_counts": [
+        {
+          "period": "2018",
+          "count": 179,
+          "domains": 100,
+          "mean_score": 13.125
+        }
+      ],
+      "confidence_over_time": [
+        {
+          "period": "2018-05",
+          "count": 179,
+          "domains": 100,
+          "mean_score": 13.125
+        }
+      ],
+      "notes": "179 observation(s) counted for RFC 7344 (decisions counted: valid_match, ambiguous), spanning 2018-05-01T00:08:01 to 2018-05-01T05:25:01. Observation counts, first_seen and last_seen are exact over every row scanned. distinct_domains (100) is a lower bound: the most distinct domains measured in any single month, summed across the disjoint OpenINTEL sources. Summing every partition's own estimate instead would give 100, which counts a domain once per measurement day it appeared on; the true figure lies between the two, and this pipeline does not merge the underlying HyperLogLog sketches, so it cannot narrow that. The 5 listed domains and the listed zones come from sampled exemplars and are not the full set. Months with no qualifying observation are omitted rather than zero-filled, and a gap in OpenINTEL coverage is indistinguishable here from non-adoption."
+    },
+    {
+      "rfc_id": "RFC 8078",
+      "rfc_title": "Managing DS Records from the Parent via CDS/CDNSKEY",
+      "rfc_publication_date": "2017-03-01T00:00:00",
+      "first_seen": null,
+      "last_seen": null,
+      "days_from_publication_to_first_seen": null,
+      "observation_count": 0,
+      "distinct_domains": 0,
+      "distinct_zones": 0,
+      "domains": [],
+      "zones": [],
+      "monthly_counts": [],
+      "yearly_counts": [],
+      "confidence_over_time": [],
+      "notes": "No observation qualified for RFC 8078 (decisions counted: valid_match, ambiguous), so first_seen is null and every count is zero. The RFC was published 2017-03-01T00:00:00. A null first_seen is not evidence of non-adoption: the RFC's indicators may be non-queryable against this corpus, the relevant names may lie outside the measured sources, or the record-type prefilter may exclude the records that would carry the evidence. Check the review queue and the run warnings before reporting this RFC as unadopted."
+    },
+    {
+      "rfc_id": "RFC 8080",
+      "rfc_title": "Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC",
+      "rfc_publication_date": "2017-02-01T00:00:00",
+      "first_seen": null,
+      "last_seen": null,
+      "days_from_publication_to_first_seen": null,
+      "observation_count": 0,
+      "distinct_domains": 0,
+      "distinct_zones": 0,
+      "domains": [],
+      "zones": [],
+      "monthly_counts": [],
+      "yearly_counts": [],
+      "confidence_over_time": [],
+      "notes": "No observation qualified for RFC 8080 (decisions counted: valid_match, ambiguous), so first_seen is null and every count is zero. The RFC was published 2017-02-01T00:00:00. A null first_seen is not evidence of non-adoption: the RFC's indicators may be non-queryable against this corpus, the relevant names may lie outside the measured sources, or the record-type prefilter may exclude the records that would carry the evidence. Check the review queue and the run warnings before reporting this RFC as unadopted."
+    },
+    {
+      "rfc_id": "RFC 8624",
+      "rfc_title": "Algorithm Implementation Requirements and Usage Guidance for DNSSEC",
+      "rfc_publication_date": "2019-06-01T00:00:00",
+      "first_seen": null,
+      "last_seen": null,
+      "days_from_publication_to_first_seen": null,
+      "observation_count": 0,
+      "distinct_domains": 0,
+      "distinct_zones": 0,
+      "domains": [],
+      "zones": [],
+      "monthly_counts": [],
+      "yearly_counts": [],
+      "confidence_over_time": [],
+      "notes": "No observation qualified for RFC 8624 (decisions counted: valid_match, ambiguous), so first_seen is null and every count is zero. Also observed but not counted: 2152427 partial_match, 27615 timestamp_invalid. The RFC was published 2019-06-01T00:00:00. A null first_seen is not evidence of non-adoption: the RFC's indicators may be non-queryable against this corpus, the relevant names may lie outside the measured sources, or the record-type prefilter may exclude the records that would carry the evidence. Check the review queue and the run warnings before reporting this RFC as unadopted."
+    }
+  ]
+}

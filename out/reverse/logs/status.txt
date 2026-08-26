@@ -1,0 +1,21 @@
+worker w1 exit=2
+worker w4 exit=2
+worker w3 exit=2
+worker w2 exit=2
+ALL DONE
+worker w4r exit=0
+pass2 r5 exit=0
+pass2 r4 exit=0
+pass2 r3 exit=0
+pass2 r1 exit=0
+worker w1r exit=0
+pass2 r2 exit=0
+PASS2 DONE
+scan exit=0
+nightly exit=1
+scan_v2 exit=0
+scan_v3 exit=0
+scan_v4 exit=1
+scan_v4 exit=1
+scan_v4 exit=1
+scan_v4 exit=0

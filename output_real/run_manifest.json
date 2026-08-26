@@ -1,0 +1,71 @@
+{
+  "pipeline": "openintel-rfc-adoption-matcher",
+  "version": "0.1.0",
+  "generated_at": "2026-07-30T01:03:33",
+  "engine": "duckdb",
+  "inputs": {
+    "checklists": "/mnt/e/Documents/University/year2/DNSSEC/rfc_adoption/data/rfc_checklists/dnssec_rfc_checklists.json",
+    "dictionary": "/mnt/e/Documents/University/year2/DNSSEC/rfc_adoption/data/openintel_dictionary/sample_openintel_dictionary.json",
+    "parquet": "basis=zonefile sources=nu 2018-05-01..2018-05-01 partitions=1",
+    "output_dir": "/mnt/e/Documents/University/year2/DNSSEC/rfc_adoption/output_real",
+    "row_limit": null,
+    "min_score": 0.0
+  },
+  "counts": {
+    "rows": 2621052,
+    "signals": 15,
+    "sampled": true,
+    "matches": 120,
+    "traces": 120,
+    "ranked_candidates": 5,
+    "review_items": 31,
+    "timeline_entries": 8,
+    "rfcs": 8,
+    "indicators": 17,
+    "dictionary_fields": 10
+  },
+  "matches_by_decision": {
+    "no_match": 71,
+    "partial_match": 13,
+    "timestamp_invalid": 7,
+    "valid_match": 29
+  },
+  "indicators_by_queryability": {
+    "ambiguous": 2,
+    "non_queryable": 1,
+    "partially_queryable": 1,
+    "queryable": 13
+  },
+  "outputs": {
+    "adoption_timeline": "adoption_timeline.json",
+    "adoption_timeline_csv": "adoption_timeline.csv",
+    "observed_signals": "observed_signals.json",
+    "observed_signals_csv": "observed_signals.csv",
+    "ranked_candidates": "ranked_candidates.json",
+    "reasoning_traces": "reasoning_traces.json",
+    "reasoning_traces_csv": "reasoning_traces.csv",
+    "report_md": "report.md",
+    "review_queue": "review_queue.json",
+    "review_queue_csv": "review_queue.csv",
+    "rfc_matches": "rfc_matches.json",
+    "rfc_matches_csv": "rfc_matches.csv",
+    "run_manifest": "run_manifest.json"
+  },
+  "warning_count": 14,
+  "warnings": [
+    "RFC 4033 lists related RFC 'RFC 4034', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+    "RFC 4033 lists related RFC 'RFC 4035', which is not defined in this checklist database; the relationship cannot be resolved or ranked against.",
+    "Dictionary field 'measurement_id' lists no openintel_native_fields, so the Parquet reader has no real OpenINTEL column to resolve it from; it will only be populated if a column of exactly that name exists.",
+    "Field 'dnssec_ok_flag' is referenced by 1 indicator(s) (rfc4033_dnssec_ok_negotiated) but is not defined in the OpenINTEL dictionary loaded from /mnt/e/Documents/University/year2/DNSSEC/rfc_adoption/data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+    "Field 'validator_algorithm_support' is referenced by 1 indicator(s) (rfc8624_validator_algorithm_support) but is not defined in the OpenINTEL dictionary loaded from /mnt/e/Documents/University/year2/DNSSEC/rfc_adoption/data/openintel_dictionary/sample_openintel_dictionary.json; every condition on it is unanswerable. No similarly named field is defined either.",
+    "Indicator rfc8624_validator_algorithm_support of RFC 8624 is non-queryable against this dictionary and will be skipped during matching: Indicator rfc8624_validator_algorithm_support is non-queryable: the field carrying its discriminating value, validator_algorithm_support, is absent from the OpenINTEL dictionary, and the only field that remains, rr_type (string), merely scopes which records are considered and is not used by any other RFC 8624 indicator, so nothing testable is left to attribute an observation to RFC 8624.",
+    "RFC 4033 was published 2005-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4033 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+    "RFC 4509 was published 2006-05-01, but the OpenINTEL fields its indicators rely on only become available later: `digest_type` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 4509 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+    "RFC 5155 was published 2008-03-01, but the OpenINTEL fields its indicators rely on only become available later: `algorithm` (from 2010-01-01), `rr_type` (from 2010-01-01). Adoption of RFC 5155 before 2010-01-01 cannot be observed through this corpus, so a first-seen date is a lower bound on when the mechanism appeared, not on when it was adopted.",
+    "Dictionary fields `domain` (from 2010-01-01), `flags` (from 2016-01-01), `key_tag` (from 2010-01-01), `measurement_id` (from 2010-01-01), `source` (from 2010-01-01), `timestamp` (from 2010-01-01), `zone` (from 2010-01-01) become available after the earliest RFC in this checklist was published. No indicator references them today, but any future indicator built on them will inherit that lower bound.",
+    "Field 'dnssec_ok_flag' has no column in this corpus but is referenced by 1 evaluable indicator(s) (RFC 4033/rfc4033_dnssec_ok_negotiated); every condition over it compiles to FALSE, so those indicators can never match here.",
+    "Rows whose rr_type is not one of CDNSKEY, CDS, DNSKEY, DS, NSEC, NSEC3, NSEC3PARAM, RRSIG were excluded before any indicator was evaluated. That is what makes the run tractable, and it assumes every DNSSEC observation carries one of those record types; an observation with a null or unexpected rr_type is not counted.",
+    "RFC 8624 has 2152427 partial_match observation(s) in the corpus aggregates but does not appear among the ranked candidates: no sampled exemplar earned a score above the threshold. The aggregate counts are still exact; only the ranking is exemplar-derived.",
+    "This is an aggregate run over 1 partition(s) and 2621052 scanned row(s). observed_signals.json, rfc_matches.json and reasoning_traces.json hold 15 sampled exemplar observation(s), not the corpus: they exist to show that the aggregate counts in ranked_candidates.json and adoption_timeline.json mean what they say. Do not read their length as a measurement."
+  ]
+}
