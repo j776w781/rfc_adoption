@@ -77,12 +77,25 @@ def measure(con, column: str, catalogue: dict) -> list[dict]:
     """First appearance over the whole corpus; diffusion over the strict panel."""
     panel = ", ".join(f"'{p}'" for p in PANEL)
 
-    # (a) Existence: earliest month anyone published this value, all RIRs.
-    first = dict(con.execute(f"""
-        SELECT {column} AS v, min(strftime(to_timestamp(timestamp/1000),'%Y-%m')) AS f
+    # (a) Existence: earliest month anyone published this value, all RIRs, AND how
+    # many distinct zones carried it that month. The count is not decoration -- for
+    # four of the ten observed algorithms the first occurrence is a single zone, and
+    # a date resting on one operator should never be reported bare.
+    monthly = con.execute(f"""
+        SELECT {column} AS v,
+               strftime(to_timestamp(timestamp/1000),'%Y-%m') AS mon,
+               count(DISTINCT query_name) AS zones
         FROM read_parquet('{CORPUS}') WHERE response_type='DS' AND {column} IS NOT NULL
-        GROUP BY 1
-    """).fetchall())
+        GROUP BY 1, 2
+    """).df()
+    first, first_zones, persisted = {}, {}, {}
+    for value, grp in monthly.groupby("v"):
+        grp = grp.sort_values("mon")
+        first[value] = grp.mon.iloc[0]
+        first_zones[value] = int(grp.zones.iloc[0])
+        # Present in every measured month after the first? A value that appears and
+        # disappears is a different object from one that appears and stays.
+        persisted[value] = len(grp) >= 3
 
     # (b) Diffusion: share of signed delegations on the strict panel.
     df = con.execute(f"""
@@ -119,6 +132,8 @@ def measure(con, column: str, catalogue: dict) -> list[dict]:
             # existence
             "t_first_date": seen,
             "t_first_years": years(published, seen),
+            "zones_at_first_occurrence": first_zones.get(value),
+            "persisted_after_first": persisted.get(value),
             "first_censored": bool(seen) and seen <= "2009-04",
             # diffusion
             "t_1pct_date": m1, "t_1pct_years": years(published, m1),
@@ -164,7 +179,7 @@ def main() -> None:
     for label, rows in (("SIGNING ALGORITHMS", algorithms), ("DS DIGEST TYPES", digests)):
         print(f"\n=== {label} ===")
         print(f"{'':4} {'change':18} {'RFC':9} {'pub':8} {'first':8} "
-              f"{'t_first':>8} {'t_10%':>8} {'gap':>7} {'now':>7}")
+              f"{'onset':>8} {'zones':>6} {'t_10%':>8} {'gap':>7} {'now':>7}")
         for r in rows:
             first = r["t_first_years"]
             ten = r["t_10pct_years"]
@@ -177,6 +192,7 @@ def main() -> None:
             star = "*" if r["first_censored"] else " "
             print(f"{r['value']:>4} {r['change']:18} {r['rfc']:9} {r['published']:8} "
                   f"{str(r['t_first_date'] or '-'):7}{star} {s_first:>8} "
+                  f"{('n=' + str(r['zones_at_first_occurrence'])) if r['zones_at_first_occurrence'] else '':>6} "
                   f"{s_ten:>8} {s_gap:>7} {r['current_share_pct']:6.1f}%")
         print("     * present on the corpus's first day: lag is an upper bound")
     print(f"\nwrote {OUT / 'adoption_measures.json'}")

@@ -1,5 +1,10 @@
 # What we measure, and why one number was doing two jobs
 
+> **Terms used here are defined in [`vocabulary.md`](vocabulary.md).** In
+> particular "adoption" is retired as a measurement term: what this document calls
+> `t_first` is a **first occurrence** (always reported with `n`, the number of
+> zones), and every share is a **prevalence** written with its population.
+
 Everything this project has published so far has used one date — the first
 observation of a matching record — and called it *adoption*. It is not. This
 document separates the measures, rebuilds the RFC classification from both
