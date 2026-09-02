@@ -74,6 +74,17 @@ that is the common case: 7 of 14 observed changes never reach
 
 ### Layer 4 — what we do not measure
 
+These are the three metrics Osterweil et al. define for DNSSEC deployment
+(IMC 2008), and naming them their way is better than inventing our own words for
+the same boundary. All three require *active resolution*; we read published zone
+data, so we measure none of them. See [prior_work.md](prior_work.md).
+
+**Availability** — can a resolver actually receive the data at all (middleboxes,
+MTU, truncation). **Verifiability** — does cryptographic verification succeed.
+**Validity** — does the data match what the zone administrator intended.
+
+The rest of this layer is ours:
+
 **Attribution.** Whether an RFC *caused* a change. Nothing in a zone file carries
 intent. An operator who enabled ECDSA because their DNS provider changed a default
 is indistinguishable from one who read RFC 6605.

@@ -25,6 +25,18 @@ The three intervals:
     establishment  first seen  -> partial        how long from novelty to real use
     ascent         partial     -> common         how long from real use to normal
 
+## Why not the standard diffusion thresholds
+
+Rogers' adopter categories set boundaries at cumulative **2.5% / 16% / 50% / 84%**,
+and adopting them would be better grounded than any number we choose. They were
+tested and rejected: Rogers' curve is *cumulative adoption*, monotone by
+construction, while ours is a **share of a fixed population** where one
+mechanism's rise is another's fall. Four of six observed series decline from their
+peak, which cumulative adoption cannot do, and only the one still ascending fits a
+logistic at all. Applying those boundaries here would move RSA/SHA-1 backwards
+through the categories as it is displaced. Full test in
+[prior_work.md](prior_work.md).
+
 ## Why 1% and 10%, and why >=10 zones
 
 Both thresholds were **swept, not chosen**. Moving the threshold from 0.5% to 60%
