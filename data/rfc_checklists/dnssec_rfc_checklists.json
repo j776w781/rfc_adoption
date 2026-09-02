@@ -1,5 +1,5 @@
 {
-  "checklist_version": "0.2.1",
+  "checklist_version": "0.2.2",
   "description": "DNSSEC RFC checklist / signature database. Each RFC lists observable indicators expressed as conditions over normalized OpenINTEL analysis fields.",
   "notes": [
     "publication_date is the RFC Editor publication month, normalized to the first day of that month.",
@@ -1463,8 +1463,8 @@
       "indicators": [
         {
           "id": "rfc9905_deprecated_sha1_signature_still_published",
-          "description": "A DNSKEY or RRSIG still uses algorithm 5 or 7 after RFC 9905 deprecated them.",
-          "required": true,
+          "description": "A DNSKEY or RRSIG still uses algorithm 5 or 7 after RFC 9905 deprecated them. Alternative evidence, not a precondition: a delegation-only corpus contains no DNSKEY/RRSIG and would otherwise score 0.",
+          "required": false,
           "weight": 9,
           "ambiguous": false,
           "conditions": [
@@ -1509,6 +1509,28 @@
                 5,
                 7
               ]
+            }
+          ]
+        },
+        {
+          "id": "rfc9905_deprecated_sha1_ds_digest_still_published",
+          "description": "A DS/CDS record still published with a SHA-1 digest (type 1), which RFC 9905 forbids for newly created DS records.",
+          "required": false,
+          "weight": 4.0,
+          "ambiguous": false,
+          "conditions": [
+            {
+              "field": "rr_type",
+              "op": "in",
+              "value": [
+                "DS",
+                "CDS"
+              ]
+            },
+            {
+              "field": "digest_type",
+              "op": "equals",
+              "value": 1
             }
           ]
         }

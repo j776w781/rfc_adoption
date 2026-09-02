@@ -110,9 +110,18 @@ Every error this project has had to retract violates one of them:
 **After:** "`P(alg 13 | DS records)` = 63.9% on 2026-08-01."
 
 **Before:** "EdDSA was adopted 5.6 years after publication."
-**After:** "Ed25519 first occurrence 2022-09, n=1 zone, onset lag 5.6 y.
-`P(alg 15 | signed delegations)` = 0.3% at 2026-08; the 10% threshold is never
-reached, so rise time is undefined."
+**After:** "Ed25519 first occurrence **2021-01** in the forward corpus, onset lag
+**3.9 y**. (Reverse corpus alone gives 2022-09, n=1 zone, 5.6 y — an upper bound,
+not the measurement.) `P(alg 15 | signed delegations)` = 0.3% at 2026-08; the 10%
+threshold is never reached, so rise time is undefined."
+
+That parenthesis is a **third rule**, learned the hard way — see
+[bottom_up.md](bottom_up.md) step 2:
+
+3. **No first occurrence without naming the corpora searched.** Existence is a
+   minimum over all available evidence, so a date from one corpus is an upper bound
+   until the others are checked. Quoting 5.6 y while holding forward data that says
+   3.9 y is the same error as quoting a prevalence without its population.
 
 **Before:** "Each new algorithm took longer to be adopted."
 **After:** "Onset lag increases monotonically with publication date across the four

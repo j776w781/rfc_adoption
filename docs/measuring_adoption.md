@@ -31,10 +31,17 @@ indicator. One operator publishing one record settles it. That answers a real
 question — *did anyone ever do this, and when* — but it is an **existence proof**,
 and it has been carrying the word "adoption" in every artefact we have produced.
 
-Ed25519 makes the problem concrete. It first appeared 5.6 years after RFC 8080.
+Ed25519 makes the problem concrete. It first appeared 3.9 years after RFC 8080.
 Nine years after publication it is on **0.3%** of signed delegations. "Adopted
-after 5.6 years" and "never adopted" are both defensible readings of the same
+after 3.9 years" and "never adopted" are both defensible readings of the same
 record, which means the measure is underspecified.
+
+> **Scope note.** Every onset figure in this document is computed on the **reverse
+> corpus only**, which is what makes its panel and denominators consistent. For
+> Ed25519 that gives 5.6 y; the forward corpus has it 20 months earlier, in 2021-01,
+> so the cross-corpus onset is **3.9 y**. Where a number here is used as a claim
+> about *our evidence as a whole* rather than about the RIPE series, take it from
+> [bottom_up.md](bottom_up.md), which searches both corpora.
 
 ### 1.2 The measures
 

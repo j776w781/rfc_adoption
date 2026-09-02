@@ -25,7 +25,14 @@
       "current_share_pct": 0.0,
       "peak_share_pct": 0.0,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2009-04",
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": 10.08,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 5,
@@ -47,7 +54,14 @@
       "current_share_pct": 1.521,
       "peak_share_pct": 100.0,
       "appearance_to_10pct_years": 2.08,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2009-04",
+      "t2_partial_usage": "2011-05",
+      "t3_common_usage": "2011-05",
+      "onset_years": 7.92,
+      "establishment_years": 2.08,
+      "ascent_years": 0.0,
+      "total_to_common_years": 10.0
     },
     {
       "value": 7,
@@ -69,7 +83,14 @@
       "current_share_pct": 6.456,
       "peak_share_pct": 28.994,
       "appearance_to_10pct_years": 2.0,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2009-08",
+      "t2_partial_usage": "2011-08",
+      "t3_common_usage": "2011-08",
+      "onset_years": 1.42,
+      "establishment_years": 2.0,
+      "ascent_years": 0.0,
+      "total_to_common_years": 3.42
     },
     {
       "value": 8,
@@ -91,7 +112,14 @@
       "current_share_pct": 22.3,
       "peak_share_pct": 74.642,
       "appearance_to_10pct_years": 2.17,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2010-04",
+      "t2_partial_usage": "2012-06",
+      "t3_common_usage": "2012-06",
+      "onset_years": 0.5,
+      "establishment_years": 2.17,
+      "ascent_years": 0.0,
+      "total_to_common_years": 2.67
     },
     {
       "value": 10,
@@ -113,7 +141,14 @@
       "current_share_pct": 0.372,
       "peak_share_pct": 3.723,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2010-08",
+      "t2_partial_usage": "2017-01",
+      "t3_common_usage": null,
+      "onset_years": 0.83,
+      "establishment_years": 6.42,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 12,
@@ -135,7 +170,14 @@
       "current_share_pct": 0.0,
       "peak_share_pct": 0.0,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2013-01",
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": 2.5,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 13,
@@ -157,7 +199,14 @@
       "current_share_pct": 67.955,
       "peak_share_pct": 67.955,
       "appearance_to_10pct_years": 3.25,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2015-12",
+      "t2_partial_usage": "2018-06",
+      "t3_common_usage": "2019-03",
+      "onset_years": 3.67,
+      "establishment_years": 2.5,
+      "ascent_years": 0.75,
+      "total_to_common_years": 6.92
     },
     {
       "value": 14,
@@ -179,7 +228,14 @@
       "current_share_pct": 2.747,
       "peak_share_pct": 3.452,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2016-04",
+      "t2_partial_usage": "2018-09",
+      "t3_common_usage": null,
+      "onset_years": 4.0,
+      "establishment_years": 2.42,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 15,
@@ -201,7 +257,14 @@
       "current_share_pct": 0.341,
       "peak_share_pct": 0.371,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2022-09",
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": 5.58,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 16,
@@ -223,7 +286,14 @@
       "current_share_pct": 0.031,
       "peak_share_pct": 0.04,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2022-12",
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": 5.83,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 17,
@@ -245,7 +315,14 @@
       "current_share_pct": 0.0,
       "peak_share_pct": 0.0,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": null,
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": null,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 23,
@@ -267,7 +344,14 @@
       "current_share_pct": 0.0,
       "peak_share_pct": 0.0,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": null,
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": null,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     }
   ],
   "digest_types": [
@@ -291,7 +375,14 @@
       "current_share_pct": 22.176,
       "peak_share_pct": 100.0,
       "appearance_to_10pct_years": 2.08,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2009-04",
+      "t2_partial_usage": "2011-05",
+      "t3_common_usage": "2011-05",
+      "onset_years": 5.33,
+      "establishment_years": 2.08,
+      "ascent_years": 0.0,
+      "total_to_common_years": 7.42
     },
     {
       "value": 2,
@@ -313,7 +404,14 @@
       "current_share_pct": 98.277,
       "peak_share_pct": 98.283,
       "appearance_to_10pct_years": 2.08,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2009-04",
+      "t2_partial_usage": "2011-05",
+      "t3_common_usage": "2011-05",
+      "onset_years": 2.92,
+      "establishment_years": 2.08,
+      "ascent_years": 0.0,
+      "total_to_common_years": 5.0
     },
     {
       "value": 3,
@@ -335,7 +433,14 @@
       "current_share_pct": 0.109,
       "peak_share_pct": 3.125,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2011-05",
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": 0.83,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 4,
@@ -357,7 +462,14 @@
       "current_share_pct": 8.845,
       "peak_share_pct": 10.865,
       "appearance_to_10pct_years": 8.58,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": "2013-08",
+      "t2_partial_usage": "2018-06",
+      "t3_common_usage": "2022-03",
+      "onset_years": 1.33,
+      "establishment_years": 4.83,
+      "ascent_years": 3.75,
+      "total_to_common_years": 9.92
     },
     {
       "value": 5,
@@ -379,7 +491,14 @@
       "current_share_pct": 0.0,
       "peak_share_pct": 0.0,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": null,
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": null,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     },
     {
       "value": 6,
@@ -401,7 +520,14 @@
       "current_share_pct": 0.0,
       "peak_share_pct": 0.0,
       "appearance_to_10pct_years": null,
-      "diffusion_panel_starts": "2011-05"
+      "diffusion_panel_starts": "2011-05",
+      "t1_first_occurrence": null,
+      "t2_partial_usage": null,
+      "t3_common_usage": null,
+      "onset_years": null,
+      "establishment_years": null,
+      "ascent_years": null,
+      "total_to_common_years": null
     }
   ]
 }

@@ -126,13 +126,19 @@ check "observed signals"            "73"       "$(get signals)"
 # One trace per (signal x RFC). Checklist 0.2.0 carries 30 RFCs, so 73 x 30.
 check "reasoning traces (73x30)"    "2190"     "$(get traces)"
 check "ranked candidates"           "11"       "$(get candidates)"
-check "review items"                "107"      "$(get review)"
+check "review items"                "108"      "$(get review)"
 check "valid matches"               "179"      "$(get valid)"
 # Checklist 0.2.1 dropped the matching indicators from RFC 6840 and RFC 9364, which
 # had matched every DNSSEC record including those predating their own publication.
 # Removing them removes 55 timestamp_invalid decisions along with the 2.45M phantom
 # matches they were generating.
-check "timestamp-invalid"           "65"       "$(get tsinvalid)"
+#
+# 0.2.2 raises this 65 -> 70 and review items 107 -> 108. RFC 9905 could not match
+# a DS-only signal before (its DNSKEY/RRSIG indicator was `required`, so a
+# delegation record scored 0.0); it now can, and five of the demo signals predate
+# its 2025-11 publication, so they are correctly forfeited as timestamp_invalid
+# rather than credited. `valid matches` stays 179 -- no adoption verdict moved.
+check "timestamp-invalid"           "70"       "$(get tsinvalid)"
 check "rank 1 is RFC 8078"          "RFC 8078" "$(get rank1)"
 check "RFC 8078 score"              "17.25"    "$(get rfc8078)"
 check "RFC 7344 score"              "11.25"    "$(get rfc7344)"

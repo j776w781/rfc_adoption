@@ -73,6 +73,51 @@ def years(a: str | None, b: str | None) -> float | None:
     return round(months(a, b) / 12, 2) if (a and b) else None
 
 
+# --------------------------------------------------------------------------- #
+# The three stages
+# --------------------------------------------------------------------------- #
+#
+# Thresholds are tuned from the data, not chosen for being round numbers.
+#
+# Sweeping the threshold from 0.5% to 60% moves the number of qualifying
+# algorithms in two steps and is otherwise flat:
+#
+#     0.5% - 3%   6 algorithms
+#     4%  - 25%   4 algorithms      <- cliffs at 4% and 30%
+#     30% +       3 algorithms
+#
+# So 1% and 10% both sit in the middle of a plateau: moving PARTIAL anywhere in
+# 0.5-3%, or COMMON anywhere in 4-25%, changes nothing. A threshold near a cliff
+# would make the result an artefact of the number chosen.
+#
+# The zone guard exists because a percentage means different things at different
+# dates: the panel grew 201x over the series, so one zone was 3.1% of it in 2011
+# and is 0.016% now. RSASHA256 and RSASHA1-NSEC3 both cross 1% in 2011-05 on a
+# SINGLE zone. A >=10 guard removes that artefact and changes no result on the
+# current data (rise times identical to two decimal places); >=25 over-constrains
+# the early era, pushing RSASHA1-NSEC3 from 2.0y to 7.8y purely because its
+# contemporaries were few.
+PARTIAL_PCT, COMMON_PCT, MIN_ZONES = 1.0, 10.0, 10
+
+
+def stage_dates(frame, value):
+    """(first occurrence, partial usage, common usage) for one observable value.
+
+    first    >=1 zone anywhere in the corpus -- existence
+    partial  >=PARTIAL_PCT% of signed delegations AND >=MIN_ZONES zones
+    common   >=COMMON_PCT%  of signed delegations AND >=MIN_ZONES zones
+    """
+    sub = frame[frame.v == value].sort_values("day")
+    if not len(sub):
+        return None, None, None
+
+    def cross(pct):
+        hit = sub[(sub.share >= pct) & (sub.users >= MIN_ZONES)]
+        return hit.day.iloc[0][:7] if len(hit) else None
+
+    return sub.day.iloc[0][:7], cross(PARTIAL_PCT), cross(COMMON_PCT)
+
+
 def measure(con, column: str, catalogue: dict) -> list[dict]:
     """First appearance over the whole corpus; diffusion over the strict panel."""
     panel = ", ".join(f"'{p}'" for p in PANEL)
@@ -123,6 +168,7 @@ def measure(con, column: str, catalogue: dict) -> list[dict]:
             return hit.day.iloc[0][:7] if len(hit) else None
 
         m1, m10, m50 = (milestone(t) for t in (1, 10, 50))
+        _, t_partial, t_common = stage_dates(df, value)
         rows.append({
             "value": int(value),
             "change": name,
@@ -145,6 +191,15 @@ def measure(con, column: str, catalogue: dict) -> list[dict]:
             "appearance_to_10pct_years": (
                 years(seen, m10) if (seen and m10) else None),
             "diffusion_panel_starts": panel_start,
+            # --- the three-stage model -------------------------------------
+            # t1 existence (all RIRs), t2/t3 population stages (strict panel)
+            "t1_first_occurrence": seen,
+            "t2_partial_usage": t_partial,
+            "t3_common_usage": t_common,
+            "onset_years": years(published, seen),
+            "establishment_years": years(seen, t_partial),
+            "ascent_years": years(t_partial, t_common),
+            "total_to_common_years": years(published, t_common),
         })
     return rows
 
