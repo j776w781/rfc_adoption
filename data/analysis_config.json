@@ -356,24 +356,25 @@
   },
   "top_down": {
     "enabled": true,
-    "_note": "Categories are conceptual impact first, then mapped down to RFCs. An RFC may appear in more than one category; the analysis reports that rather than forcing a single home, because a document like RFC 5155 genuinely is both an authenticated-denial mechanism and a signalling change.",
+    "_note": "Categories are conceptual impact first, then mapped down to RFCs. Each carries a concrete `example` because a category named only in the abstract cannot be checked against the data -- if the example cannot be written, the category is not describing anything observable. An RFC may appear in more than one category; the analysis reports that rather than forcing a single home.",
     "categories": [
       {
         "key": "protocol_foundation",
-        "label": "Protocol foundation",
-        "description": "Defines the records and the validation model everything else assumes. Changing these is not possible without changing DNSSEC itself.",
+        "label": "Base protocol: the four record types",
+        "description": "Defines the records DNSSEC is made of -- DNSKEY (the public key), DS (the parent's fingerprint of that key), RRSIG (a signature over a record set) and NSEC/NSEC3 (proof that a name does not exist) -- plus the rules a resolver follows to validate them. Nothing else in the list can be deployed without these, and they define no separate switch of their own.",
         "rfcs": [
           "RFC 4033",
           "RFC 4034",
           "RFC 4035",
           "RFC 6840",
           "RFC 9364"
-        ]
+        ],
+        "example": "A zone publishing any DS record at all is already evidence for RFC 4034: the DS record only exists because RFC 4034 defines it. There is no separate 'started using RFC 4034' event to put a date on, which is exactly why this category has no meaningful onset -- it is the floor the other five stand on, not a change operators adopt."
       },
       {
         "key": "crypto_agility",
-        "label": "Cryptographic agility",
-        "description": "Adds or replaces the cryptography. The category that requires code on both the signing and validating side, and the one where onset is longest.",
+        "label": "Which cryptography a zone signs with",
+        "description": "The signing algorithm and the DS digest: RSA/SHA-1, RSA/SHA-256, ECDSA, Ed25519, GOST, SM2. Each is a number in the DNSKEY and DS records, and changing it means new key material at the child and new code in every validating resolver.",
         "rfcs": [
           "RFC 3110",
           "RFC 5702",
@@ -384,23 +385,25 @@
           "RFC 9563",
           "RFC 4509",
           "RFC 3658"
-        ]
+        ],
+        "example": "A zone moving from RSA/SHA-256 (algorithm 8) to ECDSA P-256 (algorithm 13) generates a new key, publishes a new DNSKEY, and the parent replaces the DS. In our data that migration is the single largest movement of the whole period: algorithm 13 goes from first sighting in 2015-12 to 68% of signed delegations today."
       },
       {
         "key": "authenticated_denial",
-        "label": "Authenticated denial of existence",
-        "description": "How a zone proves a name does not exist, and what that proof leaks or costs.",
+        "label": "Proving a name does not exist",
+        "description": "A signed zone must be able to prove a negative -- that queried.example.com is not in the zone -- without signing an answer on the fly for every possible wrong name. NSEC does it by pointing at the next name in order, which leaks the whole zone; NSEC3 hashes the names to reduce that, at a CPU cost.",
         "rfcs": [
           "RFC 5155",
           "RFC 9276",
           "RFC 8198",
           "RFC 9077"
-        ]
+        ],
+        "example": "NSEC tells the asker 'nothing exists between mail.example.com and www.example.com', which proves the absence but also reveals both neighbours. Walking the chain enumerates the entire zone. NSEC3 (RFC 5155) publishes hashes instead, and RFC 9276 then says stop paying for extra hash iterations because they buy almost nothing."
       },
       {
         "key": "key_lifecycle",
-        "label": "Key management and lifecycle",
-        "description": "Getting keys in, rolled and out, including the parent-child coordination that makes DNSSEC operationally hard.",
+        "label": "Key rollover and parent-child coordination",
+        "description": "A child's key changes, but the fingerprint of that key (the DS record) lives in the PARENT zone, held by the registry. Until the parent updates, resolvers validate against a key the child no longer uses and the domain goes dark. This category is the machinery for keeping the two ends in step.",
         "rfcs": [
           "RFC 5011",
           "RFC 6781",
@@ -408,28 +411,31 @@
           "RFC 7583",
           "RFC 8078",
           "RFC 9615"
-        ]
+        ],
+        "example": "example.com wants to replace its signing key. Traditionally the operator files a ticket with their registrar to update the DS, and the zone is at risk until it lands. RFC 7344 replaces that with a DNS record: the child publishes CDS ('this is the DS I want you to hold'), the parent polls for it and updates itself. RFC 8078 adds the reverse signal -- a CDS with algorithm 0 means 'remove my DS, I am switching DNSSEC off' -- so turning it off safely stops needing a human either."
       },
       {
         "key": "applications",
-        "label": "Applications built on DNSSEC",
-        "description": "Things DNSSEC enables rather than parts of DNSSEC. Their uptake measures demand for the guarantee, not the guarantee itself.",
+        "label": "Things built on top of DNSSEC (DANE)",
+        "description": "Not parts of DNSSEC, but uses of it. Once a zone is signed, it can publish records nobody could trust before -- most importantly TLSA, which pins which TLS certificate a service is allowed to present. Their uptake measures demand for the guarantee rather than the guarantee itself.",
         "rfcs": [
           "RFC 6698",
           "RFC 7671",
           "RFC 7672"
-        ]
+        ],
+        "example": "A mail server publishes a TLSA record at _25._tcp.mail.example.com naming its own certificate. A sending server looks it up and refuses to deliver over TLS if the certificate does not match, which removes the public CAs from the trust decision. This only works because DNSSEC makes the TLSA record itself trustworthy."
       },
       {
         "key": "deprecation",
-        "label": "Deprecation and hygiene",
-        "description": "Closing mechanisms that should no longer be used. The observable is persistence, not appearance, so these run on an inverted clock.",
+        "label": "Retiring cryptography that is no longer safe",
+        "description": "Documents that close a mechanism rather than open one. The measurement runs backwards: the question is not when something first appeared but how much of it is still being published years later.",
         "rfcs": [
           "RFC 9905",
           "RFC 9906",
           "RFC 8624",
           "RFC 9904"
-        ]
+        ],
+        "example": "RFC 9905 (2025) forbids creating new DS records with a SHA-1 digest. It does not remove the ones already there, so the number that matters is the residue: 21.77% of signed reverse delegations still publish a SHA-1 digest today. RFC 9906 retired ECC-GOST and found nothing left to retire -- zero records since publication."
       }
     ]
   },

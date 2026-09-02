@@ -297,6 +297,11 @@ def top_down(
             "key": category["key"],
             "label": category["label"],
             "description": category["description"],
+            # Carried through so the example travels with the numbers. A category
+            # that cannot be given a concrete example is not describing something
+            # observable, and that should be visible in the output, not only in
+            # the config.
+            "example": category.get("example", ""),
             "rfcs": category["rfcs"],
             "rfcs_with_observables": covered_rfcs,
             "rfcs_without_observables": sorted(
