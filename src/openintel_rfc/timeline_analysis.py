@@ -24,6 +24,7 @@ import pandas as pd
 from .utils import PipelineError, get_logger
 
 __all__ = [
+    "POOLED_SOURCE",
     "cross_reference",
     "bottom_up",
     "compare_directions",
@@ -33,6 +34,10 @@ __all__ = [
 ]
 
 LOGGER = get_logger(__name__)
+
+#: Source name for rows extracted across every source of a day at once. Their
+#: distinct-domain counts are exact where per-source counts cannot be summed.
+POOLED_SOURCE = "_pooled"
 
 
 def load_config(path: Path | str) -> dict[str, Any]:
@@ -67,6 +72,18 @@ def prevalence_series(
     frame = timeline[timeline.dimension == dimension]
     if sources is not None:
         frame = frame[frame.source.isin(list(sources))]
+    elif any(str(x).startswith(POOLED_SOURCE) for x in frame.source.unique()):
+        # `_pooled` rows were extracted with every source's files in one query, so
+        # their distinct-domain counts are exact across sources. Where they exist
+        # they are the only correct basis for a pooled share: summing per-source
+        # counts double-counts any name two sources share, and reverse-DNS zonelets
+        # share 1,911 of 6,581 names between RIRs. Mixing the two would count
+        # everything twice over.
+        pooled_names = sorted(x for x in frame.source.unique()
+                              if str(x).startswith(POOLED_SOURCE))
+        frame = frame[frame.source == pooled_names[0]]
+    else:
+        frame = frame[~frame.source.astype(str).str.startswith(POOLED_SOURCE)]
     if frame.empty:
         return pd.DataFrame()
 
@@ -402,7 +419,8 @@ def cross_reference(
     # already recorded from the corpus layout. Guessing from source names would
     # break the moment a forward source were named after an RIR, and would give a
     # wrong answer silently rather than an obvious one.
-    sources = set(timeline.source.unique())
+    sources = {x for x in timeline.source.unique()
+               if not str(x).startswith(POOLED_SOURCE)}
     if "basis" in timeline.columns:
         by_basis = timeline.groupby("source").basis.first()
         reverse = set(reverse_sources or []) or {

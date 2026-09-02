@@ -87,6 +87,16 @@ DIMENSIONS: tuple[Dimension, ...] = (
 
     Dimension("digest_type_ds", "CAST(digest_type AS VARCHAR)", ("digest_type", "rr_type"),
               where="rr_type = 'DS'"),
+
+    # RFC 9905 deprecates SHA-1 signing as one act, so the quantity of interest is
+    # the union of algorithms 5 and 7. Per-value counts cannot be combined into it
+    # -- a zone publishing both appears in each -- so the union is computed here,
+    # where DISTINCT still has the domain names to work with. On 2026-08 the union
+    # is 514 zones against 416 for the larger single value: a 19% difference.
+    Dimension("sha1_signing_ds",
+              "CASE WHEN algorithm IN (5, 7) THEN 'sha1' ELSE 'other' END",
+              ("algorithm", "rr_type"), where="rr_type = 'DS'",
+              note="RFC 9905 non-conformance: SHA-1 signing algorithms, as a set."),
     Dimension("digest_type_cds", "CAST(digest_type AS VARCHAR)", ("digest_type", "rr_type"),
               where="rr_type = 'CDS'"),
 

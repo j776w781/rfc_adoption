@@ -223,3 +223,4 @@ __marimo__/
 # -- tens of thousands of files. The analysis JSON is small but is a product of a
 # specific run, so the whole directory stays out of the repo.
 out/full_run/
+out/panel_run/

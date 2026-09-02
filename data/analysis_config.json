@@ -322,12 +322,12 @@
       {
         "key": "deprecated_sha1_sig",
         "label": "SHA-1 signing still published",
-        "dimension": "algorithm_ds",
-        "value": "5|7",
+        "dimension": "sha1_signing_ds",
+        "value": "sha1",
         "rfc": "RFC 9905",
         "published": "2025-11",
         "group": "F_deprecation",
-        "observable": "algorithm 5 or 7 after RFC 9905",
+        "observable": "DS signed with algorithm 5 or 7 (as a set) after RFC 9905",
         "residue": true
       },
       {

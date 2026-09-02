@@ -112,6 +112,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--keep-archives", action="store_true",
                    help="Keep the RIPE .tar.bz2 files after parsing.")
 
+    p.add_argument("--pool-sources", action="store_true",
+                   help="Additionally extract each day with EVERY source's files "
+                        "together, as source '_pooled'. Needed only where sources "
+                        "can share a name: reverse-DNS zonelets overlap between "
+                        "RIRs, so 1,911 of 6,581 names appear under two of them and "
+                        "per-source distinct counts cannot be summed. Forward "
+                        "sources are disjoint TLDs and need this off.")
+
     p.add_argument("--threads", type=int, default=None, help="DuckDB threads.")
     p.add_argument("--memory-limit", default=None, help="DuckDB memory limit, e.g. 32GB.")
     p.add_argument("--no-resume", dest="resume", action="store_false", default=True,
@@ -239,6 +247,33 @@ def stage_extract(args: argparse.Namespace) -> Path:
 
     total_bytes = sum(d.bytes_total for d in days)
     LOGGER.info("extracting %d source-days (%s)", len(days), _fmt_bytes(total_bytes))
+
+    if args.pool_sources:
+        # One synthetic day per (basis, date) carrying every source's files, so
+        # count(DISTINCT domain) is taken across the whole day rather than summed
+        # over sources that share names.
+        from collections import defaultdict
+        from openintel_rfc.cache_index import CachedDay
+        grouped: dict[tuple[str, object], list] = defaultdict(list)
+        for day in days:
+            grouped[(day.basis, day.day)].append(day)
+        # The pooled source name carries WHICH sources it pooled. Without that,
+        # `--sources afrinic,arin --pool-sources` and a full pooled run write the
+        # same checkpoint filename, and the second silently reuses the first --
+        # a panel restricted to two RIRs would quietly report all five.
+        pooled = []
+        for key, members in sorted(grouped.items(), key=lambda kv: (kv[0][0], kv[0][1])):
+            names = sorted({d.source for d in members})
+            tag = ("_pooled" if sources is None
+                   else "_pooled-" + "-".join(names))
+            pooled.append(CachedDay(
+                source=tag, day=key[1], basis=key[0],
+                paths=[p for d in members for p in d.paths],
+                roots={r for d in members for r in d.roots},
+                bytes_total=sum(d.bytes_total for d in members)))
+        LOGGER.info("pooling: %d day(s) will also be extracted across all sources",
+                    len(pooled))
+        days = list(days) + pooled
 
     dictionary = load_dictionary(args.dictionary)
     warnings: list[str] = []
