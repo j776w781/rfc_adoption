@@ -78,6 +78,65 @@ Re-analysing costs nothing — it reads the timeline, not the corpus:
 python scripts/full_timeline.py --stage analyse --stage report --out out/full_run
 ```
 
+## Several machines against one NAS
+
+The cache is on a NAS, so every machine sees the same files. Split the scan by
+giving each one the same command with a different `--shard`:
+
+```bash
+# machine A                              # machine B                # machine C
+--shards 3 --shard 0                     --shards 3 --shard 1       --shards 3 --shard 2
+```
+
+**No coordinator, no lock, no queue.** The shard plan is deterministic, so each
+machine computes the whole plan and keeps its own slice. Work is balanced on
+**bytes, not day count** — a day's files vary by three orders of magnitude, so an
+even split of days is a wildly uneven split of work. On the reverse corpus three
+shards come out at 0.0% spread.
+
+Each day belongs to exactly one shard and a checkpoint is named after its day, so
+two machines never write the same file. Writes are `.part` then rename, which is
+what makes them safe on a network filesystem.
+
+Order of operations, which matters:
+
+1. **Index once.** Walking a NAS from every machine multiplies the metadata
+   traffic for an identical answer. Run `--stage index` on one machine, let it
+   write `inventory.json` to the shared `--out`, then give the others
+   `--stage extract` only.
+2. **Extract in parallel**, one `--shard` each.
+3. **Analyse once**, on any machine, after all shards finish.
+
+Sharding is applied *after* `--max-days` and `--pool-sources`, so a subsample
+stays a subsample and each pooled day is assigned to exactly one machine.
+
+A three-shard run and a single-machine run over the same corpus produce
+**identical results** — verified across 30 observable changes and 7 fields each.
+
+### Knowing when it is safe to analyse
+
+Each shard writes `shards/shard-<i>-of-<n>.json` when it finishes, carrying its
+day count, bytes, failures and hostname. The `analyse` stage reads those and
+warns if the set is incomplete:
+
+```
+Only 2 of 3 shards have reported. Missing: 1. This timeline covers part of the
+corpus, and every share in it is taken against that part.
+```
+
+It warns rather than refuses, because analysing a deliberate partial run is
+legitimate and the operator is the one who knows. What is never acceptable is
+doing it silently — a partial corpus produces entirely plausible numbers. It also
+flags shard reports that disagree about `n`, which means the checkpoint directory
+holds output from runs split different ways: some days missing, others duplicated.
+
+### How many machines
+
+The limit is the NAS, not the CPUs. Extraction is one sequential read per
+source-day with column pruning, so it is I/O-bound; past the point where the
+shares saturate the link, more machines just divide the same bandwidth. Start
+with three or four and watch whether wall-clock actually falls.
+
 ## The timeline is long, not wide
 
 One row per `(source, month, dimension, value)` with a record count and a

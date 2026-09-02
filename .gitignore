@@ -224,4 +224,6 @@ __marimo__/
 # specific run, so the whole directory stays out of the repo.
 out/full_run/
 out/panel_run/
+out/shard_test/
+out/shard_pooled/
 out/rfc-index.xml

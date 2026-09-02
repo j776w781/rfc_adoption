@@ -180,7 +180,13 @@ def list_objects(
 # --------------------------------------------------------------------------- #
 
 
-def plan_shards(objects: Iterable[RemoteObject], shards: int) -> list[list[RemoteObject]]:
+def plan_shards(
+    objects: Iterable[Any],
+    shards: int,
+    *,
+    size_of: Callable[[Any], int] = lambda o: o.size,
+    key_of: Callable[[Any], str] = lambda o: o.key,
+) -> list[list[Any]]:
     """Split ``objects`` into ``shards`` lists of roughly equal **bytes**.
 
     Greedy longest-processing-time-first: take the largest object still unplaced
@@ -192,17 +198,22 @@ def plan_shards(objects: Iterable[RemoteObject], shards: int) -> list[list[Remot
     Deterministic by construction. Ties break on the key, so the same input
     always yields the same assignment and a machine that restarts resumes on its
     own share rather than racing its neighbours for objects they already hold.
+    That determinism is what lets several machines shard the same work with no
+    coordination between them: each computes the whole plan and keeps its slice.
+
+    ``size_of`` and ``key_of`` default to a :class:`RemoteObject`'s attributes;
+    passing them lets the same planner balance source-days for a local scan.
     """
     count = max(int(shards), 1)
-    buckets: list[list[RemoteObject]] = [[] for _ in range(count)]
+    buckets: list[list[Any]] = [[] for _ in range(count)]
     loads = [0] * count
 
     # Largest first, key as the tie-break so the order never depends on the
     # listing order the store happened to return.
-    for obj in sorted(objects, key=lambda o: (-o.size, o.key)):
+    for obj in sorted(objects, key=lambda o: (-size_of(o), key_of(o))):
         target = min(range(count), key=lambda i: (loads[i], i))
         buckets[target].append(obj)
-        loads[target] += obj.size
+        loads[target] += size_of(obj)
 
     return buckets
 

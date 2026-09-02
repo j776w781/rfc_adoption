@@ -43,7 +43,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import date, timedelta
+import socket
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -120,6 +121,13 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         "per-source distinct counts cannot be summed. Forward "
                         "sources are disjoint TLDs and need this off.")
 
+    p.add_argument("--shards", type=int, default=1, metavar="N",
+                   help="Split the extract across N machines. Every machine runs "
+                        "the same command with a different --shard; the plan is "
+                        "computed identically on each, so they need no coordination.")
+    p.add_argument("--shard", type=int, default=0, metavar="I",
+                   help="Which slice this machine takes, 0-based.")
+
     p.add_argument("--threads", type=int, default=None, help="DuckDB threads.")
     p.add_argument("--memory-limit", default=None, help="DuckDB memory limit, e.g. 32GB.")
     p.add_argument("--no-resume", dest="resume", action="store_false", default=True,
@@ -139,6 +147,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         if ripe_root not in roots:
             roots.append(ripe_root)
     args.roots = roots
+    if args.shards < 1:
+        p.error("--shards must be >= 1")
+    if not 0 <= args.shard < args.shards:
+        p.error(f"--shard must be in 0..{args.shards - 1} for --shards {args.shards}")
     args.stages = tuple(args.stage) if args.stage else STAGES
     return args
 
@@ -275,6 +287,23 @@ def stage_extract(args: argparse.Namespace) -> Path:
                     len(pooled))
         days = list(days) + pooled
 
+    if args.shards > 1:
+        # Balanced on BYTES, not on day count: a day's files vary by three orders
+        # of magnitude, so an even split of days is a wildly uneven split of work.
+        # The plan is deterministic, so every machine computes the same one and
+        # keeps its own slice -- no lock, no queue, no coordinator. Each day
+        # belongs to exactly one shard, and a checkpoint is named after its day,
+        # so two machines never write the same file.
+        from openintel_rfc.mirror import plan_shards
+        buckets = plan_shards(days, args.shards,
+                              size_of=lambda d: d.bytes_total, key_of=lambda d: d.key)
+        loads = [sum(d.bytes_total for d in b) for b in buckets]
+        spread = ((max(loads) - min(loads)) / max(loads) * 100) if max(loads) else 0.0
+        days = buckets[args.shard]
+        LOGGER.info("shard %d of %d: %d day(s), %s (%.1f%% spread across shards)",
+                    args.shard, args.shards, len(days), _fmt_bytes(loads[args.shard]),
+                    spread)
+
     dictionary = load_dictionary(args.dictionary)
     warnings: list[str] = []
     done, skipped, failed = extract_days(
@@ -288,6 +317,21 @@ def stage_extract(args: argparse.Namespace) -> Path:
         LOGGER.warning(
             "%d source-day(s) failed and were NOT checkpointed -- re-run to retry "
             "them; they are absent from this timeline, not empty in it.", failed)
+
+    # Record that this shard finished. Several machines write to the same shared
+    # directory, each to its own filename, so this needs no locking -- and it is
+    # what lets the analyse stage refuse to report on a corpus that is still
+    # being written. A partial corpus produces plausible numbers, which is
+    # exactly why it has to be detected rather than trusted.
+    shard_dir = ensure_dir(args.out / "shards")
+    (shard_dir / f"shard-{args.shard}-of-{args.shards}.json").write_text(
+        json.dumps({
+            "shard": args.shard, "shards": args.shards,
+            "days": len(days), "bytes": sum(d.bytes_total for d in days),
+            "extracted": done, "skipped": skipped, "failed": failed,
+            "finished_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "host": socket.gethostname(),
+        }, indent=1), encoding="utf-8")
 
     timeline = merge_timeline(args.out / "checkpoints")
     if timeline.empty:
@@ -304,7 +348,51 @@ def stage_extract(args: argparse.Namespace) -> Path:
     return args.out / "timeline_monthly.parquet"
 
 
+def _check_shards(out: Path) -> list[str]:
+    """Warn if the shard set on disk is incomplete or inconsistent.
+
+    Returns the warnings rather than raising: a deliberate partial run is a
+    legitimate thing to analyse, and the operator is the one who knows. What is
+    never acceptable is doing it without saying so.
+    """
+    shard_dir = out / "shards"
+    notes: list[str] = []
+    if not shard_dir.is_dir():
+        return notes
+    found = {}
+    for path in sorted(shard_dir.glob("shard-*-of-*.json")):
+        try:
+            row = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        found[(row["shards"], row["shard"])] = row
+    if not found:
+        return notes
+    totals = {k[0] for k in found}
+    if len(totals) > 1:
+        notes.append(
+            "Shard reports disagree on how many shards there are "
+            f"({sorted(totals)}). The checkpoint directory holds output from runs "
+            "split different ways, so some days may be missing and others "
+            "duplicated. Clear it, or re-run with one consistent --shards.")
+        return notes
+    n = totals.pop()
+    missing = [i for i in range(n) if (n, i) not in found]
+    if missing:
+        notes.append(
+            f"Only {len(found)} of {n} shards have reported. Missing: "
+            f"{', '.join(map(str, missing))}. This timeline covers part of the "
+            "corpus, and every share in it is taken against that part.")
+    failed = sum(r.get("failed", 0) for r in found.values())
+    if failed:
+        notes.append(f"{failed} source-day(s) failed to read across all shards and "
+                     "are absent from this timeline; re-run to retry them.")
+    return notes
+
+
 def stage_analyse(args: argparse.Namespace) -> dict[str, Any]:
+    for note in _check_shards(args.out):
+        LOGGER.warning("%s", note)
     timeline = pd.read_parquet(
         _require(args.out / "timeline_monthly.parquet", "Timeline", "extract"))
     config = load_config(args.config)
