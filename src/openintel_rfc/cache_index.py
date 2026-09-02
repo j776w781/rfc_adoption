@@ -20,8 +20,11 @@ different things over time:
 
 1. ``<root>/<basis>/<source>/<YYYY-MM-DD>/*.parquet`` -- what ``cache_paths``
    writes, so a mirror and an ingested reverse corpus are both found.
-2. ``.../source=<name>/year=YYYY/month=M/day=D/*.parquet`` -- OpenINTEL's own
-   Hive-style partitioning, which is what a bulk copy of the public bucket has.
+2. ``fdns/basis=<basis>/source=<name>/year=YYYY/month=MM/day=DD/*.parquet`` --
+   OpenINTEL's own layout, built by ``openintel_source.partition_prefix``, which
+   is what a bulk copy of the public bucket has. ``year=`` is a directory level,
+   so a cache split by year across drives needs nothing special: whole years move
+   together, no individual day is split, and the roots simply merge.
 3. Anything else with a date and a recognisable source in the path, matched by
    regex as a last resort.
 
@@ -60,10 +63,22 @@ _MIRROR_RE = re.compile(
     r"(?P<date>\d{4}-\d{2}-\d{2})/[^/]+$"
 )
 
-#: OpenINTEL's Hive-style layout. Month and day are not zero-padded in the wild.
+#: OpenINTEL's own layout, as ``openintel_source.partition_prefix`` builds it:
+#:
+#:     fdns/basis=<basis>/source=<source>/year=YYYY/month=MM/day=DD/
+#:
+#: Month and day are zero-padded there, and that padding is mandatory on the
+#: bucket -- ``month=5`` lists nothing. Both widths are accepted here anyway,
+#: because this reads a filesystem copy rather than the bucket and a copy made
+#: with a tool that dropped the padding is still a copy of real data.
+#:
+#: ``basis=`` is captured, not assumed. It is part of a day's identity, so
+#: hardcoding it would merge two different bases for the same source-day into one
+#: entry, and it is what tells the cross-corpus comparison which side a source is
+#: on.
 _HIVE_RE = re.compile(
-    r"/source=(?P<source>[^/]+)/year=(?P<year>\d{4})/month=(?P<month>\d{1,2})/"
-    r"day=(?P<day>\d{1,2})/[^/]+$"
+    r"(?:/basis=(?P<basis>[^/]+))?/source=(?P<source>[^/]+)/"
+    r"year=(?P<year>\d{4})/month=(?P<month>\d{1,2})/day=(?P<day>\d{1,2})/[^/]+$"
 )
 
 #: Last resort: any ``YYYY/MM/DD`` or ``YYYY-MM-DD`` anywhere in the path.
@@ -189,7 +204,7 @@ def parse_path(path: str) -> tuple[str, date, str] | None:
             day = date(int(hive["year"]), int(hive["month"]), int(hive["day"]))
         except ValueError:
             return None
-        return hive["source"], day, "zonefile"
+        return hive["source"], day, hive["basis"] or "zonefile"
 
     mirror = _MIRROR_RE.search(posix)
     if mirror:

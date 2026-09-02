@@ -215,3 +215,51 @@ def test_identical_duplicates_still_follow_root_order(tmp_path):
     assert "main" in day.paths[0]
     assert day.bytes_total == 100
     assert not any("DIFFERENT sizes" in w for w in inventory.warnings)
+
+
+# --------------------------------------------------------------------------- #
+# OpenINTEL's own layout, as openintel_source.partition_prefix builds it
+# --------------------------------------------------------------------------- #
+
+def test_parses_the_real_bucket_layout_including_basis():
+    """`fdns/basis=<basis>/source=<source>/year=/month=/day=/`, zero-padded."""
+    got = parse_path(
+        "/mnt/big/fdns/basis=zonefile/source=gov/year=2024/month=05/day=06/p.parquet")
+    assert got == ("gov", date(2024, 5, 6), "zonefile")
+
+
+def test_basis_is_read_from_the_path_not_assumed():
+    """basis is part of a day's identity and decides the cross-corpus side."""
+    got = parse_path(
+        "/mnt/spill/fdns/basis=fdns/source=se/year=2019/month=01/day=02/p.parquet")
+    assert got == ("se", date(2019, 1, 2), "fdns")
+
+
+def test_a_cache_split_by_year_across_drives_is_one_corpus(tmp_path):
+    """The production shape: whole years moved to the spill when the disk filled.
+
+    No individual day is split, so `split_across_roots` is 0 -- but reading either
+    root alone sees half the period, and would report a corpus that starts or ends
+    years away from the truth.
+    """
+    main, spill = tmp_path / "main", tmp_path / "spill"
+
+    def make(root, year):
+        d = (root / f"fdns/basis=zonefile/source=gov/year={year}/month=01/day=01")
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "part-00000.parquet").write_bytes(b"x" * 100)
+
+    for y in (2018, 2019, 2020):
+        make(main, y)
+    for y in (2021, 2022, 2023):
+        make(spill, y)
+
+    both = build_inventory([main, spill])
+    assert both.summary()["source_days"] == 6
+    assert both.summary()["days_split_across_roots"] == 0, "a year moved whole"
+    span = both.span("gov")
+    assert span == (date(2018, 1, 1), date(2023, 1, 1))
+
+    # Either root alone gives a period half as long, with no hint anything is gone.
+    assert build_inventory([main]).span("gov") == (date(2018, 1, 1), date(2020, 1, 1))
+    assert build_inventory([spill]).span("gov") == (date(2021, 1, 1), date(2023, 1, 1))
