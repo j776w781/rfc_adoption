@@ -175,3 +175,9 @@ def test_inventory_round_trips_through_disk(tmp_path):
     assert len(day.paths) == 2
     assert day.split_across_roots is True
     assert day.bytes_total == 100
+
+
+def test_loose_layout_does_not_mistake_a_date_part_for_the_source():
+    """`YYYY/MM/DD` splits the date across components; "05" is not a source."""
+    got = parse_path("/data/openintel/nu/2020/01/05/part.parquet")
+    assert got == ("nu", date(2020, 1, 5), "zonefile")

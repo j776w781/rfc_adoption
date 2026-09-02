@@ -93,10 +93,13 @@ DIMENSIONS: tuple[Dimension, ...] = (
     # NSEC3 parameters -- RFC 9276 is a statement about exactly these.
     Dimension("nsec3_iterations", "CAST(nsec3_iterations AS VARCHAR)",
               ("nsec3_iterations",), where="nsec3_iterations IS NOT NULL"),
+    # NULL is *unknown*, not empty. RFC 9276 recommends an empty salt, so folding
+    # "the capture did not record a salt" into "the zone publishes no salt" would
+    # credit the zone with following the BCP on the strength of a missing column.
     Dimension("nsec3_salt_empty",
-              "CASE WHEN nsec3_salt IS NULL OR nsec3_salt IN ('', '-') "
-              "THEN 'empty' ELSE 'present' END",
-              ("nsec3_salt",), where="rr_type IN ('NSEC3', 'NSEC3PARAM')"),
+              "CASE WHEN nsec3_salt IS NULL THEN 'unknown' "
+              "WHEN nsec3_salt IN ('', '-') THEN 'empty' ELSE 'present' END",
+              ("nsec3_salt", "rr_type"), where="rr_type IN ('NSEC3', 'NSEC3PARAM')"),
     Dimension("nsec3_optout", "CAST(nsec3_flags % 2 AS VARCHAR)", ("nsec3_flags",),
               where="nsec3_flags IS NOT NULL",
               note="Bit 0 of the NSEC3 flags is Opt-Out (RFC 5155 s6)."),
@@ -247,8 +250,8 @@ def extract_days(
     memory_limit: str | None = None,
     resume: bool = True,
     warnings: list[str] | None = None,
-) -> tuple[int, int]:
-    """Extract every source-day, checkpointing each one. Returns (done, skipped).
+) -> tuple[int, int, int]:
+    """Extract every source-day. Returns ``(done, skipped, failed)``.
 
     One Parquet checkpoint per source-day, so an interrupted 14 TB run resumes at
     the day it stopped rather than at the beginning. This is the property that
@@ -263,22 +266,39 @@ def extract_days(
     if memory_limit:
         con.execute(f"SET memory_limit='{memory_limit}'")
 
-    done = skipped = 0
+    done = skipped = failures = 0
     for index, day in enumerate(days, start=1):
         target = out_dir / f"{day.basis}__{day.source}__{day.day.isoformat()}.parquet"
         if resume and target.exists():
             skipped += 1
             continue
+        before = len(collected)
         frame = extract_one(con, day, dictionary, warnings=collected)
+        failed = len(collected) > before
+
+        if failed:
+            # A read that FAILED is not a day with nothing in it. Checkpointing it
+            # like one would make a transient disk or memory error permanent: the
+            # day would be skipped by every later resume and silently absent from
+            # the corpus. Failures get a marker instead, so a resume retries them
+            # and the run can report how many there were.
+            (out_dir / f"{target.stem}.failed.json").write_text(
+                json.dumps({"key": day.key, "paths": day.paths,
+                            "reason": collected[-1]}, indent=1),
+                encoding="utf-8",
+            )
+            failures += 1
+            continue
+
         if frame.empty:
-            # Record the attempt so a resumed run does not retry a file that
-            # cannot be read; an empty checkpoint is a fact, not a gap.
+            # Genuinely nothing to count. That IS a fact, so it is checkpointed.
             pd.DataFrame(
                 columns=["source", "basis", "day", "month", "dimension",
                          "value", "records", "domains", "files"]
             ).to_parquet(target, index=False)
             skipped += 1
             continue
+        (out_dir / f"{target.stem}.failed.json").unlink(missing_ok=True)
         tmp = target.with_suffix(".parquet.part")
         frame.to_parquet(tmp, index=False)
         tmp.replace(target)
@@ -286,7 +306,14 @@ def extract_days(
         if index % 25 == 0 or index == len(days):
             LOGGER.info("extracted %d/%d source-days", index, len(days))
     con.close()
-    return done, skipped
+    if failures:
+        warn(
+            collected,
+            f"{failures} source-day(s) failed to read and were NOT checkpointed; a "
+            f"resumed run retries them. Markers are in {out_dir}/*.failed.json.",
+            LOGGER,
+        )
+    return done, skipped, failures
 
 
 def merge_timeline(checkpoint_dir: Path | str) -> pd.DataFrame:

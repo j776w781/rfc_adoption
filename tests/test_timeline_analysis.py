@@ -182,8 +182,14 @@ XREF_CONFIG = {
 }
 
 
+#: Forward/reverse is decided by `basis`, so test rows have to carry a real one.
+_BASIS = {"arin": "reverse", "afrinic": "reverse", "apnic": "reverse",
+          "lacnic": "reverse", "se": "zonefile", "gov": "zonefile", "nu": "zonefile"}
+
+
 def _row_src(source, month, dimension, value, records, domains):
-    return [source, "b", month, dimension, value, records, domains, domains, 1]
+    return [source, _BASIS.get(source, "zonefile"), month, dimension, value,
+            records, domains, domains, 1]
 
 
 def test_cross_reference_needs_both_sides():
@@ -229,3 +235,34 @@ def test_cross_reference_skips_incomparable_dimensions():
     ])
     out = cross_reference(timeline, config)
     assert out["comparisons"] == [], "rr_type is not comparable across corpora"
+
+
+def test_multi_value_domains_are_not_double_counted():
+    """A zone publishing both alg 5 and alg 7 is one zone, not two.
+
+    Summing per-value domain counts gave RFC 9905 a share of 120% of its own
+    population. Records still add (they are disjoint); domains take the largest
+    single value as a lower bound on the union.
+    """
+    timeline = _timeline([
+        _row("2026-01", "algorithm_ds", "_total", 100, 100),
+        _row("2026-01", "algorithm_ds", "5", 60, 60),
+        _row("2026-01", "algorithm_ds", "7", 60, 60),
+    ])
+    series = prevalence_series(timeline, "algorithm_ds", "5|7")
+    assert int(series.records.iloc[0]) == 120, "records are disjoint and add"
+    assert int(series.domains_peak.iloc[0]) == 60, "domains must not be summed"
+    assert series.share_pct.iloc[0] <= 100.0
+
+
+def test_corpus_side_comes_from_basis_not_source_name():
+    """A forward source named after an RIR must not be filed as reverse."""
+    timeline = _timeline([
+        _row_src("ripe", "2026-01", "algorithm_ds", "_total", 10, 10),
+        _row_src("arin", "2026-01", "algorithm_ds", "_total", 10, 10),
+    ])
+    timeline.loc[timeline.source == "ripe", "basis"] = "zonefile"
+    timeline.loc[timeline.source == "arin", "basis"] = "reverse"
+    out = cross_reference(timeline, XREF_CONFIG)
+    assert out["forward_sources"] == ["ripe"]
+    assert out["reverse_sources"] == ["arin"]

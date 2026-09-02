@@ -71,12 +71,25 @@ def prevalence_series(
         return pd.DataFrame()
 
     wanted = set(value.split("|"))
+    selected = frame[frame.value.isin(wanted)]
+    # Records are disjoint per value, so they add. **Domains are not.** A zone
+    # publishing both algorithm 5 and algorithm 7 appears under each, and summing
+    # counted it twice -- RFC 9905 read 120% of its own population. The union of
+    # distinct names is not recoverable from per-value counts, so this takes the
+    # largest single value as a lower bound on it, matching how `domains_peak`
+    # already errs: it can understate reach, never inflate it.
+    per_value_domains = (
+        selected.groupby(["month", "value"], as_index=False)
+        .agg(d=("domains_peak", "sum"), dd=("domain_days", "sum"))
+    )
+    domains = (
+        per_value_domains.groupby("month", as_index=False)
+        .agg(domains_peak=("d", "max"), domain_days=("dd", "max"))
+    )
     numerator = (
-        frame[frame.value.isin(wanted)]
-        .groupby("month", as_index=False)
-        .agg(records=("records", "sum"),
-             domains_peak=("domains_peak", "sum"),
-             domain_days=("domain_days", "sum"))
+        selected.groupby("month", as_index=False)
+        .agg(records=("records", "sum"))
+        .merge(domains, on="month", how="left")
     )
     denominator = (
         frame[frame.value == "_total"]
@@ -377,11 +390,18 @@ def cross_reference(
     comparable = list(spec.get("comparable_dimensions", []))
     incomparable = list(spec.get("incomparable_dimensions", []))
 
+    # Which side a source belongs to comes from its `basis`, which the walker
+    # already recorded from the corpus layout. Guessing from source names would
+    # break the moment a forward source were named after an RIR, and would give a
+    # wrong answer silently rather than an obvious one.
     sources = set(timeline.source.unique())
-    reverse = set(reverse_sources or []) or {
-        s for s in sources
-        if s in {"afrinic", "apnic", "arin", "lacnic", "ripe"}
-    }
+    if "basis" in timeline.columns:
+        by_basis = timeline.groupby("source").basis.first()
+        reverse = set(reverse_sources or []) or {
+            s for s in sources if str(by_basis.get(s, "")).lower() == "reverse"
+        }
+    else:  # pragma: no cover - older timelines without the column
+        reverse = set(reverse_sources or [])
     forward = set(forward_sources or []) or (sources - reverse)
 
     result: dict[str, Any] = {

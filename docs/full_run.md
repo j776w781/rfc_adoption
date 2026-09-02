@@ -1,19 +1,21 @@
 # Running the full timeline on the server
 
-One script, four stages, no network:
+One script, five stages:
 
 ```bash
 python scripts/full_timeline.py \
     --roots /mnt/bigdisk/openintel \
     --roots /mnt/spill/openintel \
-    --roots out/reverse/corpus \
+    --ripe-cache out/reverse/corpus \
     --out out/full_run \
     --threads 16 --memory-limit 48GB
 ```
 
-The OpenINTEL cache is already on disk, so nothing here lists or fetches from the
-object store. There is no endpoint to be throttled by, which is what makes the run
-repeatable and restartable.
+**The OpenINTEL side never touches the network.** The cache is already on disk, so
+nothing lists or fetches from the object store, and there is no endpoint left to
+throttle the run. The one stage that does fetch is `ripe`, and it pulls plain
+HTTPS tarballs from a server with no rate limiter — a different network with none
+of the object store's problems. Drop `--ripe-cache` and the run is fully offline.
 
 ## Why several roots matter
 
@@ -43,6 +45,7 @@ Run them together, or one at a time with `--stage`:
 
 | Stage | Does | Output |
 | --- | --- | --- |
+| `ripe` | fetches RIPE's reverse-delegation archive | the reverse corpus |
 | `index` | walks every root | `inventory.json` |
 | `extract` | one pass per source-day | `checkpoints/*.parquet`, `timeline_monthly.csv` |
 | `analyse` | bottom-up + top-down | `bottom_up.json`, `top_down.json`, `comparison.json` |
@@ -51,6 +54,16 @@ Run them together, or one at a time with `--stage`:
 `extract` writes one checkpoint per source-day and skips days already done, so an
 interrupted 14 TB run resumes where it stopped rather than at the beginning. Use
 `--no-resume` to force a re-scan.
+
+A day that **fails to read** is not checkpointed. It gets a `*.failed.json` marker
+and is retried on the next run, because treating a transient read error like an
+empty day would drop it from the corpus permanently and silently.
+
+`--max-days` samples **evenly across the sorted source-days**, not the first N. The
+list is ordered by `(source, day)`, so a prefix would be one source's earliest days
+— for the reverse corpus, AFRINIC 2009–2010 and nothing else. A subsample has to
+span every source and the whole period or it answers a different question than the
+full run.
 
 Re-analysing costs nothing — it reads the timeline, not the corpus:
 

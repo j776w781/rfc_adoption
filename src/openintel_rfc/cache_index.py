@@ -205,10 +205,16 @@ def parse_path(path: str) -> tuple[str, date, str] | None:
             day = date(int(loose["year"]), int(loose["month"]), int(loose["day"]))
         except ValueError:
             return None
-        # The source is the nearest ancestor directory that is not part of the
-        # date itself. Weak, which is why this pattern is last.
-        parts = [p for p in Path(posix).parts if not _LOOSE_DATE_RE.fullmatch(p)]
-        source = parts[-2] if len(parts) >= 2 else "unknown"
+        # The source is the nearest ancestor directory that is not itself part of
+        # the date. A `YYYY/MM/DD` path splits the date across three components,
+        # so filtering only on the full pattern leaves "05" looking like a source
+        # name -- each component has to be rejected on its own.
+        parts = Path(posix).parts[:-1]  # drop the filename
+        source = next(
+            (p for p in reversed(parts)
+             if not p.isdigit() and not _LOOSE_DATE_RE.fullmatch(p)),
+            "unknown",
+        )
         return source, day, "zonefile"
 
     return None

@@ -6,12 +6,15 @@ server, so this never lists or fetches from the object store; the RIPE reverse
 zones are just another root pointed at the same walker. That is what makes the
 run repeatable and un-throttleable -- there is no endpoint to be throttled by.
 
-Four stages, each resumable and each skippable:
+Five stages, each resumable and each skippable:
 
+    ripe      fetch and ingest RIPE's reverse-delegation archive
     index     walk every root, merge into one view of the corpus
     extract   one tidy timeline row per (source, month, dimension, value)
     analyse   bottom-up over observable changes, top-down over categories
     report    a markdown digest and a compact JSON bundle
+
+Only `ripe` touches the network, and it is plain HTTPS with no rate limiter.
 
 The multi-root walk is the point. Part of the cache was moved to a second drive,
 so a source-day can have files on both, and scanning either root alone would
@@ -21,12 +24,16 @@ counted once; see cache_index.
 
 Usage
 -----
-    # everything, two drives
-    python scripts/full_timeline.py --roots /mnt/data1/openintel /mnt/data2/openintel \\
-        --roots out/reverse/corpus --out out/full_run
+    # everything: main cache, spill cache, and RIPE fetched fresh
+    python scripts/full_timeline.py \\
+        --roots /mnt/data1/openintel --roots /mnt/data2/openintel \\
+        --ripe-cache out/reverse/corpus --out out/full_run
 
     # re-analyse without re-scanning 14 TB
-    python scripts/full_timeline.py --stage analyse --out out/full_run
+    python scripts/full_timeline.py --stage analyse --stage report --out out/full_run
+
+    # a subsample that still spans every source and the whole period
+    python scripts/full_timeline.py --max-days 200 --out out/full_run
 
     # turn either direction off
     python scripts/full_timeline.py --no-top-down --out out/full_run
@@ -115,8 +122,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     for entry in args.roots:
         roots.extend(part for part in str(entry).split(",") if part)
     # The RIPE corpus is discovered by exactly the same walker as the OpenINTEL
-    # cache -- it is written in the same layout, so it needs no special case.
-    if args.ripe_cache is not None:
+    # cache -- it is written in the same layout, so it needs no special case. It
+    # is only added once it exists: on a first run the 'ripe' stage creates it,
+    # and an `--stage index` before that should not die on a directory whose whole
+    # purpose is to be created later.
+    if args.ripe_cache is not None and Path(args.ripe_cache).exists():
         ripe_root = Path(args.ripe_cache).as_posix()
         if ripe_root not in roots:
             roots.append(ripe_root)
@@ -197,16 +207,33 @@ def stage_index(args: argparse.Namespace) -> Path:
     return target
 
 
+def _require(path: Path, what: str, produced_by: str) -> Path:
+    if not path.exists():
+        raise SystemExit(
+            f"{what} not found at {path}. Run the '{produced_by}' stage first, or "
+            f"point --out at a directory that already has it."
+        )
+    return path
+
+
 def stage_extract(args: argparse.Namespace) -> Path:
-    inventory = load_inventory(args.out / "inventory.json")
+    inventory = load_inventory(
+        _require(args.out / "inventory.json", "Corpus inventory", "index"))
     sources = args.sources.split(",") if args.sources else None
     days = inventory.select(
         sources=sources,
         start=date.fromisoformat(args.start) if args.start else None,
         end=date.fromisoformat(args.end) if args.end else None,
     )
-    if args.max_days:
-        days = days[: args.max_days]
+    if args.max_days and args.max_days < len(days):
+        # Evenly spaced, NOT the first N. The list is sorted by (source, day), so
+        # a prefix is one source's earliest days -- for the reverse corpus that is
+        # AFRINIC 2009-2010 and nothing else. A subsample has to span every source
+        # and the whole period or it answers a different question than the full run.
+        step = len(days) / args.max_days
+        days = [days[int(i * step)] for i in range(args.max_days)]
+        LOGGER.info("subsampled %d of the matching source-days, evenly spaced",
+                    len(days))
     if not days:
         raise SystemExit("No source-days matched the filter; nothing to extract.")
 
@@ -215,12 +242,17 @@ def stage_extract(args: argparse.Namespace) -> Path:
 
     dictionary = load_dictionary(args.dictionary)
     warnings: list[str] = []
-    done, skipped = extract_days(
+    done, skipped, failed = extract_days(
         days, dictionary, args.out / "checkpoints",
         threads=args.threads, memory_limit=args.memory_limit,
         resume=args.resume, warnings=warnings,
     )
-    LOGGER.info("extracted %d, skipped %d (already done or unreadable)", done, skipped)
+    LOGGER.info("extracted %d, skipped %d (already done or empty), failed %d",
+                done, skipped, failed)
+    if failed:
+        LOGGER.warning(
+            "%d source-day(s) failed and were NOT checkpointed -- re-run to retry "
+            "them; they are absent from this timeline, not empty in it.", failed)
 
     timeline = merge_timeline(args.out / "checkpoints")
     if timeline.empty:
@@ -238,7 +270,8 @@ def stage_extract(args: argparse.Namespace) -> Path:
 
 
 def stage_analyse(args: argparse.Namespace) -> dict[str, Any]:
-    timeline = pd.read_parquet(args.out / "timeline_monthly.parquet")
+    timeline = pd.read_parquet(
+        _require(args.out / "timeline_monthly.parquet", "Timeline", "extract"))
     config = load_config(args.config)
 
     do_bottom = args.bottom_up if args.bottom_up is not None \
@@ -311,7 +344,9 @@ def _bottom_up_table(rows: list[dict[str, Any]]) -> str:
 
 
 def stage_report(args: argparse.Namespace, results: dict[str, Any]) -> Path:
-    inv = json.loads((args.out / "inventory.json").read_text(encoding="utf-8"))["summary"]
+    inv = json.loads(
+        _require(args.out / "inventory.json", "Corpus inventory", "index")
+        .read_text(encoding="utf-8"))["summary"]
     bu = results.get("bottom_up", [])
     td = results.get("top_down", [])
     cmp_ = results.get("comparison", {})
@@ -448,6 +483,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if "ripe" in args.stages and args.ripe_cache is not None:
         stage_ripe(args)
+        # Created by the stage just now, so it can join the roots for this run.
+        ripe_root = Path(args.ripe_cache).as_posix()
+        if ripe_root not in args.roots:
+            args.roots.append(ripe_root)
     elif "ripe" in args.stages:
         LOGGER.info("ripe stage skipped: no --ripe-cache given")
     if "index" in args.stages:
