@@ -24,6 +24,7 @@ import pandas as pd
 from .utils import PipelineError, get_logger
 
 __all__ = [
+    "cross_reference",
     "bottom_up",
     "compare_directions",
     "load_config",
@@ -349,3 +350,121 @@ def compare_directions(
             "predictive cut; the categories are the communicable one."
         ),
     }
+
+
+def cross_reference(
+    timeline: pd.DataFrame,
+    config: dict[str, Any],
+    *,
+    forward_sources: Sequence[str] | None = None,
+    reverse_sources: Sequence[str] | None = None,
+) -> dict[str, Any]:
+    """Compare the same observable across the forward and reverse corpora.
+
+    The two corpora share no infrastructure, no operator population and no
+    collection method, so agreement between them is real evidence and disagreement
+    usually says something about the measurement rather than about operators.
+    Telling those apart is the whole job.
+
+    **Only algorithm- and digest-scoped dimensions are comparable.** The reverse
+    corpus holds NS and DS records only; the forward corpus is mostly RRSIG and
+    DNSKEY. Any share taken over "all DNSSEC records" therefore differs between
+    them by record-type composition alone -- which is exactly how a 10x gap in
+    RFC 4509 turned out to be roughly 9x denominator. Dimensions the config marks
+    incomparable are reported as such instead of being quietly differenced.
+    """
+    spec = config.get("cross_reference", {})
+    comparable = list(spec.get("comparable_dimensions", []))
+    incomparable = list(spec.get("incomparable_dimensions", []))
+
+    sources = set(timeline.source.unique())
+    reverse = set(reverse_sources or []) or {
+        s for s in sources
+        if s in {"afrinic", "apnic", "arin", "lacnic", "ripe"}
+    }
+    forward = set(forward_sources or []) or (sources - reverse)
+
+    result: dict[str, Any] = {
+        "forward_sources": sorted(forward),
+        "reverse_sources": sorted(reverse),
+        "comparable_dimensions": comparable,
+        "incomparable_dimensions": incomparable,
+        "incomparable_reason": spec.get("incomparable_reason", ""),
+        "comparisons": [],
+        "notes": [],
+    }
+    if not forward or not reverse:
+        result["notes"].append(
+            "Only one side is present in this run "
+            f"(forward={sorted(forward)}, reverse={sorted(reverse)}), so nothing is "
+            "cross-referenced. This is not a disagreement; it is a missing corpus."
+        )
+        return result
+
+    last = timeline.month.max()
+    for change in config["bottom_up"]["changes"]:
+        if change["dimension"] not in comparable:
+            continue
+        fwd = prevalence_series(timeline, change["dimension"], change["value"],
+                                sources=sorted(forward))
+        rev = prevalence_series(timeline, change["dimension"], change["value"],
+                                sources=sorted(reverse))
+        if fwd.empty or rev.empty:
+            continue
+
+        def at(series: pd.DataFrame, month: str) -> float | None:
+            row = series[series.month == month]
+            return round(float(row.share_pct.iloc[0]), 3) if len(row) else None
+
+        # Existence is a minimum over all evidence, so the earlier of the two
+        # first sightings is the one that counts -- see the Ed25519 correction.
+        def first(series: pd.DataFrame) -> str | None:
+            hit = series[series.records > 0]
+            return str(hit.month.iloc[0]) if len(hit) else None
+
+        f_first, r_first = first(fwd), first(rev)
+        both = [m for m in (f_first, r_first) if m]
+        f_now, r_now = at(fwd, last), at(rev, last)
+        result["comparisons"].append({
+            "key": change["key"],
+            "label": change["label"],
+            "rfc": change["rfc"],
+            "published": change["published"],
+            "dimension": change["dimension"],
+            "forward_first_seen": f_first,
+            "reverse_first_seen": r_first,
+            "earliest_first_seen": min(both) if both else None,
+            "earlier_corpus": (
+                None if not both else
+                ("forward" if f_first == min(both) and f_first != r_first
+                 else "reverse" if r_first == min(both) and f_first != r_first
+                 else "both")
+            ),
+            "onset_years_cross_corpus": (
+                _years(change["published"], min(both)) if both else None),
+            "forward_share_pct": f_now,
+            "reverse_share_pct": r_now,
+            "difference_pct_points": (
+                round(f_now - r_now, 3) if (f_now is not None and r_now is not None)
+                else None),
+            "month": str(last),
+        })
+
+    agreeing = [c for c in result["comparisons"]
+                if c["difference_pct_points"] is not None
+                and abs(c["difference_pct_points"]) <= 5]
+    result["notes"].append(
+        f"{len(agreeing)} of {len(result['comparisons'])} comparable observables "
+        "agree within 5 percentage points across two corpora that share no "
+        "infrastructure, operator population or collection method."
+    )
+    earlier_forward = [c for c in result["comparisons"]
+                       if c["earlier_corpus"] == "forward"]
+    if earlier_forward:
+        result["notes"].append(
+            f"{len(earlier_forward)} observable(s) appear EARLIER in the forward "
+            "corpus than the reverse one: "
+            + ", ".join(c["label"] for c in earlier_forward)
+            + ". A reverse-only onset overstates these."
+        )
+    return result

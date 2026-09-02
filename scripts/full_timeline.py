@@ -36,7 +36,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -49,8 +49,9 @@ from openintel_rfc.cache_index import (  # noqa: E402
     build_inventory, load_inventory, save_inventory,
 )
 from openintel_rfc.checklist_loader import load_dictionary  # noqa: E402
+from openintel_rfc.reverse_zones import ingest_range, monthly_days  # noqa: E402
 from openintel_rfc.timeline_analysis import (  # noqa: E402
-    bottom_up, compare_directions, load_config, top_down,
+    bottom_up, compare_directions, cross_reference, load_config, top_down,
 )
 from openintel_rfc.timeline_extract import (  # noqa: E402
     extract_days, merge_timeline,
@@ -58,7 +59,7 @@ from openintel_rfc.timeline_extract import (  # noqa: E402
 from openintel_rfc.utils import ensure_dir, get_logger  # noqa: E402
 
 LOGGER = get_logger("full_timeline")
-STAGES = ("index", "extract", "analyse", "report")
+STAGES = ("ripe", "index", "extract", "analyse", "report")
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -91,6 +92,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--top-down", dest="top_down", action="store_true", default=None)
     p.add_argument("--no-top-down", dest="top_down", action="store_false")
 
+    p.add_argument("--ripe-cache", type=Path, default=None, metavar="DIR",
+                   help="Where the RIPE reverse-zone corpus lives. The 'ripe' stage "
+                        "fetches into it, and it is added to --roots automatically.")
+    p.add_argument("--ripe-start", default="2009-03-24", metavar="YYYY-MM-DD")
+    p.add_argument("--ripe-end", default=None, metavar="YYYY-MM-DD",
+                   help="Default: today.")
+    p.add_argument("--ripe-daily", action="store_true",
+                   help="Every day instead of one per month. 17 years of dailies is "
+                        "6,108 tarballs and several hundred GB; monthly is ~210 and "
+                        "still resolves a curve to the month.")
+    p.add_argument("--keep-archives", action="store_true",
+                   help="Keep the RIPE .tar.bz2 files after parsing.")
+
     p.add_argument("--threads", type=int, default=None, help="DuckDB threads.")
     p.add_argument("--memory-limit", default=None, help="DuckDB memory limit, e.g. 32GB.")
     p.add_argument("--no-resume", dest="resume", action="store_false", default=True,
@@ -100,6 +114,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     roots: list[str] = []
     for entry in args.roots:
         roots.extend(part for part in str(entry).split(",") if part)
+    # The RIPE corpus is discovered by exactly the same walker as the OpenINTEL
+    # cache -- it is written in the same layout, so it needs no special case.
+    if args.ripe_cache is not None:
+        ripe_root = Path(args.ripe_cache).as_posix()
+        if ripe_root not in roots:
+            roots.append(ripe_root)
     args.roots = roots
     args.stages = tuple(args.stage) if args.stage else STAGES
     return args
@@ -112,6 +132,45 @@ def _fmt_bytes(n: int) -> str:
             return f"{step:.1f} {unit}"
         step /= 1024
     return f"{n} B"
+
+
+def stage_ripe(args: argparse.Namespace) -> Path:
+    """Fetch and ingest RIPE's reverse-delegation archive.
+
+    This is the one stage that touches the network, and it is a different network
+    from OpenINTEL's: RIPE publishes plain HTTPS tarballs with no rate limiter, so
+    nothing here shares the object store's throttling problem.
+
+    The archive is the only source in the project that yields a true *zone-level*
+    denominator -- every delegation is listed, signed or not -- so "share of
+    delegations signed" is directly countable rather than inferred from whichever
+    names a forward measurement happened to query. It also starts 2009-03-24, nine
+    years before the OpenINTEL window, which is what makes an uncensored onset
+    possible at all.
+    """
+    if args.ripe_cache is None:
+        raise SystemExit("--ripe-cache is required for the ripe stage.")
+    start = date.fromisoformat(args.ripe_start)
+    end = date.fromisoformat(args.ripe_end) if args.ripe_end else date.today()
+    days = ([start + timedelta(days=i) for i in range((end - start).days + 1)]
+            if args.ripe_daily else monthly_days(start, end))
+
+    LOGGER.info("RIPE: %d day(s) from %s to %s (%s)",
+                len(days), start, end, "daily" if args.ripe_daily else "monthly")
+    warnings: list[str] = []
+    reports = ingest_range(
+        days,
+        cache_dir=args.ripe_cache,
+        download_dir=args.ripe_cache / "_archives",
+        keep_archive=args.keep_archives,
+        warnings=warnings,
+    )
+    ingested = [r for r in reports if getattr(r, "rows", 0)]
+    LOGGER.info("RIPE: %d/%d days ingested; %d unavailable or empty",
+                len(ingested), len(days), len(days) - len(ingested))
+    for message in warnings[:10]:
+        LOGGER.warning("RIPE: %s", message)
+    return args.ripe_cache
 
 
 def stage_index(args: argparse.Namespace) -> Path:
@@ -219,6 +278,15 @@ def stage_analyse(args: argparse.Namespace) -> dict[str, Any]:
             results["comparison"] = comparison
     else:
         LOGGER.info("top-down disabled")
+
+    # Cross-corpus check runs whenever both sides are present. It is independent
+    # of either direction being enabled: it compares observables, not analyses.
+    xref = cross_reference(timeline, config)
+    (args.out / "cross_reference.json").write_text(
+        json.dumps(xref, indent=1), encoding="utf-8")
+    results["cross_reference"] = xref
+    for note in xref["notes"]:
+        LOGGER.info("cross-ref: %s", note)
 
     return results
 
@@ -330,6 +398,27 @@ def stage_report(args: argparse.Namespace, results: dict[str, Any]) -> Path:
             lines.append("Categories with no observable changes at all: "
                          + ", ".join(cmp_["categories_without_observables"]))
 
+    xref = results.get("cross_reference", {})
+    if xref.get("comparisons"):
+        lines += ["", "## Cross-reference: forward vs reverse", "",
+                  f"forward: {', '.join(xref['forward_sources'])}  |  "
+                  f"reverse: {', '.join(xref['reverse_sources'])}", "",
+                  "| Observable | Fwd first | Rev first | Earliest | Fwd now | Rev now | Δ |",
+                  "|---|---|---|---|---|---|---|"]
+        for c in xref["comparisons"]:
+            g = lambda v, s="—": (v if v is not None else s)
+            d = ("—" if c["difference_pct_points"] is None
+                 else f"{c['difference_pct_points']:+.1f}pp")
+            fs = "—" if c["forward_share_pct"] is None else f"{c['forward_share_pct']:.1f}%"
+            rs = "—" if c["reverse_share_pct"] is None else f"{c['reverse_share_pct']:.1f}%"
+            lines.append(
+                f"| {c['label']} | {g(c['forward_first_seen'])} | "
+                f"{g(c['reverse_first_seen'])} | {g(c['earliest_first_seen'])} | "
+                f"{fs} | {rs} | {d} |")
+        lines += [""] + [f"- {n}" for n in xref["notes"]]
+    elif xref.get("notes"):
+        lines += ["", "## Cross-reference", ""] + [f"- {n}" for n in xref["notes"]]
+
     lines += ["", "---", "",
               "Generated by `scripts/full_timeline.py`. The tidy timeline behind every "
               "number is `timeline_monthly.csv`; each row carries its own denominator "
@@ -345,6 +434,7 @@ def stage_report(args: argparse.Namespace, results: dict[str, Any]) -> Path:
         "bottom_up": bu,
         "top_down": td,
         "comparison": cmp_,
+        "cross_reference": xref,
     }
     (args.out / "analysis_bundle.json").write_text(
         json.dumps(bundle, indent=1), encoding="utf-8")
@@ -356,6 +446,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     ensure_dir(args.out)
 
+    if "ripe" in args.stages and args.ripe_cache is not None:
+        stage_ripe(args)
+    elif "ripe" in args.stages:
+        LOGGER.info("ripe stage skipped: no --ripe-cache given")
     if "index" in args.stages:
         stage_index(args)
     if "extract" in args.stages:

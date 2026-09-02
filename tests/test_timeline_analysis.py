@@ -11,6 +11,7 @@ import pandas as pd
 import pytest
 
 from openintel_rfc.timeline_analysis import (
+    cross_reference,
     bottom_up, compare_directions, prevalence_series, top_down,
 )
 
@@ -165,3 +166,66 @@ def test_comparison_crosswalks_groups_to_categories():
     comparison = compare_directions(rows, categories, CONFIG)
     assert comparison["group_to_category"][0]["categories"] == {"crypto": 1}
     assert comparison["categories_without_observables"] == []
+
+
+# --------------------------------------------------------------------------- #
+# Cross-corpus comparison
+# --------------------------------------------------------------------------- #
+
+XREF_CONFIG = {
+    **CONFIG,
+    "cross_reference": {
+        "comparable_dimensions": ["algorithm_ds"],
+        "incomparable_dimensions": ["rr_type"],
+        "incomparable_reason": "record-type composition differs",
+    },
+}
+
+
+def _row_src(source, month, dimension, value, records, domains):
+    return [source, "b", month, dimension, value, records, domains, domains, 1]
+
+
+def test_cross_reference_needs_both_sides():
+    timeline = _timeline([
+        _row_src("arin", "2020-01", "algorithm_ds", "_total", 100, 100),
+        _row_src("arin", "2020-01", "algorithm_ds", "13", 50, 50),
+    ])
+    out = cross_reference(timeline, XREF_CONFIG)
+    assert out["comparisons"] == []
+    assert "missing corpus" in out["notes"][0]
+
+
+def test_cross_reference_takes_the_earlier_first_sighting():
+    """The Ed25519 lesson: existence is a minimum over ALL evidence."""
+    timeline = _timeline([
+        # forward sees it in 2021; reverse not until 2022
+        _row_src("se", "2021-01", "algorithm_ds", "_total", 100, 100),
+        _row_src("se", "2021-01", "algorithm_ds", "13", 10, 10),
+        _row_src("arin", "2021-01", "algorithm_ds", "_total", 100, 100),
+        _row_src("arin", "2022-01", "algorithm_ds", "_total", 100, 100),
+        _row_src("arin", "2022-01", "algorithm_ds", "13", 20, 20),
+        _row_src("se", "2022-01", "algorithm_ds", "_total", 100, 100),
+        _row_src("se", "2022-01", "algorithm_ds", "13", 20, 20),
+    ])
+    out = cross_reference(timeline, XREF_CONFIG)
+    c = out["comparisons"][0]
+    assert c["forward_first_seen"] == "2021-01"
+    assert c["reverse_first_seen"] == "2022-01"
+    assert c["earliest_first_seen"] == "2021-01"
+    assert c["earlier_corpus"] == "forward"
+    assert any("EARLIER in the forward" in n for n in out["notes"])
+
+
+def test_cross_reference_skips_incomparable_dimensions():
+    """A record-type share differs by composition alone; never difference it."""
+    config = {**XREF_CONFIG, "bottom_up": {**CONFIG["bottom_up"], "changes": [
+        {**CONFIG["bottom_up"]["changes"][0], "dimension": "rr_type", "value": "DS"}]}}
+    timeline = _timeline([
+        _row_src("se", "2020-01", "rr_type", "_total", 100, 100),
+        _row_src("se", "2020-01", "rr_type", "DS", 8, 8),
+        _row_src("arin", "2020-01", "rr_type", "_total", 100, 100),
+        _row_src("arin", "2020-01", "rr_type", "DS", 100, 100),
+    ])
+    out = cross_reference(timeline, config)
+    assert out["comparisons"] == [], "rr_type is not comparable across corpora"
