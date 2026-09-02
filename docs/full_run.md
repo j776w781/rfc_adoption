@@ -33,11 +33,18 @@ against the real corpus (`tests/test_cache_index.py`):
 | --- | --- |
 | Same day, different files, two drives | merged into one day; flagged `split_across_roots` |
 | Same file copied to both drives (a partial move) | counted **once**; listed under `duplicates` |
+| The two copies differ in size | the **larger** wins and the disagreement is reported — a short copy is an interrupted move, not a short day |
 | File matching no known layout | **excluded and reported**, never silently dropped |
 
 Three layouts are recognised: this project's `<basis>/<source>/<YYYY-MM-DD>/`,
 OpenINTEL's Hive-style `source=/year=/month=/day=`, and a loose date fallback. The
 reverse corpus needs no special handling — it is just another root.
+
+**There is no "fall back to the spill".** Every root is walked in full, once, at
+index time; nothing is probed at read time. A fallback would have to decide when
+the main path is missing something, and it cannot — a source-day sitting there with
+three of its five files looks complete. Order matters only for identical
+duplicates, where the first root named wins, so pass the faster disk first.
 
 ## Stages
 

@@ -262,7 +262,10 @@ def build_inventory(
     if not roots:
         raise PipelineError("build_inventory requires at least one root.")
     inventory = CacheInventory(roots=[Path(r).as_posix() for r in roots])
-    seen_names: dict[str, set[str]] = defaultdict(set)
+    # key -> filename -> (size, path); size is kept so a truncated duplicate
+    # left by an interrupted move cannot win on root order alone.
+    seen_names: dict[str, dict[str, tuple[int, str]]] = defaultdict(dict)
+    mismatched: list[tuple[str, str, int, str, int]] = []
     count = 0
 
     for root_key, path, size in discover_files(roots, suffix=suffix):
@@ -286,9 +289,26 @@ def build_inventory(
         # double every count it contributes.
         name = Path(path).name
         if name in seen_names[key]:
-            inventory.duplicates.append(path)
+            # Same object on two roots. Root order decides, EXCEPT when the two
+            # copies differ in size: a move interrupted partway leaves a truncated
+            # file behind, and preferring it because its drive was named first
+            # would read a short day as a real one. The larger copy wins and the
+            # disagreement is reported -- it means a copy needs re-checking.
+            kept_size, kept_path = seen_names[key][name]
+            if size > kept_size:
+                entry.paths.remove(kept_path)
+                entry.paths.append(path)
+                entry.bytes_total += size - kept_size
+                entry.roots.add(root_key)
+                inventory.duplicates.append(kept_path)
+                seen_names[key][name] = (size, path)
+                mismatched.append((name, kept_path, kept_size, path, size))
+            else:
+                inventory.duplicates.append(path)
+                if size < kept_size:
+                    mismatched.append((name, path, size, kept_path, kept_size))
             continue
-        seen_names[key].add(name)
+        seen_names[key][name] = (size, path)
         entry.paths.append(path)
         entry.roots.add(root_key)
         entry.bytes_total += size
@@ -308,6 +328,20 @@ def build_inventory(
             f"{len(inventory.duplicates)} file(s) exist on more than one root and "
             "were counted once. This is expected after a partial move between "
             "drives; the copies are listed under 'duplicates'.",
+            LOGGER,
+        )
+    if mismatched:
+        for name, small, small_size, big, big_size in mismatched[:20]:
+            LOGGER.warning(
+                "%s differs between roots: %s is %d bytes, %s is %d. Using the "
+                "larger; the smaller looks like an interrupted copy.",
+                name, small, small_size, big, big_size,
+            )
+        warn(
+            inventory.warnings,
+            f"{len(mismatched)} duplicated file(s) had DIFFERENT sizes on different "
+            "roots. The larger was used in each case, but a size disagreement means "
+            "one copy is incomplete -- worth re-checking the move that produced it.",
             LOGGER,
         )
     split = sum(1 for d in inventory.days.values() if d.split_across_roots)

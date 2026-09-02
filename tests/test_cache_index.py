@@ -181,3 +181,37 @@ def test_loose_layout_does_not_mistake_a_date_part_for_the_source():
     """`YYYY/MM/DD` splits the date across components; "05" is not a source."""
     got = parse_path("/data/openintel/nu/2020/01/05/part.parquet")
     assert got == ("nu", date(2020, 1, 5), "zonefile")
+
+
+def test_a_truncated_duplicate_does_not_win_on_root_order(tmp_path):
+    """An interrupted move leaves a short file; root order must not prefer it.
+
+    The spill exists because files were moved between drives. A move that died
+    partway leaves a truncated copy behind, and taking it because its drive was
+    named first would read a short day as a real one.
+    """
+    main, spill = tmp_path / "main", tmp_path / "spill"
+    _touch(main / "zonefile/gov/2024-05-06/part-0.parquet", 10)      # truncated
+    _touch(spill / "zonefile/gov/2024-05-06/part-0.parquet", 5000)   # complete
+
+    inventory = build_inventory([main, spill])   # main named FIRST
+
+    day = inventory.days["zonefile/gov/2024-05-06"]
+    assert len(day.paths) == 1
+    assert "spill" in day.paths[0], "the complete copy must win"
+    assert day.bytes_total == 5000
+    assert any("DIFFERENT sizes" in w for w in inventory.warnings)
+
+
+def test_identical_duplicates_still_follow_root_order(tmp_path):
+    """When the copies agree, the first root wins and nothing is flagged."""
+    main, spill = tmp_path / "main", tmp_path / "spill"
+    _touch(main / "zonefile/gov/2024-05-06/part-0.parquet", 100)
+    _touch(spill / "zonefile/gov/2024-05-06/part-0.parquet", 100)
+
+    inventory = build_inventory([main, spill])
+
+    day = inventory.days["zonefile/gov/2024-05-06"]
+    assert "main" in day.paths[0]
+    assert day.bytes_total == 100
+    assert not any("DIFFERENT sizes" in w for w in inventory.warnings)
