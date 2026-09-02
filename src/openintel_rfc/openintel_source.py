@@ -55,6 +55,7 @@ time.
 from __future__ import annotations
 
 import os
+import time
 from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from datetime import date, datetime, timedelta
@@ -491,12 +492,38 @@ def list_partition_keys(
         }
         if token:
             request["ContinuationToken"] = token
+
+        '''
         try:
             response = s3.list_objects_v2(**request)
         except Exception as exc:  # botocore raises its own error hierarchy
             raise PipelineError(
                 f"Listing s3://{config.bucket}/{prefix} at {config.endpoint_url} failed: {exc}"
             ) from exc
+        '''
+        wait = 30
+        for attempt in range(10):
+            try:
+                response = s3.list_objects_v2(**request)
+                break
+
+            except Exception as exc:
+
+                text = str(exc).lower()
+                transient = (
+                    "503" in text
+                    or "service unavailable" in text
+                    or "slow down" in text
+                )
+
+                if not transient or attempt == 9:
+                    raise PipelineError(
+                                    f"Listing s3://{config.bucket}/{prefix} at {config.endpoint_url} failed: {exc}"
+                                ) from exc
+
+                time.sleep(wait)
+                wait *= 2
+
 
         for item in response.get("Contents", ()):
             key = str(item.get("Key", ""))
