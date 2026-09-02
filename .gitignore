@@ -217,3 +217,9 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+
+# Full-run outputs (scripts/full_timeline.py). Regenerable from the cache, and on
+# the real 14 TB corpus the checkpoint directory holds one Parquet per source-day
+# -- tens of thousands of files. The analysis JSON is small but is a product of a
+# specific run, so the whole directory stays out of the repo.
+out/full_run/
