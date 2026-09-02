@@ -1,0 +1,318 @@
+{
+ "observable_gaps": [
+  {
+   "id": "RFC 4470",
+   "n": 4470,
+   "title": "Minimally Covering NSEC Records and DNSSEC On-line Signing",
+   "status": "PROPOSED STANDARD",
+   "year": "2006",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 4956",
+   "n": 4956,
+   "title": "DNS Security (DNSSEC) Opt-In",
+   "status": "EXPERIMENTAL",
+   "year": "2007",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 7673",
+   "n": 7673,
+   "title": "Using DNS-Based Authentication of Named Entities (DANE) TLSA Records with SRV Records",
+   "status": "PROPOSED STANDARD",
+   "year": "2015",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 7929",
+   "n": 7929,
+   "title": "DNS-Based Authentication of Named Entities (DANE) Bindings for OpenPGP",
+   "status": "EXPERIMENTAL",
+   "year": "2016",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8162",
+   "n": 8162,
+   "title": "Using Secure DNS to Associate Certificates with Domain Names for S/MIME",
+   "status": "EXPERIMENTAL",
+   "year": "2017",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8749",
+   "n": 8749,
+   "title": "Moving DNSSEC Lookaside Validation (DLV) to Historic Status",
+   "status": "PROPOSED STANDARD",
+   "year": "2020",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8901",
+   "n": 8901,
+   "title": "Multi-Signer DNSSEC Models",
+   "status": "INFORMATIONAL",
+   "year": "2020",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8976",
+   "n": 8976,
+   "title": "Message Digest for DNS Zones",
+   "status": "PROPOSED STANDARD",
+   "year": "2021",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 9824",
+   "n": 9824,
+   "title": "Compact Denial of Existence in DNSSEC",
+   "status": "PROPOSED STANDARD",
+   "year": "2025",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 9975",
+   "n": 9975,
+   "title": "Clarifications on CDS/CDNSKEY and CSYNC Consistency",
+   "status": "PROPOSED STANDARD",
+   "year": "2026",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 10026",
+   "n": 10026,
+   "title": "Operational Recommendations for DNSSEC Delegation Signer (DS) Automation",
+   "status": "BEST CURRENT PRACTICE",
+   "year": "2026",
+   "obsoleted_by": []
+  }
+ ],
+ "non_observable": [
+  {
+   "id": "RFC 3130",
+   "n": 3130,
+   "title": "Notes from the State-Of-The-Technology: DNSSEC",
+   "status": "INFORMATIONAL",
+   "year": "2001",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 3225",
+   "n": 3225,
+   "title": "Indicating Resolver Support of DNSSEC",
+   "status": "PROPOSED STANDARD",
+   "year": "2001",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 3226",
+   "n": 3226,
+   "title": "DNSSEC and IPv6 A6 aware server/resolver message size requirements",
+   "status": "PROPOSED STANDARD",
+   "year": "2001",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 3833",
+   "n": 3833,
+   "title": "Threat Analysis of the Domain Name System (DNS)",
+   "status": "INFORMATIONAL",
+   "year": "2004",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 4471",
+   "n": 4471,
+   "title": "Derivation of DNS Name Predecessor and Successor",
+   "status": "EXPERIMENTAL",
+   "year": "2006",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 4955",
+   "n": 4955,
+   "title": "DNS Security (DNSSEC) Experiments",
+   "status": "PROPOSED STANDARD",
+   "year": "2007",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 4986",
+   "n": 4986,
+   "title": "Requirements Related to DNS Security (DNSSEC) Trust Anchor Rollover",
+   "status": "INFORMATIONAL",
+   "year": "2007",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 5910",
+   "n": 5910,
+   "title": "Domain Name System (DNS) Security Extensions Mapping for the Extensible Provisioning Protocol (EPP)",
+   "status": "PROPOSED STANDARD",
+   "year": "2010",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 6014",
+   "n": 6014,
+   "title": "Cryptographic Algorithm Identifier Allocation for DNSSEC",
+   "status": "PROPOSED STANDARD",
+   "year": "2010",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 6394",
+   "n": 6394,
+   "title": "Use Cases and Requirements for DNS-Based Authentication of Named Entities (DANE)",
+   "status": "INFORMATIONAL",
+   "year": "2011",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 6725",
+   "n": 6725,
+   "title": "DNS Security (DNSSEC) DNSKEY Algorithm IANA Registry Updates",
+   "status": "PROPOSED STANDARD",
+   "year": "2012",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 6841",
+   "n": 6841,
+   "title": "A Framework for DNSSEC Policies and DNSSEC Practice Statements",
+   "status": "INFORMATIONAL",
+   "year": "2013",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 6975",
+   "n": 6975,
+   "title": "Signaling Cryptographic Algorithm Understanding in DNS Security Extensions (DNSSEC)",
+   "status": "PROPOSED STANDARD",
+   "year": "2013",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 7129",
+   "n": 7129,
+   "title": "Authenticated Denial of Existence in the DNS",
+   "status": "INFORMATIONAL",
+   "year": "2014",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 7218",
+   "n": 7218,
+   "title": "Adding Acronyms to Simplify Conversations about DNS-Based Authentication of Named Entities (DANE)",
+   "status": "PROPOSED STANDARD",
+   "year": "2014",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 7646",
+   "n": 7646,
+   "title": "Definition and Use of DNSSEC Negative Trust Anchors",
+   "status": "INFORMATIONAL",
+   "year": "2015",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8027",
+   "n": 8027,
+   "title": "DNSSEC Roadblock Avoidance",
+   "status": "BEST CURRENT PRACTICE",
+   "year": "2016",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8145",
+   "n": 8145,
+   "title": "Signaling Trust Anchor Knowledge in DNS Security Extensions (DNSSEC)",
+   "status": "PROPOSED STANDARD",
+   "year": "2017",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8509",
+   "n": 8509,
+   "title": "A Root Key Trust Anchor Sentinel for DNSSEC",
+   "status": "PROPOSED STANDARD",
+   "year": "2018",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8598",
+   "n": 8598,
+   "title": "Split DNS Configuration for the Internet Key Exchange Protocol Version 2 (IKEv2)",
+   "status": "PROPOSED STANDARD",
+   "year": "2019",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8649",
+   "n": 8649,
+   "title": "Hash Of Root Key Certificate Extension",
+   "status": "INFORMATIONAL",
+   "year": "2019",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8914",
+   "n": 8914,
+   "title": "Extended DNS Errors",
+   "status": "PROPOSED STANDARD",
+   "year": "2020",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 8932",
+   "n": 8932,
+   "title": "Recommendations for DNS Privacy Service Operators",
+   "status": "BEST CURRENT PRACTICE",
+   "year": "2020",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 9102",
+   "n": 9102,
+   "title": "TLS DNSSEC Chain Extension",
+   "status": "EXPERIMENTAL",
+   "year": "2021",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 9157",
+   "n": 9157,
+   "title": "Revised IANA Considerations for DNSSEC",
+   "status": "PROPOSED STANDARD",
+   "year": "2021",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 9520",
+   "n": 9520,
+   "title": "Negative Caching of DNS Resolution Failures",
+   "status": "PROPOSED STANDARD",
+   "year": "2023",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 9718",
+   "n": 9718,
+   "title": "DNSSEC Trust Anchor Publication for the Root Zone",
+   "status": "INFORMATIONAL",
+   "year": "2025",
+   "obsoleted_by": []
+  },
+  {
+   "id": "RFC 9859",
+   "n": 9859,
+   "title": "Generalized DNS Notifications",
+   "status": "PROPOSED STANDARD",
+   "year": "2025",
+   "obsoleted_by": []
+  }
+ ]
+}
