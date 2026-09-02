@@ -92,6 +92,7 @@ import sys
 import time
 from pathlib import Path
 
+from openintel_rfc.retry import retry_transient
 from openintel_rfc.openintel_source import (
     AccessConfig,
     build_s3_client,
@@ -161,38 +162,28 @@ if os.environ["OPENINTEL_LIST_ONLY"] == "1":
     print("\n--list given; nothing downloaded.")
     sys.exit(0)
 
+RETRY_ATTEMPTS = int(os.environ.get("OPENINTEL_RETRY_ATTEMPTS", "8"))
+RETRY_INITIAL_WAIT = float(os.environ.get("OPENINTEL_RETRY_WAIT", "5"))
+PACE_SECONDS = float(os.environ.get("OPENINTEL_PACE_SECONDS", "0"))
+
 warnings: list[str] = []
 done = 0
 for index, partition in enumerate(partitions, start=1):
 
-    wait = 60
-
-    for attempt in range(15):
-        try:
-            paths = materialize(partition, config, warnings=warnings)
-            time.sleep(20)
-            done += len(paths)
-            print(f"[{index}/{len(partitions)}] {partition.partition_id}: {len(paths)} file(s)")
-            break
-        except Exception as exc:
-            transient = any(
-                token in str(exc).lower()
-                for token in (
-                    "503",
-                    "timeout",
-                    "service unavailable",
-                )
-            )
-
-            if not transient or attempt == 9:
-                raise
-            
-            print(
-                f"Retry {attempt+1}/10 for "
-                f"{partition.partition_id} after: {exc}"
-            )
-            time.sleep(wait)
-            wait *= 2
+    # Shares the pipeline's own classification: a 403 from nginx is throttling
+    # and gets waited out, an AccessDenied from the store fails fast. Pacing
+    # between successful fetches is a knob, not a constant -- a fixed sleep is
+    # either too slow when the endpoint is idle or too fast when it is not.
+    paths = retry_transient(
+        lambda: materialize(partition, config, warnings=warnings),
+        what=partition.partition_id,
+        attempts=RETRY_ATTEMPTS,
+        initial_wait=RETRY_INITIAL_WAIT,
+    )
+    done += len(paths)
+    print(f"[{index}/{len(partitions)}] {partition.partition_id}: {len(paths)} file(s)")
+    if PACE_SECONDS:
+        time.sleep(PACE_SECONDS)
 
 print(f"\nMaterialized {done} file(s) under {config.cache_dir}")
 for message in warnings:

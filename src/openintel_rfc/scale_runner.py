@@ -93,6 +93,13 @@ from .models import (
 )
 from .parquet_reader import describe_parquet
 from .ranking import ADOPTION_DECISIONS, RANKABLE_DECISIONS, rank_candidates
+from .retry import (
+    ANONYMOUS_ACCESS_HELP,
+    PERMANENT_AUTH_MARKERS,
+    TRANSIENT_MARKERS,
+    is_auth_failure,
+    is_transient,
+)
 from .schema_checker import queryable_field_names
 from .signal_extractor import PROVENANCE_FIELDS, SIGNAL_FIELDS, extract_signals
 from .sql_compiler import (
@@ -712,78 +719,15 @@ def build_aggregate_sql(
 #: load, not a bug in the query. Matched case-insensitively against the message,
 #: because DuckDB surfaces HTTP failures as generic exceptions.
 #:
-#: ``403`` is here because of what the endpoint actually does. nginx fronts the
-#: object store and rejects an overflowing ``limit_req`` queue with 503, but an
-#: address it has decided to block gets 403 -- with nginx's own HTML body, not
-#: the store's XML. Neither says the request was malformed, so both are worth
-#: waiting out. Distinguishing them from a genuine permission failure is
-#: `_PERMANENT_AUTH_MARKERS`' job, and it is consulted first.
-_TRANSIENT_MARKERS: tuple[str, ...] = (
-    "403",
-    "429",
-    "500",
-    "502",
-    "503",
-    "504",
-    "forbidden",
-    "service unavailable",
-    "slow down",
-    "slowdown",
-    "too many requests",
-    "timeout",
-    "timed out",
-    "connection reset",
-    "connection closed",
-    "temporarily unavailable",
-    "could not establish connection",
-)
-
-#: Substrings identifying a *permission* failure rather than load. The bucket is
-#: public and this client is meant to send no credentials at all; when one leaks
-#: in -- ``AWS_ACCESS_KEY_ID`` in the environment, an instance profile on the
-#: server, a stale ``~/.aws/credentials`` -- botocore and DuckDB sign every
-#: request and the store refuses every one of them with a 403 carrying an
-#: ``AccessDenied`` XML body.
-#:
-#: That failure is immediate, total and permanent, so it must not be retried:
-#: spending the 7.5-minute budget per partition on it turns a one-line
-#: misconfiguration into an overnight run that produces nothing and explains
-#: nothing. Checked before `_TRANSIENT_MARKERS` because these messages carry
-#: "403" too.
-_PERMANENT_AUTH_MARKERS: tuple[str, ...] = (
-    "accessdenied",
-    "access denied",
-    "signaturedoesnotmatch",
-    "invalidaccesskeyid",
-    "invalid access key",
-    "expiredtoken",
-    "tokenrefreshrequired",
-)
-
-#: What to tell an operator who hit the permanent case. It names the thing to
-#: look at, because "AccessDenied" on a public bucket is otherwise baffling.
-_ANONYMOUS_ACCESS_HELP = (
-    "The object store refused the request as unauthorised. This bucket is public "
-    "and the pipeline reads it anonymously, so this almost always means stray AWS "
-    "credentials were picked up and used to sign the request. Check "
-    "AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY / AWS_SESSION_TOKEN in the "
-    "environment, ~/.aws/credentials, and any instance profile on this host; "
-    "unset them for this run. Retrying cannot help: the credential is wrong on "
-    "every request, not just this one."
-)
-
-
-def _is_auth_failure(exc: BaseException) -> bool:
-    """True when the store rejected the *identity*, not the load."""
-    text = f"{type(exc).__name__}: {exc}".lower()
-    return any(marker in text for marker in _PERMANENT_AUTH_MARKERS)
-
-
-def _is_transient(exc: BaseException) -> bool:
-    if _is_auth_failure(exc):
-        return False
-    text = f"{type(exc).__name__}: {exc}".lower()
-    return any(marker in text for marker in _TRANSIENT_MARKERS)
+# Failure classification moved to `retry.py` so the LIST path in
+# `openintel_source` classifies a throttled response exactly as the scan path
+# does. The private aliases are kept because this module's tests and internals
+# refer to them by these names.
+_TRANSIENT_MARKERS = TRANSIENT_MARKERS
+_PERMANENT_AUTH_MARKERS = PERMANENT_AUTH_MARKERS
+_ANONYMOUS_ACCESS_HELP = ANONYMOUS_ACCESS_HELP
+_is_auth_failure = is_auth_failure
+_is_transient = is_transient
 
 
 def _process_with_retry(
