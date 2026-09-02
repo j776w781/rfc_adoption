@@ -266,3 +266,25 @@ def test_corpus_side_comes_from_basis_not_source_name():
     out = cross_reference(timeline, XREF_CONFIG)
     assert out["forward_sources"] == ["ripe"]
     assert out["reverse_sources"] == ["arin"]
+
+
+def test_a_deprecation_has_no_onset():
+    """Publication-to-first-sighting is negative for a deprecation and meaningless.
+
+    RFC 9905 (2025-11) deprecates algorithm 5, which has been in the data since
+    2009. Reporting that as an onset of -13.7 years is not a slow adoption; it is
+    a category error. Residue is the quantity for these.
+    """
+    config = {**CONFIG, "bottom_up": {**CONFIG["bottom_up"], "changes": [
+        {**CONFIG["bottom_up"]["changes"][0], "value": "5",
+         "published": "2025-11", "residue": True}]}}
+    timeline = _timeline([
+        _row("2009-04", "algorithm_ds", "_total", 100, 100),
+        _row("2009-04", "algorithm_ds", "5", 50, 50),
+        _row("2026-01", "algorithm_ds", "_total", 100, 100),
+        _row("2026-01", "algorithm_ds", "5", 10, 10),
+    ])
+    row = bottom_up(timeline, config)[0]
+    assert row["onset_years"] is None, "a deprecation has no onset"
+    assert row["state"] == "residue"
+    assert row["residue_share_pct"] == 10.0

@@ -1,7 +1,6 @@
 {
   "version": "1.0",
   "_note": "Both analyses are driven entirely by this file. Edit it rather than the code: add a row to bottom_up.changes to measure a new observable, or move an RFC between top_down.categories to re-cut the taxonomy. Nothing here is hard-coded in the scripts.",
-
   "stages": {
     "_note": "Thresholds were swept, not chosen. Qualifying counts are flat across 0.5-3% and 4-25% with cliffs at 4% and 30%, so 1% and 10% each sit mid-plateau. min_zones exists because a percentage means different things at different dates: the reverse panel grew 201x, so one zone was 3.1% of it in 2011. See docs/stages.md.",
     "partial_usage_pct": 1.0,
@@ -9,11 +8,9 @@
     "min_zones": 10,
     "population": "signed_domains"
   },
-
   "bottom_up": {
     "enabled": true,
     "_note": "One row per OBSERVABLE CHANGE, not per RFC. RFC 5702 defines two algorithms that appeared ten months apart; an RFC-level date averages away a real pattern. 'dimension' and 'value' address a row in the tidy timeline.",
-
     "groups": {
       "A_new_codepoint": {
         "label": "New codepoint over an existing primitive",
@@ -44,97 +41,409 @@
         "label": "Deprecation",
         "what_must_change": "Removal, by parties who already deployed. The observable is what PERSISTS, so onset is meaningless and residue is the quantity of interest.",
         "evidence": "RFC 9905 s3: 'SHA-1 MUST NOT be used when creating DS records'; RFC 9906 s3 retires ECC-GOST."
+      },
+      "G_new_digest": {
+        "label": "New DS digest type",
+        "what_must_change": "A hash implementation, and only on the parent's DS generator plus the validator. No signer changes and no key material changes.",
+        "evidence": "RFC 4509 s2 defines the DS digest as a hash over the child's DNSKEY: the child publishes nothing new. The first GOST digests observed (2011-05) sit on algorithm 5 and 8 keys, not algorithm 12 -- a GOST hash of an RSA key -- which is only possible because digest and signing algorithm are independent."
       }
     },
-
     "changes": [
-      {"key": "alg_3",  "label": "DSA/SHA-1",       "dimension": "algorithm_ds", "value": "3",  "rfc": "RFC 2536", "published": "1999-03", "group": "D_new_primitive",  "observable": "algorithm = 3"},
-      {"key": "alg_5",  "label": "RSASHA1",         "dimension": "algorithm_ds", "value": "5",  "rfc": "RFC 3110", "published": "2001-05", "group": "A_new_codepoint",  "observable": "algorithm = 5"},
-      {"key": "alg_7",  "label": "RSASHA1-NSEC3",   "dimension": "algorithm_ds", "value": "7",  "rfc": "RFC 5155", "published": "2008-03", "group": "B_signalling",    "observable": "algorithm = 7 (RSASHA1, signalling NSEC3)"},
-      {"key": "alg_8",  "label": "RSASHA256",       "dimension": "algorithm_ds", "value": "8",  "rfc": "RFC 5702", "published": "2009-10", "group": "A_new_codepoint",  "observable": "algorithm = 8"},
-      {"key": "alg_10", "label": "RSASHA512",       "dimension": "algorithm_ds", "value": "10", "rfc": "RFC 5702", "published": "2009-10", "group": "A_new_codepoint",  "observable": "algorithm = 10"},
-      {"key": "alg_12", "label": "ECC-GOST",        "dimension": "algorithm_ds", "value": "12", "rfc": "RFC 5933", "published": "2010-07", "group": "D_new_primitive",  "observable": "algorithm = 12"},
-      {"key": "alg_13", "label": "ECDSAP256SHA256", "dimension": "algorithm_ds", "value": "13", "rfc": "RFC 6605", "published": "2012-04", "group": "D_new_primitive",  "observable": "algorithm = 13"},
-      {"key": "alg_14", "label": "ECDSAP384SHA384", "dimension": "algorithm_ds", "value": "14", "rfc": "RFC 6605", "published": "2012-04", "group": "D_new_primitive",  "observable": "algorithm = 14"},
-      {"key": "alg_15", "label": "Ed25519",         "dimension": "algorithm_ds", "value": "15", "rfc": "RFC 8080", "published": "2017-02", "group": "D_new_primitive",  "observable": "algorithm = 15"},
-      {"key": "alg_16", "label": "Ed448",           "dimension": "algorithm_ds", "value": "16", "rfc": "RFC 8080", "published": "2017-02", "group": "D_new_primitive",  "observable": "algorithm = 16"},
-      {"key": "alg_17", "label": "SM2SM3",          "dimension": "algorithm_ds", "value": "17", "rfc": "RFC 9563", "published": "2024-12", "group": "D_new_primitive",  "observable": "algorithm = 17"},
-      {"key": "alg_23", "label": "ECC-GOST12",      "dimension": "algorithm_ds", "value": "23", "rfc": "RFC 9558", "published": "2024-04", "group": "D_new_primitive",  "observable": "algorithm = 23"},
-
-      {"key": "digest_1", "label": "SHA-1 DS digest",   "dimension": "digest_type_ds", "value": "1", "rfc": "RFC 3658", "published": "2003-12", "group": "A_new_codepoint", "observable": "DS digest type = 1"},
-      {"key": "digest_2", "label": "SHA-256 DS digest", "dimension": "digest_type_ds", "value": "2", "rfc": "RFC 4509", "published": "2006-05", "group": "A_new_codepoint", "observable": "DS digest type = 2"},
-      {"key": "digest_3", "label": "GOST DS digest",    "dimension": "digest_type_ds", "value": "3", "rfc": "RFC 5933", "published": "2010-07", "group": "D_new_primitive", "observable": "DS digest type = 3"},
-      {"key": "digest_4", "label": "SHA-384 DS digest", "dimension": "digest_type_ds", "value": "4", "rfc": "RFC 6605", "published": "2012-04", "group": "A_new_codepoint", "observable": "DS digest type = 4"},
-      {"key": "digest_5", "label": "GOST-2012 digest",  "dimension": "digest_type_ds", "value": "5", "rfc": "RFC 9558", "published": "2024-04", "group": "D_new_primitive", "observable": "DS digest type = 5"},
-      {"key": "digest_6", "label": "SM3 DS digest",     "dimension": "digest_type_ds", "value": "6", "rfc": "RFC 9563", "published": "2024-12", "group": "D_new_primitive", "observable": "DS digest type = 6"},
-
-      {"key": "nsec3_zero_iterations", "label": "NSEC3 zero iterations", "dimension": "nsec3_iterations", "value": "0",     "rfc": "RFC 9276", "published": "2022-08", "group": "E_parameter_hygiene", "observable": "NSEC3 iterations = 0"},
-      {"key": "nsec3_empty_salt",      "label": "NSEC3 empty salt",      "dimension": "nsec3_salt_empty", "value": "empty", "rfc": "RFC 9276", "published": "2022-08", "group": "E_parameter_hygiene", "observable": "NSEC3 salt is empty"},
-      {"key": "nsec3_optout",          "label": "NSEC3 opt-out in use",  "dimension": "nsec3_optout",     "value": "1",     "rfc": "RFC 5155", "published": "2008-03", "group": "E_parameter_hygiene", "observable": "NSEC3 flags bit 0 set"},
-
-      {"key": "dnskey_revoke",   "label": "DNSKEY REVOKE bit",  "dimension": "dnskey_flags",    "value": "385", "rfc": "RFC 5011", "published": "2007-09", "group": "B_signalling",      "observable": "DNSKEY flags = 385 (REVOKE|SEP|ZONE)"},
-      {"key": "dnskey_sep",      "label": "DNSKEY SEP/KSK",     "dimension": "dnskey_flags",    "value": "257", "rfc": "RFC 4034", "published": "2005-03", "group": "B_signalling",      "observable": "DNSKEY flags = 257"},
-      {"key": "dnskey_protocol", "label": "DNSKEY protocol = 3","dimension": "dnskey_protocol", "value": "3",   "rfc": "RFC 4034", "published": "2005-03", "group": "C_new_record_type", "observable": "DNSKEY protocol octet = 3"},
-
-      {"key": "cds_delete", "label": "CDS delete sentinel", "dimension": "algorithm_cds",  "value": "0", "rfc": "RFC 8078", "published": "2017-03", "group": "C_new_record_type", "observable": "CDS with algorithm 0 (delete)"},
-
-      {"key": "tlsa_dane_ee", "label": "DANE-EE (TLSA usage 3)", "dimension": "tlsa_usage", "value": "3", "rfc": "RFC 7671", "published": "2015-10", "group": "E_parameter_hygiene", "observable": "TLSA usage = 3"},
-      {"key": "tlsa_dane_ta", "label": "DANE-TA (TLSA usage 2)", "dimension": "tlsa_usage", "value": "2", "rfc": "RFC 7671", "published": "2015-10", "group": "E_parameter_hygiene", "observable": "TLSA usage = 2"},
-
-      {"key": "deprecated_sha1_sig",    "label": "SHA-1 signing still published", "dimension": "algorithm_ds",   "value": "5|7", "rfc": "RFC 9905", "published": "2025-11", "group": "F_deprecation", "observable": "algorithm 5 or 7 after RFC 9905", "residue": true},
-      {"key": "deprecated_sha1_digest", "label": "SHA-1 DS digest still published","dimension": "digest_type_ds", "value": "1",   "rfc": "RFC 9905", "published": "2025-11", "group": "F_deprecation", "observable": "DS digest 1 after RFC 9905", "residue": true},
-      {"key": "deprecated_gost",        "label": "ECC-GOST still published",       "dimension": "algorithm_ds",   "value": "12",  "rfc": "RFC 9906", "published": "2025-11", "group": "F_deprecation", "observable": "algorithm 12 after RFC 9906", "residue": true}
+      {
+        "key": "alg_3",
+        "label": "DSA/SHA-1",
+        "dimension": "algorithm_ds",
+        "value": "3",
+        "rfc": "RFC 2536",
+        "published": "1999-03",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 3"
+      },
+      {
+        "key": "alg_5",
+        "label": "RSASHA1",
+        "dimension": "algorithm_ds",
+        "value": "5",
+        "rfc": "RFC 3110",
+        "published": "2001-05",
+        "group": "A_new_codepoint",
+        "observable": "algorithm = 5"
+      },
+      {
+        "key": "alg_7",
+        "label": "RSASHA1-NSEC3",
+        "dimension": "algorithm_ds",
+        "value": "7",
+        "rfc": "RFC 5155",
+        "published": "2008-03",
+        "group": "B_signalling",
+        "observable": "algorithm = 7 (RSASHA1, signalling NSEC3)"
+      },
+      {
+        "key": "alg_8",
+        "label": "RSASHA256",
+        "dimension": "algorithm_ds",
+        "value": "8",
+        "rfc": "RFC 5702",
+        "published": "2009-10",
+        "group": "A_new_codepoint",
+        "observable": "algorithm = 8"
+      },
+      {
+        "key": "alg_10",
+        "label": "RSASHA512",
+        "dimension": "algorithm_ds",
+        "value": "10",
+        "rfc": "RFC 5702",
+        "published": "2009-10",
+        "group": "A_new_codepoint",
+        "observable": "algorithm = 10"
+      },
+      {
+        "key": "alg_12",
+        "label": "ECC-GOST",
+        "dimension": "algorithm_ds",
+        "value": "12",
+        "rfc": "RFC 5933",
+        "published": "2010-07",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 12"
+      },
+      {
+        "key": "alg_13",
+        "label": "ECDSAP256SHA256",
+        "dimension": "algorithm_ds",
+        "value": "13",
+        "rfc": "RFC 6605",
+        "published": "2012-04",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 13"
+      },
+      {
+        "key": "alg_14",
+        "label": "ECDSAP384SHA384",
+        "dimension": "algorithm_ds",
+        "value": "14",
+        "rfc": "RFC 6605",
+        "published": "2012-04",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 14"
+      },
+      {
+        "key": "alg_15",
+        "label": "Ed25519",
+        "dimension": "algorithm_ds",
+        "value": "15",
+        "rfc": "RFC 8080",
+        "published": "2017-02",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 15"
+      },
+      {
+        "key": "alg_16",
+        "label": "Ed448",
+        "dimension": "algorithm_ds",
+        "value": "16",
+        "rfc": "RFC 8080",
+        "published": "2017-02",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 16"
+      },
+      {
+        "key": "alg_17",
+        "label": "SM2SM3",
+        "dimension": "algorithm_ds",
+        "value": "17",
+        "rfc": "RFC 9563",
+        "published": "2024-12",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 17"
+      },
+      {
+        "key": "alg_23",
+        "label": "ECC-GOST12",
+        "dimension": "algorithm_ds",
+        "value": "23",
+        "rfc": "RFC 9558",
+        "published": "2024-04",
+        "group": "D_new_primitive",
+        "observable": "algorithm = 23"
+      },
+      {
+        "key": "digest_1",
+        "label": "SHA-1 DS digest",
+        "dimension": "digest_type_ds",
+        "value": "1",
+        "rfc": "RFC 3658",
+        "published": "2003-12",
+        "group": "G_new_digest",
+        "observable": "DS digest type = 1"
+      },
+      {
+        "key": "digest_2",
+        "label": "SHA-256 DS digest",
+        "dimension": "digest_type_ds",
+        "value": "2",
+        "rfc": "RFC 4509",
+        "published": "2006-05",
+        "group": "G_new_digest",
+        "observable": "DS digest type = 2"
+      },
+      {
+        "key": "digest_3",
+        "label": "GOST DS digest",
+        "dimension": "digest_type_ds",
+        "value": "3",
+        "rfc": "RFC 5933",
+        "published": "2010-07",
+        "group": "G_new_digest",
+        "observable": "DS digest type = 3"
+      },
+      {
+        "key": "digest_4",
+        "label": "SHA-384 DS digest",
+        "dimension": "digest_type_ds",
+        "value": "4",
+        "rfc": "RFC 6605",
+        "published": "2012-04",
+        "group": "G_new_digest",
+        "observable": "DS digest type = 4"
+      },
+      {
+        "key": "digest_5",
+        "label": "GOST-2012 digest",
+        "dimension": "digest_type_ds",
+        "value": "5",
+        "rfc": "RFC 9558",
+        "published": "2024-04",
+        "group": "G_new_digest",
+        "observable": "DS digest type = 5"
+      },
+      {
+        "key": "digest_6",
+        "label": "SM3 DS digest",
+        "dimension": "digest_type_ds",
+        "value": "6",
+        "rfc": "RFC 9563",
+        "published": "2024-12",
+        "group": "G_new_digest",
+        "observable": "DS digest type = 6"
+      },
+      {
+        "key": "nsec3_zero_iterations",
+        "label": "NSEC3 zero iterations",
+        "dimension": "nsec3_iterations",
+        "value": "0",
+        "rfc": "RFC 9276",
+        "published": "2022-08",
+        "group": "E_parameter_hygiene",
+        "observable": "NSEC3 iterations = 0"
+      },
+      {
+        "key": "nsec3_empty_salt",
+        "label": "NSEC3 empty salt",
+        "dimension": "nsec3_salt_empty",
+        "value": "empty",
+        "rfc": "RFC 9276",
+        "published": "2022-08",
+        "group": "E_parameter_hygiene",
+        "observable": "NSEC3 salt is empty"
+      },
+      {
+        "key": "nsec3_optout",
+        "label": "NSEC3 opt-out in use",
+        "dimension": "nsec3_optout",
+        "value": "1",
+        "rfc": "RFC 5155",
+        "published": "2008-03",
+        "group": "E_parameter_hygiene",
+        "observable": "NSEC3 flags bit 0 set"
+      },
+      {
+        "key": "dnskey_revoke",
+        "label": "DNSKEY REVOKE bit",
+        "dimension": "dnskey_flags",
+        "value": "385",
+        "rfc": "RFC 5011",
+        "published": "2007-09",
+        "group": "B_signalling",
+        "observable": "DNSKEY flags = 385 (REVOKE|SEP|ZONE)"
+      },
+      {
+        "key": "dnskey_sep",
+        "label": "DNSKEY SEP/KSK",
+        "dimension": "dnskey_flags",
+        "value": "257",
+        "rfc": "RFC 4034",
+        "published": "2005-03",
+        "group": "B_signalling",
+        "observable": "DNSKEY flags = 257"
+      },
+      {
+        "key": "dnskey_protocol",
+        "label": "DNSKEY protocol = 3",
+        "dimension": "dnskey_protocol",
+        "value": "3",
+        "rfc": "RFC 4034",
+        "published": "2005-03",
+        "group": "C_new_record_type",
+        "observable": "DNSKEY protocol octet = 3"
+      },
+      {
+        "key": "cds_delete",
+        "label": "CDS delete sentinel",
+        "dimension": "algorithm_cds",
+        "value": "0",
+        "rfc": "RFC 8078",
+        "published": "2017-03",
+        "group": "C_new_record_type",
+        "observable": "CDS with algorithm 0 (delete)"
+      },
+      {
+        "key": "tlsa_dane_ee",
+        "label": "DANE-EE (TLSA usage 3)",
+        "dimension": "tlsa_usage",
+        "value": "3",
+        "rfc": "RFC 7671",
+        "published": "2015-10",
+        "group": "E_parameter_hygiene",
+        "observable": "TLSA usage = 3"
+      },
+      {
+        "key": "tlsa_dane_ta",
+        "label": "DANE-TA (TLSA usage 2)",
+        "dimension": "tlsa_usage",
+        "value": "2",
+        "rfc": "RFC 7671",
+        "published": "2015-10",
+        "group": "E_parameter_hygiene",
+        "observable": "TLSA usage = 2"
+      },
+      {
+        "key": "deprecated_sha1_sig",
+        "label": "SHA-1 signing still published",
+        "dimension": "algorithm_ds",
+        "value": "5|7",
+        "rfc": "RFC 9905",
+        "published": "2025-11",
+        "group": "F_deprecation",
+        "observable": "algorithm 5 or 7 after RFC 9905",
+        "residue": true
+      },
+      {
+        "key": "deprecated_sha1_digest",
+        "label": "SHA-1 DS digest still published",
+        "dimension": "digest_type_ds",
+        "value": "1",
+        "rfc": "RFC 9905",
+        "published": "2025-11",
+        "group": "F_deprecation",
+        "observable": "DS digest 1 after RFC 9905",
+        "residue": true
+      },
+      {
+        "key": "deprecated_gost",
+        "label": "ECC-GOST still published",
+        "dimension": "algorithm_ds",
+        "value": "12",
+        "rfc": "RFC 9906",
+        "published": "2025-11",
+        "group": "F_deprecation",
+        "observable": "algorithm 12 after RFC 9906",
+        "residue": true
+      }
     ]
   },
-
   "top_down": {
     "enabled": true,
     "_note": "Categories are conceptual impact first, then mapped down to RFCs. An RFC may appear in more than one category; the analysis reports that rather than forcing a single home, because a document like RFC 5155 genuinely is both an authenticated-denial mechanism and a signalling change.",
-
     "categories": [
       {
         "key": "protocol_foundation",
         "label": "Protocol foundation",
         "description": "Defines the records and the validation model everything else assumes. Changing these is not possible without changing DNSSEC itself.",
-        "rfcs": ["RFC 4033", "RFC 4034", "RFC 4035", "RFC 6840", "RFC 9364"]
+        "rfcs": [
+          "RFC 4033",
+          "RFC 4034",
+          "RFC 4035",
+          "RFC 6840",
+          "RFC 9364"
+        ]
       },
       {
         "key": "crypto_agility",
         "label": "Cryptographic agility",
         "description": "Adds or replaces the cryptography. The category that requires code on both the signing and validating side, and the one where onset is longest.",
-        "rfcs": ["RFC 3110", "RFC 5702", "RFC 5933", "RFC 6605", "RFC 8080", "RFC 9558", "RFC 9563", "RFC 4509", "RFC 3658"]
+        "rfcs": [
+          "RFC 3110",
+          "RFC 5702",
+          "RFC 5933",
+          "RFC 6605",
+          "RFC 8080",
+          "RFC 9558",
+          "RFC 9563",
+          "RFC 4509",
+          "RFC 3658"
+        ]
       },
       {
         "key": "authenticated_denial",
         "label": "Authenticated denial of existence",
         "description": "How a zone proves a name does not exist, and what that proof leaks or costs.",
-        "rfcs": ["RFC 5155", "RFC 9276", "RFC 8198", "RFC 9077"]
+        "rfcs": [
+          "RFC 5155",
+          "RFC 9276",
+          "RFC 8198",
+          "RFC 9077"
+        ]
       },
       {
         "key": "key_lifecycle",
         "label": "Key management and lifecycle",
         "description": "Getting keys in, rolled and out, including the parent-child coordination that makes DNSSEC operationally hard.",
-        "rfcs": ["RFC 5011", "RFC 6781", "RFC 7344", "RFC 7583", "RFC 8078", "RFC 9615"]
+        "rfcs": [
+          "RFC 5011",
+          "RFC 6781",
+          "RFC 7344",
+          "RFC 7583",
+          "RFC 8078",
+          "RFC 9615"
+        ]
       },
       {
         "key": "applications",
         "label": "Applications built on DNSSEC",
         "description": "Things DNSSEC enables rather than parts of DNSSEC. Their uptake measures demand for the guarantee, not the guarantee itself.",
-        "rfcs": ["RFC 6698", "RFC 7671", "RFC 7672"]
+        "rfcs": [
+          "RFC 6698",
+          "RFC 7671",
+          "RFC 7672"
+        ]
       },
       {
         "key": "deprecation",
         "label": "Deprecation and hygiene",
         "description": "Closing mechanisms that should no longer be used. The observable is persistence, not appearance, so these run on an inverted clock.",
-        "rfcs": ["RFC 9905", "RFC 9906", "RFC 8624", "RFC 9904"]
+        "rfcs": [
+          "RFC 9905",
+          "RFC 9906",
+          "RFC 8624",
+          "RFC 9904"
+        ]
       }
     ]
   },
-
   "cross_reference": {
     "_note": "Corpora to compare. Each is scanned independently and compared only on dimensions whose composition is comparable -- see the RFC 4509 lesson in docs/bottom_up.md. Indicators scoped by record type are NOT comparable across corpora with different record-type mixes; indicators scoped by algorithm are.",
-    "comparable_dimensions": ["algorithm_ds", "digest_type_ds"],
-    "incomparable_dimensions": ["rr_type", "algorithm_dnskey", "algorithm_rrsig"],
+    "comparable_dimensions": [
+      "algorithm_ds",
+      "digest_type_ds"
+    ],
+    "incomparable_dimensions": [
+      "rr_type",
+      "algorithm_dnskey",
+      "algorithm_rrsig"
+    ],
     "incomparable_reason": "The reverse corpus contains only NS and DS records, so any share taken over 'all DNSSEC records' is a statement about record-type composition rather than about operator behaviour."
   }
 }

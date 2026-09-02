@@ -62,25 +62,46 @@ This is exactly what going RFC-by-RFC across all evidence is for.
 
 Groups derived from what an implementer must do, then checked against onset:
 
-| Group | What must change | RFCs | Onset |
-| --- | --- | --- | --- |
-| **A. New codepoint, existing primitive** | a table entry; the crypto is already linked in | 5702 (alg 8/10) | **0.5 y** |
-| **B. Same crypto, new signalling** | nothing cryptographic; a number that means "I do X" | 5155 (alg 7) | **1.4 y** |
-| **C. New record type, existing infrastructure** | provisioning and RR support | 8078 (CDS delete) | **1.4 y** |
-| **D. New cryptographic primitive** | new curve/hash in signer *and* validator | 5933, 6605, 8080 | **2.5 – 3.9 y** |
-| **E. Deprecation** | removal, by parties who already deployed | 9905, 9906 | n/a — see below |
+Computed on the **reverse corpus only**, so the panel and denominator are constant,
+and **excluding left-censored onsets** — a first sighting in the corpus's opening
+month is an upper bound, not a measurement, and averaging bounds into a band would
+be meaningless. Excluded on that basis: DSA/SHA-1, RSASHA1, SHA-1 and SHA-256 DS
+digests, all first seen in 2009-04.
 
-The bands do not overlap, and the mechanism is visible in the RFC text. RFC 5702
-§8.1 states Group A's intent outright:
+| Group | What must change | Measured | Onset |
+| --- | --- | --- | --- |
+| **A. New codepoint, existing primitive** | a table entry; the crypto is already linked in on both sides | alg 8, 10 | **0.5 – 0.8 y** |
+| **G. New DS digest type** | a hash, on the parent's DS generator and the validator only | digest 3, 4 | **0.8 – 1.3 y** |
+| **B. Same crypto, new signalling** | nothing cryptographic; a number that means "I do X" | alg 7 | **1.4 y** |
+| **D. New cryptographic primitive** | a new curve in the signer *and* the validator | alg 12, 13, 14, 15, 16 | **2.5 – 5.8 y** |
+| **C. New record type** | provisioning and RR support | — | not measurable on DS-only data |
+| **E. Deprecation** | removal, by parties who already deployed | — | n/a — inverted clock, see below |
+
+**A DS digest is not a signing algorithm, and separating them is what makes the
+bands separate.** They were originally pooled, which put the GOST digest (0.8 y) in
+the same group as the GOST algorithm (2.5 y) and made the bands overlap almost
+completely. The data says why they differ: the first GOST digests observed, in
+2011-05, sit on **algorithm 5 and 8 keys** — a GOST hash of an RSA key. A digest
+needs the parent's DS generator plus a hash in validators; a signing algorithm
+needs a full signer *and* validator, and the child's key material changes.
+
+So the ordering is by **how many parties must implement something new**, and the
+one real gap in the data — **1.4 y to 2.5 y** — falls exactly where a new signing
+primitive starts requiring both ends. RFC 5702 §8.1 states Group A's intent
+outright:
 
 > "The signature scheme RSASSA-PKCS1-v1_5 is chosen to match the one used for
 > RSA/SHA-1 signatures. This should ease implementation."
 
-**What separates the groups is whether new cryptographic code must ship at both
-ends.** Group D requires a signer *and* a validator to agree before anything is
-publishable; A, B and C need one party to change a value it already supports. The
-2.5–3.9 y floor for Group D is a two-sided coordination cost, not algorithmic
+Group D requires a signer *and* a validator to agree before anything is publishable;
+A, B and G need one party to change a value or add a hash it can deploy alone. The
+2.5 y floor for Group D is a two-sided coordination cost, not algorithmic
 difficulty — Ed25519 is not harder to implement than RSA/SHA-512.
+
+Two caveats on the numbers. The bands rest on 2 + 2 + 1 + 5 observations, so the
+separation is clean but it is not a distribution. And Ed25519's 5.6 y is
+reverse-corpus only; across both corpora it is **3.9 y** (see step 2), which would
+tighten Group D to 2.5–4.0 y without changing the gap below it.
 
 ## Step 4 — onset does not predict spread
 
@@ -138,8 +159,11 @@ corpus; the timeline will not show it until the scan is re-run.**
 ## Limits
 
 - Six of the eleven observed dates are upper bounds, censored by corpus start.
-- Group A, B and C each rest on a **single** RFC. The band separation is clean but
-  it is 1 + 1 + 1 + 3 observations, not a distribution.
+- The bands rest on 2 + 2 + 1 + 5 observed changes after censored onsets are
+  excluded. Clean separation, but not a distribution.
+- Group C (new record type) has no members measurable on DS-only data; its RFC 8078
+  figure of 1.4 y comes from the forward corpus and is not part of the band
+  comparison above, which is single-corpus by construction.
 - r = −0.14 is 14 points; it is enough to refute "onset predicts spread", not enough
   to assert any other relationship.
 - Onset measures time to *first publication by anyone*, which one motivated operator

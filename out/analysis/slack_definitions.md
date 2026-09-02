@@ -78,14 +78,20 @@ I built `scripts/full_timeline.py` to pull the insights out end to end, in both 
 *Bottom-up* — from the RFC text upward. The unit is the *observable change, not the RFC*: RFC 5702 defines two algorithms that appeared ten months apart, so an RFC-level date would average away a real pattern. For each one: the exact observable (`algorithm = 8`, `DS digest type = 2`, `NSEC3 iterations = 0`, ...), when it first appeared, the three stages, and which implementation-change group it belongs to. The groups came out non-overlapping:
 
 ```
-  A  New codepoint, primitive already linked in   RFC 5702        0.5y
-  B  Same crypto, new signalling                  RFC 5155 alg 7  1.4y
-  C  New record type, existing infrastructure     RFC 8078        1.4y
-  D  New cryptographic primitive                  5933/6605/8080  2.5 - 3.9y
-  E  Deprecation                                  9905/9906       inverted clock
+  A  New codepoint, primitive already linked in   alg 8, 10           0.5 - 0.8y
+  G  New DS digest type                           digest 3, 4         0.8 - 1.3y
+  B  Same crypto, new signalling                  alg 7               1.4y
+  D  New cryptographic primitive                  alg 12,13,14,15,16  2.5 - 5.8y
+  E  Deprecation                                  9905/9906           inverted clock
 ```
 
-What separates them is whether new cryptographic code has to ship *at both ends*, not how hard the maths is — Ed25519 isn't harder to implement than RSA/SHA-512. Group D needs a signer and a validator to agree before anything is publishable. RFC 5702 §8.1 says it outright: _"chosen to match the one used for RSA/SHA-1 signatures. This should ease implementation."_
+Computed on the reverse corpus only so the denominator is constant, and *excluding left-censored onsets* — DSA, RSASHA1 and the SHA-1/SHA-256 digests were all first seen in the corpus's opening month, so their onsets are upper bounds and averaging bounds into a band would be meaningless.
+
+The ordering is by *how many parties have to implement something new*, and there's one real gap in the data — *1.4y to 2.5y* — falling exactly where a new signing primitive starts requiring both ends. Group D needs a signer *and* a validator to agree before anything is publishable; the others need one party to change a value or add a hash it can deploy alone. Not about difficulty: Ed25519 isn't harder to implement than RSA/SHA-512. RFC 5702 §8.1 says it outright: _"chosen to match the one used for RSA/SHA-1 signatures. This should ease implementation."_
+
+*One correction I'd have shipped if I hadn't re-checked:* I originally had DS digest types pooled in with signing algorithms, which put the GOST digest (0.8y) in the same group as the GOST algorithm (2.5y) and made the bands overlap almost completely. The data explains why they differ — *the first GOST digests, in 2011-05, sit on algorithm 5 and 8 keys*, i.e. a GOST hash of an RSA key. A digest needs the parent's DS generator plus a hash in validators; a signing algorithm needs a full signer and validator and new key material at the child. Different implementation classes, so they're now separate groups.
+
+Caveat: this rests on 2 + 2 + 1 + 5 observed changes. Clean separation, but not a distribution. And Ed25519's 5.6y here is reverse-only — cross-corpus it's 3.9y, which tightens D to 2.5–4.0y without touching the gap below it.
 
 *Top-down* — six categories by conceptual impact, then mapped down to RFCs: protocol foundation, crypto agility, authenticated denial, key lifecycle, applications (DANE), deprecation. The design decision I'd like your view on: *a category's numbers are exactly its members' numbers*, nothing is measured independently at that level. So "meeting in the middle" is a real check — if a category's story isn't visible in its members' rows, the output says the category has no evidence instead of letting an average paper over it. It also lists which RFCs in a category have no observable at all, i.e. where the taxonomy reaches further than the data.
 

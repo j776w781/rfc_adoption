@@ -195,7 +195,15 @@ def bottom_up(
         record["left_censored"] = bool(
             dates["t1_first_seen"] and dates["t1_first_seen"] == corpus_start
         )
-        record["onset_years"] = _years(change["published"], dates["t1_first_seen"])
+        # A deprecation has no onset. Its observable is a mechanism that existed
+        # long before the document retiring it, so publication-to-first-sighting is
+        # negative and meaningless -- RFC 9905 (2025-11) against algorithm 5 first
+        # seen in 2009 reads as -13.7 years. What matters for these is the residue,
+        # computed below.
+        record["onset_years"] = (
+            None if change.get("residue")
+            else _years(change["published"], dates["t1_first_seen"])
+        )
         record["establishment_years"] = _years(
             dates["t1_first_seen"], dates["t2_partial_usage"])
         record["ascent_years"] = _years(
