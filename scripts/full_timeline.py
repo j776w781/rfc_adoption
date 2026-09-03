@@ -334,7 +334,7 @@ def stage_extract(args: argparse.Namespace) -> Path:
             "host": socket.gethostname(),
         }, indent=1), encoding="utf-8")
 
-    timeline = merge_timeline(args.out / "checkpoints")
+    timeline = merge_timeline(args.out / "checkpoints", days)
     if timeline.empty:
         raise SystemExit("Extraction produced no rows; check the roots and dictionary.")
     ensure_dir(args.out)

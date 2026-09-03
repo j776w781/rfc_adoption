@@ -326,8 +326,18 @@ def extract_days(
     return done, skipped, failures
 
 
-def merge_timeline(checkpoint_dir: Path | str) -> pd.DataFrame:
-    """Fold every checkpoint into one monthly timeline.
+def merge_timeline(
+    checkpoint_dir: Path | str,
+    days: Sequence[CachedDay] | None = None,
+) -> pd.DataFrame:
+    """Fold the checkpoints into one monthly timeline.
+
+    ``days`` restricts the merge to the source-days this run selected. Without
+    it every checkpoint in the directory is folded in, which silently pools runs
+    that were meant to be separate: a second pass with a different ``--sources``
+    into the same output directory produced a timeline holding all five RIRs
+    while the analysis beside it was labelled a two-RIR panel. The checkpoints
+    are keyed by source-day precisely so this can be filtered.
 
     Days are summed into months. Record counts add; **distinct-domain counts do
     not** -- the same name measured on two days is one domain, and adding them
@@ -335,7 +345,17 @@ def merge_timeline(checkpoint_dir: Path | str) -> pd.DataFrame:
     checkpoints, so the column is named ``domain_days`` to say what it is rather
     than being passed off as a distinct count.
     """
-    files = sorted(Path(checkpoint_dir).glob("*.parquet"))
+    directory = Path(checkpoint_dir)
+    if days is None:
+        files = sorted(directory.glob("*.parquet"))
+    else:
+        wanted = {f"{d.basis}__{d.source}__{d.day.isoformat()}.parquet" for d in days}
+        files = sorted(p for p in directory.glob("*.parquet") if p.name in wanted)
+        stray = len(list(directory.glob("*.parquet"))) - len(files)
+        if stray:
+            LOGGER.info(
+                "%d checkpoint(s) in %s are outside this run's selection and were "
+                "not merged.", stray, directory)
     if not files:
         return pd.DataFrame()
     frames = []

@@ -58,3 +58,38 @@ def test_more_shards_than_days_leaves_empty_shards_not_duplicates():
 def test_one_shard_is_the_whole_corpus():
     days = _days(40)
     assert len(plan_shards(days, 1, **SIZE)[0]) == 40
+
+
+# --------------------------------------------------------------------------- #
+# merge_timeline must honour the run's selection
+# --------------------------------------------------------------------------- #
+
+def test_merge_only_folds_the_days_this_run_selected(tmp_path):
+    """Two runs sharing an output directory must not pool into each other.
+
+    A second pass with a different --sources into the same --out produced a
+    timeline holding every RIR while the analysis beside it was labelled a
+    two-RIR panel. The checkpoints are keyed by source-day so the merge can be
+    filtered; it now is.
+    """
+    import pandas as pd
+    from openintel_rfc.timeline_extract import merge_timeline
+
+    ck = tmp_path / "checkpoints"
+    ck.mkdir()
+    wanted, stray = [], []
+    for source, bucket in (("arin", wanted), ("ripe", stray)):
+        day = CachedDay(source=source, day=date(2020, 1, 1), basis="reverse",
+                        paths=["/x.parquet"])
+        bucket.append(day)
+        pd.DataFrame([{
+            "source": source, "basis": "reverse", "day": "2020-01-01",
+            "month": "2020-01", "dimension": "algorithm_ds", "value": "13",
+            "records": 10, "domains": 10, "files": 1,
+        }]).to_parquet(ck / f"reverse__{source}__2020-01-01.parquet", index=False)
+
+    everything = merge_timeline(ck)
+    selected = merge_timeline(ck, wanted)
+
+    assert set(everything.source) == {"arin", "ripe"}, "unfiltered folds in both"
+    assert set(selected.source) == {"arin"}, "filtered keeps only the selection"
