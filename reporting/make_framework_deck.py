@@ -32,6 +32,11 @@ AMBER = RGBColor(0xC9, 0x6A, 0x06)
 BRICK = RGBColor(0xB3, 0x2B, 0x22)
 FONT = "Segoe UI"
 
+#: Paragraph break inside a textbox string. Spelled chr(10) rather than an
+#: escape so it survives being edited through shells and heredocs, which have
+#: mangled it more than once.
+NL = chr(10)
+
 prs = Presentation()
 prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
 W, H = prs.slide_width, prs.slide_height
@@ -259,6 +264,43 @@ textbox(s, M, top + Inches(3.5), W - 2 * M, Inches(0.9),
         "0.5–3% and 4–25%, so any value mid-plateau gives identical results. "
         "The ≥10-zone guard exists because the panel grew 201×: one zone was 3.1% "
         "of it in 2011 and is 0.016% now.", size=14, color=MUTED)
+
+# =========================================================================== #
+# 5b. The stages on real mechanisms — examples and justification
+# =========================================================================== #
+s, top = new("The same three stages, three different endings",
+             "All three of these “first appeared”. Only one of them is used.",
+             eyebrow="worked examples")
+after = table(s, M, top, W - 2 * M, [
+    ["Mechanism", "RFC", "1 · first seen", "2 · partial", "3 · common", "Today"],
+    ["ECDSA P-256", "6605 · 2012-04", "2015-12   n=2", "2018-06", "2019-03", "68.0%"],
+    ["RSA/SHA-512", "5702 · 2009-10", "2012-02   n=1", "2017-01", "never", "0.37%"],
+    ["Ed25519", "8080 · 2017-02", "2022-09   n=1", "never", "never", "0.34%"],
+], [0.20, 0.20, 0.22, 0.14, 0.13, 0.11], row_h=0.52)
+
+textbox(s, M, after + Inches(0.26), Inches(5.7), Inches(0.34),
+        "Why the stages are separate", size=15, bold=True, color=TEAL)
+textbox(s, M, after + Inches(0.64), Inches(5.7), Inches(1.9),
+        "One “adoption date” would have called all three adopted, because all "
+        "three were first seen." + NL + NL +
+        "Ed25519 never left stage 1 — its first sighting was a single zone, and "
+        "nine years on it is still 0.34%. An existence proof, nothing more." + NL + NL +
+        "RSA/SHA-512 cleared stage 2 and stopped. Somebody genuinely uses it; it "
+        "never became a normal choice. Only stages 2 and 3 apart can say that.",
+        size=13.5)
+
+textbox(s, M + Inches(6.3), after + Inches(0.26), Inches(5.4), Inches(0.34),
+        "Why these thresholds", size=15, bold=True, color=TEAL)
+textbox(s, M + Inches(6.3), after + Inches(0.64), Inches(5.4), Inches(1.9),
+        "Swept, not picked. The number of qualifying algorithms is flat across "
+        "0.5–3% and again across 4–25%, so any value mid-plateau gives identical "
+        "results. 4% or 30% would sit on a cliff." + NL + NL +
+        "The ≥10-zone guard exists because the panel grew 201×. Without it, "
+        "RSA/SHA-256 and RSASHA1-NSEC3 both “reach 1%” in 2011-05 on a SINGLE "
+        "zone — 1% of a 32-zone panel." + NL + NL +
+        "A ≥25 guard over-corrects, pushing RSASHA1-NSEC3 from 2.0y to 7.8y "
+        "purely because it had few contemporaries.",
+        size=13.5)
 
 # =========================================================================== #
 # 6. The pipeline — what it does

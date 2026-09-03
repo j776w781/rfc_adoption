@@ -227,3 +227,6 @@ out/panel_run/
 out/shard_test/
 out/shard_pooled/
 out/rfc-index.xml
+
+# PowerPoint lock files, created while a deck is open.
+~$*
