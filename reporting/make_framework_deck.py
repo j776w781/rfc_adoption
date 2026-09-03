@@ -262,20 +262,22 @@ textbox(s, M, top + Inches(2.5), W - 2 * M, Inches(1.5),
 textbox(s, M, top + Inches(3.5), W - 2 * M, Inches(0.9),
         "Thresholds were swept, not picked. The qualifying count is flat across "
         "0.5–3% and 4–25%, so any value mid-plateau gives identical results. "
-        "The ≥10-zone guard exists because the panel grew 201×: one zone was 3.1% "
-        "of it in 2011 and is 0.016% now.", size=14, color=MUTED)
+        "The ≥10-zone guard exists because a population grows: on the reverse "
+        "panel one zone was 3.1% of it in 2011 and is 0.016% now — a 201× change "
+        "in what the same threshold demands.", size=14, color=MUTED)
 
 # =========================================================================== #
 # 5b. The stages on real mechanisms — examples and justification
 # =========================================================================== #
 s, top = new("The same three stages, three different endings",
-             "All three of these “first appeared”. Only one of them is used.",
+             "All three first appeared. Two reached real use, one never did, and one of "
+             "those two has since fallen back.",
              eyebrow="worked examples")
 after = table(s, M, top, W - 2 * M, [
     ["From RFC 8080", "Onset", "1 · first seen", "2 · in use", "3 · widely used", "Peak", "Now"],
     ["Ed25519", "1.9 y", "2019-01", "2020-04", "never", "2.03%", "0.37%"],
     ["Ed448", "3.2 y", "2020-05", "never", "never", "0.03%", "0.03%"],
-    ["ECDSA P-256 (RFC 6605)", "3.6 y", "2015-11", "2016-10", "2019-02", "76.2%", "71.1%"],
+    ["ECDSA P-256 (RFC 6605)", "3.6 y", "2015-11", "2016-10", "2019-02", "76.2%", "see note"],
 ], [0.24, 0.10, 0.15, 0.13, 0.15, 0.11, 0.11], row_h=0.52)
 
 textbox(s, M, after + Inches(0.26), Inches(5.7), Inches(0.34),
@@ -297,9 +299,9 @@ textbox(s, M + Inches(6.3), after + Inches(0.64), Inches(5.4), Inches(1.9),
         "Swept, not picked. The number of qualifying algorithms is flat across "
         "0.5–3% and again across 4–25%, so any value mid-plateau gives identical "
         "results. 4% or 30% would sit on a cliff." + NL + NL +
-        "The ≥10-zone guard exists because the panel grew 201×. Without it, "
-        "RSA/SHA-256 and RSASHA1-NSEC3 both “reach 1%” in 2011-05 on a SINGLE "
-        "zone — 1% of a 32-zone panel." + NL + NL +
+        "The ≥10-zone guard: on the reverse panel, RSA/SHA-256 and RSASHA1-NSEC3 "
+        "both “reach 1%” in 2011-05 on a SINGLE zone — 1% of a 32-zone "
+        "population." + NL + NL +
         "A ≥25 guard over-corrects, pushing RSASHA1-NSEC3 from 2.0y to 7.8y "
         "purely because it had few contemporaries.",
         size=13.5)
@@ -374,7 +376,7 @@ cards(s, top, [
 ], height=1.8, size=16)
 after = table(s, M, top + Inches(1.98), W - 2 * M, [
     ["New cryptographic primitive", "Published", "Reverse only", "Full corpus"],
-    ["ECC-GOST", "2010-07", "—", "2.4 y"],
+    ["ECC-GOST", "2010-07", "2.5 y", "2.4 y"],
     ["ECDSA P-256", "2012-04", "3.7 y", "3.6 y"],
     ["ECDSA P-384", "2012-04", "4.0 y", "3.9 y"],
     ["Ed25519", "2017-02", "5.6 y", "1.9 y  ← the newest is the fastest"],
@@ -428,7 +430,8 @@ textbox(s, M, after + Inches(0.22), W - 2 * M, Inches(1.7),
 # 10. Insight — displacement
 # =========================================================================== #
 s, top = new("Most of what happens is retreat, not arrival",
-             "Four of six tracked mechanisms are below their own peak.",
+             "Reverse panel, the one series with no composition break: four of "
+             "six mechanisms sit below their own peak.",
              eyebrow="insight 3")
 picture(s, "displacement", top, max_h=Inches(3.7))
 textbox(s, M, H - Inches(1.5), W - 2 * M, Inches(1.1),
@@ -445,10 +448,10 @@ s, top = new("Deprecation runs on an inverted clock",
              eyebrow="insight 4")
 cards(s, top, [
     ("RFC 9905 — SHA-1 SIGNING",
-     "7.81%\n514 zones",
+     "7.30%\n15,888 records",
      "still published after the RFC forbade new use"),
     ("RFC 9905 — SHA-1 DS DIGEST",
-     "21.77%\n1,433 zones",
+     "18.26%\n19,652 records",
      "a different fix: replace the DS at the parent"),
     ("RFC 9906 — ECC-GOST",
      "0\nzero records",
@@ -457,8 +460,10 @@ cards(s, top, [
 textbox(s, M, top + Inches(2.7), W - 2 * M, Inches(1.4),
         "The two halves of RFC 9905 need different remedies — replace the DS at "
         "the parent, versus reissue the child’s keys — so they are reported as two "
-        "numbers, never one “SHA-1 exposure”.\n"
-        "400 zones carry both.", size=16)
+        "numbers, never one “SHA-1 exposure”." + NL + NL +
+        "Both RFCs published 2025-11 and the forward corpus ends 2023-12, so the "
+        "entire post-publication window is reverse data — a property of the "
+        "corpus, not a choice.", size=15)
 
 # =========================================================================== #
 # 12. Limits
@@ -467,9 +472,13 @@ s, top = new("What this cannot see", "Stated so no one reads a blank as a zero."
              eyebrow="limits")
 table(s, M, top, W - 2 * M, [
     ["Limit", "Consequence"],
-    ["The reverse corpus holds NS and DS records only",
-     "9 configured observables — NSEC3 parameters, DNSKEY flags, CDS, TLSA — "
-     "have nothing that could match. Not negative results."],
+    ["Forward and reverse cover different periods",
+     "Forward ends 2023-12, the RIRs run to 2026-08. Any share spanning 2024-01 "
+     "compares two populations: 11 of 15 peak-to-now drops are not comparable, "
+     "and none of them is quoted."],
+    ["Only TLSA is still unreachable",
+     "The forward corpus closed the rest — 2 observables have no denominator "
+     "anywhere, down from 9. Untestable, not negative."],
     ["We read published zone data, never live queries",
      "availability / verifiability / validity (Osterweil’s three) are outside "
      "the instrument entirely."],
@@ -487,21 +496,22 @@ table(s, M, top, W - 2 * M, [
 s, top = new("What needs to be done", eyebrow="next")
 table(s, M, top, W - 2 * M, [
     ["", "Work", "Why it matters"],
-    ["1", "Run the pipeline over the full 14 TB OpenINTEL cache",
-     "Everything here is reverse-DNS only. The forward corpus has the record "
-     "types this corpus lacks."],
-    ["2", "Decide: share measure, cumulative measure, or both",
+    ["1", "Analyse forward and reverse separately, never pooled",
+     "They cover different periods, so a pooled share crosses a break at "
+     "2024-01. This is the one thing blocking the prevalence numbers; it needs "
+     "no rescan, only the analyse stage."],
+    ["2", "Extend the forward mirror past 2023-12",
+     "RFC 9905 and 9906 published 2025-11, so the whole deprecation question is "
+     "answerable only on reverse data until the forward mirror catches up."],
+    ["3", "Decide: share measure, cumulative measure, or both",
      "A cumulative measure would let us inherit Rogers’ thresholds, but it "
      "cannot see displacement."],
-    ["3", "Settle whether displacement is genuinely unclaimed",
+    ["4", "Settle whether displacement is genuinely unclaimed",
      "If it is, it is a stronger contribution than the timeline. Needs someone "
      "who knows the literature better than a search does."],
-    ["4", "Add the 13 measurable RFCs we do not screen",
-     "Mechanical work. ZONEMD and compact denial of existence would extend the "
-     "story, not just widen it."],
-    ["5", "Re-run the forward scan under the current checklist",
-     "RFC 5011 and 9276 are unresolved only because the forward run predates "
-     "the 30-RFC checklist."],
+    ["5", "Add the 13 measurable RFCs we do not screen",
+     "ZONEMD, compact denial of existence, multi-signer. Mechanical work that "
+     "would extend the story rather than just widen it."],
 ], [0.04, 0.36, 0.60], row_h=0.78)
 
 OUT.parent.mkdir(parents=True, exist_ok=True)
