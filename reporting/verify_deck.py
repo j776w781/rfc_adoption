@@ -137,9 +137,14 @@ if SPLIT.exists():
     check("comparison month is where both corpora overlap",
           says(x["comparison_month"]), x["comparison_month"])
     comparable = [c for c in x["comparisons"] if c["difference_pct_points"] is not None]
-    agree = [c for c in comparable if abs(c["difference_pct_points"]) <= 5]
-    check("agreement count", says(f"{len(agree)} of {len(comparable)}"),
-          f"expected {len(agree)} of {len(comparable)}")
+    counts = x["verdict_counts"]
+    check("agreement count uses the corrected verdicts",
+          says(f"Of {len(comparable)} observables both corpora can answer"),
+          f"expected a breakdown over {len(comparable)}")
+    for verdict, n in counts.items():
+        check(f"count for {verdict!r}", says(str(n)), f"expected {n}")
+    check("the inflated 14-of-20 claim is gone", not says("14 of 20"),
+          "an absolute threshold counted 'absent from both' as agreement")
     d2 = next(c for c in comparable if c["label"] == "SHA-256 DS digest")
     check("SHA-256 forward", says(f"{d2['forward_share_pct']:.2f}%"),
           f"{d2['forward_share_pct']:.2f}%")

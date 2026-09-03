@@ -47,10 +47,17 @@ def save(fig, name):
 # --------------------------------------------------------------------------- #
 x = split["cross_reference"]
 month = x["comparison_month"]
-pairs = [c for c in x["comparisons"] if c["difference_pct_points"] is not None
-         and max(c["forward_share_pct"], c["reverse_share_pct"]) >= 1.0
+# Only observables materially present on at least one side. The ten that read
+# 0.00% on both would otherwise fill half the chart with bars of nothing, each
+# labelled "agree" -- which is how the headline came to say 14 of 20 agreed.
+pairs = [c for c in x["comparisons"]
+         if c["difference_pct_points"] is not None
+         and c["verdict"] != "absent from both"
          and "still publish" not in c["label"]]
 pairs.sort(key=lambda c: -max(c["forward_share_pct"], c["reverse_share_pct"]))
+absent = sum(1 for c in x["comparisons"]
+             if c.get("verdict") == "absent from both"
+             and "still publish" not in c["label"])
 
 fig, ax = plt.subplots(figsize=(10, 0.52 * len(pairs) + 1.4))
 y = np.arange(len(pairs))
@@ -58,18 +65,29 @@ ax.barh(y - 0.19, [c["forward_share_pct"] for c in pairs], height=0.36,
         color=TEAL, label=f"forward TLDs ({len(FORWARD)} sources)")
 ax.barh(y + 0.19, [c["reverse_share_pct"] for c in pairs], height=0.36,
         color=AMBER, label=f"reverse delegations ({len(REVERSE)} RIRs)")
+LABEL = {"agree": ("agrees to {gap:.2f} pts", TEAL),
+         "disagree": ("{gap:+.0f} pts apart", BRICK),
+         "present on one side only": ("one side only, {ratio}", MUTED)}
 for i, c in enumerate(pairs):
     hi = max(c["forward_share_pct"], c["reverse_share_pct"])
     gap = c["difference_pct_points"]
-    ax.text(hi + 1.5, i, f"{gap:+.0f} pts" if abs(gap) >= 5 else "agree",
-            va="center", fontsize=9.5,
-            color=BRICK if abs(gap) >= 5 else MUTED,
-            fontweight="bold" if abs(gap) >= 5 else "normal")
+    ratio = (f"{c['ratio']:.0f}x apart" if c.get("ratio") else "absent forward")
+    tmpl, colour = LABEL[c["verdict"]]
+    ax.text(hi + 1.5, i, tmpl.format(gap=abs(gap) if c["verdict"] == "agree" else gap,
+                                     ratio=ratio),
+            va="center", fontsize=9.5, color=colour,
+            fontweight="bold" if c["verdict"] != "present on one side only" else "normal")
 ax.set_yticks(y)
 ax.set_yticklabels([c["label"] for c in pairs], fontsize=10)
 ax.invert_yaxis()
-ax.set_xlim(0, 112)
-ax.set_xlabel(f"share of signed names at {month}")
+ax.set_xlim(0, 128)
+ax.set_xticks([0, 20, 40, 60, 80, 100])
+ax.set_xticklabels([f"{v}%" for v in (0, 20, 40, 60, 80, 100)])
+ax.set_xlabel(f"share of signed names at {month}   (labels are percentage POINTS, "
+              f"not percent)")
+ax.set_title(f"{absent} further observables read under 0.5% on both sides and are "
+             f"omitted — absent, not agreeing",
+             fontsize=10.5, color=MUTED, loc="left", pad=10)
 ax.legend(frameon=False, loc="lower right", fontsize=10)
 ax.grid(axis="x", color=RULE, lw=0.7)
 ax.set_axisbelow(True)

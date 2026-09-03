@@ -135,9 +135,27 @@ Separated: **forward 24/30 observables (2016-06 → 2023-12), reverse 17/30
 
 ## Where they agree, and where they do not
 
-At **2023-12**, the last month both cover — **14 of 20 comparable observables
-agree within 5 percentage points**, across two corpora sharing no
-infrastructure, operator population or collection method.
+At **2023-12**, the last month both cover. The first version of this said
+*"14 of 20 agree within 5 percentage points"*, which was nearly meaningless: an
+absolute threshold on values that mostly sit near zero counts **"absent from
+both" as agreement**. RSASHA1 reads 0.01% forward against 2.10% reverse — 2.1
+points apart and **300× apart** — and nine pairs were 0.00% on both sides.
+
+A pair now counts as agreeing only when one side is materially present (≥0.5%),
+the gap is under 5 points, **and** the two are within a factor of 3. On that
+measure:
+
+| verdict | n |
+| --- | --- |
+| **agree** | **1** |
+| disagree by more than 5 points | 6 |
+| present on one side only | 3 |
+| under 0.5% on both — absent, not corroborating | 10 |
+
+The one agreement is still worth having: **SHA-256 DS digest reads 98.34%
+forward and 98.24% reverse, 0.10 points apart**, from corpora sharing no
+infrastructure, operator population or collection method. But it is one
+observable, not fourteen.
 
     SHA-256 DS digest    forward 98.34%   reverse 98.24%    +0.1   agreement to a tenth
     ECDSA P-256          forward 76.18%   reverse 43.47%   +32.7

@@ -24,6 +24,7 @@ import pandas as pd
 from .utils import PipelineError, get_logger
 
 __all__ = [
+    "MATERIAL_PCT",
     "POOLED_SOURCE",
     "STAGE_NAMES",
     "cross_reference",
@@ -40,6 +41,14 @@ LOGGER = get_logger(__name__)
 #: Source name for rows extracted across every source of a day at once. Their
 #: distinct-domain counts are exact where per-source counts cannot be summed.
 POOLED_SOURCE = "_pooled"
+
+#: A pair of shares only counts as agreement when at least one side is materially
+#: present, the absolute gap is small, AND the two are within a factor of each
+#: other. Two values of 0.00% are not corroboration, and 0.01% against 2.10% is
+#: 2.1 points apart while being 300x apart.
+MATERIAL_PCT = 0.5
+POINT_TOLERANCE = 5.0
+RATIO_TOLERANCE = 3.0
 
 
 def load_config(path: Path | str) -> dict[str, Any]:
@@ -633,14 +642,48 @@ def cross_reference(
     # two corpora contradicting each other.
     comparable = [c for c in result["comparisons"]
                   if c["difference_pct_points"] is not None]
-    agreeing = [c for c in comparable if abs(c["difference_pct_points"]) <= 5]
+
+    # An absolute threshold alone is not agreement. Most of these values sit near
+    # zero, where "both absent" passes a 5-point test and reads as corroboration:
+    # RSASHA1 at 0.01% against 2.10% is 2.1 points apart and 300x apart, and
+    # nine pairs were 0.00% on both sides. So a pair only counts as agreeing when
+    # at least one side is materially present AND the two are within a factor of
+    # each other as well as within the point threshold.
+    for c in comparable:
+        f, r = c["forward_share_pct"], c["reverse_share_pct"]
+        hi, lo = max(f, r), min(f, r)
+        c["ratio"] = (hi / lo) if lo > 0 else None
+        if hi < MATERIAL_PCT:
+            c["verdict"] = "absent from both"
+        elif abs(c["difference_pct_points"]) > POINT_TOLERANCE:
+            c["verdict"] = "disagree"
+        elif c["ratio"] is None or c["ratio"] >= RATIO_TOLERANCE:
+            c["verdict"] = "present on one side only"
+        else:
+            c["verdict"] = "agree"
+
+    counts: dict[str, int] = {}
+    for c in comparable:
+        counts[c["verdict"]] = counts.get(c["verdict"], 0) + 1
+    result["verdict_counts"] = counts
+    agreeing = [c for c in comparable if c["verdict"] == "agree"]
     if comparable:
         result["notes"].append(
-            f"{len(agreeing)} of {len(comparable)} observables that both corpora "
-            f"can answer agree within 5 percentage points at {last}, across two "
-            "corpora that share no infrastructure, operator population or "
-            "collection method."
+            f"Of {len(comparable)} observables both corpora can answer at {last}: "
+            f"{counts.get('agree', 0)} agree, "
+            f"{counts.get('disagree', 0)} disagree by more than "
+            f"{POINT_TOLERANCE:g} points, "
+            f"{counts.get('present on one side only', 0)} are present on one side "
+            f"only, and {counts.get('absent from both', 0)} are below "
+            f"{MATERIAL_PCT:g}% on both sides — absent, not corroborating."
         )
+        for c in agreeing:
+            result["notes"].append(
+                f"Agreement: {c['label']} reads {c['forward_share_pct']:.2f}% "
+                f"forward and {c['reverse_share_pct']:.2f}% reverse, "
+                f"{abs(c['difference_pct_points']):.2f} points apart, across "
+                "corpora sharing no infrastructure, operators or method."
+            )
     skipped = len(result["comparisons"]) - len(comparable)
     if skipped:
         result["notes"].append(

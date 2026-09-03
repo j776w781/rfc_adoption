@@ -314,12 +314,14 @@ s, top = new("Two corpora that share nothing, compared at one date",
              "2023-12, the last month both cover.",
              eyebrow="cross-reference")
 picture(s, "forward_vs_reverse", top, max_h=Inches(3.8))
-textbox(s, M, H - Inches(1.45), W - 2 * M, Inches(1.1),
-        "14 of 20 comparable observables agree within 5 percentage points — "
-        "SHA-256 DS digest reads 98.34% and 98.24%, a tenth of a point apart, "
-        "from corpora with no shared infrastructure, operators or method. Where "
-        "they disagree the direction is consistent: forward zones have "
-        "modernised and reverse delegations have not.", size=14)
+textbox(s, M, H - Inches(1.6), W - 2 * M, Inches(1.25),
+        "Of 20 observables both corpora can answer: 1 agrees, 6 disagree by more "
+        "than 5 points, 3 are present on one side only, and 10 read under 0.5% on "
+        "both — absent, not corroborating. The one agreement is worth having: "
+        "SHA-256 DS digest reads 98.34% and 98.24%, a tenth of a point apart, from "
+        "corpora sharing no infrastructure, operators or method. Every "
+        "disagreement points the same way: forward zones have modernised and "
+        "reverse delegations have not.", size=13.5)
 
 # =========================================================================== #
 # 5d. Why they are never pooled
