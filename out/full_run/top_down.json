@@ -1,0 +1,534 @@
+[
+ {
+  "key": "protocol_foundation",
+  "label": "Base protocol: the four record types",
+  "description": "Defines the records DNSSEC is made of -- DNSKEY (the public key), DS (the parent's fingerprint of that key), RRSIG (a signature over a record set) and NSEC/NSEC3 (proof that a name does not exist) -- plus the rules a resolver follows to validate them. Nothing else in the list can be deployed without these, and they define no separate switch of their own.",
+  "example": "A real delegation from our corpus, as AFRINIC's reverse zone publishes it:\n    0.4.c.0.f.0.c.2.ip6.arpa.  IN  NS   ns1...\n    0.4.c.0.f.0.c.2.ip6.arpa.  IN  DS   25209 13 2 <sha-256 of the child's key>\n\nResolving a name underneath it uses all four record types in turn. The PARENT publishes the DS: 'the child signs with key tag 25209, algorithm 13, and here is the SHA-256 hash of that key' (RFC 4034 s5). The resolver then asks the CHILD, which returns its DNSKEY -- the actual public key, which must hash to the DS or the chain is broken (s2) -- and an RRSIG, a signature over the answer made with that key (s3). If the name does not exist, the child returns NSEC or NSEC3 instead: a signed statement of absence (s4). RFC 4035 is the half that says what the resolver DOES with all this -- set the DO bit to request the records at all, set AD on the reply once validation succeeds -- and RFC 4033 is the threat model explaining why any of it exists.\n\nThe measurement consequence is visible in that one DS line. It is simultaneously evidence for RFC 4034 (a DS record exists at all), RFC 4509 (digest type 2 is SHA-256) and RFC 6605 (algorithm 13 is ECDSA P-256). Only the last two have a date worth measuring: operators switched TO them from something else, so there is a before and an after. RFC 4034 has no before -- the record could not exist without it -- which is why this category is the floor the other five stand on rather than a change anyone adopts.",
+  "rfcs": [
+   "RFC 4033",
+   "RFC 4034",
+   "RFC 4035",
+   "RFC 6840",
+   "RFC 9364"
+  ],
+  "rfcs_with_observables": [
+   "RFC 4034"
+  ],
+  "rfcs_without_observables": [
+   "RFC 4033",
+   "RFC 4035",
+   "RFC 6840",
+   "RFC 9364"
+  ],
+  "observable_changes": 2,
+  "observed_changes": 2,
+  "onset_years": {
+   "n": 2,
+   "min": 11.25,
+   "max": 11.25,
+   "median": 11.25,
+   "spread": 0.0
+  },
+  "establishment_years": {
+   "n": 2,
+   "min": 0.0,
+   "max": 0.0,
+   "median": 0.0,
+   "spread": 0.0
+  },
+  "ascent_years": {
+   "n": 2,
+   "min": 0.0,
+   "max": 0.0,
+   "median": 0.0,
+   "spread": 0.0
+  },
+  "reached_partial": 2,
+  "reached_common": 2,
+  "max_current_share_pct": 100.0,
+  "members": [
+   {
+    "key": "dnskey_sep",
+    "label": "DNSKEY SEP/KSK",
+    "rfc": "RFC 4034",
+    "group": "B_signalling",
+    "state": "common",
+    "onset_years": 11.25,
+    "current_share_pct": 99.9446
+   },
+   {
+    "key": "dnskey_protocol",
+    "label": "DNSKEY protocol = 3",
+    "rfc": "RFC 4034",
+    "group": "C_new_record_type",
+    "state": "common",
+    "onset_years": 11.25,
+    "current_share_pct": 100.0
+   }
+  ]
+ },
+ {
+  "key": "crypto_agility",
+  "label": "Which cryptography a zone signs with",
+  "description": "The signing algorithm and the DS digest: RSA/SHA-1, RSA/SHA-256, ECDSA, Ed25519, GOST, SM2. Each is a number in the DNSKEY and DS records, and changing it means new key material at the child and new code in every validating resolver.",
+  "example": "A zone moving from RSA/SHA-256 (algorithm 8) to ECDSA P-256 (algorithm 13) generates a new key, publishes a new DNSKEY, and the parent replaces the DS. In our data that migration is the single largest movement of the whole period: algorithm 13 goes from first sighting in 2015-12 to 68% of signed delegations today.",
+  "rfcs": [
+   "RFC 3110",
+   "RFC 5702",
+   "RFC 5933",
+   "RFC 6605",
+   "RFC 8080",
+   "RFC 9558",
+   "RFC 9563",
+   "RFC 4509",
+   "RFC 3658"
+  ],
+  "rfcs_with_observables": [
+   "RFC 3110",
+   "RFC 3658",
+   "RFC 4509",
+   "RFC 5702",
+   "RFC 5933",
+   "RFC 6605",
+   "RFC 8080",
+   "RFC 9558",
+   "RFC 9563"
+  ],
+  "rfcs_without_observables": [],
+  "observable_changes": 16,
+  "observed_changes": 13,
+  "onset_years": {
+   "n": 13,
+   "min": -0.42,
+   "max": 7.83,
+   "median": 2.42,
+   "spread": 8.25
+  },
+  "establishment_years": {
+   "n": 10,
+   "min": 0.0,
+   "max": 7.83,
+   "median": 1.0,
+   "spread": 7.83
+  },
+  "ascent_years": {
+   "n": 6,
+   "min": 0.0,
+   "max": 8.08,
+   "median": 0.42,
+   "spread": 8.08
+  },
+  "reached_partial": 10,
+  "reached_common": 6,
+  "max_current_share_pct": 98.1926,
+  "members": [
+   {
+    "key": "alg_5",
+    "label": "RSASHA1",
+    "rfc": "RFC 3110",
+    "group": "A_new_codepoint",
+    "state": "common",
+    "onset_years": 7.83,
+    "current_share_pct": 1.2745
+   },
+   {
+    "key": "alg_8",
+    "label": "RSASHA256",
+    "rfc": "RFC 5702",
+    "group": "A_new_codepoint",
+    "state": "common",
+    "onset_years": 0.42,
+    "current_share_pct": 20.3684
+   },
+   {
+    "key": "alg_10",
+    "label": "RSASHA512",
+    "rfc": "RFC 5702",
+    "group": "A_new_codepoint",
+    "state": "partial",
+    "onset_years": 0.75,
+    "current_share_pct": 0.3012
+   },
+   {
+    "key": "alg_12",
+    "label": "ECC-GOST",
+    "rfc": "RFC 5933",
+    "group": "D_new_primitive",
+    "state": "seen_only",
+    "onset_years": 2.42,
+    "current_share_pct": 0.0
+   },
+   {
+    "key": "digest_3",
+    "label": "GOST DS digest",
+    "rfc": "RFC 5933",
+    "group": "G_new_digest",
+    "state": "partial",
+    "onset_years": 0.75,
+    "current_share_pct": 0.1043
+   },
+   {
+    "key": "alg_13",
+    "label": "ECDSAP256SHA256",
+    "rfc": "RFC 6605",
+    "group": "D_new_primitive",
+    "state": "common",
+    "onset_years": 3.58,
+    "current_share_pct": 71.0694
+   },
+   {
+    "key": "alg_14",
+    "label": "ECDSAP384SHA384",
+    "rfc": "RFC 6605",
+    "group": "D_new_primitive",
+    "state": "partial",
+    "onset_years": 3.92,
+    "current_share_pct": 2.4447
+   },
+   {
+    "key": "digest_4",
+    "label": "SHA-384 DS digest",
+    "rfc": "RFC 6605",
+    "group": "G_new_digest",
+    "state": "common",
+    "onset_years": 1.25,
+    "current_share_pct": 8.0292
+   },
+   {
+    "key": "alg_15",
+    "label": "Ed25519",
+    "rfc": "RFC 8080",
+    "group": "D_new_primitive",
+    "state": "partial",
+    "onset_years": 1.92,
+    "current_share_pct": 0.3708
+   },
+   {
+    "key": "alg_16",
+    "label": "Ed448",
+    "rfc": "RFC 8080",
+    "group": "D_new_primitive",
+    "state": "seen_only",
+    "onset_years": 3.25,
+    "current_share_pct": 0.0348
+   },
+   {
+    "key": "alg_23",
+    "label": "ECC-GOST12",
+    "rfc": "RFC 9558",
+    "group": "D_new_primitive",
+    "state": "scanned_no_match",
+    "onset_years": null,
+    "current_share_pct": 0.0
+   },
+   {
+    "key": "digest_5",
+    "label": "GOST-2012 digest",
+    "rfc": "RFC 9558",
+    "group": "G_new_digest",
+    "state": "seen_only",
+    "onset_years": -0.42,
+    "current_share_pct": 0.0
+   },
+   {
+    "key": "alg_17",
+    "label": "SM2SM3",
+    "rfc": "RFC 9563",
+    "group": "D_new_primitive",
+    "state": "scanned_no_match",
+    "onset_years": null,
+    "current_share_pct": 0.0
+   },
+   {
+    "key": "digest_6",
+    "label": "SM3 DS digest",
+    "rfc": "RFC 9563",
+    "group": "G_new_digest",
+    "state": "scanned_no_match",
+    "onset_years": null,
+    "current_share_pct": 0.0
+   },
+   {
+    "key": "digest_2",
+    "label": "SHA-256 DS digest",
+    "rfc": "RFC 4509",
+    "group": "G_new_digest",
+    "state": "common",
+    "onset_years": 2.83,
+    "current_share_pct": 98.1926
+   },
+   {
+    "key": "digest_1",
+    "label": "SHA-1 DS digest",
+    "rfc": "RFC 3658",
+    "group": "G_new_digest",
+    "state": "common",
+    "onset_years": 5.25,
+    "current_share_pct": 18.2598
+   }
+  ]
+ },
+ {
+  "key": "authenticated_denial",
+  "label": "Proving a name does not exist",
+  "description": "A signed zone must be able to prove a negative -- that queried.example.com is not in the zone -- without signing an answer on the fly for every possible wrong name. NSEC does it by pointing at the next name in order, which leaks the whole zone; NSEC3 hashes the names to reduce that, at a CPU cost.",
+  "example": "NSEC tells the asker 'nothing exists between mail.example.com and www.example.com', which proves the absence but also reveals both neighbours. Walking the chain enumerates the entire zone. NSEC3 (RFC 5155) publishes hashes instead, and RFC 9276 then says stop paying for extra hash iterations because they buy almost nothing.",
+  "rfcs": [
+   "RFC 5155",
+   "RFC 9276",
+   "RFC 8198",
+   "RFC 9077"
+  ],
+  "rfcs_with_observables": [
+   "RFC 5155",
+   "RFC 9276"
+  ],
+  "rfcs_without_observables": [
+   "RFC 8198",
+   "RFC 9077"
+  ],
+  "observable_changes": 4,
+  "observed_changes": 3,
+  "onset_years": {
+   "n": 3,
+   "min": -6.17,
+   "max": 8.25,
+   "median": 1.33,
+   "spread": 14.42
+  },
+  "establishment_years": {
+   "n": 3,
+   "min": 0.0,
+   "max": 5.67,
+   "median": 0.0,
+   "spread": 5.67
+  },
+  "ascent_years": {
+   "n": 2,
+   "min": 0.0,
+   "max": 0.0,
+   "median": 0.0,
+   "spread": 0.0
+  },
+  "reached_partial": 3,
+  "reached_common": 2,
+  "max_current_share_pct": 14.3396,
+  "members": [
+   {
+    "key": "alg_7",
+    "label": "RSASHA1-NSEC3",
+    "rfc": "RFC 5155",
+    "group": "B_signalling",
+    "state": "common",
+    "onset_years": 1.33,
+    "current_share_pct": 6.0248
+   },
+   {
+    "key": "nsec3_optout",
+    "label": "NSEC3 opt-out in use",
+    "rfc": "RFC 5155",
+    "group": "E_parameter_hygiene",
+    "state": "common",
+    "onset_years": 8.25,
+    "current_share_pct": 14.3396
+   },
+   {
+    "key": "nsec3_zero_iterations",
+    "label": "NSEC3 zero iterations",
+    "rfc": "RFC 9276",
+    "group": "E_parameter_hygiene",
+    "state": "partial",
+    "onset_years": -6.17,
+    "current_share_pct": 9.6106
+   },
+   {
+    "key": "nsec3_empty_salt",
+    "label": "NSEC3 empty salt",
+    "rfc": "RFC 9276",
+    "group": "E_parameter_hygiene",
+    "state": "scanned_no_match",
+    "onset_years": null,
+    "current_share_pct": 0.0
+   }
+  ]
+ },
+ {
+  "key": "key_lifecycle",
+  "label": "Key rollover and parent-child coordination",
+  "description": "A child's key changes, but the fingerprint of that key (the DS record) lives in the PARENT zone, held by the registry. Until the parent updates, resolvers validate against a key the child no longer uses and the domain goes dark. This category is the machinery for keeping the two ends in step.",
+  "example": "example.com wants to replace its signing key. Traditionally the operator files a ticket with their registrar to update the DS, and the zone is at risk until it lands. RFC 7344 replaces that with a DNS record: the child publishes CDS ('this is the DS I want you to hold'), the parent polls for it and updates itself. RFC 8078 adds the reverse signal -- a CDS with algorithm 0 means 'remove my DS, I am switching DNSSEC off' -- so turning it off safely stops needing a human either.",
+  "rfcs": [
+   "RFC 5011",
+   "RFC 6781",
+   "RFC 7344",
+   "RFC 7583",
+   "RFC 8078",
+   "RFC 9615"
+  ],
+  "rfcs_with_observables": [
+   "RFC 5011",
+   "RFC 8078"
+  ],
+  "rfcs_without_observables": [
+   "RFC 6781",
+   "RFC 7344",
+   "RFC 7583",
+   "RFC 9615"
+  ],
+  "observable_changes": 2,
+  "observed_changes": 2,
+  "onset_years": {
+   "n": 2,
+   "min": 1.42,
+   "max": 8.75,
+   "median": 5.08,
+   "spread": 7.33
+  },
+  "establishment_years": {
+   "n": 1,
+   "min": 0.08,
+   "max": 0.08,
+   "median": 0.08,
+   "spread": 0.0
+  },
+  "ascent_years": null,
+  "reached_partial": 1,
+  "reached_common": 0,
+  "max_current_share_pct": 0.4978,
+  "members": [
+   {
+    "key": "dnskey_revoke",
+    "label": "DNSKEY REVOKE bit",
+    "rfc": "RFC 5011",
+    "group": "B_signalling",
+    "state": "seen_only",
+    "onset_years": 8.75,
+    "current_share_pct": 0.0008
+   },
+   {
+    "key": "cds_delete",
+    "label": "CDS delete sentinel",
+    "rfc": "RFC 8078",
+    "group": "C_new_record_type",
+    "state": "partial",
+    "onset_years": 1.42,
+    "current_share_pct": 0.4978
+   }
+  ]
+ },
+ {
+  "key": "applications",
+  "label": "Things built on top of DNSSEC (DANE)",
+  "description": "Not parts of DNSSEC, but uses of it. Once a zone is signed, it can publish records nobody could trust before -- most importantly TLSA, which pins which TLS certificate a service is allowed to present. Their uptake measures demand for the guarantee rather than the guarantee itself.",
+  "example": "A mail server publishes a TLSA record at _25._tcp.mail.example.com naming its own certificate. A sending server looks it up and refuses to deliver over TLS if the certificate does not match, which removes the public CAs from the trust decision. This only works because DNSSEC makes the TLSA record itself trustworthy.",
+  "rfcs": [
+   "RFC 6698",
+   "RFC 7671",
+   "RFC 7672"
+  ],
+  "rfcs_with_observables": [
+   "RFC 7671"
+  ],
+  "rfcs_without_observables": [
+   "RFC 6698",
+   "RFC 7672"
+  ],
+  "observable_changes": 2,
+  "observed_changes": 0,
+  "onset_years": null,
+  "establishment_years": null,
+  "ascent_years": null,
+  "reached_partial": 0,
+  "reached_common": 0,
+  "max_current_share_pct": null,
+  "members": [
+   {
+    "key": "tlsa_dane_ee",
+    "label": "DANE-EE (TLSA usage 3)",
+    "rfc": "RFC 7671",
+    "group": "E_parameter_hygiene",
+    "state": "no_corpus_coverage",
+    "onset_years": null,
+    "current_share_pct": null
+   },
+   {
+    "key": "tlsa_dane_ta",
+    "label": "DANE-TA (TLSA usage 2)",
+    "rfc": "RFC 7671",
+    "group": "E_parameter_hygiene",
+    "state": "no_corpus_coverage",
+    "onset_years": null,
+    "current_share_pct": null
+   }
+  ]
+ },
+ {
+  "key": "deprecation",
+  "label": "Retiring cryptography that is no longer safe",
+  "description": "Documents that close a mechanism rather than open one. The measurement runs backwards: the question is not when something first appeared but how much of it is still being published years later.",
+  "example": "RFC 9905 (2025) forbids creating new DS records with a SHA-1 digest. It does not remove the ones already there, so the number that matters is the residue: 21.77% of signed reverse delegations still publish a SHA-1 digest today. RFC 9906 retired ECC-GOST and found nothing left to retire -- zero records since publication.",
+  "rfcs": [
+   "RFC 9905",
+   "RFC 9906",
+   "RFC 8624",
+   "RFC 9904"
+  ],
+  "rfcs_with_observables": [
+   "RFC 9905",
+   "RFC 9906"
+  ],
+  "rfcs_without_observables": [
+   "RFC 8624",
+   "RFC 9904"
+  ],
+  "observable_changes": 3,
+  "observed_changes": 3,
+  "onset_years": null,
+  "establishment_years": {
+   "n": 2,
+   "min": 0.0,
+   "max": 0.0,
+   "median": 0.0,
+   "spread": 0.0
+  },
+  "ascent_years": {
+   "n": 2,
+   "min": 0.0,
+   "max": 0.0,
+   "median": 0.0,
+   "spread": 0.0
+  },
+  "reached_partial": 2,
+  "reached_common": 2,
+  "max_current_share_pct": 18.2598,
+  "members": [
+   {
+    "key": "deprecated_sha1_sig",
+    "label": "SHA-1 signing still published",
+    "rfc": "RFC 9905",
+    "group": "F_deprecation",
+    "state": "residue",
+    "onset_years": null,
+    "current_share_pct": 7.2993
+   },
+   {
+    "key": "deprecated_sha1_digest",
+    "label": "SHA-1 DS digest still published",
+    "rfc": "RFC 9905",
+    "group": "F_deprecation",
+    "state": "residue",
+    "onset_years": null,
+    "current_share_pct": 18.2598
+   },
+   {
+    "key": "deprecated_gost",
+    "label": "ECC-GOST still published",
+    "rfc": "RFC 9906",
+    "group": "F_deprecation",
+    "state": "residue",
+    "onset_years": null,
+    "current_share_pct": 0.0
+   }
+  ]
+ }
+]

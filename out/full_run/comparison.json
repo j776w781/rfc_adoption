@@ -1,0 +1,164 @@
+{
+ "implementation_groups": [
+  {
+   "key": "A_new_codepoint",
+   "label": "New codepoint over an existing primitive",
+   "what_must_change": "A table entry. The cryptography is already linked in on both sides.",
+   "evidence": "RFC 5702 s8.1: 'The signature scheme RSASSA-PKCS1-v1_5 is chosen to match the one used for RSA/SHA-1 signatures. This should ease implementation.'",
+   "changes": 3,
+   "observed": 3,
+   "onset_years": {
+    "n": 3,
+    "min": 0.42,
+    "max": 7.83,
+    "median": 0.75,
+    "spread": 7.41
+   }
+  },
+  {
+   "key": "B_signalling",
+   "label": "Same cryptography, new signalling",
+   "what_must_change": "Nothing cryptographic. A number that means 'I do X'.",
+   "evidence": "RFC 5155 s2: algorithm 7 is RSASHA1 and signals NSEC3 support; the signing maths is unchanged from algorithm 5.",
+   "changes": 3,
+   "observed": 3,
+   "onset_years": {
+    "n": 3,
+    "min": 1.33,
+    "max": 11.25,
+    "median": 8.75,
+    "spread": 9.92
+   }
+  },
+  {
+   "key": "C_new_record_type",
+   "label": "New record type on existing infrastructure",
+   "what_must_change": "Provisioning and RR support, but no new cryptography.",
+   "evidence": "RFC 7344 s3-4 defines CDS/CDNSKEY reusing the DS and DNSKEY wire formats verbatim.",
+   "changes": 2,
+   "observed": 2,
+   "onset_years": {
+    "n": 2,
+    "min": 1.42,
+    "max": 11.25,
+    "median": 6.33,
+    "spread": 9.83
+   }
+  },
+  {
+   "key": "D_new_primitive",
+   "label": "New cryptographic primitive",
+   "what_must_change": "A new curve or hash implemented in the signer AND the validator before anything is publishable.",
+   "evidence": "RFC 6605 s6 and RFC 8080 s5 both require validator support before a zone can safely sign with the algorithm.",
+   "changes": 8,
+   "observed": 6,
+   "onset_years": {
+    "n": 6,
+    "min": 1.92,
+    "max": 10.0,
+    "median": 3.42,
+    "spread": 8.08
+   }
+  },
+  {
+   "key": "E_parameter_hygiene",
+   "label": "Parameter choice within an existing mechanism",
+   "what_must_change": "Zone configuration only; one operator acting alone.",
+   "evidence": "RFC 9276 s3.1: 'an iteration count of 0' and 's3.2: an empty salt', both configuration values of a mechanism already deployed.",
+   "changes": 5,
+   "observed": 2,
+   "onset_years": {
+    "n": 2,
+    "min": -6.17,
+    "max": 8.25,
+    "median": 1.04,
+    "spread": 14.42
+   }
+  },
+  {
+   "key": "F_deprecation",
+   "label": "Deprecation",
+   "what_must_change": "Removal, by parties who already deployed. The observable is what PERSISTS, so onset is meaningless and residue is the quantity of interest.",
+   "evidence": "RFC 9905 s3: 'SHA-1 MUST NOT be used when creating DS records'; RFC 9906 s3 retires ECC-GOST.",
+   "changes": 3,
+   "observed": 3,
+   "onset_years": null
+  },
+  {
+   "key": "G_new_digest",
+   "label": "New DS digest type",
+   "what_must_change": "A hash implementation, and only on the parent's DS generator plus the validator. No signer changes and no key material changes.",
+   "evidence": "RFC 4509 s2 defines the DS digest as a hash over the child's DNSKEY: the child publishes nothing new. The first GOST digests observed (2011-05) sit on algorithm 5 and 8 keys, not algorithm 12 -- a GOST hash of an RSA key -- which is only possible because digest and signing algorithm are independent.",
+   "changes": 6,
+   "observed": 5,
+   "onset_years": {
+    "n": 5,
+    "min": -0.42,
+    "max": 5.25,
+    "median": 1.25,
+    "spread": 5.67
+   }
+  }
+ ],
+ "group_to_category": [
+  {
+   "group": "A_new_codepoint",
+   "categories": {
+    "crypto_agility": 3
+   },
+   "spans_categories": 1
+  },
+  {
+   "group": "B_signalling",
+   "categories": {
+    "authenticated_denial": 1,
+    "key_lifecycle": 1,
+    "protocol_foundation": 1
+   },
+   "spans_categories": 3
+  },
+  {
+   "group": "C_new_record_type",
+   "categories": {
+    "protocol_foundation": 1,
+    "key_lifecycle": 1
+   },
+   "spans_categories": 2
+  },
+  {
+   "group": "D_new_primitive",
+   "categories": {
+    "crypto_agility": 7,
+    "(uncategorised)": 1
+   },
+   "spans_categories": 2
+  },
+  {
+   "group": "E_parameter_hygiene",
+   "categories": {
+    "authenticated_denial": 3,
+    "applications": 2
+   },
+   "spans_categories": 2
+  },
+  {
+   "group": "F_deprecation",
+   "categories": {
+    "deprecation": 3
+   },
+   "spans_categories": 1
+  },
+  {
+   "group": "G_new_digest",
+   "categories": {
+    "crypto_agility": 6
+   },
+   "spans_categories": 1
+  }
+ ],
+ "categories_without_observables": [],
+ "categories_with_observables_but_no_observations": [
+  "applications"
+ ],
+ "note": "Onset bands come from the implementation groups, not the conceptual categories: a category mixes changes of very different implementation cost, so its onset spread is wide and says little. The groups are the predictive cut; the categories are the communicable one."
+}
