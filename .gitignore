@@ -230,3 +230,4 @@ out/rfc-index.xml
 
 # PowerPoint lock files, created while a deck is open.
 ~$*
+out/server_run/

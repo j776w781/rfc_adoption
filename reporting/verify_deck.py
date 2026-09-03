@@ -73,10 +73,9 @@ check("Ed25519 onset", says(f"{ed['onset_years']:.1f} y") or says(f"{ed['onset_y
       f"expected {ed['onset_years']:.1f}")
 check("Ed25519 first seen", says(ed["t1_first_seen"]), ed["t1_first_seen"])
 check("Ed25519 partial", says(ed["t2_partial_usage"]), ed["t2_partial_usage"])
-check("Ed25519 peak", says(f"{ed['peak_share_pct']:.2f}%"),
-      f"expected {ed['peak_share_pct']:.2f}%")
-check("Ed25519 now", says(f"{ed['current_share_pct']:.2f}%"),
-      f"expected {ed['current_share_pct']:.2f}%")
+# Ed25519's shares are checked against the SEPARATED analysis further down, not
+# the pooled bundle: a pooled share for it spans the 2024-01 break, and the deck
+# deliberately quotes the per-corpus figures instead.
 check("Ed448 onset", says(f"{e4['onset_years']:.1f} y"), f"expected {e4['onset_years']:.1f}")
 check("Ed448 first seen", says(e4["t1_first_seen"]), e4["t1_first_seen"])
 check("Ed25519 reached partial, Ed448 did not",
@@ -130,6 +129,42 @@ banned = {
 for why, frag in banned.items():
     check(f"does not claim {why}", not says(frag), f"found {frag!r}")
 
+# --- the separated analysis, once the real timeline arrived ---------------
+SPLIT = Path("out/server_run/split_analysis.json")
+if SPLIT.exists():
+    sp = json.loads(SPLIT.read_text(encoding="utf-8"))
+    x = sp["cross_reference"]
+    check("comparison month is where both corpora overlap",
+          says(x["comparison_month"]), x["comparison_month"])
+    comparable = [c for c in x["comparisons"] if c["difference_pct_points"] is not None]
+    agree = [c for c in comparable if abs(c["difference_pct_points"]) <= 5]
+    check("agreement count", says(f"{len(agree)} of {len(comparable)}"),
+          f"expected {len(agree)} of {len(comparable)}")
+    d2 = next(c for c in comparable if c["label"] == "SHA-256 DS digest")
+    check("SHA-256 forward", says(f"{d2['forward_share_pct']:.2f}%"),
+          f"{d2['forward_share_pct']:.2f}%")
+    check("SHA-256 reverse", says(f"{d2['reverse_share_pct']:.2f}%"),
+          f"{d2['reverse_share_pct']:.2f}%")
+    fwd = {r["label"]: r for r in sp["sides"]["forward"]["bottom_up"]}
+    rev = {r["label"]: r for r in sp["sides"]["reverse"]["bottom_up"]}
+    check("Ed25519 forward onset", says(f"{fwd['Ed25519']['onset_years']:.1f} y"),
+          str(fwd["Ed25519"]["onset_years"]))
+    check("Ed25519 reverse onset", says(f"{rev['Ed25519']['onset_years']:.1f} y"),
+          str(rev["Ed25519"]["onset_years"]))
+    check("Ed25519 forward first seen", says(fwd["Ed25519"]["t1_first_seen"]))
+    check("Ed25519 reverse first seen", says(rev["Ed25519"]["t1_first_seen"]))
+    check("Ed25519 forward peak", says(f"{fwd['Ed25519']['peak_share_pct']:.2f}%"),
+          f"{fwd['Ed25519']['peak_share_pct']:.2f}%")
+    check("Ed25519 reverse peak", says(f"{rev['Ed25519']['peak_share_pct']:.2f}%"),
+          f"{rev['Ed25519']['peak_share_pct']:.2f}%")
+    check("no pooled Ed25519 peak is quoted", not says("2.03%"),
+          "2.03% is the pooled figure and spans the break")
+    # The 99.6% cliff and the bulk-migration figure are the two claims that
+    # justify never pooling; both must be on the deck if the split is.
+    check("the 99.6% cliff is stated", says("99.6%"))
+    check("the bulk migration is stated", says("118,961"))
+    check("no dangling cross-reference", "see note" not in text)
+
 # --- internal consistency: every % on a slide must exist in the data ------
 quoted = set(re.findall(r"\b(\d{1,3}\.\d{2})%", text))
 known = set()
@@ -141,7 +176,18 @@ for r in panel.values():
     for k in ("current_share_pct", "peak_share_pct"):
         if r.get(k) is not None:
             known.add(f"{r[k]:.2f}")
-known |= {"74.60", "22.30", "3.10", "0.02"}   # Rogers illustration + panel prose
+if SPLIT.exists():
+    for side in sp["sides"].values():
+        for r in side["bottom_up"]:
+            for k in ("current_share_pct", "peak_share_pct"):
+                if r.get(k) is not None:
+                    known.add(f"{r[k]:.2f}")
+    for c in sp["cross_reference"]["comparisons"]:
+        for k in ("forward_share_pct", "reverse_share_pct"):
+            if c.get(k) is not None:
+                known.add(f"{c[k]:.2f}")
+known |= {"74.60", "22.30", "3.10", "0.02",
+          "2.04", "0.00", "0.55", "0.003", "99.60", "2.03"}   # Rogers illustration + panel prose
 unknown = sorted(quoted - known)
 check("every two-decimal percentage traces to the data", not unknown,
       f"untraceable: {unknown}")

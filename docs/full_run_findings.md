@@ -111,3 +111,82 @@ The analysis stage is cheap and needs no rescan:
 ```bash
 python scripts/full_timeline.py --stage analyse --stage report --out out/full_run
 ```
+
+---
+
+# Second pass: with the timeline, separated
+
+The timeline was on the `server_results` branch. Analysing the two corpora
+separately changes what can be claimed, and turns up a limitation that matters
+more than any single number.
+
+## The two corpora must never be pooled
+
+    2023-12   forward 2,219,858   reverse 9,508   pooled 2,229,366
+    2024-01   forward         0   reverse 9,550   pooled     9,550    -99.6%
+
+The forward sources are **99.6%** of the DS-bearing population while present,
+and they stop at 2023-12. So every pooled share is a forward number until
+2023-12 and a reverse number afterwards, with a 99.6% cliff between them. Peak
+and latest values routinely sit on opposite sides of it.
+
+Separated: **forward 24/30 observables (2016-06 → 2023-12), reverse 17/30
+(2009-03 → 2026-08)**.
+
+## Where they agree, and where they do not
+
+At **2023-12**, the last month both cover — **14 of 20 comparable observables
+agree within 5 percentage points**, across two corpora sharing no
+infrastructure, operator population or collection method.
+
+    SHA-256 DS digest    forward 98.34%   reverse 98.24%    +0.1   agreement to a tenth
+    ECDSA P-256          forward 76.18%   reverse 43.47%   +32.7
+    RSA/SHA-256          forward 23.83%   reverse 47.66%   -23.8
+    SHA-1 DS digest      forward  3.05%   reverse 47.61%   -44.6
+    SHA-384 DS digest    forward 31.75%   reverse 10.03%   +21.7
+
+The pattern in the disagreements is consistent: **forward zones have modernised
+and reverse delegations have not.** ECDSA 76% against 43%, and the SHA-1 digest
+retired to 3% forward while still on 48% of reverse delegations. That also
+explains the withdrawn monotonicity finding — reverse operators lag as a group,
+so a reverse-only view makes every newer algorithm look slower than it was.
+
+## The limitation that matters most
+
+A "share of signed names" in the forward corpus is not measuring independent
+adoption decisions. Month-on-month jumps in the *number* of names carrying a
+value, where one month moves more than half the running maximum:
+
+    forward, 7 such jumps      reverse, 3 such jumps
+    alg 13  2019-02  +118,961 names in ONE month -> 157,622
+    alg 15  2023-01   +11,853 -> 11,921
+    alg 13  2016-10   +11,587 -> 11,779
+    alg  7  2020-05   +10,616 -> 19,414
+    alg 15  2020-04    +8,797 -> 8,800
+
+Ed25519 in the forward corpus is the clearest case: 3 names in 2020-01,
+**19,863 in 2020-06**, back to 42 by 2021-06, a second spike to 11,921 in
+2023-01, then 72. `.se` accounts for nearly all of it, peaking at 19,455 names.
+
+Tens of thousands of names appearing and vanishing within months, twice, is not
+diffusion. It is one operator moving a portfolio. The data cannot name them —
+that would need per-domain attribution we do not do — but the shape is
+diagnostic, and it means **forward shares largely measure registrar and provider
+defaults**. "ECDSA reached common usage in 2019-02" records a single bulk
+migration of 118,961 names, which was 76% of ECDSA's total that month.
+
+This strengthens rather than weakens the case against the diffusion literature:
+that literature assumes a population of independent adopters, and this one has a
+handful of actors who can move six figures of names in a month.
+
+The three reverse jumps are a different problem — the RIPE format change
+(2015-09) and APNIC leaving (2024-12) — composition, not behaviour.
+
+## One caveat on the reverse figures
+
+The run did not use `--pool-sources`, so reverse shares are computed by summing
+per-RIR distinct-name counts. Reverse names overlap between RIRs, so that
+denominator is inflated: locally, on the same corpus, the summed figure was 8,492
+against a true distinct count of 6,581, and the SHA-1 digest share moved from
+21.8% to 17.8%. **Forward shares are exact** — those sources are disjoint TLDs.
+Re-running reverse with `--pool-sources` settles it.

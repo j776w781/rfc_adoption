@@ -178,10 +178,10 @@ cards(s, top, [
      "Ed25519 first appeared in 2019-01, 1.9 years after RFC 8080.",
      "true, and almost meaningless alone"),
     ("IT REACHED REAL USE",
-     "It peaked at 2.03% of signed names in 2020-06.",
+     "In the forward TLDs it reached 2.04% of signed names by 2020-06.",
      "a different measure entirely"),
     ("IT IS SPREADING",
-     "It is not. It has fallen back to 0.37% since.",
+     "It is not. Those same TLDs were back to 0.003% by 2023-12.",
      "a third measure again"),
 ], height=2.0)
 textbox(s, M, top + Inches(2.4), W - 2 * M, Inches(1.4),
@@ -275,22 +275,23 @@ s, top = new("The same three stages, three different endings",
              eyebrow="worked examples")
 after = table(s, M, top, W - 2 * M, [
     ["From RFC 8080", "Onset", "1 · first seen", "2 · in use", "3 · widely used", "Peak", "Now"],
-    ["Ed25519", "1.9 y", "2019-01", "2020-04", "never", "2.03%", "0.37%"],
-    ["Ed448", "3.2 y", "2020-05", "never", "never", "0.03%", "0.03%"],
-    ["ECDSA P-256 (RFC 6605)", "3.6 y", "2015-11", "2016-10", "2019-02", "76.2%", "see note"],
+    ["Ed25519 — forward", "1.9 y", "2019-01", "2020-04", "never", "2.04%", "0.003%"],
+    ["Ed25519 — reverse", "5.5 y", "2022-08", "never", "never", "0.39%", "0.37%"],
+    ["Ed448 — forward", "3.2 y", "2020-05", "never", "never", "0.00%", "0.00%"],
 ], [0.24, 0.10, 0.15, 0.13, 0.15, 0.11, 0.11], row_h=0.52)
 
 textbox(s, M, after + Inches(0.26), Inches(5.7), Inches(0.34),
         "Why the stages are separate", size=15, bold=True, color=TEAL)
 textbox(s, M, after + Inches(0.64), Inches(5.7), Inches(1.9),
-        "Ed25519 and Ed448 are defined by the SAME RFC, published the same day, "
-        "in the same cryptographic family." + NL + NL +
-        "Ed25519 appeared after 1.9 years, reached real use, peaked at 2.03% and "
-        "has fallen back to 0.37%. Ed448 took 3.2 years to appear and has never "
-        "been used by more than a handful of zones." + NL + NL +
-        "One date per RFC would have averaged these into a single number for "
-        "“RFC 8080” and hidden both stories. This is why the unit of measurement "
-        "is the observable change, not the document.",
+        "Ed25519 and Ed448 come from the SAME RFC, published the same day, in the "
+        "same family — one date for “RFC 8080” would have averaged them into a "
+        "single number." + NL + NL +
+        "Ed25519 appeared in the forward TLDs after 1.9 years and in reverse "
+        "delegations only after 5.5, and did something different in each. "
+        "Ed448 has never left first sighting anywhere." + NL + NL +
+        "Each row is one corpus throughout. This is why the unit is the "
+        "observable change and not the document, and why a first-sighting date "
+        "has to name the corpora it searched.",
         size=13.5)
 
 textbox(s, M + Inches(6.3), after + Inches(0.26), Inches(5.4), Inches(0.34),
@@ -305,6 +306,64 @@ textbox(s, M + Inches(6.3), after + Inches(0.64), Inches(5.4), Inches(1.9),
         "A ≥25 guard over-corrects, pushing RSASHA1-NSEC3 from 2.0y to 7.8y "
         "purely because it had few contemporaries.",
         size=13.5)
+
+# =========================================================================== #
+# 5c. Forward vs reverse -- where two independent corpora agree
+# =========================================================================== #
+s, top = new("Two corpora that share nothing, compared at one date",
+             "2023-12, the last month both cover.",
+             eyebrow="cross-reference")
+picture(s, "forward_vs_reverse", top, max_h=Inches(3.8))
+textbox(s, M, H - Inches(1.45), W - 2 * M, Inches(1.1),
+        "14 of 20 comparable observables agree within 5 percentage points — "
+        "SHA-256 DS digest reads 98.34% and 98.24%, a tenth of a point apart, "
+        "from corpora with no shared infrastructure, operators or method. Where "
+        "they disagree the direction is consistent: forward zones have "
+        "modernised and reverse delegations have not.", size=14)
+
+# =========================================================================== #
+# 5d. Why they are never pooled
+# =========================================================================== #
+s, top = new("Why the two are never pooled",
+             "The forward sources are 99.6% of the population, and they stop.",
+             eyebrow="the denominator")
+picture(s, "composition_break", top, max_h=Inches(3.5))
+textbox(s, M, H - Inches(1.6), W - 2 * M, Inches(1.2),
+        "A pooled share is a forward number until 2023-12 and a reverse number "
+        "after it, with a 99.6% cliff between. Peak and latest values routinely "
+        "land on opposite sides, so 11 of 15 peak-to-latest drops in the pooled "
+        "run are not comparable and none is quoted here. Every figure on this "
+        "deck is one corpus at a time.", size=14)
+
+# =========================================================================== #
+# 5e. The limitation that matters most
+# =========================================================================== #
+s, top = new("A share of names is not a count of decisions",
+             "In the forward corpus, single operators move six figures of names "
+             "in one month.",
+             eyebrow="the biggest caveat")
+after = table(s, M, top, Inches(5.6), [
+    ["Ed25519, forward TLDs", "names", "share"],
+    ["2020-01", "3", "0.000%"],
+    ["2020-06", "19,863", "2.039%"],
+    ["2021-06", "42", "0.004%"],
+    ["2023-01", "11,921", "0.557%"],
+    ["2023-12", "72", "0.003%"],
+], [0.40, 0.30, 0.30], row_h=0.40)
+textbox(s, M + Inches(6.1), top, Inches(5.6), Inches(3.4),
+        "Tens of thousands of names appearing and vanishing within months, "
+        "twice, is not diffusion. It is one operator moving a portfolio — .se "
+        "accounts for nearly all of it, peaking at 19,455 names." + NL + NL +
+        "The largest jump anywhere is ECDSA P-256: +118,961 names in 2019-02, "
+        "76% of its total that month. So “ECDSA reached common usage in 2019-02” "
+        "records one bulk migration." + NL + NL +
+        "Forward shares therefore largely measure registrar and provider "
+        "defaults, not independent decisions.", size=13.5)
+textbox(s, M, top + Inches(3.6), W - 2 * M, Inches(0.9),
+        "This strengthens the case against the diffusion literature rather than "
+        "weakening it: that literature assumes a population of independent "
+        "adopters, and this one has a handful of actors who can move six figures "
+        "of names at once.", size=14, color=MUTED)
 
 # =========================================================================== #
 # 6. The pipeline — what it does
