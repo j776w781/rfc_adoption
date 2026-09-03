@@ -25,7 +25,9 @@ from .utils import PipelineError, get_logger
 
 __all__ = [
     "POOLED_SOURCE",
+    "STAGE_NAMES",
     "cross_reference",
+    "detect_breaks",
     "bottom_up",
     "compare_directions",
     "load_config",
@@ -133,6 +135,91 @@ def prevalence_series(
     return merged.sort_values("month").reset_index(drop=True)
 
 
+#: Plain-language names for the stages, in order. These are what appears in
+#: output read by people; the `t1/t2/t3` keys stay for anything computing on it.
+STAGE_NAMES = ("not seen", "seen only", "in use", "widely used")
+
+
+def _stage_of(share: float, zones: float, stages: dict[str, Any]) -> str:
+    """Which stage a single month sits in."""
+    if share <= 0:
+        return "not seen"
+    if zones < float(stages.get("min_zones", 0)):
+        return "seen only"
+    if share >= float(stages["common_usage_pct"]):
+        return "widely used"
+    if share >= float(stages["partial_usage_pct"]):
+        return "in use"
+    return "seen only"
+
+
+def _describe(series: pd.DataFrame, dates: dict[str, Any],
+              stages: dict[str, Any], *, residue: bool) -> dict[str, Any]:
+    """Where it is now, the furthest it ever got, and which way it is moving.
+
+    Splitting these is the whole point. A single label that means "furthest ever
+    reached" but reads as present tense put RSA/SHA-512 (0.37% today, peaked at
+    3.7%) and Ed25519 (0.34% today, never above 0.37%) in visibly different
+    categories on nearly identical numbers, with no way for a reader to see why.
+    """
+    if dates["t1_first_seen"] is None:
+        return {"state": "scanned_no_match", "now": "not seen",
+                "peak_reached": "not seen", "trend": "absent",
+                "summary": "Looked for and not found in this corpus."}
+
+    now_share = float(series.share_pct.iloc[-1])
+    now_zones = float(series.domains_peak.iloc[-1])
+    peak_share = float(series.share_pct.max())
+    peak_month = str(series.loc[series.share_pct.idxmax(), "month"])
+
+    now = _stage_of(now_share, now_zones, stages)
+    # The furthest it ever got is the best stage any single month achieved, which
+    # is exactly what the old single label reported.
+    peak_reached = max(
+        (_stage_of(r.share_pct, r.domains_peak, stages) for r in series.itertuples()),
+        key=STAGE_NAMES.index,
+    )
+
+    # Direction, from where it sits relative to its own peak. A mechanism at its
+    # peak is still climbing or holding; one well below it has been displaced.
+    #
+    # The absolute test comes first because a ratio is hysterical about small
+    # numbers: Ed25519 fell 0.37% -> 0.34%, a ratio of 0.92 that would read as
+    # "easing" when the line is visibly flat. Three tenths of a percentage point
+    # is not a movement worth naming.
+    drop = peak_share - now_share
+    if peak_share <= 0:
+        trend = "absent"
+    elif drop < 0.5:
+        trend = "rising" if now_share >= peak_share * 0.99 else "steady"
+    elif now_share >= peak_share * 0.7:
+        trend = "easing"
+    else:
+        trend = "declining"
+
+    if residue:
+        summary = (f"Deprecated, still published on {now_share:.2f}% of signed "
+                   f"delegations and {trend}.")
+    elif now == peak_reached:
+        summary = (f"{now.capitalize()} and {trend} — {now_share:.2f}% today"
+                   + (f", its highest." if trend in ("rising", "steady")
+                      else f", down from {peak_share:.2f}% in {peak_month}."))
+    else:
+        summary = (f"Was {peak_reached} ({peak_share:.2f}% in {peak_month}), "
+                   f"now {now} at {now_share:.2f}% and {trend}.")
+
+    return {
+        # Kept so nothing downstream breaks, but it is the PEAK, not the present.
+        "state": {"widely used": "common", "in use": "partial",
+                  "seen only": "seen_only", "not seen": "scanned_no_match"}[
+                      "seen only" if residue else peak_reached],
+        "now": now,
+        "peak_reached": peak_reached,
+        "trend": trend,
+        "summary": summary,
+    }
+
+
 def _stage_dates(series: pd.DataFrame, stages: dict[str, Any]) -> dict[str, Any]:
     """First occurrence, partial usage and common usage for one series."""
     if series.empty:
@@ -217,10 +304,19 @@ def bottom_up(
         # negative and meaningless -- RFC 9905 (2025-11) against algorithm 5 first
         # seen in 2009 reads as -13.7 years. What matters for these is the residue,
         # computed below.
-        record["onset_years"] = (
-            None if change.get("residue")
-            else _years(change["published"], dates["t1_first_seen"])
-        )
+        onset = (None if change.get("residue")
+                 else _years(change["published"], dates["t1_first_seen"]))
+        # A negative onset is not a fast adoption, it is the wrong question. The
+        # value was already in the data before the document existed, so there is
+        # no "time until someone did it" to measure. Two ways this happens:
+        # RFC 9276 recommends NSEC3 iterations = 0, which was always legal and
+        # already common (first seen 2016-06 against a 2022-08 RFC, reading
+        # -6.2y); and an implementation shipping from a draft, as the GOST-2012
+        # digest did five months before RFC 9558 published.
+        record["onset_years"] = None if (onset is not None and onset < 0) else onset
+        record["predates_rfc"] = bool(onset is not None and onset < 0)
+        if record["predates_rfc"]:
+            record["predates_rfc_by_years"] = abs(onset)
         record["establishment_years"] = _years(
             dates["t1_first_seen"], dates["t2_partial_usage"])
         record["ascent_years"] = _years(
@@ -233,20 +329,25 @@ def bottom_up(
         record["last_month"] = str(series.month.iloc[-1])
         record["months_observed"] = int((series.records > 0).sum())
 
-        if dates["t1_first_seen"] is None:
-            record["state"] = "scanned_no_match"
-        elif change.get("residue"):
-            record["state"] = "residue"
-        elif dates["t3_common_usage"]:
-            record["state"] = "common"
-        elif dates["t2_partial_usage"]:
-            record["state"] = "partial"
-        else:
-            record["state"] = "seen_only"
+        # One `state` was doing two jobs and reading as though it did one. It
+        # named the HIGHEST stage ever reached, but present tense: RSA/SHA-512
+        # showed "partial" while sitting at 0.37%, having peaked at 3.7% seven
+        # years earlier. Meanwhile Ed25519 showed "seen only" at 0.34% -- a
+        # nearly identical number with a completely different history. Both
+        # labels were defensible, which is the same ambiguity that made the word
+        # "adoption" unusable in the first place.
+        #
+        # So the two questions are now answered separately: where is it NOW, and
+        # what is the furthest it ever got. `trend` says which way it is moving,
+        # and `summary` states all three in a sentence a reader does not have to
+        # decode.
+        record.update(_describe(series, dates, stages,
+                                residue=bool(change.get("residue"))))
 
         # For a deprecation the interesting quantity is what remains after the
         # document, not when it first appeared -- which is usually decades before.
         if change.get("residue"):
+            record["state"] = "residue"
             after = series[series.month >= change["published"]]
             record["residue_share_pct"] = (
                 round(float(after.share_pct.iloc[-1]), 4) if len(after) else None
@@ -452,7 +553,32 @@ def cross_reference(
         )
         return result
 
-    last = timeline.month.max()
+    # Compare at the last month BOTH sides actually have, not the last month in
+    # the timeline. The corpora do not end together -- forward stops when the
+    # mirror stops, reverse keeps going -- so taking the global maximum asks the
+    # forward corpus about a date it has no data for, gets None, and then reports
+    # that absence as a failure to agree.
+    fwd_months = set(timeline[timeline.source.isin(sorted(forward))].month.unique())
+    rev_months = set(timeline[timeline.source.isin(sorted(reverse))].month.unique())
+    shared = sorted(fwd_months & rev_months)
+    if not shared:
+        result["notes"].append(
+            "The two corpora share no measured month, so nothing can be compared "
+            f"at a common date: forward runs to {max(fwd_months, default='—')}, "
+            f"reverse to {max(rev_months, default='—')}."
+        )
+        return result
+    last = shared[-1]
+    result["comparison_month"] = last
+    result["forward_last_month"] = max(fwd_months)
+    result["reverse_last_month"] = max(rev_months)
+    if result["forward_last_month"] != result["reverse_last_month"]:
+        result["notes"].append(
+            f"Compared at {last}, the last month both corpora cover. Forward data "
+            f"ends {result['forward_last_month']}, reverse continues to "
+            f"{result['reverse_last_month']}, so a figure quoted from one side's "
+            "own latest month is not comparable with the other's."
+        )
     for change in config["bottom_up"]["changes"]:
         if change["dimension"] not in comparable:
             continue
@@ -501,14 +627,26 @@ def cross_reference(
             "month": str(last),
         })
 
-    agreeing = [c for c in result["comparisons"]
-                if c["difference_pct_points"] is not None
-                and abs(c["difference_pct_points"]) <= 5]
-    result["notes"].append(
-        f"{len(agreeing)} of {len(result['comparisons'])} comparable observables "
-        "agree within 5 percentage points across two corpora that share no "
-        "infrastructure, operator population or collection method."
-    )
+    # Only rows where BOTH sides produced a number can agree or disagree. Counting
+    # a missing value as a disagreement previously turned "the forward corpus has
+    # no data for this month" into "0 of 20 observables agree", which reads as the
+    # two corpora contradicting each other.
+    comparable = [c for c in result["comparisons"]
+                  if c["difference_pct_points"] is not None]
+    agreeing = [c for c in comparable if abs(c["difference_pct_points"]) <= 5]
+    if comparable:
+        result["notes"].append(
+            f"{len(agreeing)} of {len(comparable)} observables that both corpora "
+            f"can answer agree within 5 percentage points at {last}, across two "
+            "corpora that share no infrastructure, operator population or "
+            "collection method."
+        )
+    skipped = len(result["comparisons"]) - len(comparable)
+    if skipped:
+        result["notes"].append(
+            f"{skipped} further observable(s) could not be compared because one "
+            "side has no value for them — absent from a corpus, not disagreeing."
+        )
     earlier_forward = [c for c in result["comparisons"]
                        if c["earlier_corpus"] == "forward"]
     if earlier_forward:
@@ -519,3 +657,52 @@ def cross_reference(
             + ". A reverse-only onset overstates these."
         )
     return result
+
+
+def detect_breaks(timeline: pd.DataFrame, *, step_pct: float = 25.0) -> list[str]:
+    """Find places where the POPULATION changed, not the behaviour.
+
+    Two kinds, both of which make a pooled share mean different things before and
+    after, and neither of which looks like an error in the output:
+
+    * A source stops reporting mid-series. In the full run every forward source
+      ends 2023-12 while the RIRs continue to 2026-08, so a pooled figure for
+      2026 is reverse-only however it is labelled, and the series crosses a cliff
+      at 2024-01 that has nothing to do with operators.
+    * A dimension's denominator steps sharply from one month to the next, which
+      is what a source joining or leaving looks like from inside the numbers.
+    """
+    notes: list[str] = []
+    if timeline.empty:
+        return notes
+
+    real = timeline[~timeline.source.astype(str).str.startswith(POOLED_SOURCE)]
+    if real.empty:
+        return notes
+    last_overall = real.month.max()
+
+    ends = real.groupby("source").month.max()
+    stopped = sorted(s for s, m in ends.items() if m < last_overall)
+    if stopped:
+        detail = ", ".join(f"{s} ends {ends[s]}" for s in stopped)
+        notes.append(
+            f"{len(stopped)} of {real.source.nunique()} sources stop before the "
+            f"end of the series ({detail}; the rest run to {last_overall}). Any "
+            "pooled share after the earliest of those dates is computed on the "
+            "survivors only. Report the two groups separately, or cut the series "
+            "at the last month they all cover."
+        )
+
+    for dim, grp in real[real.value == "_total"].groupby("dimension"):
+        s = (grp.groupby("month").domains_peak.sum().sort_index())
+        if len(s) < 3:
+            continue
+        step = s.pct_change() * 100
+        big = step[step.abs() >= step_pct]
+        for month, pct in big.items():
+            notes.append(
+                f"'{dim}' denominator steps {pct:+.0f}% at {month} "
+                f"({int(s.shift(1)[month]):,} -> {int(s[month]):,} names). A share "
+                "spanning that month compares two different populations."
+            )
+    return notes

@@ -59,7 +59,8 @@ from openintel_rfc.cache_index import (  # noqa: E402
 from openintel_rfc.checklist_loader import load_dictionary  # noqa: E402
 from openintel_rfc.reverse_zones import ingest_range, monthly_days  # noqa: E402
 from openintel_rfc.timeline_analysis import (  # noqa: E402
-    bottom_up, compare_directions, cross_reference, load_config, top_down,
+    bottom_up, compare_directions, cross_reference, detect_breaks,
+    load_config, top_down,
 )
 from openintel_rfc.timeline_extract import (  # noqa: E402
     extract_days, merge_timeline,
@@ -396,6 +397,14 @@ def stage_analyse(args: argparse.Namespace) -> dict[str, Any]:
     timeline = pd.read_parquet(
         _require(args.out / "timeline_monthly.parquet", "Timeline", "extract"))
     config = load_config(args.config)
+
+    # Population changes look exactly like behaviour changes in a pooled share,
+    # so they are surfaced before any number derived from one is reported.
+    breaks = detect_breaks(timeline)
+    for note in breaks:
+        LOGGER.warning("corpus: %s", note)
+    (args.out / "corpus_breaks.json").write_text(
+        json.dumps(breaks, indent=1), encoding="utf-8")
 
     do_bottom = args.bottom_up if args.bottom_up is not None \
         else config["bottom_up"].get("enabled", True)

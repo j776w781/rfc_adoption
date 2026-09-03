@@ -288,3 +288,86 @@ def test_a_deprecation_has_no_onset():
     assert row["onset_years"] is None, "a deprecation has no onset"
     assert row["state"] == "residue"
     assert row["residue_share_pct"] == 10.0
+
+
+# --------------------------------------------------------------------------- #
+# Plain-language description: where it is now vs the furthest it ever got
+# --------------------------------------------------------------------------- #
+
+def test_reached_and_retreated_is_not_the_same_as_never_reached():
+    """The case that exposed the old single label.
+
+    RSA/SHA-512 sat at 0.37% having peaked at 3.7%; Ed25519 sat at 0.34% having
+    never exceeded 0.37%. One label meaning "furthest ever reached" but reading
+    as present tense put nearly identical numbers in different categories with
+    no way to see why.
+    """
+    retreated = _timeline([
+        _row("2015-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2015-01", "algorithm_ds", "13", 40, 40),      # 4% — in use
+        _row("2026-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2026-01", "algorithm_ds", "13", 4, 4),        # 0.4% — seen only
+    ])
+    never = _timeline([
+        _row("2015-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2015-01", "algorithm_ds", "13", 3, 3),
+        _row("2026-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2026-01", "algorithm_ds", "13", 4, 4),        # 0.4%, never higher
+    ])
+    a = bottom_up(retreated, CONFIG)[0]
+    b = bottom_up(never, CONFIG)[0]
+
+    assert a["now"] == "seen only" and a["peak_reached"] == "in use"
+    assert b["now"] == "seen only" and b["peak_reached"] == "seen only"
+    assert a["trend"] == "declining"
+    assert "Was in use" in a["summary"], a["summary"]
+    # Both sit at the same share today, and the summaries say different things.
+    assert a["current_share_pct"] == b["current_share_pct"]
+    assert a["summary"] != b["summary"]
+
+
+def test_a_tiny_movement_is_steady_not_a_decline():
+    """A ratio is hysterical about small numbers; 0.03pp is not a trend."""
+    timeline = _timeline([
+        _row("2025-01", "algorithm_ds", "_total", 10000, 10000),
+        _row("2025-01", "algorithm_ds", "13", 37, 37),      # 0.37%
+        _row("2026-01", "algorithm_ds", "_total", 10000, 10000),
+        _row("2026-01", "algorithm_ds", "13", 34, 34),      # 0.34%
+    ])
+    row = bottom_up(timeline, CONFIG)[0]
+    assert row["trend"] == "steady", row["summary"]
+
+
+def test_a_real_decline_is_named_as_one():
+    timeline = _timeline([
+        _row("2017-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2017-01", "algorithm_ds", "13", 750, 750),    # 75%
+        _row("2026-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2026-01", "algorithm_ds", "13", 220, 220),    # 22%
+    ])
+    row = bottom_up(timeline, CONFIG)[0]
+    assert row["trend"] == "declining"
+    assert row["now"] == "widely used" and row["peak_reached"] == "widely used"
+    assert "down from" in row["summary"]
+
+
+def test_something_at_its_own_peak_is_rising():
+    timeline = _timeline([
+        _row("2020-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2020-01", "algorithm_ds", "13", 100, 100),
+        _row("2026-01", "algorithm_ds", "_total", 1000, 1000),
+        _row("2026-01", "algorithm_ds", "13", 680, 680),
+    ])
+    row = bottom_up(timeline, CONFIG)[0]
+    assert row["trend"] == "rising"
+    assert "its highest" in row["summary"]
+
+
+def test_an_unfound_value_says_so_plainly():
+    timeline = _timeline([
+        _row("2020-01", "algorithm_ds", "_total", 100, 100),
+        _row("2020-01", "algorithm_ds", "8", 100, 100),
+    ])
+    row = bottom_up(timeline, CONFIG)[0]
+    assert row["now"] == "not seen"
+    assert row["summary"] == "Looked for and not found in this corpus."

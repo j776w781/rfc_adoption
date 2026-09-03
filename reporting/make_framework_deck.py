@@ -164,8 +164,8 @@ textbox(s, M, Inches(4.4), Inches(8.2), Inches(1.2),
         "the pipeline that computes it, and what it has found so far.",
         size=17, color=MUTED)
 textbox(s, M, Inches(6.2), Inches(9), Inches(0.5),
-        "Reverse-DNS delegation corpus · 199 monthly snapshots, 2009–2026 · "
-        "975 source-days · 1,875,584 DS records", size=12, color=MUTED)
+        "Full run: 8.24 TB · 15,179 source-days · 25,151 files · 12 sources · "
+        "5 RIRs (2009–2026) + 7 forward TLDs (2016–2023)", size=12, color=MUTED)
 
 # =========================================================================== #
 # 2. The problem
@@ -175,17 +175,17 @@ s, top = new("One word was doing three jobs",
              eyebrow="the problem")
 cards(s, top, [
     ("SOMEONE TRIED IT",
-     "A single zone published Ed25519 in 2021.",
+     "Ed25519 first appeared in 2019-01, 1.9 years after RFC 8080.",
      "true, and almost meaningless alone"),
-    ("IT IS IN REAL USE",
-     "0.34% of signed delegations carry it today.",
+    ("IT REACHED REAL USE",
+     "It peaked at 2.03% of signed names in 2020-06.",
      "a different measure entirely"),
     ("IT IS SPREADING",
-     "It is not. The share has been flat for two years.",
+     "It is not. It has fallen back to 0.37% since.",
      "a third measure again"),
 ], height=2.0)
 textbox(s, M, top + Inches(2.4), W - 2 * M, Inches(1.4),
-        "“Ed25519 was adopted after 5.6 years” and “Ed25519 was never adopted” "
+        "“Ed25519 was adopted after 1.9 years” and “Ed25519 was never adopted” "
         "are both defensible readings of the same record.\n"
         "That is what makes the word unusable once a number is attached to it.",
         size=17)
@@ -272,21 +272,23 @@ s, top = new("The same three stages, three different endings",
              "All three of these “first appeared”. Only one of them is used.",
              eyebrow="worked examples")
 after = table(s, M, top, W - 2 * M, [
-    ["Mechanism", "RFC", "1 · first seen", "2 · partial", "3 · common", "Today"],
-    ["ECDSA P-256", "6605 · 2012-04", "2015-12   n=2", "2018-06", "2019-03", "68.0%"],
-    ["RSA/SHA-512", "5702 · 2009-10", "2012-02   n=1", "2017-01", "never", "0.37%"],
-    ["Ed25519", "8080 · 2017-02", "2022-09   n=1", "never", "never", "0.34%"],
-], [0.20, 0.20, 0.22, 0.14, 0.13, 0.11], row_h=0.52)
+    ["From RFC 8080", "Onset", "1 · first seen", "2 · in use", "3 · widely used", "Peak", "Now"],
+    ["Ed25519", "1.9 y", "2019-01", "2020-04", "never", "2.03%", "0.37%"],
+    ["Ed448", "3.2 y", "2020-05", "never", "never", "0.03%", "0.03%"],
+    ["ECDSA P-256 (RFC 6605)", "3.6 y", "2015-11", "2016-10", "2019-02", "76.2%", "71.1%"],
+], [0.24, 0.10, 0.15, 0.13, 0.15, 0.11, 0.11], row_h=0.52)
 
 textbox(s, M, after + Inches(0.26), Inches(5.7), Inches(0.34),
         "Why the stages are separate", size=15, bold=True, color=TEAL)
 textbox(s, M, after + Inches(0.64), Inches(5.7), Inches(1.9),
-        "One “adoption date” would have called all three adopted, because all "
-        "three were first seen." + NL + NL +
-        "Ed25519 never left stage 1 — its first sighting was a single zone, and "
-        "nine years on it is still 0.34%. An existence proof, nothing more." + NL + NL +
-        "RSA/SHA-512 cleared stage 2 and stopped. Somebody genuinely uses it; it "
-        "never became a normal choice. Only stages 2 and 3 apart can say that.",
+        "Ed25519 and Ed448 are defined by the SAME RFC, published the same day, "
+        "in the same cryptographic family." + NL + NL +
+        "Ed25519 appeared after 1.9 years, reached real use, peaked at 2.03% and "
+        "has fallen back to 0.37%. Ed448 took 3.2 years to appear and has never "
+        "been used by more than a handful of zones." + NL + NL +
+        "One date per RFC would have averaged these into a single number for "
+        "“RFC 8080” and hidden both stories. This is why the unit of measurement "
+        "is the observable change, not the document.",
         size=13.5)
 
 textbox(s, M + Inches(6.3), after + Inches(0.26), Inches(5.4), Inches(0.34),
@@ -351,15 +353,52 @@ textbox(s, M, top + Inches(3.6), W - 2 * M, Inches(0.8),
         "set is incomplete.", size=14, color=MUTED)
 
 # =========================================================================== #
+# 7b. What the full corpus changed
+# =========================================================================== #
+s, top = new("What the full corpus changed",
+             "Adding 8.24 TB of forward data moved 14 dates and refuted one finding.",
+             eyebrow="the full run")
+cards(s, top, [
+    ("MEASURABLE OBSERVABLES",
+     "14  →  24",
+     "Ten became measurable for the first time. The forward corpus carries NSEC3 "
+     "parameters, DNSKEY flags and CDS, which delegation data cannot."),
+    ("FIRST-SEEN DATES MOVED EARLIER",
+     "14 of them",
+     "Existence is a minimum over all evidence, so more corpus can only move a "
+     "date earlier. Largest: SHA-384 digest −4.1 y, Ed25519 −3.7 y."),
+    ("A FINDING WITHDRAWN",
+     "no longer true",
+     "“Each new algorithm takes longer to appear” held in reverse data and fails "
+     "on the full corpus."),
+], height=1.8, size=16)
+after = table(s, M, top + Inches(1.98), W - 2 * M, [
+    ["New cryptographic primitive", "Published", "Reverse only", "Full corpus"],
+    ["ECC-GOST", "2010-07", "—", "2.4 y"],
+    ["ECDSA P-256", "2012-04", "3.7 y", "3.6 y"],
+    ["ECDSA P-384", "2012-04", "4.0 y", "3.9 y"],
+    ["Ed25519", "2017-02", "5.6 y", "1.9 y  ← the newest is the fastest"],
+    ["Ed448", "2017-02", "5.8 y", "3.2 y"],
+], [0.30, 0.16, 0.18, 0.36], row_h=0.34)
+textbox(s, M, after + Inches(0.12), W - 2 * M, Inches(0.6),
+        "Reverse only: 3.7 → 4.0 → 5.6 → 5.8, monotonic. Full corpus: "
+        "2.4 → 3.6 → 3.9 → 1.9 → 3.2, not monotonic. The pattern was a property of "
+        "one corpus: reverse-DNS operators adopt late, so every newer algorithm "
+        "looked slower. .se had Ed25519 in 2019-01; the RIRs not until 2022-08.",
+        size=12.5, color=MUTED)
+
+# =========================================================================== #
 # 8. Insight — onset does not predict spread
 # =========================================================================== #
 s, top = new("Being early tells you nothing about ending up used",
              eyebrow="insight 1")
 picture(s, "onset_vs_spread", top, max_h=Inches(4.2))
-textbox(s, M, H - Inches(1.25), W - 2 * M, Inches(0.9),
-        "The two most prevalent mechanisms were slower than average to appear. "
-        "Half the fastest are still below 1%. This is the evidence FOR splitting "
-        "the definition, not an assumption behind it.", size=15)
+textbox(s, M, H - Inches(1.45), W - 2 * M, Inches(1.1),
+        "Peak share, not today's — “today” is 2023-12 for the forward-only "
+        "observables and 2026-08 for the DS ones, so one axis cannot carry both. "
+        "At n=11 the correlation is not distinguishable from zero under either "
+        "endpoint (−0.14 on peak, +0.33 on latest). This is the evidence FOR "
+        "splitting the definition, not an assumption behind it.", size=14)
 
 # =========================================================================== #
 # 9. Insight — implementation cost predicts onset
@@ -367,20 +406,23 @@ textbox(s, M, H - Inches(1.25), W - 2 * M, Inches(0.9),
 s, top = new("What does predict onset: how many parties must ship code",
              eyebrow="insight 2")
 after = table(s, M, top, W - 2 * M, [
-    ["What the change requires", "Measured on", "Onset"],
+    ["What the change requires", "Measured on", "Onset", "n"],
     ["A new codepoint — the cryptography is already linked in",
-     "algorithms 8, 10", "0.5 – 0.8 y"],
-    ["A new DS digest — a hash, parent side only", "digests 3, 4", "0.8 – 1.3 y"],
-    ["Same cryptography, new signalling", "algorithm 7", "1.4 y"],
+     "algorithms 8, 10", "0.4 – 0.8 y", "2"],
+    ["A new DS digest — a hash, parent side only", "digests 3, 4", "0.8 – 1.2 y", "2"],
+    ["Same cryptography, new signalling", "algorithm 7", "1.3 y", "1"],
+    ["A new record type on existing infrastructure", "CDS delete", "1.4 y", "1"],
     ["A NEW PRIMITIVE — signer AND validator must both ship",
-     "algorithms 12–16", "2.5 – 5.8 y"],
-], [0.56, 0.22, 0.22], row_h=0.6)
-textbox(s, M, after + Inches(0.25), W - 2 * M, Inches(1.5),
-        "The one real gap in the data — 1.4 y to 2.5 y — falls exactly where a "
-        "change starts needing both ends. Not difficulty: Ed25519 is no harder to "
-        "implement than RSA/SHA-512.\n\n"
-        "RFC 5218 calls this “incrementally deployable”, which is the citation for "
-        "the mechanism.", size=16)
+     "algorithms 12–16", "1.9 – 3.9 y", "5"],
+], [0.50, 0.20, 0.20, 0.06], row_h=0.52)
+textbox(s, M, after + Inches(0.22), W - 2 * M, Inches(1.7),
+        "Five groups, strictly ascending, on the full corpus. The claim to make is "
+        "about the ORDERING: the middle gaps are 0.1 y with n=1, which is not a "
+        "boundary. Only the last gap is substantial — 1.4 y to 1.9 y, where a "
+        "change starts needing both ends." + NL + NL +
+        "Not difficulty: Ed25519 is no harder to implement than RSA/SHA-512. "
+        "RFC 5218 calls it “incrementally deployable”, which is the citation for "
+        "the mechanism.", size=14.5)
 
 # =========================================================================== #
 # 10. Insight — displacement

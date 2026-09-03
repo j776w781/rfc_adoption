@@ -114,6 +114,7 @@ Every error this project has had to retract violates one of them:
 | "EdDSA adopted after 5.6 years" | 2 — n=1, and occurrence read as prevalence |
 | "Rollovers peak when adoption is steepest" | Layer 4 — attribution asserted, r = 0.43 |
 | "RFC 6840 first seen 2013-02, 1.8M observations" | Layer 1 — occurrence of the wrong thing |
+| "Onset increases monotonically with publication date" | 3 — true of one corpus, asserted of the ecosystem |
 
 ## Worked rewrites
 
@@ -135,9 +136,18 @@ That parenthesis is a **third rule**, learned the hard way — see
    3.9 y is the same error as quoting a prevalence without its population.
 
 **Before:** "Each new algorithm took longer to be adopted."
-**After:** "Onset lag increases monotonically with publication date across the four
-signing-algorithm families. Rise time does not vary with it — the variation is in
-onset, not in spread."
+**~~After:~~ WITHDRAWN.** The replacement was *"onset lag increases monotonically
+with publication date across the four signing-algorithm families"*, and the full
+corpus refutes it: `2.4 → 3.6 → 3.9 → 1.9 → 3.2` years by publication date, with
+the **newest primitive the fastest**. The monotonic pattern existed only in the
+reverse corpus, which sees EdDSA in 2022 where `.se` had it in 2019. Reverse-DNS
+operators adopt late as a group, so a reverse-only view makes every newer
+algorithm look slower than it was.
+
+This is rule 3 biting the sentence written to demonstrate rule 3. The honest form
+names the corpus: *"across the five signing primitives measured on the full
+corpus, onset does not vary with publication date."* See
+[full_run_findings.md](full_run_findings.md).
 
 **Before:** "15.3% of DS records still use SHA-1, a compliance problem."
 **After:** "`P(digest 1 | DS records)` = 15.3%, a residue. RFC 9905 closes it to

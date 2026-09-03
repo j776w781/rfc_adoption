@@ -58,6 +58,12 @@ reverse corpus alone. The forward corpus has it in `.se` from **2021-01** — 53
 distinct domains, 6.6M observations, not a stray. The correct onset is **3.9 y**.
 This is exactly what going RFC-by-RFC across all evidence is for.
 
+> **Superseded by the full corpus.** The bands below were computed on the reverse
+> corpus alone. On the full 8.24 TB run the ordering holds across *five* groups but
+> the separation narrows sharply, and the new-primitive band moves from 2.5–5.8 y
+> to 1.9–3.9 y. See [full_run_findings.md](full_run_findings.md) for the current
+> figures; the reasoning below is unchanged and still the argument.
+
 ## Step 3 — grouping by the implementation change required
 
 Groups derived from what an implementer must do, then checked against onset:

@@ -42,7 +42,14 @@ def save(fig, name):
 
 
 curves = json.load(open(RUN / "curves.json"))
-bottom_up = json.load(open(RUN / "bottom_up.json"))
+BUNDLE = Path(sys.argv[3]) if len(sys.argv) > 3 else None
+if BUNDLE and BUNDLE.exists():
+    bottom_up = json.load(open(BUNDLE))["bottom_up"]
+    SCOPE = "full corpus"
+else:
+    bottom_up = json.load(open(RUN / "bottom_up.json"))
+    SCOPE = "reverse corpus"
+print(f"  onsets from: {SCOPE}")
 
 
 def months_axis(ax, months):
@@ -120,15 +127,21 @@ save(fig, "why_not_rogers")
 # --------------------------------------------------------------------------- #
 # 3. Onset does not predict spread.
 # --------------------------------------------------------------------------- #
+# Peak share, not today's share: "today" is 2023-12 for forward-only dimensions
+# and 2026-08 for DS ones, because the forward sources stop in 2023. Comparing
+# those in one scatter would put two different dates on one axis.
 pts = [r for r in bottom_up
-       if r.get("onset_years") is not None and not r["is_residue"]
-       and not r["left_censored"] and r.get("current_share_pct") is not None]
+       if r.get("onset_years") is not None and r["onset_years"] >= 0
+       and not r["is_residue"] and not r["left_censored"]
+       and r.get("peak_share_pct") is not None]
+for r in pts:
+    r["_y"] = r["peak_share_pct"]
 fig, ax = plt.subplots(figsize=(9.6, 4.8))
 for r in pts:
-    c = TEAL if r["current_share_pct"] >= 5 else AMBER
-    ax.scatter(r["onset_years"], np.sqrt(r["current_share_pct"]), s=95,
+    c = TEAL if r["_y"] >= 5 else AMBER
+    ax.scatter(r["onset_years"], np.sqrt(r["_y"]), s=95,
                color=c, zorder=3, edgecolor="white", lw=1.6)
-    ax.annotate(r["label"], (r["onset_years"], np.sqrt(r["current_share_pct"])),
+    ax.annotate(r["label"], (r["onset_years"], np.sqrt(r["_y"])),
                 xytext=(9, -3), textcoords="offset points", fontsize=9.5,
                 color=MUTED)
 for v in (0, 1, 5, 25, 100):
@@ -136,12 +149,18 @@ for v in (0, 1, 5, 25, 100):
 ax.set_yticks([np.sqrt(v) for v in (0, 1, 5, 25, 100)])
 ax.set_yticklabels(["0%", "1%", "5%", "25%", "100%"])
 ax.set_xlabel("onset — years from RFC publication to first sighting")
-ax.set_ylabel("share of signed delegations today")
-ax.set_xlim(0, 6.6)
+ax.set_ylabel("peak share of signed names reached")
+ax.set_xlim(0, max(r["onset_years"] for r in pts) + 1.4)
 ax.set_axisbelow(True)
-ax.text(0.63, 0.10, "r = +0.02", transform=ax.transAxes, fontsize=15,
-        fontweight="bold", color=INK)
-ax.text(0.63, 0.02, "onset explains nothing about where it ends up",
+import statistics as _st
+_xs = [r["onset_years"] for r in pts]; _ys = [r["_y"] for r in pts]
+_mx, _my = _st.mean(_xs), _st.mean(_ys)
+_num = sum((a - _mx) * (b - _my) for a, b in zip(_xs, _ys))
+_den = (sum((a - _mx) ** 2 for a in _xs) * sum((b - _my) ** 2 for b in _ys)) ** 0.5
+_r = _num / _den if _den else 0.0
+ax.text(0.60, 0.12, f"r = {_r:+.2f}   n = {len(pts)}", transform=ax.transAxes,
+        fontsize=15, fontweight="bold", color=INK)
+ax.text(0.60, 0.03, "not distinguishable from no relationship",
         transform=ax.transAxes, fontsize=10, color=MUTED)
 save(fig, "onset_vs_spread")
 
