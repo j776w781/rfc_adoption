@@ -240,7 +240,7 @@ def deployment_context(rows: dict, timeline: Path) -> list[dict]:
             continue
         out.append({"cve": r["cve"], "published": r["published"], "mechanism": r["mechanism"],
                     "cvss": r["cvss"],
-                    "high_iteration_zones_that_month": int(high.get(m, 0)),
+                    "high_iteration_names_that_month": int(high.get(m, 0)),
                     "description": (r["description"] or "")[:160]})
     return out
 

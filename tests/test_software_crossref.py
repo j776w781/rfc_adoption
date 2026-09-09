@@ -106,7 +106,7 @@ def test_nsec3_collapse_precedes_rfc_9276(analysis):
     """The whole point: deployment moved before the RFC, not after."""
     c = analysis["nsec3_iteration_collapse"]
     assert c["largest_single_month_fall"]["month"] < c["rfc_9276_published"]
-    assert c["largest_single_month_fall"]["zones_lost"] > 10000
+    assert c["largest_single_month_fall"]["names_lost"] > 10000
 
 
 def test_most_rfcs_land_on_a_predecessor_still_spreading(analysis):

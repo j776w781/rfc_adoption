@@ -153,16 +153,23 @@ to change an NSEC3 iteration count, because a count above what resolvers accept
 stops the zone validating. So this is the one mechanism where the arrow is
 readable from outside.
 
-    zones publishing NSEC3 with >= 100 iterations, forward corpus
+    distinct NSEC3 owner names published with >= 100 iterations, forward corpus
 
     2021-06   18,077
-    2021-07   18,071
+    2021-07   18,071     <- PowerDNS Auth 4.5.0 caps configurable iterations at 100
     2021-08   17,941     <- Unbound 1.13.2 released 2021-08-05
     2021-09   17,491
     2021-10    3,027     <- -83% in one month
     2021-11      528     <- -97% against August
+    2021-12      528     <- Knot 3.1.5 adds a config check
     2022-01      534
                          <- RFC 9276 published 2022-08
+
+An owner name, not a zone: NSEC3 owner names are hashed, so one zone contributes
+one name per hashed owner. The zone-level measure is NSEC3PARAM, which sits only
+at the apex, and it puts NSEC3 on 98.4% of signed forward zones in 2016-06 and
+61.9% by 2023-12. The collapse below is a within-series comparison, so the
+percentages hold whichever unit is used.
 
 The Unbound commit that lowered the cap (2021-05-25) says what it is doing:
 
@@ -170,8 +177,10 @@ The Unbound commit that lowered the cap (2021-05-25) says what it is doing:
 > Knot and ..."*
 
 A cross-vendor agreement, stated in a commit message, **15 months before RFC 9276
-was published**. PowerDNS lowered `max-nsec3-iterations` to 100 in 4.6.0
-(2021-12-14); Knot added a config check in 3.1.5 (2021-12-20).
+was published**. PowerDNS Authoritative had already capped the configurable
+maximum at 100 in 4.5.0 (2021-07-12) — the authoritative side of the same
+squeeze, limiting what an operator can ask for — and Knot added a config check in
+3.1.5 (2021-12-20).
 
 **The zones moved two months after the resolver release and ten months before the
 RFC.** RFC 9276 documented a change that had already happened. This is the
@@ -179,7 +188,7 @@ explanation for the `predates_rfc` flag and the −6.2 y "negative onset" that
 `full_run_findings.md` recorded and could not account for: the question was not
 mis-posed, the RFC simply was not the cause.
 
-`.gov` is the control. It sat at 40 zones over 100 iterations before the collapse
+`.gov` is the control. It sat at 40 such names before the collapse
 and 42 after — it never moved, because it was never above the cap.
 
 ## Every jump is one operator, and the pairs show it

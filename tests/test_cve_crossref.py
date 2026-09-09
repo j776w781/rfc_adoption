@@ -105,3 +105,46 @@ def test_doc_cve_ids_all_exist_in_the_inventory(doc, a):
     known = {c["cve"] for c in a["cves"]}
     for cve in set(re.findall(r"CVE-\d{4}-\d{4,7}", doc)):
         assert cve in known, cve
+
+
+ADOPT = ROOT / "out" / "analysis" / "cve_adoption_crossref.json"
+
+
+@pytest.fixture(scope="module")
+def adopt() -> dict:
+    if not ADOPT.exists():
+        pytest.skip("run scripts/cve_adoption_crossref.py first")
+    return json.loads(ADOPT.read_text(encoding="utf-8"))
+
+
+def test_adoption_join_only_attaches_named_mechanisms(adopt):
+    """A bug in the shared validation path is not evidence against one algorithm."""
+    t = adopt["totals"]
+    assert t["attached_to_a_named_mechanism"] + t["not_attachable"] == t["dnssec_cves"]
+    assert t["attached_to_a_named_mechanism"] < t["not_attachable"]
+
+
+def test_shared_core_carries_most_dnssec_cves(adopt):
+    """The finding: the attack surface is the machinery common to all deployments."""
+    assert adopt["shared_core"]["n_cves"] > adopt["totals"]["attached_to_a_named_mechanism"]
+
+
+def test_no_cve_predates_first_use_of_what_it_attacks(adopt):
+    stages = [c["stage_when_published"]
+              for r in adopt["changes"] for c in r["cves"]]
+    assert stages, "expected at least one mechanism-named CVE"
+    assert "before first use" not in stages
+
+
+def test_nsec3_is_measured_by_nsec3param_not_algorithm_7(adopt):
+    """Algorithm 7 peaks near 29%; NSEC3 itself sits far higher, and the CVEs
+    matched on /NSEC3/ are about the mechanism."""
+    n3 = adopt["nsec3_mechanism"]
+    alg7 = next(r for r in adopt["changes"] if r["change"] == "RSASHA1-NSEC3")
+    assert n3["peak_share_pct"] > 2 * alg7["peak_share_pct"]
+    assert "NSEC3PARAM" in n3["basis"]
+
+
+def test_correlation_is_reported_with_its_caveat(adopt):
+    assert adopt["correlation_peak_share_vs_cve_count"] is not None
+    assert "establish" in adopt["correlation_caveat"]

@@ -329,7 +329,7 @@
       "published": "2017-01-12",
       "mechanism": "dnssec-other",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 11507,
+      "high_iteration_names_that_month": 11507,
       "description": "named in ISC BIND 9.9.9-P4, 9.9.9-S6, 9.10.4-P4, and 9.11.0-P1 allows remote attackers to cause a denial of service (assertion failure and daemon exit) via a re"
     },
     {
@@ -337,7 +337,7 @@
       "published": "2018-01-22",
       "mechanism": "validation",
       "cvss": 3.7,
-      "high_iteration_zones_that_month": 12227,
+      "high_iteration_names_that_month": 12227,
       "description": "Improper input validation bugs in DNSSEC validators components in Knot Resolver (prior version 1.5.2) allow attacker in man-in-the-middle position to deny exist"
     },
     {
@@ -345,7 +345,7 @@
       "published": "2018-01-22",
       "mechanism": "validation",
       "cvss": 3.7,
-      "high_iteration_zones_that_month": 12227,
+      "high_iteration_names_that_month": 12227,
       "description": "Improper input validation bugs in DNSSEC validators components in PowerDNS version 4.1.0 allow attacker in man-in-the-middle position to deny existence of some "
     },
     {
@@ -353,7 +353,7 @@
       "published": "2018-01-23",
       "mechanism": "nsec",
       "cvss": 5.3,
-      "high_iteration_zones_that_month": 12227,
+      "high_iteration_names_that_month": 12227,
       "description": "A flaw was found in the way unbound before 1.6.8 validated wildcard-synthesized NSEC records. An improperly validated wildcard NSEC record could be used to prov"
     },
     {
@@ -361,7 +361,7 @@
       "published": "2018-01-23",
       "mechanism": "dnskey",
       "cvss": 5.9,
-      "high_iteration_zones_that_month": 12227,
+      "high_iteration_names_that_month": 12227,
       "description": "An issue has been found in the DNSSEC validation component of PowerDNS Recursor from 4.0.0 and up to and including 4.0.6, where the signatures might have been a"
     },
     {
@@ -369,7 +369,7 @@
       "published": "2018-01-23",
       "mechanism": "algorithm",
       "cvss": 5.9,
-      "high_iteration_zones_that_month": 12227,
+      "high_iteration_names_that_month": 12227,
       "description": "An issue has been found in the DNSSEC parsing code of PowerDNS Recursor from 4.0.0 up to and including 4.0.6 leading to a memory leak when parsing specially cra"
     },
     {
@@ -377,7 +377,7 @@
       "published": "2018-01-23",
       "mechanism": "nsec",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 12227,
+      "high_iteration_names_that_month": 12227,
       "description": "A vulnerability was found in the implementation of DNSSEC in Dnsmasq up to and including 2.78. Wildcard synthesized NSEC records could be improperly interpreted"
     },
     {
@@ -385,7 +385,7 @@
       "published": "2018-11-09",
       "mechanism": "validation",
       "cvss": 5.3,
-      "high_iteration_zones_that_month": 12792,
+      "high_iteration_names_that_month": 12792,
       "description": "An issue has been found in PowerDNS Recursor from 4.0.0 up to and including 4.1.4. A remote attacker sending a DNS query for a meta-type like OPT can lead to a "
     },
     {
@@ -393,7 +393,7 @@
       "published": "2019-01-16",
       "mechanism": "nsec",
       "cvss": 5.9,
-      "high_iteration_zones_that_month": 12868,
+      "high_iteration_names_that_month": 12868,
       "description": "A problem with the implementation of the new serve-stale feature in BIND 9.12 can lead to an assertion failure in rbtdb.c, even when stale-answer-enable is off."
     },
     {
@@ -401,7 +401,7 @@
       "published": "2019-01-29",
       "mechanism": "validation",
       "cvss": 3.7,
-      "high_iteration_zones_that_month": 12868,
+      "high_iteration_names_that_month": 12868,
       "description": "An issue has been found in PowerDNS Recursor versions 4.1.x before 4.1.9 where records in the answer section of responses received from authoritative servers wi"
     },
     {
@@ -409,7 +409,7 @@
       "published": "2019-04-09",
       "mechanism": "validation",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 12946,
+      "high_iteration_names_that_month": 12946,
       "description": "A denial of service flaw was found in the way BIND handled DNSSEC validation. A remote attacker could use this flaw to make named exit unexpectedly with an asse"
     },
     {
@@ -417,7 +417,7 @@
       "published": "2019-07-16",
       "mechanism": "validation",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 13064,
+      "high_iteration_names_that_month": 13064,
       "description": "A vulnerability was discovered in DNS resolver component of knot resolver through version 3.2.0 before 4.1.0 which allows remote attackers to bypass DNSSEC vali"
     },
     {
@@ -425,7 +425,7 @@
       "published": "2019-07-16",
       "mechanism": "dnssec-other",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 13064,
+      "high_iteration_names_that_month": 13064,
       "description": "A vulnerability was discovered in DNS resolver of knot resolver before version 4.1.0 which allows remote attackers to downgrade DNSSEC-secure domains to DNSSEC-"
     },
     {
@@ -433,7 +433,7 @@
       "published": "2019-07-30",
       "mechanism": "dnssec-other",
       "cvss": 7.8,
-      "high_iteration_zones_that_month": 13064,
+      "high_iteration_names_that_month": 13064,
       "description": "cPanel before 76.0.8 allows arbitrary code execution in the context of the root account via dnssec adminbin (SEC-465)."
     },
     {
@@ -441,7 +441,7 @@
       "published": "2019-10-09",
       "mechanism": "trust-anchor",
       "cvss": 4.9,
-      "high_iteration_zones_that_month": 13186,
+      "high_iteration_names_that_month": 13186,
       "description": "\"managed-keys\" is a feature which allows a BIND resolver to automatically maintain the keys used by trust anchors which operators configure for use in DNSSEC va"
     },
     {
@@ -449,7 +449,7 @@
       "published": "2019-10-17",
       "mechanism": "trust-anchor",
       "cvss": 5.9,
-      "high_iteration_zones_that_month": 13186,
+      "high_iteration_names_that_month": 13186,
       "description": "Mirror zones are a BIND feature allowing recursive servers to pre-cache zone data provided by other servers. A mirror zone is similar to a zone of type secondar"
     },
     {
@@ -457,7 +457,7 @@
       "published": "2020-05-19",
       "mechanism": "validation",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 17287,
+      "high_iteration_names_that_month": 17287,
       "description": "An issue has been found in PowerDNS Recursor 4.1.0 through 4.3.0 where records in the answer section of a NXDOMAIN response lacking an SOA were not properly val"
     },
     {
@@ -465,7 +465,7 @@
       "published": "2020-09-25",
       "mechanism": "dnssec-other",
       "cvss": 6.1,
-      "high_iteration_zones_that_month": 17644,
+      "high_iteration_names_that_month": 17644,
       "description": "cPanel before 88.0.13 allows self XSS via DNS Zone Manager DNSSEC interfaces (SEC-564)."
     },
     {
@@ -473,7 +473,7 @@
       "published": "2020-10-16",
       "mechanism": "validation",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 17734,
+      "high_iteration_names_that_month": 17734,
       "description": "An issue has been found in PowerDNS Recursor before 4.1.18, 4.2.x before 4.2.5, and 4.3.x before 4.3.5. A remote attacker can cause the cached records for a giv"
     },
     {
@@ -481,7 +481,7 @@
       "published": "2021-01-20",
       "mechanism": "validation",
       "cvss": 8.1,
-      "high_iteration_zones_that_month": 18149,
+      "high_iteration_names_that_month": 18149,
       "description": "A flaw was found in dnsmasq before version 2.83. A heap-based buffer overflow was discovered in the way RRSets are sorted before validating with DNSSEC data. An"
     },
     {
@@ -489,7 +489,7 @@
       "published": "2021-01-20",
       "mechanism": "validation",
       "cvss": 8.1,
-      "high_iteration_zones_that_month": 18149,
+      "high_iteration_names_that_month": 18149,
       "description": "A flaw was found in dnsmasq before 2.83. A buffer overflow vulnerability was discovered in the way dnsmasq extract names from DNS packets before validating them"
     },
     {
@@ -497,7 +497,7 @@
       "published": "2021-01-20",
       "mechanism": "validation",
       "cvss": 5.9,
-      "high_iteration_zones_that_month": 18149,
+      "high_iteration_names_that_month": 18149,
       "description": "A flaw was found in dnsmasq before version 2.83. A heap-based buffer overflow was discovered in dnsmasq when DNSSEC is enabled and before it validates the recei"
     },
     {
@@ -505,7 +505,7 @@
       "published": "2021-01-20",
       "mechanism": "ds-digest",
       "cvss": 3.7,
-      "high_iteration_zones_that_month": 18149,
+      "high_iteration_names_that_month": 18149,
       "description": "A flaw was found in dnsmasq before version 2.83. When getting a reply from a forwarded query, dnsmasq checks in forward.c:reply_query(), which is the forwarded "
     },
     {
@@ -513,7 +513,7 @@
       "published": "2021-01-20",
       "mechanism": "validation",
       "cvss": 5.9,
-      "high_iteration_zones_that_month": 18149,
+      "high_iteration_names_that_month": 18149,
       "description": "A flaw was found in dnsmasq before version 2.83. A heap-based buffer overflow was discovered in dnsmasq when DNSSEC is enabled and before it validates the recei"
     },
     {
@@ -521,7 +521,7 @@
       "published": "2021-08-25",
       "mechanism": "nsec3",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 17941,
+      "high_iteration_names_that_month": 17941,
       "description": "Knot Resolver before 5.3.2 is prone to an assertion failure, triggerable by a remote attacker in an edge case (NSEC3 with too many iterations used for a positiv"
     },
     {
@@ -529,7 +529,7 @@
       "published": "2022-08-15",
       "mechanism": "dnssec-other",
       "cvss": 5.3,
-      "high_iteration_zones_that_month": 584,
+      "high_iteration_names_that_month": 584,
       "description": "dproxy-nexgen (aka dproxy nexgen) forwards and caches DNS queries with the CD (aka checking disabled) bit set to 1. This leads to disabling of DNSSEC protection"
     },
     {
@@ -537,7 +537,7 @@
       "published": "2022-08-15",
       "mechanism": "dnssec-other",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 584,
+      "high_iteration_names_that_month": 584,
       "description": "DNRD (aka Domain Name Relay Daemon) 2.20.3 forwards and caches DNS queries with the CD (aka checking disabled) bit set to 1. This leads to disabling of DNSSEC p"
     },
     {
@@ -545,7 +545,7 @@
       "published": "2022-09-21",
       "mechanism": "algorithm",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 603,
+      "high_iteration_names_that_month": 603,
       "description": "By spoofing the target resolver with responses that have a malformed ECDSA signature, an attacker can trigger a small memory leak. It is possible to gradually e"
     },
     {
@@ -553,7 +553,7 @@
       "published": "2022-09-21",
       "mechanism": "algorithm",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 603,
+      "high_iteration_names_that_month": 603,
       "description": "By spoofing the target resolver with responses that have a malformed EdDSA signature, an attacker can trigger a small memory leak. It is possible to gradually e"
     },
     {
@@ -561,7 +561,7 @@
       "published": "2022-09-26",
       "mechanism": "dnskey",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 603,
+      "high_iteration_names_that_month": 603,
       "description": "A vulnerability named 'Non-Responsive Delegation Attack' (NRDelegation Attack) has been discovered in various DNS resolving software. The NRDelegation Attack wo"
     },
     {
@@ -569,7 +569,7 @@
       "published": "2022-10-19",
       "mechanism": "dnssec-other",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 695,
+      "high_iteration_names_that_month": 695,
       "description": "In BIG-IP versions 17.0.x before 17.0.0.1, 16.1.x before 16.1.3.1, 15.1.x before 15.1.6.1, 14.1.x before 14.1.5.1, and 13.1.x before 13.1.5.1, when DNS profile "
     },
     {
@@ -577,7 +577,7 @@
       "published": "2022-12-28",
       "mechanism": "rrsig",
       "cvss": 6.5,
-      "high_iteration_zones_that_month": 649,
+      "high_iteration_names_that_month": 649,
       "description": "DNSSEC validation is not performed correctly. An attacker can cause this package to report successful validation for invalid, attacker-controlled records. The o"
     },
     {
@@ -585,7 +585,7 @@
       "published": "2022-12-28",
       "mechanism": "validation",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 649,
+      "high_iteration_names_that_month": 649,
       "description": "DNSSEC validation is not performed correctly. An attacker can cause this package to report successful validation for invalid, attacker-controlled records. Root "
     },
     {
@@ -593,7 +593,7 @@
       "published": "2023-01-21",
       "mechanism": "ds-digest",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 688,
+      "high_iteration_names_that_month": 688,
       "description": "A remote attacker might be able to cause infinite recursion in PowerDNS Recursor 4.8.0 via a DNS query that retrieves DS records for a misconfigured domain, bec"
     },
     {
@@ -601,7 +601,7 @@
       "published": "2023-01-26",
       "mechanism": "rrsig",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 688,
+      "high_iteration_names_that_month": 688,
       "description": "BIND 9 resolver can crash when stale cache and stale answers are enabled, option `stale-answer-client-timeout` is set to a positive integer, and the resolver re"
     },
     {
@@ -609,7 +609,7 @@
       "published": "2023-06-21",
       "mechanism": "nsec",
       "cvss": 7.5,
-      "high_iteration_zones_that_month": 983,
+      "high_iteration_names_that_month": 983,
       "description": "A `named` instance configured to run as a DNSSEC-validating recursive resolver with the Aggressive Use of DNSSEC-Validated Cache (RFC 8198) option (`synth-from-"
     }
   ],

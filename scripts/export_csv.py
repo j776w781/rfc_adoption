@@ -120,6 +120,30 @@ def cves(a: dict, out: Path) -> None:
        for c in a["coordinated"]])
 
 
+def adoption(j: dict, out: Path) -> None:
+    w(out / "dns_cve_vs_adoption.csv",
+      ["change", "codepoint", "rfc", "rfc_published", "t_first_seen", "t_1pct",
+       "t_10pct", "onset_years", "peak_share_pct", "current_share_pct",
+       "reached_common_usage", "n_named_cves", "cve_ids", "cve_stages"],
+      [[r["change"], r["codepoint"], r["rfc"], r["published"], r["t_first"] or "",
+        r["t_1pct"] or "", r["t_10pct"] or "",
+        r["onset_years"] if r["onset_years"] is not None else "",
+        r["peak_share_pct"] if r["peak_share_pct"] is not None else "",
+        r["current_share_pct"] if r["current_share_pct"] is not None else "",
+        r["reached_common_usage"], r["n_cves"],
+        "; ".join(c["cve"] for c in r["cves"]),
+        "; ".join(f'{k}={v}' for k, v in r["cve_stage_counts"].items())]
+       for r in sorted(j["changes"], key=lambda x: -(x["peak_share_pct"] or 0))])
+
+    w(out / "dns_cve_vs_adoption_detail.csv",
+      ["cve", "published", "cvss", "mechanism", "change", "rfc",
+       "stage_when_published", "share_pct_then"],
+      [[c["cve"], c["published"], c["cvss"] if c["cvss"] is not None else "",
+        c["mechanism"] or "", r["change"], r["rfc"], c["stage_when_published"],
+        c["share_pct_then"] if c["share_pct_then"] is not None else ""]
+       for r in j["changes"] for c in r["cves"]])
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path, default=Path("out/analysis"))
@@ -132,6 +156,11 @@ def main() -> int:
         cves(json.loads(cve_path.read_text("utf-8")), args.out)
     else:
         print("  (skipping CVE exports: run scripts/cve_crossref.py first)")
+    adopt_path = Path("out/analysis/cve_adoption_crossref.json")
+    if adopt_path.exists():
+        adoption(json.loads(adopt_path.read_text("utf-8")), args.out)
+    else:
+        print("  (skipping adoption join: run scripts/cve_adoption_crossref.py first)")
     return 0
 
 

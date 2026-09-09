@@ -1,0 +1,965 @@
+{
+  "generated": "2026-09-09",
+  "method": {
+    "join": "CVE description must name the algorithm or mechanism.",
+    "why_narrow": "A bug in the shared validation path is not evidence against any one algorithm. Those are counted under shared_core.",
+    "share_basis": "reverse corpus, P(value | signed delegations)"
+  },
+  "totals": {
+    "dnssec_cves": 97,
+    "attached_to_a_named_mechanism": 16,
+    "shared_core_rfc_4033_4034_4035": 69,
+    "not_attachable": 81
+  },
+  "correlation_peak_share_vs_cve_count": 0.105,
+  "correlation_caveat": "11 mechanisms and 16 mechanism-named CVEs. This refutes a strong relationship; it does not establish a weak one.",
+  "nsec3_mechanism": {
+    "basis": "forward corpus, NSEC3PARAM zones / signed zones",
+    "first_month": "2016-06",
+    "last_month": "2023-12",
+    "peak_share_pct": 98.39,
+    "peak_month": "2016-06",
+    "last_share_pct": 61.94,
+    "mechanism": "NSEC3",
+    "rfc": "RFC 5155",
+    "published": "2008-03",
+    "n_cves": 12,
+    "cves": [
+      {
+        "cve": "CVE-2009-3602",
+        "published": "2009-10-13",
+        "cvss": 7.5
+      },
+      {
+        "cve": "CVE-2010-0097",
+        "published": "2010-01-22",
+        "cvss": 4.3
+      },
+      {
+        "cve": "CVE-2011-4869",
+        "published": "2011-12-20",
+        "cvss": 7.8
+      },
+      {
+        "cve": "CVE-2014-0591",
+        "published": "2014-01-14",
+        "cvss": 2.6
+      },
+      {
+        "cve": "CVE-2021-40083",
+        "published": "2021-08-25",
+        "cvss": 7.5
+      },
+      {
+        "cve": "CVE-2023-50868",
+        "published": "2024-02-14",
+        "cvss": 7.5
+      },
+      {
+        "cve": "CVE-2026-33261",
+        "published": "2026-04-22",
+        "cvss": 5.9
+      },
+      {
+        "cve": "CVE-2026-33278",
+        "published": "2026-05-20",
+        "cvss": 9.8
+      },
+      {
+        "cve": "CVE-2026-42923",
+        "published": "2026-05-20",
+        "cvss": 5.3
+      },
+      {
+        "cve": "CVE-2026-10723",
+        "published": "2026-07-22",
+        "cvss": 6.8
+      },
+      {
+        "cve": "CVE-2026-13204",
+        "published": "2026-07-22",
+        "cvss": 7.5
+      },
+      {
+        "cve": "CVE-2026-52686",
+        "published": "2026-07-23",
+        "cvss": 3.7
+      }
+    ]
+  },
+  "changes": [
+    {
+      "change": "DSA/SHA-1",
+      "codepoint": 3,
+      "rfc": "RFC 2536",
+      "published": "1999-03",
+      "t_first": "2009-04",
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": 10.08,
+      "peak_share_pct": 0.0,
+      "current_share_pct": 0.0,
+      "reached_common_usage": false,
+      "matchable": true,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "RSASHA1",
+      "codepoint": 5,
+      "rfc": "RFC 3110",
+      "published": "2001-05",
+      "t_first": "2009-04",
+      "t_1pct": "2011-05",
+      "t_10pct": "2011-05",
+      "onset_years": 7.92,
+      "peak_share_pct": 100.0,
+      "current_share_pct": 1.521,
+      "reached_common_usage": true,
+      "matchable": true,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "RSASHA1-NSEC3",
+      "codepoint": 7,
+      "rfc": "RFC 5155",
+      "published": "2008-03",
+      "t_first": "2009-08",
+      "t_1pct": "2011-05",
+      "t_10pct": "2011-08",
+      "onset_years": 1.42,
+      "peak_share_pct": 28.994,
+      "current_share_pct": 6.456,
+      "reached_common_usage": true,
+      "matchable": true,
+      "n_cves": 12,
+      "cve_stage_counts": {
+        "seen, below 1%": 2,
+        "in common usage": 10
+      },
+      "cves": [
+        {
+          "cve": "CVE-2009-3602",
+          "published": "2009-10-13",
+          "cvss": 7.5,
+          "mechanism": "nsec3",
+          "stage_when_published": "seen, below 1%",
+          "share_pct_then": 11.602
+        },
+        {
+          "cve": "CVE-2010-0097",
+          "published": "2010-01-22",
+          "cvss": 4.3,
+          "mechanism": "nsec3",
+          "stage_when_published": "seen, below 1%",
+          "share_pct_then": 15.385
+        },
+        {
+          "cve": "CVE-2011-4869",
+          "published": "2011-12-20",
+          "cvss": 7.8,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 17.374
+        },
+        {
+          "cve": "CVE-2014-0591",
+          "published": "2014-01-14",
+          "cvss": 2.6,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 9.042
+        },
+        {
+          "cve": "CVE-2021-40083",
+          "published": "2021-08-25",
+          "cvss": 7.5,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 8.646
+        },
+        {
+          "cve": "CVE-2023-50868",
+          "published": "2024-02-14",
+          "cvss": 7.5,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 5.085
+        },
+        {
+          "cve": "CVE-2026-33261",
+          "published": "2026-04-22",
+          "cvss": 5.9,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 5.856
+        },
+        {
+          "cve": "CVE-2026-33278",
+          "published": "2026-05-20",
+          "cvss": 9.8,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 5.696
+        },
+        {
+          "cve": "CVE-2026-42923",
+          "published": "2026-05-20",
+          "cvss": 5.3,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 5.696
+        },
+        {
+          "cve": "CVE-2026-10723",
+          "published": "2026-07-22",
+          "cvss": 6.8,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 5.382
+        },
+        {
+          "cve": "CVE-2026-13204",
+          "published": "2026-07-22",
+          "cvss": 7.5,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 5.382
+        },
+        {
+          "cve": "CVE-2026-52686",
+          "published": "2026-07-23",
+          "cvss": 3.7,
+          "mechanism": "nsec3",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 5.382
+        }
+      ]
+    },
+    {
+      "change": "RSASHA256",
+      "codepoint": 8,
+      "rfc": "RFC 5702",
+      "published": "2009-10",
+      "t_first": "2010-04",
+      "t_1pct": "2011-05",
+      "t_10pct": "2012-06",
+      "onset_years": 0.5,
+      "peak_share_pct": 74.642,
+      "current_share_pct": 22.3,
+      "reached_common_usage": true,
+      "matchable": true,
+      "n_cves": 1,
+      "cve_stage_counts": {
+        "in common usage": 1
+      },
+      "cves": [
+        {
+          "cve": "CVE-2026-22866",
+          "published": "2026-02-25",
+          "cvss": 7.5,
+          "mechanism": "algorithm",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 21.371
+        }
+      ]
+    },
+    {
+      "change": "RSASHA512",
+      "codepoint": 10,
+      "rfc": "RFC 5702",
+      "published": "2009-10",
+      "t_first": "2010-08",
+      "t_1pct": "2014-08",
+      "t_10pct": null,
+      "onset_years": 0.83,
+      "peak_share_pct": 3.723,
+      "current_share_pct": 0.372,
+      "reached_common_usage": false,
+      "matchable": true,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "ECC-GOST",
+      "codepoint": 12,
+      "rfc": "RFC 5933",
+      "published": "2010-07",
+      "t_first": "2013-01",
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": 2.5,
+      "peak_share_pct": 0.0,
+      "current_share_pct": 0.0,
+      "reached_common_usage": false,
+      "matchable": true,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "ECDSAP256SHA256",
+      "codepoint": 13,
+      "rfc": "RFC 6605",
+      "published": "2012-04",
+      "t_first": "2015-12",
+      "t_1pct": "2018-06",
+      "t_10pct": "2019-03",
+      "onset_years": 3.67,
+      "peak_share_pct": 67.955,
+      "current_share_pct": 67.955,
+      "reached_common_usage": true,
+      "matchable": true,
+      "n_cves": 2,
+      "cve_stage_counts": {
+        "seen, below 1%": 1,
+        "in common usage": 1
+      },
+      "cves": [
+        {
+          "cve": "CVE-2017-15094",
+          "published": "2018-01-23",
+          "cvss": 5.9,
+          "mechanism": "algorithm",
+          "stage_when_published": "seen, below 1%",
+          "share_pct_then": 6.642
+        },
+        {
+          "cve": "CVE-2022-38177",
+          "published": "2022-09-21",
+          "cvss": 7.5,
+          "mechanism": "algorithm",
+          "stage_when_published": "in common usage",
+          "share_pct_then": 35.218
+        }
+      ]
+    },
+    {
+      "change": "ECDSAP384SHA384",
+      "codepoint": 14,
+      "rfc": "RFC 6605",
+      "published": "2012-04",
+      "t_first": "2016-04",
+      "t_1pct": "2018-09",
+      "t_10pct": null,
+      "onset_years": 4.0,
+      "peak_share_pct": 3.452,
+      "current_share_pct": 2.747,
+      "reached_common_usage": false,
+      "matchable": true,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "Ed25519",
+      "codepoint": 15,
+      "rfc": "RFC 8080",
+      "published": "2017-02",
+      "t_first": "2022-09",
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": 5.58,
+      "peak_share_pct": 0.371,
+      "current_share_pct": 0.341,
+      "reached_common_usage": false,
+      "matchable": true,
+      "n_cves": 1,
+      "cve_stage_counts": {
+        "seen, below 1%": 1
+      },
+      "cves": [
+        {
+          "cve": "CVE-2022-38178",
+          "published": "2022-09-21",
+          "cvss": 7.5,
+          "mechanism": "algorithm",
+          "stage_when_published": "seen, below 1%",
+          "share_pct_then": 0.024
+        }
+      ]
+    },
+    {
+      "change": "Ed448",
+      "codepoint": 16,
+      "rfc": "RFC 8080",
+      "published": "2017-02",
+      "t_first": "2022-12",
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": 5.83,
+      "peak_share_pct": 0.04,
+      "current_share_pct": 0.031,
+      "reached_common_usage": false,
+      "matchable": true,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "SM2SM3",
+      "codepoint": 17,
+      "rfc": "RFC 9563",
+      "published": "2024-12",
+      "t_first": null,
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": null,
+      "peak_share_pct": 0.0,
+      "current_share_pct": 0.0,
+      "reached_common_usage": false,
+      "matchable": false,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "ECC-GOST12",
+      "codepoint": 23,
+      "rfc": "RFC 9558",
+      "published": "2024-04",
+      "t_first": null,
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": null,
+      "peak_share_pct": 0.0,
+      "current_share_pct": 0.0,
+      "reached_common_usage": false,
+      "matchable": false,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "SHA-1 DS digest",
+      "codepoint": 1,
+      "rfc": "RFC 3658",
+      "published": "2003-12",
+      "t_first": "2009-04",
+      "t_1pct": "2011-05",
+      "t_10pct": "2011-05",
+      "onset_years": 5.33,
+      "peak_share_pct": 100.0,
+      "current_share_pct": 22.176,
+      "reached_common_usage": true,
+      "matchable": false,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "SHA-256 DS digest",
+      "codepoint": 2,
+      "rfc": "RFC 4509",
+      "published": "2006-05",
+      "t_first": "2009-04",
+      "t_1pct": "2011-05",
+      "t_10pct": "2011-05",
+      "onset_years": 2.92,
+      "peak_share_pct": 98.283,
+      "current_share_pct": 98.277,
+      "reached_common_usage": true,
+      "matchable": false,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "GOST DS digest",
+      "codepoint": 3,
+      "rfc": "RFC 5933",
+      "published": "2010-07",
+      "t_first": "2011-05",
+      "t_1pct": "2011-05",
+      "t_10pct": null,
+      "onset_years": 0.83,
+      "peak_share_pct": 3.125,
+      "current_share_pct": 0.109,
+      "reached_common_usage": false,
+      "matchable": false,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "SHA-384 DS digest",
+      "codepoint": 4,
+      "rfc": "RFC 6605",
+      "published": "2012-04",
+      "t_first": "2013-08",
+      "t_1pct": "2018-06",
+      "t_10pct": "2022-03",
+      "onset_years": 1.33,
+      "peak_share_pct": 10.865,
+      "current_share_pct": 8.845,
+      "reached_common_usage": true,
+      "matchable": true,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "GOST-2012 digest",
+      "codepoint": 5,
+      "rfc": "RFC 9558",
+      "published": "2024-04",
+      "t_first": null,
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": null,
+      "peak_share_pct": 0.0,
+      "current_share_pct": 0.0,
+      "reached_common_usage": false,
+      "matchable": false,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    },
+    {
+      "change": "SM3 DS digest",
+      "codepoint": 6,
+      "rfc": "RFC 9563",
+      "published": "2024-12",
+      "t_first": null,
+      "t_1pct": null,
+      "t_10pct": null,
+      "onset_years": null,
+      "peak_share_pct": 0.0,
+      "current_share_pct": 0.0,
+      "reached_common_usage": false,
+      "matchable": false,
+      "n_cves": 0,
+      "cve_stage_counts": {},
+      "cves": []
+    }
+  ],
+  "shared_core": {
+    "rfcs": [
+      "RFC 4033",
+      "RFC 4034",
+      "RFC 4035"
+    ],
+    "n_cves": 69,
+    "exposure": "100% of signed zones by construction: every signed zone uses these three specifications whatever algorithm it chose.",
+    "cves": [
+      {
+        "cve": "CVE-2026-13321",
+        "published": null,
+        "cvss": null,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2001-0497",
+        "published": "2001-07-21",
+        "cvss": 7.8,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2005-0034",
+        "published": "2005-05-02",
+        "cvss": 4.3,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2005-3899",
+        "published": "2005-11-29",
+        "cvss": 5.4,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2007-0494",
+        "published": "2007-01-25",
+        "cvss": 4.3,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2009-4022",
+        "published": "2009-11-25",
+        "cvss": 2.6,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2010-0290",
+        "published": "2010-01-22",
+        "cvss": 4.0,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2010-3613",
+        "published": "2010-12-06",
+        "cvss": 4.0,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2010-3614",
+        "published": "2010-12-06",
+        "cvss": 6.4,
+        "mechanism": "dnskey"
+      },
+      {
+        "cve": "CVE-2011-1907",
+        "published": "2011-05-09",
+        "cvss": 5.0,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2011-1910",
+        "published": "2011-05-31",
+        "cvss": 5.0,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2009-4008",
+        "published": "2011-06-02",
+        "cvss": 5.0,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2012-3817",
+        "published": "2012-07-25",
+        "cvss": 7.8,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2015-4620",
+        "published": "2015-07-08",
+        "cvss": 7.8,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2015-5722",
+        "published": "2015-09-05",
+        "cvss": 7.8,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2016-9147",
+        "published": "2017-01-12",
+        "cvss": 7.5,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2018-1000002",
+        "published": "2018-01-22",
+        "cvss": 3.7,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2018-1000003",
+        "published": "2018-01-22",
+        "cvss": 3.7,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2017-15090",
+        "published": "2018-01-23",
+        "cvss": 5.9,
+        "mechanism": "dnskey"
+      },
+      {
+        "cve": "CVE-2017-15105",
+        "published": "2018-01-23",
+        "cvss": 5.3,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2017-15107",
+        "published": "2018-01-23",
+        "cvss": 7.5,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2018-14644",
+        "published": "2018-11-09",
+        "cvss": 5.3,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2018-5737",
+        "published": "2019-01-16",
+        "cvss": 5.9,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2019-3807",
+        "published": "2019-01-29",
+        "cvss": 3.7,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2017-3139",
+        "published": "2019-04-09",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2019-10190",
+        "published": "2019-07-16",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2019-10191",
+        "published": "2019-07-16",
+        "cvss": 7.5,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2018-20869",
+        "published": "2019-07-30",
+        "cvss": 7.8,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2020-12244",
+        "published": "2020-05-19",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2020-26110",
+        "published": "2020-09-25",
+        "cvss": 6.1,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2020-25829",
+        "published": "2020-10-16",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2020-25681",
+        "published": "2021-01-20",
+        "cvss": 8.1,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2020-25682",
+        "published": "2021-01-20",
+        "cvss": 8.1,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2020-25683",
+        "published": "2021-01-20",
+        "cvss": 5.9,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2020-25687",
+        "published": "2021-01-20",
+        "cvss": 5.9,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2022-33991",
+        "published": "2022-08-15",
+        "cvss": 5.3,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2022-33992",
+        "published": "2022-08-15",
+        "cvss": 7.5,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2022-3204",
+        "published": "2022-09-26",
+        "cvss": 7.5,
+        "mechanism": "dnskey"
+      },
+      {
+        "cve": "CVE-2022-41787",
+        "published": "2022-10-19",
+        "cvss": 7.5,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2022-3346",
+        "published": "2022-12-28",
+        "cvss": 6.5,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2022-3347",
+        "published": "2022-12-28",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2022-3736",
+        "published": "2023-01-26",
+        "cvss": 7.5,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2023-2829",
+        "published": "2023-06-21",
+        "cvss": 7.5,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2023-50387",
+        "published": "2024-02-14",
+        "cvss": 7.5,
+        "mechanism": "dnskey"
+      },
+      {
+        "cve": "CVE-2024-1975",
+        "published": "2024-07-23",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2025-21087",
+        "published": "2025-02-05",
+        "cvss": 7.5,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2025-8677",
+        "published": "2025-10-22",
+        "cvss": 7.5,
+        "mechanism": "dnskey"
+      },
+      {
+        "cve": "CVE-2026-1519",
+        "published": "2026-03-25",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2026-3104",
+        "published": "2026-03-25",
+        "cvss": 7.5,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2026-33258",
+        "published": "2026-04-22",
+        "cvss": 5.3,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2026-4890",
+        "published": "2026-05-11",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2026-4891",
+        "published": "2026-05-11",
+        "cvss": 5.3,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2026-45557",
+        "published": "2026-05-19",
+        "cvss": 5.8,
+        "mechanism": "dnskey"
+      },
+      {
+        "cve": "CVE-2026-42959",
+        "published": "2026-05-20",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2026-52690",
+        "published": "2026-06-25",
+        "cvss": 5.9,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2026-10822",
+        "published": "2026-07-22",
+        "cvss": 6.5,
+        "mechanism": "dnskey"
+      },
+      {
+        "cve": "CVE-2026-11605",
+        "published": "2026-07-22",
+        "cvss": 7.5,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2026-11622",
+        "published": "2026-07-22",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2026-11721",
+        "published": "2026-07-22",
+        "cvss": 7.5,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2026-44687",
+        "published": "2026-07-22",
+        "cvss": 3.7,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2026-44690",
+        "published": "2026-07-22",
+        "cvss": 7.5,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2026-46582",
+        "published": "2026-07-22",
+        "cvss": 3.7,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2026-50045",
+        "published": "2026-07-22",
+        "cvss": 5.3,
+        "mechanism": "dnssec-other"
+      },
+      {
+        "cve": "CVE-2026-50243",
+        "published": "2026-07-22",
+        "cvss": 3.7,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2026-50248",
+        "published": "2026-07-22",
+        "cvss": 6.5,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2026-56416",
+        "published": "2026-07-22",
+        "cvss": 4.8,
+        "mechanism": "rrsig"
+      },
+      {
+        "cve": "CVE-2026-39155",
+        "published": "2026-07-23",
+        "cvss": 6.5,
+        "mechanism": "nsec"
+      },
+      {
+        "cve": "CVE-2026-52688",
+        "published": "2026-07-23",
+        "cvss": 7.5,
+        "mechanism": "validation"
+      },
+      {
+        "cve": "CVE-2026-13002",
+        "published": "2026-08-14",
+        "cvss": 4.4,
+        "mechanism": "dnssec-other"
+      }
+    ]
+  }
+}

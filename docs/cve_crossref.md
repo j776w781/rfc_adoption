@@ -156,12 +156,13 @@ does not run the way the standards process implies:
 
     2021-05-25   Unbound commits the 150-iteration cap, citing agreement with
                  BIND and Knot
-    2021-08-05   Unbound 1.13.2 ships it
+    2021-07-12   PowerDNS Authoritative 4.5.0 caps configurable iterations at 100
+    2021-08-05   Unbound 1.13.2 ships the validator cap
     2021-08-25   CVE-2021-40083 (CVSS 7.5): Knot Resolver assertion failure on
                  "NSEC3 with too many iterations"
-    2021-10      zones at >=100 iterations fall 17,491 -> 3,027  (-83%)
+    2021-10      NSEC3 names at >=100 iterations fall 17,491 -> 3,027  (-83%)
     2021-11      -> 528  (-97% against August)
-    2021-12      PowerDNS lowers max-nsec3-iterations to 100; Knot adds a check
+    2021-12-20   Knot 3.1.5 adds a config check on the default
     2022-08      RFC 9276 published
     2024-02-14   CVE-2023-50868, CVSS 7.5, in every major implementation
 
@@ -176,6 +177,91 @@ The ordering is: **vendors agree → vendors ship → zones move → IETF docume
 taken in a commit message. This is the same conclusion the release-date analysis
 reached from a different direction (see
 [software_crossref.md](software_crossref.md)), and the two are independent.
+
+## Against the adoption rates
+
+The adoption measures say when each mechanism appeared, when it reached 1% and
+10% of signed delegations, and where it ended up. Laying the CVE record over
+them asks whether vulnerability follows deployment.
+
+The join is deliberately narrow: a CVE is attached to a mechanism only if its
+description names that mechanism. A bug in the shared validation path is not
+evidence against ECDSA merely because ECDSA is a DNSSEC algorithm.
+
+| Change | RFC | first seen | 1% | 10% | peak share | CVEs |
+| --- | --- | --- | --- | --- | ---: | ---: |
+| RSASHA1 | RFC 3110 | 2009-04 | 2011-05 | 2011-05 | 100.00% | **0** |
+| RSASHA256 | RFC 5702 | 2010-04 | 2011-05 | 2012-06 | 74.64% | 1 |
+| ECDSA P-256 | RFC 6605 | 2015-12 | 2018-06 | 2019-03 | 67.95% | 2 |
+| RSASHA1-NSEC3 (alg 7) | RFC 5155 | 2009-08 | 2011-05 | 2011-08 | 28.99% | 12 |
+| SHA-384 DS digest | RFC 6605 | 2013-08 | 2018-06 | 2022-03 | 10.87% | 0 |
+| RSASHA512 | RFC 5702 | 2010-08 | 2014-08 | — | 3.72% | 0 |
+| ECDSA P-384 | RFC 6605 | 2016-04 | 2018-09 | — | 3.45% | 0 |
+| Ed25519 | RFC 8080 | 2022-09 | — | — | 0.37% | 1 |
+| Ed448 | RFC 8080 | 2022-12 | — | — | 0.04% | 0 |
+| DSA/SHA-1 | RFC 2536 | 2009-04 | — | — | 0.00% | 0 |
+| ECC-GOST | RFC 5933 | 2013-01 | — | — | 0.00% | 0 |
+
+Peak share is `P(value | signed delegations)` on the strict panel, reverse corpus.
+
+### Algorithm choice barely moves your CVE exposure
+
+**Only 16 of the 97 DNSSEC CVEs name a specific algorithm or mechanism at all.**
+Of ten signing algorithms observed in the corpus, seven have never had one.
+RSASHA1 reached 100% of signed delegations and has **zero**; ECDSA P-256 at 68%
+has two.
+
+Where the CVEs actually are:
+
+    69 of 97   RFC 4033 / 4034 / 4035 -- the shared core
+    12         NSEC3
+     4         everything else with a name attached
+
+The shared core has no adoption curve, because its exposure is 100% of signed
+zones by construction: every signed zone uses those three specifications
+whatever algorithm it picked. **The DNSSEC attack surface is the machinery
+common to all deployments, not the algorithm anyone is arguing about.** That is
+worth saying plainly, because the adoption analysis spends most of its effort on
+the algorithm mix, and the algorithm mix is close to irrelevant to this risk.
+
+`corr(peak share, CVE count) = 0.105` over the eleven matchable mechanisms. With
+n=11 and sixteen CVEs that refutes a strong relationship and establishes nothing
+else.
+
+### NSEC3 is the exception, and algorithm 7 is the wrong way to see it
+
+Twelve of the sixteen are NSEC3. The table above puts NSEC3 at a 28.99% peak,
+which is algorithm 7 — a bad proxy, because NSEC3 is used with algorithms 8, 10
+and 13 as well. Measured properly, by NSEC3PARAM at the zone apex:
+
+    NSEC3PARAM zones / signed zones, forward corpus
+      2016-06   98.39%
+      2023-12   61.94%
+
+So the mechanism carrying twelve of sixteen named CVEs is also the most widely
+deployed optional mechanism in DNSSEC — on nearly every signed zone at the start
+of the window and still on three in five at the end. It is the one place where
+deployment and vulnerability do line up, and it is also the one place where a
+validator could force zones to change.
+
+### Vulnerabilities arrive in things people already run
+
+Classifying each of the sixteen by the deployment stage its mechanism was in on
+the month the CVE was published:
+
+    in common usage     12
+    seen, below 1%       4
+    before first use     0
+
+**No CVE has ever landed before the thing it attacks was in use.** Nothing in
+this record could have warned an operator off a mechanism in advance; the flaws
+are found once there is something to find them in.
+
+The four early ones are instructive in the other direction. `CVE-2022-38178`
+(CVSS 7.5, a memory leak in EdDSA verification) was published when Ed25519 sat
+at **0.02%** of signed delegations — a serious rating against a mechanism almost
+nobody had deployed. CVSS scores the flaw, not the exposure, and the adoption
+data is what converts one into the other.
 
 ## What this cannot show
 
@@ -195,3 +281,10 @@ reached from a different direction (see
 - **The deployment link rests on one mechanism.** NSEC3 iterations is the only
   observable in this corpus a resolver can coerce. Nothing here generalises to
   algorithms, which no CVE has ever forced a zone to change.
+- **The adoption join covers 16 of 97 DNSSEC CVEs.** The other 81 are real
+  vulnerabilities in code every signed zone depends on; they are excluded from
+  the per-mechanism table because they have no single mechanism, not because
+  they are minor.
+- **Peak share and CVE count are measured on different corpora** — reverse for
+  the adoption curves, forward for NSEC3PARAM — so the two columns of that table
+  should not be divided by one another.

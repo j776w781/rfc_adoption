@@ -259,18 +259,22 @@ def iteration_collapse(fwd: pd.DataFrame, limits: list[dict]) -> dict:
     drop = tot.diff()
     worst = drop.idxmin() if not drop.dropna().empty else None
     return {
-        "definition": "zones publishing NSEC3 with >= 100 iterations, forward corpus",
-        "high_iteration_zones_by_month": {m: int(v) for m, v in tot.items()},
+        "definition": ("distinct NSEC3 owner names published with >= 100 iterations, "
+                       "forward corpus. NSEC3 owner names are hashed, so this counts "
+                       "names and not zones; a zone contributes one name per hashed "
+                       "owner. The zone-level measure is NSEC3PARAM, which sits only "
+                       "at the apex."),
+        "high_iteration_names_by_month": {m: int(v) for m, v in tot.items()},
         "largest_single_month_fall": {
             "month": str(worst),
-            "zones_lost": int(-drop[worst]) if worst else None,
+            "names_lost": int(-drop[worst]) if worst else None,
             "before": int(tot.shift()[worst]) if worst else None,
             "after": int(tot[worst]) if worst else None,
         },
-        "by_source_around_collapse": {
+        "by_source_around_collapse_names": {
             src: {m: int(high[src][m]) for m in high.index if "2021-06" <= m <= "2022-02"}
             for src in high.columns},
-        "zero_iteration_zones": {
+        "zero_iteration_names": {
             src: {m: int(zero[src][m]) for m in zero.index if m in ("2021-08", "2021-11", "2022-08", "2023-12")}
             for src in zero.columns},
         "validator_limits": limits,

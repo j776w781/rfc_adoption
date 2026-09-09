@@ -363,8 +363,8 @@
     ]
   },
   "nsec3_iteration_collapse": {
-    "definition": "zones publishing NSEC3 with >= 100 iterations, forward corpus",
-    "high_iteration_zones_by_month": {
+    "definition": "distinct NSEC3 owner names published with >= 100 iterations, forward corpus. NSEC3 owner names are hashed, so this counts names and not zones; a zone contributes one name per hashed owner. The zone-level measure is NSEC3PARAM, which sits only at the apex.",
+    "high_iteration_names_by_month": {
       "2016-06": 10618,
       "2016-07": 10734,
       "2016-08": 10890,
@@ -459,11 +459,11 @@
     },
     "largest_single_month_fall": {
       "month": "2021-10",
-      "zones_lost": 14464,
+      "names_lost": 14464,
       "before": 17491,
       "after": 3027
     },
-    "by_source_around_collapse": {
+    "by_source_around_collapse_names": {
       "ch": {
         "2021-06": 3718,
         "2021-07": 3706,
@@ -531,7 +531,7 @@
         "2022-02": 88
       }
     },
-    "zero_iteration_zones": {
+    "zero_iteration_names": {
       "ch": {
         "2021-08": 268,
         "2021-11": 3859,
@@ -605,7 +605,7 @@
         "commit_date": "2021-05-19",
         "evidence": "auth: lower max-nsec3-iterations to 100",
         "evidence_commit": "1fa649bb0ce7c412a83f73d080e288be328cef4e",
-        "evidence_url": "https://github.com/PowerDNS/pdns/commit/5a5d565f00e3382d75dd37f999c11eb9d0cac8d2",
+        "evidence_url": "https://github.com/PowerDNS/pdns/commit/1fa649bb0ce7c412a83f73d080e288be328cef4e",
         "evidence_kind": "commit",
         "attribution": "exact",
         "attribution_basis": "The cited commit introduces the feature and this is the single earliest stable release containing it."
@@ -618,7 +618,7 @@
         "commit_date": "2021-12-07",
         "evidence": "conf: add check on using the default number of NSEC3 iterations",
         "evidence_commit": "9bc55edeeb1d415fd4bb2445c4d182a0cd713c6f",
-        "evidence_url": "https://github.com/CZ-NIC/knot/commit/d15e881b6d585f6d0268fa2e1efa9501291100de",
+        "evidence_url": "https://github.com/CZ-NIC/knot/commit/9bc55edeeb1d415fd4bb2445c4d182a0cd713c6f",
         "evidence_kind": "commit",
         "attribution": "approximate",
         "attribution_basis": "A configuration check warning about the default, not a change to the default itself."
