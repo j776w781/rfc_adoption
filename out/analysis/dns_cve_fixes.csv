@@ -1,0 +1,230 @@
+cve,published,scope,mechanism,rfc,project,role,fix_version,fix_release_date,commit_date,days_from_publication_to_release,released_before_publication,commit_subject
+CVE-2006-5989,,dependency,,,BIND 9,both,9.11.29,2021-03-09,2021-01-07,,,Fix off-by-one bug in ISC SPNEGO implementation
+CVE-2008-0122,2008-01-16,dns,,,BIND 9,both,9.4.3,2008-11-12,2008-01-15,301,False,2305.   [security]      inet_network() buffer overflow. CVE-2008-0122.
+CVE-2009-4492,,dependency,,,PowerDNS Authoritative,authoritative,4.2.0,2019-08-27,2018-01-09,,,upgrade to webrick 1.4.2 (CVE-2009-4492)
+CVE-2009-4492,,dependency,,,PowerDNS Recursor,resolver,4.2.0,2019-07-12,2018-01-09,,,upgrade to webrick 1.4.2 (CVE-2009-4492)
+CVE-2010-3613,2010-12-06,dnssec,rrsig,RFC 4035,BIND 9,both,,,2010-11-25,,,CVE-2010-3613 Reduce complexity from M to L raising score from 7.1 to 7.8. Just have the base CVSS vectors.
+CVE-2011-1922,2011-05-31,dns,,,Unbound,resolver,1.4.10,2011-05-25,2011-05-25,-6,True,"      - Fix assertion failure when unbound generates an empty error reply         in response to a query, CVE-2011-1922 VU#531342.       - release 1.4"
+CVE-2011-4528,,dns,,,Unbound,resolver,1.4.14,2011-12-19,2011-12-19,,,- Fix for VU#209659 CVE-2011-4528: Unbound denial of service vulnerabilities from nonstandard redirection and denial of existence http://www.unbound.n
+CVE-2012-0206,2012-02-17,dns,,,PowerDNS Authoritative,authoritative,3.3.1,2013-12-17,2012-01-10,669,False,"fix CVE-2012-0206, and PowerDNS Authoritative Server Security Notification 2012-01"
+CVE-2012-0206,2012-02-17,dns,,,PowerDNS Recursor,resolver,3.5.1,2013-05-03,2012-01-10,441,False,"fix CVE-2012-0206, and PowerDNS Authoritative Server Security Notification 2012-01"
+CVE-2013-4854,2013-07-29,dnssec,trust-anchor,RFC 5011,BIND 9,both,9.8.6,2013-09-04,2013-07-17,37,False,3621.   [security]      Incorrect bounds checking on private type 'keydata'                         can lead to a remotely triggerable REQUIRE failure
+CVE-2014-3214,2014-05-09,dns,,,BIND 9,both,,,2014-05-09,,,Add CVE-2014-3214 to README
+CVE-2014-3859,2014-06-13,dns,,,BIND 9,both,9.8.8,2014-09-16,2014-05-26,95,False,add CVE-2014-3859
+CVE-2014-8500,2014-12-11,dns,,,BIND 9,both,9.9.7,2015-02-18,2014-11-17,69,False,[v9_9] limit recursion depth and iterative queries
+CVE-2014-8602,2014-12-11,dns,,,Unbound,resolver,1.5.1,2014-12-08,2014-12-08,-3,True,- Fix CVE-2014-8602: denial of service by making resolver chase   endless series of delegations.
+CVE-2015-1349,2015-02-19,dnssec,trust-anchor,RFC 5011,BIND 9,both,,,2015-02-03,,,[v9_10_1_patch] avoid crash due to managed-key rollover
+CVE-2015-1868,2015-05-18,dns,,,PowerDNS Authoritative,authoritative,3.3.2,2015-05-01,2015-05-01,-17,True,import CVE-2015-1868 patch
+CVE-2015-1868,2015-05-18,dns,,,PowerDNS Recursor,resolver,,,2015-05-01,,,import CVE-2015-1868 patch
+CVE-2015-3193,,dependency,,,BIND 9,both,,,2015-12-04,,,4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.
+CVE-2015-4620,2015-07-08,dnssec,validation,RFC 4035,BIND 9,both,,,2015-06-17,,,add release notes for CVE-2015-4620
+CVE-2015-5477,2015-07-29,dns,,,BIND 9,both,,,2015-07-14,,,4165.   [bug]           An failure to reset a value to NULL in tkey.c could                         result in an assertion failure. (CVE-2015-5477)   
+CVE-2015-5722,2015-09-05,dnssec,dnssec-other,RFC 4033,BIND 9,both,,,2015-08-07,,,[v9_9_7_patch] address buffer accounting error
+CVE-2015-8000,2015-12-16,dns,,,BIND 9,both,,,2015-11-16,,,"4260.   [security]      Insufficient testing when parsing a message allowed                         records with an incorrect class to be be accepted,"
+CVE-2015-8461,2015-12-16,dns,,,BIND 9,both,,,2015-12-03,,,Add CVE-2015-8461
+CVE-2015-8704,2016-01-20,dns,,,BIND 9,both,,,2015-12-31,,,4285.   [security]      Specific APL data could trigger a INSIST.                         (CVE-2015-8704) [RT #41396]
+CVE-2015-8705,2016-01-20,dns,,,BIND 9,both,9.11.0,2016-09-29,2015-12-31,253,False,4286.   [security]      render_ecs errors were mishandled when printing out                         a OPT record resulting in a assertion failure.    
+CVE-2016-1285,2016-03-09,dns,,,BIND 9,both,,,2016-02-18,,,4318.   [security]      Malformed control messages can trigger assertions                         in named and rndc. (CVE-2016-1285) [RT #41666]
+CVE-2016-1286,2016-03-09,dns,,,BIND 9,both,,,2016-02-22,,,add CVE-2016-1286 to -P4 summary. Fix misspelling
+CVE-2016-2088,2016-03-09,dns,,,BIND 9,both,9.11.0,2016-09-29,2016-02-27,204,False,add CVE-2016-2088
+CVE-2016-2775,2016-07-19,dns,,,BIND 9,both,9.9.10,2017-04-14,2016-07-12,269,False,add CVE-2016-2775
+CVE-2016-2776,2016-09-28,dns,,,BIND 9,both,,,2016-09-09,,,add CVE-2016-2776
+CVE-2016-6170,2016-07-06,dns,,,BIND 9,both,9.10.5,2017-04-14,2016-11-02,282,False,4504.   [security]      Allow the maximum number of records in a zone to                         be specified.  This provides a control for issues    
+CVE-2016-6171,2017-02-09,dns,,,Knot DNS,authoritative,2.3.0,2016-08-09,,-184,True,"- Zone size limit restriction for DDNS, AXFR, and IXFR (CVE-2016-6171)"
+CVE-2016-6173,2017-02-09,dns,,,NSD,authoritative,4.1.11,2016-08-01,2016-07-07,-192,True,- Fix #790 Fixes CVE-2016-6173.
+CVE-2016-8864,2016-11-02,dns,,,BIND 9,both,,,2016-10-21,,,CVE-2016-8864
+CVE-2016-9131,2017-01-12,dns,,,BIND 9,both,,,2016-11-03,,,CVE-2016-9131
+CVE-2016-9147,2017-01-12,dnssec,dnssec-other,RFC 4033,BIND 9,both,,,2016-11-04,,,CVE-2016-9147
+CVE-2016-9444,2017-01-12,dns,,,BIND 9,both,9.9.10,2017-04-14,2016-11-22,92,False,4517.   [security]      Named could mishandle authority sections that were                         missing RRSIGs triggering an assertion failure.    
+CVE-2016-9778,2019-01-16,dns,,,BIND 9,both,,,2016-12-09,,,4531.   [security]      'is_zone' was not being properly updated by redirect2                         and subsequently preserved leading to an asserti
+CVE-2017-11104,2017-07-08,dns,,,Knot DNS,authoritative,2.5.2,2017-06-23,,-15,True,- CVE-2017-11104: Improper TSIG validity period check can allow TSIG forgery (Thanks to Synacktiv!)
+CVE-2017-15105,2018-01-23,dnssec,nsec,RFC 4034,Unbound,resolver,1.7.0,2018-03-12,2018-01-19,48,False,- patch for CVE-2017-15105: vulnerability in the processing of   wildcard synthesized NSEC records.
+CVE-2017-3135,2019-01-16,dns,,,BIND 9,both,,,2017-01-24,,,4556.   [security]      Combining dns64 and rpz can result in dereferencing                         a NULL pointer (read).  (CVE-2017-3135) [RT#44434]
+CVE-2017-3136,2019-01-16,dns,,,BIND 9,both,9.12.0,2018-01-17,2017-02-15,-364,True,add CVE-2017-3136 note
+CVE-2017-3137,2019-01-16,dns,,,BIND 9,both,,,2017-02-23,,,[v9_11_0_patch] remove unnecessary INSIST and prep 9.11.1-P4
+CVE-2017-3138,2019-01-16,dns,,,BIND 9,both,,,2017-03-25,,,"4582.   [security]      'rndc """"' could trigger a assertion failure in named.                         (CVE-2017-3138) [RT #44924]"
+CVE-2017-3140,2019-01-16,dns,,,BIND 9,both,,,2017-05-30,,,[v9_9_10_patch] fix rpz formerr loop
+CVE-2017-3141,2019-01-16,dns,,,BIND 9,both,,,2017-05-30,,,[v9_9_10_patch] quote service registry paths
+CVE-2017-3142,2019-01-16,dns,,,BIND 9,both,,,2017-06-27,,,[v9_9_10_patch] address TSIG bypass/forgery vulnerabilities
+CVE-2017-3143,2019-01-16,dns,,,BIND 9,both,,,2017-06-27,,,[v9_9_10_patch] address TSIG bypass/forgery vulnerabilities
+CVE-2017-3145,2019-01-16,dns,,,BIND 9,both,,,2018-01-03,,,[v9_9_11_patch] prevent use-after-free
+CVE-2018-1000002,2018-01-22,dnssec,validation,RFC 4035,Knot Resolver,resolver,1.5.2,2018-01-22,,0,False,"- fix CVE-2018-1000002: insufficient DNSSEC validation, allowing"
+CVE-2018-1046,,dns,,,PowerDNS Authoritative,authoritative,4.2.0,2019-08-27,2018-05-08,,,Merge pull request #6581 from rgacogne/docs-sec-2018-02
+CVE-2018-1046,,dns,,,PowerDNS Recursor,resolver,4.2.0,2019-07-12,2018-05-08,,,Merge pull request #6581 from rgacogne/docs-sec-2018-02
+CVE-2018-10920,2018-08-02,dns,,,Knot Resolver,resolver,2.4.1,2018-08-02,,0,False,- fix CVE-2018-10920: Improper input validation bug in DNS resolver component
+CVE-2018-1110,2021-03-30,dns,,,Knot Resolver,resolver,2.3.0,2018-04-23,,-1072,True,- fix CVE-2018-1110: denial of service triggered by malformed DNS messages
+CVE-2018-5737,2019-01-16,dnssec,nsec,RFC 4034,BIND 9,both,9.13.0,2018-05-22,2018-05-21,-239,True,Merge branch '185-fix-changes-entry' into 'master'
+CVE-2018-5740,2019-01-16,dns,,,BIND 9,both,9.11.5,2018-10-06,2018-08-08,-102,True,Merge branch 'security-v9_11' into 'v9_11'
+CVE-2019-10190,2019-07-16,dnssec,validation,RFC 4035,Knot Resolver,resolver,4.1.0,2019-07-10,,-6,True,- fix CVE-2019-10190: do not pass bogus negative answer to client (!827)
+CVE-2019-10191,2019-07-16,dnssec,dnssec-other,RFC 4033,Knot Resolver,resolver,4.1.0,2019-07-10,2019-06-25,-6,True,lib/cache: fix CVE-2019-10191
+CVE-2019-13207,,dns,,,NSD,authoritative,4.2.2,2019-08-13,2019-07-04,,,- Fix #20: CVE-2019-13207 Stack-based Buffer Overflow in the   dname_concatenate() function.  Reported by Frederic Cambus.   It causes the zone parser
+CVE-2019-16866,2019-10-03,dns,,,Unbound,resolver,1.9.6,2019-12-06,2019-10-03,64,False,- Merge 1.9.4 release with fix for vulnerability CVE-2019-16866. - Continue with development of 1.9.5.
+CVE-2019-18934,2019-11-19,dns,,,Unbound,resolver,1.9.6,2019-12-06,2019-11-19,17,False,"- Fix CVE-2019-18934, shell execution in ipsecmod."
+CVE-2019-19331,2019-12-16,dns,,,Knot Resolver,resolver,4.3.0,2019-12-04,,-12,True,Security - CVE-2019-19331
+CVE-2019-6467,2019-10-09,dns,,,BIND 9,both,,,2019-04-25,,,Merge branch '880-secure-asdfasdfasdf-abacadabra-crash-v9_12_4_patch-v9_12' into 'v9_12'
+CVE-2019-6477,2019-11-26,dns,,,BIND 9,both,9.15.7,2019-12-13,2019-12-11,17,False,Fix release notes for BIND 9.15.6
+CVE-2019-9512,,dependency,,,PowerDNS Authoritative,authoritative,4.3.0,2020-04-05,2019-08-14,,,Merge pull request #8200 from rgacogne/update-h2o-2.2.6
+CVE-2019-9512,,dependency,,,PowerDNS Recursor,resolver,4.3.0,2020-02-26,2019-08-14,,,Merge pull request #8200 from rgacogne/update-h2o-2.2.6
+CVE-2019-9514,,dependency,,,PowerDNS Authoritative,authoritative,4.3.0,2020-04-05,2019-08-14,,,Merge pull request #8200 from rgacogne/update-h2o-2.2.6
+CVE-2019-9514,,dependency,,,PowerDNS Recursor,resolver,4.3.0,2020-02-26,2019-08-14,,,Merge pull request #8200 from rgacogne/update-h2o-2.2.6
+CVE-2019-9515,,dependency,,,PowerDNS Authoritative,authoritative,4.3.0,2020-04-05,2019-08-14,,,Merge pull request #8200 from rgacogne/update-h2o-2.2.6
+CVE-2019-9515,,dependency,,,PowerDNS Recursor,resolver,4.3.0,2020-02-26,2019-08-14,,,Merge pull request #8200 from rgacogne/update-h2o-2.2.6
+CVE-2020-12662,2020-05-19,dns,,,Unbound,resolver,1.11.0,2020-07-20,2020-05-19,62,False,- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf
+CVE-2020-12663,2020-05-19,dns,,,Unbound,resolver,1.11.0,2020-07-20,2020-05-19,62,False,- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf
+CVE-2020-12667,2020-05-19,dns,,,Knot Resolver,resolver,5.1.1,2020-05-19,2020-05-05,0,False,NEWS for NXNSAttack CVE-2020-12667
+CVE-2020-25829,2020-10-16,dnssec,validation,RFC 4035,PowerDNS Authoritative,authoritative,,,2020-10-12,,,Backport of CVE-2020-25829 (any-cache-update) to 4.2.x
+CVE-2020-25829,2020-10-16,dnssec,validation,RFC 4035,PowerDNS Recursor,resolver,4.2.5,2020-10-13,2020-10-12,-3,True,Backport of CVE-2020-25829 (any-cache-update) to 4.2.x
+CVE-2020-28935,2020-12-07,dns,,,NSD,authoritative,4.3.4,2020-11-24,2020-11-23,-13,True,- Fix for CVE-2020-28935 : Fix that symlink does not interfere   with chown of pidfile.
+CVE-2020-28935,2020-12-07,dns,,,Unbound,resolver,1.13.0,2020-12-03,2020-11-23,-4,True,"Further fix for CVE-2020-28935, so the chown is omitted when the pidfile fails due to a symlink."
+CVE-2020-8616,2020-05-19,dns,,,BIND 9,both,9.11.20,2020-06-10,2020-05-19,22,False,Merge branch 'v9_11_19-release' into 'v9_11'
+CVE-2020-8617,2020-05-19,dns,,,BIND 9,both,9.11.20,2020-06-10,2020-05-19,22,False,Merge branch 'v9_11_19-release' into 'v9_11'
+CVE-2020-8618,2020-06-17,dns,,,BIND 9,both,9.16.5,2020-07-03,2020-06-18,16,False,Merge branch 'v9_16_4-release' into 'v9_16'
+CVE-2020-8619,2020-06-17,dns,,,BIND 9,both,9.11.21,2020-07-03,2020-06-18,16,False,Merge branch 'v9_11_20-release' into 'v9_11'
+CVE-2020-8620,2020-08-21,dns,,,BIND 9,both,9.16.6,2020-08-10,2020-08-05,-11,True,Merge branch '1996-confidential-issue-v9_16' into 'security-v9_16'
+CVE-2020-8621,2020-08-21,dns,,,BIND 9,both,9.16.6,2020-08-10,2020-08-05,-11,True,Merge branch '1997-confidential-issue-v9_16' into 'security-v9_16'
+CVE-2020-8622,2020-08-21,dns,,,BIND 9,both,9.11.22,2020-08-06,2020-08-05,-15,True,Merge branch '2028-unexpectedend-and-tsig-v9_11' into 'security-v9_11'
+CVE-2020-8623,2020-08-21,dns,,,BIND 9,both,9.11.22,2020-08-06,2020-08-05,-15,True,Merge branch '2037-confidential-issue-v9_11' into 'security-v9_11'
+CVE-2020-8624,2020-08-21,dns,,,BIND 9,both,9.11.22,2020-08-06,2020-08-05,-15,True,Merge branch '2055-grant-subdomain-fix-v9_11' into 'security-v9_11'
+CVE-2020-8625,2021-02-17,dependency,,,BIND 9,both,9.11.29,2021-03-09,2021-02-04,20,False,Merge branch '2354-security-off-by-one-error-in-spnego-v9_11' into 'security-v9_11'
+CVE-2021-25214,2021-04-29,dns,,,BIND 9,both,9.11.32,2021-05-12,2021-04-12,13,False,Merge branch '2467-confidential-issue-ixfr-checks-v9_11' into 'security-v9_11'
+CVE-2021-25215,2021-04-29,dns,,,BIND 9,both,9.11.32,2021-05-12,2021-04-12,13,False,Merge branch '2540-confidential-issue-existing-dname-v9_11' into 'security-v9_11'
+CVE-2021-25216,2021-04-29,dependency,,,BIND 9,both,9.11.32,2021-05-12,2021-04-12,13,False,Merge branch '2604-confidential-issue-spnego-v9_11' into 'security-v9_11'
+CVE-2021-25218,2021-08-18,dns,,,BIND 9,both,9.17.18,2021-09-07,2021-08-06,20,False,Merge branch '2839-confidential-rrl-msgsize' into 'security-main'
+CVE-2021-25219,2021-10-27,dns,,,BIND 9,both,9.11.37,2022-03-07,2021-10-11,131,False,Merge branch '2899-security-disable-lame-cache-v9_11' into 'security-v9_11'
+CVE-2021-25220,2022-03-23,dns,,,BIND 9,both,9.16.28,2022-04-11,2022-03-03,19,False,Merge branch '2950-confidential-cache-acceptance-rules-v9_16' into 'security-v9_16'
+CVE-2021-40083,2021-08-25,dnssec,nsec3,RFC 5155,Knot Resolver,resolver,5.4.2,2021-10-13,2021-08-25,49,False,NEWS 5.3.2: add CVE-2021-40083 reference
+CVE-2022-0396,2022-03-23,dns,,,BIND 9,both,9.16.28,2022-04-11,2022-03-03,19,False,Merge branch '3112-ensure-correct-ordering-in-isc__nm_process_sock_buffer-v9_16' into 'security-v9_16'
+CVE-2022-0635,2022-03-23,dns,,,BIND 9,both,9.18.2,2022-04-11,2022-02-17,19,False,Add regression test for CVE-2022-0635
+CVE-2022-0667,2022-03-22,dns,,,BIND 9,both,9.18.2,2022-04-11,2022-03-03,20,False,Merge branch '3129-check-fetch-shutting-down-in-resume_dslookup-v9_18' into 'security-v9_18'
+CVE-2022-1183,2022-05-19,dns,,,BIND 9,both,9.18.3,2022-05-09,2022-05-05,-10,True,Merge branch '3216-sslyze-crash-fix-v9_18' into 'security-v9_18'
+CVE-2022-2795,2022-09-21,dns,,,BIND 9,both,,,2022-09-06,,,Add tests for CVE-2022-2795
+CVE-2022-2881,2022-09-21,dns,,,BIND 9,both,9.18.7,2022-09-08,2022-08-16,-13,True,CHANGES and release notes for CVE-2022-2881 [GL #3493]
+CVE-2022-2906,2022-09-21,dependency,,,BIND 9,both,9.18.7,2022-09-08,2022-09-08,-13,True,Merge branch '3491-security-fix-openssl-dh-memory-leaks-v9_18' into 'security-v9_18'
+CVE-2022-30698,2022-08-01,dns,,,Unbound,resolver,1.16.2,2022-08-01,2022-08-01,0,False,- Fix the novel ghost domain issues CVE-2022-30698 and CVE-2022-30699.
+CVE-2022-30699,2022-08-01,dns,,,Unbound,resolver,1.16.2,2022-08-01,2022-08-01,0,False,- Fix the novel ghost domain issues CVE-2022-30698 and CVE-2022-30699.
+CVE-2022-3080,2022-09-21,dns,,,BIND 9,both,9.16.33,2022-09-08,2022-09-08,-13,True,Merge branch '3517-serve-stale-client-timeout-0-cname-crash-v9_16' into 'security-v9_16'
+CVE-2022-3094,2023-01-26,dns,,,BIND 9,both,9.16.37,2023-01-12,2023-01-12,-14,True,Merge branch '3523-confidential-update-quota-v9_16' into 'security-v9_16'
+CVE-2022-3204,2022-09-26,dnssec,dnskey,RFC 4034,Unbound,resolver,1.16.3,2022-09-21,2022-09-21,-5,True,- Patch for CVE-2022-3204 Non-Responsive Delegation Attack.
+CVE-2022-3736,2023-01-26,dnssec,rrsig,RFC 4035,BIND 9,both,9.16.37,2023-01-12,2023-01-12,-14,True,Merge branch '3622-serve-stale-rrsig-fix-security-v9_16' into 'security-v9_16'
+CVE-2022-37428,2022-08-23,dependency,,,PowerDNS Authoritative,authoritative,,,2022-08-03,,,Backport of protobuf PSA 2022-02 (CVE-2022-37428) to rec-4.5.x
+CVE-2022-37428,2022-08-23,dependency,,,PowerDNS Recursor,resolver,4.5.10,2022-08-23,2022-08-03,0,False,Backport of protobuf PSA 2022-02 (CVE-2022-37428) to rec-4.5.x
+CVE-2022-38177,2022-09-21,dnssec,algorithm,RFC 6605/8080,BIND 9,both,9.16.33,2022-09-08,2022-09-08,-13,True,Merge branch '3487-ecdsa-verify-leak' into 'security-v9_16'
+CVE-2022-38178,2022-09-21,dnssec,algorithm,RFC 6605/8080,BIND 9,both,9.16.33,2022-09-08,2022-09-08,-13,True,Merge branch '3487-eddsa-verify-leak-v9_16' into 'security-v9_16'
+CVE-2022-3924,2023-01-26,dns,,,BIND 9,both,9.16.39,2023-03-06,2022-11-11,39,False,Add tests for CVE-2022-3924
+CVE-2022-40188,2022-09-23,dns,,,Knot Resolver,resolver,,,2022-08-17,,,lib/zonecut + iterator: limit large NS sets
+CVE-2023-26437,2023-04-04,dns,,,PowerDNS Authoritative,authoritative,,,2023-03-16,,,PowerDNS Security Advisory 2023-02: Deterred spoofing attempts can lead to authoritative servers being marked unavailable (CVE-2023-26437)
+CVE-2023-26437,2023-04-04,dns,,,PowerDNS Recursor,resolver,4.6.6,2023-03-29,2023-03-16,-6,True,PowerDNS Security Advisory 2023-02: Deterred spoofing attempts can lead to authoritative servers being marked unavailable (CVE-2023-26437)
+CVE-2023-2828,2023-06-21,dns,,,BIND 9,both,,,2023-07-26,,,Merge branch '4055-improve-the-overmem-cache-cleaning-9.11' into 'bind-9.11'
+CVE-2023-2911,2023-06-21,dns,,,BIND 9,both,9.16.42,2023-06-09,2023-06-09,-12,True,Merge branch '4089-confidential-stale-query-loop-bind-9.16' into 'security-bind-9.16'
+CVE-2023-3341,2023-09-20,dns,,,BIND 9,both,9.18.20,2023-11-09,2023-07-12,50,False,Add test for CVE-2023-3341
+CVE-2023-4236,2023-09-20,dns,,,BIND 9,both,9.18.19,2023-09-11,2023-09-08,-9,True,Merge branch '4242-use-after-free-fix' into 'security-bind-9.18'
+CVE-2023-4408,2024-02-13,dns,,,BIND 9,both,9.16.48,2024-02-11,2024-01-05,-2,True,Merge branch '4234-confidential-use-hashmap-when-parsing-9.16' into 'v9.16.46-release'
+CVE-2023-46317,2023-10-22,dns,,,Knot Resolver,resolver,5.7.0,2023-08-22,,-61,True,CVE-2023-46317 got later assigned to this issue.
+CVE-2023-50387,2024-02-14,dnssec,dnskey,RFC 4034,BIND 9,both,9.16.48,2024-02-11,2024-02-01,-3,True,Merge branch 'ondrej/split-taskmgr-9.16' into 'v9.16.47-release'
+CVE-2023-50387,2024-02-14,dnssec,dnskey,RFC 4034,Knot Resolver,resolver,,,2024-01-01,,,mitigate KeyTrap DoS = CVE-2023-50387
+CVE-2023-50387,2024-02-14,dnssec,dnskey,RFC 4034,PowerDNS Authoritative,authoritative,4.9.0,2024-03-14,2024-02-09,29,False,rec: CVE-2023-50387 and CVE-2023-50868
+CVE-2023-50387,2024-02-14,dnssec,dnskey,RFC 4034,PowerDNS Recursor,resolver,5.1.0,2024-07-08,2024-02-09,145,False,rec: CVE-2023-50387 and CVE-2023-50868
+CVE-2023-50387,2024-02-14,dnssec,dnskey,RFC 4034,Unbound,resolver,1.19.1,2024-02-13,2024-02-13,-1,True,"- Fix CVE-2023-50387, DNSSEC verification complexity can be exploited to   exhaust CPU resources and stall DNS resolvers."
+CVE-2023-50868,2024-02-14,dnssec,nsec3,RFC 5155,BIND 9,both,9.16.50,2024-04-03,2024-02-14,49,False,Mention CVE-2023-50868 in CHANGES entry 6322
+CVE-2023-50868,2024-02-14,dnssec,nsec3,RFC 5155,Knot Resolver,resolver,,,2024-02-12,,,validator: refuse to validate answers with more than 8 NSEC3 records
+CVE-2023-50868,2024-02-14,dnssec,nsec3,RFC 5155,PowerDNS Authoritative,authoritative,4.9.0,2024-03-14,2024-02-09,29,False,rec: CVE-2023-50387 and CVE-2023-50868
+CVE-2023-50868,2024-02-14,dnssec,nsec3,RFC 5155,PowerDNS Recursor,resolver,5.1.0,2024-07-08,2024-02-09,145,False,rec: CVE-2023-50387 and CVE-2023-50868
+CVE-2023-50868,2024-02-14,dnssec,nsec3,RFC 5155,Unbound,resolver,1.19.1,2024-02-13,2024-02-13,-1,True,"- Fix CVE-2023-50868, NSEC3 closest encloser proof can exhaust CPU."
+CVE-2023-5517,2024-02-13,dns,,,BIND 9,both,9.16.48,2024-02-11,2024-01-05,-2,True,Merge branch '4281-confidential-redirect-rfc1918-check-failure-bind-9.16' into 'v9.16.46-release'
+CVE-2023-5679,2024-02-13,dns,,,BIND 9,both,9.16.48,2024-02-11,2024-01-05,-2,True,Merge branch '4334-confidential-dns64-and-serve-stale-bind-9.16' into 'v9.16.46-release'
+CVE-2023-6193,,dns,,,PowerDNS Authoritative,authoritative,4.9.0,2024-03-14,2024-01-23,,,dnsdist: Update Quiche to 0.20.0
+CVE-2023-6193,,dns,,,PowerDNS Recursor,resolver,5.1.0,2024-07-08,2024-01-23,,,dnsdist: Update Quiche to 0.20.0
+CVE-2023-6516,2024-02-13,dns,,,BIND 9,both,9.16.48,2024-02-11,2024-01-05,-2,True,Merge branch '4383-security-limit-tree-pruning-overhead-9.16' into 'v9.16.46-release'
+CVE-2024-0760,,dns,,,BIND 9,both,9.18.28,2024-07-08,2024-06-10,,,Merge branch '4481-security-tcp-flood-9.18' into 'v9.18.28-release'
+CVE-2024-11187,,dns,,,BIND 9,both,9.18.33,2025-01-20,2025-01-15,,,[9.18] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets
+CVE-2024-12705,,dns,,,BIND 9,both,9.18.33,2025-01-20,2025-01-15,,,[9.18] [CVE-2024-12705] sec: usr: DNS-over-HTTP(s) flooding fixes
+CVE-2024-1737,,dns,,,BIND 9,both,9.18.28,2024-07-08,2024-07-02,,,Merge branch '3405-security-limit-the-number-of-resource-records-in-rrset-nxdomain-9.18' into 'v9.18.28-release'
+CVE-2024-1931,2024-03-07,dns,,,Unbound,resolver,1.19.3,2024-03-11,2024-03-07,4,False,"- Version set to 1.19.3 for release. After 1.19.2 point release with   security fix for CVE-2024-1931, Denial of service when trimming   EDE text on p"
+CVE-2024-1975,2024-07-23,dnssec,validation,RFC 4035,BIND 9,both,9.18.28,2024-07-08,2024-06-10,-15,True,Merge branch 'security-4480-drop-sig0-support' into 'v9.18.28-release'
+CVE-2024-25583,,dns,,,PowerDNS Authoritative,authoritative,,,2024-04-09,,,rec: backport CVE-2024-25583 to rel/rec-4.8.8-branch
+CVE-2024-25583,,dns,,,PowerDNS Recursor,resolver,4.8.8,2024-04-09,2024-04-09,,,rec: backport CVE-2024-25583 to rel/rec-4.8.8-branch
+CVE-2024-25590,,dns,,,PowerDNS Authoritative,authoritative,,,2024-10-03,,,Merge pull request #14745 from omoerbeek/rec-4.9.9-branch
+CVE-2024-25590,,dns,,,PowerDNS Recursor,resolver,,,2024-10-03,,,Merge pull request #14745 from omoerbeek/rec-4.9.9-branch
+CVE-2024-33655,,dns,,,Unbound,resolver,1.20.0,2024-05-01,2024-05-01,,,- Fix for the DNSBomb vulnerability CVE-2024-33655. Thanks to Xiang Li   from the Network and Information Security Lab of Tsinghua University   for re
+CVE-2024-4076,,dns,,,BIND 9,both,9.18.28,2024-07-08,2024-06-10,,,Merge branch '4507-confidential-clear-zversion-v9_18' into 'v9.18.28-release'
+CVE-2024-8508,2024-10-03,dns,,,Unbound,resolver,1.22.0,2024-10-16,2024-10-03,13,False,"- The fix for CVE-2024-8508 was part of 1.21.1, a security point release   on 1.21.0. The code repository continues with this fix and the version   nu"
+CVE-2025-11411,,dns,,,Unbound,resolver,1.24.1,2025-10-22,2025-10-22,,,"- Fix CVE-2025-11411 (possible domain hijacking attack), reported by Yuxiao Wu,   Yunyi Zhang, Baojun Liu and Haixin Duan from Tsinghua University."
+CVE-2025-13878,,dns,,,BIND 9,both,9.18.44,2026-01-09,2026-01-08,,,[9.18] [CVE-2025-13878] sec: usr: Fix incorrect length checks for BRID and HHIT records
+CVE-2025-40775,,dns,,,BIND 9,both,9.20.9,2025-05-08,2025-05-07,,,[9.20] [CVE-2025-40775] sec: usr: Prevent assertion when processing TSIG algorithm
+CVE-2025-40777,,dns,,,BIND 9,both,9.20.11,2025-07-04,2025-07-03,,,[9.20] [CVE-2025-40777] sec: usr: Fix a possible assertion failure when using the 'stale-answer-client-timeout 0' option
+CVE-2025-40778,,dns,,,BIND 9,both,9.18.44,2026-01-09,2025-07-11,,,Test that positive answer cannot overwrite sibling NS RRs
+CVE-2025-40780,,dns,,,BIND 9,both,9.18.41,2025-10-18,2025-10-02,,,[9.18] [CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator
+CVE-2025-5994,2025-07-16,dns,,,Unbound,resolver,1.24.0,2025-09-17,2025-07-16,63,False,"- Fix for RebirthDay Attack CVE-2025-5994, reported by Xiang Li   from AOSP Lab Nankai University. - Tag for 1.23.1 with the release of 1.23.0 and the"
+CVE-2025-8677,2025-10-22,dnssec,dnskey,RFC 4034,BIND 9,both,9.18.41,2025-10-18,2025-10-02,-4,True,[9.18] [CVE-2025-8677] sec: usr: DNSSEC validation fails if matching but invalid DNSKEY is found
+CVE-2026-10723,2026-07-22,dnssec,nsec3,RFC 5155,BIND 9,both,,,2026-07-02,,,[9.11] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name
+CVE-2026-10822,2026-07-22,dnssec,dnskey,RFC 4034,BIND 9,both,,,2026-06-15,,,[9.18] [CVE-2026-10822] sec: usr: Fix dns_name_fromwire to record boundaries
+CVE-2026-11331,,dns,,,BIND 9,both,,,2026-06-12,,,[9.16] [CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long
+CVE-2026-11605,2026-07-22,dnssec,rrsig,RFC 4035,BIND 9,both,9.20.26,2026-07-20,2026-06-23,-2,True,[9.20] [CVE-2026-11605] sec: usr: Prevent excessive validation work from crafted negative responses
+CVE-2026-11622,2026-07-22,dnssec,validation,RFC 4035,BIND 9,both,,,2026-06-26,,,[9.11] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack
+CVE-2026-11721,2026-07-22,dnssec,rrsig,RFC 4035,BIND 9,both,9.21.24,2026-07-13,2026-06-22,-9,True,[CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted
+CVE-2026-12617,,dns,,,BIND 9,both,,,2026-06-15,,,Reproducer for #5946 (assertion in some CNAME/DNAME queries)
+CVE-2026-13204,2026-07-22,dnssec,nsec3,RFC 5155,BIND 9,both,9.20.26,2026-07-20,2026-07-07,-2,True,[9.20] [CVE-2026-13204] fix: usr: Prevent crash from malformed NSEC/NSEC3 response
+CVE-2026-13321,,dnssec,nsec,RFC 4034,BIND 9,both,9.21.24,2026-07-13,2026-07-03,,,[CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field
+CVE-2026-14586,,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,,,"- Fix CVE-2026-14586, Assertion in libngtcp2 when under pressure   in high concurrency DNS-over-QUIC environments. Thanks to Kunta   Chu, Kaihua Wang,"
+CVE-2026-1519,2026-03-25,dnssec,validation,RFC 4035,BIND 9,both,9.18.47,2026-03-13,2026-02-03,-12,True,Reproducer for CVE-2026-1519
+CVE-2026-18664,2026-08-26,dns,,,NSD,authoritative,4.15.2,2026-09-02,2026-08-26,7,False,Merge tag 'NSD_4_15_1_REL' into release-4.15.2
+CVE-2026-18916,2026-08-26,dns,,,NSD,authoritative,4.15.2,2026-09-02,2026-08-26,7,False,Merge tag 'NSD_4_15_1_REL' into release-4.15.2
+CVE-2026-19401,2026-08-26,dns,,,NSD,authoritative,4.15.2,2026-09-02,2026-08-26,7,False,Merge tag 'NSD_4_15_1_REL' into release-4.15.2
+CVE-2026-19538,2026-08-26,dns,,,NSD,authoritative,4.15.2,2026-09-02,2026-08-26,7,False,Merge tag 'NSD_4_15_1_REL' into release-4.15.2
+CVE-2026-3039,2026-05-20,dependency,,,BIND 9,both,,,2026-05-01,,,[9.11] [CVE-2026-3039] sec: usr: Fix GSS-API resource leak
+CVE-2026-3104,2026-03-25,dnssec,dnssec-other,RFC 4033,BIND 9,both,9.20.21,2026-03-13,2026-03-13,-12,True,[9.20] [CVE-2026-3104] sec: usr: Fix memory leaks in code preparing DNSSEC proofs of non-existence
+CVE-2026-3119,2026-03-25,dns,,,BIND 9,both,9.20.21,2026-03-13,2026-03-13,-12,True,[9.20] [CVE-2026-3119] sec: usr: Prevent a crash in code processing queries containing a TKEY record
+CVE-2026-32665,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-32665, Remote DNS-over-QUIC denial of   service due to `quic-size` budget bypass. Thanks to N0zoM1z0   (https://github.com/N0zoM1z0) fo"
+CVE-2026-32792,2026-05-20,dns,,,Unbound,resolver,1.25.1,2026-05-20,2026-05-20,0,False,"- Fix CVE-2026-32792, Packet of death with DNSCrypt. Thanks to Andrew   Griffiths from 'calif.io' for the report."
+CVE-2026-33257,2026-04-22,dns,,,PowerDNS Authoritative,authoritative,5.0.4,2026-04-22,2026-04-22,0,False,Fixes for CVE-2026-33257; part of PowerDNS Security Advisory 2026-05
+CVE-2026-33257,2026-04-22,dns,,,PowerDNS Recursor,resolver,,,2026-04-22,,,Fixes for CVE-2026-33257; part of PowerDNS Security Advisory 2026-05
+CVE-2026-33260,2026-04-22,dns,,,PowerDNS Authoritative,authoritative,5.0.4,2026-04-22,2026-04-22,0,False,Fixes for CVE-2026-33260; part of PowerDNS Security Advisory 2026-05
+CVE-2026-33260,2026-04-22,dns,,,PowerDNS Recursor,resolver,,,2026-04-22,,,Fixes for CVE-2026-33260; part of PowerDNS Security Advisory 2026-05
+CVE-2026-33278,2026-05-20,dnssec,nsec3,RFC 5155,Unbound,resolver,1.26.0,2026-07-24,2026-05-20,65,False,- Unit test for CVE-2026-33278.
+CVE-2026-33608,,dns,,,PowerDNS Authoritative,authoritative,5.1.0,2026-06-02,2026-04-22,,,Prevent creadeSecondaryDomain from creating an invalid bind configuration.
+CVE-2026-33608,,dns,,,PowerDNS Recursor,resolver,,,2026-04-22,,,Prevent creadeSecondaryDomain from creating an invalid bind configuration.
+CVE-2026-33609,,dns,,,PowerDNS Authoritative,authoritative,5.1.0,2026-06-02,2026-04-22,,,"Rewrite the ldap escape function, and always escape network-controlled input."
+CVE-2026-33609,,dns,,,PowerDNS Recursor,resolver,,,2026-04-22,,,"Rewrite the ldap escape function, and always escape network-controlled input."
+CVE-2026-33610,,dns,,,PowerDNS Authoritative,authoritative,5.1.0,2026-06-02,2026-04-22,,,Make sure to wrap the socket in a unique_ptr to close it in all cases.
+CVE-2026-33610,,dns,,,PowerDNS Recursor,resolver,,,2026-04-22,,,Make sure to wrap the socket in a unique_ptr to close it in all cases.
+CVE-2026-33611,,dns,,,PowerDNS Authoritative,authoritative,5.1.0,2026-06-02,2026-04-22,,,Fix writer and text parser for too long alpn values.
+CVE-2026-33611,,dns,,,PowerDNS Recursor,resolver,,,2026-04-22,,,Fix writer and text parser for too long alpn values.
+CVE-2026-3591,2026-03-25,dns,,,BIND 9,both,9.20.21,2026-03-13,2026-03-13,-12,True,[9.20] [CVE-2026-3591] sec: usr: Fix a stack use-after-return flaw in SIG(0) handling code
+CVE-2026-3592,2026-05-20,dns,,,BIND 9,both,,,2026-04-30,,,[v9_11] [CVE-2026-3592] sec: usr: Limit resolver server list size
+CVE-2026-3593,2026-05-20,dns,,,BIND 9,both,9.21.22,2026-05-08,2026-05-05,-12,True,[CVE-2026-3593] sec: usr: Fix use-after-free in DNS-over-HTTPS when processing HTTP/2 SETTINGS frames
+CVE-2026-40622,2026-05-20,dns,,,Unbound,resolver,1.26.0,2026-07-24,2026-05-20,65,False,- Unit test for CVE-2026-40622.
+CVE-2026-40691,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-40691, Packet of death for DNSCrypt over TCP. Thanks   to Qifan Zhang, Palo Alto Networks, for the report. In addition,   thanks to Tru"
+CVE-2026-41292,2026-05-20,dns,,,Unbound,resolver,1.25.1,2026-05-20,2026-05-20,0,False,"- Fix CVE-2026-41292, Parsing a long list of incoming EDNS options   degrades performance. Thanks to GitHub user 'N0zoM1z0', also Qifan   Zhang from P"
+CVE-2026-41637,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-41637, Degradation of resolution service from   improperly accounted client-terminated DNS-over-QUIC queries. Thanks   to Qifan Zhang, "
+CVE-2026-42534,2026-05-20,dns,,,Unbound,resolver,1.25.1,2026-05-20,2026-05-20,0,False,"- Fix CVE-2026-42534, Jostle logic bypass degrades resolution   performance. Thanks to Qifan Zhang, Palo Alto Networks, for the   report."
+CVE-2026-42923,2026-05-20,dnssec,nsec3,RFC 5155,Unbound,resolver,1.25.1,2026-05-20,2026-05-20,0,False,"- Fix CVE-2026-42923, Degradation of service with unbounded NSEC3   hash calculations. Thanks to Qifan Zhang, Palo Alto Networks, for   the report."
+CVE-2026-42944,2026-05-20,dns,,,Unbound,resolver,1.26.0,2026-07-24,2026-05-20,65,False,- Unit test for CVE-2026-42944.
+CVE-2026-42955,2026-07-22,dns,,,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-42955.
+CVE-2026-42959,2026-05-20,dnssec,validation,RFC 4035,Unbound,resolver,1.26.0,2026-07-24,2026-05-20,65,False,- Unit test for CVE-2026-42959.
+CVE-2026-42960,2026-05-20,dns,,,Unbound,resolver,1.26.0,2026-07-24,2026-05-20,65,False,- Unit test for CVE-2026-42960.
+CVE-2026-44390,2026-05-20,dns,,,Unbound,resolver,1.26.0,2026-07-24,2026-05-20,65,False,- Unit test for CVE-2026-44390.
+CVE-2026-44608,2026-05-20,dns,,,Unbound,resolver,1.25.1,2026-05-20,2026-05-20,0,False,"- Fix CVE-2026-44608, Use after free and crash in RPZ code. Thanks   to Qifan Zhang, Palo Alto Networks, for the report."
+CVE-2026-44621,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-44621, Libunbound applications configured with   'unwanted-reply-threshold' could eventually be abruptly   terminated. Thanks to Qifan "
+CVE-2026-44687,2026-07-22,dnssec,dnssec-other,RFC 4033,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-44687.
+CVE-2026-44690,2026-07-22,dnssec,nsec,RFC 4034,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-44690.
+CVE-2026-46582,2026-07-22,dnssec,nsec,RFC 4034,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-46582.
+CVE-2026-49975,,dependency,,,PowerDNS Authoritative,authoritative,,,2026-07-02,,,Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4
+CVE-2026-49975,,dependency,,,PowerDNS Recursor,resolver,,,2026-07-02,,,Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4
+CVE-2026-50045,2026-07-22,dnssec,dnssec-other,RFC 4033,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-50045.
+CVE-2026-50046,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-50046, Possible heap use-after-free in an error path   when a DoT forwarded query is jostled out. Thanks to Qifan Zhang,   Palo Alto Ne"
+CVE-2026-50243,2026-07-22,dnssec,rrsig,RFC 4035,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-50243.
+CVE-2026-50248,2026-07-22,dnssec,rrsig,RFC 4035,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,"- Fix error in log printout in fix for CVE-2026-50248, when the   primary name is bogus."
+CVE-2026-50251,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-50251, Attacker supplied `0.0.0.0`/`::` glue triggers   defensive full-cache flush. Thanks to Qifan Zhang, Palo Alto   Networks, for th"
+CVE-2026-50252,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-50252, Possible cache poisoning attack by mapping   source port population per thread. Thanks to Inbal Schussheim and   Amit Klein, Heb"
+CVE-2026-52863,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-52863, Memory corruption could lead to crash and   denial of service. Thanks to Qifan Zhang, Palo Alto Networks,   for the report."
+CVE-2026-54478,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-54478, DNS Cookie bypass when combined with   proxy-protocol use. Thanks to Qifan Zhang, Palo Alto Networks,   for the report."
+CVE-2026-55708,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-55708, Privacy/configuration issue when adding local   data in views through 'unbound-control'. Thanks to Qifan Zhang,   Palo Alto Netw"
+CVE-2026-55717,2026-07-22,dns,,,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-55717.
+CVE-2026-55973,2026-07-22,dns,,,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-55973.
+CVE-2026-55990,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-55990, Packet of death for a DNSCrypt misconfigured   Unbound. Thanks to Qifan Zhang, Palo Alto Networks, for the report."
+CVE-2026-55991,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-55991, Remote DNS-over-QUIC (DoQ) flow-control   assertion failure in libngtcp2. Thanks to Qifan Zhang, Palo Alto   Networks, for the r"
+CVE-2026-56416,2026-07-22,dnssec,rrsig,RFC 4035,Unbound,resolver,1.26.0,2026-07-24,2026-07-22,2,False,- Unit test for CVE-2026-56416.
+CVE-2026-56444,2026-07-22,dns,,,Unbound,resolver,1.25.2,2026-07-22,2026-07-22,0,False,"- Fix CVE-2026-56444, Degradation of resolution service when   'discard-timeout' and 'serve-expired-client-timeout' are combined in   unusual configur"
+CVE-2026-5946,2026-05-20,dns,,,BIND 9,both,9.20.26,2026-07-20,2026-03-11,61,False,Document that non-IN RR class issues are out of CVE scope
+CVE-2026-5947,2026-05-20,dns,,,BIND 9,both,9.21.22,2026-05-08,2026-05-01,-12,True,[CVE-2026-5947] sec: usr: Fix crash in resolver when SIG(0)-signed responses are received under load
+CVE-2026-5950,2026-05-20,dns,,,BIND 9,both,,,2026-04-30,,,[v9_11] [CVE-2026-5950] sec: usr: Avoid unbounded recursion loop
