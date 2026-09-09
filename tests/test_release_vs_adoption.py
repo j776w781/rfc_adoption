@@ -41,8 +41,8 @@ def test_late_curve_events_are_flagged(a):
 def test_availability_releases_move_nothing(a):
     """The one firm result: shipping the capability is not an event."""
     avail = [e for e in a["event_studies"] if e["kind"] == "first signer release"]
-    assert len(avail) >= 5
-    assert sum(1 for e in avail if e["change_pp"] == 0.0) >= len(avail) - 1
+    assert len(avail) >= 4
+    assert all(e["change_pp"] == 0.0 for e in avail), avail
 
 
 def test_default_change_is_closer_to_takeoff_than_the_rfc(a):
@@ -55,10 +55,35 @@ def test_default_change_is_closer_to_takeoff_than_the_rfc(a):
 
 def test_doc_does_not_overclaim(a):
     doc = DOC.read_text(encoding="utf-8")
-    assert "Suggested, not established" in doc
+    assert "Not established either way" in doc
     assert "Not supported" in doc
-    # The interpretable default-change events are 3, and only 1 shows an effect.
+    # No interpretable default-change event shows an effect. If one ever does,
+    # this fails and the document has to be rewritten rather than quietly drift.
     early = [e for e in a["event_studies"]
              if e["kind"].startswith("default change") and not e["late_curve"]]
-    assert len(early) == 3
-    assert sum(1 for e in early if e["change_pp"] > 0.1) == 1
+    assert early
+    assert all(abs(e["change_pp"]) < 0.1 for e in early), early
+
+
+def test_reverse_rates_come_from_the_strict_panel(a):
+    """Summing the five RIRs double-counts names and moved every crossing date.
+
+    ECDSA read 2017-08 summed against 2018-06 on the panel. The panel is what
+    adoption_measures.json uses, so anything else puts this analysis and the
+    project's published adoption dates in disagreement.
+    """
+    assert "afrinic" in a["populations"]["reverse"].lower()
+    for r in a["takeoff"]:
+        if r["basis"] == "reverse":
+            assert "AFRINIC+ARIN" in r["population"]
+            assert r["series_start"] >= "2011-05"
+
+
+def test_reverse_crossings_match_the_projects_adoption_measures(a):
+    """digest 4 is the one observable mapping 1:1 to an adoption_measures row."""
+    am = json.loads((ROOT / "out" / "analysis" / "adoption_measures.json")
+                    .read_text(encoding="utf-8"))
+    sha384 = next(d for d in am["digest_types"] if d["value"] == 4)
+    row = next(r for r in a["takeoff"]
+               if r["observable"] == "digest 4" and r["basis"] == "reverse")
+    assert row["first_month_over_1pct"] == sha384["t_1pct_date"]

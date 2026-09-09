@@ -1,13 +1,10 @@
 observable,corpus,event_kind,software,event_month,share_at_event_pct,late_curve_not_interpretable,window_months,mean_pp_before,mean_pp_after,change_pp
-alg 13/14,reverse,default change,knot 2.1.0,2016-01,0.14,False,12,0.012,0.025,0.013
-alg 13/14,reverse,default change,pdns-auth 4.0.0,2016-07,0.55,False,12,0.034,0.007,-0.027
-alg 8/10,reverse,default change,opendnssec 1.2.0,2011-03,0.76,False,12,0.064,1.108,1.045
-alg 8/10,reverse,default change,knot 2.0.0,2015-06,55.82,True,12,1.106,1.761,0.655
-alg 13/14,reverse,default change (opt-in),bind9 9.16.0,2020-02,21.69,True,12,0.429,0.28,-0.149
+alg 13/14,reverse,default change,knot 2.1.0,2016-01,0.25,False,12,0.021,0.055,0.034
+alg 13/14,reverse,default change,pdns-auth 4.0.0,2016-07,0.72,False,12,0.06,0.017,-0.043
+alg 8/10,reverse,default change,knot 2.0.0,2015-06,65.76,True,12,1.138,0.079,-1.059
+alg 13/14,reverse,default change (opt-in),bind9 9.16.0,2020-02,25.1,True,12,1.201,0.448,-0.753
 alg 13/14,zonefile,default change (opt-in),bind9 9.16.0,2020-02,51.49,True,12,2.585,0.256,-2.328
-alg 12,reverse,first signer release,bind9 9.6.2,2010-02,0.0,False,12,0.0,0.0,0.0
 alg 13/14,reverse,first signer release,pdns-auth 3.0.1,2012-01,0.0,False,12,0.0,0.0,0.0
 alg 15/16,reverse,first signer release,knot 2.6.0,2017-09,0.0,False,12,0.0,0.0,0.0
 alg 15/16,zonefile,first signer release,knot 2.6.0,2017-09,0.0,False,12,0.0,0.0,0.0
-alg 8/10,reverse,first signer release,bind9 9.7.0,2010-02,0.0,False,12,0.0,0.575,0.575
 digest 4,reverse,first signer release,pdns-auth 3.0.1,2012-01,0.0,False,12,0.0,0.0,0.0

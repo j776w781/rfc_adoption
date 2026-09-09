@@ -5,7 +5,9 @@ OpenDNSSEC ship constantly, and almost no operator implements DNSSEC themselves.
 If adoption is really a story about software updates rather than about operators
 reading RFCs, it should show up as adoption moving when releases land.
 
-It partly does, and the part that does not is the more useful finding.
+The short answer is that **availability demonstrably does not move it, and the
+data cannot show whether defaults do.** The reasons are worth setting out,
+because two of them are properties of the corpus rather than of the world.
 
 Analysis `scripts/release_vs_adoption.py`, output
 `out/analysis/release_vs_adoption.json`. Three candidate explanations for when a
@@ -13,125 +15,149 @@ mechanism started spreading:
 
     RFC published  ->  a signer can publish it  ->  it is the default  ->  zones move
 
+## Which population these rates come from
+
+This matters more than it sounds, and an earlier version of this document got it
+wrong.
+
+- **Reverse**: the strict **AFRINIC + ARIN** panel, `P(value | signed
+  delegations)`, from `out/panel_run`. Summing the five RIRs instead
+  double-counts names present in more than one, which
+  [full_run_findings.md](full_run_findings.md) flagged. That error moved every
+  crossing date — ECDSA read 2017-08 summed against **2018-06** on the panel, and
+  RSA/SHA-1 read 2009-03 against **2011-05**. The panel is the population
+  `out/analysis/adoption_measures.json` uses, so the crossings here now match the
+  project's published adoption dates exactly.
+- **Forward**: the seven forward TLDs of the full run, `out/server_run`. These
+  are disjoint zones, so pooling them is exact.
+
+The strict panel **starts 2011-05** and held 32 signed delegations then. That
+single fact removes several tests below.
+
 ## Availability moves nothing
 
-An event study around each release that first let a signer publish a value —
-mean monthly change in share of signed delegations, twelve months either side:
+Event study around each release that first let a signer publish a value — mean
+monthly change in share, twelve months either side:
 
 | Observable | corpus | Release | share at event | before | after | change |
 | --- | --- | --- | ---: | ---: | ---: | ---: |
-| alg 12 | reverse | BIND 9.6.2 (2010-02) | 0.00% | 0.000 | 0.000 | **0.000** |
 | alg 13/14 | reverse | PowerDNS 3.0.1 (2012-01) | 0.00% | 0.000 | 0.000 | **0.000** |
 | alg 15/16 | reverse | Knot 2.6.0 (2017-09) | 0.00% | 0.000 | 0.000 | **0.000** |
 | alg 15/16 | forward | Knot 2.6.0 (2017-09) | 0.00% | 0.000 | 0.000 | **0.000** |
 | digest 4 | reverse | PowerDNS 3.0.1 (2012-01) | 0.00% | 0.000 | 0.000 | **0.000** |
-| alg 8/10 | reverse | BIND 9.7.0 (2010-02) | 0.00% | 0.000 | 0.575 | +0.575 |
 
-Five of the six rows show literally nothing — **four distinct releases, and for
-each of them the share is still exactly 0.00% a full year after the software
-could publish the value.** The single exception is RSA/SHA-256, and even there
-the reverse panel held only tens of zones at the time.
+**Every one is exactly zero, before and after.** For each of these, the share is
+still 0.00% a full year after the software could publish the value. This is the
+one result here that is not fragile: it holds on both corpora, on the strict
+panel, and it agrees with the onset decomposition in
+[software_crossref.md](software_crossref.md), which found code lag near zero and
+deployment lag in years.
 
-This is the same result the onset decomposition reached from the other side: code
-lag is near zero, deployment lag is years. Shipping the capability is not an
-event in the deployment record. It is a precondition, and nothing more.
+Shipping the capability is not an event in the deployment record. It is a
+precondition and nothing more.
 
-## Defaults sit far closer to takeoff than RFCs do
+## Defaults are closer in time, on two cases
 
-Time from each candidate date to the month the value first crossed 1% of signed
-delegations:
+Time from each candidate date to the month the value first crossed 1%:
 
 | Observable | corpus | 1% at | from RFC | from first signer | from default change |
 | --- | --- | --- | ---: | ---: | ---: |
-| alg 8/10 | reverse | 2011-04 | 1.50 y | 1.17 y | **0.08 y** |
-| alg 13/14 | reverse | 2017-08 | 5.33 y | 5.58 y | **1.58 y** |
+| alg 13/14 | reverse | 2018-06 | 5.33 y | 5.58 y | **1.58 y** |
 | alg 13/14 | forward | 2016-10 | 4.50 y | 4.75 y | **0.75 y** |
+| alg 15/16 | forward | 2020-05 | 3.25 y | 2.67 y | — |
+| digest 4 | reverse | 2018-06 | 6.17 y | 6.42 y | — |
+| digest 4 | forward | 2019-09 | 7.42 y | 7.67 y | — |
 
-RFC dates span 1.5–5.3 years from takeoff and first-availability 1.2–5.6; the
-default change spans **0.08–1.58**. Across the three cases where a default change
-can be identified, it is between four and six times closer to the crossing than
-either of the other two dates.
-
-And the defaults led rather than followed. Knot switched its default to ECDSA
-P-256 in 2.1.0 (2016-01) when ECDSA stood at **0.14%** of reverse signed
-delegations; PowerDNS 4.0.0 followed in 2016-07 at 0.55%. Neither vendor was
+Where a default change exists it is three to six times closer to the crossing
+than the RFC. It also **led** rather than followed: Knot switched its default to
+ECDSA P-256 in 2.1.0 (2016-01) when ECDSA stood at 0.25% of panel signed
+delegations, and PowerDNS 4.0.0 followed in 2016-07 at 0.72%. Neither vendor was
 ratifying something already popular.
 
-## But the event studies do not confirm it
+That is two observations, both of the same algorithm.
 
-The same test applied to the default changes, restricted to those occurring
-early enough in a curve for a percentage-point comparison to mean anything:
+## And no event study confirms it
 
 | Observable | Default change | share at event | before | after | change |
 | --- | --- | ---: | ---: | ---: | ---: |
-| alg 8/10 | OpenDNSSEC 1.2.0 (2011-03) | 0.76% | 0.064 | 1.108 | **+1.045** |
-| alg 13/14 | Knot 2.1.0 (2016-01) | 0.14% | 0.012 | 0.025 | +0.013 |
-| alg 13/14 | PowerDNS 4.0.0 (2016-07) | 0.55% | 0.034 | 0.007 | −0.027 |
+| alg 13/14 | Knot 2.1.0 (2016-01) | 0.25% | 0.021 | 0.055 | +0.034 |
+| alg 13/14 | PowerDNS 4.0.0 (2016-07) | 0.72% | 0.060 | 0.017 | −0.043 |
 
-**One of three.** OpenDNSSEC's default change is followed by a seventeen-fold
-jump in monthly growth; the two ECDSA defaults are followed by nothing
-measurable within a year.
+**Neither shows an effect.** Both changes are followed by monthly growth within a
+few hundredths of a percentage point of what preceded them.
 
-Three further events had to be discarded rather than read: Knot 2.0.0 fires at
-55.8% share, BIND 9.16.0 at 21.7% (reverse) and 51.5% (forward). **A bounded
-share series must decelerate as it approaches its ceiling**, so an event late in
-a curve inherits a negative delta it did not cause — BIND 9.16.0 shows −2.33 in
-the forward corpus purely because ECDSA was already past half the population.
-Reporting those as evidence that a release slowed adoption would be an artefact
-of the measure.
+Three further events had to be discarded rather than read, because **a bounded
+share series must decelerate as it approaches its ceiling**: Knot 2.0.0 fires at
+65.8% share, BIND 9.16.0 at 25.1% (reverse) and 51.5% (forward). BIND 9.16.0
+shows −2.33 pp/month in the forward corpus for reasons that have nothing to do
+with the release. Reporting those as a release slowing adoption would be an
+artefact of the measure.
 
 BIND's is not a comparable event anyway: `dnssec-policy` is **opt-in**. An
-operator has to write `dnssec-policy default;` to get the ECDSAP256SHA256 CSK,
-so unlike the PowerDNS and Knot rows it does not propagate silently on upgrade.
-That distinction is now recorded in the dataset.
+operator must write `dnssec-policy default;` to get the ECDSAP256SHA256 CSK, so
+unlike the Knot and PowerDNS rows it does not propagate silently on upgrade.
+
+### A withdrawn result
+
+An earlier version of this analysis reported OpenDNSSEC 1.2.0 (2011-03) as
+followed by a **seventeen-fold jump** in monthly growth of RSA/SHA-256, and
+presented it as the one confirmed case of a default change moving adoption.
+
+It was an artefact of the summed-RIR population. On the strict panel the series
+begins **2011-05**, two months *after* that release, so there is no before-period
+and no event study to run. RSA/SHA-256 is already at 3.1% in the panel's first
+month, which makes it left-censored for this purpose entirely. The claim is
+withdrawn; nothing replaces it.
 
 ## Why the decisive test cannot be run here
 
-The two ECDSA default changes land in 2016-01 and 2016-07. The forward corpus —
-the one whose operators actually modernised — **starts 2016-06**, so it cannot
-see the before-period for either. The reverse corpus spans the whole window but
-its operators lag the ecosystem by years, which is exactly why it shows nothing
-in 2016.
+The two ECDSA default changes land in 2016-01 and 2016-07.
 
-So the one place where the hypothesis is most testable is the one place the data
-does not reach. Everything above is the honest remainder.
+- The **forward corpus starts 2016-06**, so it has no before-period for either.
+- The **reverse panel** covers the window but its operators lag the ecosystem by
+  years — which is why ECDSA is still at 0.25% there in 2016 and does not cross
+  1% until 2018-06.
+
+So the corpus that would show the effect cannot see the event, and the corpus
+that can see the event is not where the effect would appear. That is the whole
+difficulty, and no amount of care with the existing data removes it.
 
 ## What this supports, and what it does not
 
-**Supported.** Shipping a capability does not move deployment: five of six
-first-availability releases are followed by zero change, and four leave the share
-at exactly 0.00% a year later. Whatever moves adoption, it is not the feature
-becoming available.
+**Supported.** Shipping a capability does not move deployment. Four of four
+first-availability releases are followed by exactly zero change, with the share
+still at 0.00% a year later.
 
-**Suggested, not established.** Default changes sit four to six times closer to
-the 1% crossing than RFC publication does, and they precede rather than follow
-the rise. That is three data points, and only one of the three shows an
-acceleration in the surrounding year.
+**Not established either way.** Whether default changes drive adoption. The
+timing is suggestive on two cases and the direction is right — vendors moved
+before the rise, not after — but neither event study detects anything, and the
+one case that appeared to was a population error.
 
 **Not supported.** "Software updates drive adoption rates" as a general claim.
-Two of three interpretable default changes produced no measurable acceleration,
-and the population is not one where a diffusion statistic means much: the jump
-analysis in [software_crossref.md](software_crossref.md) showed a handful of
-registry operators move six-figure blocks of names in single months, and every
-jump is paired across the two TLDs of one operator. An event study over that
-population measures whether a dozen organisations happened to move, not whether
-a market responded.
+Nothing in this record demonstrates it. It remains the most plausible mechanism
+by which an operator's behaviour changes without an operator deciding anything,
+which is a statement about plausibility, not evidence.
+
+A further reason to be careful with any statistic here: the jump analysis in
+[software_crossref.md](software_crossref.md) showed a handful of registry
+operators moving six-figure blocks of names in single months, every jump paired
+across the two TLDs of one operator. An event study over that population measures
+whether a dozen organisations happened to move, not whether a market responded.
 
 **The consistent story across all three analyses** — onset decomposition, the
-jump pairing, and this — is that the binding constraint sits with **operators and
-the platforms they run**, not with implementers and not with the IETF. Software
-defaults are the most plausible channel by which an operator's behaviour changes
-without an operator deciding anything, and the timing is consistent with that.
-Proving it needs something this corpus does not contain.
+jump pairing, and this one — is that the binding constraint sits with **operators
+and the platforms they run**, not with implementers and not with the IETF. This
+analysis narrows where the evidence for that is: it is in the onset decomposition
+and the operator pairing, not in release-event timing.
 
 ## What would settle it
 
-- **Forward-corpus coverage before 2016-06**, which would give a real
-  before-period for the two ECDSA default changes. This is the single highest-value
-  gap.
+- **Forward-corpus coverage before 2016-06.** The single highest-value gap: it
+  would give a real before-period for both ECDSA default changes, in the corpus
+  where the operators actually modernised.
 - **Per-zone software identification.** Nothing in published zone data says what
-  signed it. Version fingerprinting, or registry disclosure, would turn every
+  signed it. Version fingerprinting or registry disclosure would turn every
   alignment here into an attribution.
-- **More default changes to test.** Six are identified across five projects in
-  seventeen years; three are usable. That is the sample size, and no amount of
-  care with the existing corpora enlarges it.
+- **More default changes to test.** Seven are identified across five projects in
+  seventeen years; two are usable. That is the sample size, and no amount of care
+  with the existing corpora enlarges it.

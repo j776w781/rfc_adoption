@@ -53,15 +53,30 @@ def months_between(a: str, b: str) -> float:
     return ((int(b[:4]) - int(a[:4])) * 12 + (int(b[5:7]) - int(a[5:7]))) / 12.0
 
 
-def series(df: pd.DataFrame, basis: str, dim: str, values: list[str]) -> pd.Series:
+#: The reverse population. Summing the five RIRs double-counts names that appear
+#: in more than one of them, which full_run_findings.md flagged and which moves
+#: every crossing date: ECDSA reads 2017-08 summed against 2018-06 on the panel,
+#: and RSASHA1 reads 2009-03 against 2011-05. The strict AFRINIC+ARIN panel is
+#: what out/analysis/adoption_measures.json uses, and using anything else here
+#: means this analysis and the project's own adoption dates disagree.
+PANEL_SOURCE = "_pooled-afrinic-arin"
+
+
+def series(df: pd.DataFrame, basis: str, dim: str, values: list[str],
+           source: str | None = None) -> pd.Series:
     """Share of signed delegations carrying the value, per month.
 
     A month in which the value does not appear is 0%, not missing. Dropping
     those instead leaves the series starting at first sighting, which deletes
     every month before the software shipped -- exactly the period an event study
     needs.
+
+    Forward sources are disjoint TLDs, so pooling them is exact. Reverse sources
+    are not, which is why `source` exists.
     """
     b = df[(df.basis == basis) & (df.dimension == dim)]
+    if source is not None:
+        b = b[b.source == source]
     den = b[b.value == "_total"].groupby("month").domains_peak.sum().sort_index()
     num = (b[b.value.isin(values)].groupby("month").domains_peak.sum()
            .reindex(den.index, fill_value=0))
@@ -111,13 +126,18 @@ def event_study(s: pd.Series, event: str, window: int = 12) -> dict | None:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--timeline", type=Path,
-                    default=Path("out/server_run/timeline_monthly.parquet"))
+                    default=Path("out/server_run/timeline_monthly.parquet"),
+                    help="full run; forward (zonefile) series come from here")
+    ap.add_argument("--panel", type=Path,
+                    default=Path("out/panel_run/timeline_monthly.parquet"),
+                    help="strict AFRINIC+ARIN panel; reverse series come from here")
     ap.add_argument("--support", type=Path,
                     default=Path("data/software/software_support.json"))
     ap.add_argument("--out", type=Path, default=Path("out/analysis/release_vs_adoption.json"))
     args = ap.parse_args()
 
     df = pd.read_parquet(args.timeline)
+    panel = pd.read_parquet(args.panel) if args.panel.exists() else None
     sup = json.loads(args.support.read_text(encoding="utf-8"))
 
     alias = {"alg 15": "alg 15/16", "alg 16": "alg 15/16", "alg 13": "alg 13/14",
@@ -140,7 +160,12 @@ def main() -> int:
     rows, studies = [], []
     for obs, (rdim, fdim, vals, rfc, pub) in OBSERVABLES.items():
         for basis, dim in (("reverse", rdim), ("zonefile", fdim)):
-            s = series(df, basis, dim, vals)
+            if basis == "reverse":
+                if panel is None:
+                    continue
+                s = series(panel, basis, dim, vals, source=PANEL_SOURCE)
+            else:
+                s = series(df, basis, dim, vals)
             if s.empty:
                 continue
             t = takeoff(s)
@@ -148,6 +173,9 @@ def main() -> int:
             dfl = defaults.get(obs)
             mark = t["first_month_over_1pct"]
             row = {"observable": obs, "rfc": rfc, "rfc_published": pub, "basis": basis,
+                   "population": ("strict panel AFRINIC+ARIN, P(value | signed delegations)"
+                                  if basis == "reverse" else
+                                  "7 disjoint forward TLDs, P(value | signed zones)"),
                    "series_start": str(s.index.min()), "series_end": str(s.index.max()),
                    **t,
                    "first_signer": f'{sig["implementation"]} {sig["first_release"]}' if sig else None,
@@ -184,6 +212,12 @@ def main() -> int:
         "caveat": ("Month-on-month share change over a population a dozen registry "
                    "operators dominate. An event study here measures whether those "
                    "operators moved, not whether a market diffused."),
+        "populations": {
+            "reverse": f"panel_run, source {PANEL_SOURCE} -- the same strict panel as "
+                       "out/analysis/adoption_measures.json, so the 1% crossings here "
+                       "match the project's published adoption dates",
+            "zonefile": "server_run, 7 disjoint forward TLDs pooled (exact)",
+        },
         "takeoff": rows,
         "event_studies": studies,
     }
