@@ -599,6 +599,21 @@
       "evidence_kind": "commit",
       "attribution": "exact",
       "attribution_basis": "The cited commit introduces the feature and this is the single earliest stable release containing it."
+    },
+    {
+      "implementation": "bind9",
+      "what": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK",
+      "first_release": "9.16.0",
+      "released": "2020-02-12",
+      "commit_date": "2020-01-14",
+      "evidence": "dnssec-policy 'default': keymgr: DNSKEY example.com/ECDSAP256SHA256 (CSK) created for policy default",
+      "evidence_kind": "documentation",
+      "evidence_url": "https://bind9.readthedocs.io/en/v9.16.25/dnssec-guide.html",
+      "evidence_commit": null,
+      "product_code": true,
+      "attribution": "approximate",
+      "attribution_basis": "Documented default of dnssec-policy, which arrives in 9.16.0. Unlike the PowerDNS and Knot rows this default is opt-in: an operator must write 'dnssec-policy default;' to get it, so it does not propagate silently on upgrade and should not be expected to move a curve the way an automatic default would.",
+      "opt_in": true
     }
   ],
   "validator_limits": [

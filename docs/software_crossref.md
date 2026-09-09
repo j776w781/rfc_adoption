@@ -139,6 +139,14 @@ analysis leaves open, not a result.
 | **Knot** | **signing algorithm → ECDSAP256SHA256** | **2.1.0** | **2016-01-14** | `src/dnssec/lib/kasp/policy.c` |
 | **PowerDNS** | **ZSK default → ECDSA P-256** | **4.0.0** | **2016-07-08** | `common_startup.cc`, `pdns.conf-dist`, `pdnsutil.cc` |
 | PowerDNS | KSK default → ECDSA P-256 | 4.0.0 | 2016-07-08 | `pdnsutil.cc` |
+| BIND | `dnssec-policy default` signs with one ECDSAP256SHA256 CSK | 9.16.0 | 2020-02-12 | ISC documentation |
+
+BIND's is the odd one out and is not comparable to the rest: `dnssec-policy` is
+**opt-in**. An operator has to write `dnssec-policy default;` to get that CSK, so
+it does not propagate silently on upgrade the way the Knot and PowerDNS defaults
+do. The dataset records this as `opt_in`, and
+[releases_vs_adoption.md](releases_vs_adoption.md) keeps it out of the
+default-change comparison for that reason.
 
 Knot and PowerDNS moved their default signing algorithm to ECDSA P-256 within
 seven months of each other, in 2016. `.se` shows its first ECDSA jump in **2016-10** —

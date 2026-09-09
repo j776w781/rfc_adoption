@@ -1,0 +1,11 @@
+observable,rfc,rfc_published,corpus,series_start,series_end,first_month_over_1pct,steepest_month,steepest_gain_pp,first_signer,first_signer_released,default_change,default_released,years_rfc_to_1pct,years_first_signer_to_1pct,years_default_to_1pct,censored_start
+alg 8/10,RFC 5702,2009-10,reverse,2009-03,2026-08,2011-04,2015-09,10.21,bind9 9.7.0,2010-02,opendnssec 1.2.0,2011-03,1.5,1.17,0.08,False
+alg 8/10,RFC 5702,2009-10,zonefile,2016-06,2023-12,2016-06,2021-12,1.9,bind9 9.7.0,2010-02,opendnssec 1.2.0,2011-03,6.67,6.33,5.25,True
+alg 12,RFC 5933,2010-07,reverse,2009-03,2026-08,,2012-12,0.29,bind9 9.6.2,2010-02,,,,,,False
+alg 12,RFC 5933,2010-07,zonefile,2016-06,2023-12,,2016-07,0.0,bind9 9.6.2,2010-02,,,,,,False
+alg 13/14,RFC 6605,2012-04,reverse,2009-03,2026-08,2017-08,2024-12,16.23,pdns-auth 3.0.1,2012-01,knot 2.1.0,2016-01,5.33,5.58,1.58,False
+alg 13/14,RFC 6605,2012-04,zonefile,2016-06,2023-12,2016-10,2019-01,16.15,pdns-auth 3.0.1,2012-01,knot 2.1.0,2016-01,4.5,4.75,0.75,False
+alg 15/16,RFC 8080,2017-02,reverse,2009-03,2026-08,,2025-01,0.06,knot 2.6.0,2017-09,,,,,,False
+alg 15/16,RFC 8080,2017-02,zonefile,2016-06,2023-12,2020-05,2020-04,0.97,knot 2.6.0,2017-09,,,3.25,2.67,,False
+digest 4,RFC 6605,2012-04,reverse,2009-03,2026-08,2013-07,2017-08,5.36,pdns-auth 3.0.1,2012-01,,,1.25,1.5,,False
+digest 4,RFC 6605,2012-04,zonefile,2016-06,2023-12,2019-09,2021-09,8.06,pdns-auth 3.0.1,2012-01,,,7.42,7.67,,False

@@ -144,6 +144,36 @@ def adoption(j: dict, out: Path) -> None:
        for r in j["changes"] for c in r["cves"]])
 
 
+def releases_adoption(j: dict, out: Path) -> None:
+    w(out / "dns_release_vs_adoption_takeoff.csv",
+      ["observable", "rfc", "rfc_published", "corpus", "series_start", "series_end",
+       "first_month_over_1pct", "steepest_month", "steepest_gain_pp",
+       "first_signer", "first_signer_released", "default_change", "default_released",
+       "years_rfc_to_1pct", "years_first_signer_to_1pct", "years_default_to_1pct",
+       "censored_start"],
+      [[r["observable"], r["rfc"], r["rfc_published"], r["basis"], r["series_start"],
+        r["series_end"], r["first_month_over_1pct"] or "", r["steepest_month"] or "",
+        r["steepest_gain_pp"] if r["steepest_gain_pp"] is not None else "",
+        r["first_signer"] or "", r["first_signer_released"] or "",
+        r["default_change"] or "", r["default_released"] or "",
+        r["from_rfc_to_1pct_years"] if r["from_rfc_to_1pct_years"] is not None else "",
+        r["from_first_signer_to_1pct_years"]
+        if r["from_first_signer_to_1pct_years"] is not None else "",
+        r["from_default_change_to_1pct_years"]
+        if r["from_default_change_to_1pct_years"] is not None else "",
+        r["censored_start"]]
+       for r in j["takeoff"]])
+
+    w(out / "dns_release_vs_adoption_events.csv",
+      ["observable", "corpus", "event_kind", "software", "event_month",
+       "share_at_event_pct", "late_curve_not_interpretable", "window_months",
+       "mean_pp_before", "mean_pp_after", "change_pp"],
+      [[e["observable"], e["basis"], e["kind"], e["software"], e["event"],
+        e["share_at_event_pct"], e["late_curve"], e["window_months"],
+        e["mean_pp_before"], e["mean_pp_after"], e["change_pp"]]
+       for e in sorted(j["event_studies"], key=lambda x: (x["kind"], x["observable"]))])
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path, default=Path("out/analysis"))
@@ -156,6 +186,11 @@ def main() -> int:
         cves(json.loads(cve_path.read_text("utf-8")), args.out)
     else:
         print("  (skipping CVE exports: run scripts/cve_crossref.py first)")
+    ra_path = Path("out/analysis/release_vs_adoption.json")
+    if ra_path.exists():
+        releases_adoption(json.loads(ra_path.read_text("utf-8")), args.out)
+    else:
+        print("  (skipping release/adoption: run scripts/release_vs_adoption.py first)")
     adopt_path = Path("out/analysis/cve_adoption_crossref.json")
     if adopt_path.exists():
         adoption(json.loads(adopt_path.read_text("utf-8")), args.out)
