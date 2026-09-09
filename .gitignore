@@ -231,3 +231,9 @@ out/rfc-index.xml
 # PowerPoint lock files, created while a deck is open.
 ~$*
 out/server_run/
+
+# bare clones made by scripts/clone_dns_software.sh (re-creatable, ~1 GB)
+out/software_repos/
+
+# session working directory, not part of the project
+.claude/
