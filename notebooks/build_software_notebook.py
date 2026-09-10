@@ -1117,8 +1117,12 @@ def program_panel(proj):
     n_lanes = max((p[4] for p in placed), default=0) + 1
     for x, label, colour, mk, lane, right in placed:
         y = 0.34 + 0.15 * lane
-        top_ax.plot([x, x], [0.15, y], color=colour, linewidth=1,
-                    linestyle=(0, (3, 3)), alpha=0.65, zorder=3)
+        # The guide carries the date down through BOTH panels, so a milestone can
+        # be read against the series. Drawn in muted grey, not the mark's colour:
+        # coloured and dashed it looked like a data line, and the height a marker
+        # sits at means nothing -- it is lane packing to stop labels colliding.
+        top_ax.plot([x, x], [0.15, y], color=GRID, linewidth=1, zorder=2)
+        ax.axvline(x, color=GRID, linewidth=1, zorder=0)
         top_ax.scatter(x, y, s=62, color=colour, marker=mk, zorder=5,
                        edgecolor=SURFACE, linewidth=1.4)
         top_ax.text(x + (-0.22 if right else 0.22), y, label, fontsize=8.5,
@@ -1144,8 +1148,9 @@ def program_panel(proj):
                 va="bottom")
     metric(ax, "Upper strip: grey ticks are every stable release; circle = a capability "
                "first shipped, diamond = a default changed, square = a limit that forces "
-               "zones to change. Lower panel is the same series in all eight charts, so "
-               "they can be read side by side.")
+               "zones to change. A milestone's height is only spacing so labels do not "
+               "collide -- it carries no value. The grey guide drops its date through to "
+               "the series below, which is the same series in all eight charts.")
     return save(fig, f"22_program_{proj.replace('-', '_')}")
 
 
