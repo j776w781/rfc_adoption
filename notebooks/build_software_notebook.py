@@ -118,6 +118,16 @@ def title(ax, headline, sub=None):
                 va="bottom")
 
 
+def metric(ax, text):
+    '''One line under the axis saying what the number on it actually is.
+
+    Every chart here plots a derived quantity -- a lag, a share, a rate. Without
+    the definition on the chart the reader is guessing at the units.
+    '''
+    ax.text(0, -0.30, text, transform=ax.transAxes, color=MUTED, fontsize=9.5,
+            va="top", ha="left", wrap=True)
+
+
 def year_axis(ax):
     '''Integer year ticks on a fractional-year axis.
 
@@ -224,26 +234,44 @@ One row per observable. The gap that matters is the one on the right.
 code(r"""
 rows = [r for r in A["onset_decomposition"] if r.get("first_zone_seen")]
 rows.sort(key=lambda r: r["rfc_published"], reverse=True)
-fig, ax = plt.subplots(figsize=(10, 3.4))
+
+fig, ax = plt.subplots(figsize=(11, 4.0))
 for i, r in enumerate(rows):
-    xs = [to_year(r["rfc_published"]), to_year(r["first_signer_released"]),
-          to_year(r["first_zone_seen"])]
-    ax.plot([xs[0], xs[2]], [i, i], color=GRID, linewidth=6, solid_capstyle="round",
-            zorder=1)
-    ax.scatter(xs[0], i, s=90, color=S3, zorder=3, edgecolor=SURFACE, linewidth=2)
-    ax.scatter(xs[1], i, s=90, color=S2, zorder=3, edgecolor=SURFACE, linewidth=2)
-    ax.scatter(xs[2], i, s=90, color=S1, zorder=3, edgecolor=SURFACE, linewidth=2)
+    x_rfc = to_year(r["rfc_published"])
+    x_code = to_year(r["first_signer_released"])
+    x_zone = to_year(r["first_zone_seen"])
+    lo, hi = min(x_rfc, x_code), x_zone
+    # Two segments, not one bar: the whole point is which half is long.
+    ax.plot([lo, x_code], [i, i], color=S2, linewidth=9, solid_capstyle="butt", zorder=2)
+    ax.plot([x_code, hi], [i, i], color=S1, linewidth=9, solid_capstyle="butt", zorder=2)
+    for x, colour in ((x_rfc, S3), (x_code, S2), (x_zone, S1)):
+        ax.scatter(x, i, s=95, color=colour, zorder=4, edgecolor=SURFACE, linewidth=2)
+    code_y, dep_y = r["code_lag_years"], r["deployment_lag_years"]
+    # Code lag below the bar, deployment above: on the two rows where both are
+    # labelled they otherwise overprint each other.
+    if abs(code_y) >= 0.6:
+        ax.text((lo + x_code) / 2, i - 0.30, f"{code_y:+.1f} y code", ha="center",
+                va="top", fontsize=9, color=S2)
+    ax.text((x_code + hi) / 2, i + 0.30, f"{dep_y:.1f} y waiting for an operator",
+            ha="center", va="bottom", fontsize=9.5, color=INK, fontweight="bold")
+
 ax.set_yticks(range(len(rows)))
 ax.set_yticklabels([f'{r["observable"]}  {r["rfc"]}' for r in rows], fontsize=10.5,
                    color=INK_2)
+ax.set_ylim(-0.85, len(rows) - 0.1)
 ax.set_xlabel("year", color=INK_2)
 year_axis(ax)
 style(ax, axis="x")
-for label, colour, xoff in (("RFC published", S3, 0), ("first signer release", S2, 1),
-                            ("first zone", S1, 2)):
-    ax.scatter([], [], s=90, color=colour, label=label)
-ax.legend(frameon=False, loc="lower right", fontsize=10, labelcolor=INK_2, ncol=3)
-title(ax, "Code arrives with the standard; zones arrive years later")
+for label, colour in (("RFC published", S3), ("a signer could publish it", S2),
+                      ("first zone did", S1)):
+    ax.scatter([], [], s=95, color=colour, label=label)
+ax.legend(frameon=False, fontsize=10, labelcolor=INK_2, ncol=3, loc="lower left",
+          bbox_to_anchor=(0, 1.0))
+ax.set_title("Code arrives with the standard; zones arrive years later", loc="left",
+             color=INK, fontweight="bold", pad=34)
+metric(ax, "Each row is one mechanism on a calendar. Orange = time from the RFC until "
+           "some signer could publish the value (negative where it shipped from the "
+           "draft). Blue = time from then until the first zone actually did.")
 save(fig, "02_three_clocks_timeline")
 """)
 
@@ -448,31 +476,51 @@ default change exists it is three to six times closer than the RFC.
 
 code(r"""
 rows = [r for r in RA["takeoff"] if r["first_month_over_1pct"] and not r["censored_start"]]
-rows.sort(key=lambda r: r["from_rfc_to_1pct_years"])
-labels = [f'{r["observable"]}\n{r["basis"]}' for r in rows]
-y = range(len(rows))
-h = 0.26
-fig, ax = plt.subplots(figsize=(10, 3.6))
-for off, key, colour, name in ((-h, "from_rfc_to_1pct_years", S1, "from RFC"),
-                               (0.0, "from_first_signer_to_1pct_years", S2,
-                                "from first signer release"),
-                               (h, "from_default_change_to_1pct_years", S3,
-                                "from default change")):
-    vals = [r[key] if r[key] is not None else 0 for r in rows]
-    ax.barh([i + off for i in y], vals, height=h - 0.03, color=colour, label=name,
-            zorder=3)
-    for i, (r, v) in enumerate(zip(rows, vals)):
-        if r[key] is not None:
-            ax.text(v + 0.09, i + off, f"{v:.2f}", va="center", fontsize=9, color=INK_2)
-        elif key.endswith("default_change_to_1pct_years"):
-            ax.text(0.09, i + off, "no default change identified", va="center",
-                    fontsize=9, color=MUTED, style="italic")
-ax.set_yticks(list(y)); ax.set_yticklabels(labels, fontsize=10, color=INK_2)
-ax.set_xlabel("years to the 1% crossing", color=INK_2)
+rows.sort(key=lambda r: to_year(r["rfc_published"]), reverse=True)
+
+fig, ax = plt.subplots(figsize=(11, 4.2))
+for i, r in enumerate(rows):
+    x_rfc = to_year(r["rfc_published"])
+    x_sig = to_year(r["first_signer_released"])
+    x_1pct = to_year(r["first_month_over_1pct"])
+    x_def = to_year(r["default_released"]) if r["default_released"] else None
+
+    ax.plot([min(x_rfc, x_sig), x_1pct], [i, i], color=GRID, linewidth=8,
+            solid_capstyle="round", zorder=1)
+    ax.scatter(x_rfc, i, s=95, color=S3, zorder=4, edgecolor=SURFACE, linewidth=2)
+    ax.scatter(x_sig, i, s=95, color=S2, zorder=4, edgecolor=SURFACE, linewidth=2)
+    if x_def is not None:
+        ax.plot([x_def, x_1pct], [i, i], color=S1, linewidth=8, solid_capstyle="butt",
+                zorder=2)
+        ax.scatter(x_def, i, s=130, color=S1, marker="D", zorder=5,
+                   edgecolor=SURFACE, linewidth=2)
+        ax.text((x_def + x_1pct) / 2, i + 0.28,
+                f'{r["from_default_change_to_1pct_years"]:.2f} y', ha="center",
+                fontsize=9.5, color=INK, fontweight="bold")
+    ax.scatter(x_1pct, i, s=150, color=CRITICAL, marker="*", zorder=5)
+    ax.text(x_rfc, i - 0.30, f'{r["from_rfc_to_1pct_years"]:.2f} y from the RFC',
+            fontsize=9, color=MUTED, ha="left", va="top")
+
+ax.set_yticks(range(len(rows)))
+ax.set_yticklabels([f'{r["observable"]}  {r["rfc"]}\n{r["basis"]} corpus' for r in rows],
+                   fontsize=10, color=INK_2)
+ax.set_ylim(-0.9, len(rows) - 0.1)
+ax.set_xlabel("year", color=INK_2)
+year_axis(ax)
 style(ax, axis="x")
-ax.legend(frameon=False, loc="lower right", fontsize=10, labelcolor=INK_2)
-title(ax, "The default change sits closest to takeoff",
-      "Two observations carry the default column; treat it as suggestive")
+for lbl, colour, mk, sz in (("RFC published", S3, "o", 95),
+                            ("first signer release", S2, "o", 95),
+                            ("vendor default changed", S1, "D", 110),
+                            ("1% of signed delegations", CRITICAL, "*", 170)):
+    ax.scatter([], [], s=sz, color=colour, marker=mk, label=lbl)
+ax.legend(frameon=False, fontsize=10, labelcolor=INK_2, ncol=4, loc="lower left",
+          bbox_to_anchor=(0, 1.0))
+ax.set_title("Which event is the 1% crossing actually near?", loc="left", color=INK,
+             fontweight="bold", pad=34)
+metric(ax, "The red star is the first month the mechanism reached 1% of signed "
+           "delegations -- the point where it stops being a curiosity. The other three "
+           "marks are the candidate causes. The blue segment is the only short gap, and "
+           "it exists on two rows out of five.")
 save(fig, "08_takeoff_lags")
 """)
 
@@ -488,33 +536,57 @@ delta it did not cause.
 code(r"""
 ev = [e for e in RA["event_studies"] if not e["late_curve"]]
 ev.sort(key=lambda e: (e["kind"], e["observable"]))
+
+# The effect size means nothing without the series' own month-to-month variation
+# beside it. VALS maps an observable back to its codepoints so the noise band can
+# be recomputed here rather than asserted.
+VALS = {"alg 8/10": ["8", "10"], "alg 12": ["12"], "alg 13/14": ["13", "14"],
+        "alg 15/16": ["15", "16"], "digest 4": ["4"]}
+
+
+def noise_band(observable, basis):
+    '''Interquartile range of this series' ordinary monthly change.'''
+    dim = ("digest_type_ds" if observable == "digest 4" else
+           ("algorithm_ds" if basis == "reverse" else "algorithm_dnskey"))
+    df, src = ((PAN, PANEL_SOURCE) if basis == "reverse" else (SRV, None))
+    d = share(df, basis, dim, VALS[observable], source=src).diff().dropna()
+    return float(d.quantile(0.25)), float(d.quantile(0.75))
+
+
 def pretty(sw):
     key, _, ver = sw.partition(" ")
     return f"{NAME.get(key, key)} {ver}"
 
+
 labels = [f'{pretty(e["software"])}\n{e["observable"]} · {e["basis"]}' for e in ev]
-y = range(len(ev))
-fig, ax = plt.subplots(figsize=(10, 3.4))
+fig, ax = plt.subplots(figsize=(11, 3.8))
 for i, e in enumerate(ev):
-    ax.plot([e["mean_pp_before"], e["mean_pp_after"]], [i, i], color=GRID, linewidth=5,
-            solid_capstyle="round", zorder=1)
-    ax.scatter(e["mean_pp_before"], i, s=95, color=S1, zorder=3, edgecolor=SURFACE,
+    q1, q3 = noise_band(e["observable"], e["basis"])
+    ax.barh(i, q3 - q1, left=q1, height=0.58, color=GRID, zorder=1)
+    ax.plot([e["mean_pp_before"], e["mean_pp_after"]], [i, i], color=BASELINE,
+            linewidth=2, zorder=2)
+    ax.scatter(e["mean_pp_before"], i, s=95, color=S1, zorder=4, edgecolor=SURFACE,
                linewidth=2)
-    ax.scatter(e["mean_pp_after"], i, s=95, color=S2, zorder=3, edgecolor=SURFACE,
+    ax.scatter(e["mean_pp_after"], i, s=95, color=S2, zorder=4, edgecolor=SURFACE,
                linewidth=2)
-    ax.text(max(e["mean_pp_before"], e["mean_pp_after"]) + 0.0035, i,
-            f'{e["change_pp"]:+.3f} pp', va="center", fontsize=9.5, color=INK_2)
-ax.set_yticks(list(y)); ax.set_yticklabels(labels, fontsize=9.5, color=INK_2)
-ax.set_xlabel("mean monthly change in share (percentage points)", color=INK_2)
+
+ax.set_yticks(range(len(ev))); ax.set_yticklabels(labels, fontsize=9.5, color=INK_2)
 ax.axvline(0, color=BASELINE, linewidth=1)
-ax.set_xlim(-0.006, 0.082)          # headroom so the right-hand labels are not clipped
+ax.set_xlabel("change in the share of signed delegations, percentage points per month",
+              color=INK_2)
 style(ax, axis="x")
-ax.scatter([], [], s=95, color=S1, label="12 months before")
-ax.scatter([], [], s=95, color=S2, label="12 months after")
-ax.legend(frameon=False, loc="upper right", fontsize=10, labelcolor=INK_2,
-          bbox_to_anchor=(1.0, 1.18), ncol=2)
-title(ax, "No release is followed by a change in adoption rate",
-      "Availability releases sit at exactly zero on both sides")
+ax.barh([], [], color=GRID, edgecolor=GRID,
+        label="the series' ordinary monthly variation (IQR)")
+ax.scatter([], [], s=95, color=S1, label="mean, 12 months before")
+ax.scatter([], [], s=95, color=S2, label="mean, 12 months after")
+ax.legend(frameon=False, fontsize=9.5, labelcolor=INK_2, ncol=3, loc="lower left",
+          bbox_to_anchor=(0, 1.0))
+ax.set_title("Every release moves less than the series moves on an ordinary month",
+             loc="left", color=INK, fontweight="bold", pad=34)
+metric(ax, "Blue is the average monthly change in the year before the release, orange "
+           "the year after. The grey band is where half of all months for that series "
+           "already sit. A release only matters if the two dots straddle the band -- "
+           "none does.")
 save(fig, "09_event_studies")
 """)
 
@@ -916,12 +988,22 @@ ax.axvline(0, color=BASELINE, linewidth=1.2)
 ax.set_yticks(list(y))
 ax.set_yticklabels([f'{NAME[p]}\nmedian release {r["median_release_year"]}'
                     for p, r in rows], fontsize=9.5, color=INK_2)
-ax.set_xlabel("extra delegation changes per month after a release", color=INK_2)
+typical = int(LED[LED.kind.isin(["sign", "rollover"])]
+              .groupby("month").delegation.nunique().median())
+ax.axvline(typical, color=MUTED, linewidth=1, linestyle=(0, (4, 3)), zorder=2)
+ax.text(typical, len(rows) - 0.4, f"  a typical month sees {typical} changes",
+        fontsize=9.5, color=MUTED, va="top")
+ax.set_xlabel("extra delegations changing per month in the 3 months after a release",
+              color=INK_2)
 style(ax, axis="x")
 ax.legend(frameon=False, fontsize=10, labelcolor=INK_2, loc="lower right",
           bbox_to_anchor=(1.0, 1.02), ncol=1)
-title(ax, "No project survives detrending",
-      "Four cleared p < 0.05 on raw counts; after detrending the smallest p is 0.11")
+ax.set_title("No project survives detrending", loc="left", color=INK,
+             fontweight="bold", pad=34)
+metric(ax, "Months in the 3 months after one of that project's releases, against every "
+           "other month. Raw counts rank projects by how recently they shipped, because "
+           "change volume rose 25x over the corpus; detrended compares each month with "
+           "its own two-year neighbourhood. p is a circular-shift test.")
 save(fig, "20_release_scan")
 """)
 
