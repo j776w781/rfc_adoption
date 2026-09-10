@@ -825,6 +825,127 @@ save(fig, "17_cve_vs_adoption")
 
 # ============================================================= closing =======
 md(r"""
+## 9. Per delegation: who actually made each change
+
+The monthly series counts delegations; it cannot say *which*. The raw reverse
+corpus can, so following `query_name` month to month gives every individual
+change with a date — 25,930 events over 13,654 delegations, 2009-2026.
+
+**Reverse only.** The OpenINTEL forward per-day records are not in this
+repository, so `.se`, `.nu` and `.ch` stay at TLD level here.
+""")
+
+code(r"""
+LED = pd.read_parquet(ROOT / "out/analysis/delegation_changes.parquet")
+CLU = pd.read_parquet(ROOT / "out/analysis/delegation_change_clusters.parquet")
+SCAN = json.loads((ROOT / "out/analysis/release_scan.json").read_text(encoding="utf-8"))
+
+bins = [1, 2, 5, 10, 50, 100, 10 ** 9]
+lab = ["1", "2-4", "5-9", "10-49", "50-99", "100+"]
+CLU["bucket"] = pd.cut(CLU.n_delegations, bins=bins, labels=lab, right=False)
+t = CLU.groupby("bucket", observed=True).n_delegations.sum()
+t = t / t.sum() * 100
+
+fig, ax = plt.subplots(figsize=(10, 3.2))
+# One hue: this is one quantity split by size, not four identities.
+ax.bar(range(len(t)), t.values, color=S1, width=0.66, zorder=3)
+for i, v in enumerate(t.values):
+    ax.text(i, v + 0.8, f"{v:.1f}%", ha="center", fontsize=10.5, color=INK,
+            fontweight="bold")
+ax.set_xticks(range(len(t)))
+ax.set_xticklabels([f"{b}\n{int(CLU[CLU.bucket == b].shape[0]):,} actions" for b in t.index],
+                   fontsize=10, color=INK_2)
+style(ax); pct(ax); ax.set_ylim(0, t.max() * 1.22)
+ax.set_ylabel("share of all changed delegations", color=INK_2)
+ax.set_xlabel("delegations moving together in one action (month × transition × block)",
+              color=INK_2)
+title(ax, "Fourteen actions account for 8.7% of every change in seventeen years",
+      "Only 15% of changed delegations moved alone — the closest thing here to a manual edit")
+save(fig, "18_manual_vs_bulk")
+""")
+
+code(r"""
+tot = CLU.groupby("source").n_delegations.sum()
+bulk = CLU[CLU.n_delegations >= 5].groupby("source").n_delegations.sum()
+pctb = (bulk / tot * 100).sort_values()
+
+fig, ax = plt.subplots(figsize=(10, 2.9))
+ax.barh(range(len(pctb)), pctb.values, height=0.6, color=S1, zorder=3)
+for i, (s, v) in enumerate(pctb.items()):
+    ax.text(v + 1.2, i, f"{v:.1f}%   ({int(tot[s]):,} changed)", va="center",
+            fontsize=10, color=INK_2)
+ax.set_yticks(range(len(pctb)))
+ax.set_yticklabels([s.upper() for s in pctb.index], fontsize=10.5, color=INK_2)
+style(ax, axis="x"); pct(ax, axis="x"); ax.set_xlim(0, 100)
+ax.set_xlabel("share of changed delegations moving in an action of 5 or more",
+              color=INK_2)
+title(ax, "Whatever drives DNSSEC change, it is not the same process in every registry")
+save(fig, "19_bulk_by_rir")
+""")
+
+md(r"""
+### 9.1 Every release against the change ledger
+
+97% of corpus months contain a release from some project, so no ecosystem-level
+control exists and no individual release is identifiable. Per project one does.
+The raw comparison ranks projects by how recently they shipped; the detrended
+one is the answer.
+""")
+
+code(r"""
+rows = [(p, r) for p, r in SCAN["per_project"].items() if r.get("testable")]
+rows.sort(key=lambda t: t[1]["raw_difference"])
+y = range(len(rows))
+h = 0.36
+fig, ax = plt.subplots(figsize=(10, 3.4))
+ax.barh([i - h / 2 for i in y], [r["raw_difference"] for _, r in rows], height=h - 0.04,
+        color=S2, label="raw — tracks how recently the project shipped", zorder=3)
+ax.barh([i + h / 2 for i in y], [r["detrended_difference"] for _, r in rows],
+        height=h - 0.04, color=S1, label="detrended — judged against its own era",
+        zorder=3)
+# One right-hand column for the p values: keyed off each bar's own end they
+# land on top of the negative bars.
+lo = min(min(r["raw_difference"], r["detrended_difference"]) for _, r in rows)
+hi = max(max(r["raw_difference"], r["detrended_difference"]) for _, r in rows)
+label_x = hi + (hi - lo) * 0.06
+for i, (_, r) in enumerate(rows):
+    ax.text(label_x, i, f'p = {r["circular_shift_p"]:.2f}', va="center", fontsize=9.5,
+            color=INK_2)
+ax.set_xlim(lo - (hi - lo) * 0.06, label_x + (hi - lo) * 0.16)
+ax.axvline(0, color=BASELINE, linewidth=1.2)
+ax.set_yticks(list(y))
+ax.set_yticklabels([f'{NAME[p]}\nmedian release {r["median_release_year"]}'
+                    for p, r in rows], fontsize=9.5, color=INK_2)
+ax.set_xlabel("extra delegation changes per month after a release", color=INK_2)
+style(ax, axis="x")
+ax.legend(frameon=False, fontsize=10, labelcolor=INK_2, loc="lower right",
+          bbox_to_anchor=(1.0, 1.02), ncol=1)
+title(ax, "No project survives detrending",
+      "Four cleared p < 0.05 on raw counts; after detrending the smallest p is 0.11")
+save(fig, "20_release_scan")
+""")
+
+code(r"""
+per_month = (LED[LED.kind.isin(["sign", "rollover"])]
+             .groupby("month").delegation.nunique().sort_index())
+trend = per_month.rolling(25, center=True, min_periods=5).median()
+xs = [to_year(m) for m in per_month.index]
+
+fig, ax = plt.subplots(figsize=(10, 3.2))
+ax.plot(xs, per_month.values, color=S1, linewidth=1.4, label="delegations changing",
+        zorder=3)
+ax.plot(xs, trend.values, color=S2, linewidth=2.4, label="two-year rolling median",
+        zorder=4)
+style(ax); year_axis(ax)
+ax.set_ylabel("delegations signing or rolling over", color=INK_2)
+ax.set_xlabel("year", color=INK_2)
+ax.legend(frameon=False, fontsize=10, labelcolor=INK_2, loc="upper left")
+title(ax, "The trend that made four projects look significant",
+      "Change volume rises ~25x from 2009; projects that shipped later sit in busier months")
+save(fig, "21_change_trend")
+""")
+
+md(r"""
 ## 8. What the figures support
 
 **Established.** Shipping a capability does not move deployment. Onset is almost

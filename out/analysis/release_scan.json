@@ -1,0 +1,180 @@
+{
+  "generated": "2026-09-10",
+  "corpus": {
+    "months": [
+      "2009-08",
+      "2026-08"
+    ],
+    "n_months": 193,
+    "basis": "reverse (RIR delegations); the forward per-day records are not in this repository"
+  },
+  "window_months": 3,
+  "identification": {
+    "months_with_any_release": 0.969,
+    "note": "No ecosystem-level control exists. Only per-project tests are run."
+  },
+  "release_density": {
+    "bind9": {
+      "releases_total": 251,
+      "releases_in_span": 111,
+      "months_with_a_release": 111,
+      "share_of_months": 0.575
+    },
+    "knot": {
+      "releases_total": 171,
+      "releases_in_span": 120,
+      "months_with_a_release": 120,
+      "share_of_months": 0.622
+    },
+    "kresd": {
+      "releases_total": 89,
+      "releases_in_span": 72,
+      "months_with_a_release": 72,
+      "share_of_months": 0.373
+    },
+    "nsd": {
+      "releases_total": 130,
+      "releases_in_span": 73,
+      "months_with_a_release": 73,
+      "share_of_months": 0.378
+    },
+    "opendnssec": {
+      "releases_total": 62,
+      "releases_in_span": 50,
+      "months_with_a_release": 50,
+      "share_of_months": 0.259
+    },
+    "pdns-auth": {
+      "releases_total": 107,
+      "releases_in_span": 63,
+      "months_with_a_release": 63,
+      "share_of_months": 0.326
+    },
+    "pdns-rec": {
+      "releases_total": 168,
+      "releases_in_span": 77,
+      "months_with_a_release": 77,
+      "share_of_months": 0.399
+    },
+    "unbound": {
+      "releases_total": 105,
+      "releases_in_span": 79,
+      "months_with_a_release": 79,
+      "share_of_months": 0.409
+    }
+  },
+  "per_project": {
+    "bind9": {
+      "testable": true,
+      "role": "both",
+      "n_release_months": 111,
+      "median_release_year": 2020,
+      "raw_mean_after": 82.83,
+      "raw_mean_other": 90.64,
+      "raw_difference": -7.8,
+      "detrended_after": 22.69,
+      "detrended_other": 62.97,
+      "detrended_difference": -40.28,
+      "circular_shift_p": 0.931,
+      "n_permutations": 2000
+    },
+    "knot": {
+      "testable": true,
+      "role": "authoritative",
+      "n_release_months": 120,
+      "median_release_year": 2019,
+      "raw_mean_after": 91.39,
+      "raw_mean_other": 29.09,
+      "raw_difference": 62.3,
+      "detrended_after": 32.76,
+      "detrended_other": 10.3,
+      "detrended_difference": 22.47,
+      "circular_shift_p": 0.1144,
+      "n_permutations": 2000
+    },
+    "kresd": {
+      "testable": true,
+      "role": "resolver",
+      "n_release_months": 72,
+      "median_release_year": 2021,
+      "raw_mean_after": 97.3,
+      "raw_mean_other": 64.26,
+      "raw_difference": 33.04,
+      "detrended_after": 26.32,
+      "detrended_other": 36.18,
+      "detrended_difference": -9.86,
+      "circular_shift_p": 0.6447,
+      "n_permutations": 2000
+    },
+    "nsd": {
+      "testable": true,
+      "role": "authoritative",
+      "n_release_months": 73,
+      "median_release_year": 2015,
+      "raw_mean_after": 87.81,
+      "raw_mean_other": 67.24,
+      "raw_difference": 20.56,
+      "detrended_after": 33.73,
+      "detrended_other": 13.08,
+      "detrended_difference": 20.66,
+      "circular_shift_p": 0.1599,
+      "n_permutations": 2000
+    },
+    "opendnssec": {
+      "testable": true,
+      "role": "signer",
+      "n_release_months": 50,
+      "median_release_year": 2014,
+      "raw_mean_after": 68.11,
+      "raw_mean_other": 103.59,
+      "raw_difference": -35.48,
+      "detrended_after": 29.32,
+      "detrended_other": 31.26,
+      "detrended_difference": -1.94,
+      "circular_shift_p": 0.5452,
+      "n_permutations": 2000
+    },
+    "pdns-auth": {
+      "testable": true,
+      "role": "authoritative",
+      "n_release_months": 63,
+      "median_release_year": 2021,
+      "raw_mean_after": 99.02,
+      "raw_mean_other": 51.63,
+      "raw_difference": 47.39,
+      "detrended_after": 33.88,
+      "detrended_other": 22.04,
+      "detrended_difference": 11.84,
+      "circular_shift_p": 0.3183,
+      "n_permutations": 2000
+    },
+    "pdns-rec": {
+      "testable": true,
+      "role": "resolver",
+      "n_release_months": 77,
+      "median_release_year": 2022,
+      "raw_mean_after": 96.85,
+      "raw_mean_other": 53.55,
+      "raw_difference": 43.3,
+      "detrended_after": 29.67,
+      "detrended_other": 31.51,
+      "detrended_difference": -1.84,
+      "circular_shift_p": 0.5022,
+      "n_permutations": 2000
+    },
+    "unbound": {
+      "testable": true,
+      "role": "resolver",
+      "n_release_months": 79,
+      "median_release_year": 2017,
+      "raw_mean_after": 86.99,
+      "raw_mean_other": 70.19,
+      "raw_difference": 16.79,
+      "detrended_after": 33.53,
+      "detrended_other": 12.79,
+      "detrended_difference": 20.74,
+      "circular_shift_p": 0.1529,
+      "n_permutations": 2000
+    }
+  }
+}

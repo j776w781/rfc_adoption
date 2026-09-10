@@ -1,0 +1,2066 @@
+month,source,kind,from_alg,to_alg,n_delegations,n_blocks,largest_block_share,hhi,level
+2009-08,ripe,rollover,5,7,21,3,0.762,0.619,concentrated (one block is most of it)
+2009-08,ripe,sign,,5,9,3,0.778,0.6296,concentrated (one block is most of it)
+2009-12,ripe,sign,,7,9,2,0.889,0.8025,concentrated (one block is most of it)
+2010-02,ripe,sign,,5,5,3,0.4,0.36,diffuse (many blocks)
+2010-03,ripe,sign,,5,15,7,0.333,0.2,diffuse (many blocks)
+2010-04,ripe,sign,,5,32,2,0.969,0.9395,concentrated (one block is most of it)
+2010-04,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2010-05,ripe,sign,,5,8,7,0.25,0.1562,diffuse (many blocks)
+2010-06,ripe,sign,,5,18,2,0.889,0.8025,concentrated (one block is most of it)
+2010-07,ripe,rollover,5,8,1,1,1.0,1.0,single delegation
+2010-08,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2010-08,ripe,sign,,5,107,10,0.299,0.2139,diffuse (many blocks)
+2010-08,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2010-08,ripe,unsign,5,,2,2,0.5,0.5,concentrated (one block is most of it)
+2010-09,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2010-10,ripe,sign,,5,9,4,0.556,0.3827,concentrated (one block is most of it)
+2010-10,ripe,sign,,7,2,1,1.0,1.0,one block
+2010-10,ripe,unsign,5,,2,2,0.5,0.5,concentrated (one block is most of it)
+2010-11,ripe,sign,,5,17,4,0.824,0.6886,concentrated (one block is most of it)
+2010-11,ripe,unsign,5,,10,1,1.0,1.0,one block
+2011-05,arin,sign,,5,31,10,0.484,0.2966,diffuse (many blocks)
+2011-05,arin,sign,,"5,7,8",1,1,1.0,1.0,single delegation
+2011-05,ripe,rollover,5,7,1,1,1.0,1.0,single delegation
+2011-05,ripe,rollover,5,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2011-05,ripe,sign,,5,25,16,0.32,0.1392,diffuse (many blocks)
+2011-05,ripe,sign,,7,10,7,0.4,0.22,diffuse (many blocks)
+2011-05,ripe,sign,,8,26,12,0.308,0.1598,diffuse (many blocks)
+2011-05,ripe,unsign,5,,16,7,0.5,0.3047,concentrated (one block is most of it)
+2011-06,apnic,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2011-06,arin,sign,,5,49,3,0.653,0.5335,concentrated (one block is most of it)
+2011-06,arin,sign,,8,1,1,1.0,1.0,single delegation
+2011-06,ripe,sign,,10,3,3,0.333,0.3333,diffuse (many blocks)
+2011-06,ripe,sign,,5,5,4,0.4,0.28,diffuse (many blocks)
+2011-06,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2011-06,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2011-07,arin,sign,,5,4,2,0.75,0.625,concentrated (one block is most of it)
+2011-07,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2011-07,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2011-08,arin,rollover,5,"5,7,8",1,1,1.0,1.0,single delegation
+2011-08,arin,sign,,7,14,5,0.714,0.5306,concentrated (one block is most of it)
+2011-08,ripe,sign,,5,4,3,0.5,0.375,concentrated (one block is most of it)
+2011-08,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2011-09,apnic,sign,,5,4,3,0.5,0.375,concentrated (one block is most of it)
+2011-09,arin,sign,,8,1,1,1.0,1.0,single delegation
+2011-09,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2011-09,ripe,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2011-09,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2011-10,apnic,sign,,5,1,1,1.0,1.0,single delegation
+2011-10,ripe,sign,,5,7,3,0.714,0.551,concentrated (one block is most of it)
+2011-10,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2011-11,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2011-11,arin,sign,,7,1,1,1.0,1.0,single delegation
+2011-11,arin,sign,,8,1,1,1.0,1.0,single delegation
+2011-11,ripe,rollover,5,8,13,2,0.538,0.503,concentrated (one block is most of it)
+2011-11,ripe,rollover,7,10,1,1,1.0,1.0,single delegation
+2011-11,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2011-11,ripe,sign,,7,63,4,0.508,0.351,concentrated (one block is most of it)
+2011-11,ripe,sign,,8,12,2,0.75,0.625,concentrated (one block is most of it)
+2011-12,apnic,sign,,5,3,1,1.0,1.0,one block
+2011-12,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2011-12,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2012-01,apnic,sign,,5,35,5,0.629,0.4563,concentrated (one block is most of it)
+2012-01,arin,sign,,5,1,1,1.0,1.0,single delegation
+2012-01,ripe,sign,,5,63,1,1.0,1.0,one block
+2012-01,ripe,sign,,7,6,2,0.833,0.7222,concentrated (one block is most of it)
+2012-01,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2012-01,ripe,unsign,7,,1,1,1.0,1.0,single delegation
+2012-02,apnic,sign,,8,36,3,0.861,0.7546,concentrated (one block is most of it)
+2012-02,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2012-02,arin,rollover,"5,7,8","5,7,8,10",1,1,1.0,1.0,single delegation
+2012-02,arin,sign,,5,17,2,0.941,0.8893,concentrated (one block is most of it)
+2012-02,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2012-02,ripe,sign,,7,10,3,0.8,0.66,concentrated (one block is most of it)
+2012-02,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2012-02,ripe,unsign,10,,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-03,arin,rollover,5,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-03,arin,sign,,5,1,1,1.0,1.0,single delegation
+2012-03,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2012-03,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2012-03,ripe,sign,,7,4,3,0.5,0.375,concentrated (one block is most of it)
+2012-03,ripe,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2012-04,arin,rollover,5,8,1,1,1.0,1.0,single delegation
+2012-04,arin,sign,,5,4,3,0.5,0.375,concentrated (one block is most of it)
+2012-04,ripe,sign,,10,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-04,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2012-04,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2012-05,arin,sign,,8,1,1,1.0,1.0,single delegation
+2012-05,ripe,sign,,5,4,1,1.0,1.0,one block
+2012-05,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2012-06,afrinic,sign,,8,13,5,0.692,0.503,concentrated (one block is most of it)
+2012-06,apnic,sign,,8,12,2,0.917,0.8472,concentrated (one block is most of it)
+2012-06,arin,sign,,5,1,1,1.0,1.0,single delegation
+2012-06,arin,sign,,8,6,3,0.667,0.5,concentrated (one block is most of it)
+2012-06,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2012-06,ripe,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-08,afrinic,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-08,apnic,sign,,5,4,1,1.0,1.0,one block
+2012-08,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-08,arin,sign,,7,1,1,1.0,1.0,single delegation
+2012-08,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2012-08,ripe,sign,,8,5,5,0.2,0.2,diffuse (many blocks)
+2012-08,ripe,unsign,5,,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-08,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2012-09,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2012-09,ripe,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-09,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2012-10,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2012-10,arin,sign,,5,1,1,1.0,1.0,single delegation
+2012-10,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2012-10,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2012-11,afrinic,unsign,5,,1,1,1.0,1.0,single delegation
+2012-11,arin,rollover,5,7,1,1,1.0,1.0,single delegation
+2012-11,arin,sign,,8,24,2,0.667,0.5556,concentrated (one block is most of it)
+2012-11,ripe,rollover,5,8,1,1,1.0,1.0,single delegation
+2012-11,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2012-11,ripe,sign,,7,7,1,1.0,1.0,one block
+2012-11,ripe,sign,,8,23,8,0.348,0.2287,diffuse (many blocks)
+2012-11,ripe,unsign,7,,1,1,1.0,1.0,single delegation
+2012-11,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2012-12,apnic,sign,,5,1,1,1.0,1.0,single delegation
+2012-12,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2012-12,arin,unsign,5,,21,4,0.714,0.551,concentrated (one block is most of it)
+2012-12,arin,unsign,7,,10,1,1.0,1.0,one block
+2012-12,arin,unsign,8,,15,5,0.533,0.3689,concentrated (one block is most of it)
+2012-12,ripe,sign,,5,16,3,0.5,0.4453,concentrated (one block is most of it)
+2012-12,ripe,sign,,7,3,3,0.333,0.3333,diffuse (many blocks)
+2012-12,ripe,sign,,8,42,4,0.762,0.6179,concentrated (one block is most of it)
+2012-12,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2013-01,arin,sign,,5,23,5,0.652,0.4669,concentrated (one block is most of it)
+2013-01,arin,sign,,7,10,1,1.0,1.0,one block
+2013-01,arin,sign,,8,15,5,0.533,0.3689,concentrated (one block is most of it)
+2013-01,ripe,rollover,5,10,2,2,0.5,0.5,concentrated (one block is most of it)
+2013-01,ripe,rollover,7,8,9,2,0.889,0.8025,concentrated (one block is most of it)
+2013-01,ripe,sign,,10,8,2,0.5,0.5,concentrated (one block is most of it)
+2013-01,ripe,sign,,5,13,3,0.615,0.4793,concentrated (one block is most of it)
+2013-01,ripe,sign,,"7,12",3,2,0.667,0.5556,concentrated (one block is most of it)
+2013-01,ripe,sign,,8,16,3,0.5,0.4453,concentrated (one block is most of it)
+2013-02,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2013-02,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2013-02,ripe,rollover,"7,12","8,12",2,1,1.0,1.0,one block
+2013-02,ripe,sign,,10,6,1,1.0,1.0,one block
+2013-02,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2013-02,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2013-02,ripe,sign,,8,64,1,1.0,1.0,one block
+2013-02,ripe,unsign,"7,12",,1,1,1.0,1.0,single delegation
+2013-03,apnic,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2013-03,arin,sign,,5,4,1,1.0,1.0,one block
+2013-03,arin,sign,,7,1,1,1.0,1.0,single delegation
+2013-03,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2013-03,ripe,unsign,8,,64,1,1.0,1.0,one block
+2013-04,arin,sign,,5,4,3,0.5,0.375,concentrated (one block is most of it)
+2013-05,apnic,rollover,5,8,1,1,1.0,1.0,single delegation
+2013-05,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2013-05,ripe,sign,,7,3,1,1.0,1.0,one block
+2013-05,ripe,sign,,8,6,5,0.333,0.2222,diffuse (many blocks)
+2013-06,arin,sign,,8,8,1,1.0,1.0,one block
+2013-06,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2013-06,ripe,sign,,7,2,1,1.0,1.0,one block
+2013-06,ripe,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2013-07,apnic,sign,,5,1,1,1.0,1.0,single delegation
+2013-07,arin,rollover,7,8,1,1,1.0,1.0,single delegation
+2013-07,arin,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2013-07,ripe,sign,,5,11,2,0.727,0.6033,concentrated (one block is most of it)
+2013-07,ripe,sign,,8,17,5,0.471,0.3149,diffuse (many blocks)
+2013-07,ripe,unsign,5,,4,1,1.0,1.0,one block
+2013-08,arin,sign,,8,7,5,0.286,0.2245,diffuse (many blocks)
+2013-08,ripe,rollover,7,8,35,4,0.429,0.3012,diffuse (many blocks)
+2013-08,ripe,sign,,5,13,2,0.923,0.858,concentrated (one block is most of it)
+2013-08,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2013-09,arin,sign,,7,3,1,1.0,1.0,one block
+2013-09,arin,sign,,8,6,3,0.667,0.5,concentrated (one block is most of it)
+2013-09,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2013-09,ripe,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2013-09,ripe,sign,,8,18,6,0.333,0.2531,diffuse (many blocks)
+2013-10,afrinic,unsign,5,,1,1,1.0,1.0,single delegation
+2013-10,apnic,sign,,7,1,1,1.0,1.0,single delegation
+2013-10,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2013-10,ripe,sign,,5,8,2,0.5,0.5,concentrated (one block is most of it)
+2013-10,ripe,sign,,7,7,1,1.0,1.0,one block
+2013-10,ripe,sign,,8,11,5,0.364,0.2397,diffuse (many blocks)
+2013-10,ripe,unsign,5,,9,2,0.889,0.8025,concentrated (one block is most of it)
+2013-11,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2013-11,arin,sign,,5,1,1,1.0,1.0,single delegation
+2013-11,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2013-11,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2013-11,ripe,sign,,8,24,9,0.292,0.1597,diffuse (many blocks)
+2013-12,afrinic,sign,,8,9,2,0.889,0.8025,concentrated (one block is most of it)
+2013-12,arin,rollover,5,8,1,1,1.0,1.0,single delegation
+2013-12,arin,sign,,8,17,12,0.353,0.1626,diffuse (many blocks)
+2013-12,ripe,sign,,5,179,1,1.0,1.0,one block
+2013-12,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2013-12,ripe,sign,,"8,12",3,2,0.667,0.5556,concentrated (one block is most of it)
+2013-12,ripe,unsign,8,,4,4,0.25,0.25,diffuse (many blocks)
+2014-01,afrinic,unsign,8,,9,2,0.889,0.8025,concentrated (one block is most of it)
+2014-01,apnic,sign,,8,3,1,1.0,1.0,one block
+2014-01,arin,rollover,8,"7,8",1,1,1.0,1.0,single delegation
+2014-01,arin,sign,,8,39,7,0.795,0.641,concentrated (one block is most of it)
+2014-01,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2014-02,apnic,sign,,8,3,1,1.0,1.0,one block
+2014-02,arin,sign,,8,4,1,1.0,1.0,one block
+2014-02,ripe,rollover,5,8,2,1,1.0,1.0,one block
+2014-02,ripe,sign,,5,9,5,0.444,0.284,diffuse (many blocks)
+2014-02,ripe,sign,,8,18,3,0.889,0.7963,concentrated (one block is most of it)
+2014-02,ripe,unsign,3,,4,1,1.0,1.0,one block
+2014-02,ripe,unsign,"8,12",,2,1,1.0,1.0,one block
+2014-03,apnic,sign,,8,7,2,0.571,0.5102,concentrated (one block is most of it)
+2014-03,ripe,sign,,8,96,10,0.667,0.4792,concentrated (one block is most of it)
+2014-03,ripe,unsign,5,,4,1,1.0,1.0,one block
+2014-03,ripe,unsign,8,,32,3,0.656,0.502,concentrated (one block is most of it)
+2014-04,apnic,sign,,8,54,6,0.296,0.2209,diffuse (many blocks)
+2014-04,ripe,sign,,8,12,2,0.667,0.5556,concentrated (one block is most of it)
+2014-04,ripe,unsign,5,,8,2,0.5,0.5,concentrated (one block is most of it)
+2014-04,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2014-05,apnic,sign,,5,4,1,1.0,1.0,one block
+2014-05,apnic,sign,,8,4,1,1.0,1.0,one block
+2014-05,arin,sign,,8,8,2,0.5,0.5,concentrated (one block is most of it)
+2014-05,ripe,sign,,5,3,3,0.333,0.3333,diffuse (many blocks)
+2014-05,ripe,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2014-05,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2014-06,apnic,sign,,8,4,1,1.0,1.0,one block
+2014-06,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2014-06,arin,unsign,7,,3,1,1.0,1.0,one block
+2014-06,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2014-06,ripe,sign,,5,6,3,0.667,0.5,concentrated (one block is most of it)
+2014-06,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2014-06,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2014-06,ripe,unsign,7,,1,1,1.0,1.0,single delegation
+2014-07,afrinic,sign,,8,8,1,1.0,1.0,one block
+2014-07,apnic,sign,,8,2,1,1.0,1.0,one block
+2014-07,arin,sign,,5,1,1,1.0,1.0,single delegation
+2014-07,arin,sign,,8,1,1,1.0,1.0,single delegation
+2014-07,ripe,sign,,5,10,2,0.7,0.58,concentrated (one block is most of it)
+2014-07,ripe,sign,,8,15,4,0.533,0.3778,concentrated (one block is most of it)
+2014-07,ripe,unsign,10,,1,1,1.0,1.0,single delegation
+2014-08,arin,rollover,"5,7,8","5,7,8,10",1,1,1.0,1.0,single delegation
+2014-08,arin,sign,,10,2,2,0.5,0.5,concentrated (one block is most of it)
+2014-08,arin,sign,,5,9,2,0.889,0.8025,concentrated (one block is most of it)
+2014-08,arin,sign,,7,6,3,0.5,0.3889,concentrated (one block is most of it)
+2014-08,arin,sign,,8,2,1,1.0,1.0,one block
+2014-08,ripe,rollover,7,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2014-08,ripe,sign,,5,4,1,1.0,1.0,one block
+2014-08,ripe,sign,,8,3,1,1.0,1.0,one block
+2014-09,arin,sign,,5,10,9,0.2,0.12,diffuse (many blocks)
+2014-09,arin,sign,,7,1,1,1.0,1.0,single delegation
+2014-09,arin,sign,,8,55,5,0.582,0.4321,concentrated (one block is most of it)
+2014-09,ripe,sign,,5,12,4,0.75,0.5833,concentrated (one block is most of it)
+2014-09,ripe,sign,,7,3,1,1.0,1.0,one block
+2014-09,ripe,sign,,8,22,11,0.364,0.1818,diffuse (many blocks)
+2014-10,afrinic,sign,,8,37,3,0.757,0.6202,concentrated (one block is most of it)
+2014-10,apnic,sign,,8,4,1,1.0,1.0,one block
+2014-10,arin,sign,,10,3,3,0.333,0.3333,diffuse (many blocks)
+2014-10,arin,sign,,5,32,23,0.25,0.0898,diffuse (many blocks)
+2014-10,arin,sign,,7,14,10,0.357,0.1735,diffuse (many blocks)
+2014-10,arin,sign,,8,66,22,0.485,0.2631,diffuse (many blocks)
+2014-10,arin,unsign,5,,6,2,0.833,0.7222,concentrated (one block is most of it)
+2014-10,arin,unsign,"5,7,8,10",,2,2,0.5,0.5,concentrated (one block is most of it)
+2014-10,arin,unsign,8,,4,1,1.0,1.0,one block
+2014-10,ripe,sign,,10,8,1,1.0,1.0,one block
+2014-10,ripe,sign,,5,6,3,0.5,0.3889,concentrated (one block is most of it)
+2014-10,ripe,sign,,8,18,12,0.222,0.1111,diffuse (many blocks)
+2014-11,afrinic,sign,,8,139,2,0.791,0.6698,concentrated (one block is most of it)
+2014-11,apnic,sign,,5,1,1,1.0,1.0,single delegation
+2014-11,arin,sign,,5,2,1,1.0,1.0,one block
+2014-11,arin,sign,,7,1,1,1.0,1.0,single delegation
+2014-11,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2014-11,ripe,sign,,10,9,2,0.889,0.8025,concentrated (one block is most of it)
+2014-11,ripe,sign,,5,8,5,0.5,0.3125,concentrated (one block is most of it)
+2014-11,ripe,sign,,7,4,1,1.0,1.0,one block
+2014-11,ripe,sign,,8,148,8,0.743,0.5918,concentrated (one block is most of it)
+2014-12,apnic,sign,,5,4,1,1.0,1.0,one block
+2014-12,apnic,sign,,8,4,1,1.0,1.0,one block
+2014-12,arin,sign,,7,4,1,1.0,1.0,one block
+2014-12,arin,sign,,8,1,1,1.0,1.0,single delegation
+2014-12,ripe,rollover,5,"5,8",5,4,0.4,0.28,diffuse (many blocks)
+2014-12,ripe,sign,,10,3,1,1.0,1.0,one block
+2014-12,ripe,sign,,5,5,2,0.8,0.68,concentrated (one block is most of it)
+2014-12,ripe,sign,,7,16,3,0.5,0.4453,concentrated (one block is most of it)
+2014-12,ripe,sign,,8,136,15,0.235,0.1574,diffuse (many blocks)
+2015-01,apnic,unsign,8,,1,1,1.0,1.0,single delegation
+2015-01,arin,rollover,7,"7,8",1,1,1.0,1.0,single delegation
+2015-01,arin,sign,,5,12,2,0.667,0.5556,concentrated (one block is most of it)
+2015-01,ripe,rollover,10,"8,10",1,1,1.0,1.0,single delegation
+2015-01,ripe,sign,,5,9,3,0.444,0.4074,diffuse (many blocks)
+2015-01,ripe,sign,,8,5,3,0.6,0.44,concentrated (one block is most of it)
+2015-02,arin,sign,,10,1,1,1.0,1.0,single delegation
+2015-02,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2015-02,ripe,sign,,10,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-02,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2015-02,ripe,sign,,7,4,1,1.0,1.0,one block
+2015-02,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2015-03,arin,rollover,7,"7,8",1,1,1.0,1.0,single delegation
+2015-03,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-03,arin,sign,,7,1,1,1.0,1.0,single delegation
+2015-03,arin,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2015-03,arin,unsign,10,,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-03,ripe,sign,,10,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-03,ripe,sign,,5,1,1,1.0,1.0,single delegation
+2015-03,ripe,sign,,7,5,2,0.8,0.68,concentrated (one block is most of it)
+2015-04,afrinic,sign,,8,4,1,1.0,1.0,one block
+2015-04,apnic,rollover,5,8,1,1,1.0,1.0,single delegation
+2015-04,apnic,sign,,8,38,9,0.421,0.2493,diffuse (many blocks)
+2015-04,arin,rollover,"7,8",8,1,1,1.0,1.0,single delegation
+2015-04,arin,sign,,5,14,2,0.714,0.5918,concentrated (one block is most of it)
+2015-04,arin,sign,,8,35,4,0.914,0.8384,concentrated (one block is most of it)
+2015-04,arin,unsign,10,,1,1,1.0,1.0,single delegation
+2015-04,arin,unsign,8,,16,1,1.0,1.0,one block
+2015-04,ripe,rollover,"5,8",8,5,4,0.4,0.28,diffuse (many blocks)
+2015-04,ripe,rollover,"8,10",8,1,1,1.0,1.0,single delegation
+2015-04,ripe,sign,,10,2,1,1.0,1.0,one block
+2015-04,ripe,sign,,5,6,3,0.667,0.5,concentrated (one block is most of it)
+2015-04,ripe,sign,,8,36,12,0.222,0.1219,diffuse (many blocks)
+2015-04,ripe,unsign,5,,5,5,0.2,0.2,diffuse (many blocks)
+2015-04,ripe,unsign,8,,31,4,0.677,0.5276,concentrated (one block is most of it)
+2015-05,apnic,sign,,5,2,1,1.0,1.0,one block
+2015-05,apnic,unsign,8,,2,1,1.0,1.0,one block
+2015-05,arin,sign,,5,16,6,0.25,0.2109,diffuse (many blocks)
+2015-05,arin,sign,,8,1,1,1.0,1.0,single delegation
+2015-05,arin,unsign,7,,4,1,1.0,1.0,one block
+2015-05,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2015-05,ripe,sign,,5,9,5,0.333,0.2346,diffuse (many blocks)
+2015-05,ripe,sign,,8,27,5,0.593,0.4431,concentrated (one block is most of it)
+2015-05,ripe,unsign,5,,62,5,0.516,0.371,concentrated (one block is most of it)
+2015-05,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2015-06,apnic,sign,,5,4,1,1.0,1.0,one block
+2015-06,arin,sign,,10,3,3,0.333,0.3333,diffuse (many blocks)
+2015-06,arin,sign,,7,4,1,1.0,1.0,one block
+2015-06,arin,sign,,8,7,1,1.0,1.0,one block
+2015-06,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2015-06,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2015-06,ripe,sign,,5,77,6,0.377,0.2403,diffuse (many blocks)
+2015-06,ripe,sign,,7,41,5,0.39,0.2671,diffuse (many blocks)
+2015-06,ripe,unsign,5,,4,1,1.0,1.0,one block
+2015-07,arin,sign,,5,16,1,1.0,1.0,one block
+2015-07,arin,sign,,7,2,1,1.0,1.0,one block
+2015-07,arin,sign,,8,1,1,1.0,1.0,single delegation
+2015-07,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2015-07,ripe,sign,,5,10,4,0.4,0.34,diffuse (many blocks)
+2015-07,ripe,sign,,8,8,4,0.5,0.3438,concentrated (one block is most of it)
+2015-07,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2015-07,ripe,unsign,7,,72,5,0.444,0.284,diffuse (many blocks)
+2015-08,afrinic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-08,apnic,sign,,8,10,3,0.8,0.66,concentrated (one block is most of it)
+2015-08,arin,sign,,7,3,3,0.333,0.3333,diffuse (many blocks)
+2015-08,arin,sign,,8,4,1,1.0,1.0,one block
+2015-08,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2015-08,ripe,sign,,5,47,7,0.34,0.2404,diffuse (many blocks)
+2015-08,ripe,sign,,8,86,12,0.372,0.2085,diffuse (many blocks)
+2015-08,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2015-09,arin,sign,,5,5,3,0.6,0.44,concentrated (one block is most of it)
+2015-09,arin,sign,,7,1,1,1.0,1.0,single delegation
+2015-09,arin,sign,,8,5,4,0.4,0.28,diffuse (many blocks)
+2015-09,ripe,sign,,5,8,2,0.5,0.5,concentrated (one block is most of it)
+2015-09,ripe,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2015-09,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2015-10,afrinic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-10,afrinic,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-10,arin,rollover,5,"7,8",1,1,1.0,1.0,single delegation
+2015-10,arin,rollover,7,8,3,3,0.333,0.3333,diffuse (many blocks)
+2015-10,arin,sign,,5,1,1,1.0,1.0,single delegation
+2015-10,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-10,ripe,unsign,10,,48,20,0.167,0.0964,diffuse (many blocks)
+2015-10,ripe,unsign,5,,782,115,0.229,0.0712,diffuse (many blocks)
+2015-10,ripe,unsign,7,,100,28,0.16,0.0708,diffuse (many blocks)
+2015-10,ripe,unsign,8,,844,162,0.13,0.0343,diffuse (many blocks)
+2015-10,ripe,unsign,"8,12",,3,2,0.667,0.5556,concentrated (one block is most of it)
+2015-11,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2015-11,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2015-11,arin,sign,,5,3,2,0.667,0.5556,concentrated (one block is most of it)
+2015-11,arin,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2015-12,afrinic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-12,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2015-12,apnic,sign,,7,1,1,1.0,1.0,single delegation
+2015-12,apnic,sign,,8,339,12,0.236,0.1451,diffuse (many blocks)
+2015-12,apnic,unsign,8,,1,1,1.0,1.0,single delegation
+2015-12,arin,rollover,"7,8",7,1,1,1.0,1.0,single delegation
+2015-12,arin,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2015-12,arin,sign,,8,5,2,0.6,0.52,concentrated (one block is most of it)
+2016-01,apnic,rollover,5,8,3,1,1.0,1.0,one block
+2016-01,apnic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-01,arin,rollover,5,8,1,1,1.0,1.0,single delegation
+2016-01,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-01,arin,sign,,8,10,3,0.8,0.66,concentrated (one block is most of it)
+2016-01,arin,unsign,8,,2,1,1.0,1.0,one block
+2016-02,apnic,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2016-02,apnic,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-02,arin,rollover,5,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2016-02,arin,sign,,8,4,2,0.75,0.625,concentrated (one block is most of it)
+2016-04,afrinic,sign,,8,16,3,0.812,0.6797,concentrated (one block is most of it)
+2016-04,apnic,sign,,5,1,1,1.0,1.0,single delegation
+2016-04,apnic,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2016-04,apnic,unsign,5,,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-04,arin,rollover,5,"5,8,14",4,2,0.75,0.625,concentrated (one block is most of it)
+2016-04,arin,sign,,5,1,1,1.0,1.0,single delegation
+2016-04,arin,sign,,7,1,1,1.0,1.0,single delegation
+2016-04,arin,sign,,8,5,5,0.2,0.2,diffuse (many blocks)
+2016-04,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2016-04,ripe,sign,,8,7,4,0.571,0.3878,concentrated (one block is most of it)
+2016-04,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2016-05,apnic,sign,,5,1,1,1.0,1.0,single delegation
+2016-05,apnic,sign,,7,5,2,0.8,0.68,concentrated (one block is most of it)
+2016-05,apnic,unsign,8,,3,1,1.0,1.0,one block
+2016-05,arin,rollover,"5,8,14","8,14",4,2,0.75,0.625,concentrated (one block is most of it)
+2016-05,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2016-06,apnic,unsign,5,,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-06,arin,rollover,5,"5,8",1,1,1.0,1.0,single delegation
+2016-06,arin,sign,,10,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-06,arin,sign,,8,1,1,1.0,1.0,single delegation
+2016-06,ripe,rollover,5,"5,8",1,1,1.0,1.0,single delegation
+2016-07,apnic,sign,,8,4,1,1.0,1.0,one block
+2016-07,arin,sign,,8,4,2,0.5,0.5,concentrated (one block is most of it)
+2016-07,ripe,sign,,8,2,1,1.0,1.0,one block
+2016-08,afrinic,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-08,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2016-08,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2016-08,arin,rollover,7,8,11,3,0.818,0.686,concentrated (one block is most of it)
+2016-08,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2016-08,arin,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2016-08,arin,unsign,5,,32,1,1.0,1.0,one block
+2016-08,ripe,rollover,8,13,1,1,1.0,1.0,single delegation
+2016-09,apnic,sign,,5,4,3,0.5,0.375,concentrated (one block is most of it)
+2016-09,arin,rollover,7,8,1,1,1.0,1.0,single delegation
+2016-09,arin,sign,,5,1,1,1.0,1.0,single delegation
+2016-09,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2016-10,apnic,sign,,8,8,2,0.875,0.7812,concentrated (one block is most of it)
+2016-10,arin,rollover,5,8,16,1,1.0,1.0,one block
+2016-10,arin,sign,,5,8,2,0.5,0.5,concentrated (one block is most of it)
+2016-10,arin,sign,,8,32,1,1.0,1.0,one block
+2016-10,arin,unsign,8,,4,3,0.5,0.375,concentrated (one block is most of it)
+2016-10,lacnic,sign,,5,4,1,1.0,1.0,one block
+2016-11,afrinic,sign,,8,16,3,0.688,0.5391,concentrated (one block is most of it)
+2016-11,apnic,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-11,apnic,sign,,7,2,1,1.0,1.0,one block
+2016-11,apnic,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2016-11,arin,sign,,13,1,1,1.0,1.0,single delegation
+2016-11,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-11,arin,unsign,7,,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-12,apnic,sign,,8,713,17,0.292,0.1486,diffuse (many blocks)
+2016-12,arin,rollover,5,8,1,1,1.0,1.0,single delegation
+2016-12,arin,rollover,"5,8",8,1,1,1.0,1.0,single delegation
+2016-12,arin,sign,,"7,8,10",1,1,1.0,1.0,single delegation
+2016-12,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2016-12,ripe,rollover,"5,8",8,1,1,1.0,1.0,single delegation
+2016-12,ripe,sign,,"7,8,10",1,1,1.0,1.0,single delegation
+2017-01,afrinic,sign,,8,18,1,1.0,1.0,one block
+2017-01,apnic,sign,,8,301,33,0.123,0.0651,diffuse (many blocks)
+2017-01,apnic,unsign,8,,71,10,0.225,0.143,diffuse (many blocks)
+2017-01,arin,sign,,10,1,1,1.0,1.0,single delegation
+2017-01,arin,unsign,5,,4,1,1.0,1.0,one block
+2017-01,lacnic,unsign,5,,4,1,1.0,1.0,one block
+2017-02,apnic,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2017-02,apnic,unsign,8,,4,1,1.0,1.0,one block
+2017-02,arin,sign,,8,36,5,0.722,0.5494,concentrated (one block is most of it)
+2017-02,lacnic,sign,,8,1,1,1.0,1.0,single delegation
+2017-02,ripe,sign,,8,3,1,1.0,1.0,one block
+2017-03,afrinic,sign,,7,1,1,1.0,1.0,single delegation
+2017-03,arin,rollover,10,"10,13",1,1,1.0,1.0,single delegation
+2017-03,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-03,arin,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-03,ripe,rollover,10,"10,13",1,1,1.0,1.0,single delegation
+2017-04,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2017-04,apnic,unsign,7,,5,2,0.8,0.68,concentrated (one block is most of it)
+2017-04,arin,rollover,7,8,1,1,1.0,1.0,single delegation
+2017-04,arin,rollover,8,5,87,6,0.368,0.308,diffuse (many blocks)
+2017-04,arin,sign,,5,4,4,0.25,0.25,diffuse (many blocks)
+2017-04,arin,sign,,7,1,1,1.0,1.0,single delegation
+2017-04,arin,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2017-04,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2017-05,afrinic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-05,apnic,sign,,8,2,1,1.0,1.0,one block
+2017-05,apnic,unsign,5,,4,1,1.0,1.0,one block
+2017-05,apnic,unsign,7,,1,1,1.0,1.0,single delegation
+2017-05,arin,sign,,8,46,14,0.348,0.1682,diffuse (many blocks)
+2017-05,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2017-06,apnic,sign,,5,1,1,1.0,1.0,single delegation
+2017-06,arin,rollover,5,7,87,6,0.368,0.308,diffuse (many blocks)
+2017-06,arin,rollover,7,8,1,1,1.0,1.0,single delegation
+2017-07,afrinic,sign,,7,1,1,1.0,1.0,single delegation
+2017-07,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2017-07,arin,sign,,10,9,3,0.444,0.4074,diffuse (many blocks)
+2017-07,arin,sign,,7,81,4,0.741,0.5806,concentrated (one block is most of it)
+2017-07,arin,sign,,8,1,1,1.0,1.0,single delegation
+2017-07,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2017-07,arin,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-07,lacnic,unsign,8,,1,1,1.0,1.0,single delegation
+2017-07,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2017-08,apnic,sign,,8,8,3,0.5,0.4062,concentrated (one block is most of it)
+2017-08,arin,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-08,arin,sign,,5,1,1,1.0,1.0,single delegation
+2017-08,arin,sign,,8,7,4,0.571,0.3878,concentrated (one block is most of it)
+2017-08,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2017-08,arin,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2017-09,apnic,sign,,13,155,22,0.406,0.198,diffuse (many blocks)
+2017-09,apnic,sign,,5,5,2,0.8,0.68,concentrated (one block is most of it)
+2017-09,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-09,arin,sign,,7,9,3,0.444,0.4074,diffuse (many blocks)
+2017-09,arin,sign,,8,31,6,0.516,0.3528,concentrated (one block is most of it)
+2017-09,arin,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-10,afrinic,sign,,7,2,1,1.0,1.0,one block
+2017-10,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2017-10,arin,sign,,7,2,1,1.0,1.0,one block
+2017-10,lacnic,sign,,8,1,1,1.0,1.0,single delegation
+2017-11,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2017-11,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2017-11,arin,sign,,13,1,1,1.0,1.0,single delegation
+2017-11,arin,sign,,7,3,3,0.333,0.3333,diffuse (many blocks)
+2017-11,arin,unsign,10,,1,1,1.0,1.0,single delegation
+2017-12,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2017-12,apnic,sign,,13,8,1,1.0,1.0,one block
+2017-12,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2017-12,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2017-12,arin,sign,,8,1,1,1.0,1.0,single delegation
+2017-12,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2017-12,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2018-01,afrinic,sign,,7,1,1,1.0,1.0,single delegation
+2018-01,apnic,unsign,8,,6,3,0.667,0.5,concentrated (one block is most of it)
+2018-01,arin,sign,,5,1,1,1.0,1.0,single delegation
+2018-01,arin,sign,,7,6,3,0.5,0.3889,concentrated (one block is most of it)
+2018-01,arin,sign,,8,5,4,0.4,0.28,diffuse (many blocks)
+2018-01,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2018-01,lacnic,sign,,7,3,1,1.0,1.0,one block
+2018-02,afrinic,unsign,8,,8,2,0.875,0.7812,concentrated (one block is most of it)
+2018-02,apnic,sign,,13,16,4,0.688,0.5156,concentrated (one block is most of it)
+2018-02,apnic,sign,,8,6,4,0.333,0.2778,diffuse (many blocks)
+2018-02,apnic,unsign,8,,1,1,1.0,1.0,single delegation
+2018-02,arin,rollover,"7,8,10",8,1,1,1.0,1.0,single delegation
+2018-02,arin,sign,,7,1,1,1.0,1.0,single delegation
+2018-02,arin,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2018-02,arin,unsign,7,,2,1,1.0,1.0,one block
+2018-02,arin,unsign,8,,8,2,0.875,0.7812,concentrated (one block is most of it)
+2018-02,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2018-02,lacnic,unsign,7,,2,1,1.0,1.0,one block
+2018-02,ripe,rollover,"7,8,10",8,1,1,1.0,1.0,single delegation
+2018-02,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2018-03,apnic,sign,,13,17,4,0.471,0.3356,diffuse (many blocks)
+2018-03,apnic,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2018-03,apnic,unsign,8,,44,3,0.727,0.5919,concentrated (one block is most of it)
+2018-03,arin,rollover,5,8,2,1,1.0,1.0,one block
+2018-03,arin,sign,,7,4,4,0.25,0.25,diffuse (many blocks)
+2018-03,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-03,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2018-03,lacnic,sign,,7,2,1,1.0,1.0,one block
+2018-03,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2018-04,apnic,sign,,7,3,2,0.667,0.5556,concentrated (one block is most of it)
+2018-04,arin,rollover,7,8,1,1,1.0,1.0,single delegation
+2018-04,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-04,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-04,arin,unsign,7,,3,3,0.333,0.3333,diffuse (many blocks)
+2018-04,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2018-04,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2018-05,afrinic,sign,,8,8,2,0.875,0.7812,concentrated (one block is most of it)
+2018-05,apnic,sign,,13,4,4,0.25,0.25,diffuse (many blocks)
+2018-05,apnic,sign,,8,5,3,0.6,0.44,concentrated (one block is most of it)
+2018-05,apnic,unsign,5,,2,1,1.0,1.0,one block
+2018-05,apnic,unsign,8,,32,1,1.0,1.0,one block
+2018-05,arin,rollover,7,8,1,1,1.0,1.0,single delegation
+2018-05,arin,rollover,8,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-05,arin,sign,,5,8,1,1.0,1.0,one block
+2018-05,arin,sign,,7,3,2,0.667,0.5556,concentrated (one block is most of it)
+2018-05,arin,sign,,8,11,5,0.636,0.438,concentrated (one block is most of it)
+2018-05,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2018-05,arin,unsign,7,,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-05,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2018-05,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2018-06,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2018-06,apnic,sign,,13,119,14,0.538,0.3136,concentrated (one block is most of it)
+2018-06,arin,sign,,13,17,2,0.941,0.8893,concentrated (one block is most of it)
+2018-06,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-07,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2018-07,apnic,unsign,5,,5,2,0.8,0.68,concentrated (one block is most of it)
+2018-07,arin,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-07,arin,sign,,7,44,10,0.182,0.1271,diffuse (many blocks)
+2018-07,arin,sign,,8,7,4,0.571,0.3878,concentrated (one block is most of it)
+2018-07,arin,unsign,8,,28,3,0.571,0.4286,concentrated (one block is most of it)
+2018-08,apnic,unsign,8,,4,2,0.75,0.625,concentrated (one block is most of it)
+2018-08,arin,sign,,14,5,2,0.8,0.68,concentrated (one block is most of it)
+2018-08,arin,sign,,8,1,1,1.0,1.0,single delegation
+2018-09,apnic,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2018-09,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2018-09,arin,sign,,13,10,3,0.8,0.66,concentrated (one block is most of it)
+2018-09,arin,sign,,14,4,1,1.0,1.0,one block
+2018-09,arin,sign,,7,39,6,0.41,0.3491,diffuse (many blocks)
+2018-09,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2018-09,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2018-10,apnic,rollover,8,13,4,1,1.0,1.0,one block
+2018-10,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2018-10,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2018-10,arin,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2018-10,arin,sign,,7,1,1,1.0,1.0,single delegation
+2018-10,arin,unsign,13,,1,1,1.0,1.0,single delegation
+2018-10,arin,unsign,8,,5,2,0.8,0.68,concentrated (one block is most of it)
+2018-11,afrinic,sign,,5,21,3,0.857,0.746,concentrated (one block is most of it)
+2018-11,afrinic,sign,,7,83,5,0.386,0.3189,diffuse (many blocks)
+2018-11,afrinic,sign,,8,4,3,0.5,0.375,concentrated (one block is most of it)
+2018-11,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2018-11,apnic,sign,,14,1,1,1.0,1.0,single delegation
+2018-11,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2018-11,arin,sign,,10,1,1,1.0,1.0,single delegation
+2018-11,arin,sign,,14,1,1,1.0,1.0,single delegation
+2018-11,arin,sign,,5,2,1,1.0,1.0,one block
+2018-11,arin,sign,,7,32,1,1.0,1.0,one block
+2018-11,arin,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2018-11,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2018-11,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2018-12,afrinic,sign,,5,1,1,1.0,1.0,single delegation
+2018-12,afrinic,sign,,8,3,1,1.0,1.0,one block
+2018-12,apnic,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2018-12,apnic,sign,,8,300,37,0.167,0.0671,diffuse (many blocks)
+2018-12,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2018-12,apnic,unsign,8,,37,3,0.865,0.7604,concentrated (one block is most of it)
+2018-12,arin,rollover,13,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-12,arin,sign,,10,1,1,1.0,1.0,single delegation
+2018-12,arin,sign,,13,26,7,0.615,0.4142,concentrated (one block is most of it)
+2018-12,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2018-12,arin,unsign,13,,1,1,1.0,1.0,single delegation
+2018-12,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2018-12,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2019-01,afrinic,sign,,13,40,2,0.8,0.68,concentrated (one block is most of it)
+2019-01,apnic,sign,,13,100,4,0.63,0.501,concentrated (one block is most of it)
+2019-01,arin,sign,,13,55,5,0.582,0.3904,concentrated (one block is most of it)
+2019-01,arin,sign,,5,1,1,1.0,1.0,single delegation
+2019-01,ripe,sign,,13,63,1,1.0,1.0,one block
+2019-02,afrinic,rollover,5,8,2,1,1.0,1.0,one block
+2019-02,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2019-02,apnic,sign,,8,300,29,0.167,0.0674,diffuse (many blocks)
+2019-02,arin,sign,,7,4,1,1.0,1.0,one block
+2019-02,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-02,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2019-02,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2019-03,afrinic,rollover,5,8,15,2,0.933,0.8756,concentrated (one block is most of it)
+2019-03,afrinic,sign,,7,16,4,0.438,0.3203,diffuse (many blocks)
+2019-03,apnic,sign,,13,13,3,0.615,0.4793,concentrated (one block is most of it)
+2019-03,apnic,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-03,arin,sign,,13,45,5,0.356,0.2928,diffuse (many blocks)
+2019-03,arin,sign,,7,1,1,1.0,1.0,single delegation
+2019-03,arin,sign,,8,20,8,0.2,0.17,diffuse (many blocks)
+2019-03,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2019-03,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2019-03,ripe,sign,,13,16,2,0.5,0.5,concentrated (one block is most of it)
+2019-03,ripe,sign,,8,4,1,1.0,1.0,one block
+2019-04,afrinic,sign,,13,2,1,1.0,1.0,one block
+2019-04,apnic,sign,,13,2,1,1.0,1.0,one block
+2019-04,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2019-04,apnic,unsign,8,,1,1,1.0,1.0,single delegation
+2019-04,arin,rollover,8,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-04,arin,sign,,"5,8,10",1,1,1.0,1.0,single delegation
+2019-04,arin,sign,,8,20,4,0.7,0.525,concentrated (one block is most of it)
+2019-05,afrinic,sign,,13,14,3,0.429,0.3469,diffuse (many blocks)
+2019-05,afrinic,unsign,8,,5,2,0.6,0.52,concentrated (one block is most of it)
+2019-05,apnic,sign,,8,3,1,1.0,1.0,one block
+2019-05,apnic,unsign,8,,5,2,0.8,0.68,concentrated (one block is most of it)
+2019-05,arin,rollover,7,8,1,1,1.0,1.0,single delegation
+2019-05,arin,sign,,14,1,1,1.0,1.0,single delegation
+2019-05,arin,sign,,7,1,1,1.0,1.0,single delegation
+2019-05,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-05,arin,sign,,"8,13",2,1,1.0,1.0,one block
+2019-05,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2019-05,lacnic,sign,,"8,13",2,1,1.0,1.0,one block
+2019-05,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2019-05,ripe,sign,,14,1,1,1.0,1.0,single delegation
+2019-06,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2019-06,apnic,sign,,5,4,2,0.75,0.625,concentrated (one block is most of it)
+2019-06,apnic,sign,,8,251,1,1.0,1.0,one block
+2019-06,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2019-06,apnic,unsign,8,,1,1,1.0,1.0,single delegation
+2019-06,arin,rollover,5,13,1,1,1.0,1.0,single delegation
+2019-06,arin,sign,,10,1,1,1.0,1.0,single delegation
+2019-06,arin,sign,,13,131,17,0.473,0.2629,diffuse (many blocks)
+2019-06,arin,sign,,14,2,1,1.0,1.0,one block
+2019-06,arin,sign,,7,1,1,1.0,1.0,single delegation
+2019-06,arin,sign,,8,270,4,0.93,0.8678,concentrated (one block is most of it)
+2019-06,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2019-06,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2019-06,ripe,sign,,14,2,1,1.0,1.0,one block
+2019-07,apnic,sign,,13,4,1,1.0,1.0,one block
+2019-07,apnic,sign,,8,300,34,0.163,0.0651,diffuse (many blocks)
+2019-07,apnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2019-07,arin,sign,,13,34,13,0.235,0.1228,diffuse (many blocks)
+2019-07,arin,sign,,14,4,1,1.0,1.0,one block
+2019-07,arin,sign,,8,15,7,0.467,0.2711,diffuse (many blocks)
+2019-07,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2019-07,lacnic,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2019-07,ripe,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2019-07,ripe,sign,,14,4,1,1.0,1.0,one block
+2019-07,ripe,sign,,8,11,4,0.636,0.4545,concentrated (one block is most of it)
+2019-08,apnic,rollover,5,13,38,6,0.605,0.4307,concentrated (one block is most of it)
+2019-08,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2019-08,arin,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2019-08,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-08,arin,sign,,8,23,7,0.696,0.5009,concentrated (one block is most of it)
+2019-08,arin,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-08,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2019-08,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2019-09,afrinic,rollover,8,13,1,1,1.0,1.0,single delegation
+2019-09,afrinic,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-09,afrinic,sign,,8,4,2,0.5,0.5,concentrated (one block is most of it)
+2019-09,apnic,sign,,13,4,1,1.0,1.0,one block
+2019-09,apnic,unsign,13,,4,1,1.0,1.0,one block
+2019-09,arin,sign,,10,9,2,0.889,0.8025,concentrated (one block is most of it)
+2019-09,arin,sign,,13,9,3,0.778,0.6296,concentrated (one block is most of it)
+2019-09,arin,sign,,14,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-09,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-09,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2019-09,ripe,sign,,10,1,1,1.0,1.0,single delegation
+2019-09,ripe,sign,,13,7,1,1.0,1.0,one block
+2019-09,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2019-10,afrinic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-10,apnic,unsign,5,,4,1,1.0,1.0,one block
+2019-10,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2019-10,arin,rollover,8,"8,14",1,1,1.0,1.0,single delegation
+2019-10,arin,sign,,13,40,12,0.4,0.2063,diffuse (many blocks)
+2019-10,arin,sign,,14,1,1,1.0,1.0,single delegation
+2019-10,arin,unsign,8,,2,1,1.0,1.0,one block
+2019-10,ripe,sign,,13,14,5,0.286,0.2551,diffuse (many blocks)
+2019-10,ripe,sign,,14,1,1,1.0,1.0,single delegation
+2019-11,arin,rollover,14,10,1,1,1.0,1.0,single delegation
+2019-11,arin,rollover,"8,14",14,4,2,0.75,0.625,concentrated (one block is most of it)
+2019-11,arin,sign,,13,14,7,0.286,0.2041,diffuse (many blocks)
+2019-11,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-11,arin,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2019-11,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2019-11,ripe,rollover,14,10,1,1,1.0,1.0,single delegation
+2019-11,ripe,sign,,13,9,3,0.444,0.4074,diffuse (many blocks)
+2019-12,afrinic,rollover,8,13,9,2,0.889,0.8025,concentrated (one block is most of it)
+2019-12,afrinic,sign,,7,4,1,1.0,1.0,one block
+2019-12,afrinic,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2019-12,arin,rollover,5,13,1,1,1.0,1.0,single delegation
+2019-12,arin,rollover,8,13,9,2,0.889,0.8025,concentrated (one block is most of it)
+2019-12,arin,sign,,13,34,6,0.471,0.3062,diffuse (many blocks)
+2019-12,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-12,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-12,arin,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2019-12,ripe,rollover,5,13,1,1,1.0,1.0,single delegation
+2019-12,ripe,sign,,13,4,1,1.0,1.0,one block
+2019-12,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2020-01,afrinic,rollover,8,13,1,1,1.0,1.0,single delegation
+2020-01,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2020-01,apnic,sign,,13,3,2,0.667,0.5556,concentrated (one block is most of it)
+2020-01,apnic,sign,,8,353,43,0.127,0.0694,diffuse (many blocks)
+2020-01,arin,rollover,5,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-01,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2020-01,arin,sign,,13,42,5,0.762,0.5998,concentrated (one block is most of it)
+2020-01,arin,sign,,8,25,9,0.68,0.4752,concentrated (one block is most of it)
+2020-01,ripe,rollover,5,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-01,ripe,sign,,13,10,4,0.4,0.34,diffuse (many blocks)
+2020-02,afrinic,unsign,13,,1,1,1.0,1.0,single delegation
+2020-02,apnic,rollover,8,14,17,4,0.471,0.3356,diffuse (many blocks)
+2020-02,apnic,sign,,13,2,1,1.0,1.0,one block
+2020-02,apnic,sign,,5,2,1,1.0,1.0,one block
+2020-02,apnic,sign,,7,19,1,1.0,1.0,one block
+2020-02,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2020-02,arin,rollover,5,13,4,2,0.75,0.625,concentrated (one block is most of it)
+2020-02,arin,rollover,8,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-02,arin,sign,,13,34,15,0.382,0.1869,diffuse (many blocks)
+2020-02,arin,sign,,5,1,1,1.0,1.0,single delegation
+2020-02,arin,sign,,7,1,1,1.0,1.0,single delegation
+2020-02,arin,unsign,13,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2020-02,arin,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-02,ripe,rollover,5,13,1,1,1.0,1.0,single delegation
+2020-02,ripe,sign,,13,6,3,0.667,0.5,concentrated (one block is most of it)
+2020-03,afrinic,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2020-03,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2020-03,arin,sign,,10,5,5,0.2,0.2,diffuse (many blocks)
+2020-03,arin,sign,,13,12,6,0.333,0.2222,diffuse (many blocks)
+2020-03,arin,sign,,8,1,1,1.0,1.0,single delegation
+2020-03,arin,unsign,13,,1,1,1.0,1.0,single delegation
+2020-03,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2020-03,ripe,rollover,8,13,1,1,1.0,1.0,single delegation
+2020-03,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2020-04,apnic,sign,,13,4,2,0.5,0.5,concentrated (one block is most of it)
+2020-04,arin,sign,,13,3,3,0.333,0.3333,diffuse (many blocks)
+2020-04,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-04,arin,sign,,8,1,1,1.0,1.0,single delegation
+2020-04,arin,unsign,14,,1,1,1.0,1.0,single delegation
+2020-04,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2020-05,afrinic,sign,,7,1,1,1.0,1.0,single delegation
+2020-05,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2020-05,apnic,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2020-05,apnic,unsign,13,,2,1,1.0,1.0,one block
+2020-05,arin,rollover,"5,8,10","5,8",1,1,1.0,1.0,single delegation
+2020-05,arin,rollover,8,13,3,2,0.667,0.5556,concentrated (one block is most of it)
+2020-05,arin,sign,,13,24,11,0.333,0.1806,diffuse (many blocks)
+2020-05,arin,sign,,14,4,1,1.0,1.0,one block
+2020-05,arin,sign,,5,4,1,1.0,1.0,one block
+2020-05,arin,sign,,7,1,1,1.0,1.0,single delegation
+2020-05,arin,sign,,8,7,4,0.571,0.3878,concentrated (one block is most of it)
+2020-05,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2020-05,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2020-05,ripe,sign,,14,4,1,1.0,1.0,one block
+2020-05,ripe,sign,,8,4,1,1.0,1.0,one block
+2020-06,apnic,sign,,7,4,1,1.0,1.0,one block
+2020-06,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2020-06,apnic,unsign,7,,19,1,1.0,1.0,one block
+2020-06,arin,sign,,13,8,5,0.5,0.3125,concentrated (one block is most of it)
+2020-06,arin,sign,,5,256,1,1.0,1.0,one block
+2020-06,arin,sign,,7,1,1,1.0,1.0,single delegation
+2020-06,arin,sign,,8,11,4,0.364,0.2893,diffuse (many blocks)
+2020-06,arin,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-06,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2020-06,ripe,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2020-06,ripe,sign,,7,4,1,1.0,1.0,one block
+2020-06,ripe,sign,,8,4,1,1.0,1.0,one block
+2020-06,ripe,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-07,apnic,sign,,7,1,1,1.0,1.0,single delegation
+2020-07,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2020-07,arin,rollover,5,7,13,1,1.0,1.0,one block
+2020-07,arin,rollover,8,10,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-07,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2020-07,arin,sign,,13,4,1,1.0,1.0,one block
+2020-07,arin,sign,,5,1,1,1.0,1.0,single delegation
+2020-07,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-07,arin,sign,,8,7,3,0.571,0.4286,concentrated (one block is most of it)
+2020-07,arin,unsign,10,,1,1,1.0,1.0,single delegation
+2020-07,arin,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2020-07,arin,unsign,5,,143,3,0.916,0.8427,concentrated (one block is most of it)
+2020-07,ripe,sign,,13,4,1,1.0,1.0,one block
+2020-07,ripe,sign,,7,1,1,1.0,1.0,single delegation
+2020-07,ripe,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2020-08,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2020-08,apnic,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2020-08,apnic,unsign,5,,2,1,1.0,1.0,one block
+2020-08,arin,rollover,8,"8,13",1,1,1.0,1.0,single delegation
+2020-08,arin,sign,,13,18,3,0.889,0.7963,concentrated (one block is most of it)
+2020-08,arin,sign,,14,1,1,1.0,1.0,single delegation
+2020-08,arin,sign,,8,3,1,1.0,1.0,one block
+2020-08,arin,unsign,13,,4,4,0.25,0.25,diffuse (many blocks)
+2020-08,arin,unsign,5,,113,2,0.991,0.9825,concentrated (one block is most of it)
+2020-08,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2020-08,arin,unsign,8,,8,2,0.875,0.7812,concentrated (one block is most of it)
+2020-08,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2020-09,afrinic,sign,,13,1,1,1.0,1.0,single delegation
+2020-09,apnic,sign,,13,20,5,0.2,0.2,diffuse (many blocks)
+2020-09,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2020-09,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2020-09,arin,sign,,13,10,4,0.4,0.34,diffuse (many blocks)
+2020-09,arin,sign,,14,1,1,1.0,1.0,single delegation
+2020-09,arin,sign,,7,5,2,0.8,0.68,concentrated (one block is most of it)
+2020-09,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-09,arin,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2020-09,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2020-09,ripe,rollover,8,13,1,1,1.0,1.0,single delegation
+2020-09,ripe,sign,,7,4,1,1.0,1.0,one block
+2020-09,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2020-10,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2020-10,afrinic,unsign,5,,2,1,1.0,1.0,one block
+2020-10,afrinic,unsign,7,,30,1,1.0,1.0,one block
+2020-10,apnic,sign,,13,8,3,0.5,0.375,concentrated (one block is most of it)
+2020-10,apnic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-10,apnic,unsign,13,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2020-10,arin,rollover,5,7,4,1,1.0,1.0,one block
+2020-10,arin,sign,,13,15,6,0.267,0.2267,diffuse (many blocks)
+2020-10,arin,sign,,7,3,2,0.667,0.5556,concentrated (one block is most of it)
+2020-10,arin,sign,,8,8,5,0.375,0.25,diffuse (many blocks)
+2020-10,arin,unsign,13,,2,1,1.0,1.0,one block
+2020-10,ripe,sign,,13,13,4,0.308,0.2899,diffuse (many blocks)
+2020-11,apnic,sign,,8,12,5,0.583,0.3889,concentrated (one block is most of it)
+2020-11,arin,rollover,10,8,1,1,1.0,1.0,single delegation
+2020-11,arin,sign,,13,84,19,0.19,0.1188,diffuse (many blocks)
+2020-11,arin,sign,,7,5,2,0.8,0.68,concentrated (one block is most of it)
+2020-11,arin,sign,,8,3,1,1.0,1.0,one block
+2020-11,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2020-11,arin,unsign,"5,8",,1,1,1.0,1.0,single delegation
+2020-11,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2020-11,lacnic,sign,,13,1,1,1.0,1.0,single delegation
+2020-11,lacnic,sign,,8,3,1,1.0,1.0,one block
+2020-11,ripe,rollover,10,8,1,1,1.0,1.0,single delegation
+2020-11,ripe,sign,,13,4,1,1.0,1.0,one block
+2020-12,apnic,sign,,13,3,3,0.333,0.3333,diffuse (many blocks)
+2020-12,apnic,sign,,14,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-12,apnic,unsign,8,,6,4,0.333,0.2778,diffuse (many blocks)
+2020-12,arin,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-12,arin,sign,,14,2,2,0.5,0.5,concentrated (one block is most of it)
+2020-12,arin,sign,,5,4,1,1.0,1.0,one block
+2020-12,arin,sign,,7,60,3,0.95,0.9039,concentrated (one block is most of it)
+2020-12,arin,sign,,8,22,4,0.727,0.5661,concentrated (one block is most of it)
+2020-12,arin,unsign,13,,1,1,1.0,1.0,single delegation
+2020-12,arin,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2020-12,lacnic,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2020-12,lacnic,unsign,13,,1,1,1.0,1.0,single delegation
+2020-12,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2020-12,ripe,sign,,5,4,1,1.0,1.0,one block
+2020-12,ripe,sign,,8,16,1,1.0,1.0,one block
+2020-12,ripe,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-02,afrinic,sign,,13,53,4,0.604,0.4617,concentrated (one block is most of it)
+2021-02,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2021-02,apnic,sign,,13,6,4,0.333,0.2778,diffuse (many blocks)
+2021-02,apnic,sign,,8,6,5,0.333,0.2222,diffuse (many blocks)
+2021-02,arin,rollover,13,7,1,1,1.0,1.0,single delegation
+2021-02,arin,sign,,13,39,6,0.821,0.6818,concentrated (one block is most of it)
+2021-02,arin,sign,,5,1,1,1.0,1.0,single delegation
+2021-02,arin,sign,,7,77,8,0.831,0.6964,concentrated (one block is most of it)
+2021-02,arin,sign,,8,20,8,0.3,0.19,diffuse (many blocks)
+2021-02,arin,unsign,13,,21,6,0.619,0.4286,concentrated (one block is most of it)
+2021-02,arin,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2021-02,lacnic,sign,,8,1,1,1.0,1.0,single delegation
+2021-02,ripe,rollover,13,7,1,1,1.0,1.0,single delegation
+2021-02,ripe,sign,,8,4,1,1.0,1.0,one block
+2021-02,ripe,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-03,apnic,sign,,13,10,3,0.4,0.36,diffuse (many blocks)
+2021-03,apnic,unsign,13,,2,1,1.0,1.0,one block
+2021-03,apnic,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-03,arin,rollover,7,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-03,arin,sign,,13,32,15,0.125,0.0938,diffuse (many blocks)
+2021-03,arin,sign,,8,8,3,0.5,0.375,concentrated (one block is most of it)
+2021-03,arin,unsign,13,,15,4,0.533,0.3778,concentrated (one block is most of it)
+2021-03,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2021-03,lacnic,sign,,13,20,5,0.2,0.2,diffuse (many blocks)
+2021-03,lacnic,sign,,8,4,1,1.0,1.0,one block
+2021-03,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2021-04,afrinic,sign,,13,12,1,1.0,1.0,one block
+2021-04,afrinic,sign,,8,12,2,0.667,0.5556,concentrated (one block is most of it)
+2021-04,apnic,sign,,13,12,3,0.333,0.3333,diffuse (many blocks)
+2021-04,arin,sign,,13,53,19,0.075,0.0666,diffuse (many blocks)
+2021-04,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-04,arin,sign,,8,36,13,0.222,0.1188,diffuse (many blocks)
+2021-04,arin,unsign,"7,8",,1,1,1.0,1.0,single delegation
+2021-04,lacnic,sign,,13,20,5,0.2,0.2,diffuse (many blocks)
+2021-04,lacnic,sign,,8,12,3,0.333,0.3333,diffuse (many blocks)
+2021-04,ripe,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-04,ripe,sign,,8,4,1,1.0,1.0,one block
+2021-05,afrinic,unsign,5,,3,1,1.0,1.0,one block
+2021-05,apnic,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-05,arin,rollover,7,8,4,1,1.0,1.0,one block
+2021-05,arin,sign,,13,16,5,0.25,0.2266,diffuse (many blocks)
+2021-05,arin,sign,,5,4,1,1.0,1.0,one block
+2021-05,arin,sign,,8,18,10,0.222,0.142,diffuse (many blocks)
+2021-05,arin,sign,,"8,14",1,1,1.0,1.0,single delegation
+2021-05,arin,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-05,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2021-05,lacnic,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-05,lacnic,sign,,5,4,1,1.0,1.0,one block
+2021-05,lacnic,sign,,8,4,1,1.0,1.0,one block
+2021-05,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2021-06,afrinic,sign,,13,3,1,1.0,1.0,one block
+2021-06,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2021-06,apnic,unsign,13,,4,1,1.0,1.0,one block
+2021-06,arin,rollover,5,13,4,1,1.0,1.0,one block
+2021-06,arin,rollover,5,8,21,17,0.19,0.0794,diffuse (many blocks)
+2021-06,arin,rollover,8,13,2,1,1.0,1.0,one block
+2021-06,arin,sign,,13,21,9,0.381,0.2109,diffuse (many blocks)
+2021-06,arin,sign,,14,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-06,arin,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-06,arin,unsign,13,,19,7,0.211,0.1856,diffuse (many blocks)
+2021-06,arin,unsign,7,,4,1,1.0,1.0,one block
+2021-06,arin,unsign,8,,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-06,lacnic,sign,,13,4,1,1.0,1.0,one block
+2021-06,lacnic,sign,,8,4,1,1.0,1.0,one block
+2021-06,lacnic,unsign,7,,4,1,1.0,1.0,one block
+2021-06,lacnic,unsign,8,,4,1,1.0,1.0,one block
+2021-06,ripe,rollover,5,13,4,1,1.0,1.0,one block
+2021-06,ripe,sign,,13,9,2,0.889,0.8025,concentrated (one block is most of it)
+2021-06,ripe,unsign,7,,1,1,1.0,1.0,single delegation
+2021-07,apnic,rollover,8,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-07,apnic,sign,,13,2,1,1.0,1.0,one block
+2021-07,arin,sign,,13,7,4,0.571,0.3878,concentrated (one block is most of it)
+2021-07,arin,sign,,5,2,1,1.0,1.0,one block
+2021-07,arin,sign,,8,1,1,1.0,1.0,single delegation
+2021-07,arin,unsign,13,,3,3,0.333,0.3333,diffuse (many blocks)
+2021-07,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2021-07,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2021-07,lacnic,sign,,13,4,1,1.0,1.0,one block
+2021-07,lacnic,sign,,5,2,1,1.0,1.0,one block
+2021-07,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2021-07,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2021-08,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2021-08,apnic,rollover,8,13,15,5,0.533,0.3689,concentrated (one block is most of it)
+2021-08,apnic,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-08,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2021-08,arin,rollover,8,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-08,arin,sign,,13,29,14,0.138,0.1058,diffuse (many blocks)
+2021-08,arin,sign,,14,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-08,arin,sign,,7,1,1,1.0,1.0,single delegation
+2021-08,arin,sign,,8,27,6,0.593,0.3992,concentrated (one block is most of it)
+2021-08,arin,unsign,13,,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-08,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2021-08,lacnic,sign,,13,20,5,0.2,0.2,diffuse (many blocks)
+2021-08,lacnic,sign,,8,4,1,1.0,1.0,one block
+2021-08,lacnic,unsign,13,,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-08,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2021-08,ripe,sign,,14,4,1,1.0,1.0,one block
+2021-09,afrinic,rollover,7,13,3,1,1.0,1.0,one block
+2021-09,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2021-09,afrinic,sign,,"8,13",1,1,1.0,1.0,single delegation
+2021-09,apnic,sign,,13,25,7,0.4,0.2416,diffuse (many blocks)
+2021-09,arin,sign,,13,55,16,0.073,0.0698,diffuse (many blocks)
+2021-09,arin,sign,,8,18,6,0.222,0.2037,diffuse (many blocks)
+2021-09,arin,sign,,"8,13",1,1,1.0,1.0,single delegation
+2021-09,arin,unsign,13,,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-09,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2021-09,arin,unsign,8,,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-09,lacnic,sign,,13,44,11,0.091,0.0909,diffuse (many blocks)
+2021-09,lacnic,sign,,8,16,4,0.25,0.25,diffuse (many blocks)
+2021-09,lacnic,unsign,13,,8,2,0.5,0.5,concentrated (one block is most of it)
+2021-09,lacnic,unsign,8,,4,1,1.0,1.0,one block
+2021-09,ripe,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-09,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2021-10,apnic,sign,,13,7,4,0.571,0.3878,concentrated (one block is most of it)
+2021-10,apnic,sign,,14,4,1,1.0,1.0,one block
+2021-10,arin,sign,,13,32,13,0.125,0.0996,diffuse (many blocks)
+2021-10,arin,sign,,14,4,1,1.0,1.0,one block
+2021-10,arin,sign,,5,1,1,1.0,1.0,single delegation
+2021-10,arin,sign,,7,1,1,1.0,1.0,single delegation
+2021-10,arin,sign,,8,21,9,0.19,0.1565,diffuse (many blocks)
+2021-10,arin,unsign,10,,13,6,0.615,0.4083,concentrated (one block is most of it)
+2021-10,arin,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2021-10,arin,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2021-10,lacnic,sign,,13,23,6,0.174,0.1682,diffuse (many blocks)
+2021-10,lacnic,sign,,14,4,1,1.0,1.0,one block
+2021-10,lacnic,sign,,8,17,5,0.235,0.2249,diffuse (many blocks)
+2021-10,lacnic,unsign,8,,2,1,1.0,1.0,one block
+2021-10,ripe,sign,,13,2,1,1.0,1.0,one block
+2021-11,afrinic,sign,,13,1,1,1.0,1.0,single delegation
+2021-11,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2021-11,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2021-11,arin,rollover,10,13,1,1,1.0,1.0,single delegation
+2021-11,arin,rollover,10,14,1,1,1.0,1.0,single delegation
+2021-11,arin,rollover,7,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2021-11,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2021-11,arin,sign,,10,9,2,0.889,0.8025,concentrated (one block is most of it)
+2021-11,arin,sign,,13,41,16,0.098,0.0827,diffuse (many blocks)
+2021-11,arin,sign,,8,6,3,0.667,0.5,concentrated (one block is most of it)
+2021-11,arin,unsign,13,,1,1,1.0,1.0,single delegation
+2021-11,arin,unsign,8,,2,1,1.0,1.0,one block
+2021-11,lacnic,sign,,13,24,6,0.167,0.1667,diffuse (many blocks)
+2021-11,lacnic,unsign,14,,2,1,1.0,1.0,one block
+2021-11,lacnic,unsign,8,,2,1,1.0,1.0,one block
+2021-11,ripe,sign,,13,9,3,0.444,0.4074,diffuse (many blocks)
+2021-11,ripe,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2021-11,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2021-12,afrinic,sign,,8,6,2,0.667,0.5556,concentrated (one block is most of it)
+2021-12,apnic,sign,,10,1,1,1.0,1.0,single delegation
+2021-12,apnic,sign,,13,4,1,1.0,1.0,one block
+2021-12,apnic,sign,,5,3,3,0.333,0.3333,diffuse (many blocks)
+2021-12,arin,rollover,7,10,87,6,0.368,0.308,diffuse (many blocks)
+2021-12,arin,sign,,13,39,14,0.103,0.0888,diffuse (many blocks)
+2021-12,arin,sign,,5,4,1,1.0,1.0,one block
+2021-12,arin,sign,,8,15,6,0.267,0.2267,diffuse (many blocks)
+2021-12,arin,unsign,13,,5,3,0.6,0.44,concentrated (one block is most of it)
+2021-12,arin,unsign,14,,4,1,1.0,1.0,one block
+2021-12,arin,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2021-12,lacnic,sign,,13,14,4,0.286,0.2551,diffuse (many blocks)
+2021-12,lacnic,sign,,5,4,1,1.0,1.0,one block
+2021-12,lacnic,sign,,8,12,3,0.333,0.3333,diffuse (many blocks)
+2021-12,lacnic,unsign,13,,3,1,1.0,1.0,one block
+2021-12,lacnic,unsign,14,,2,1,1.0,1.0,one block
+2021-12,lacnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2021-12,ripe,sign,,13,17,5,0.235,0.2249,diffuse (many blocks)
+2022-01,afrinic,rollover,8,"8,13",1,1,1.0,1.0,single delegation
+2022-01,afrinic,sign,,"8,13",18,2,0.778,0.6543,concentrated (one block is most of it)
+2022-01,apnic,sign,,13,14,6,0.286,0.2143,diffuse (many blocks)
+2022-01,arin,rollover,8,"8,13",1,1,1.0,1.0,single delegation
+2022-01,arin,sign,,13,24,9,0.167,0.1458,diffuse (many blocks)
+2022-01,arin,sign,,5,5,1,1.0,1.0,one block
+2022-01,arin,sign,,7,16,4,0.25,0.25,diffuse (many blocks)
+2022-01,arin,sign,,8,5,3,0.6,0.44,concentrated (one block is most of it)
+2022-01,arin,sign,,"8,13",14,1,1.0,1.0,one block
+2022-01,arin,unsign,13,,3,3,0.333,0.3333,diffuse (many blocks)
+2022-01,arin,unsign,8,,5,4,0.4,0.28,diffuse (many blocks)
+2022-01,lacnic,sign,,5,5,1,1.0,1.0,one block
+2022-01,lacnic,sign,,7,16,4,0.25,0.25,diffuse (many blocks)
+2022-01,lacnic,sign,,8,3,1,1.0,1.0,one block
+2022-01,lacnic,unsign,8,,2,1,1.0,1.0,one block
+2022-01,ripe,sign,,13,17,5,0.235,0.2249,diffuse (many blocks)
+2022-02,afrinic,unsign,"8,13",,1,1,1.0,1.0,single delegation
+2022-02,apnic,sign,,13,17,5,0.235,0.2249,diffuse (many blocks)
+2022-02,apnic,sign,,14,6,3,0.667,0.5,concentrated (one block is most of it)
+2022-02,arin,rollover,7,13,12,3,0.333,0.3333,diffuse (many blocks)
+2022-02,arin,sign,,13,53,14,0.302,0.1371,diffuse (many blocks)
+2022-02,arin,sign,,14,5,5,0.2,0.2,diffuse (many blocks)
+2022-02,arin,sign,,8,43,9,0.186,0.1217,diffuse (many blocks)
+2022-02,arin,unsign,13,,3,1,1.0,1.0,one block
+2022-02,arin,unsign,5,,6,3,0.667,0.5,concentrated (one block is most of it)
+2022-02,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2022-02,arin,unsign,8,,5,3,0.6,0.44,concentrated (one block is most of it)
+2022-02,arin,unsign,"8,13",,1,1,1.0,1.0,single delegation
+2022-02,lacnic,rollover,7,13,12,3,0.333,0.3333,diffuse (many blocks)
+2022-02,lacnic,sign,,13,20,5,0.2,0.2,diffuse (many blocks)
+2022-02,lacnic,sign,,8,24,6,0.167,0.1667,diffuse (many blocks)
+2022-02,lacnic,unsign,13,,3,1,1.0,1.0,one block
+2022-02,lacnic,unsign,5,,4,1,1.0,1.0,one block
+2022-02,lacnic,unsign,8,,2,1,1.0,1.0,one block
+2022-02,ripe,sign,,14,1,1,1.0,1.0,single delegation
+2022-03,afrinic,rollover,7,13,3,1,1.0,1.0,one block
+2022-03,afrinic,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2022-03,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2022-03,apnic,rollover,8,13,7,2,0.857,0.7551,concentrated (one block is most of it)
+2022-03,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2022-03,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2022-03,arin,rollover,7,13,3,1,1.0,1.0,one block
+2022-03,arin,rollover,8,13,4,1,1.0,1.0,one block
+2022-03,arin,sign,,13,46,17,0.087,0.0728,diffuse (many blocks)
+2022-03,arin,sign,,14,1,1,1.0,1.0,single delegation
+2022-03,arin,sign,,5,4,1,1.0,1.0,one block
+2022-03,arin,sign,,7,1,1,1.0,1.0,single delegation
+2022-03,arin,sign,,8,7,2,0.571,0.5102,concentrated (one block is most of it)
+2022-03,arin,unsign,13,,4,3,0.5,0.375,concentrated (one block is most of it)
+2022-03,arin,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2022-03,lacnic,rollover,8,13,4,1,1.0,1.0,one block
+2022-03,lacnic,sign,,13,35,9,0.114,0.1118,diffuse (many blocks)
+2022-03,lacnic,sign,,5,4,1,1.0,1.0,one block
+2022-03,lacnic,sign,,8,6,2,0.667,0.5556,concentrated (one block is most of it)
+2022-03,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2022-03,lacnic,unsign,8,,2,1,1.0,1.0,one block
+2022-03,ripe,sign,,13,6,2,0.667,0.5556,concentrated (one block is most of it)
+2022-04,afrinic,sign,,13,4,3,0.5,0.375,concentrated (one block is most of it)
+2022-04,afrinic,unsign,"8,13",,4,1,1.0,1.0,one block
+2022-04,apnic,unsign,13,,2,1,1.0,1.0,one block
+2022-04,arin,rollover,7,"7,8",1,1,1.0,1.0,single delegation
+2022-04,arin,rollover,7,8,5,2,0.6,0.52,concentrated (one block is most of it)
+2022-04,arin,rollover,8,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2022-04,arin,sign,,13,42,15,0.19,0.0986,diffuse (many blocks)
+2022-04,arin,sign,,7,1,1,1.0,1.0,single delegation
+2022-04,arin,sign,,8,5,3,0.4,0.36,diffuse (many blocks)
+2022-04,arin,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2022-04,arin,unsign,14,,5,5,0.2,0.2,diffuse (many blocks)
+2022-04,arin,unsign,5,,5,2,0.8,0.68,concentrated (one block is most of it)
+2022-04,arin,unsign,8,,8,2,0.5,0.5,concentrated (one block is most of it)
+2022-04,lacnic,rollover,8,13,4,1,1.0,1.0,one block
+2022-04,lacnic,sign,,13,30,7,0.267,0.1644,diffuse (many blocks)
+2022-04,lacnic,sign,,8,4,2,0.5,0.5,concentrated (one block is most of it)
+2022-04,lacnic,unsign,5,,4,1,1.0,1.0,one block
+2022-04,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2022-04,lacnic,unsign,8,,8,2,0.5,0.5,concentrated (one block is most of it)
+2022-05,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2022-05,arin,rollover,10,"8,10",3,3,0.333,0.3333,diffuse (many blocks)
+2022-05,arin,rollover,8,13,10,5,0.4,0.28,diffuse (many blocks)
+2022-05,arin,rollover,8,"8,13",1,1,1.0,1.0,single delegation
+2022-05,arin,sign,,13,70,33,0.057,0.0416,diffuse (many blocks)
+2022-05,arin,sign,,5,1,1,1.0,1.0,single delegation
+2022-05,arin,sign,,7,1,1,1.0,1.0,single delegation
+2022-05,arin,sign,,8,87,9,0.368,0.2858,diffuse (many blocks)
+2022-05,arin,unsign,13,,16,4,0.25,0.25,diffuse (many blocks)
+2022-05,arin,unsign,7,,5,1,1.0,1.0,one block
+2022-05,arin,unsign,8,,15,5,0.533,0.3689,concentrated (one block is most of it)
+2022-05,lacnic,sign,,13,40,13,0.1,0.09,diffuse (many blocks)
+2022-05,lacnic,sign,,7,3,2,0.667,0.5556,concentrated (one block is most of it)
+2022-05,lacnic,sign,,8,4,1,1.0,1.0,one block
+2022-05,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2022-05,lacnic,unsign,8,,4,1,1.0,1.0,one block
+2022-05,ripe,rollover,8,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2022-05,ripe,unsign,13,,4,1,1.0,1.0,one block
+2022-06,afrinic,sign,,13,7,2,0.571,0.5102,concentrated (one block is most of it)
+2022-06,afrinic,unsign,13,,4,3,0.5,0.375,concentrated (one block is most of it)
+2022-06,apnic,sign,,13,2,1,1.0,1.0,one block
+2022-06,apnic,sign,,7,1,1,1.0,1.0,single delegation
+2022-06,arin,rollover,10,"8,10",1,1,1.0,1.0,single delegation
+2022-06,arin,sign,,13,77,24,0.104,0.0626,diffuse (many blocks)
+2022-06,arin,sign,,7,34,6,0.471,0.3062,diffuse (many blocks)
+2022-06,arin,sign,,8,8,2,0.5,0.5,concentrated (one block is most of it)
+2022-06,arin,unsign,7,,2,2,0.5,0.5,concentrated (one block is most of it)
+2022-06,arin,unsign,8,,4,1,1.0,1.0,one block
+2022-06,lacnic,sign,,13,34,8,0.235,0.1644,diffuse (many blocks)
+2022-06,lacnic,sign,,8,8,2,0.5,0.5,concentrated (one block is most of it)
+2022-06,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2022-06,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2022-06,lacnic,unsign,8,,4,1,1.0,1.0,one block
+2022-06,ripe,sign,,13,5,1,1.0,1.0,one block
+2022-07,afrinic,unsign,13,,7,2,0.571,0.5102,concentrated (one block is most of it)
+2022-07,apnic,sign,,13,4,2,0.5,0.5,concentrated (one block is most of it)
+2022-07,arin,sign,,13,35,10,0.229,0.1331,diffuse (many blocks)
+2022-07,arin,sign,,7,1,1,1.0,1.0,single delegation
+2022-07,arin,sign,,8,8,3,0.5,0.4062,concentrated (one block is most of it)
+2022-07,arin,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2022-07,arin,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2022-07,lacnic,sign,,13,31,7,0.258,0.1592,diffuse (many blocks)
+2022-07,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2022-07,lacnic,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2022-07,lacnic,unsign,13,,9,3,0.444,0.4074,diffuse (many blocks)
+2022-07,lacnic,unsign,8,,4,1,1.0,1.0,one block
+2022-07,ripe,sign,,8,3,1,1.0,1.0,one block
+2022-08,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2022-08,apnic,unsign,13,,4,1,1.0,1.0,one block
+2022-08,arin,rollover,10,"7,10",1,1,1.0,1.0,single delegation
+2022-08,arin,rollover,"7,8","8,13",1,1,1.0,1.0,single delegation
+2022-08,arin,sign,,13,20,10,0.2,0.13,diffuse (many blocks)
+2022-08,arin,sign,,7,4,2,0.75,0.625,concentrated (one block is most of it)
+2022-08,arin,sign,,8,25,9,0.32,0.1872,diffuse (many blocks)
+2022-08,arin,unsign,13,,18,6,0.222,0.2037,diffuse (many blocks)
+2022-08,arin,unsign,8,,19,4,0.842,0.7175,concentrated (one block is most of it)
+2022-08,lacnic,sign,,13,11,4,0.364,0.3058,diffuse (many blocks)
+2022-08,lacnic,sign,,7,3,1,1.0,1.0,one block
+2022-08,lacnic,sign,,8,15,4,0.267,0.2533,diffuse (many blocks)
+2022-08,lacnic,unsign,8,,1,1,1.0,1.0,single delegation
+2022-08,ripe,sign,,13,6,3,0.667,0.5,concentrated (one block is most of it)
+2022-08,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2022-08,ripe,unsign,13,,20,5,0.2,0.2,diffuse (many blocks)
+2022-09,afrinic,sign,,13,3,1,1.0,1.0,one block
+2022-09,apnic,sign,,13,5,3,0.6,0.44,concentrated (one block is most of it)
+2022-09,arin,rollover,8,15,1,1,1.0,1.0,single delegation
+2022-09,arin,sign,,13,48,14,0.312,0.1441,diffuse (many blocks)
+2022-09,arin,sign,,14,1,1,1.0,1.0,single delegation
+2022-09,arin,sign,,8,4,3,0.5,0.375,concentrated (one block is most of it)
+2022-09,arin,unsign,13,,7,3,0.571,0.4286,concentrated (one block is most of it)
+2022-09,arin,unsign,7,,3,1,1.0,1.0,one block
+2022-09,arin,unsign,8,,9,3,0.444,0.4074,diffuse (many blocks)
+2022-09,lacnic,rollover,13,8,4,1,1.0,1.0,one block
+2022-09,lacnic,sign,,13,18,5,0.222,0.2099,diffuse (many blocks)
+2022-09,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2022-09,lacnic,unsign,8,,9,3,0.444,0.4074,diffuse (many blocks)
+2022-09,ripe,rollover,8,15,1,1,1.0,1.0,single delegation
+2022-09,ripe,sign,,13,9,4,0.444,0.3333,diffuse (many blocks)
+2022-10,afrinic,rollover,13,7,2,1,1.0,1.0,one block
+2022-10,afrinic,sign,,13,4,2,0.5,0.5,concentrated (one block is most of it)
+2022-10,apnic,unsign,5,,3,3,0.333,0.3333,diffuse (many blocks)
+2022-10,arin,rollover,5,13,1,1,1.0,1.0,single delegation
+2022-10,arin,rollover,5,"5,13",1,1,1.0,1.0,single delegation
+2022-10,arin,sign,,13,27,9,0.148,0.1358,diffuse (many blocks)
+2022-10,arin,sign,,5,4,1,1.0,1.0,one block
+2022-10,arin,sign,,7,3,1,1.0,1.0,one block
+2022-10,arin,sign,,8,12,3,0.333,0.3333,diffuse (many blocks)
+2022-10,arin,unsign,13,,6,3,0.667,0.5,concentrated (one block is most of it)
+2022-10,arin,unsign,5,,2,1,1.0,1.0,one block
+2022-10,arin,unsign,7,,80,3,0.75,0.595,concentrated (one block is most of it)
+2022-10,arin,unsign,8,,2,1,1.0,1.0,one block
+2022-10,lacnic,sign,,13,24,6,0.167,0.1667,diffuse (many blocks)
+2022-10,lacnic,sign,,5,4,1,1.0,1.0,one block
+2022-10,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2022-10,lacnic,sign,,8,8,2,0.5,0.5,concentrated (one block is most of it)
+2022-10,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2022-10,lacnic,unsign,5,,2,1,1.0,1.0,one block
+2022-10,lacnic,unsign,8,,5,2,0.6,0.52,concentrated (one block is most of it)
+2022-11,afrinic,sign,,13,21,3,0.762,0.619,concentrated (one block is most of it)
+2022-11,afrinic,sign,,8,4,3,0.5,0.375,concentrated (one block is most of it)
+2022-11,apnic,sign,,13,4,1,1.0,1.0,one block
+2022-11,arin,rollover,7,13,1,1,1.0,1.0,single delegation
+2022-11,arin,sign,,13,30,10,0.267,0.1511,diffuse (many blocks)
+2022-11,arin,sign,,"13,14",1,1,1.0,1.0,single delegation
+2022-11,arin,sign,,14,55,6,0.364,0.2417,diffuse (many blocks)
+2022-11,arin,sign,,5,1,1,1.0,1.0,single delegation
+2022-11,arin,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2022-11,arin,unsign,13,,55,22,0.073,0.0585,diffuse (many blocks)
+2022-11,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2022-11,arin,unsign,8,,14,6,0.286,0.2041,diffuse (many blocks)
+2022-11,lacnic,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2022-11,lacnic,sign,,8,4,2,0.75,0.625,concentrated (one block is most of it)
+2022-11,lacnic,unsign,13,,22,7,0.182,0.1612,diffuse (many blocks)
+2022-11,lacnic,unsign,8,,10,4,0.4,0.3,diffuse (many blocks)
+2022-11,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2022-11,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2022-12,afrinic,rollover,7,13,3,1,1.0,1.0,one block
+2022-12,afrinic,sign,,13,1,1,1.0,1.0,single delegation
+2022-12,apnic,sign,,13,5,3,0.6,0.44,concentrated (one block is most of it)
+2022-12,arin,rollover,10,"10,13",83,4,0.386,0.3244,diffuse (many blocks)
+2022-12,arin,rollover,7,13,2,1,1.0,1.0,one block
+2022-12,arin,rollover,"8,10","10,13",4,4,0.25,0.25,diffuse (many blocks)
+2022-12,arin,sign,,13,74,34,0.081,0.0424,diffuse (many blocks)
+2022-12,arin,sign,,14,32,3,0.5,0.4707,concentrated (one block is most of it)
+2022-12,arin,sign,,16,1,1,1.0,1.0,single delegation
+2022-12,arin,sign,,5,2,1,1.0,1.0,one block
+2022-12,arin,sign,,8,26,11,0.154,0.1213,diffuse (many blocks)
+2022-12,arin,unsign,13,,19,8,0.211,0.169,diffuse (many blocks)
+2022-12,arin,unsign,5,,2,2,0.5,0.5,concentrated (one block is most of it)
+2022-12,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2022-12,arin,unsign,8,,11,5,0.364,0.2562,diffuse (many blocks)
+2022-12,lacnic,sign,,13,24,7,0.167,0.1562,diffuse (many blocks)
+2022-12,lacnic,sign,,5,2,1,1.0,1.0,one block
+2022-12,lacnic,sign,,8,21,6,0.19,0.1746,diffuse (many blocks)
+2022-12,lacnic,unsign,13,,19,5,0.211,0.2022,diffuse (many blocks)
+2022-12,lacnic,unsign,5,,1,1,1.0,1.0,single delegation
+2022-12,lacnic,unsign,8,,11,4,0.364,0.3058,diffuse (many blocks)
+2022-12,ripe,sign,,13,2,1,1.0,1.0,one block
+2023-01,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2023-01,apnic,sign,,13,5,4,0.4,0.28,diffuse (many blocks)
+2023-01,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2023-01,arin,sign,,13,41,14,0.463,0.2493,diffuse (many blocks)
+2023-01,arin,sign,,15,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-01,arin,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-01,arin,unsign,13,,11,4,0.364,0.3058,diffuse (many blocks)
+2023-01,arin,unsign,5,,3,1,1.0,1.0,one block
+2023-01,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2023-01,arin,unsign,8,,4,3,0.5,0.375,concentrated (one block is most of it)
+2023-01,lacnic,sign,,13,13,4,0.308,0.2899,diffuse (many blocks)
+2023-01,lacnic,sign,,8,2,1,1.0,1.0,one block
+2023-01,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2023-01,lacnic,unsign,5,,3,1,1.0,1.0,one block
+2023-01,lacnic,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2023-01,ripe,sign,,13,22,4,0.864,0.7521,concentrated (one block is most of it)
+2023-01,ripe,unsign,13,,4,1,1.0,1.0,one block
+2023-02,apnic,sign,,13,18,3,0.444,0.4074,diffuse (many blocks)
+2023-02,arin,rollover,10,14,1,1,1.0,1.0,single delegation
+2023-02,arin,sign,,13,95,23,0.147,0.0659,diffuse (many blocks)
+2023-02,arin,sign,,7,1,1,1.0,1.0,single delegation
+2023-02,arin,sign,,8,19,12,0.211,0.1247,diffuse (many blocks)
+2023-02,arin,unsign,13,,10,4,0.4,0.34,diffuse (many blocks)
+2023-02,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2023-02,arin,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-02,lacnic,sign,,13,51,13,0.157,0.0873,diffuse (many blocks)
+2023-02,lacnic,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2023-02,lacnic,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2023-02,lacnic,unsign,5,,1,1,1.0,1.0,single delegation
+2023-02,lacnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-02,ripe,rollover,10,14,1,1,1.0,1.0,single delegation
+2023-02,ripe,sign,,13,14,1,1.0,1.0,one block
+2023-02,ripe,unsign,13,,4,1,1.0,1.0,one block
+2023-03,afrinic,sign,,13,4,3,0.5,0.375,concentrated (one block is most of it)
+2023-03,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2023-03,apnic,sign,,13,17,2,0.941,0.8893,concentrated (one block is most of it)
+2023-03,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2023-03,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2023-03,arin,rollover,8,13,4,1,1.0,1.0,one block
+2023-03,arin,sign,,13,37,15,0.108,0.0898,diffuse (many blocks)
+2023-03,arin,sign,,5,1,1,1.0,1.0,single delegation
+2023-03,arin,sign,,8,9,7,0.222,0.1605,diffuse (many blocks)
+2023-03,arin,unsign,13,,10,6,0.4,0.24,diffuse (many blocks)
+2023-03,arin,unsign,14,,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-03,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2023-03,arin,unsign,8,,1,1,1.0,1.0,single delegation
+2023-03,lacnic,rollover,8,13,4,1,1.0,1.0,one block
+2023-03,lacnic,sign,,13,13,4,0.308,0.2899,diffuse (many blocks)
+2023-03,lacnic,sign,,5,1,1,1.0,1.0,single delegation
+2023-03,lacnic,sign,,8,2,1,1.0,1.0,one block
+2023-03,lacnic,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2023-03,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2023-03,lacnic,unsign,8,,2,1,1.0,1.0,one block
+2023-03,ripe,sign,,13,24,3,0.667,0.5,concentrated (one block is most of it)
+2023-03,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2023-04,afrinic,unsign,13,,1,1,1.0,1.0,single delegation
+2023-04,apnic,sign,,13,3,3,0.333,0.3333,diffuse (many blocks)
+2023-04,apnic,unsign,13,,2,1,1.0,1.0,one block
+2023-04,apnic,unsign,5,,1,1,1.0,1.0,single delegation
+2023-04,arin,rollover,13,10,1,1,1.0,1.0,single delegation
+2023-04,arin,rollover,5,"5,8",7,3,0.429,0.3469,diffuse (many blocks)
+2023-04,arin,rollover,5,8,1,1,1.0,1.0,single delegation
+2023-04,arin,rollover,8,13,21,12,0.19,0.1202,diffuse (many blocks)
+2023-04,arin,rollover,8,"8,13",7,2,0.714,0.5918,concentrated (one block is most of it)
+2023-04,arin,sign,,13,42,17,0.095,0.0794,diffuse (many blocks)
+2023-04,arin,sign,,7,1,1,1.0,1.0,single delegation
+2023-04,arin,sign,,"7,14",1,1,1.0,1.0,single delegation
+2023-04,arin,sign,,8,9,3,0.444,0.4074,diffuse (many blocks)
+2023-04,arin,unsign,13,,8,3,0.75,0.5938,concentrated (one block is most of it)
+2023-04,arin,unsign,8,,10,5,0.4,0.26,diffuse (many blocks)
+2023-04,lacnic,sign,,13,34,10,0.118,0.1125,diffuse (many blocks)
+2023-04,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2023-04,lacnic,sign,,8,10,3,0.4,0.36,diffuse (many blocks)
+2023-04,lacnic,unsign,8,,7,4,0.429,0.3061,diffuse (many blocks)
+2023-04,ripe,rollover,13,10,1,1,1.0,1.0,single delegation
+2023-04,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2023-04,ripe,unsign,5,,1,1,1.0,1.0,single delegation
+2023-05,afrinic,sign,,13,4,3,0.5,0.375,concentrated (one block is most of it)
+2023-05,arin,rollover,10,13,1,1,1.0,1.0,single delegation
+2023-05,arin,rollover,8,13,30,6,0.533,0.3467,concentrated (one block is most of it)
+2023-05,arin,rollover,8,"8,13",7,4,0.429,0.3061,diffuse (many blocks)
+2023-05,arin,rollover,"8,13",13,7,2,0.714,0.5918,concentrated (one block is most of it)
+2023-05,arin,sign,,13,56,18,0.286,0.1224,diffuse (many blocks)
+2023-05,arin,sign,,14,3,1,1.0,1.0,one block
+2023-05,arin,sign,,7,1,1,1.0,1.0,single delegation
+2023-05,arin,sign,,8,9,5,0.444,0.284,diffuse (many blocks)
+2023-05,arin,unsign,13,,5,3,0.4,0.36,diffuse (many blocks)
+2023-05,arin,unsign,14,,11,1,1.0,1.0,one block
+2023-05,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2023-05,arin,unsign,"7,14",,1,1,1.0,1.0,single delegation
+2023-05,arin,unsign,8,,43,8,0.744,0.5673,concentrated (one block is most of it)
+2023-05,lacnic,sign,,13,32,9,0.125,0.1172,diffuse (many blocks)
+2023-05,lacnic,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2023-05,lacnic,unsign,13,,2,1,1.0,1.0,one block
+2023-05,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2023-05,lacnic,unsign,8,,4,3,0.5,0.375,concentrated (one block is most of it)
+2023-05,ripe,rollover,10,13,1,1,1.0,1.0,single delegation
+2023-05,ripe,rollover,8,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-05,ripe,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-06,afrinic,unsign,13,,4,1,1.0,1.0,one block
+2023-06,apnic,sign,,13,4,1,1.0,1.0,one block
+2023-06,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2023-06,arin,rollover,13,14,4,1,1.0,1.0,one block
+2023-06,arin,rollover,5,"5,13",1,1,1.0,1.0,single delegation
+2023-06,arin,rollover,8,13,3,3,0.333,0.3333,diffuse (many blocks)
+2023-06,arin,rollover,"8,13",13,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-06,arin,sign,,13,96,27,0.167,0.0853,diffuse (many blocks)
+2023-06,arin,sign,,7,3,3,0.333,0.3333,diffuse (many blocks)
+2023-06,arin,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2023-06,arin,unsign,13,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2023-06,arin,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2023-06,lacnic,sign,,13,17,5,0.235,0.2249,diffuse (many blocks)
+2023-06,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2023-06,lacnic,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2023-06,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2023-06,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2023-06,lacnic,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-06,ripe,rollover,13,14,4,1,1.0,1.0,one block
+2023-06,ripe,sign,,13,4,1,1.0,1.0,one block
+2023-07,afrinic,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-07,afrinic,sign,,8,4,1,1.0,1.0,one block
+2023-07,apnic,sign,,13,13,6,0.615,0.4083,concentrated (one block is most of it)
+2023-07,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2023-07,arin,sign,,13,33,15,0.121,0.0909,diffuse (many blocks)
+2023-07,arin,sign,,14,5,2,0.8,0.68,concentrated (one block is most of it)
+2023-07,arin,sign,,8,1,1,1.0,1.0,single delegation
+2023-07,arin,unsign,13,,4,4,0.25,0.25,diffuse (many blocks)
+2023-07,arin,unsign,7,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-07,arin,unsign,8,,4,3,0.5,0.375,concentrated (one block is most of it)
+2023-07,lacnic,sign,,13,10,4,0.4,0.34,diffuse (many blocks)
+2023-07,lacnic,sign,,14,4,1,1.0,1.0,one block
+2023-07,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2023-07,lacnic,sign,,8,1,1,1.0,1.0,single delegation
+2023-07,lacnic,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-07,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2023-07,lacnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-07,ripe,sign,,14,1,1,1.0,1.0,single delegation
+2023-08,apnic,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2023-08,apnic,unsign,13,,3,1,1.0,1.0,one block
+2023-08,arin,rollover,13,8,3,3,0.333,0.3333,diffuse (many blocks)
+2023-08,arin,rollover,5,"5,13",1,1,1.0,1.0,single delegation
+2023-08,arin,sign,,13,45,26,0.089,0.0568,diffuse (many blocks)
+2023-08,arin,sign,,7,7,3,0.571,0.4286,concentrated (one block is most of it)
+2023-08,arin,sign,,8,14,7,0.286,0.2041,diffuse (many blocks)
+2023-08,arin,unsign,13,,9,3,0.444,0.4074,diffuse (many blocks)
+2023-08,arin,unsign,8,,17,5,0.235,0.2111,diffuse (many blocks)
+2023-08,lacnic,sign,,13,13,4,0.308,0.2899,diffuse (many blocks)
+2023-08,lacnic,sign,,7,5,2,0.8,0.68,concentrated (one block is most of it)
+2023-08,lacnic,sign,,8,9,3,0.444,0.358,diffuse (many blocks)
+2023-08,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2023-08,lacnic,unsign,8,,11,3,0.364,0.3388,diffuse (many blocks)
+2023-08,ripe,sign,,13,6,3,0.667,0.5,concentrated (one block is most of it)
+2023-09,afrinic,sign,,"7,13",1,1,1.0,1.0,single delegation
+2023-09,afrinic,sign,,8,17,4,0.471,0.3979,diffuse (many blocks)
+2023-09,apnic,sign,,13,4,1,1.0,1.0,one block
+2023-09,apnic,sign,,8,1,1,1.0,1.0,single delegation
+2023-09,apnic,unsign,13,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-09,arin,rollover,5,8,1,1,1.0,1.0,single delegation
+2023-09,arin,sign,,13,26,16,0.154,0.0947,diffuse (many blocks)
+2023-09,arin,sign,,14,1,1,1.0,1.0,single delegation
+2023-09,arin,sign,,5,4,1,1.0,1.0,one block
+2023-09,arin,sign,,8,31,12,0.129,0.103,diffuse (many blocks)
+2023-09,arin,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-09,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2023-09,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2023-09,arin,unsign,8,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2023-09,lacnic,sign,,13,4,3,0.5,0.375,concentrated (one block is most of it)
+2023-09,lacnic,sign,,5,4,1,1.0,1.0,one block
+2023-09,lacnic,sign,,8,21,8,0.19,0.161,diffuse (many blocks)
+2023-09,lacnic,unsign,13,,1,1,1.0,1.0,single delegation
+2023-09,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2023-09,lacnic,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2023-10,afrinic,sign,,8,11,4,0.727,0.5537,concentrated (one block is most of it)
+2023-10,apnic,rollover,5,8,4,2,0.75,0.625,concentrated (one block is most of it)
+2023-10,apnic,sign,,13,1,1,1.0,1.0,single delegation
+2023-10,arin,rollover,"5,13",13,1,1,1.0,1.0,single delegation
+2023-10,arin,rollover,8,13,3,3,0.333,0.3333,diffuse (many blocks)
+2023-10,arin,sign,,13,90,33,0.178,0.0612,diffuse (many blocks)
+2023-10,arin,sign,,7,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-10,arin,sign,,8,27,11,0.296,0.1742,diffuse (many blocks)
+2023-10,arin,unsign,10,,9,2,0.889,0.8025,concentrated (one block is most of it)
+2023-10,arin,unsign,13,,6,5,0.333,0.2222,diffuse (many blocks)
+2023-10,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2023-10,arin,unsign,8,,12,5,0.333,0.2639,diffuse (many blocks)
+2023-10,lacnic,sign,,13,41,11,0.146,0.1005,diffuse (many blocks)
+2023-10,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2023-10,lacnic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-10,lacnic,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-10,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2023-10,lacnic,unsign,8,,11,5,0.364,0.2893,diffuse (many blocks)
+2023-10,ripe,unsign,13,,2,1,1.0,1.0,one block
+2023-11,afrinic,sign,,13,17,4,0.471,0.3356,diffuse (many blocks)
+2023-11,apnic,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2023-11,apnic,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-11,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2023-11,arin,sign,,13,36,20,0.111,0.0664,diffuse (many blocks)
+2023-11,arin,sign,,5,7,2,0.571,0.5102,concentrated (one block is most of it)
+2023-11,arin,sign,,7,1,1,1.0,1.0,single delegation
+2023-11,arin,sign,,8,7,4,0.571,0.3878,concentrated (one block is most of it)
+2023-11,arin,unsign,13,,4,3,0.5,0.375,concentrated (one block is most of it)
+2023-11,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2023-11,arin,unsign,8,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2023-11,lacnic,sign,,13,10,5,0.4,0.26,diffuse (many blocks)
+2023-11,lacnic,sign,,5,7,2,0.571,0.5102,concentrated (one block is most of it)
+2023-11,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2023-11,lacnic,sign,,8,7,4,0.571,0.3878,concentrated (one block is most of it)
+2023-11,lacnic,unsign,13,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2023-11,lacnic,unsign,8,,6,3,0.667,0.5,concentrated (one block is most of it)
+2023-11,ripe,rollover,8,13,1,1,1.0,1.0,single delegation
+2023-11,ripe,sign,,13,17,7,0.235,0.1903,diffuse (many blocks)
+2023-12,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2023-12,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2023-12,apnic,sign,,13,6,3,0.667,0.5,concentrated (one block is most of it)
+2023-12,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2023-12,arin,rollover,"10,13",13,87,6,0.368,0.308,diffuse (many blocks)
+2023-12,arin,rollover,8,13,6,3,0.667,0.5,concentrated (one block is most of it)
+2023-12,arin,sign,,13,54,21,0.296,0.1235,diffuse (many blocks)
+2023-12,arin,sign,,8,21,10,0.381,0.2063,diffuse (many blocks)
+2023-12,arin,unsign,13,,25,8,0.16,0.1392,diffuse (many blocks)
+2023-12,arin,unsign,7,,3,3,0.333,0.3333,diffuse (many blocks)
+2023-12,arin,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2023-12,lacnic,rollover,8,13,4,1,1.0,1.0,one block
+2023-12,lacnic,sign,,13,17,5,0.235,0.2249,diffuse (many blocks)
+2023-12,lacnic,sign,,8,13,3,0.615,0.4793,concentrated (one block is most of it)
+2023-12,lacnic,unsign,13,,21,6,0.19,0.1837,diffuse (many blocks)
+2023-12,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2023-12,lacnic,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2023-12,ripe,sign,,13,4,1,1.0,1.0,one block
+2023-12,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2024-01,afrinic,sign,,13,1,1,1.0,1.0,single delegation
+2024-01,arin,rollover,8,13,2,1,1.0,1.0,one block
+2024-01,arin,sign,,13,54,25,0.148,0.0638,diffuse (many blocks)
+2024-01,arin,sign,,14,1,1,1.0,1.0,single delegation
+2024-01,arin,sign,,7,3,3,0.333,0.3333,diffuse (many blocks)
+2024-01,arin,sign,,8,9,6,0.444,0.2593,diffuse (many blocks)
+2024-01,arin,unsign,13,,8,2,0.5,0.5,concentrated (one block is most of it)
+2024-01,arin,unsign,5,,8,2,0.875,0.7812,concentrated (one block is most of it)
+2024-01,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2024-01,arin,unsign,8,,5,4,0.4,0.28,diffuse (many blocks)
+2024-01,lacnic,sign,,13,22,8,0.182,0.1529,diffuse (many blocks)
+2024-01,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2024-01,lacnic,sign,,8,7,4,0.571,0.3878,concentrated (one block is most of it)
+2024-01,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2024-01,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2024-01,lacnic,unsign,8,,6,3,0.333,0.3333,diffuse (many blocks)
+2024-02,afrinic,unsign,13,,13,3,0.615,0.4793,concentrated (one block is most of it)
+2024-02,apnic,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2024-02,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2024-02,apnic,unsign,8,,1,1,1.0,1.0,single delegation
+2024-02,arin,rollover,5,13,5,3,0.4,0.36,diffuse (many blocks)
+2024-02,arin,sign,,13,58,32,0.069,0.0452,diffuse (many blocks)
+2024-02,arin,sign,,7,1,1,1.0,1.0,single delegation
+2024-02,arin,sign,,8,20,10,0.2,0.135,diffuse (many blocks)
+2024-02,arin,unsign,13,,16,9,0.25,0.1641,diffuse (many blocks)
+2024-02,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2024-02,arin,unsign,8,,25,8,0.32,0.1936,diffuse (many blocks)
+2024-02,lacnic,sign,,13,25,8,0.16,0.1424,diffuse (many blocks)
+2024-02,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2024-02,lacnic,sign,,8,15,7,0.267,0.1733,diffuse (many blocks)
+2024-02,lacnic,unsign,13,,12,5,0.333,0.2639,diffuse (many blocks)
+2024-02,lacnic,unsign,5,,1,1,1.0,1.0,single delegation
+2024-02,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2024-02,lacnic,unsign,8,,11,4,0.455,0.3223,diffuse (many blocks)
+2024-02,ripe,rollover,5,13,1,1,1.0,1.0,single delegation
+2024-02,ripe,sign,,13,3,3,0.333,0.3333,diffuse (many blocks)
+2024-02,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2024-03,afrinic,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2024-03,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2024-03,apnic,sign,,13,4,4,0.25,0.25,diffuse (many blocks)
+2024-03,apnic,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2024-03,arin,rollover,7,"7,13",1,1,1.0,1.0,single delegation
+2024-03,arin,sign,,13,56,27,0.071,0.0536,diffuse (many blocks)
+2024-03,arin,sign,,14,8,2,0.5,0.5,concentrated (one block is most of it)
+2024-03,arin,sign,,8,7,7,0.143,0.1429,diffuse (many blocks)
+2024-03,arin,unsign,13,,47,15,0.085,0.0765,diffuse (many blocks)
+2024-03,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2024-03,arin,unsign,8,,9,3,0.444,0.358,diffuse (many blocks)
+2024-03,lacnic,sign,,13,24,6,0.167,0.1667,diffuse (many blocks)
+2024-03,lacnic,sign,,14,8,2,0.5,0.5,concentrated (one block is most of it)
+2024-03,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2024-03,lacnic,sign,,8,7,5,0.286,0.2245,diffuse (many blocks)
+2024-03,lacnic,unsign,13,,42,11,0.095,0.0918,diffuse (many blocks)
+2024-03,lacnic,unsign,5,,2,1,1.0,1.0,one block
+2024-03,lacnic,unsign,8,,8,5,0.5,0.3125,concentrated (one block is most of it)
+2024-03,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2024-03,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2024-04,afrinic,sign,,8,4,1,1.0,1.0,one block
+2024-04,apnic,rollover,7,15,4,2,0.75,0.625,concentrated (one block is most of it)
+2024-04,apnic,sign,,13,7,5,0.286,0.2245,diffuse (many blocks)
+2024-04,apnic,sign,,15,1,1,1.0,1.0,single delegation
+2024-04,arin,rollover,7,13,4,1,1.0,1.0,one block
+2024-04,arin,rollover,"7,13","7,8,13",1,1,1.0,1.0,single delegation
+2024-04,arin,sign,,13,51,24,0.078,0.0611,diffuse (many blocks)
+2024-04,arin,sign,,5,2,2,0.5,0.5,concentrated (one block is most of it)
+2024-04,arin,sign,,8,21,8,0.238,0.1655,diffuse (many blocks)
+2024-04,arin,unsign,13,,12,6,0.333,0.25,diffuse (many blocks)
+2024-04,arin,unsign,8,,19,9,0.211,0.1579,diffuse (many blocks)
+2024-04,lacnic,rollover,7,13,4,1,1.0,1.0,one block
+2024-04,lacnic,sign,,13,16,4,0.25,0.25,diffuse (many blocks)
+2024-04,lacnic,sign,,5,3,2,0.667,0.5556,concentrated (one block is most of it)
+2024-04,lacnic,sign,,8,18,7,0.333,0.2222,diffuse (many blocks)
+2024-04,lacnic,unsign,13,,12,3,0.333,0.3333,diffuse (many blocks)
+2024-04,lacnic,unsign,8,,16,7,0.25,0.1875,diffuse (many blocks)
+2024-04,ripe,sign,,13,6,3,0.667,0.5,concentrated (one block is most of it)
+2024-05,afrinic,sign,,13,1,1,1.0,1.0,single delegation
+2024-05,apnic,rollover,7,14,4,1,1.0,1.0,one block
+2024-05,apnic,sign,,13,11,5,0.364,0.2893,diffuse (many blocks)
+2024-05,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2024-05,arin,sign,,13,56,27,0.214,0.0874,diffuse (many blocks)
+2024-05,arin,sign,,8,7,3,0.571,0.4286,concentrated (one block is most of it)
+2024-05,arin,unsign,13,,20,10,0.2,0.14,diffuse (many blocks)
+2024-05,arin,unsign,7,,2,1,1.0,1.0,one block
+2024-05,arin,unsign,8,,6,3,0.667,0.5,concentrated (one block is most of it)
+2024-05,lacnic,sign,,13,4,1,1.0,1.0,one block
+2024-05,lacnic,sign,,8,7,3,0.429,0.3878,diffuse (many blocks)
+2024-05,lacnic,unsign,13,,13,4,0.308,0.2899,diffuse (many blocks)
+2024-05,lacnic,unsign,7,,2,1,1.0,1.0,one block
+2024-05,lacnic,unsign,8,,8,4,0.5,0.3438,concentrated (one block is most of it)
+2024-05,ripe,rollover,7,14,4,1,1.0,1.0,one block
+2024-05,ripe,rollover,8,13,1,1,1.0,1.0,single delegation
+2024-05,ripe,sign,,13,10,4,0.7,0.52,concentrated (one block is most of it)
+2024-05,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2024-06,afrinic,sign,,13,6,4,0.333,0.2778,diffuse (many blocks)
+2024-06,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2024-06,apnic,sign,,13,4,1,1.0,1.0,one block
+2024-06,arin,rollover,8,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2024-06,arin,sign,,13,53,33,0.075,0.0445,diffuse (many blocks)
+2024-06,arin,sign,,5,32,1,1.0,1.0,one block
+2024-06,arin,sign,,8,13,6,0.308,0.2308,diffuse (many blocks)
+2024-06,arin,unsign,13,,13,6,0.308,0.2308,diffuse (many blocks)
+2024-06,arin,unsign,7,,2,1,1.0,1.0,one block
+2024-06,arin,unsign,8,,13,5,0.308,0.2426,diffuse (many blocks)
+2024-06,lacnic,sign,,13,23,7,0.217,0.172,diffuse (many blocks)
+2024-06,lacnic,sign,,8,13,4,0.308,0.2663,diffuse (many blocks)
+2024-06,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2024-06,lacnic,unsign,7,,2,1,1.0,1.0,one block
+2024-06,lacnic,unsign,8,,10,4,0.4,0.3,diffuse (many blocks)
+2024-06,ripe,rollover,8,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2024-06,ripe,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2024-07,afrinic,rollover,8,13,4,4,0.25,0.25,diffuse (many blocks)
+2024-07,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2024-07,apnic,sign,,13,4,3,0.5,0.375,concentrated (one block is most of it)
+2024-07,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2024-07,arin,rollover,5,8,31,1,1.0,1.0,one block
+2024-07,arin,rollover,7,10,1,1,1.0,1.0,single delegation
+2024-07,arin,rollover,8,13,58,8,0.552,0.3876,concentrated (one block is most of it)
+2024-07,arin,sign,,13,59,31,0.068,0.0485,diffuse (many blocks)
+2024-07,arin,sign,,8,48,14,0.083,0.079,diffuse (many blocks)
+2024-07,arin,unsign,13,,11,5,0.364,0.2893,diffuse (many blocks)
+2024-07,arin,unsign,5,,8,1,1.0,1.0,one block
+2024-07,arin,unsign,8,,16,8,0.25,0.1797,diffuse (many blocks)
+2024-07,lacnic,rollover,8,13,4,1,1.0,1.0,one block
+2024-07,lacnic,sign,,13,29,8,0.138,0.1344,diffuse (many blocks)
+2024-07,lacnic,sign,,8,43,13,0.093,0.0882,diffuse (many blocks)
+2024-07,lacnic,unsign,13,,10,4,0.4,0.34,diffuse (many blocks)
+2024-07,lacnic,unsign,8,,15,6,0.267,0.2267,diffuse (many blocks)
+2024-07,ripe,rollover,7,10,1,1,1.0,1.0,single delegation
+2024-07,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2024-07,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2024-08,apnic,rollover,8,13,1,1,1.0,1.0,single delegation
+2024-08,apnic,unsign,13,,1,1,1.0,1.0,single delegation
+2024-08,arin,rollover,7,13,1,1,1.0,1.0,single delegation
+2024-08,arin,rollover,8,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2024-08,arin,sign,,10,8,1,1.0,1.0,one block
+2024-08,arin,sign,,13,68,16,0.471,0.2526,diffuse (many blocks)
+2024-08,arin,sign,,7,1,1,1.0,1.0,single delegation
+2024-08,arin,sign,,8,14,11,0.214,0.1122,diffuse (many blocks)
+2024-08,arin,unsign,13,,11,4,0.364,0.3058,diffuse (many blocks)
+2024-08,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2024-08,arin,unsign,8,,9,4,0.444,0.3086,diffuse (many blocks)
+2024-08,lacnic,rollover,8,13,4,1,1.0,1.0,one block
+2024-08,lacnic,sign,,13,25,6,0.32,0.2064,diffuse (many blocks)
+2024-08,lacnic,sign,,8,8,4,0.5,0.3438,concentrated (one block is most of it)
+2024-08,lacnic,unsign,13,,8,2,0.5,0.5,concentrated (one block is most of it)
+2024-08,lacnic,unsign,8,,12,5,0.333,0.2639,diffuse (many blocks)
+2024-08,ripe,sign,,13,1,1,1.0,1.0,single delegation
+2024-08,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2024-09,afrinic,unsign,13,,4,3,0.5,0.375,concentrated (one block is most of it)
+2024-09,apnic,sign,,8,2,1,1.0,1.0,one block
+2024-09,apnic,unsign,8,,1,1,1.0,1.0,single delegation
+2024-09,arin,sign,,13,32,17,0.125,0.082,diffuse (many blocks)
+2024-09,arin,sign,,14,2,1,1.0,1.0,one block
+2024-09,arin,sign,,7,5,2,0.8,0.68,concentrated (one block is most of it)
+2024-09,arin,sign,,8,15,8,0.267,0.1556,diffuse (many blocks)
+2024-09,arin,unsign,13,,47,19,0.106,0.0702,diffuse (many blocks)
+2024-09,arin,unsign,5,,4,1,1.0,1.0,one block
+2024-09,arin,unsign,7,,2,2,0.5,0.5,concentrated (one block is most of it)
+2024-09,arin,unsign,8,,24,9,0.167,0.1389,diffuse (many blocks)
+2024-09,lacnic,sign,,13,13,6,0.308,0.2308,diffuse (many blocks)
+2024-09,lacnic,sign,,7,4,1,1.0,1.0,one block
+2024-09,lacnic,sign,,8,25,13,0.16,0.088,diffuse (many blocks)
+2024-09,lacnic,unsign,13,,37,13,0.189,0.1074,diffuse (many blocks)
+2024-09,lacnic,unsign,5,,4,1,1.0,1.0,one block
+2024-09,lacnic,unsign,8,,12,6,0.333,0.25,diffuse (many blocks)
+2024-09,ripe,sign,,13,3,3,0.333,0.3333,diffuse (many blocks)
+2024-09,ripe,sign,,14,2,1,1.0,1.0,one block
+2024-09,ripe,unsign,13,,4,4,0.25,0.25,diffuse (many blocks)
+2024-10,afrinic,sign,,13,1,1,1.0,1.0,single delegation
+2024-10,afrinic,sign,,5,1,1,1.0,1.0,single delegation
+2024-10,apnic,sign,,13,4,4,0.25,0.25,diffuse (many blocks)
+2024-10,arin,rollover,"10,13","13,15",1,1,1.0,1.0,single delegation
+2024-10,arin,rollover,8,13,3,2,0.667,0.5556,concentrated (one block is most of it)
+2024-10,arin,rollover,"8,14",14,1,1,1.0,1.0,single delegation
+2024-10,arin,sign,,13,90,32,0.344,0.1393,diffuse (many blocks)
+2024-10,arin,sign,,15,1,1,1.0,1.0,single delegation
+2024-10,arin,sign,,7,3,1,1.0,1.0,one block
+2024-10,arin,sign,,8,36,13,0.194,0.1096,diffuse (many blocks)
+2024-10,arin,unsign,13,,11,6,0.364,0.2397,diffuse (many blocks)
+2024-10,arin,unsign,8,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2024-10,lacnic,sign,,13,29,11,0.241,0.1367,diffuse (many blocks)
+2024-10,lacnic,sign,,"7,14",4,1,1.0,1.0,one block
+2024-10,lacnic,sign,,8,28,10,0.143,0.1276,diffuse (many blocks)
+2024-10,lacnic,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2024-10,lacnic,unsign,8,,15,6,0.267,0.2089,diffuse (many blocks)
+2024-10,ripe,rollover,"10,13","13,15",1,1,1.0,1.0,single delegation
+2024-10,ripe,sign,,13,7,4,0.571,0.3878,concentrated (one block is most of it)
+2024-10,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2024-11,apnic,rollover,8,13,3,1,1.0,1.0,one block
+2024-11,apnic,sign,,13,11,4,0.727,0.5537,concentrated (one block is most of it)
+2024-11,apnic,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2024-11,arin,rollover,8,13,55,17,0.582,0.358,concentrated (one block is most of it)
+2024-11,arin,sign,,13,80,37,0.1,0.0422,diffuse (many blocks)
+2024-11,arin,sign,,14,3,1,1.0,1.0,one block
+2024-11,arin,sign,,16,1,1,1.0,1.0,single delegation
+2024-11,arin,sign,,8,12,8,0.333,0.1806,diffuse (many blocks)
+2024-11,arin,unsign,13,,8,6,0.25,0.1875,diffuse (many blocks)
+2024-11,arin,unsign,"13,14",,1,1,1.0,1.0,single delegation
+2024-11,arin,unsign,8,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2024-11,lacnic,sign,,13,50,13,0.16,0.0888,diffuse (many blocks)
+2024-11,lacnic,sign,,8,12,5,0.333,0.2639,diffuse (many blocks)
+2024-11,lacnic,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2024-11,lacnic,unsign,"7,14",,4,1,1.0,1.0,one block
+2024-11,lacnic,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2024-11,ripe,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2024-11,ripe,sign,,14,3,1,1.0,1.0,one block
+2024-11,ripe,unsign,13,,2,1,1.0,1.0,one block
+2024-12,apnic,sign,,13,10,6,0.4,0.24,diffuse (many blocks)
+2024-12,apnic,unsign,13,,9,6,0.222,0.1852,diffuse (many blocks)
+2024-12,arin,rollover,10,13,1,1,1.0,1.0,single delegation
+2024-12,arin,rollover,10,7,1,1,1.0,1.0,single delegation
+2024-12,arin,rollover,7,13,3,1,1.0,1.0,one block
+2024-12,arin,rollover,8,"8,15",2,1,1.0,1.0,one block
+2024-12,arin,sign,,13,101,27,0.317,0.1544,diffuse (many blocks)
+2024-12,arin,sign,,"7,8",15,1,1.0,1.0,one block
+2024-12,arin,sign,,8,14,5,0.286,0.2551,diffuse (many blocks)
+2024-12,arin,unsign,13,,9,6,0.444,0.2593,diffuse (many blocks)
+2024-12,arin,unsign,14,,1,1,1.0,1.0,single delegation
+2024-12,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2024-12,arin,unsign,7,,2,2,0.5,0.5,concentrated (one block is most of it)
+2024-12,arin,unsign,"7,8",,1,1,1.0,1.0,single delegation
+2024-12,arin,unsign,8,,51,10,0.608,0.3925,concentrated (one block is most of it)
+2024-12,lacnic,sign,,13,9,3,0.444,0.4074,diffuse (many blocks)
+2024-12,lacnic,sign,,8,4,4,0.25,0.25,diffuse (many blocks)
+2024-12,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2024-12,lacnic,unsign,8,,12,3,0.333,0.3333,diffuse (many blocks)
+2024-12,ripe,rollover,10,13,1,1,1.0,1.0,single delegation
+2024-12,ripe,rollover,10,7,1,1,1.0,1.0,single delegation
+2024-12,ripe,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-01,afrinic,sign,,13,7,4,0.429,0.3061,diffuse (many blocks)
+2025-01,afrinic,unsign,13,,2,1,1.0,1.0,one block
+2025-01,arin,rollover,13,"13,15",1,1,1.0,1.0,single delegation
+2025-01,arin,rollover,13,15,3,1,1.0,1.0,one block
+2025-01,arin,rollover,7,13,1,1,1.0,1.0,single delegation
+2025-01,arin,rollover,8,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-01,arin,rollover,"8,15",13,2,1,1.0,1.0,one block
+2025-01,arin,sign,,13,84,32,0.19,0.0737,diffuse (many blocks)
+2025-01,arin,sign,,8,19,9,0.211,0.1579,diffuse (many blocks)
+2025-01,arin,unsign,13,,25,10,0.16,0.1296,diffuse (many blocks)
+2025-01,arin,unsign,7,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2025-01,arin,unsign,"7,10",,1,1,1.0,1.0,single delegation
+2025-01,arin,unsign,8,,8,4,0.5,0.3438,concentrated (one block is most of it)
+2025-01,lacnic,sign,,13,25,8,0.16,0.1424,diffuse (many blocks)
+2025-01,lacnic,sign,,8,9,3,0.444,0.4074,diffuse (many blocks)
+2025-01,lacnic,unsign,13,,16,5,0.25,0.2266,diffuse (many blocks)
+2025-01,lacnic,unsign,7,,4,1,1.0,1.0,one block
+2025-01,lacnic,unsign,8,,10,4,0.3,0.26,diffuse (many blocks)
+2025-01,ripe,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-01,ripe,unsign,7,,1,1,1.0,1.0,single delegation
+2025-01,ripe,unsign,8,,4,1,1.0,1.0,one block
+2025-02,afrinic,sign,,13,3,1,1.0,1.0,one block
+2025-02,arin,sign,,13,61,27,0.066,0.0519,diffuse (many blocks)
+2025-02,arin,sign,,14,1,1,1.0,1.0,single delegation
+2025-02,arin,sign,,15,4,1,1.0,1.0,one block
+2025-02,arin,sign,,7,1,1,1.0,1.0,single delegation
+2025-02,arin,sign,,8,21,7,0.476,0.288,diffuse (many blocks)
+2025-02,arin,unsign,13,,17,8,0.235,0.1834,diffuse (many blocks)
+2025-02,arin,unsign,7,,3,3,0.333,0.3333,diffuse (many blocks)
+2025-02,arin,unsign,8,,6,3,0.667,0.5,concentrated (one block is most of it)
+2025-02,lacnic,sign,,13,33,9,0.121,0.1185,diffuse (many blocks)
+2025-02,lacnic,sign,,8,1,1,1.0,1.0,single delegation
+2025-02,lacnic,unsign,13,,12,3,0.333,0.3333,diffuse (many blocks)
+2025-02,lacnic,unsign,7,,3,1,1.0,1.0,one block
+2025-02,lacnic,unsign,8,,10,5,0.4,0.26,diffuse (many blocks)
+2025-02,ripe,sign,,13,6,6,0.167,0.1667,diffuse (many blocks)
+2025-02,ripe,sign,,14,1,1,1.0,1.0,single delegation
+2025-02,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2025-02,ripe,unsign,7,,1,1,1.0,1.0,single delegation
+2025-03,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2025-03,arin,rollover,"13,15",15,1,1,1.0,1.0,single delegation
+2025-03,arin,rollover,8,13,3,1,1.0,1.0,one block
+2025-03,arin,sign,,13,103,30,0.311,0.1407,diffuse (many blocks)
+2025-03,arin,sign,,15,3,2,0.667,0.5556,concentrated (one block is most of it)
+2025-03,arin,sign,,7,1,1,1.0,1.0,single delegation
+2025-03,arin,sign,,8,31,9,0.516,0.3091,concentrated (one block is most of it)
+2025-03,arin,unsign,13,,14,6,0.286,0.2245,diffuse (many blocks)
+2025-03,arin,unsign,7,,2,1,1.0,1.0,one block
+2025-03,arin,unsign,"7,8,13",,1,1,1.0,1.0,single delegation
+2025-03,arin,unsign,8,,15,5,0.267,0.2356,diffuse (many blocks)
+2025-03,lacnic,sign,,13,12,3,0.333,0.3333,diffuse (many blocks)
+2025-03,lacnic,sign,,7,3,1,1.0,1.0,one block
+2025-03,lacnic,sign,,8,16,5,0.25,0.2266,diffuse (many blocks)
+2025-03,lacnic,unsign,13,,13,5,0.308,0.2544,diffuse (many blocks)
+2025-03,lacnic,unsign,5,,1,1,1.0,1.0,single delegation
+2025-03,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2025-03,lacnic,unsign,8,,12,4,0.333,0.2917,diffuse (many blocks)
+2025-03,ripe,sign,,13,4,4,0.25,0.25,diffuse (many blocks)
+2025-03,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2025-04,arin,sign,,13,62,28,0.258,0.0952,diffuse (many blocks)
+2025-04,arin,sign,,7,2,1,1.0,1.0,one block
+2025-04,arin,sign,,8,22,9,0.182,0.1488,diffuse (many blocks)
+2025-04,arin,unsign,13,,4,4,0.25,0.25,diffuse (many blocks)
+2025-04,arin,unsign,5,,8,3,0.5,0.4062,concentrated (one block is most of it)
+2025-04,arin,unsign,"7,8",,2,1,1.0,1.0,one block
+2025-04,arin,unsign,8,,14,7,0.286,0.2041,diffuse (many blocks)
+2025-04,lacnic,sign,,13,23,8,0.174,0.1456,diffuse (many blocks)
+2025-04,lacnic,sign,,8,14,5,0.286,0.2347,diffuse (many blocks)
+2025-04,lacnic,unsign,13,,15,5,0.267,0.2356,diffuse (many blocks)
+2025-04,lacnic,unsign,5,,6,2,0.667,0.5556,concentrated (one block is most of it)
+2025-04,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2025-04,lacnic,unsign,8,,8,3,0.5,0.4062,concentrated (one block is most of it)
+2025-04,ripe,sign,,13,9,5,0.444,0.284,diffuse (many blocks)
+2025-04,ripe,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2025-05,afrinic,sign,,13,3,1,1.0,1.0,one block
+2025-05,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2025-05,arin,rollover,13,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-05,arin,rollover,8,13,7,2,0.571,0.5102,concentrated (one block is most of it)
+2025-05,arin,sign,,13,64,32,0.25,0.0889,diffuse (many blocks)
+2025-05,arin,sign,,8,17,6,0.235,0.2042,diffuse (many blocks)
+2025-05,arin,unsign,13,,9,6,0.444,0.2593,diffuse (many blocks)
+2025-05,arin,unsign,8,,10,7,0.4,0.22,diffuse (many blocks)
+2025-05,lacnic,sign,,13,19,7,0.211,0.1745,diffuse (many blocks)
+2025-05,lacnic,sign,,7,2,1,1.0,1.0,one block
+2025-05,lacnic,sign,,8,6,3,0.667,0.5,concentrated (one block is most of it)
+2025-05,lacnic,unsign,13,,12,5,0.333,0.2639,diffuse (many blocks)
+2025-05,lacnic,unsign,8,,6,3,0.667,0.5,concentrated (one block is most of it)
+2025-05,ripe,rollover,8,13,4,1,1.0,1.0,one block
+2025-05,ripe,sign,,13,5,5,0.2,0.2,diffuse (many blocks)
+2025-05,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2025-05,ripe,unsign,8,,1,1,1.0,1.0,single delegation
+2025-06,afrinic,sign,,13,1,1,1.0,1.0,single delegation
+2025-06,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2025-06,arin,rollover,10,13,1,1,1.0,1.0,single delegation
+2025-06,arin,rollover,13,"13,15",1,1,1.0,1.0,single delegation
+2025-06,arin,rollover,13,15,1,1,1.0,1.0,single delegation
+2025-06,arin,sign,,13,28,16,0.143,0.0918,diffuse (many blocks)
+2025-06,arin,sign,,8,11,5,0.364,0.2893,diffuse (many blocks)
+2025-06,arin,unsign,13,,15,8,0.267,0.1644,diffuse (many blocks)
+2025-06,arin,unsign,8,,17,5,0.235,0.2249,diffuse (many blocks)
+2025-06,lacnic,sign,,13,20,8,0.2,0.17,diffuse (many blocks)
+2025-06,lacnic,sign,,8,12,5,0.333,0.2639,diffuse (many blocks)
+2025-06,lacnic,unsign,13,,13,6,0.308,0.2071,diffuse (many blocks)
+2025-06,lacnic,unsign,8,,9,3,0.444,0.4074,diffuse (many blocks)
+2025-06,ripe,rollover,10,13,1,1,1.0,1.0,single delegation
+2025-06,ripe,rollover,13,"13,15",1,1,1.0,1.0,single delegation
+2025-06,ripe,rollover,13,15,1,1,1.0,1.0,single delegation
+2025-06,ripe,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2025-06,ripe,sign,,14,1,1,1.0,1.0,single delegation
+2025-06,ripe,sign,,8,1,1,1.0,1.0,single delegation
+2025-07,afrinic,unsign,13,,4,2,0.5,0.5,concentrated (one block is most of it)
+2025-07,arin,rollover,5,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-07,arin,sign,,13,61,23,0.262,0.1045,diffuse (many blocks)
+2025-07,arin,sign,,7,32,1,1.0,1.0,one block
+2025-07,arin,sign,,8,12,6,0.333,0.25,diffuse (many blocks)
+2025-07,arin,unsign,13,,9,9,0.111,0.1111,diffuse (many blocks)
+2025-07,arin,unsign,8,,3,3,0.333,0.3333,diffuse (many blocks)
+2025-07,lacnic,sign,,13,21,6,0.19,0.1837,diffuse (many blocks)
+2025-07,lacnic,sign,,8,4,1,1.0,1.0,one block
+2025-07,lacnic,unsign,13,,14,9,0.214,0.1327,diffuse (many blocks)
+2025-07,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2025-07,lacnic,unsign,8,,1,1,1.0,1.0,single delegation
+2025-07,ripe,sign,,13,8,2,0.5,0.5,concentrated (one block is most of it)
+2025-07,ripe,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-08,afrinic,rollover,8,13,1,1,1.0,1.0,single delegation
+2025-08,arin,rollover,14,15,1,1,1.0,1.0,single delegation
+2025-08,arin,rollover,7,13,8,1,1.0,1.0,one block
+2025-08,arin,rollover,7,"7,13",1,1,1.0,1.0,single delegation
+2025-08,arin,rollover,8,13,28,11,0.607,0.3852,concentrated (one block is most of it)
+2025-08,arin,sign,,13,98,33,0.388,0.1708,diffuse (many blocks)
+2025-08,arin,sign,,"7,13",1,1,1.0,1.0,single delegation
+2025-08,arin,sign,,8,11,5,0.364,0.2893,diffuse (many blocks)
+2025-08,arin,unsign,13,,33,18,0.121,0.0854,diffuse (many blocks)
+2025-08,arin,unsign,8,,9,4,0.444,0.3333,diffuse (many blocks)
+2025-08,lacnic,sign,,13,20,7,0.3,0.19,diffuse (many blocks)
+2025-08,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2025-08,lacnic,sign,,8,10,4,0.4,0.34,diffuse (many blocks)
+2025-08,lacnic,unsign,13,,17,5,0.235,0.2249,diffuse (many blocks)
+2025-08,lacnic,unsign,8,,7,2,0.571,0.5102,concentrated (one block is most of it)
+2025-08,ripe,rollover,14,15,1,1,1.0,1.0,single delegation
+2025-08,ripe,sign,,13,9,5,0.444,0.284,diffuse (many blocks)
+2025-09,afrinic,sign,,13,3,2,0.667,0.5556,concentrated (one block is most of it)
+2025-09,arin,rollover,5,13,1,1,1.0,1.0,single delegation
+2025-09,arin,rollover,7,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-09,arin,rollover,"7,13",13,1,1,1.0,1.0,single delegation
+2025-09,arin,sign,,13,64,33,0.125,0.0513,diffuse (many blocks)
+2025-09,arin,sign,,8,3,1,1.0,1.0,one block
+2025-09,arin,unsign,13,,14,9,0.286,0.1633,diffuse (many blocks)
+2025-09,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2025-09,arin,unsign,8,,13,5,0.308,0.2544,diffuse (many blocks)
+2025-09,lacnic,rollover,5,13,1,1,1.0,1.0,single delegation
+2025-09,lacnic,sign,,13,17,5,0.235,0.2249,diffuse (many blocks)
+2025-09,lacnic,sign,,8,3,1,1.0,1.0,one block
+2025-09,lacnic,unsign,13,,4,1,1.0,1.0,one block
+2025-09,lacnic,unsign,8,,11,4,0.364,0.3058,diffuse (many blocks)
+2025-09,ripe,sign,,13,5,4,0.4,0.28,diffuse (many blocks)
+2025-09,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2025-09,ripe,unsign,14,,1,1,1.0,1.0,single delegation
+2025-09,ripe,unsign,8,,3,1,1.0,1.0,one block
+2025-10,afrinic,unsign,13,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2025-10,arin,rollover,13,8,4,1,1.0,1.0,one block
+2025-10,arin,sign,,13,105,45,0.114,0.0407,diffuse (many blocks)
+2025-10,arin,sign,,14,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-10,arin,sign,,8,137,4,0.934,0.8747,concentrated (one block is most of it)
+2025-10,arin,unsign,13,,22,13,0.182,0.1198,diffuse (many blocks)
+2025-10,arin,unsign,8,,14,6,0.286,0.2041,diffuse (many blocks)
+2025-10,lacnic,rollover,13,8,4,1,1.0,1.0,one block
+2025-10,lacnic,sign,,13,58,20,0.138,0.0702,diffuse (many blocks)
+2025-10,lacnic,sign,,8,7,3,0.571,0.4286,concentrated (one block is most of it)
+2025-10,lacnic,unsign,13,,13,4,0.308,0.2899,diffuse (many blocks)
+2025-10,lacnic,unsign,8,,8,3,0.5,0.4062,concentrated (one block is most of it)
+2025-10,ripe,sign,,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-10,ripe,sign,,8,4,1,1.0,1.0,one block
+2025-10,ripe,unsign,13,,2,2,0.5,0.5,concentrated (one block is most of it)
+2025-11,afrinic,sign,,13,4,1,1.0,1.0,one block
+2025-11,afrinic,sign,,8,4,1,1.0,1.0,one block
+2025-11,afrinic,unsign,8,,37,3,0.865,0.7604,concentrated (one block is most of it)
+2025-11,arin,rollover,8,13,4,4,0.25,0.25,diffuse (many blocks)
+2025-11,arin,sign,,13,72,35,0.111,0.0467,diffuse (many blocks)
+2025-11,arin,sign,,8,19,7,0.211,0.1745,diffuse (many blocks)
+2025-11,arin,unsign,13,,17,11,0.235,0.1419,diffuse (many blocks)
+2025-11,arin,unsign,8,,103,7,0.932,0.8695,concentrated (one block is most of it)
+2025-11,lacnic,sign,,13,18,8,0.222,0.1728,diffuse (many blocks)
+2025-11,lacnic,sign,,8,11,3,0.364,0.3388,diffuse (many blocks)
+2025-11,lacnic,unsign,13,,10,5,0.4,0.28,diffuse (many blocks)
+2025-11,lacnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2025-11,ripe,sign,,13,8,4,0.5,0.3438,concentrated (one block is most of it)
+2025-11,ripe,unsign,13,,4,1,1.0,1.0,one block
+2025-12,afrinic,sign,,13,4,1,1.0,1.0,one block
+2025-12,afrinic,sign,,8,5,2,0.8,0.68,concentrated (one block is most of it)
+2025-12,afrinic,unsign,5,,1,1,1.0,1.0,single delegation
+2025-12,arin,rollover,8,13,1,1,1.0,1.0,single delegation
+2025-12,arin,sign,,13,81,32,0.198,0.073,diffuse (many blocks)
+2025-12,arin,sign,,15,1,1,1.0,1.0,single delegation
+2025-12,arin,sign,,8,15,11,0.267,0.1289,diffuse (many blocks)
+2025-12,arin,unsign,13,,15,7,0.267,0.1911,diffuse (many blocks)
+2025-12,arin,unsign,7,,1,1,1.0,1.0,single delegation
+2025-12,arin,unsign,8,,5,2,0.6,0.52,concentrated (one block is most of it)
+2025-12,lacnic,sign,,13,26,8,0.154,0.145,diffuse (many blocks)
+2025-12,lacnic,sign,,8,7,3,0.571,0.4286,concentrated (one block is most of it)
+2025-12,lacnic,unsign,13,,11,3,0.455,0.3719,diffuse (many blocks)
+2025-12,lacnic,unsign,8,,4,2,0.75,0.625,concentrated (one block is most of it)
+2025-12,ripe,sign,,13,9,3,0.444,0.4074,diffuse (many blocks)
+2025-12,ripe,sign,,15,1,1,1.0,1.0,single delegation
+2025-12,ripe,unsign,13,,2,1,1.0,1.0,one block
+2026-01,afrinic,sign,,13,5,2,0.8,0.68,concentrated (one block is most of it)
+2026-01,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2026-01,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2026-01,arin,rollover,13,8,2,1,1.0,1.0,one block
+2026-01,arin,rollover,8,"8,13",3,2,0.667,0.5556,concentrated (one block is most of it)
+2026-01,arin,sign,,13,42,19,0.19,0.0907,diffuse (many blocks)
+2026-01,arin,sign,,8,10,4,0.4,0.3,diffuse (many blocks)
+2026-01,arin,unsign,13,,21,11,0.19,0.1338,diffuse (many blocks)
+2026-01,arin,unsign,8,,11,8,0.364,0.1901,diffuse (many blocks)
+2026-01,lacnic,sign,,13,24,7,0.333,0.2049,diffuse (many blocks)
+2026-01,lacnic,sign,,8,6,3,0.667,0.5,concentrated (one block is most of it)
+2026-01,lacnic,unsign,13,,21,8,0.19,0.161,diffuse (many blocks)
+2026-01,lacnic,unsign,8,,14,7,0.286,0.2041,diffuse (many blocks)
+2026-01,ripe,sign,,13,4,1,1.0,1.0,one block
+2026-02,afrinic,rollover,13,"7,13",4,1,1.0,1.0,one block
+2026-02,afrinic,sign,,13,8,4,0.5,0.3438,concentrated (one block is most of it)
+2026-02,afrinic,unsign,13,,4,3,0.5,0.375,concentrated (one block is most of it)
+2026-02,afrinic,unsign,7,,1,1,1.0,1.0,single delegation
+2026-02,arin,sign,,13,71,37,0.169,0.0557,diffuse (many blocks)
+2026-02,arin,sign,,15,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-02,arin,sign,,8,36,14,0.444,0.2299,diffuse (many blocks)
+2026-02,arin,unsign,13,,24,13,0.167,0.1111,diffuse (many blocks)
+2026-02,arin,unsign,7,,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-02,arin,unsign,8,,7,5,0.429,0.2653,diffuse (many blocks)
+2026-02,lacnic,sign,,13,12,4,0.333,0.2778,diffuse (many blocks)
+2026-02,lacnic,sign,,8,5,2,0.6,0.52,concentrated (one block is most of it)
+2026-02,lacnic,unsign,13,,11,4,0.364,0.3058,diffuse (many blocks)
+2026-02,lacnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2026-02,ripe,sign,,13,7,4,0.571,0.3878,concentrated (one block is most of it)
+2026-02,ripe,sign,,15,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-02,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2026-03,afrinic,sign,,13,4,1,1.0,1.0,one block
+2026-03,arin,rollover,8,14,2,1,1.0,1.0,one block
+2026-03,arin,sign,,13,195,27,0.595,0.372,concentrated (one block is most of it)
+2026-03,arin,sign,,"13,14",1,1,1.0,1.0,single delegation
+2026-03,arin,sign,,14,1,1,1.0,1.0,single delegation
+2026-03,arin,sign,,7,4,1,1.0,1.0,one block
+2026-03,arin,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-03,arin,unsign,13,,17,10,0.235,0.1488,diffuse (many blocks)
+2026-03,arin,unsign,5,,2,1,1.0,1.0,one block
+2026-03,arin,unsign,8,,7,4,0.571,0.3878,concentrated (one block is most of it)
+2026-03,lacnic,sign,,13,33,9,0.121,0.1148,diffuse (many blocks)
+2026-03,lacnic,sign,,7,4,1,1.0,1.0,one block
+2026-03,lacnic,sign,,8,3,2,0.667,0.5556,concentrated (one block is most of it)
+2026-03,lacnic,unsign,13,,8,4,0.5,0.3438,concentrated (one block is most of it)
+2026-03,lacnic,unsign,5,,1,1,1.0,1.0,single delegation
+2026-03,lacnic,unsign,8,,5,2,0.8,0.68,concentrated (one block is most of it)
+2026-03,ripe,sign,,13,25,3,0.88,0.7824,concentrated (one block is most of it)
+2026-03,ripe,sign,,15,1,1,1.0,1.0,single delegation
+2026-03,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2026-04,afrinic,sign,,8,1,1,1.0,1.0,single delegation
+2026-04,arin,rollover,13,8,1,1,1.0,1.0,single delegation
+2026-04,arin,rollover,7,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-04,arin,sign,,13,49,21,0.184,0.0929,diffuse (many blocks)
+2026-04,arin,sign,,5,2,1,1.0,1.0,one block
+2026-04,arin,sign,,8,25,9,0.16,0.136,diffuse (many blocks)
+2026-04,arin,unsign,13,,18,11,0.333,0.1605,diffuse (many blocks)
+2026-04,arin,unsign,5,,17,3,0.471,0.4464,diffuse (many blocks)
+2026-04,arin,unsign,8,,5,2,0.8,0.68,concentrated (one block is most of it)
+2026-04,lacnic,sign,,13,9,3,0.444,0.4074,diffuse (many blocks)
+2026-04,lacnic,sign,,5,1,1,1.0,1.0,single delegation
+2026-04,lacnic,sign,,7,1,1,1.0,1.0,single delegation
+2026-04,lacnic,sign,,8,11,5,0.364,0.2893,diffuse (many blocks)
+2026-04,lacnic,unsign,13,,16,6,0.312,0.2188,diffuse (many blocks)
+2026-04,lacnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2026-04,ripe,sign,,13,4,1,1.0,1.0,one block
+2026-04,ripe,unsign,13,,2,1,1.0,1.0,one block
+2026-05,afrinic,sign,,13,2,1,1.0,1.0,one block
+2026-05,afrinic,unsign,8,,1,1,1.0,1.0,single delegation
+2026-05,arin,rollover,7,13,4,1,1.0,1.0,one block
+2026-05,arin,rollover,"7,13",13,1,1,1.0,1.0,single delegation
+2026-05,arin,sign,,10,4,1,1.0,1.0,one block
+2026-05,arin,sign,,13,71,29,0.282,0.1085,diffuse (many blocks)
+2026-05,arin,sign,,14,1,1,1.0,1.0,single delegation
+2026-05,arin,sign,,7,3,1,1.0,1.0,one block
+2026-05,arin,sign,,8,10,6,0.4,0.24,diffuse (many blocks)
+2026-05,arin,unsign,10,,3,3,0.333,0.3333,diffuse (many blocks)
+2026-05,arin,unsign,13,,12,6,0.333,0.25,diffuse (many blocks)
+2026-05,arin,unsign,8,,16,7,0.25,0.1719,diffuse (many blocks)
+2026-05,lacnic,sign,,13,32,10,0.188,0.125,diffuse (many blocks)
+2026-05,lacnic,sign,,8,3,3,0.333,0.3333,diffuse (many blocks)
+2026-05,lacnic,unsign,13,,12,4,0.333,0.2778,diffuse (many blocks)
+2026-05,lacnic,unsign,7,,1,1,1.0,1.0,single delegation
+2026-05,lacnic,unsign,8,,3,2,0.667,0.5556,concentrated (one block is most of it)
+2026-05,ripe,rollover,7,13,4,1,1.0,1.0,one block
+2026-05,ripe,sign,,13,27,4,0.741,0.5857,concentrated (one block is most of it)
+2026-06,arin,rollover,5,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-06,arin,rollover,7,13,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-06,arin,rollover,"8,13",8,2,1,1.0,1.0,one block
+2026-06,arin,sign,,13,67,31,0.06,0.0461,diffuse (many blocks)
+2026-06,arin,sign,,14,30,7,0.3,0.2133,diffuse (many blocks)
+2026-06,arin,sign,,8,18,5,0.222,0.2099,diffuse (many blocks)
+2026-06,arin,unsign,13,,22,11,0.182,0.1322,diffuse (many blocks)
+2026-06,arin,unsign,14,,1,1,1.0,1.0,single delegation
+2026-06,arin,unsign,5,,17,2,0.941,0.8893,concentrated (one block is most of it)
+2026-06,arin,unsign,7,,3,1,1.0,1.0,one block
+2026-06,arin,unsign,"7,8",,1,1,1.0,1.0,single delegation
+2026-06,arin,unsign,8,,8,4,0.5,0.3438,concentrated (one block is most of it)
+2026-06,lacnic,rollover,"8,13",8,2,1,1.0,1.0,one block
+2026-06,lacnic,sign,,13,41,13,0.098,0.0874,diffuse (many blocks)
+2026-06,lacnic,sign,,8,21,6,0.19,0.1837,diffuse (many blocks)
+2026-06,lacnic,unsign,13,,9,3,0.444,0.4074,diffuse (many blocks)
+2026-06,lacnic,unsign,8,,5,1,1.0,1.0,one block
+2026-06,ripe,sign,,13,7,4,0.571,0.3878,concentrated (one block is most of it)
+2026-06,ripe,sign,,14,5,2,0.8,0.68,concentrated (one block is most of it)
+2026-07,afrinic,rollover,7,"7,13",52,3,0.615,0.4793,concentrated (one block is most of it)
+2026-07,afrinic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-07,arin,rollover,14,13,4,1,1.0,1.0,one block
+2026-07,arin,rollover,7,"7,13",32,1,1.0,1.0,one block
+2026-07,arin,sign,,13,91,43,0.066,0.0332,diffuse (many blocks)
+2026-07,arin,sign,,14,1,1,1.0,1.0,single delegation
+2026-07,arin,sign,,8,9,5,0.444,0.284,diffuse (many blocks)
+2026-07,arin,unsign,13,,13,7,0.308,0.2189,diffuse (many blocks)
+2026-07,arin,unsign,8,,8,4,0.5,0.3438,concentrated (one block is most of it)
+2026-07,lacnic,rollover,14,13,4,1,1.0,1.0,one block
+2026-07,lacnic,sign,,13,39,11,0.154,0.1032,diffuse (many blocks)
+2026-07,lacnic,sign,,8,7,3,0.571,0.4286,concentrated (one block is most of it)
+2026-07,lacnic,unsign,13,,5,2,0.8,0.68,concentrated (one block is most of it)
+2026-07,lacnic,unsign,7,,2,1,1.0,1.0,one block
+2026-07,lacnic,unsign,8,,8,4,0.5,0.3438,concentrated (one block is most of it)
+2026-07,ripe,sign,,13,5,3,0.4,0.36,diffuse (many blocks)
+2026-07,ripe,sign,,14,2,1,1.0,1.0,one block
+2026-07,ripe,unsign,13,,1,1,1.0,1.0,single delegation
+2026-07,ripe,unsign,8,,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-08,arin,rollover,5,"5,13",4,4,0.25,0.25,diffuse (many blocks)
+2026-08,arin,rollover,7,13,6,2,0.833,0.7222,concentrated (one block is most of it)
+2026-08,arin,rollover,8,13,4,1,1.0,1.0,one block
+2026-08,arin,sign,,13,119,65,0.059,0.0242,diffuse (many blocks)
+2026-08,arin,sign,,14,1,1,1.0,1.0,single delegation
+2026-08,arin,sign,,8,4,3,0.5,0.375,concentrated (one block is most of it)
+2026-08,arin,unsign,13,,19,10,0.211,0.1524,diffuse (many blocks)
+2026-08,arin,unsign,5,,1,1,1.0,1.0,single delegation
+2026-08,arin,unsign,8,,8,3,0.5,0.4062,concentrated (one block is most of it)
+2026-08,lacnic,sign,,13,44,13,0.091,0.0857,diffuse (many blocks)
+2026-08,lacnic,sign,,7,2,1,1.0,1.0,one block
+2026-08,lacnic,sign,,8,2,2,0.5,0.5,concentrated (one block is most of it)
+2026-08,lacnic,unsign,13,,8,2,0.5,0.5,concentrated (one block is most of it)
+2026-08,lacnic,unsign,5,,1,1,1.0,1.0,single delegation
+2026-08,lacnic,unsign,8,,6,3,0.667,0.5,concentrated (one block is most of it)
+2026-08,ripe,rollover,7,13,6,2,0.833,0.7222,concentrated (one block is most of it)
+2026-08,ripe,sign,,13,16,9,0.438,0.2344,diffuse (many blocks)
+2026-08,ripe,unsign,13,,4,1,1.0,1.0,one block

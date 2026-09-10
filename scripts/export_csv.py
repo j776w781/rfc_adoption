@@ -174,6 +174,26 @@ def releases_adoption(j: dict, out: Path) -> None:
        for e in sorted(j["event_studies"], key=lambda x: (x["kind"], x["observable"]))])
 
 
+def delegation(out: Path) -> None:
+    """Per-delegation ledger exports (reverse corpus only)."""
+    import pandas as pd
+    src = Path("out/analysis")
+    led = src / "delegation_changes.parquet"
+    if not led.exists():
+        print("  (skipping delegation exports: run scripts/delegation_changes.py first)")
+        return
+    df = pd.read_parquet(led)
+    df.to_csv(out / "dns_delegation_changes.csv", index=False, lineterminator="\n")
+    print(f"  {out / 'dns_delegation_changes.csv'}  ({len(df)} rows)")
+    for name, fname in (("delegation_change_clusters", "dns_delegation_actions.csv"),
+                        ("delegation_change_levels", "dns_delegation_levels.csv")):
+        f = src / f"{name}.parquet"
+        if f.exists():
+            d = pd.read_parquet(f)
+            d.to_csv(out / fname, index=False, lineterminator="\n")
+            print(f"  {out / fname}  ({len(d)} rows)")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", type=Path, default=Path("out/analysis"))
@@ -191,6 +211,22 @@ def main() -> int:
         releases_adoption(json.loads(ra_path.read_text("utf-8")), args.out)
     else:
         print("  (skipping release/adoption: run scripts/release_vs_adoption.py first)")
+    delegation(args.out)
+    scan = Path("out/analysis/release_scan.json")
+    if scan.exists():
+        j = json.loads(scan.read_text("utf-8"))
+        w(args.out / "dns_release_scan_per_project.csv",
+          ["project", "role", "median_release_year", "release_months",
+           "raw_mean_after", "raw_mean_other", "raw_difference",
+           "detrended_after", "detrended_other", "detrended_difference",
+           "circular_shift_p", "significant_after_detrending"],
+          [[p, r.get("role", ""), r.get("median_release_year", ""),
+            r.get("n_release_months", ""), r.get("raw_mean_after", ""),
+            r.get("raw_mean_other", ""), r.get("raw_difference", ""),
+            r.get("detrended_after", ""), r.get("detrended_other", ""),
+            r.get("detrended_difference", ""), r.get("circular_shift_p", ""),
+            (r.get("circular_shift_p", 1) < 0.05) if r.get("testable") else ""]
+           for p, r in sorted(j["per_project"].items())])
     adopt_path = Path("out/analysis/cve_adoption_crossref.json")
     if adopt_path.exists():
         adoption(json.loads(adopt_path.read_text("utf-8")), args.out)
