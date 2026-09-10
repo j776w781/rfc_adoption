@@ -1028,6 +1028,133 @@ save(fig, "21_change_trend")
 """)
 
 md(r"""
+## 10. One program at a time
+
+Everything above compares projects to each other. This section gives each of the
+eight its own panel: every stable release it shipped, which of those were DNSSEC
+milestones, and what DNSSEC deployment was doing at the time.
+
+The outcome line is the same in all eight panels — delegations signing or rolling
+over per month, reverse corpus — so the panels can be laid side by side without
+re-reading the axis. What differs between them is only the program's own marks.
+""")
+
+code(r"""
+PER_MONTH = (LED[LED.kind.isin(["sign", "rollover"])]
+             .groupby("month").delegation.nunique().sort_index())
+PM_X = [to_year(m) for m in PER_MONTH.index]
+SPAN = (PM_X[0], PM_X[-1])
+
+CAP_LABEL = {"validate": "validate", "sign": "sign", "publish": "publish",
+             "rrtype": "rrtype", "algorithm-aware": "codepoint"}
+
+
+def program_panel(proj):
+    '''One program: its releases and milestones above, DNSSEC change below.
+
+    The milestones get their own strip rather than being drawn over the series.
+    Sharing one axes means either the labels sit on the data or the x-limit is
+    padded far enough to make room, which squeezes seventeen years of series into
+    half the width.
+    '''
+    rel = REL[proj]["releases"]
+    feats = [r for r in SUP["support"] if r["implementation"] == proj]
+    defs = [r for r in SUP["default_changes"] if r["implementation"] == proj]
+    lims = [r for r in SUP["validator_limits"] if r["implementation"] == proj]
+    scan = SCAN["per_project"].get(proj, {})
+
+    fig, (top_ax, ax) = plt.subplots(
+        2, 1, figsize=(11, 5.0), sharex=True,
+        gridspec_kw={"height_ratios": [1.35, 1], "hspace": 0.08})
+
+    # ---- lower panel: the outcome, identical in every program's chart ------- #
+    ax.fill_between(PM_X, PER_MONTH.values, color=S1, alpha=0.13, zorder=1)
+    ax.plot(PM_X, PER_MONTH.values, color=S1, linewidth=1.5, zorder=2)
+    style(ax); year_axis(ax)
+    ax.set_ylim(0, PER_MONTH.max() * 1.06)
+    ax.set_ylabel("delegations changing\nper month", color=INK_2, fontsize=10)
+    ax.set_xlabel("year", color=INK_2)
+    ax.set_xlim(SPAN[0] - 0.4, SPAN[1] + 0.4)
+
+    # ---- upper strip: release cadence and DNSSEC milestones ---------------- #
+    in_span = [to_year(d[:7]) for d in rel.values()
+               if SPAN[0] <= to_year(d[:7]) <= SPAN[1]]
+    for x in in_span:
+        top_ax.plot([x, x], [0.03, 0.15], color=MUTED, linewidth=0.9, alpha=0.6,
+                    zorder=3)
+    # Right-aligned: at the left it lands under the earliest milestone label.
+    # In the gap between the rug (tops at 0.15) and the first label lane (0.34).
+    top_ax.text(SPAN[1] + 0.3, 0.22, f"{len(in_span)} stable releases in span "
+                f"(of {len(rel)} total)", fontsize=9, color=MUTED, va="center",
+                ha="right")
+
+    marks = ([(to_year(r["released"][:7]),
+               f'{r["first_release"]} {r["observable"]}', S2, "o") for r in feats]
+             + [(to_year(r["released"][:7]), f'{r["first_release"]} default', S3, "D")
+                for r in defs]
+             + [(to_year(r["released"][:7]), f'{r["first_release"]} limit', CRITICAL, "s")
+                for r in lims])
+    marks.sort()
+
+    # Greedy lane packing. Assigning lanes by index modulo N puts marks that are
+    # close in time into the same lane whenever the count is a multiple of N --
+    # Knot has nine milestones inside six years and they overprinted.
+    YEARS_PER_CHAR = (SPAN[1] - SPAN[0]) / 96.0
+    lane_end, placed = [], []
+    for x, label, colour, mk in marks:
+        width = len(label) * YEARS_PER_CHAR + 0.35
+        right = x > SPAN[0] + (SPAN[1] - SPAN[0]) * 0.60
+        x0, x1 = (x - width, x) if right else (x, x + width)
+        for lane, end in enumerate(lane_end):
+            if x0 > end:
+                lane_end[lane] = x1
+                break
+        else:
+            lane = len(lane_end)
+            lane_end.append(x1)
+        placed.append((x, label, colour, mk, lane, right))
+
+    n_lanes = max((p[4] for p in placed), default=0) + 1
+    for x, label, colour, mk, lane, right in placed:
+        y = 0.34 + 0.15 * lane
+        top_ax.plot([x, x], [0.15, y], color=colour, linewidth=1,
+                    linestyle=(0, (3, 3)), alpha=0.65, zorder=3)
+        top_ax.scatter(x, y, s=62, color=colour, marker=mk, zorder=5,
+                       edgecolor=SURFACE, linewidth=1.4)
+        top_ax.text(x + (-0.22 if right else 0.22), y, label, fontsize=8.5,
+                    color=INK_2, va="center", ha="right" if right else "left")
+    top_ax.set_ylim(0, 0.34 + 0.15 * max(n_lanes, 3))
+    top_ax.set_yticks([])
+    for side in ("top", "right", "left", "bottom"):
+        top_ax.spines[side].set_visible(False)
+    top_ax.tick_params(length=0)
+
+    role = REL[proj]["role"]
+    if scan.get("testable"):
+        verdict = ("no detectable effect on adoption"
+                   if scan["circular_shift_p"] >= 0.05 else "effect detected")
+        sub = (f'{scan["n_release_months"]} of 193 months carried a release · '
+               f'detrended {scan["detrended_difference"]:+.1f} changes/month · '
+               f'p = {scan["circular_shift_p"]:.2f} → {verdict}')
+    else:
+        sub = "not testable: releases cover too much of the corpus"
+    top_ax.set_title(f"{NAME[proj]}  —  {role}", loc="left", color=INK,
+                     fontweight="bold", pad=30)
+    top_ax.text(0, 1.035, sub, transform=top_ax.transAxes, color=INK_2, fontsize=9.5,
+                va="bottom")
+    metric(ax, "Upper strip: grey ticks are every stable release; circle = a capability "
+               "first shipped, diamond = a default changed, square = a limit that forces "
+               "zones to change. Lower panel is the same series in all eight charts, so "
+               "they can be read side by side.")
+    return save(fig, f"22_program_{proj.replace('-', '_')}")
+
+
+for _proj in ["bind9", "unbound", "knot", "kresd", "nsd", "opendnssec",
+              "pdns-auth", "pdns-rec"]:
+    program_panel(_proj)
+""")
+
+md(r"""
 ## 8. What the figures support
 
 **Established.** Shipping a capability does not move deployment. Onset is almost
