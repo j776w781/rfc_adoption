@@ -1031,126 +1031,128 @@ md(r"""
 ## 10. One program at a time
 
 Everything above compares projects to each other. This section gives each of the
-eight its own panel: every stable release it shipped, which of those were DNSSEC
-milestones, and what DNSSEC deployment was doing at the time.
+eight its own panel, and asks one question of each: **when this program shipped,
+did anything happen?**
 
-The outcome line is the same in all eight panels — delegations signing or rolling
-over per month, reverse corpus — so the panels can be laid side by side without
-re-reading the axis. What differs between them is only the program's own marks.
+The form is a superposed-epoch average. Every release of that program is lined up
+at month zero and the surrounding two years averaged, so a release that moved
+deployment would show as a step up to the right of zero. The grey band is the
+same calculation on the same release pattern slid to a random point in the
+corpus, two thousand times — so the band is what this program's release *rhythm*
+produces against a series it has nothing to do with.
+
+If the blue line sits inside the grey band, the program's releases are
+indistinguishable from noise at that offset.
 """)
 
 code(r"""
+import numpy as np
+
 PER_MONTH = (LED[LED.kind.isin(["sign", "rollover"])]
              .groupby("month").delegation.nunique().sort_index())
-PM_X = [to_year(m) for m in PER_MONTH.index]
-SPAN = (PM_X[0], PM_X[-1])
+MONTHS = list(PER_MONTH.index)
+IDX = {m: i for i, m in enumerate(MONTHS)}
 
-CAP_LABEL = {"validate": "validate", "sign": "sign", "publish": "publish",
-             "rrtype": "rrtype", "algorithm-aware": "codepoint"}
+# Detrended: each month against its own two-year neighbourhood. Raw counts rise
+# ~25x over the corpus, so without this a panel measures when a project shipped.
+TREND = PER_MONTH.rolling(25, center=True, min_periods=5).median()
+RESID = (PER_MONTH - TREND).fillna(0.0).to_numpy()
+# Centre it. A spiky series sits above its own rolling median, so the raw
+# residual averages ~+30 and a zero line would read as "nothing unusual" while
+# sitting nowhere near the data. Centred, zero means exactly that.
+RESID = RESID - RESID.mean()
+
+LAGS = np.arange(-12, 13)          # months either side of a release
+RNG = np.random.default_rng(20260911)
+N_PERM = 2000
+
+
+def epoch_curve(release_idx):
+    '''Mean detrended change at each offset from a release month.
+
+    The superposed-epoch average: line every release up at month 0 and take the
+    mean of what happened around them. If releases move deployment, the curve
+    steps up to the right of zero.
+    '''
+    grid = release_idx[:, None] + LAGS[None, :]
+    ok = (grid >= 0) & (grid < len(RESID))
+    vals = np.where(ok, RESID[np.clip(grid, 0, len(RESID) - 1)], np.nan)
+    return np.nanmean(vals, axis=0)
+
+
+def null_band(release_idx, n=N_PERM):
+    '''Same statistic under a circular shift of the whole schedule.
+
+    Shifting keeps every gap between a project's releases intact and changes only
+    where the schedule lands, so the band is what this release pattern would
+    produce against a series it has no relationship with.
+    '''
+    out = np.empty((n, len(LAGS)))
+    for i in range(n):
+        k = RNG.integers(1, len(MONTHS))
+        out[i] = epoch_curve((release_idx + k) % len(MONTHS))
+    return np.nanpercentile(out, 5, axis=0), np.nanpercentile(out, 95, axis=0)
 
 
 def program_panel(proj):
-    '''One program: its releases and milestones above, DNSSEC change below.
-
-    The milestones get their own strip rather than being drawn over the series.
-    Sharing one axes means either the labels sit on the data or the x-limit is
-    padded far enough to make room, which squeezes seventeen years of series into
-    half the width.
-    '''
+    '''What happened around this program's releases, against what chance gives.'''
     rel = REL[proj]["releases"]
-    feats = [r for r in SUP["support"] if r["implementation"] == proj]
-    defs = [r for r in SUP["default_changes"] if r["implementation"] == proj]
-    lims = [r for r in SUP["validator_limits"] if r["implementation"] == proj]
+    idx = np.array(sorted({IDX[d[:7]] for d in rel.values() if d[:7] in IDX}))
     scan = SCAN["per_project"].get(proj, {})
+    if len(idx) < 5:
+        return None
 
-    fig, (top_ax, ax) = plt.subplots(
-        2, 1, figsize=(11, 5.0), sharex=True,
-        gridspec_kw={"height_ratios": [1.35, 1], "hspace": 0.08})
+    obs = epoch_curve(idx)
+    lo, hi = null_band(idx)
 
-    # ---- lower panel: the outcome, identical in every program's chart ------- #
-    ax.fill_between(PM_X, PER_MONTH.values, color=S1, alpha=0.13, zorder=1)
-    ax.plot(PM_X, PER_MONTH.values, color=S1, linewidth=1.5, zorder=2)
-    style(ax); year_axis(ax)
-    ax.set_ylim(0, PER_MONTH.max() * 1.06)
-    ax.set_ylabel("delegations changing\nper month", color=INK_2, fontsize=10)
-    ax.set_xlabel("year", color=INK_2)
-    ax.set_xlim(SPAN[0] - 0.4, SPAN[1] + 0.4)
+    fig, ax = plt.subplots(figsize=(8.6, 3.9))
+    ax.fill_between(LAGS, lo, hi, color=GRID, zorder=1,
+                    label="what chance gives (90% of circular shifts)")
+    ax.axhline(0, color=BASELINE, linewidth=1, zorder=2)
+    ax.axvline(0, color=MUTED, linewidth=1.2, linestyle=(0, (4, 3)), zorder=2)
+    outside = (obs > hi) | (obs < lo)
+    ax.plot(LAGS, obs, color=S1, linewidth=2.4, zorder=4,
+            label=f"observed, averaged over {len(idx)} release months")
+    if outside.any():
+        ax.scatter(LAGS[outside], obs[outside], s=60, color=CRITICAL, zorder=5,
+                   edgecolor=SURFACE, linewidth=1.5)
 
-    # ---- upper strip: release cadence and DNSSEC milestones ---------------- #
-    in_span = [to_year(d[:7]) for d in rel.values()
-               if SPAN[0] <= to_year(d[:7]) <= SPAN[1]]
-    for x in in_span:
-        top_ax.plot([x, x], [0.03, 0.15], color=MUTED, linewidth=0.9, alpha=0.6,
-                    zorder=3)
-    # Right-aligned: at the left it lands under the earliest milestone label.
-    # In the gap between the rug (tops at 0.15) and the first label lane (0.34).
-    top_ax.text(SPAN[1] + 0.3, 0.22, f"{len(in_span)} stable releases in span "
-                f"(of {len(rel)} total)", fontsize=9, color=MUTED, va="center",
-                ha="right")
-
-    marks = ([(to_year(r["released"][:7]),
-               f'{r["first_release"]} {r["observable"]}', S2, "o") for r in feats]
-             + [(to_year(r["released"][:7]), f'{r["first_release"]} default', S3, "D")
-                for r in defs]
-             + [(to_year(r["released"][:7]), f'{r["first_release"]} limit', CRITICAL, "s")
-                for r in lims])
-    marks.sort()
-
-    # Greedy lane packing. Assigning lanes by index modulo N puts marks that are
-    # close in time into the same lane whenever the count is a multiple of N --
-    # Knot has nine milestones inside six years and they overprinted.
-    YEARS_PER_CHAR = (SPAN[1] - SPAN[0]) / 96.0
-    lane_end, placed = [], []
-    for x, label, colour, mk in marks:
-        width = len(label) * YEARS_PER_CHAR + 0.35
-        right = x > SPAN[0] + (SPAN[1] - SPAN[0]) * 0.60
-        x0, x1 = (x - width, x) if right else (x, x + width)
-        for lane, end in enumerate(lane_end):
-            if x0 > end:
-                lane_end[lane] = x1
-                break
-        else:
-            lane = len(lane_end)
-            lane_end.append(x1)
-        placed.append((x, label, colour, mk, lane, right))
-
-    n_lanes = max((p[4] for p in placed), default=0) + 1
-    for x, label, colour, mk, lane, right in placed:
-        y = 0.34 + 0.15 * lane
-        # The guide carries the date down through BOTH panels, so a milestone can
-        # be read against the series. Drawn in muted grey, not the mark's colour:
-        # coloured and dashed it looked like a data line, and the height a marker
-        # sits at means nothing -- it is lane packing to stop labels colliding.
-        top_ax.plot([x, x], [0.15, y], color=GRID, linewidth=1, zorder=2)
-        ax.axvline(x, color=GRID, linewidth=1, zorder=0)
-        top_ax.scatter(x, y, s=62, color=colour, marker=mk, zorder=5,
-                       edgecolor=SURFACE, linewidth=1.4)
-        top_ax.text(x + (-0.22 if right else 0.22), y, label, fontsize=8.5,
-                    color=INK_2, va="center", ha="right" if right else "left")
-    top_ax.set_ylim(0, 0.34 + 0.15 * max(n_lanes, 3))
-    top_ax.set_yticks([])
-    for side in ("top", "right", "left", "bottom"):
-        top_ax.spines[side].set_visible(False)
-    top_ax.tick_params(length=0)
+    ax.text(0, ax.get_ylim()[1], " release month", color=MUTED, fontsize=9.5,
+            va="top", ha="left")
+    style(ax)
+    ax.set_xlim(LAGS[0], LAGS[-1])
+    ax.set_xticks([-12, -6, 0, 6, 12])
+    ax.set_xticklabels(["12 months\nbefore", "6", "release", "6", "12 months\nafter"],
+                       fontsize=9.5, color=INK_2)
+    ax.set_ylabel("delegations changing per month,\nabove or below normal for that era",
+                  color=INK_2, fontsize=10)
+    pad = (hi.max() - lo.min()) * 0.12
+    ax.set_ylim(min(lo.min(), obs.min()) - pad, max(hi.max(), obs.max()) + pad)
 
     role = REL[proj]["role"]
-    if scan.get("testable"):
-        verdict = ("no detectable effect on adoption"
-                   if scan["circular_shift_p"] >= 0.05 else "effect detected")
-        sub = (f'{scan["n_release_months"]} of 193 months carried a release · '
-               f'detrended {scan["detrended_difference"]:+.1f} changes/month · '
-               f'p = {scan["circular_shift_p"]:.2f} → {verdict}')
+    # A 90% band puts 10% of offsets outside by construction -- 2.5 of 25 -- so
+    # excursions are only worth reporting against that expectation, and only
+    # upward ones would be evidence of a release driving adoption.
+    above, below = int((obs > hi).sum()), int((obs < lo).sum())
+    expected = round(len(LAGS) * 0.10, 1)
+    if above == 0:
+        verdict = (f"never rises above the band ({below} dips below; "
+                   f"{expected} excursions expected by chance)")
     else:
-        sub = "not testable: releases cover too much of the corpus"
-    top_ax.set_title(f"{NAME[proj]}  —  {role}", loc="left", color=INK,
-                     fontweight="bold", pad=30)
-    top_ax.text(0, 1.035, sub, transform=top_ax.transAxes, color=INK_2, fontsize=9.5,
-                va="bottom")
-    metric(ax, "Upper strip: grey ticks are every stable release; circle = a capability "
-               "first shipped, diamond = a default changed, square = a limit that forces "
-               "zones to change. A milestone's height is only spacing so labels do not "
-               "collide -- it carries no value. The grey guide drops its date through to "
-               "the series below, which is the same series in all eight charts.")
+        verdict = (f"{above} offsets above the band, {below} below; "
+                   f"{expected} expected by chance")
+    ax.set_title(f"{NAME[proj]}  —  {role}", loc="left", color=INK, fontweight="bold",
+                 pad=52)
+    ax.text(0, 1.035, f'{len(rel)} stable releases · p = '
+            f'{scan.get("circular_shift_p", float("nan")):.2f} · {verdict}',
+            transform=ax.transAxes, color=INK_2, fontsize=9.5, va="bottom")
+    ax.legend(frameon=False, fontsize=9.5, labelcolor=INK_2, ncol=2,
+              loc="lower left", bbox_to_anchor=(0, 1.10))
+    metric(ax, "Every release of this program is lined up at month zero and the "
+               "surrounding months averaged. A release that mattered would push the blue "
+               "line above the grey band to the right of zero. The band is the same "
+               "calculation on the same release pattern, slid to a random point in the "
+               "corpus, 2,000 times.")
     return save(fig, f"22_program_{proj.replace('-', '_')}")
 
 
