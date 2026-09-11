@@ -1124,8 +1124,8 @@ def program_panel(proj):
     ax.set_xticks([-12, -6, 0, 6, 12])
     ax.set_xticklabels(["12 months\nbefore", "6", "release", "6", "12 months\nafter"],
                        fontsize=9.5, color=INK_2)
-    ax.set_ylabel("delegations changing per month,\nabove or below normal for that era",
-                  color=INK_2, fontsize=10)
+    ax.set_ylabel("reverse-DNS zones newly signing or\nswitching algorithm, per month\n"
+                  "(above or below normal for that era)", color=INK_2, fontsize=9.5)
     pad = (hi.max() - lo.min()) * 0.12
     ax.set_ylim(min(lo.min(), obs.min()) - pad, max(hi.max(), obs.max()) + pad)
 
@@ -1148,11 +1148,15 @@ def program_panel(proj):
             transform=ax.transAxes, color=INK_2, fontsize=9.5, va="bottom")
     ax.legend(frameon=False, fontsize=9.5, labelcolor=INK_2, ncol=2,
               loc="lower left", bbox_to_anchor=(0, 1.10))
-    metric(ax, "Every release of this program is lined up at month zero and the "
-               "surrounding months averaged. A release that mattered would push the blue "
+    metric(ax, "A delegation is one reverse-DNS zone an RIR handed to a network "
+               "operator, such as 26.96.192.in-addr.arpa. The outcome counts those that "
+               "gained a DS record or changed signing algorithm that month -- a median of "
+               "63 across the corpus, against roughly 4,000 signed delegations in ARIN "
+               "alone. Every release of this program is lined up at month zero and the "
+               "surrounding months averaged; a release that mattered would push the blue "
                "line above the grey band to the right of zero. The band is the same "
                "calculation on the same release pattern, slid to a random point in the "
-               "corpus, 2,000 times.")
+               "corpus 2,000 times.")
     return save(fig, f"22_program_{proj.replace('-', '_')}")
 
 
