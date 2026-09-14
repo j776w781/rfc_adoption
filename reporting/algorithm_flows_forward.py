@@ -30,8 +30,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.ticker import FuncFormatter, MaxNLocator
 
-from algorithm_flows import (BARE, FAM_COLOR, FAMILY, GRID, INK, INK_2, MUTED, ORDER,
-                             SURFACE, style)   # noqa: F401  (shared look)
+from algorithm_flows import (BARE, BASELINE, FAM_COLOR, FAMILY, GRID, INK, INK_2,
+                             MUTED, ORDER, SURFACE, style)  # noqa: F401 (shared look)
 
 TLDS = ["se", "nu", "ch", "gov", "ee", "li"]
 
@@ -76,8 +76,15 @@ def main() -> int:
         total = wide.sum(axis=1).replace(0, pd.NA)
         share = wide.div(total, axis=0) * 100
         xs = [to_year(m) for m in share.index]
-        ax.stackplot(xs, *[share[f].fillna(0) for f in ORDER],
-                     colors=[FAM_COLOR[f] for f in ORDER], zorder=3)
+        # Lines on a shared zero, not a stack: in a stacked area only the bottom
+        # band has a fixed baseline, and comparing .se's ECDSA with .ch's means
+        # reading two bands off two different floors.
+        for fam in ORDER:
+            ser = share[fam].fillna(0)
+            if ser.max() < 1:
+                continue
+            ax.plot(xs, ser, color=FAM_COLOR[fam], linewidth=2.2, zorder=3)
+        ax.axhline(50, color=BASELINE, linewidth=0.9, linestyle=(0, (4, 3)), zorder=2)
         style(ax)
         ax.set_ylim(0, 100)
         ax.set_xlim(min(xs), max(xs))
@@ -86,10 +93,9 @@ def main() -> int:
         ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}%"))
         last = share.iloc[-1]
         lead = max(ORDER, key=lambda f: 0 if pd.isna(last[f]) else last[f])
-        ax.set_title(f".{tld}   {int(total.iloc[-1]):,} signed zones",
-                     loc="left", fontsize=11, color=INK, fontweight="bold")
-        ax.text(0.03, 0.08, f"{lead} {last[lead]:.0f}%", transform=ax.transAxes,
-                fontsize=10, color="#ffffff", fontweight="bold")
+        ax.set_title(f".{tld}   {int(total.iloc[-1]):,} signed zones   "
+                     f"{lead} {last[lead]:.0f}%",
+                     loc="left", fontsize=10.5, color=INK, fontweight="bold")
         ax.tick_params(labelsize=9)
     for ax in axes.ravel()[len(tlds):]:
         ax.set_visible(False)
@@ -97,10 +103,10 @@ def main() -> int:
     if not args.bare:
         # Title above, legend under it: at the same height they overprint.
         fig.suptitle("OpenINTEL: what the signed zones of each TLD actually run",
-                     x=0.005, y=1.035, ha="left", fontsize=13, fontweight="bold",
+                     x=0.005, y=1.075, ha="left", fontsize=13, fontweight="bold",
                      color=INK)
         fig.legend(handles, ORDER, frameon=False, ncol=4, loc="lower left",
-                   bbox_to_anchor=(0.005, 0.965), fontsize=10, labelcolor=INK_2)
+                   bbox_to_anchor=(0.005, 0.985), fontsize=10, labelcolor=INK_2)
         fig.text(0.005, -0.04, textwrap.fill(
             "Share of each TLD's signed zones by algorithm family, from the monthly "
             "counts. The forward corpus runs 2016-06 to 2023-12 and the TLDs enter at "

@@ -144,43 +144,63 @@ def main() -> int:
     counts = counts[ORDER]
 
     fig, ax = plt.subplots(figsize=(10.5, 4.4))
-    ax.stackplot(counts.index, *[counts[f] for f in ORDER],
-                 colors=[FAM_COLOR[f] for f in ORDER], labels=ORDER, zorder=3)
-    for fam, y in (("RSA/SHA-1", 2013), ("RSA/SHA-2", 2019), ("ECDSA", 2024)):
-        below = sum(counts[o][y] for o in ORDER[:ORDER.index(fam)])
-        ax.text(y, below + counts[fam][y] / 2, fam, ha="center", va="center",
-                fontsize=11, color="#ffffff", fontweight="bold", zorder=5)
+    # Lines, not a stack. In a stacked area only the bottom band has a fixed
+    # baseline; every band above it is read against a moving floor, which is
+    # exactly the comparison these charts exist to make.
+    for fam in ORDER:
+        if counts[fam].max() < 5:
+            continue
+        ax.plot(counts.index, counts[fam], color=FAM_COLOR[fam], linewidth=2.6,
+                zorder=3)
+        # Right-hand labels, as in the share figure: at each line's own peak the
+        # RSA/SHA-1 label lands on top of the rising ECDSA line.
+        last = counts.index[-1]
+        ax.annotate(f"{fam}  {int(counts[fam][last]):,}", (last, counts[fam][last]),
+                    xytext=(9, 0), textcoords="offset points", va="center",
+                    fontsize=10.5, color=INK, fontweight="bold")
     style(ax)
-    ax.set_xlim(years[0], years[-1])
     year_ticks(ax)
+    ax.set_xlim(years[0], years[-1] + 3.6)
+    ax.set_ylim(bottom=0)
     ax.set_ylabel("zones signing for the first time", color=INK_2)
     ax.set_xlabel("year", color=INK_2)
     headline(ax, "What a zone turning DNSSEC on for the first time picked",
-             "RSA/SHA-1 until 2013, RSA/SHA-2 through 2019, ECDSA ever since")
-    note(ax, "Each band is the number of reverse-DNS zones that gained a DS record that "
-             "year, by the algorithm family they chose. 2026 is nine months.")
+             "RSA/SHA-2 peaks in 2019 and ECDSA in 2025. RSA/SHA-1 is the odd one: "
+             "still chosen by 373 zones in 2020, thirteen years after RSA/SHA-2 "
+             "existed")
+    note(ax, "Reverse-DNS zones that gained a DS record that year, counted by the "
+             "algorithm family they chose. A zone appears once, in the year it first "
+             "signed. 2026 is nine months.")
     save(fig, args.out, "f1_first_signing_choice")
 
     # ---- 2. the same as a share, so the handover is unmistakable ------------ #
     shares = counts.div(counts.sum(axis=1).replace(0, pd.NA), axis=0) * 100
-    fig, ax = plt.subplots(figsize=(10.5, 4.0))
-    ax.stackplot(shares.index, *[shares[f].fillna(0) for f in ORDER],
-                 colors=[FAM_COLOR[f] for f in ORDER], labels=ORDER, zorder=3)
+    fig, ax = plt.subplots(figsize=(10.5, 4.2))
+    for fam in ORDER:
+        ser = shares[fam].fillna(0)
+        if ser.max() < 1:
+            continue
+        ax.plot(ser.index, ser, color=FAM_COLOR[fam], linewidth=2.8, zorder=3)
+        last = ser.index[-1]
+        ax.annotate(f"{fam}  {ser[last]:.0f}%", (last, ser[last]), xytext=(9, 0),
+                    textcoords="offset points", va="center", fontsize=10.5,
+                    color=INK, fontweight="bold")
+    ax.axhline(50, color=BASELINE, linewidth=1, linestyle=(0, (4, 3)), zorder=2)
+    # Right-hand end: at the left it lands on the RSA/SHA-1 line.
+    ax.text(years[-1] + 3.3, 51.5, "half of that year's new signers", fontsize=9.5,
+            color=MUTED, ha="right")
     style(ax)
-    ax.set_ylim(0, 100)
-    ax.set_xlim(years[0], years[-1])
-    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}%"))
     year_ticks(ax)
+    ax.set_ylim(0, 100)
+    ax.set_xlim(years[0], years[-1] + 3.4)
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:g}%"))
     ax.set_ylabel("share of that year's new signers", color=INK_2)
     ax.set_xlabel("year", color=INK_2)
-    for fam, y in (("RSA/SHA-1", 2012), ("RSA/SHA-2", 2017), ("ECDSA", 2024)):
-        below = sum(shares[o].fillna(0)[y] for o in ORDER[:ORDER.index(fam)])
-        ax.text(y, below + shares[fam].fillna(0)[y] / 2, fam, ha="center", va="center",
-                fontsize=11, color="#ffffff", fontweight="bold", zorder=5)
     headline(ax, "Two complete handovers in seventeen years",
-             "ECDSA passes half of new signings in 2021 and reaches 85% by 2026")
-    note(ax, "Same data as the previous figure, as a share of each year's total. "
-             "EdDSA, standardised in 2017, never becomes visible at this scale.")
+             "Each family crosses the halfway line on its way up, and the one before it "
+             "crosses on the way down")
+    note(ax, "Same data as the previous figure, as a share of each year's total. Lines "
+             "sum to 100% by construction. EdDSA, standardised in 2017, never reaches 1%.")
     save(fig, args.out, "f2_first_signing_share")
 
     # ---- 3. where zones that already had DNSSEC went ----------------------- #
