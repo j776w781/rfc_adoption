@@ -18,11 +18,17 @@ A change is attributed to the coarsest level at which it is coherent: if every
 delegation that changed in a month sits under one block, the block made the
 change; if the change spans many blocks in one RIR, it happened above them.
 
-**Reverse only.** The forward (OpenINTEL) per-day records are not in this
-repository -- only the monthly aggregates -- so no equivalent ledger exists for
-`.se`, `.nu`, `.ch` and the rest. Forward stays at TLD level.
+Works on either corpus. The reverse (RIR) per-day records are in this repository;
+the forward (OpenINTEL) ones are not, but the moment they exist this runs over
+them unchanged -- the column names differ between the two and are resolved by
+candidate rather than hardcoded.
 
-    python scripts/delegation_changes.py [--corpus out/reverse/corpus/reverse]
+    # reverse, the default
+    python scripts/delegation_changes.py
+
+    # forward, once out/full_run has written a zonefile corpus
+    python scripts/delegation_changes.py --corpus <root>/zonefile --basis zonefile \
+        --out out/analysis/forward
 """
 from __future__ import annotations
 
@@ -34,8 +40,26 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
+import pyarrow.parquet as pq
 
 MONTH = re.compile(r"/(\d{4}-\d{2})-\d{2}/")
+
+#: Column names differ between the ingested RIPE corpus and OpenINTEL's own
+#: parquet, and between OpenINTEL vintages. Resolve by candidate so a schema
+#: change is a miss to report rather than a silent empty result.
+NAME_COLS = ("query_name", "domain", "name")
+TYPE_COLS = ("response_type", "rr_type", "type")
+ALG_COLS = {"DS": ("ds_algorithm", "algorithm"),
+            "DNSKEY": ("dnskey_algorithm", "algorithm")}
+
+
+def pick(columns, candidates, what, path):
+    for c in candidates:
+        if c in columns:
+            return c
+    raise SystemExit(
+        f"{path}: no column for {what}. Tried {list(candidates)}; file has "
+        f"{sorted(columns)[:12]}...")
 
 #: A cluster this size or larger, all making the same transition in one month
 #: under one block, is a bulk action. The cut is reported alongside the full
@@ -50,7 +74,7 @@ def block_of(name: str) -> str:
     return rest if rest.count(".") >= 2 else name
 
 
-def ledger(corpus: Path) -> pd.DataFrame:
+def ledger(corpus: Path, record: str = "DS") -> pd.DataFrame:
     rows = []
     for src_dir in sorted(p for p in corpus.iterdir() if p.is_dir()):
         source = src_dir.name
@@ -59,9 +83,13 @@ def ledger(corpus: Path) -> pd.DataFrame:
         prev = None
         for f in sorted(glob.glob(str(src_dir / "*" / "*.parquet"))):
             month = MONTH.search(f).group(1)
-            df = pd.read_parquet(f, columns=["query_name", "response_type", "ds_algorithm"])
-            ds = df[(df.response_type == "DS") & df.ds_algorithm.notna()]
-            cur = (ds.groupby("query_name").ds_algorithm
+            available = pq.ParquetFile(f).schema_arrow.names
+            name_c = pick(available, NAME_COLS, "the zone name", f)
+            type_c = pick(available, TYPE_COLS, "the record type", f)
+            alg_c = pick(available, ALG_COLS[record], f"the {record} algorithm", f)
+            df = pd.read_parquet(f, columns=[name_c, type_c, alg_c])
+            ds = df[(df[type_c] == record) & df[alg_c].notna()]
+            cur = (ds.groupby(name_c)[alg_c]
                    .apply(lambda s: frozenset(int(x) for x in s)).to_dict())
             if prev is not None:
                 for name in set(prev) | set(cur):
@@ -129,11 +157,24 @@ def attribute(led: pd.DataFrame) -> pd.DataFrame:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", type=Path, default=Path("out/reverse/corpus/reverse"))
+    ap.add_argument("--basis", default="reverse", choices=["reverse", "zonefile"])
+    ap.add_argument("--record", default=None, choices=["DS", "DNSKEY"],
+                    help="Default: DS for both, which is what makes the two corpora "
+                         "comparable -- it is the delegation either way.")
     ap.add_argument("--out", type=Path, default=Path("out/analysis"))
     args = ap.parse_args()
+    record = args.record or "DS"
 
-    print("building the per-delegation change ledger (reverse corpus)")
-    led = ledger(args.corpus)
+    if not args.corpus.exists():
+        raise SystemExit(
+            f"no corpus at {args.corpus}.\n"
+            "For the forward side, run scripts/full_timeline.py --stage index "
+            "--roots <openintel mirror> first; out/full_run is its output, not its "
+            "input.")
+
+    print(f"building the per-delegation change ledger "
+          f"({args.basis} corpus, {record} records)")
+    led = ledger(args.corpus, record=record)
     args.out.mkdir(parents=True, exist_ok=True)
     led.to_parquet(args.out / "delegation_changes.parquet", index=False)
 
