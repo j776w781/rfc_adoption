@@ -1,0 +1,92 @@
+{
+  "corpus": {
+    "months": [
+      "2016-06",
+      "2023-12"
+    ],
+    "sources": [
+      "ch",
+      "ee",
+      "gov",
+      "li",
+      "nu",
+      "se"
+    ],
+    "entry_month": {
+      "ch": "2020-05",
+      "ee": "2019-07",
+      "gov": "2017-05",
+      "li": "2020-05",
+      "nu": "2016-06",
+      "se": "2016-06"
+    }
+  },
+  "signed_zones_last_month": {
+    "RSA/SHA-1": 2347,
+    "RSA/SHA-2": 553251,
+    "ECDSA": 1729561,
+    "EdDSA": 181
+  },
+  "share_of_signed_zones_last_month_pct": {
+    "RSA/SHA-1": 0.1,
+    "RSA/SHA-2": 24.4,
+    "ECDSA": 76.1,
+    "EdDSA": 0.0
+  },
+  "dual_signing_peak": {
+    "month": "2019-11",
+    "zones": 219967
+  },
+  "overlap_warning": "per-algorithm zone counts overlap: a zone mid-rollover publishes two families and is counted under both, so they must never be stacked",
+  "per_tld_last_month_pct": {
+    "se": {
+      "month": "2023-12",
+      "signed_zones": 840009,
+      "RSA/SHA-1": 0.1,
+      "RSA/SHA-2": 44.8,
+      "ECDSA": 56.6,
+      "EdDSA": 0.0
+    },
+    "nu": {
+      "month": "2023-12",
+      "signed_zones": 126141,
+      "RSA/SHA-1": 0.2,
+      "RSA/SHA-2": 45.7,
+      "ECDSA": 54.7,
+      "EdDSA": 0.0
+    },
+    "ch": {
+      "month": "2023-12",
+      "signed_zones": 1244739,
+      "RSA/SHA-1": 0.1,
+      "RSA/SHA-2": 9.2,
+      "ECDSA": 90.8,
+      "EdDSA": 0.0
+    },
+    "gov": {
+      "month": "2023-12",
+      "signed_zones": 1766,
+      "RSA/SHA-1": 9.3,
+      "RSA/SHA-2": 41.6,
+      "ECDSA": 49.7,
+      "EdDSA": 0.0
+    },
+    "ee": {
+      "month": "2023-12",
+      "signed_zones": 36865,
+      "RSA/SHA-1": 0.3,
+      "RSA/SHA-2": 3.8,
+      "ECDSA": 96.0,
+      "EdDSA": 0.0
+    },
+    "li": {
+      "month": "2023-12",
+      "signed_zones": 22041,
+      "RSA/SHA-1": 0.2,
+      "RSA/SHA-2": 13.0,
+      "ECDSA": 86.9,
+      "EdDSA": 0.1
+    }
+  },
+  "not_available_forward": "per-zone rollover paths: neither the monthly aggregates, the RFC checkpoints nor the sampled exemplars follow one zone across months"
+}

@@ -138,6 +138,29 @@ def main() -> int:
         "Running total of arrivals minus departures. A net position over observed "
         "changes, not a census of the reverse DNS.")
 
+    # ---- the forward corpus ------------------------------------------------ #
+    fwd = json.loads(Path("out/analysis/algorithm_flows_forward.json")
+                     .read_text(encoding="utf-8"))
+    per_tld = fwd["per_tld_last_month_pct"]
+    chart_slide(
+        prs, "openintel", "What the signed zones of each TLD actually run",
+        args.figs / "f6_forward_family_share.png",
+        f".ee is {per_tld['ee']['ECDSA']:.0f}% ECDSA and .ch {per_tld['ch']['ECDSA']:.0f}%, "
+        f"but .se is only {per_tld['se']['ECDSA']:.0f}% and .gov still "
+        f"{per_tld['gov']['RSA/SHA-1']:.0f}% RSA/SHA-1.",
+        "Share of each TLD's signed zones by family. The forward corpus runs 2016-06 to "
+        "2023-12 and TLDs enter at different dates, so each panel starts where its data "
+        "does.")
+
+    chart_slide(
+        prs, "openintel", "The migration, and the rollovers still in flight",
+        args.figs / "f7_forward_net_growth.png",
+        f"{fwd['dual_signing_peak']['zones']:,} zones were publishing two algorithm "
+        f"families at once in {fwd['dual_signing_peak']['month']}.",
+        "Lines sum to more than the total because a zone rolling over publishes both "
+        "algorithms; that gap is the population mid-rollover. Per-algorithm counts "
+        "overlap and must never be stacked.")
+
     # ---- what it means ----------------------------------------------------- #
     s = blank(prs)
     text(s, Inches(0.62), Inches(0.38), Inches(12), Inches(0.3), ["WHAT THIS SHOWS"],
