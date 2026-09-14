@@ -1,0 +1,250 @@
+{
+  "first_signing_by_year": {
+    "2009": {
+      "RSA/SHA-1": 18,
+      "RSA/SHA-2": 0,
+      "ECDSA": 0,
+      "EdDSA": 0
+    },
+    "2010": {
+      "RSA/SHA-1": 215,
+      "RSA/SHA-2": 2,
+      "ECDSA": 0,
+      "EdDSA": 0
+    },
+    "2011": {
+      "RSA/SHA-1": 229,
+      "RSA/SHA-2": 49,
+      "ECDSA": 0,
+      "EdDSA": 0
+    },
+    "2012": {
+      "RSA/SHA-1": 189,
+      "RSA/SHA-2": 177,
+      "ECDSA": 0,
+      "EdDSA": 0
+    },
+    "2013": {
+      "RSA/SHA-1": 299,
+      "RSA/SHA-2": 245,
+      "ECDSA": 0,
+      "EdDSA": 0
+    },
+    "2014": {
+      "RSA/SHA-1": 174,
+      "RSA/SHA-2": 798,
+      "ECDSA": 0,
+      "EdDSA": 0
+    },
+    "2015": {
+      "RSA/SHA-1": 302,
+      "RSA/SHA-2": 632,
+      "ECDSA": 2,
+      "EdDSA": 0
+    },
+    "2016": {
+      "RSA/SHA-1": 27,
+      "RSA/SHA-2": 839,
+      "ECDSA": 3,
+      "EdDSA": 0
+    },
+    "2017": {
+      "RSA/SHA-1": 112,
+      "RSA/SHA-2": 476,
+      "ECDSA": 168,
+      "EdDSA": 0
+    },
+    "2018": {
+      "RSA/SHA-1": 215,
+      "RSA/SHA-2": 364,
+      "ECDSA": 238,
+      "EdDSA": 0
+    },
+    "2019": {
+      "RSA/SHA-1": 39,
+      "RSA/SHA-2": 984,
+      "ECDSA": 520,
+      "EdDSA": 0
+    },
+    "2020": {
+      "RSA/SHA-1": 373,
+      "RSA/SHA-2": 446,
+      "ECDSA": 294,
+      "EdDSA": 0
+    },
+    "2021": {
+      "RSA/SHA-1": 96,
+      "RSA/SHA-2": 209,
+      "ECDSA": 482,
+      "EdDSA": 0
+    },
+    "2022": {
+      "RSA/SHA-1": 66,
+      "RSA/SHA-2": 234,
+      "ECDSA": 706,
+      "EdDSA": 1
+    },
+    "2023": {
+      "RSA/SHA-1": 26,
+      "RSA/SHA-2": 162,
+      "ECDSA": 747,
+      "EdDSA": 2
+    },
+    "2024": {
+      "RSA/SHA-1": 63,
+      "RSA/SHA-2": 199,
+      "ECDSA": 857,
+      "EdDSA": 3
+    },
+    "2025": {
+      "RSA/SHA-1": 36,
+      "RSA/SHA-2": 304,
+      "ECDSA": 955,
+      "EdDSA": 8
+    },
+    "2026": {
+      "RSA/SHA-1": 12,
+      "RSA/SHA-2": 122,
+      "ECDSA": 771,
+      "EdDSA": 3
+    }
+  },
+  "first_signing_share_pct": {
+    "2009": {
+      "RSA/SHA-1": 100.0,
+      "RSA/SHA-2": 0.0,
+      "ECDSA": 0.0,
+      "EdDSA": 0.0
+    },
+    "2010": {
+      "RSA/SHA-1": 99.1,
+      "RSA/SHA-2": 0.9,
+      "ECDSA": 0.0,
+      "EdDSA": 0.0
+    },
+    "2011": {
+      "RSA/SHA-1": 82.4,
+      "RSA/SHA-2": 17.6,
+      "ECDSA": 0.0,
+      "EdDSA": 0.0
+    },
+    "2012": {
+      "RSA/SHA-1": 51.6,
+      "RSA/SHA-2": 48.4,
+      "ECDSA": 0.0,
+      "EdDSA": 0.0
+    },
+    "2013": {
+      "RSA/SHA-1": 55.0,
+      "RSA/SHA-2": 45.0,
+      "ECDSA": 0.0,
+      "EdDSA": 0.0
+    },
+    "2014": {
+      "RSA/SHA-1": 17.9,
+      "RSA/SHA-2": 82.1,
+      "ECDSA": 0.0,
+      "EdDSA": 0.0
+    },
+    "2015": {
+      "RSA/SHA-1": 32.3,
+      "RSA/SHA-2": 67.5,
+      "ECDSA": 0.2,
+      "EdDSA": 0.0
+    },
+    "2016": {
+      "RSA/SHA-1": 3.1,
+      "RSA/SHA-2": 96.5,
+      "ECDSA": 0.3,
+      "EdDSA": 0.0
+    },
+    "2017": {
+      "RSA/SHA-1": 14.8,
+      "RSA/SHA-2": 63.0,
+      "ECDSA": 22.2,
+      "EdDSA": 0.0
+    },
+    "2018": {
+      "RSA/SHA-1": 26.3,
+      "RSA/SHA-2": 44.6,
+      "ECDSA": 29.1,
+      "EdDSA": 0.0
+    },
+    "2019": {
+      "RSA/SHA-1": 2.5,
+      "RSA/SHA-2": 63.8,
+      "ECDSA": 33.7,
+      "EdDSA": 0.0
+    },
+    "2020": {
+      "RSA/SHA-1": 33.5,
+      "RSA/SHA-2": 40.1,
+      "ECDSA": 26.4,
+      "EdDSA": 0.0
+    },
+    "2021": {
+      "RSA/SHA-1": 12.2,
+      "RSA/SHA-2": 26.6,
+      "ECDSA": 61.2,
+      "EdDSA": 0.0
+    },
+    "2022": {
+      "RSA/SHA-1": 6.6,
+      "RSA/SHA-2": 23.2,
+      "ECDSA": 70.1,
+      "EdDSA": 0.1
+    },
+    "2023": {
+      "RSA/SHA-1": 2.8,
+      "RSA/SHA-2": 17.3,
+      "ECDSA": 79.7,
+      "EdDSA": 0.2
+    },
+    "2024": {
+      "RSA/SHA-1": 5.6,
+      "RSA/SHA-2": 17.7,
+      "ECDSA": 76.4,
+      "EdDSA": 0.3
+    },
+    "2025": {
+      "RSA/SHA-1": 2.8,
+      "RSA/SHA-2": 23.3,
+      "ECDSA": 73.3,
+      "EdDSA": 0.6
+    },
+    "2026": {
+      "RSA/SHA-1": 1.3,
+      "RSA/SHA-2": 13.4,
+      "ECDSA": 84.9,
+      "EdDSA": 0.3
+    }
+  },
+  "top_rollover_paths": {
+    "RSASHA256 \u2192 ECDSA P-256": 403,
+    "added ECDSA P-256": 199,
+    "RSASHA1 \u2192 RSASHA1-NSEC3": 127,
+    "RSASHA1 \u2192 RSASHA256": 126,
+    "RSASHA1-NSEC3 \u2192 RSASHA512": 90,
+    "RSASHA1-NSEC3 \u2192 ECDSA P-256": 89,
+    "dropped RSASHA512": 89,
+    "RSASHA256 \u2192 RSASHA1": 87,
+    "RSASHA1-NSEC3 \u2192 RSASHA256": 81,
+    "RSASHA1 \u2192 ECDSA P-256": 71,
+    "added RSASHA256": 23,
+    "ECDSA P-256 \u2192 RSASHA256": 22,
+    "RSASHA256 \u2192 ECDSA P-384": 19,
+    "dropped RSASHA256": 16,
+    "dropped RSASHA1": 12,
+    "RSASHA1-NSEC3 \u2192 ECDSA P-384": 8,
+    "ECDSA P-256 \u2192 ECDSA P-384": 8,
+    "ECDSA P-384 \u2192 ECDSA P-256": 8,
+    "RSASHA512 \u2192 ECDSA P-256": 7,
+    "added RSASHA1-NSEC3": 6
+  },
+  "installed_base_last": {
+    "RSA/SHA-1": 413,
+    "RSA/SHA-2": 4631,
+    "ECDSA": 7112,
+    "EdDSA": 38
+  }
+}
