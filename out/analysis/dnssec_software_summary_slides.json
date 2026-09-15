@@ -16,7 +16,7 @@
    "Software",
    "8 projects cloned; 1,083 stable release dates from git tags (BIND development branches excluded). For each RFC: the first release that signs or validates it, the release that changed the default, and validator caps -- each backed by the commit and checked to be contained in the cited release.",
    "OS packages",
-   "the first Ubuntu LTS (16.04 to 24.04) and Debian (11 to 13) release carrying each version, from Launchpad and the Debian tracker: the path by which most operators actually receive a new default.",
+   "the first Ubuntu LTS (16.04 to 24.04) and Debian (9 to 13) release carrying each version, from Launchpad and sources.debian.org: the path by which most operators actually receive a new default. The new-signings test is run around each OS release as well as around the upstream one.",
    "CVEs",
    "441 CVEs across the eight products from NVD; 97 are DNSSEC mechanisms, classified by the mechanism the description names (NSEC3, validation, trust anchor, algorithm...) and attributed to a product only by NVD CPE.",
    "Zones",
@@ -30,7 +30,7 @@
   "text": [
    "FINDING 1",
    "Code is never the wait; operators are",
-   "Across the algorithm and record-type RFCs the code lag runs -0.4 to +1.8 years (negative: a signer shipped it from the draft), while the lag from that release to the first zone runs 0.1 to 3.8 years. The RFC is never waiting for an implementation; it is waiting for an operator.\nDefaults sit closer to take-off than RFCs do, but no event study or release scan finds a release month that moves the curve: after detrending, the smallest circular-shift p across the eight projects is 0.11. 97% of months contain some DNS release, so 'a release came just before' is always true and never evidence.\nVerdict rule: FAST = first zone within a year of the RFC and 10% of signed delegations within four; SLOW = reached 10%, later; NEVER = under 1% of signed zones today.",
+   "Across the algorithm and record-type RFCs the code lag runs -0.4 to +1.8 years (negative: a signer shipped it from the draft), while the lag from that release to the first zone runs 0.1 to 3.8 years. The RFC is never waiting for an implementation; it is waiting for an operator.\nDefaults sit closer to take-off than RFCs do, but no event study or release scan finds a release month that moves the curve: after detrending, the smallest circular-shift p across the eight projects is 0.11. 97% of months in the release-scan span contain a stable release of one of the eight, so 'a release came just before' is always true and never evidence. Where defaults do show is in what newly signed zones choose, after the OS release that carries them (slide 5).\nVerdict rule: FAST = first zone within a year of the RFC and 10% of signed delegations within four; SLOW = reached 10%, later; NEVER = under 1% of signed zones today.",
    "RFC",
    "published",
    "first signer release",
@@ -111,7 +111,7 @@
   "text": [
    "FINDING 5  \u00b7  CVEs",
    "CVEs follow deployment; none led a push",
-   "97 of the 441 CVEs are DNSSEC mechanisms; 69 of those sit in the RFC 4033/4034/4035 core (validation, RRSIG, DNSKEY, NSEC) and belong to no single later RFC. The per-RFC sets are small: NSEC3 12, trust anchors 8, ECDSA 2, EdDSA 1, RSA/SHA-256 and CDS none.\nA CVE is attached to an RFC by the mechanism its description names, not by citing the RFC; only CVE-2023-50868 (NSEC3) and CVE-2013-4854 (RFC 5011) name their RFC in the text.\nEvery CVE nearest to an adoption spike is a validator bug (memory leak, assertion failure). Median lag from a spike to the nearest CVE: 16 months for ECDSA, 57 for NSEC3. CVE-2022-38178 came 4 months before the second EdDSA episode; it is a BIND memory leak and not a reason to sign with EdDSA.\nThe one CVE inside a causal chain is CVE-2021-40083: a symptom of the iteration problem the 2021 caps fixed, published the month the caps shipped. The DNSSEC CVE surface is on validators (Unbound, BIND, Knot Resolver, PowerDNS Recursor); the signers whose defaults move zones publish almost none.\nNSEC3 order of events: BIND 9.6.0 signs it 2008-12, the first NSEC3-signed reverse delegations appear 2009-07, the first CVE 2009-10. Code, then deployment, then CVEs, each within a year."
+   "97 of the 441 CVEs are DNSSEC mechanisms; 69 of those sit in the RFC 4033/4034/4035 core (validation, RRSIG, DNSKEY, NSEC) and belong to no single later RFC. The per-RFC sets are small: NSEC3 12, trust anchors 8, ECDSA 2, EdDSA 1, RSA/SHA-256 and CDS none.\nA CVE is attached to an RFC by the mechanism its description names, not by citing the RFC: 6 of the 97 DNSSEC CVEs cite any RFC in their text, and only 2 cite one of the RFCs studied here (CVE-2013-4854 -> RFC 5011; CVE-2023-50868 -> RFC 5155, 9276).\nEvery CVE nearest to an adoption spike is a validator bug (memory leak, assertion failure). Median lag from a spike to the nearest CVE: 16 months for ECDSA, 57 for NSEC3. CVE-2022-38178 came 4 months before the second EdDSA episode; it is a BIND memory leak and not a reason to sign with EdDSA.\nThe one CVE inside a causal chain is CVE-2021-40083: a symptom of the iteration problem the 2021 caps fixed, published the month the caps shipped. The DNSSEC CVE surface is on validators (Unbound, BIND, Knot Resolver, PowerDNS Recursor); the signers whose defaults move zones publish almost none.\nNSEC3 order of events: BIND 9.6.0 signs it 2008-12, the first NSEC3-signed reverse delegations appear 2009-07, the first CVE 2009-10. Code, then deployment, then CVEs, each within a year."
   ]
  },
  {
@@ -130,7 +130,7 @@
    "first zone 2010-03; new reverse signings 0.9% -> 20.0% across the 2011 default",
    "RFC 6605 ECDSA",
    "slow",
-   "signer default (2016) + operator rollovers",
+   "signer defaults reach new zones via Debian 9 (2017); majority by operator rollovers",
    "first zone 2015-11; majority only via 2019 rollovers and the 2021 .ch wave",
    "RFC 5155 NSEC3",
    "slow",

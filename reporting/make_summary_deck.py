@@ -49,6 +49,14 @@ def main() -> int:
     code = [o["code_lag_years"] for o in SC["onset_decomposition"] if o.get("code_lag_years") is not None]
     dep = [o["deployment_lag_years"] for o in SC["onset_decomposition"] if o.get("deployment_lag_years") is not None]
     smallest_p = min(v["circular_shift_p"] for v in RS["per_project"].values() if v.get("testable"))
+    import pandas as pd, re
+    rel_months = {d[:7] for v in R.values() for d in v["releases"].values()}
+    span = pd.period_range("2009-03", "2026-08", freq="M").strftime("%Y-%m")
+    dens = RS["identification"]["months_with_any_release"]   # same figure the release scan and the case deck use
+    cite = [(c["cve"], sorted(set(re.findall(r"RFC\s?(\d{4})", c["description"] or ""))))
+            for c in CV["cves"] if c["scope"] == "dnssec" and re.search(r"RFC\s?\d{4}", c["description"] or "")]
+    studied = {"5155", "9276", "5011", "5702", "6605", "8080", "7344", "5933"}
+    cite_studied = [(cv, [n for n in ns if n in studied]) for cv, ns in cite if any(n in studied for n in ns)]
 
     prs = Presentation(); prs.slide_width, prs.slide_height = W, H
 
@@ -74,8 +82,9 @@ def main() -> int:
         ("Software", f"{len(R)} projects cloned; {n_rel:,} stable release dates from git tags (BIND development branches excluded). "
                      "For each RFC: the first release that signs or validates it, the release that changed the default, and "
                      "validator caps -- each backed by the commit and checked to be contained in the cited release."),
-        ("OS packages", "the first Ubuntu LTS (16.04 to 24.04) and Debian (11 to 13) release carrying each version, from Launchpad and "
-                        "the Debian tracker: the path by which most operators actually receive a new default."),
+        ("OS packages", "the first Ubuntu LTS (16.04 to 24.04) and Debian (9 to 13) release carrying each version, from Launchpad and "
+                        "sources.debian.org: the path by which most operators actually receive a new default. The new-signings test is "
+                        "run around each OS release as well as around the upstream one."),
         ("CVEs", f"{n_cve} CVEs across the eight products from NVD; {n_dnssec} are DNSSEC mechanisms, classified by the mechanism the "
                  f"description names (NSEC3, validation, trust anchor, algorithm...) and attributed to a product only by NVD CPE."),
         ("Zones", "OpenINTEL zone files for .se .nu .ch .li .ee .gov .fed.us (2016-06 to 2023-12) and reverse DNS for five RIRs "
@@ -106,8 +115,9 @@ def main() -> int:
         f"from the draft), while the lag from that release to the first zone runs {min(dep):.1f} to {max(dep):.1f} years. The RFC is never "
         f"waiting for an implementation; it is waiting for an operator.",
         f"Defaults sit closer to take-off than RFCs do, but no event study or release scan finds a release month that moves the curve: after "
-        f"detrending, the smallest circular-shift p across the eight projects is {smallest_p:.2f}. 97% of months contain some DNS release, "
-        f"so 'a release came just before' is always true and never evidence.",
+        f"detrending, the smallest circular-shift p across the eight projects is {smallest_p:.2f}. {dens*100:.0f}% of months in the release-scan span contain "
+        f"a stable release of one of the eight, so 'a release came just before' is always true and never evidence. Where defaults do show is "
+        f"in what newly signed zones choose, after the OS release that carries them (slide 5).",
         "Verdict rule: FAST = first zone within a year of the RFC and 10% of signed delegations within four; SLOW = reached 10%, later; "
         "NEVER = under 1% of signed zones today.",
     ], size=12, color=INK, space=8)
@@ -166,8 +176,9 @@ def main() -> int:
         f'{n_dnssec} of the {n_cve} CVEs are DNSSEC mechanisms; {core} of those sit in the RFC 4033/4034/4035 core (validation, RRSIG, DNSKEY, NSEC) '
         f'and belong to no single later RFC. The per-RFC sets are small: NSEC3 {len(T["RFC 5155"]["cves"])}, trust anchors {len(T["RFC 5011"]["cves"])}, '
         f'ECDSA {len(T["RFC 6605"]["cves"])}, EdDSA {len(T["RFC 8080"]["cves"])}, RSA/SHA-256 and CDS none.',
-        "A CVE is attached to an RFC by the mechanism its description names, not by citing the RFC; only CVE-2023-50868 (NSEC3) and CVE-2013-4854 "
-        "(RFC 5011) name their RFC in the text.",
+        f"A CVE is attached to an RFC by the mechanism its description names, not by citing the RFC: {len(cite)} of the {n_dnssec} DNSSEC CVEs cite any RFC "
+        f"in their text, and only {len(cite_studied)} cite one of the RFCs studied here ("
+        + "; ".join(f'{cv} -> RFC {", ".join(ns)}' for cv, ns in cite_studied) + ").",
         f'Every CVE nearest to an adoption spike is a validator bug (memory leak, assertion failure). Median lag from a spike to the nearest CVE: '
         f'{c6["summary"]["median_lag_to_cve_months"]:.0f} months for ECDSA, {C["RFC 5155"]["summary"]["median_lag_to_cve_months"]:.0f} for NSEC3. '
         f'CVE-2022-38178 came 4 months before the second EdDSA episode; it is a BIND memory leak and not a reason to sign with EdDSA.',
@@ -184,7 +195,7 @@ def main() -> int:
     rows += [
         ["RFC 5702 RSA/SHA-256", T["RFC 5702"]["verdict"], "signer default, inherited by new zones",
          f'first zone {od["RFC 5702"]["first_zone_seen"]}; new reverse signings {ar5["1.2.0"]["share_before_pct"]}% -> {ar5["1.2.0"]["share_after_pct"]}% across the 2011 default'],
-        ["RFC 6605 ECDSA", T["RFC 6605"]["verdict"], "signer default (2016) + operator rollovers",
+        ["RFC 6605 ECDSA", T["RFC 6605"]["verdict"], "signer defaults reach new zones via Debian 9 (2017); majority by operator rollovers",
          f'first zone {od["RFC 6605"]["first_zone_seen"]}; majority only via 2019 rollovers and the 2021 .ch wave'],
         ["RFC 5155 NSEC3", T["RFC 5155"]["verdict"], "signer option; BIND default from 9.7.0", f'first zone {T["RFC 5155"]["lags"]["first_zone_seen"]}; 10% at {T["RFC 5155"]["adoption"][0]["t_10pct"]}'],
         ["RFC 9276 iterations", T["RFC 9276"]["verdict"], "validator caps force re-signing", "collapse 2021-10, ten months before the RFC"],
@@ -192,7 +203,7 @@ def main() -> int:
         ["RFC 8080 EdDSA", T["RFC 8080"]["verdict"], "never a default anywhere", f'{T["RFC 8080"]["curve_summary"]["reverse_last_pct"]:.2f}% reverse, {T["RFC 8080"]["curve_summary"]["forward_last_pct"]:.2f}% forward today'],
         ["RFC 5933 GOST", T["RFC 5933"]["verdict"], "never a default; Russian namespace not in corpora", "0.00% in both corpora"],
     ]
-    table(s, Inches(0.5), Inches(1.35), Inches(12.3), rows, [Inches(2.2), Inches(1.5), Inches(3.6), Inches(5.0)], size=10)
+    table(s, Inches(0.5), Inches(1.35), Inches(12.3), rows, [Inches(2.0), Inches(1.4), Inches(4.4), Inches(4.5)], size=10)
     text(s, Inches(0.62), Inches(4.5), Inches(12.1), Inches(2.5), [
         "Fast RFCs are the ones a signer default carries into every newly signed zone. Slow ones need operators to roll existing zones, and "
         "operators do that in six-figure batches years after the default changed. Never-adopted ones had no default anywhere. The only RFC that "
