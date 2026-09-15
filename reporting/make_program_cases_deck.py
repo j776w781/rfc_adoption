@@ -295,12 +295,12 @@ def new_signings_slide(prs, rfc, c, figs):
          size=12, color=MUTED, bold=True)
     text(s, Inches(0.62), Inches(0.58), Inches(12.1), Inches(0.6),
          ["Did newly signed reverse delegations pick up the new default?"], size=22, bold=True)
-    fit_picture(s, p, Inches(1.3), Inches(3.3))
+    fit_picture(s, p, Inches(1.25), Inches(2.7))
     rows = [["release", "kind", "date", "new signings, 12 mo before", "share choosing it", "new signings, 12 mo after", "share choosing it"]]
     seen = set()
     for r in c["new_signings"]["around_releases"]:
         k = (r["program"], r["version"])
-        if k in seen:
+        if k in seen or (r["kind"] == "support" and c["new_signings"]["around_os_ships"]):
             continue
         seen.add(k)
         rows.append([f'{r["program"]} {r["version"]}', r["kind"], r["date"][:7], r["new_signings_12m_before"],
@@ -311,7 +311,7 @@ def new_signings_slide(prs, rfc, c, figs):
                      "-" if r["share_before_pct"] is None else f'{r["share_before_pct"]}% ({r["blocks_choosing_before"]} blocks)',
                      r["new_signings_12m_after"],
                      "-" if r["share_after_pct"] is None else f'{r["share_after_pct"]}% ({r["blocks_choosing_after"]} blocks)'])
-    table(s, Inches(0.8), Inches(4.75), Inches(11.7), rows,
+    table(s, Inches(0.8), Inches(4.1), Inches(11.7), rows,
           [Inches(3.3), Inches(0.9), Inches(0.9), Inches(1.7), Inches(1.9), Inches(1.7), Inches(1.9)], size=8.5)
     text(s, Inches(0.62), Inches(6.85), Inches(12.1), Inches(0.5),
          ["An update changes what a newly signed zone gets; it never re-signs an existing zone. So this share, not the "
