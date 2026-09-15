@@ -5,7 +5,7 @@
    "8 PROGRAMS  \u00b7  1,083 RELEASES  \u00b7  441 CVEs  \u00b7  OPENINTEL + REVERSE DNS",
    "Does DNS software explain\nwhen DNSSEC RFCs get adopted?",
    "",
-   "BIND 9, Unbound, NSD, Knot DNS, Knot Resolver, PowerDNS Auth/Recursor and OpenDNSSEC: when each one implemented an RFC, when it made it the default, when Ubuntu and Debian shipped that version, and which CVEs touched it -- lined up against what zones actually did in the OpenINTEL zone files and in reverse DNS.\nShort version: code is never the wait, defaults act only on newly signed zones, one RFC was forced by validators before it was published, and no CVE led a push."
+   "BIND 9, Unbound, NSD, Knot DNS, Knot Resolver, PowerDNS Auth/Recursor and OpenDNSSEC: when each one implemented an RFC, when it made it the default, when Ubuntu and Debian shipped that version, and which CVEs touched it -- lined up against what zones actually did in the OpenINTEL zone files and in reverse DNS.\nShort version: code is never the wait; defaults do reach zones, through OS releases and only on newly signed zones, so they never show as a spike; one RFC was forced by validators before it was published; no CVE led a push."
   ]
  },
  {
@@ -94,8 +94,8 @@
   "n": 5,
   "text": [
    "FINDING 3  \u00b7  THE AUTO-UPDATE TEST",
-   "Updates change what new zones get; only BIND's defaults reached reverse DNS",
-   "An update cannot roll an existing zone; it can only change what a zone signed after the update gets. So the test is the share of NEW signings choosing the algorithm, which the reverse ledger records per delegation.\nECDSA: the 2016 Knot and PowerDNS defaults left no trace (0.2% -> 0.3% and 0.3% -> 0.2% in the year either side). The share stepped around BIND 9.16.0 (22.8% -> 38.8%), which Ubuntu 20.04 and Debian 11 carried. Reverse operators run BIND.\nRSA/SHA-256: new signings choosing it went 0.9% -> 20.0% across OpenDNSSEC 1.2.0's default (2011-03) and kept rising for two years; BIND 9.7.0 had shipped it 13 months earlier, so it reads as availability, not one vendor.\nEdDSA: never a default anywhere; 14 rollovers to it in the whole ledger; two forward episodes, both withdrawn. No default, no adoption."
+   "Updates work: the OS release is the event, and it acts on new zones only",
+   "An update cannot roll an existing zone; it can only change what a zone signed after the update gets. So the test is the share of NEW signings choosing the algorithm, which the reverse ledger records per delegation.\nECDSA: on their upstream dates the 2016 Knot and PowerDNS defaults left no trace (0.2% -> 0.3%, 0.3% -> 0.2%), and neither did Ubuntu 16.04, which carried only Knot. Debian 9 (2017-06-17) was the first OS release to ship both ECDSA-default signers: in the year after it, 57.1% of new reverse signings chose ECDSA (0.2% the year before), from 55 blocks (3 before). A second step, 22.8% -> 38.8%, came with BIND 9.16.0 in Ubuntu 20.04 and Debian 11.\nRSA/SHA-256: new signings choosing it went 0.9% -> 20.0% across OpenDNSSEC 1.2.0's default (2011-03) and kept rising for two years; BIND 9.7.0 had shipped it 13 months earlier, so it reads as availability, not one vendor.\nEdDSA: never a default anywhere; 14 rollovers to it in the whole ledger; two forward episodes, both withdrawn. No default, no adoption."
   ]
  },
  {
@@ -159,7 +159,7 @@
   "text": [
    "LIMITS",
    "What this cannot show",
-   "Which software signs a zone is never visible from its records; 'nearest release' is timing evidence. Registry and registrar signing platforms are closed source and are not in the release list.\nOpenINTEL here is monthly aggregates for seven TLDs from 2016-06 (2020-05 for .ch/.li) to 2023-12, so RSA/SHA-256 and NSEC3 adoption are visible only in reverse DNS, and forward spikes cannot be attributed to an operator.\nReverse DNS is small (25,930 change events on 13,654 delegations) and NSEC3 is visible there only through algorithm 7.\nOS package dates bound when a default became reachable by apt, not when anyone upgraded; Debian 9 and 10 are no longer served and are not asserted.\nWith 3 to 31 spikes per RFC, 'beats chance' is a reading, not a test with a p-value. CVE attribution is by NVD product only.\nDecks with every figure and ledger: dnssec_rfc_why.pptx (per-RFC timelines), dnssec_program_rfc_cases.pptx (per-program case studies), dnssec_algorithm_flows.pptx (what zones move between). CSVs: dns_software_*.csv, dns_cve_list.csv, dns_program_rfc_spikes.csv."
+   "Which software signs a zone is never visible from its records; 'nearest release' is timing evidence. Registry and registrar signing platforms are closed source and are not in the release list.\nOpenINTEL here is monthly aggregates for seven TLDs from 2016-06 (2020-05 for .ch/.li) to 2023-12, so RSA/SHA-256 and NSEC3 adoption are visible only in reverse DNS, and forward spikes cannot be attributed to an operator.\nReverse DNS is small (25,930 change events on 13,654 delegations) and NSEC3 is visible there only through algorithm 7.\nOS package dates bound when a default became reachable by apt, not when anyone upgraded. The Debian 9 step rests on 55 blocks in one corpus, APNIC-heavy, with one block a third of it.\nWith 3 to 31 spikes per RFC, 'beats chance' is a reading, not a test with a p-value. CVE attribution is by NVD product only.\nDecks with every figure and ledger: dnssec_rfc_why.pptx (per-RFC timelines), dnssec_program_rfc_cases.pptx (per-program case studies), dnssec_algorithm_flows.pptx (what zones move between). CSVs: dns_software_*.csv, dns_cve_list.csv, dns_program_rfc_spikes.csv."
   ]
  }
 ]

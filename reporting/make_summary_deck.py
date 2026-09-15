@@ -44,6 +44,7 @@ def main() -> int:
     c6, c9, c5, c8 = C["RFC 6605"], C["RFC 9276"], C["RFC 5702"], C["RFC 8080"]
     ar6 = {r["version"]: r for r in c6["new_signings"]["around_releases"] if r["kind"] == "default"}
     ar5 = {r["version"]: r for r in c5["new_signings"]["around_releases"]}
+    os9 = next(r for r in c6["new_signings"]["around_os_ships"] if r["os"] == "Debian 9")
     od = {o["rfc"]: o for o in SC["onset_decomposition"]}
     code = [o["code_lag_years"] for o in SC["onset_decomposition"] if o.get("code_lag_years") is not None]
     dep = [o["deployment_lag_years"] for o in SC["onset_decomposition"] if o.get("deployment_lag_years") is not None]
@@ -63,8 +64,8 @@ def main() -> int:
         "BIND 9, Unbound, NSD, Knot DNS, Knot Resolver, PowerDNS Auth/Recursor and OpenDNSSEC: when each one implemented "
         "an RFC, when it made it the default, when Ubuntu and Debian shipped that version, and which CVEs touched it -- "
         "lined up against what zones actually did in the OpenINTEL zone files and in reverse DNS.",
-        "Short version: code is never the wait, defaults act only on newly signed zones, one RFC was forced by validators "
-        "before it was published, and no CVE led a push.",
+        "Short version: code is never the wait; defaults do reach zones, through OS releases and only on newly signed zones, so they "
+        "never show as a spike; one RFC was forced by validators before it was published; no CVE led a push.",
     ], size=14, color=INK_2)
 
     # 2 what we did
@@ -129,14 +130,17 @@ def main() -> int:
     ], size=11, color=INK, space=6)
 
     # 5 auto-update
-    s = blank(prs); kicker(s, "FINDING 3  ·  THE AUTO-UPDATE TEST", "Updates change what new zones get; only BIND's defaults reached reverse DNS", ACCENT)
+    s = blank(prs); kicker(s, "FINDING 3  ·  THE AUTO-UPDATE TEST", "Updates work: the OS release is the event, and it acts on new zones only", ACCENT)
     fit_picture(s, figs / "rfc_6605_new_signings.png", Inches(1.25), Inches(2.6))
     text(s, Inches(0.62), Inches(4.0), Inches(12.1), Inches(3.2), [
         "An update cannot roll an existing zone; it can only change what a zone signed after the update gets. So the test is the share of "
         "NEW signings choosing the algorithm, which the reverse ledger records per delegation.",
-        f'ECDSA: the 2016 Knot and PowerDNS defaults left no trace ({ar6["2.1.0"]["share_before_pct"]}% -> {ar6["2.1.0"]["share_after_pct"]}% and '
-        f'{ar6["4.0.0"]["share_before_pct"]}% -> {ar6["4.0.0"]["share_after_pct"]}% in the year either side). The share stepped around BIND 9.16.0 '
-        f'({ar6["9.16.0"]["share_before_pct"]}% -> {ar6["9.16.0"]["share_after_pct"]}%), which Ubuntu 20.04 and Debian 11 carried. Reverse operators run BIND.',
+        f'ECDSA: on their upstream dates the 2016 Knot and PowerDNS defaults left no trace ({ar6["2.1.0"]["share_before_pct"]}% -> '
+        f'{ar6["2.1.0"]["share_after_pct"]}%, {ar6["4.0.0"]["share_before_pct"]}% -> {ar6["4.0.0"]["share_after_pct"]}%), and neither did Ubuntu 16.04, '
+        f'which carried only Knot. Debian 9 ({os9["date"]}) was the first OS release to ship both ECDSA-default signers: in the year after it, '
+        f'{os9["share_after_pct"]}% of new reverse signings chose ECDSA ({os9["share_before_pct"]}% the year before), from {os9["blocks_choosing_after"]} '
+        f'blocks ({os9["blocks_choosing_before"]} before). A second step, {ar6["9.16.0"]["share_before_pct"]}% -> {ar6["9.16.0"]["share_after_pct"]}%, '
+        f'came with BIND 9.16.0 in Ubuntu 20.04 and Debian 11.',
         f'RSA/SHA-256: new signings choosing it went {ar5["1.2.0"]["share_before_pct"]}% -> {ar5["1.2.0"]["share_after_pct"]}% across OpenDNSSEC 1.2.0\'s '
         f'default (2011-03) and kept rising for two years; BIND 9.7.0 had shipped it 13 months earlier, so it reads as availability, not one vendor.',
         f'EdDSA: never a default anywhere; {sum(r["hit"] for r in c8["new_signings"]["rollovers_to_by_year"])} rollovers to it in the whole ledger; '
@@ -203,7 +207,8 @@ def main() -> int:
         "OpenINTEL here is monthly aggregates for seven TLDs from 2016-06 (2020-05 for .ch/.li) to 2023-12, so RSA/SHA-256 and NSEC3 adoption "
         "are visible only in reverse DNS, and forward spikes cannot be attributed to an operator.",
         "Reverse DNS is small (25,930 change events on 13,654 delegations) and NSEC3 is visible there only through algorithm 7.",
-        "OS package dates bound when a default became reachable by apt, not when anyone upgraded; Debian 9 and 10 are no longer served and are not asserted.",
+        "OS package dates bound when a default became reachable by apt, not when anyone upgraded. The Debian 9 step rests on 55 blocks in one "
+        "corpus, APNIC-heavy, with one block a third of it.",
         "With 3 to 31 spikes per RFC, 'beats chance' is a reading, not a test with a p-value. CVE attribution is by NVD product only.",
         "Decks with every figure and ledger: dnssec_rfc_why.pptx (per-RFC timelines), dnssec_program_rfc_cases.pptx (per-program case studies), "
         "dnssec_algorithm_flows.pptx (what zones move between). CSVs: dns_software_*.csv, dns_cve_list.csv, dns_program_rfc_spikes.csv.",

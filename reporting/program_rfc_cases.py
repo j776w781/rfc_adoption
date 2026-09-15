@@ -69,12 +69,15 @@ def year_axis(ax, lo, hi):
 
 
 def vcmp(a: str) -> tuple:
+    """Debian-style version to a comparable tuple; '~' marks a pre-release,
+    which sorts below the release it precedes (4.0.0~alpha2 < 4.0.0)."""
+    pre = "~" in a
     a = a.split(":")[-1].split("~")[0].split("+")[0].split("-")[0]
     out = []
     for p in a.split("."):
         num = "".join(ch for ch in p if ch.isdigit())
         out.append(int(num) if num else 0)
-    return tuple(out + [0] * (4 - len(out)))
+    return tuple(out + [0] * (4 - len(out)) + [-1 if pre else 0])
 
 
 def first_ships(distro, program, version):

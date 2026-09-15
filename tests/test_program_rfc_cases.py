@@ -66,6 +66,18 @@ def test_reverse_new_signings_ignored_2016_defaults_and_moved_with_bind(cases):
     assert ar["9.16.0"]["share_after_pct"] - ar["9.16.0"]["share_before_pct"] > 10
 
 
+def test_debian_9_is_the_ecdsa_step_in_reverse_new_signings(cases):
+    ns = cases["RFC 6605"]["new_signings"]
+    by = {r["os"]: r for r in ns["around_os_ships"]}
+    assert set(by["Debian 9"]["carries"]) == {"Knot DNS 2.1.0", "PowerDNS Auth 4.0.0"}
+    assert by["Debian 9"]["date"] == "2017-06-17"
+    assert by["Debian 9"]["share_before_pct"] < 1 and by["Debian 9"]["share_after_pct"] > 40
+    assert by["Debian 9"]["blocks_choosing_before"] <= 5 and by["Debian 9"]["blocks_choosing_after"] >= 40
+    # Ubuntu 16.04 carried a pre-release PowerDNS (4.0.0~alpha2), so only Knot's default
+    assert by["Ubuntu 16.04"]["carries"] == ["Knot DNS 2.1.0"]
+    assert by["Ubuntu 16.04"]["share_after_pct"] < 1
+
+
 def test_rsasha256_new_signings_stepped_after_opendnssec_default(cases):
     ar = {r["version"]: r for r in cases["RFC 5702"]["new_signings"]["around_releases"]}
     assert ar["1.2.0"]["share_before_pct"] < 2 and ar["1.2.0"]["share_after_pct"] >= 15
@@ -143,7 +155,7 @@ def test_cve_attribution_is_by_product_only(cases):
 
 def test_distro_ships_have_sources_and_dates():
     d = json.loads((ROOT / "data/software/distro_ships.json").read_text("utf-8"))
-    assert {s["name"] for s in d["ships"]} >= {"Ubuntu 20.04", "Debian 11"}
+    assert {s["name"] for s in d["ships"]} >= {"Ubuntu 16.04", "Debian 9", "Ubuntu 20.04", "Debian 11"}
     for s in d["ships"]:
         assert len(s["released"]) == 10 and set(s["versions"]) == {"bind9", "pdns", "knot"}
     assert "launchpad" in d["sources"]["ubuntu_versions"]

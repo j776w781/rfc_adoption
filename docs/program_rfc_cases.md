@@ -36,8 +36,9 @@ and ask what had just happened in software.
   reverse signings choosing the algorithm per quarter, and in the 12 months
   either side of each default change.
 * **OS packages** (`data/software/distro_ships.json`): Ubuntu 16.04-24.04 from
-  Launchpad, Debian 11-13 from the Debian tracker, with release dates. Debian
-  9 and 10 are no longer served and are not asserted.
+  Launchpad, Debian 9-13 from sources.debian.org, with release dates. The
+  auto-update test is run around each OS release that carried a
+  default-changing version, as well as around the upstream release.
 * Shares per RIR are hidden where the RIR has under 30 signed delegations;
   the strict AFRINIC+ARIN panel is the reverse share of record.
 
@@ -53,9 +54,14 @@ majority in .se (2019-01 +119,500; 2019-06/07 +217,437) were entirely
 rollovers, 30-35 months after any default. The .ch wave of 2021-06..11
 (+591,333) was new signings that chose ECDSA 96% of the time. Two of 31 spikes
 fall within three months of a default, against a 9% forward chance rate. In
-reverse DNS, new signings ignored the 2016 defaults (0.2% -> 0.3%, 0.3% ->
-0.2%) and stepped around BIND 9.16.0 (22.8% -> 38.8%), which Ubuntu 20.04 and
-Debian 11 carried.
+reverse DNS, new signings ignored the 2016 defaults on their upstream dates
+(0.2% -> 0.3%, 0.3% -> 0.2%) and ignored Ubuntu 16.04, which carried only
+Knot's. Debian 9 (2017-06-17) was the first OS release shipping both
+ECDSA-default signers (PowerDNS 4.0.3, Knot 2.4.0): in the year after it 57.1%
+of new reverse signings chose ECDSA against 0.2% the year before, from 55
+blocks against 3. A second step (22.8% -> 38.8%) came with BIND 9.16.0 via
+Ubuntu 20.04 and Debian 11. The update path works, one OS release at a time,
+on new zones only, and it never shows as a spike in the adoption curve.
 
 **RFC 5702 (RSA/SHA-256).** Adopted before the forward corpus begins (99% of
 signed .se zones in 2016-06). Forward spikes are later signing waves that used
@@ -96,14 +102,16 @@ many iterations). All three spikes are within three months of a cap against a
   so before the RFC.
 * No CVE led a push; the one inside a causal chain (CVE-2021-40083) is a
   symptom of the problem the caps fixed.
-* In reverse DNS the defaults that reached operators were BIND's, through
-  Ubuntu 20.04 and Debian 11; Knot's and PowerDNS's defaults left no trace
-  there.
+* Defaults reach operators through OS releases, not upstream tarballs: the
+  ECDSA step in reverse DNS is Debian 9, thirteen months after PowerDNS 4.0.0
+  and seventeen after Knot 2.1.0.
 
 ## Limits
 
 The program that signs a zone is never visible; "nearest release" is timing
 only. Forward per-zone records are not in this repo, so forward spikes cannot
 be attributed to an operator. Reverse DNS is small (25,930 events). Package
-dates bound when a default became reachable, not when anyone upgraded. Counts
+dates bound when a default became reachable, not when anyone upgraded; the
+Debian 9 step rests on 55 blocks in one corpus, APNIC-heavy, one block a third
+of it. Counts
 of 3-31 spikes per RFC make "beats chance" a reading, not a test.

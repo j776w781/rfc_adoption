@@ -365,6 +365,39 @@ def build_case(rfc, spec, srv, pan, ledger, sup, rel, cves):
     return case
 
 
+def vcmp(a: str) -> tuple:
+    """Debian-style version to a comparable tuple; '~' marks a pre-release,
+    which sorts below the release it precedes (4.0.0~alpha2 < 4.0.0)."""
+    pre = "~" in a
+    a = a.split(":")[-1].split("~")[0].split("+")[0].split("-")[0]
+    out = []
+    for p in a.split("."):
+        num = "".join(ch for ch in p if ch.isdigit())
+        out.append(int(num) if num else 0)
+    return tuple(out + [0] * (4 - len(out)) + [-1 if pre else 0])
+
+
+def os_ships(default_rel):
+    """The first OS release, per distribution, carrying each default-changing
+    version -- and, per OS release, which defaults it delivered at once."""
+    distro = json.loads(Path("data/software/distro_ships.json").read_text("utf-8"))
+    key = {"pdns-auth": "pdns"}
+    out = {}
+    for e in default_rel:
+        pk = key.get(e["key"], e["key"])
+        hit = {}
+        for d in sorted(distro["ships"], key=lambda x: x["released"]):
+            v = d["versions"].get(pk)
+            if v and vcmp(v) >= vcmp(e["version"]) and d["distribution"] not in hit:
+                hit[d["distribution"]] = d
+        for d in hit.values():
+            out.setdefault(d["name"], {"os": d["name"], "date": d["released"], "carries": []})
+            tag = f'{e["program"]} {e["version"]}'
+            if tag not in out[d["name"]]["carries"]:
+                out[d["name"]]["carries"].append(tag)
+    return sorted(out.values(), key=lambda x: x["date"])
+
+
 def new_signings(ledger, algs, default_rel, signer_rel):
     s = ledger[ledger.kind == "sign"].copy()
     s["hit"] = s.to_alg.astype(str).isin(algs)
@@ -374,9 +407,23 @@ def new_signings(ledger, algs, default_rel, signer_rel):
     r = ledger[ledger.kind == "rollover"].copy()
     r["hit"] = r.to_alg.astype(str).isin(algs)
     rq = r.groupby(r.month.str[:4]).agg(n=("hit", "size"), hit=("hit", "sum")).reset_index()
+    hitq = q[q.hit > 0]
     out = {"quarterly": q.to_dict("records"),
+           "first_quarter_with_any": None if hitq.empty else hitq.iloc[0]["q"],
            "rollovers_to_by_year": rq.rename(columns={"month": "year"}).to_dict("records"),
-           "around_releases": []}
+           "around_releases": [], "around_os_ships": []}
+    for d in os_ships([e for e in default_rel if not e.get("opt_in")]):
+        m = d["date"][:7]
+        lo = (pd.Period(m) - 12).strftime("%Y-%m"); hi = (pd.Period(m) + 12).strftime("%Y-%m")
+        before = s[(s.month >= lo) & (s.month < m)]
+        after = s[(s.month >= m) & (s.month <= hi)]
+        out["around_os_ships"].append({
+            **d, "new_signings_12m_before": int(len(before)),
+            "share_before_pct": round(before.hit.mean() * 100, 1) if len(before) else None,
+            "blocks_choosing_before": int(before[before.hit].block.nunique()),
+            "new_signings_12m_after": int(len(after)),
+            "share_after_pct": round(after.hit.mean() * 100, 1) if len(after) else None,
+            "blocks_choosing_after": int(after[after.hit].block.nunique())})
     for e in default_rel + [x for x in signer_rel if x["kind"] == "support"]:
         m = e["date"][:7]
         lo = (pd.Period(m) - 12).strftime("%Y-%m"); hi = (pd.Period(m) + 12).strftime("%Y-%m")

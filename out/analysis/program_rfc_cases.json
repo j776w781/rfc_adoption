@@ -5666,6 +5666,7 @@
       "share_pct": 7.0
      }
     ],
+    "first_quarter_with_any": "2010Q2",
     "rollovers_to_by_year": [
      {
       "year": "2009",
@@ -5791,6 +5792,34 @@
       "share_before_pct": 0.0,
       "new_signings_12m_after": 217,
       "share_after_pct": 0.9
+     }
+    ],
+    "around_os_ships": [
+     {
+      "os": "Ubuntu 16.04",
+      "date": "2016-04-21",
+      "carries": [
+       "Knot DNS 2.0.0"
+      ],
+      "new_signings_12m_before": 924,
+      "share_before_pct": 70.3,
+      "blocks_choosing_before": 96,
+      "new_signings_12m_after": 1237,
+      "share_after_pct": 96.8,
+      "blocks_choosing_after": 94
+     },
+     {
+      "os": "Debian 9",
+      "date": "2017-06-17",
+      "carries": [
+       "Knot DNS 2.0.0"
+      ],
+      "new_signings_12m_before": 1247,
+      "share_before_pct": 97.6,
+      "blocks_choosing_before": 96,
+      "new_signings_12m_after": 597,
+      "share_after_pct": 18.4,
+      "blocks_choosing_after": 43
      }
     ]
    },
@@ -11921,6 +11950,7 @@
       "share_pct": 92.4
      }
     ],
+    "first_quarter_with_any": "2015Q4",
     "rollovers_to_by_year": [
      {
       "year": "2009",
@@ -12101,6 +12131,48 @@
       "share_before_pct": 0.0,
       "new_signings_12m_after": 1331,
       "share_after_pct": 0.0
+     }
+    ],
+    "around_os_ships": [
+     {
+      "os": "Ubuntu 16.04",
+      "date": "2016-04-21",
+      "carries": [
+       "Knot DNS 2.1.0"
+      ],
+      "new_signings_12m_before": 924,
+      "share_before_pct": 0.2,
+      "blocks_choosing_before": 2,
+      "new_signings_12m_after": 1237,
+      "share_after_pct": 0.2,
+      "blocks_choosing_after": 3
+     },
+     {
+      "os": "Debian 9",
+      "date": "2017-06-17",
+      "carries": [
+       "Knot DNS 2.1.0",
+       "PowerDNS Auth 4.0.0"
+      ],
+      "new_signings_12m_before": 1247,
+      "share_before_pct": 0.2,
+      "blocks_choosing_before": 3,
+      "new_signings_12m_after": 597,
+      "share_after_pct": 57.1,
+      "blocks_choosing_after": 55
+     },
+     {
+      "os": "Ubuntu 18.04",
+      "date": "2018-04-26",
+      "carries": [
+       "PowerDNS Auth 4.0.0"
+      ],
+      "new_signings_12m_before": 473,
+      "share_before_pct": 42.5,
+      "blocks_choosing_before": 35,
+      "new_signings_12m_after": 1507,
+      "share_after_pct": 36.0,
+      "blocks_choosing_after": 58
      }
     ]
    },
@@ -14076,6 +14148,7 @@
       "share_pct": 0.0
      }
     ],
+    "first_quarter_with_any": "2022Q4",
     "rollovers_to_by_year": [
      {
       "year": "2009",
@@ -14213,7 +14286,8 @@
       "new_signings_12m_after": 1244,
       "share_after_pct": 0.0
      }
-    ]
+    ],
+    "around_os_ships": []
    },
    "summary": {
     "n_spikes": 5,
@@ -19031,6 +19105,7 @@
       "share_pct": 0.6
      }
     ],
+    "first_quarter_with_any": "2009Q4",
     "rollovers_to_by_year": [
      {
       "year": "2009",
@@ -19145,6 +19220,34 @@
       "share_before_pct": null,
       "new_signings_12m_after": 18,
       "share_after_pct": 50.0
+     }
+    ],
+    "around_os_ships": [
+     {
+      "os": "Ubuntu 16.04",
+      "date": "2016-04-21",
+      "carries": [
+       "BIND 9 9.7.0"
+      ],
+      "new_signings_12m_before": 924,
+      "share_before_pct": 5.8,
+      "blocks_choosing_before": 14,
+      "new_signings_12m_after": 1237,
+      "share_after_pct": 0.8,
+      "blocks_choosing_after": 6
+     },
+     {
+      "os": "Debian 9",
+      "date": "2017-06-17",
+      "carries": [
+       "BIND 9 9.7.0"
+      ],
+      "new_signings_12m_before": 1247,
+      "share_before_pct": 0.3,
+      "blocks_choosing_before": 3,
+      "new_signings_12m_after": 597,
+      "share_after_pct": 21.1,
+      "blocks_choosing_after": 20
      }
     ]
    },

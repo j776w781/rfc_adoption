@@ -104,6 +104,7 @@ def reading(rfc, c):
         ch21 = next(j for j in c["spikes"] if j["source"] == "ch" and j["start"] == "2021-06")
         pd4 = next(e for p in c["programs"] if p["key"] == "pdns-auth" for e in p["events"] if e["kind"] == "default")
         ar = {r["version"]: r for r in c["new_signings"]["around_releases"] if r["kind"] == "default"}
+        os9 = next(r for r in c["new_signings"]["around_os_ships"] if r["os"] == "Debian 9")
         return [
             f'The first ECDSA move in the forward corpus is .se {se16["start"]}: +{se16["delta"]:,} zones, '
             f'{se16["nearest_default_change"]["lag_months"]} months after PowerDNS Auth {pd4["version"]} made '
@@ -119,11 +120,13 @@ def reading(rfc, c):
             f'of the time, so about {round(ch["forward"]["within_3m_after_default_change"]*s["n_forward"] + ch["reverse"]["within_3m_after_default_change"]*s["n_reverse"], 1)} '
             f'would be expected by luck. CVEs: {s["spikes_within_3m_of_cve"]} spikes within {W3} months of one, '
             f'both after CVE-2022-38177 -- a validator memory leak, not a reason to sign with ECDSA.',
-            f'Reverse DNS tells the auto-update story directly. New signings ignored the Knot 2.1.0 and PowerDNS 4.0.0 '
-            f'defaults ({ar["2.1.0"]["share_before_pct"]}% -> {ar["2.1.0"]["share_after_pct"]}% and '
-            f'{ar["4.0.0"]["share_before_pct"]}% -> {ar["4.0.0"]["share_after_pct"]}% ECDSA in the year either side) '
-            f'and only moved around BIND 9.16.0 ({ar["9.16.0"]["share_before_pct"]}% -> {ar["9.16.0"]["share_after_pct"]}%), '
-            f'which Ubuntu 20.04 and Debian 11 carried. Reverse operators run BIND; the defaults that reached them were BIND\'s.',
+            f'Reverse DNS tells the auto-update story directly, and the OS release is the event, not the upstream one. New signings '
+            f'ignored the Knot 2.1.0 and PowerDNS 4.0.0 defaults on their upstream dates ({ar["2.1.0"]["share_before_pct"]}% -> '
+            f'{ar["2.1.0"]["share_after_pct"]}% and {ar["4.0.0"]["share_before_pct"]}% -> {ar["4.0.0"]["share_after_pct"]}% ECDSA in the year '
+            f'either side) and ignored Ubuntu 16.04, which carried only Knot\'s. In the year after Debian 9 ({os9["date"]}) shipped both '
+            f'PowerDNS 4.0.3 and Knot 2.4.0 with ECDSA default, the share went {os9["share_before_pct"]}% -> {os9["share_after_pct"]}% and the '
+            f'blocks choosing it {os9["blocks_choosing_before"]} -> {os9["blocks_choosing_after"]}. BIND 9.16.0 (Ubuntu 20.04, Debian 11) '
+            f'added a second step ({ar["9.16.0"]["share_before_pct"]}% -> {ar["9.16.0"]["share_after_pct"]}%).',
         ]
     if rfc == "RFC 5702":
         ar = {r["version"]: r for r in c["new_signings"]["around_releases"]}
@@ -303,8 +306,13 @@ def new_signings_slide(prs, rfc, c, figs):
         rows.append([f'{r["program"]} {r["version"]}', r["kind"], r["date"][:7], r["new_signings_12m_before"],
                      "-" if r["share_before_pct"] is None else f'{r["share_before_pct"]}%',
                      r["new_signings_12m_after"], "-" if r["share_after_pct"] is None else f'{r["share_after_pct"]}%'])
+    for r in c["new_signings"].get("around_os_ships", []):
+        rows.append([f'{r["os"]}: ' + ", ".join(r["carries"]), "OS package", r["date"][:7], r["new_signings_12m_before"],
+                     "-" if r["share_before_pct"] is None else f'{r["share_before_pct"]}% ({r["blocks_choosing_before"]} blocks)',
+                     r["new_signings_12m_after"],
+                     "-" if r["share_after_pct"] is None else f'{r["share_after_pct"]}% ({r["blocks_choosing_after"]} blocks)'])
     table(s, Inches(0.8), Inches(4.75), Inches(11.7), rows,
-          [Inches(2.3), Inches(0.9), Inches(0.9), Inches(2.0), Inches(1.6), Inches(2.0), Inches(1.6)], size=9)
+          [Inches(3.3), Inches(0.9), Inches(0.9), Inches(1.7), Inches(1.9), Inches(1.7), Inches(1.9)], size=8.5)
     text(s, Inches(0.62), Inches(6.85), Inches(12.1), Inches(0.5),
          ["An update changes what a newly signed zone gets; it never re-signs an existing zone. So this share, not the "
           "adoption curve, is where an automatic update would show. Source: out/analysis/delegation_changes.parquet, kind = sign."],
@@ -407,16 +415,19 @@ def main() -> int:
     text(s, Inches(0.62), Inches(0.58), Inches(12.1), Inches(0.6), ["Where an update could act, and where it did"], size=22, bold=True)
     ar6 = {r["version"]: r for r in c6["new_signings"]["around_releases"] if r["kind"] == "default"}
     ar5 = {r["version"]: r for r in C["RFC 5702"]["new_signings"]["around_releases"]}
+    os9 = next(r for r in c6["new_signings"]["around_os_ships"] if r["os"] == "Debian 9")
     text(s, Inches(0.62), Inches(1.3), Inches(12.1), Inches(5.4), [
         "An update cannot roll a zone to a new algorithm; it can only change what a zone signed AFTER the update gets. So the test is the "
         "share of new signings, not the adoption curve, and the reverse ledger is the only place it can be run per zone.",
         f'RSA/SHA-256: the share of new reverse signings choosing it rose from {ar5["1.2.0"]["share_before_pct"]}% to {ar5["1.2.0"]["share_after_pct"]}% '
         f'across OpenDNSSEC 1.2.0\'s default ({ar5["1.2.0"]["date"][:7]}) and kept rising for two years. Consistent with defaults arriving through '
         f'updates; not attributable to one vendor, since BIND 9.7.0 had shipped the algorithm 13 months earlier.',
-        f'ECDSA: the Knot 2.1.0 and PowerDNS 4.0.0 defaults (2016) changed nothing in reverse DNS ({ar6["2.1.0"]["share_before_pct"]}% -> '
-        f'{ar6["2.1.0"]["share_after_pct"]}%, {ar6["4.0.0"]["share_before_pct"]}% -> {ar6["4.0.0"]["share_after_pct"]}%). The share moved from 2017 '
-        f'and stepped around BIND 9.16.0 ({ar6["9.16.0"]["share_before_pct"]}% -> {ar6["9.16.0"]["share_after_pct"]}%), whose dnssec-policy is '
-        f'opt-in -- the operator still had to choose it, but the OS packages (Ubuntu 20.04, Debian 11) made ECDSA the one-line choice.',
+        f'ECDSA: the Knot 2.1.0 and PowerDNS 4.0.0 defaults changed nothing on their upstream dates ({ar6["2.1.0"]["share_before_pct"]}% -> '
+        f'{ar6["2.1.0"]["share_after_pct"]}%, {ar6["4.0.0"]["share_before_pct"]}% -> {ar6["4.0.0"]["share_after_pct"]}%), nor did Ubuntu 16.04 '
+        f'(Knot only). The step is Debian 9 ({os9["date"]}), the first OS release shipping both ECDSA-default signers: '
+        f'{os9["share_before_pct"]}% -> {os9["share_after_pct"]}% of new signings, {os9["blocks_choosing_before"]} -> {os9["blocks_choosing_after"]} '
+        f'blocks. A second step came with BIND 9.16.0 ({ar6["9.16.0"]["share_before_pct"]}% -> {ar6["9.16.0"]["share_after_pct"]}%) via Ubuntu 20.04 '
+        f'and Debian 11. The update path works -- one OS release at a time, on new zones only, and it never shows as a spike in the adoption curve.',
         "Forward DNS: the .ch 2021 wave chose ECDSA for 96% of 591,333 newly signed zones and NSEC3 with 1 iteration; by then every signer's "
         "default was ECDSA and the caps had just landed. That is an update effect in the only sense the data supports: whatever the hosters ran, "
         "its defaults were current. The 2019 .se moves were rollovers and cannot be.",
@@ -436,8 +447,8 @@ def main() -> int:
         "so forward spikes cannot be attributed to an operator; 'new vs rolled' is a bound from the change in signed-zone count.",
         "Reverse DNS is small (25,930 change events on 13,654 delegations); its spikes are one /16 block at a time and its shares are hidden where a "
         "RIR has fewer than 30 signed delegations. NSEC3 is invisible in DS records except through algorithm 7.",
-        "OS packages: Ubuntu LTS 16.04 to 24.04 and Debian 11 to 13, from Launchpad and the Debian tracker; Debian 9 and 10 are no longer served and "
-        "are not asserted. Package dates bound when a default became reachable by apt, not when any operator upgraded.",
+        "OS packages: Ubuntu LTS 16.04 to 24.04 and Debian 9 to 13, from Launchpad and sources.debian.org. Package dates bound when a default "
+        "became reachable by apt, not when any operator upgraded; the Debian 9 step is 55 blocks in one corpus, APNIC-heavy, with one block a third of it.",
         "The chance rate is per month and per series; with 3 to 31 spikes per RFC the counts are small, and 'beats chance' is a reading, not a test "
         "with a p-value. CVE attribution is by NVD product only; keyword matches are shown as 'other / unattributed'.",
     ], size=11.5, color=INK, space=7)
