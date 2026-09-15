@@ -150,9 +150,13 @@ trend line drawn through 2026 is measuring how hard people looked.
 
 Almost none could. A CVE in a resolver is fixed by upgrading the resolver, which
 changes nothing a zone publishes and is therefore invisible here. The exception is
-the one mechanism where a validator can refuse to accept what a zone publishes —
-NSEC3 iterations — and the chronology is worth setting out in full, because it
-does not run the way the standards process implies:
+the one mechanism where validators publish what they will accept — NSEC3
+iterations — and the chronology is worth setting out in full, because it does not
+run the way the standards process implies. One precision first: the names that
+moved sat at exactly 100 iterations (17,455 of the 17,491 at ≥100 in 2021-09;
+36 were strictly above), which is below the 150 cap Unbound shipped and at
+PowerDNS's 100. Neither cap refused them, so refusal is not what the series
+shows. The ordering is:
 
     2021-05-25   Unbound commits the 150-iteration cap, citing agreement with
                  BIND and Knot
@@ -278,8 +282,10 @@ data is what converts one into the other.
   `out/analysis/cve_crossref.json`.
 - **Severity is NVD's CVSS**, which is assigned per product and often disputed by
   the vendor. It is reported, not endorsed.
-- **The deployment link rests on one mechanism.** NSEC3 iterations is the only
-  observable in this corpus a resolver can coerce. Nothing here generalises to
+- **The deployment link rests on one mechanism, and on ordering only.** NSEC3
+  iterations is the only observable in this corpus that validators publish limits
+  for; the names that moved sat at exactly 100, below both caps, so what moved
+  them cannot be separated from the timing. Nothing here generalises to
   algorithms, which no CVE has ever forced a zone to change.
 - **The adoption join covers 16 of 97 DNSSEC CVEs.** The other 81 are real
   vulnerabilities in code every signed zone depends on; they are excluded from

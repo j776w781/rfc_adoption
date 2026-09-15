@@ -1,0 +1,169 @@
+[
+  {
+    "slide": 1,
+    "text": [
+      "DNSSEC RFC ADOPTION  \u00b7  EIGHT IMPLEMENTATIONS  \u00b7  441 CVEs  \u00b7  TWO CORPORA",
+      "Why some DNSSEC RFCs are adopted fast,\nand some never",
+      "For each RFC, on one time axis: when it was published, when BIND, Unbound, Knot, PowerDNS and OpenDNSSEC could first sign or validate it, every default change and validator limit, every CVE that names it, and what zones actually did -- each spike named to the operator that made it.\nThe question is what separates the RFCs that moved from the ones that did not."
+    ]
+  },
+  {
+    "slide": 2,
+    "text": [
+      "HOW TO READ A TIMELINE",
+      "Four clocks on one axis",
+      "Upper strip",
+      "events, packed into lanes so labels never overprint. Height means nothing; only the horizontal position is data.",
+      "Green circle",
+      "the RFC published. Faded green: a related RFC (predecessor or successor).",
+      "Orange / blue circle",
+      "first stable release of a signer that could produce this value / of a validator that could check it.",
+      "Yellow diamond",
+      "a vendor changed its default to this. Red square: a validator or signer capped the old value.",
+      "Red triangle",
+      "a CVE whose description names this mechanism, sized by CVSS.",
+      "Lower panel",
+      "share of signed zones carrying the value. Orange: the seven OpenINTEL forward TLDs. Blue: the strict AFRINIC+ARIN reverse panel, the same population as every adoption date in this project. Red dots: one operator moved more than half the running maximum in a month -- a portfolio move, not diffusion.",
+      "Verdict rule",
+      "FAST = first zone within a year of the RFC and 10% of signed delegations within four. SLOW = reached 10%, later. NEVER = under 1% of signed zones in every corpus today. Others are named for what the data shows.",
+      "Evidence line",
+      "under each timeline: every date and figure the slide rests on."
+    ]
+  },
+  {
+    "slide": 3,
+    "text": [
+      "FAST  \u00b7  RFC 5702",
+      "RSA/SHA-256 and RSA/SHA-512",
+      "Same key type and sizes as RSA/SHA-1, so a zone changes one number, not its key management. Unbound 1.1.0 validated it 11 months before the RFC and BIND 9 9.7.0 signed it 4 months after; the first zone followed the signer within two months. It is the only signing algorithm in the set that changed nothing about a zone's keys. Whether a default carried it cannot be tested -- OpenDNSSEC made it the default in 2011-03, but both corpora open with it already in use, so no before-period exists.",
+      "published 2009-10  \u00b7  first signer BIND 9 9.7.0 2010-02  \u00b7  first validator Unbound 1.1.0 2008-11  \u00b7  first zone 2010-03 (reverse)  \u00b7  onset 0.4 y = code +0.3 + operators 0.1  \u00b7  RSASHA256 10% at 2012-06  \u00b7  forward now 24.4%  \u00b7  reverse now 22.7%  \u00b7  largest spike +60,903 .ch 2021-12 (SWITCH)"
+    ]
+  },
+  {
+    "slide": 4,
+    "text": [
+      "SLOW  \u00b7  RFC 5155",
+      "NSEC3 authenticated denial",
+      "Unbound could validate NSEC3 four months before the RFC existed and BIND could sign it nine months after. A tenth of signed delegations by 2011-08, and 98% of forward zones when that corpus opens in 2016. 12 CVEs name NSEC3, the first 1.6 years after the RFC and 6 in 2026's audit wave. Its iteration count -- which RFC 5155 allowed up to 65,535 -- was only capped by vendors thirteen years later, which is RFC 9276's slide.",
+      "published 2008-03  \u00b7  first signer BIND 9 9.6.0 2008-12  \u00b7  first validator Unbound 0.7.1 2007-11  \u00b7  first zone 2009-08  \u00b7  onset 1.4 y = code +0.8 + operators 0.7  \u00b7  RSASHA1-NSEC3 10% at 2011-08  \u00b7  forward now 61.9%  \u00b7  reverse now 6.5%  \u00b7  12 CVEs naming it, first 2009-10"
+    ]
+  },
+  {
+    "slide": 5,
+    "text": [
+      "VENDOR-TRIGGERED  \u00b7  RFC 9276",
+      "NSEC3 parameter guidance (0 iterations)",
+      "The one RFC in this set where zones demonstrably moved before the standard. Resolver vendors agreed a 150-iteration cap in a commit in 2021-05; PowerDNS Auth capped configurable iterations at 100 in 2021-07; Unbound shipped 150 in 2021-08; CVE-2021-40083 (a Knot Resolver crash on high iterations) was published 2021-08-25, after the cap was already committed. Names at 100 or more iterations fell 17,491 to 3,027 in 2021-10 -- 17,455 of them sitting at exactly 100, BIND's pre-2010 default, which neither cap refused (36 were above 100, and 34 still were after). RFC 9276 came ten months later; CVE-2023-50868 two years and four months after the collapse. The ordering is certain. What moved the names -- refusal, guidance, or an operator re-signing -- the data cannot separate.",
+      "published 2022-08  \u00b7  8 NSEC3 CVEs since the 2021 cap (1 names RFC 9276), counted again on the RFC 5155 slide"
+    ]
+  },
+  {
+    "slide": 6,
+    "text": [
+      "SLOW  \u00b7  RFC 6605",
+      "ECDSA P-256 / P-384",
+      "The code was never the wait: PowerDNS signed ECDSA three months before the RFC, Unbound validated it one month after, and the first zone came 3.8 years later. Knot (2016-01, at 0.25% share) and PowerDNS (2016-07, at 0.72%) then made it their default, and .se and .nu show their first ECDSA jump in 2016-10 (+10,788 and +857), three months after PowerDNS 4.0.0 -- an alignment, not an attribution: on the reverse panel, the only corpus with a before-period, event studies around both defaults detect nothing (+0.034 and -0.043 pp/month). The forward rise is two registries: .se migrating 119,500 zones in 2019-01, SWITCH mass-signing .ch (+174,356) in 2021-08. The reverse curve's owners are network blocks: the largest single ECDSA action is 116 delegations under 45.130.in-addr.arpa in 2026-03.",
+      "published 2012-04  \u00b7  first signer PowerDNS Auth 3.0.1 2012-01  \u00b7  first validator Unbound 1.4.17 2012-05  \u00b7  first zone 2015-11 (reverse)  \u00b7  onset 3.6 y = code -0.2 + operators 3.8  \u00b7  ECDSAP256SHA256 10% at 2019-03  \u00b7  forward now 76.1%  \u00b7  reverse now 70.7%  \u00b7  published when RFC 5702 was at 16% of its eventual share  \u00b7  2 CVEs naming it, first 2018-01  \u00b7  largest spike +174,356 .ch 2021-08 (SWITCH)"
+    ]
+  },
+  {
+    "slide": 7,
+    "text": [
+      "NICHE BY DESIGN  \u00b7  RFC 7344",
+      "CDS / CDNSKEY child signalling",
+      "18.5% of signed forward zones publish a CDS record, and only a zone whose parent will act on it has reason to. Where a registry does -- SWITCH's registry page says it polls .ch and .li for CDS and signs on sight, a statement this repository cites but does not contain -- CDS publication jumped first (14,385 .ch zones in 2021-04 to 100,549 in 2021-07) and signed zones followed (154,190 to 573,504 by 2021-09), taking .ch from 140,506 to 851,003 signed zones inside 2021. An RFC that automates a step is adopted by the party that automates.",
+      "published 2014-09  \u00b7  first signer PowerDNS Auth 4.0.0 2016-07  \u00b7  first zone 2017-10 (zonefile)  \u00b7  onset 3.1 y = code +1.8 + operators 1.2  \u00b7  forward now 18.5%  \u00b7  largest spike +78,041 .ch 2021-11 (SWITCH)"
+    ]
+  },
+  {
+    "slide": 8,
+    "text": [
+      "NEVER  \u00b7  RFC 8080",
+      "EdDSA (Ed25519 / Ed448)",
+      "Knot, Unbound and BIND shipped EdDSA within a year of the RFC; OpenDNSSEC took 3.6. No vendor ever made it a default. It was published when ECDSA stood at 1% of the share it would reach. Nine years on: 0.37% of panel delegations, 0.01% of forward zones; the only spikes were one operator's .se and .nu moves, withdrawn twice. One CVE names EdDSA (CVE-2022-38178), published at 0.02% deployment.",
+      "published 2017-02  \u00b7  first signer Knot DNS 2.6.0 2017-09  \u00b7  first validator Unbound 1.6.4 2017-06  \u00b7  first zone 2019-01 (zonefile)  \u00b7  onset 1.9 y = code +0.6 + operators 1.3  \u00b7  forward now 0.0%  \u00b7  reverse now 0.4%  \u00b7  published when RFC 6605 was at 1% of its eventual share  \u00b7  1 CVEs naming it, first 2022-09  \u00b7  largest spike +10,623 .se 2023-01 (Swedish Internet Foundation)"
+    ]
+  },
+  {
+    "slide": 9,
+    "text": [
+      "NEVER  \u00b7  RFC 5933",
+      "GOST signing and digest",
+      "BIND and Unbound both implemented GOST from the draft, before the RFC. In these corpora it never exceeded five RIPE delegations (2012-12 to 2015-08) or four forward zones: 0.00% of the strict AFRINIC+ARIN panel and of the seven TLDs, none of which is Russian; the RIPE region, where every reverse GOST record sits, is outside the panel. Published when RSA/SHA-2 was at 1% of its eventual share. RFC 9906 deprecated it in 2025-11, a decade after its last record here -- like RFC 9276 at the front, it documented what had already happened.",
+      "published 2010-07  \u00b7  first signer BIND 9 9.6.2 2010-02  \u00b7  first validator Unbound 1.4.0 2009-11  \u00b7  first zone 2012-12 (reverse)  \u00b7  onset 2.4 y = code -0.4 + operators 2.8  \u00b7  forward now 0.0%  \u00b7  reverse now 0.0%  \u00b7  published when RFC 5702 was at 1% of its eventual share"
+    ]
+  },
+  {
+    "slide": 10,
+    "text": [
+      "PARTLY OBSERVABLE  \u00b7  RFC 5011",
+      "Automated trust-anchor rollover",
+      "The resolver half -- hold-down timers, whether a validator accepts a new anchor -- leaves no trace in any zone, and the reverse corpus (NS and DS only) sees none of it. The signer half does leave one: the REVOKE bit RFC 5011 defines, on 3 to 159 forward zones in every month since 2016-06 (median 17). BIND 9.7.0 could both revoke a key and track a rolled anchor from 2010-02, Unbound 1.4.0 the validator side from 2009-11; the forward corpus opens with revoked keys already present, so first-seen is left-censored. 8 CVEs mention trust anchors; the first (2008-03) predates every implementation in the table.",
+      "published 2007-09  \u00b7  first signer BIND 9 9.7.0 2010-02  \u00b7  first validator Unbound 1.4.0 2009-11  \u00b7  8 CVEs naming it, first 2008-03  \u00b7  revoked keys on 3-159 forward zones/month since 2016-06"
+    ]
+  },
+  {
+    "slide": 11,
+    "text": [
+      "WHAT SEPARATES THEM",
+      "How a change reaches a zone decides its speed",
+      "Across the five mechanisms with a release history, RFC-to-signer runs -0.4 to +1.8 years and signer-to-first-zone 0.1 to 3.8. For the two slowest, ECDSA and GOST, the whole onset is the second number; CDS is the exception, where the code itself took 1.8 years. Speed is mostly decided after the code ships, by the mechanism that carries the value to a zone:",
+      "Vendor-triggered",
+      "measured",
+      "2 months",
+      "NSEC3 iterations: names at >=100 fell 17,491 to 3,027 in 2021-10, two months after the caps, ten months before RFC 9276.",
+      "Registry-automated",
+      "measured",
+      "~2 months",
+      "CDS: SWITCH acts on the record; .ch 140,506 to 851,003 signed zones inside 2021. The ~2 months is CDS publication leading signing in the series, not a derived figure.",
+      "Default-on-upgrade",
+      "inferred",
+      "3 months - 3 years",
+      "ECDSA: Knot and PowerDNS defaults in 2016 sit 0.8-1.6 y from the 1% crossing against 4.5-5.3 for the RFC; event studies detect no acceleration, so this is timing, not proof.",
+      "Opt-in configuration",
+      "inferred",
+      "1.3 - 3.8 years",
+      "everything else: somebody decides and edits. Every spike is one operator; the partner TLD moves in the same month in 20 of 21.",
+      "No default, ever",
+      "observed",
+      "never",
+      "EdDSA and GOST: fully implemented, never a default anywhere, published when the predecessor stood at 1% of its eventual share. 0.37% and 0.00% today.",
+      "Fast (RFC 5702) is the case where the value changes nothing a zone manages. The first two rows are read off the series; the next two are the residual after that, attributed to a mechanism no zone reveals; the last is the absence of a default in the release history."
+    ]
+  },
+  {
+    "slide": 12,
+    "text": [
+      "THE PROGRAMS, AND THE CVEs",
+      "CVEs follow adoption; the validators that carry most of them publish nothing",
+      "1",
+      "Unbound is a validator: it can never appear in a spike.",
+      "It publishes nothing, so zone data cannot see it move. What it dates is the validation side, and it was ready before the RFC for 3 of its 7 DNSSEC milestones (nsec3, alg 8/10, alg 12) -- plus the 2021 iteration cap, fifteen months before RFC 9276.",
+      "2",
+      "BIND: one dated silent default change found in seventeen years.",
+      "NSEC3 iterations default 100 -> 10 in 9.7.0 (2010-02). Its ECDSA default arrived only as opt-in dnssec-policy in 9.16.0 (2020-02). No BIND release schedule predicts change in the ledger (p = 0.93).",
+      "3",
+      "No CVE led a push.",
+      "Of 16 DNSSEC CVEs that name a specific mechanism, 12 were published while it was already in common usage and 0 before anyone used it. The one candidate, CVE-2021-40083, was published after the NSEC3 cap it might have prompted was already committed.",
+      "4",
+      "The DNSSEC CVE surface is on validators, and validators are invisible here.",
+      "DNSSEC CVEs per program: BIND 9 40, Unbound 16, PowerDNS Rec 12, PowerDNS Auth 3, NSD 0, OpenDNSSEC 0. NSD and OpenDNSSEC do not validate. 69 of 97 DNSSEC CVEs sit in the validation core every signed zone shares -- KeyTrap (CVE-2023-50387) among them, with git-dated fixes from 3 vendors spread over 148 days. No algorithm choice avoids any of it."
+    ]
+  },
+  {
+    "slide": 13,
+    "text": [
+      "WHAT THIS CANNOT SHOW",
+      "Four limits that bound every claim above",
+      "No zone's software is identifiable.",
+      "Every alignment between a release and a deployment move is a coincidence in time. Even for NSEC3 iterations, which resolver or signer each operator ran is unknown -- and the names that moved sat below Unbound's cap and at PowerDNS's.",
+      "Per-zone tracking is reverse-only.",
+      "The forward per-day records are not in this repository; .se, .nu and .ch are seen as monthly aggregates. Rollover paths and the manual-versus-bulk split rest on RIR delegations.",
+      "Release timing is not identifiable at the ecosystem level.",
+      "97% of corpus months contain a release from some project. Per project, after detrending, no release schedule predicts change: smallest p is 0.11.",
+      "The registry and registrar layer is closed.",
+      "The operators the evidence points at -- SWITCH, the Swedish Internet Foundation -- run platforms whose release history cannot be read. The channel most likely to carry an automatic change is the one this data cannot see.",
+      "Reproducible: python reporting/rfc_timelines.py && python reporting/make_rfc_deck.py"
+    ]
+  }
+]

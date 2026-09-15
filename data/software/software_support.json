@@ -507,6 +507,40 @@
       "evidence_kind": "commit",
       "attribution": "exact",
       "attribution_basis": "The cited commit introduces the feature and this is the single earliest stable release containing it."
+    },
+    {
+      "implementation": "bind9",
+      "capability": "validate",
+      "observable": "trust-anchor rollover",
+      "rfc": "RFC 5011",
+      "first_release": "9.7.0",
+      "released": "2010-02-16",
+      "commit_date": "2009-06-30",
+      "evidence": "2619. [func] Add support for RFC 5011, automatic trust anchor maintenance. The new \"managed-keys\" statement can be used in place of \"trusted-keys\" [RT #19248]",
+      "evidence_kind": "commit",
+      "evidence_commit": "cfb1587eb9",
+      "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/cfb1587eb9",
+      "pre_rfc": false,
+      "standard_codepoint": true,
+      "attribution": "exact",
+      "attribution_basis": "The CHANGES entry that adds managed-keys; 9.7.0 is the first stable release containing it."
+    },
+    {
+      "implementation": "bind9",
+      "capability": "sign",
+      "observable": "revoked-KSK state",
+      "rfc": "RFC 5011",
+      "first_release": "9.7.0",
+      "released": "2010-02-16",
+      "commit_date": "2009-09-02",
+      "evidence": "2668. [func] dnssec-revoke sets the revocation date in addition to the revoke bit [RT #19942]",
+      "evidence_kind": "commit",
+      "evidence_commit": "eab9975bcf",
+      "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/eab9975bcf",
+      "pre_rfc": false,
+      "standard_codepoint": true,
+      "attribution": "exact",
+      "attribution_basis": "dnssec-revoke, the tool that sets the RFC 5011 REVOKE bit on a KSK, lands in the 9.7.0 cycle; the docbook was added 2009-06-30 and this entry dates the tool's final behaviour."
     }
   ],
   "default_changes": [
@@ -676,6 +710,7 @@
     "Capability is recorded, not conflated: 'rrtype' (can parse/serve the type), 'publish' (can generate it), 'sign' (can produce RRSIGs with it), 'validate' (can verify it). BIND had CDS record types in 2014 and CDS generation in 2020.",
     "Registry and registrar platforms are out of scope and are not open source. Where a spike is attributed to an operator below, the attribution is to the operator, never to a particular piece of software they might run.",
     "standard_codepoint=false marks an implementation shipped on a private or provisional codepoint. Those rows are evidence that the cryptography was ready, but they are excluded from code-lag arithmetic: nothing published under codepoint 250 is an RFC 8080 observation.",
-    "confidence was removed. It was an unexplained three-level label. Each row now carries attribution (exact / earliest-of-several / approximate) plus attribution_basis saying in words what is uncertain, and evidence_url pointing at the commit so the claim can be checked rather than trusted."
+    "confidence was removed. It was an unexplained three-level label. Each row now carries attribution (exact / earliest-of-several / approximate) plus attribution_basis saying in words what is uncertain, and evidence_url pointing at the commit so the claim can be checked rather than trusted.",
+    "RFC 5011 rows for BIND 9.7.0 added 2026-09-15: managed-keys (validator) and dnssec-revoke (signer). The revoked-KSK series in the forward corpus starts in its first month (2016-06), so with BIND able to revoke from 2010-02 the first-seen date is left-censored."
   ]
 }

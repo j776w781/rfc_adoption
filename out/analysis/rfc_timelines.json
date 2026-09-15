@@ -1,0 +1,1140 @@
+{
+  "RFC 5155": {
+    "rfc": "RFC 5155",
+    "title": "NSEC3 authenticated denial",
+    "published": "2008-03",
+    "software": [
+      {
+        "implementation": "Unbound",
+        "key": "unbound",
+        "capability": "validate",
+        "version": "0.7.1",
+        "released": "2007-11-19",
+        "pre_rfc": true,
+        "evidence_url": "https://github.com/NLnetLabs/unbound/commit/d85debfae4c3d216c00960c1f8ecb88556399f61"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "sign",
+        "version": "9.6.0",
+        "released": "2008-12-21",
+        "pre_rfc": false,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/6098d364b690cb9dabf96e9664c4689c8559bd2e"
+      }
+    ],
+    "defaults": [
+      {
+        "implementation": "BIND 9",
+        "version": "9.7.0",
+        "released": "2010-02-16",
+        "what": "NSEC3 iterations default 100 -> 10",
+        "opt_in": false
+      }
+    ],
+    "limits": [
+      {
+        "implementation": "PowerDNS Rec",
+        "version": "4.1.0",
+        "released": "2017-12-04",
+        "what": "reject zones with too many NSEC3 iterations"
+      },
+      {
+        "implementation": "Unbound",
+        "version": "1.13.2",
+        "released": "2021-08-05",
+        "what": "NSEC3 max iterations lowered to 150, matching other vendors"
+      },
+      {
+        "implementation": "Knot DNS",
+        "version": "3.1.5",
+        "released": "2021-12-20",
+        "what": "config check on the default NSEC3 iteration count"
+      }
+    ],
+    "cves": [
+      {
+        "cve": "CVE-2009-3602",
+        "published": "2009-10-13",
+        "cvss": 7.5,
+        "mechanism": "nsec3",
+        "description": "Unbound before 1.3.4 does not properly verify signatures for NSEC3 records, which allows remote attackers to cause secure delegations to be "
+      },
+      {
+        "cve": "CVE-2010-0097",
+        "published": "2010-01-22",
+        "cvss": 4.3,
+        "mechanism": "nsec3",
+        "description": "ISC BIND 9.0.x through 9.3.x, 9.4 before 9.4.3-P5, 9.5 before 9.5.2-P2, 9.6 before 9.6.1-P3, and 9.7.0 beta does not properly validate DNSSE"
+      },
+      {
+        "cve": "CVE-2011-4869",
+        "published": "2011-12-20",
+        "cvss": 7.8,
+        "mechanism": "nsec3",
+        "description": "validator/val_nsec3.c in Unbound before 1.4.13p2 does not properly perform proof processing for NSEC3-signed zones, which allows remote DNS "
+      },
+      {
+        "cve": "CVE-2014-0591",
+        "published": "2014-01-14",
+        "cvss": 2.6,
+        "mechanism": "nsec3",
+        "description": "The query_findclosestnsec3 function in query.c in named in ISC BIND 9.6, 9.7, and 9.8 before 9.8.6-P2 and 9.9 before 9.9.4-P2, and 9.6-ESV b"
+      },
+      {
+        "cve": "CVE-2021-40083",
+        "published": "2021-08-25",
+        "cvss": 7.5,
+        "mechanism": "nsec3",
+        "description": "Knot Resolver before 5.3.2 is prone to an assertion failure, triggerable by a remote attacker in an edge case (NSEC3 with too many iteration"
+      },
+      {
+        "cve": "CVE-2023-50868",
+        "published": "2024-02-14",
+        "cvss": 7.5,
+        "mechanism": "nsec3",
+        "description": "The Closest Encloser Proof aspect of the DNS protocol (in RFC 5155 when RFC 9276 guidance is skipped) allows remote attackers to cause a den"
+      },
+      {
+        "cve": "CVE-2026-10723",
+        "published": "2026-07-22",
+        "cvss": 6.8,
+        "mechanism": "nsec3",
+        "description": "BIND may accept incorrect child-zone NSEC3 records as valid, which could allow an attacker to forge authenticated NXDOMAIN responses.\nThis i"
+      },
+      {
+        "cve": "CVE-2026-13204",
+        "published": "2026-07-22",
+        "cvss": 7.5,
+        "mechanism": "nsec3",
+        "description": "If a provably insecure domain is covered by both an NSEC and NSEC3 record at the parent, and there exist an RRSIG for only one of these type"
+      },
+      {
+        "cve": "CVE-2026-33261",
+        "published": "2026-04-22",
+        "cvss": 5.9,
+        "mechanism": "nsec3",
+        "description": "A zone transition from NSEC to NSEC3 might trigger an internal inconsistency and cause a denial of service."
+      },
+      {
+        "cve": "CVE-2026-33278",
+        "published": "2026-05-20",
+        "cvss": 9.8,
+        "mechanism": "nsec3",
+        "description": "NLnet Labs Unbound 1.19.1 up to and including version 1.25.0 has a vulnerability in the DNSSEC validator that enables denial of service and "
+      },
+      {
+        "cve": "CVE-2026-42923",
+        "published": "2026-05-20",
+        "cvss": 5.3,
+        "mechanism": "nsec3",
+        "description": "NLnet Labs Unbound up to and including version 1.25.0 has a vulnerability in the DNSSEC validator where the code path to consult the negativ"
+      },
+      {
+        "cve": "CVE-2026-52686",
+        "published": "2026-07-23",
+        "cvss": 3.7,
+        "mechanism": "nsec3",
+        "description": "The issue is a DNSSEC validation bypass where wildcard expansion proofs (NSEC/NSEC3 records) are accepted without signature validation when "
+      }
+    ],
+    "spikes": [],
+    "related_rfcs": [
+      {
+        "rfc": "RFC 9276",
+        "published": "2022-08"
+      }
+    ],
+    "adoption": [
+      {
+        "change": "RSASHA1-NSEC3",
+        "first_seen": "2009-08",
+        "t_1pct": "2011-05",
+        "t_10pct": "2011-08",
+        "peak_share_pct": 28.994,
+        "current_share_pct": 6.456,
+        "onset_years": 1.42
+      }
+    ],
+    "curve_note": "forward: NSEC3PARAM at the apex over signed zones",
+    "lags": {
+      "first_signer_release": "2008-12-21",
+      "first_signer": "bind9 9.6.0",
+      "first_validator_release": "2007-11-19",
+      "first_validator": "unbound 0.7.1",
+      "first_zone_seen": "2009-08",
+      "code_lag_years": 0.75,
+      "deployment_lag_years": 0.67,
+      "onset_years": 1.42
+    },
+    "verdict": "slow",
+    "verdict_basis": "first zone 1.4 y after the RFC and 10% of signed delegations 3.4 y after it",
+    "curve_summary": {
+      "forward_peak_pct": 98.39,
+      "forward_last_pct": 61.94,
+      "reverse_peak_pct": 28.99,
+      "reverse_last_pct": 6.46
+    }
+  },
+  "RFC 5702": {
+    "rfc": "RFC 5702",
+    "title": "RSA/SHA-256 and RSA/SHA-512",
+    "published": "2009-10",
+    "software": [
+      {
+        "implementation": "Unbound",
+        "key": "unbound",
+        "capability": "validate",
+        "version": "1.1.0",
+        "released": "2008-11-14",
+        "pre_rfc": true,
+        "evidence_url": "https://github.com/NLnetLabs/unbound/commit/8a32f9003b7c2eafea658516d0d62efdf36fb49b"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "sign",
+        "version": "9.7.0",
+        "released": "2010-02-16",
+        "pre_rfc": false,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/cc6cddfd94e8f0c58c290317b0853dac30b1b895"
+      }
+    ],
+    "defaults": [
+      {
+        "implementation": "OpenDNSSEC",
+        "version": "1.2.0",
+        "released": "2011-03-18",
+        "what": "default signing algorithm -> 8 (RSASHA256)",
+        "opt_in": false
+      },
+      {
+        "implementation": "Knot DNS",
+        "version": "2.0.0",
+        "released": "2015-06-26",
+        "what": "default signing algorithm -> RSASHA256",
+        "opt_in": false
+      }
+    ],
+    "limits": [],
+    "cves": [],
+    "spikes": [
+      {
+        "month": "2021-12",
+        "source": "ch",
+        "operator": "SWITCH",
+        "delta_zones": 60903,
+        "zones_after": 93372
+      },
+      {
+        "month": "2021-12",
+        "source": "li",
+        "operator": "SWITCH",
+        "delta_zones": 1012,
+        "zones_after": 2244
+      }
+    ],
+    "related_rfcs": [
+      {
+        "rfc": "RFC 6605",
+        "published": "2012-04"
+      }
+    ],
+    "adoption": [
+      {
+        "change": "RSASHA256",
+        "first_seen": "2010-03",
+        "t_1pct": "2011-05",
+        "t_10pct": "2012-06",
+        "peak_share_pct": 74.642,
+        "current_share_pct": 22.3,
+        "onset_years": 0.5,
+        "first_seen_reverse_panel": "2010-04"
+      },
+      {
+        "change": "RSASHA512",
+        "first_seen": "2010-03",
+        "t_1pct": "2014-08",
+        "t_10pct": null,
+        "peak_share_pct": 3.723,
+        "current_share_pct": 0.372,
+        "onset_years": 0.83,
+        "first_seen_reverse_panel": "2010-08"
+      }
+    ],
+    "lags": {
+      "first_signer_release": "2010-02",
+      "first_signer": "bind9 9.7.0",
+      "first_validator_release": "2008-11",
+      "first_validator": "unbound 1.1.0",
+      "first_zone_seen": "2010-03",
+      "first_seen_basis": "reverse",
+      "code_lag_years": 0.3,
+      "deployment_lag_years": 0.1,
+      "onset_years": 0.4,
+      "source": "out/analysis/software_crossref.json onset_decomposition"
+    },
+    "verdict": "fast",
+    "verdict_basis": "first zone 0.4 y after the RFC and 10% of signed delegations 2.7 y after it",
+    "curve_summary": {
+      "forward_peak_pct": 98.52,
+      "forward_last_pct": 24.36,
+      "reverse_peak_pct": 75.74,
+      "reverse_last_pct": 22.67
+    }
+  },
+  "RFC 5933": {
+    "rfc": "RFC 5933",
+    "title": "GOST signing and digest",
+    "published": "2010-07",
+    "software": [
+      {
+        "implementation": "Unbound",
+        "key": "unbound",
+        "capability": "validate",
+        "version": "1.4.0",
+        "released": "2009-11-23",
+        "pre_rfc": true,
+        "evidence_url": "https://github.com/NLnetLabs/unbound/blob/master/doc/Changelog"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "sign",
+        "version": "9.6.2",
+        "released": "2010-02-18",
+        "pre_rfc": true,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/d9fdcc51316d53d175d37c28f4b22292ed1c0c97"
+      }
+    ],
+    "defaults": [],
+    "limits": [],
+    "cves": [],
+    "spikes": [],
+    "related_rfcs": [
+      {
+        "rfc": "RFC 5702",
+        "published": "2009-10"
+      },
+      {
+        "rfc": "RFC 9906",
+        "published": "2025-11"
+      }
+    ],
+    "adoption": [
+      {
+        "change": "ECC-GOST",
+        "first_seen": "2012-12",
+        "t_1pct": null,
+        "t_10pct": null,
+        "peak_share_pct": 0.0,
+        "current_share_pct": 0.0,
+        "onset_years": 2.5,
+        "first_seen_reverse_panel": "2013-01"
+      }
+    ],
+    "successor_overlap": [
+      {
+        "predecessor": "RFC 5702",
+        "predecessor_share_at_publication": 0.8,
+        "predecessor_peak_share": 87.79,
+        "fraction_of_peak_reached": 0.01
+      }
+    ],
+    "lags": {
+      "first_signer_release": "2010-02",
+      "first_signer": "bind9 9.6.2",
+      "first_validator_release": "2009-11",
+      "first_validator": "unbound 1.4.0",
+      "first_zone_seen": "2012-12",
+      "first_seen_basis": "reverse",
+      "code_lag_years": -0.4,
+      "deployment_lag_years": 2.8,
+      "onset_years": 2.4,
+      "source": "out/analysis/software_crossref.json onset_decomposition"
+    },
+    "verdict": "never",
+    "verdict_basis": "0.00% of signed zones today, years after every major implementation shipped it; neither corpus covers the Russian namespace it was written for, so 0.00% is partly sample construction",
+    "curve_summary": {
+      "forward_peak_pct": 0.0,
+      "forward_last_pct": 0.0,
+      "reverse_peak_pct": 0.0,
+      "reverse_last_pct": 0.0
+    }
+  },
+  "RFC 6605": {
+    "rfc": "RFC 6605",
+    "title": "ECDSA P-256 / P-384",
+    "published": "2012-04",
+    "software": [
+      {
+        "implementation": "PowerDNS Auth",
+        "key": "pdns-auth",
+        "capability": "sign",
+        "version": "3.0.1",
+        "released": "2012-01-10",
+        "pre_rfc": true,
+        "evidence_url": "https://github.com/PowerDNS/pdns/commit/022e5e0b24c5f1741d0a38bf67bd3b5d60318f47"
+      },
+      {
+        "implementation": "Unbound",
+        "key": "unbound",
+        "capability": "validate",
+        "version": "1.4.17",
+        "released": "2012-05-18",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/NLnetLabs/unbound/commit/53a448ffae9d220e38ce459b28148e3d9fc45300"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "sign",
+        "version": "9.8.4",
+        "released": "2012-09-26",
+        "pre_rfc": false,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/9d1aaaaf3a919264f340d2fd88d2468e0d0b4c3a"
+      },
+      {
+        "implementation": "Knot DNS",
+        "key": "knot",
+        "capability": "sign",
+        "version": "1.4.0",
+        "released": "2013-12-31",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/CZ-NIC/knot/commit/e87dfa76816f6de259b4e1fe51e00039767af476"
+      },
+      {
+        "implementation": "PowerDNS Auth",
+        "key": "pdns-auth",
+        "capability": "sign",
+        "version": "3.0.1",
+        "released": "2012-01-10",
+        "pre_rfc": true,
+        "evidence_url": "https://github.com/PowerDNS/pdns/commit/39315b97fad8deefca673041b85222e4ae00e7ab"
+      }
+    ],
+    "defaults": [
+      {
+        "implementation": "Knot DNS",
+        "version": "2.1.0",
+        "released": "2016-01-14",
+        "what": "default signing algorithm -> ECDSAP256SHA256",
+        "opt_in": false
+      },
+      {
+        "implementation": "PowerDNS Auth",
+        "version": "4.0.0",
+        "released": "2016-07-08",
+        "what": "default ZSK algorithm -> ECDSA P-256",
+        "opt_in": false
+      },
+      {
+        "implementation": "PowerDNS Auth",
+        "version": "4.0.0",
+        "released": "2016-07-08",
+        "what": "default KSK algorithm -> ECDSA P-256",
+        "opt_in": false
+      },
+      {
+        "implementation": "BIND 9",
+        "version": "9.16.0",
+        "released": "2020-02-12",
+        "what": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK",
+        "opt_in": true
+      }
+    ],
+    "limits": [],
+    "cves": [
+      {
+        "cve": "CVE-2017-15094",
+        "published": "2018-01-23",
+        "cvss": 5.9,
+        "mechanism": "algorithm",
+        "description": "An issue has been found in the DNSSEC parsing code of PowerDNS Recursor from 4.0.0 up to and including 4.0.6 leading to a memory leak when p"
+      },
+      {
+        "cve": "CVE-2022-38177",
+        "published": "2022-09-21",
+        "cvss": 7.5,
+        "mechanism": "algorithm",
+        "description": "By spoofing the target resolver with responses that have a malformed ECDSA signature, an attacker can trigger a small memory leak. It is pos"
+      }
+    ],
+    "spikes": [
+      {
+        "month": "2016-10",
+        "source": "nu",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 857,
+        "zones_after": 900
+      },
+      {
+        "month": "2016-10",
+        "source": "se",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 10788,
+        "zones_after": 11046
+      },
+      {
+        "month": "2016-11",
+        "source": "se",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 6405,
+        "zones_after": 17451
+      },
+      {
+        "month": "2017-04",
+        "source": "se",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 16925,
+        "zones_after": 34870
+      },
+      {
+        "month": "2019-01",
+        "source": "nu",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 18247,
+        "zones_after": 21091
+      },
+      {
+        "month": "2019-01",
+        "source": "se",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 119500,
+        "zones_after": 153990
+      },
+      {
+        "month": "2021-06",
+        "source": "li",
+        "operator": "SWITCH",
+        "delta_zones": 786,
+        "zones_after": 1950
+      },
+      {
+        "month": "2021-08",
+        "source": "ch",
+        "operator": "SWITCH",
+        "delta_zones": 174356,
+        "zones_after": 391960
+      },
+      {
+        "month": "2021-08",
+        "source": "li",
+        "operator": "SWITCH",
+        "delta_zones": 1882,
+        "zones_after": 4446
+      },
+      {
+        "month": "2021-09",
+        "source": "li",
+        "operator": "SWITCH",
+        "delta_zones": 2268,
+        "zones_after": 6714
+      }
+    ],
+    "related_rfcs": [
+      {
+        "rfc": "RFC 5702",
+        "published": "2009-10"
+      },
+      {
+        "rfc": "RFC 8080",
+        "published": "2017-02"
+      }
+    ],
+    "adoption": [
+      {
+        "change": "ECDSAP256SHA256",
+        "first_seen": "2015-11",
+        "t_1pct": "2018-06",
+        "t_10pct": "2019-03",
+        "peak_share_pct": 67.955,
+        "current_share_pct": 67.955,
+        "onset_years": 3.67,
+        "first_seen_reverse_panel": "2015-12"
+      },
+      {
+        "change": "ECDSAP384SHA384",
+        "first_seen": "2015-11",
+        "t_1pct": "2018-09",
+        "t_10pct": null,
+        "peak_share_pct": 3.452,
+        "current_share_pct": 2.747,
+        "onset_years": 4.0,
+        "first_seen_reverse_panel": "2016-04"
+      }
+    ],
+    "successor_overlap": [
+      {
+        "predecessor": "RFC 5702",
+        "predecessor_share_at_publication": 14.2,
+        "predecessor_peak_share": 87.79,
+        "fraction_of_peak_reached": 0.16
+      }
+    ],
+    "lags": {
+      "first_signer_release": "2012-01",
+      "first_signer": "pdns-auth 3.0.1",
+      "first_validator_release": "2012-05",
+      "first_validator": "unbound 1.4.17",
+      "first_zone_seen": "2015-11",
+      "first_seen_basis": "reverse",
+      "code_lag_years": -0.2,
+      "deployment_lag_years": 3.8,
+      "onset_years": 3.6,
+      "source": "out/analysis/software_crossref.json onset_decomposition"
+    },
+    "verdict": "slow",
+    "verdict_basis": "first zone 3.6 y after the RFC and 10% of signed delegations 6.9 y after it",
+    "curve_summary": {
+      "forward_peak_pct": 76.29,
+      "forward_last_pct": 76.14,
+      "reverse_peak_pct": 70.7,
+      "reverse_last_pct": 70.7
+    }
+  },
+  "RFC 7344": {
+    "rfc": "RFC 7344",
+    "title": "CDS / CDNSKEY child signalling",
+    "published": "2014-09",
+    "software": [
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "rrtype",
+        "version": "9.8.8",
+        "released": "2014-09-16",
+        "pre_rfc": true,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/c39bcc17362213903144f3dc360d77a2bf484058"
+      },
+      {
+        "implementation": "Knot DNS",
+        "key": "knot",
+        "capability": "rrtype",
+        "version": "1.6.3",
+        "released": "2015-04-08",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/CZ-NIC/knot/commit/5ff97dfb7c514abb278043a8806a931578389280"
+      },
+      {
+        "implementation": "PowerDNS Auth",
+        "key": "pdns-auth",
+        "capability": "publish",
+        "version": "4.0.0",
+        "released": "2016-07-08",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/PowerDNS/pdns/commit/ef542223c831c0f791fb4909c4f5d06ed67398da"
+      },
+      {
+        "implementation": "Knot DNS",
+        "key": "knot",
+        "capability": "publish",
+        "version": "2.5.0",
+        "released": "2017-06-05",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/CZ-NIC/knot/commit/14e414b14c81fb2c89c1d9ec52ea52712678d3db"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "publish",
+        "version": "9.16.0",
+        "released": "2020-02-12",
+        "pre_rfc": false,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/2f5c441181071fa7fd579ac973ce068a336bedda"
+      }
+    ],
+    "defaults": [],
+    "limits": [],
+    "cves": [],
+    "spikes": [
+      {
+        "month": "2021-06",
+        "source": "ch",
+        "delta_zones": 38489,
+        "zones_after": 54356,
+        "operator": "SWITCH"
+      },
+      {
+        "month": "2021-06",
+        "source": "li",
+        "delta_zones": 771,
+        "zones_after": 1312,
+        "operator": "SWITCH"
+      },
+      {
+        "month": "2021-07",
+        "source": "ch",
+        "delta_zones": 46193,
+        "zones_after": 100549,
+        "operator": "SWITCH"
+      },
+      {
+        "month": "2021-10",
+        "source": "se",
+        "delta_zones": 1934,
+        "zones_after": 4635,
+        "operator": "Swedish Internet Foundation"
+      },
+      {
+        "month": "2021-11",
+        "source": "ch",
+        "delta_zones": 78041,
+        "zones_after": 218211,
+        "operator": "SWITCH"
+      },
+      {
+        "month": "2021-11",
+        "source": "se",
+        "delta_zones": 2713,
+        "zones_after": 7348,
+        "operator": "Swedish Internet Foundation"
+      }
+    ],
+    "related_rfcs": [
+      {
+        "rfc": "RFC 8078",
+        "published": "2017-03"
+      }
+    ],
+    "adoption": [],
+    "curve_note": "forward: NSEC3PARAM at the apex over signed zones",
+    "lags": {
+      "first_signer_release": "2016-07",
+      "first_signer": "pdns-auth 4.0.0",
+      "first_validator_release": null,
+      "first_validator": null,
+      "first_zone_seen": "2017-10",
+      "first_seen_basis": "zonefile",
+      "code_lag_years": 1.8,
+      "deployment_lag_years": 1.2,
+      "onset_years": 3.1,
+      "source": "out/analysis/software_crossref.json onset_decomposition"
+    },
+    "verdict": "niche by design",
+    "verdict_basis": "18.5% of signed forward zones publish a CDS record; only a zone whose parent will act on it has reason to, and where a registry does the effect is six figures",
+    "curve_summary": {
+      "forward_peak_pct": 18.88,
+      "forward_last_pct": 18.47,
+      "reverse_peak_pct": null,
+      "reverse_last_pct": null
+    }
+  },
+  "RFC 8080": {
+    "rfc": "RFC 8080",
+    "title": "EdDSA (Ed25519 / Ed448)",
+    "published": "2017-02",
+    "software": [
+      {
+        "implementation": "Knot DNS",
+        "key": "knot",
+        "capability": "algorithm-aware",
+        "version": "2.4.0",
+        "released": "2017-01-18",
+        "pre_rfc": true,
+        "evidence_url": "https://github.com/CZ-NIC/knot/commit/015dfc57c63f735e1e2eca645b0062afcc6fec51"
+      },
+      {
+        "implementation": "Unbound",
+        "key": "unbound",
+        "capability": "validate",
+        "version": "1.6.4",
+        "released": "2017-06-22",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/NLnetLabs/unbound/commit/8c4e7ffb1422c904e348a6379bcacecefd19dfc5"
+      },
+      {
+        "implementation": "Knot DNS",
+        "key": "knot",
+        "capability": "sign",
+        "version": "2.6.0",
+        "released": "2017-09-29",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/CZ-NIC/knot/commit/662b449b7f6d9f7900d22789d097af6a2277593f"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "sign",
+        "version": "9.12.0",
+        "released": "2018-01-17",
+        "pre_rfc": false,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/9b9182fe00c0cdaf9a94bbe84e685adad84f47a4"
+      },
+      {
+        "implementation": "Unbound",
+        "key": "unbound",
+        "capability": "validate",
+        "version": "1.7.1",
+        "released": "2018-04-26",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/NLnetLabs/unbound/commit/1f9caf5805fd7b5af95b09e919adf603dde1b8e7"
+      },
+      {
+        "implementation": "OpenDNSSEC",
+        "key": "opendnssec",
+        "capability": "sign",
+        "version": "2.1.7",
+        "released": "2020-10-07",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/opendnssec/opendnssec/commit/46e0a7b94793da6bb3b28107f53252b81c150754"
+      }
+    ],
+    "defaults": [],
+    "limits": [],
+    "cves": [
+      {
+        "cve": "CVE-2022-38178",
+        "published": "2022-09-21",
+        "cvss": 7.5,
+        "mechanism": "algorithm",
+        "description": "By spoofing the target resolver with responses that have a malformed EdDSA signature, an attacker can trigger a small memory leak. It is pos"
+      }
+    ],
+    "spikes": [
+      {
+        "month": "2020-04",
+        "source": "se",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 8403,
+        "zones_after": 8407
+      },
+      {
+        "month": "2020-05",
+        "source": "se",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 5537,
+        "zones_after": 13944
+      },
+      {
+        "month": "2023-01",
+        "source": "nu",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 735,
+        "zones_after": 738
+      },
+      {
+        "month": "2023-01",
+        "source": "se",
+        "operator": "Swedish Internet Foundation",
+        "delta_zones": 10623,
+        "zones_after": 10659
+      }
+    ],
+    "related_rfcs": [
+      {
+        "rfc": "RFC 6605",
+        "published": "2012-04"
+      }
+    ],
+    "adoption": [
+      {
+        "change": "Ed25519",
+        "first_seen": "2019-01",
+        "t_1pct": null,
+        "t_10pct": null,
+        "peak_share_pct": 0.371,
+        "current_share_pct": 0.341,
+        "onset_years": 5.58,
+        "first_seen_reverse_panel": "2022-09"
+      },
+      {
+        "change": "Ed448",
+        "first_seen": "2019-01",
+        "t_1pct": null,
+        "t_10pct": null,
+        "peak_share_pct": 0.04,
+        "current_share_pct": 0.031,
+        "onset_years": 5.83,
+        "first_seen_reverse_panel": "2022-12"
+      }
+    ],
+    "successor_overlap": [
+      {
+        "predecessor": "RFC 6605",
+        "predecessor_share_at_publication": 0.51,
+        "predecessor_peak_share": 74.06,
+        "fraction_of_peak_reached": 0.01
+      }
+    ],
+    "lags": {
+      "first_signer_release": "2017-09",
+      "first_signer": "knot 2.6.0",
+      "first_validator_release": "2017-06",
+      "first_validator": "unbound 1.6.4",
+      "first_zone_seen": "2019-01",
+      "first_seen_basis": "zonefile",
+      "code_lag_years": 0.6,
+      "deployment_lag_years": 1.3,
+      "onset_years": 1.9,
+      "source": "out/analysis/software_crossref.json onset_decomposition"
+    },
+    "verdict": "never",
+    "verdict_basis": "0.37% of signed zones today, years after every major implementation shipped it; a 1.9% spike was one operator and was withdrawn",
+    "curve_summary": {
+      "forward_peak_pct": 1.92,
+      "forward_last_pct": 0.01,
+      "reverse_peak_pct": 0.4,
+      "reverse_last_pct": 0.37
+    }
+  },
+  "RFC 9276": {
+    "rfc": "RFC 9276",
+    "title": "NSEC3 parameter guidance (0 iterations)",
+    "published": "2022-08",
+    "software": [],
+    "defaults": [],
+    "limits": [
+      {
+        "implementation": "PowerDNS Rec",
+        "version": "4.1.0",
+        "released": "2017-12-04",
+        "what": "reject zones with too many NSEC3 iterations"
+      },
+      {
+        "implementation": "Unbound",
+        "version": "1.13.2",
+        "released": "2021-08-05",
+        "what": "NSEC3 max iterations lowered to 150, matching other vendors"
+      },
+      {
+        "implementation": "Knot DNS",
+        "version": "3.1.5",
+        "released": "2021-12-20",
+        "what": "config check on the default NSEC3 iteration count"
+      }
+    ],
+    "cves": [
+      {
+        "cve": "CVE-2021-40083",
+        "published": "2021-08-25",
+        "cvss": 7.5,
+        "mechanism": "nsec3",
+        "description": "Knot Resolver before 5.3.2 is prone to an assertion failure, triggerable by a remote attacker in an edge case (NSEC3 with too many iteration"
+      },
+      {
+        "cve": "CVE-2023-50868",
+        "published": "2024-02-14",
+        "cvss": 7.5,
+        "mechanism": "nsec3",
+        "description": "The Closest Encloser Proof aspect of the DNS protocol (in RFC 5155 when RFC 9276 guidance is skipped) allows remote attackers to cause a den"
+      },
+      {
+        "cve": "CVE-2026-10723",
+        "published": "2026-07-22",
+        "cvss": 6.8,
+        "mechanism": "nsec3",
+        "description": "BIND may accept incorrect child-zone NSEC3 records as valid, which could allow an attacker to forge authenticated NXDOMAIN responses.\nThis i"
+      },
+      {
+        "cve": "CVE-2026-13204",
+        "published": "2026-07-22",
+        "cvss": 7.5,
+        "mechanism": "nsec3",
+        "description": "If a provably insecure domain is covered by both an NSEC and NSEC3 record at the parent, and there exist an RRSIG for only one of these type"
+      },
+      {
+        "cve": "CVE-2026-33261",
+        "published": "2026-04-22",
+        "cvss": 5.9,
+        "mechanism": "nsec3",
+        "description": "A zone transition from NSEC to NSEC3 might trigger an internal inconsistency and cause a denial of service."
+      },
+      {
+        "cve": "CVE-2026-33278",
+        "published": "2026-05-20",
+        "cvss": 9.8,
+        "mechanism": "nsec3",
+        "description": "NLnet Labs Unbound 1.19.1 up to and including version 1.25.0 has a vulnerability in the DNSSEC validator that enables denial of service and "
+      },
+      {
+        "cve": "CVE-2026-42923",
+        "published": "2026-05-20",
+        "cvss": 5.3,
+        "mechanism": "nsec3",
+        "description": "NLnet Labs Unbound up to and including version 1.25.0 has a vulnerability in the DNSSEC validator where the code path to consult the negativ"
+      },
+      {
+        "cve": "CVE-2026-52686",
+        "published": "2026-07-23",
+        "cvss": 3.7,
+        "mechanism": "nsec3",
+        "description": "The issue is a DNSSEC validation bypass where wildcard expansion proofs (NSEC/NSEC3 records) are accepted without signature validation when "
+      }
+    ],
+    "spikes": [],
+    "related_rfcs": [
+      {
+        "rfc": "RFC 5155",
+        "published": "2008-03"
+      }
+    ],
+    "adoption": [],
+    "collapse": {
+      "month": "2021-10",
+      "names_lost": 14464,
+      "before": 17491,
+      "after": 3027
+    },
+    "iterations_exactly_100": {
+      "2021-09": 17455,
+      "2021-10": 2993
+    },
+    "iterations_over_100": {
+      "2021-09": 36,
+      "2021-10": 34
+    },
+    "cve_note": "NSEC3 CVEs since the 2021 cap; counted again on RFC 5155's slide. Only CVE-2023-50868 names RFC 9276 itself.",
+    "lags": {
+      "first_signer_release": null,
+      "first_signer": null,
+      "first_validator_release": null,
+      "first_validator": null,
+      "first_zone_seen": null,
+      "code_lag_years": null,
+      "deployment_lag_years": null,
+      "onset_years": null
+    },
+    "verdict": "vendor-triggered",
+    "verdict_basis": "names at >= 100 iterations fell 83% in 2021-10, two months after the resolver caps shipped and ten months before the RFC. The moved names sat at exactly 100, below both caps, so what moved them -- refusal, guidance or an operator re-sign -- the data cannot say; the ordering it can",
+    "curve_summary": {
+      "forward_peak_pct": null,
+      "forward_last_pct": null,
+      "reverse_peak_pct": null,
+      "reverse_last_pct": null
+    }
+  },
+  "RFC 5011": {
+    "rfc": "RFC 5011",
+    "title": "Automated trust-anchor rollover",
+    "published": "2007-09",
+    "software": [
+      {
+        "implementation": "Unbound",
+        "key": "unbound",
+        "capability": "validate",
+        "version": "1.4.0",
+        "released": "2009-11-23",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/NLnetLabs/unbound/commit/9dc9f0a8e8e6948f52664d840b92284404ddbb2c"
+      },
+      {
+        "implementation": "Knot DNS",
+        "key": "knot",
+        "capability": "sign",
+        "version": "3.0.0",
+        "released": "2020-09-09",
+        "pre_rfc": false,
+        "evidence_url": "https://github.com/CZ-NIC/knot/commit/1ad6ddf0d0387988c6ec28f8ff6f8fe04844c683"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "validate",
+        "version": "9.7.0",
+        "released": "2010-02-16",
+        "pre_rfc": false,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/cfb1587eb9"
+      },
+      {
+        "implementation": "BIND 9",
+        "key": "bind9",
+        "capability": "sign",
+        "version": "9.7.0",
+        "released": "2010-02-16",
+        "pre_rfc": false,
+        "evidence_url": "https://gitlab.isc.org/isc-projects/bind9/-/commit/eab9975bcf"
+      }
+    ],
+    "defaults": [],
+    "limits": [],
+    "cves": [
+      {
+        "cve": "CVE-2008-1184",
+        "published": "2008-03-06",
+        "cvss": 5.0,
+        "mechanism": "trust-anchor",
+        "description": "The DNSSEC validation library (libval) library in dnssec-tools before 1.3.1 does not properly check that the signing key is the APEX trust a"
+      },
+      {
+        "cve": "CVE-2010-0213",
+        "published": "2010-07-28",
+        "cvss": 2.6,
+        "mechanism": "trust-anchor",
+        "description": "BIND 9.7.1 and 9.7.1-P1, when a recursive validating server has a trust anchor that is configured statically or via DNSSEC Lookaside Validat"
+      },
+      {
+        "cve": "CVE-2010-3762",
+        "published": "2010-10-05",
+        "cvss": 4.3,
+        "mechanism": "trust-anchor",
+        "description": "ISC BIND before 9.7.2-P2, when DNSSEC validation is enabled, does not properly handle certain bad signatures if multiple trust anchors exist"
+      },
+      {
+        "cve": "CVE-2013-4854",
+        "published": "2013-07-29",
+        "cvss": 7.8,
+        "mechanism": "trust-anchor",
+        "description": "The RFC 5011 implementation in rdata.c in ISC BIND 9.7.x and 9.8.x before 9.8.5-P2, 9.8.6b1, 9.9.x before 9.9.3-P2, and 9.9.4b1, and DNSco B"
+      },
+      {
+        "cve": "CVE-2015-1349",
+        "published": "2015-02-19",
+        "cvss": 5.4,
+        "mechanism": "trust-anchor",
+        "description": "named in ISC BIND 9.7.0 through 9.9.6 before 9.9.6-P2 and 9.10.x before 9.10.1-P2, when DNSSEC validation and the managed-keys feature are e"
+      },
+      {
+        "cve": "CVE-2018-5745",
+        "published": "2019-10-09",
+        "cvss": 4.9,
+        "mechanism": "trust-anchor",
+        "description": "\"managed-keys\" is a feature which allows a BIND resolver to automatically maintain the keys used by trust anchors which operators configure "
+      },
+      {
+        "cve": "CVE-2019-6475",
+        "published": "2019-10-17",
+        "cvss": 5.9,
+        "mechanism": "trust-anchor",
+        "description": "Mirror zones are a BIND feature allowing recursive servers to pre-cache zone data provided by other servers. A mirror zone is similar to a z"
+      },
+      {
+        "cve": "CVE-2025-25188",
+        "published": "2025-02-10",
+        "cvss": null,
+        "mechanism": "trust-anchor",
+        "description": "Hickory DNS is a Rust based DNS client, server, and resolver. A vulnerability present starting in version 0.8.0 and prior to versions 0.24.3"
+      }
+    ],
+    "spikes": [],
+    "related_rfcs": [],
+    "adoption": [],
+    "_revoked": "month\n2016-06     9\n2016-07     6\n2016-08     6\n2016-09    23\n2016-10    21\n           ..\n2023-08    16\n2023-09     5\n2023-10    12\n2023-11    19\n2023-12    19\nName: domains_peak, Length: 91, dtype: int64",
+    "revoked": {
+      "months": 91,
+      "first": "2016-06",
+      "min": 3,
+      "median": 17,
+      "max": 159,
+      "last": 19
+    },
+    "lags": {
+      "first_signer_release": "2010-02-16",
+      "first_signer": "bind9 9.7.0",
+      "first_validator_release": "2009-11-23",
+      "first_validator": "unbound 1.4.0",
+      "first_zone_seen": null,
+      "code_lag_years": 2.42,
+      "deployment_lag_years": null,
+      "onset_years": null
+    },
+    "verdict": "partly observable",
+    "verdict_basis": "the resolver half leaves no trace in any zone; the REVOKE bit RFC 5011 defines is on 3-159 forward zones every month since 2016-06 (median 17)",
+    "curve_summary": {
+      "forward_peak_pct": null,
+      "forward_last_pct": null,
+      "reverse_peak_pct": null,
+      "reverse_last_pct": null
+    }
+  }
+}

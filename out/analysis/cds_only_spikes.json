@@ -1,0 +1,38 @@
+[
+ {
+  "month": "2021-06",
+  "source": "ch",
+  "delta_zones": 38489,
+  "zones_after": 54356
+ },
+ {
+  "month": "2021-06",
+  "source": "li",
+  "delta_zones": 771,
+  "zones_after": 1312
+ },
+ {
+  "month": "2021-07",
+  "source": "ch",
+  "delta_zones": 46193,
+  "zones_after": 100549
+ },
+ {
+  "month": "2021-10",
+  "source": "se",
+  "delta_zones": 1934,
+  "zones_after": 4635
+ },
+ {
+  "month": "2021-11",
+  "source": "ch",
+  "delta_zones": 78041,
+  "zones_after": 218211
+ },
+ {
+  "month": "2021-11",
+  "source": "se",
+  "delta_zones": 2713,
+  "zones_after": 7348
+ }
+]

@@ -113,7 +113,7 @@ deployment lag.
 
 | Mechanism | What happens | Observed lag | Example |
 | --- | --- | --- | --- |
-| **Validator-forced** | resolvers stop accepting the old value; the zone changes or goes dark | **2 months** | NSEC3 iterations, 2021 |
+| **Vendor-triggered** | resolvers cap the value and vendors say so; zones move within months, before the RFC | **2 months** | NSEC3 iterations, 2021 |
 | **Registry-automated** | the registry acts on a signal the child publishes | ~2 months | CDS bootstrapping in `.ch`/`.li`, 2021 |
 | **Default-on-upgrade** | the new value is what the software does if nobody says otherwise | 3 months – 3 years | ECDSA defaults, 2016 |
 | **Opt-in config** | somebody must decide and edit something | 1.3 – 3.8 years | everything else |
@@ -121,7 +121,7 @@ deployment lag.
 The four are ordered by how little human decision each requires, and that
 ordering matches the measured lags better than implementation difficulty does.
 
-**Two of these lags are measured and two are inferred.** Validator-forced and
+**Two of these lags are measured and two are inferred.** Vendor-triggered and
 registry-automated are read directly off the series — the zones move, and the
 month they move is visible. Default-on-upgrade and opt-in config are the residual
 categories: their ranges come from the deployment-lag column above, attributed to
@@ -191,7 +191,16 @@ squeeze, limiting what an operator can ask for — and Knot added a config check
 3.1.5 (2021-12-20).
 
 **The zones moved two months after the resolver release and ten months before the
-RFC.** RFC 9276 documented a change that had already happened. This is the
+RFC.** RFC 9276 documented a change that had already happened.
+
+One precision the numbers force. The names that moved sat at **exactly 100**
+iterations — 17,455 of the 17,491 at ≥100 in 2021-09, against 36 strictly above
+100 — which is BIND's pre-9.7.0 default and is *below* Unbound's 150 cap and *at*
+PowerDNS's 100. Neither cap refused them. So "validators stopped accepting them"
+is not what this series shows; what it shows is the ordering — vendors cap and
+publish guidance, the names move within two months, the RFC follows ten months
+later. Whether refusal, the guidance, or an operator re-signing did it, the data
+cannot separate. This is the
 explanation for the `predates_rfc` flag and the −6.2 y "negative onset" that
 `full_run_findings.md` recorded and could not account for: the question was not
 mis-posed, the RFC simply was not the cause.
