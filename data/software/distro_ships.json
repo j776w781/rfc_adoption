@@ -1,0 +1,28 @@
+{
+  "purpose": "The version of each DNS program that an operating-system release first shipped. Operators mostly meet a new default through the OS package, not the upstream tarball, so these dates are the 'automatic update' path. Versions are the release pocket (what an install of that OS gets before any security update).",
+  "sources": {
+    "ubuntu_versions": "https://launchpad.net/ubuntu/+source/bind9, https://launchpad.net/ubuntu/+source/pdns, https://launchpad.net/ubuntu/+source/knot (release pocket, read 2026-09-15)",
+    "ubuntu_dates": "https://en.wikipedia.org/wiki/Ubuntu_version_history (16.04, 18.04, 20.04); https://launchpad.net/ubuntu/jammy and /noble (22.04, 24.04)",
+    "debian_versions": "https://tracker.debian.org/pkg/bind9, /pdns, /knot (oldoldstable = 11, oldstable = 12, stable = 13; read 2026-09-15). Point-release versions are shown; the major.minor is what matters here.",
+    "debian_dates": "https://www.debian.org/releases/",
+    "not_included": "Debian 9 (2017-06-17) and 10 (2019-07-06): packages.debian.org no longer serves those suites, so their versions are not asserted here."
+  },
+  "ships": [
+    {"distribution": "Ubuntu", "name": "Ubuntu 16.04", "released": "2016-04-21",
+     "versions": {"bind9": "9.10.3", "pdns": "4.0.0~alpha2", "knot": "2.1.1"}},
+    {"distribution": "Ubuntu", "name": "Ubuntu 18.04", "released": "2018-04-26",
+     "versions": {"bind9": "9.11.3", "pdns": "4.1.1", "knot": "2.6.5"}},
+    {"distribution": "Ubuntu", "name": "Ubuntu 20.04", "released": "2020-04-23",
+     "versions": {"bind9": "9.16.1", "pdns": "4.2.1", "knot": "2.7.8"}},
+    {"distribution": "Ubuntu", "name": "Ubuntu 22.04", "released": "2022-04-21",
+     "versions": {"bind9": "9.18.1", "pdns": "4.5.3", "knot": "3.1.6"}},
+    {"distribution": "Ubuntu", "name": "Ubuntu 24.04", "released": "2024-04-25",
+     "versions": {"bind9": "9.18.24", "pdns": "4.8.3", "knot": "3.3.4"}},
+    {"distribution": "Debian", "name": "Debian 11", "released": "2021-08-14",
+     "versions": {"bind9": "9.16.50", "pdns": "4.4.1", "knot": "3.0.5"}},
+    {"distribution": "Debian", "name": "Debian 12", "released": "2023-06-10",
+     "versions": {"bind9": "9.18.49", "pdns": "4.7.3", "knot": "3.2.6"}},
+    {"distribution": "Debian", "name": "Debian 13", "released": "2025-08-09",
+     "versions": {"bind9": "9.20.23", "pdns": "4.9.16", "knot": "3.4.6"}}
+  ]
+}

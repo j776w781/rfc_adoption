@@ -1,0 +1,18 @@
+rfc,program,version,kind,date,what,new_signings_12m_before,share_before_pct,new_signings_12m_after,share_after_pct
+RFC 5702,OpenDNSSEC,1.2.0,default,2011-03-18,default signing algorithm -> 8 (RSASHA256),212,0.9,459,20.0
+RFC 5702,Knot DNS,2.0.0,default,2015-06-26,default signing algorithm -> RSASHA256,1093,78.0,777,69.6
+RFC 5702,BIND 9,9.7.0,support,2010-02-16,sign,18,0.0,217,0.9
+RFC 6605,Knot DNS,2.1.0,default,2016-01-14,default signing algorithm -> ECDSAP256SHA256,953,0.2,1199,0.3
+RFC 6605,PowerDNS Auth,4.0.0,default,2016-07-08,default ZSK algorithm -> ECDSA P-256,640,0.3,1338,0.2
+RFC 6605,PowerDNS Auth,4.0.0,default,2016-07-08,default KSK algorithm -> ECDSA P-256,640,0.3,1338,0.2
+RFC 6605,BIND 9,9.16.0,default,2020-02-12,built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK,2169,22.8,1030,38.8
+RFC 6605,PowerDNS Auth,3.0.1,support,2012-01-10,sign,279,0.0,456,0.0
+RFC 6605,PowerDNS Auth,3.0.1,support,2012-01-10,sign,279,0.0,456,0.0
+RFC 6605,BIND 9,9.8.4,support,2012-09-26,sign,344,0.0,406,0.0
+RFC 6605,Knot DNS,1.4.0,support,2013-12-31,sign,402,0.0,1331,0.0
+RFC 8080,Knot DNS,2.4.0,support,2017-01-18,algorithm-aware,879,0.0,783,0.0
+RFC 8080,Knot DNS,2.6.0,support,2017-09-29,sign,1342,0.0,603,0.0
+RFC 8080,BIND 9,9.12.0,support,2018-01-17,sign,767,0.0,1134,0.0
+RFC 8080,OpenDNSSEC,2.1.7,support,2020-10-07,sign,1110,0.0,1244,0.0
+RFC 5155,BIND 9,9.7.0,default,2010-02-16,NSEC3 iterations default 100 -> 10,18,50.0,217,1.8
+RFC 5155,BIND 9,9.6.0,support,2008-12-21,sign,0,,18,50.0
