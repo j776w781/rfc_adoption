@@ -155,6 +155,24 @@ def perm_baseline(a, base, n=N_PERM, a_months=None, base_months=None):
     return (hits + 1) / (n + 1)
 
 
+def perm_ranksum(a, b, n=N_PERM):
+    """Permutation test on the difference in mean rank (Mann-Whitney in
+    permutation form). Unlike the median it uses every observation, so it does
+    not hinge on which value happens to sit in the middle -- with 16 RFC months
+    the median falls in a 1.2-unit gap between the 8th and 9th values."""
+    a, b = np.asarray(a), np.asarray(b)
+    pool = np.concatenate([a, b]); k = len(a)
+    ranks = pd.Series(pool).rank().values
+    obs = abs(ranks[:k].mean() - ranks[k:].mean())
+    hits = 0
+    for _ in range(n):
+        q = RNG.permutation(pool)
+        rk = pd.Series(q).rank().values
+        if abs(rk[:k].mean() - rk[k:].mean()) >= obs:
+            hits += 1
+    return (hits + 1) / (n + 1)
+
+
 def detrend(rate: pd.Series) -> pd.Series:
     return rate - rate.rolling(25, center=True, min_periods=7).median()
 
@@ -186,9 +204,14 @@ def _block(rate, events_cve, events_rfc, label, key):
     cv, cm = uniq("cve_patch")
     rf, rm = uniq("rfc_published")
     bl, bm = list(base.values()), list(base.keys())
+    other = [v for m, v in base.items() if m not in set(cm) | set(rm)]
     out = {"cve_patches": describe(cv), "rfc_publications": describe(rf), "all_months": describe(bl),
+           "other_months": describe(other),
            "cve_events": sum(1 for r in rows if r["kind"] == "cve_patch"),
            "rfc_events": sum(1 for r in rows if r["kind"] == "rfc_published"),
+           "p_rank_cve_vs_rfc": round(perm_ranksum(cv, rf), 4) if len(cv) > 1 and len(rf) > 1 else None,
+           "p_rank_cve_vs_other": round(perm_ranksum(cv, other), 4) if len(cv) > 1 and other else None,
+           "p_rank_rfc_vs_other": round(perm_ranksum(rf, other), 4) if len(rf) > 1 and other else None,
            "p_cve_vs_rfc": round(perm_labels(cv, rf), 4) if len(cv) > 1 and len(rf) > 1 else None,
            "p_cve_vs_all": round(perm_baseline(cv, bl), 4) if len(cv) > 1 else None,
            "p_cve_vs_all_year_matched": round(perm_baseline(cv, bl, a_months=cm, base_months=bm), 4) if len(cv) > 1 else None,

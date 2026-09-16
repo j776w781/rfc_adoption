@@ -265,9 +265,13 @@ def main() -> int:
     text(s, Inches(0.62), Inches(5.3), Inches(12.1), Inches(1.9), [
         f'Take every month in which a DNSSEC CVE was patched ({rv["cve_patches"]["n"]} months; {rv["cve_events"]} CVEs, several sharing a fix month) '
         f'and every month in which a DNSSEC RFC was published ({rv["rfc_publications"]["n"]} months inside the reverse series). The adoption rate over '
-        f'that month and the three after it has the same distribution in both groups and in ordinary months: medians '
-        f'{rv["cve_patches"]["median"]*1000:.1f}, {rv["rfc_publications"]["median"]*1000:.1f} and {rv["all_months"]["median"]*1000:.1f} thousandths of a '
-        f'point per month; permutation p = {rv["p_cve_vs_rfc"]:.2f}.',
+        f'that month and the three after it has the same distribution in all three groups. Medians '
+        f'{rv["cve_patches"]["median"]*1000:.1f}, {rv["rfc_publications"]["median"]*1000:.1f} and {rv["other_months"]["median"]*1000:.1f} thousandths of '
+        f'a point per month, on {rv["cve_patches"]["n"]}, {rv["rfc_publications"]["n"]} and {rv["other_months"]["n"]} months.',
+        f'The medians are a fragile summary at this sample size -- with {rv["rfc_publications"]["n"]} RFC months the median falls in a gap between '
+        f'the 8th and 9th values -- so the comparison is also run on ranks, which use every observation. Neither separates the groups: median '
+        f'permutation p = {rv["p_cve_vs_rfc"]:.2f}, rank permutation p = {rv["p_rank_cve_vs_rfc"]:.2f} for CVE against RFC, '
+        f'{rv["p_rank_cve_vs_other"]:.2f} and {rv["p_rank_rfc_vs_other"]:.2f} for each against ordinary months.',
         "Measured on each event\'s own mechanism instead, RFC publications sit in ordinary or dead months (RFC 6605 at the 3rd percentile of the ECDSA "
         "curve) and two CVE patch months are extreme: CVE-2021-40083 is the NSEC3 iteration collapse, and CVE-2022-38177/38178 coincides with one "
         "ARIN block re-signing to ECDSA -- timing, not cause.",
