@@ -136,12 +136,10 @@ def reading(rfc, c):
             f'.se zones, so the OpenINTEL side cannot witness its adoption at all. Its forward spikes are signing waves that '
             f'happened to use it: .se {se17["start"]} +{se17["delta"]:,} zones, {se17["split"]["new_signings_at_most"]:,} of them '
             f'newly signed, {se17["nearest_default_change"]["lag_months"]} months after the nearest default change (Knot 2.0.0).',
-            f'Reverse DNS does witness it. In the twelve months after OpenDNSSEC 1.2.0 made RSASHA256 its default ({ar["1.2.0"]["date"][:7]}), '
-            f'the share of newly signed delegations choosing it went from {ar["1.2.0"]["share_before_pct"]}% to '
-            f'{ar["1.2.0"]["share_after_pct"]}% (on {ar["1.2.0"]["new_signings_12m_before"]} and {ar["1.2.0"]["new_signings_12m_after"]} signings). '
-            f'That is the one default change in this study followed by a step in what new zones chose -- but BIND 9.7.0 had '
-            f'enabled the algorithm 13 months earlier, and the rise continued for two years, so it reads as the algorithm becoming '
-            f'available everywhere, not as one vendor\'s default.',
+            f'Reverse DNS does witness it, and shows the same batching as ECDSA. New signings choosing RSASHA256 go from '
+            f'{Q5["2010Q4"]:.0f}% in 2010Q4 to {Q5["2011Q2"]:.0f}% in 2011Q2 and {Q5["2012Q2"]:.0f}% in 2012Q2, and the step detector puts the '
+            f'step at 2012Q2 -- 15 months after OpenDNSSEC 1.2.0 made RSASHA256 its default and 27 after BIND 9.7.0 shipped it. The 2011 rise '
+            f'is 88 signings across three RIRs with one parent block a third of them, so it is a few operators, not a population.',
             f'Spikes vs releases: {s["spikes_within_3m_of_default_change"]} of {s["n_spikes"]} spikes fall within 3 months of a default change '
             f'(expected by chance about {round(ch["reverse"]["within_3m_after_default_change"]*s["n_reverse"], 1)}); the median lag from a spike to '
             f'the nearest signer release is {s["median_lag_to_signer_release_months"]:.0f} months. No CVE names this algorithm.',
@@ -330,6 +328,7 @@ def main() -> int:
     globals()["AT"] = json.loads(Path("out/analysis/os_release_attribution.json").read_text("utf-8"))
     globals()["CH"] = AT["chance_a_month_follows_an_os_release"]
     globals()["ST"] = AT["families"]["ECDSA"]["steps"][0]
+    globals()["Q5"] = {r["q"]: r["share_pct"] for r in AT["families"]["RSA/SHA-256"]["quarterly"]}
 
     prs = Presentation()
     prs.slide_width, prs.slide_height = W, H
@@ -421,9 +420,9 @@ def main() -> int:
     text(s, Inches(0.62), Inches(1.3), Inches(12.1), Inches(5.4), [
         "An update cannot roll a zone to a new algorithm; it can only change what a zone signed AFTER the update gets. So the test is the "
         "share of new signings, not the adoption curve, and the reverse ledger is the only place it can be run per zone.",
-        f'RSA/SHA-256: the share of new reverse signings choosing it rose from {ar5["1.2.0"]["share_before_pct"]}% to {ar5["1.2.0"]["share_after_pct"]}% '
-        f'across OpenDNSSEC 1.2.0\'s default ({ar5["1.2.0"]["date"][:7]}) and kept rising for two years. Consistent with defaults arriving through '
-        f'updates; not attributable to one vendor, since BIND 9.7.0 had shipped the algorithm 13 months earlier.',
+        f'RSA/SHA-256: new reverse signings choosing it go {Q5["2010Q4"]:.0f}% (2010Q4) -> {Q5["2011Q2"]:.0f}% (2011Q2) -> '
+        f'{Q5["2012Q2"]:.0f}% (2012Q2), with the detected step at 2012Q2, 15 months after OpenDNSSEC 1.2.0\'s default and 27 after BIND 9.7.0. '
+        f'Two of its five steps have no OS release in the year before them at all.',
         f'ECDSA: the Knot 2.1.0 and PowerDNS 4.0.0 defaults changed nothing on their upstream dates ({ar6["2.1.0"]["share_before_pct"]}% -> '
         f'{ar6["2.1.0"]["share_after_pct"]}%, {ar6["4.0.0"]["share_before_pct"]}% -> {ar6["4.0.0"]["share_after_pct"]}%). New signings then stepped '
         f'{len(AT["families"]["ECDSA"]["steps"])} times between 2017 and 2020, each step concentrated in a single month and a handful of parent '

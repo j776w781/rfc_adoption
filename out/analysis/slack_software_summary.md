@@ -1,4 +1,4 @@
-Hi, an update on the software side: I cross-referenced the DNS programs (BIND 9, Unbound, NSD, Knot DNS/Resolver, PowerDNS Auth/Recursor, OpenDNSSEC) with the adoption data from both corpora. Short deck attached (`dnssec_software_summary.pptx`, 9 slides); the full per-RFC and per-program decks are in `out/analysis/`.
+Hi, an update on the software side: I cross-referenced the DNS programs (BIND 9, Unbound, NSD, Knot DNS/Resolver, PowerDNS Auth/Recursor, OpenDNSSEC) with the adoption data from both corpora. Short deck attached (`dnssec_software_summary.pptx`, 11 slides); the full per-RFC and per-program decks are in `out/analysis/`.
 
 *What I did*
 

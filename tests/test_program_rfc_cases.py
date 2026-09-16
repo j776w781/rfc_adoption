@@ -197,3 +197,40 @@ def test_deck_numbers_trace_to_json(cases):
     assert f'{ar["9.16.0"]["share_after_pct"]}%' in txt
     assert "vendor-triggered" in txt.lower()
     assert len(slides) >= 20
+
+
+# --- guard against the failure mode this project keeps hitting -------------- #
+
+ATTRIBUTION_PHRASES = [
+    "the OS release is the event",
+    "the step is Debian",
+    "the update path works",
+    "defaults that reached them were",
+    "reverse operators run BIND",
+    "through OS releases",
+    "the path by which most operators",
+    "Defaults are what move zones",
+]
+
+
+@pytest.mark.parametrize("deck", ["dnssec_software_summary", "dnssec_program_rfc_cases"])
+def test_decks_do_not_attribute_adoption_to_a_single_release(deck):
+    """Three separate wrong claims in this project have had the same shape:
+    naming one release as the cause of a step in adoption. The timing cannot
+    carry that: 31% of months follow some OS release within three months, and
+    every step has a different one behind it."""
+    p = ROOT / f"out/analysis/{deck}_slides.json"
+    if not p.exists():
+        pytest.skip("deck not built")
+    txt = "\n".join(t for s in json.loads(p.read_text("utf-8")) for t in s["text"])
+    for phrase in ATTRIBUTION_PHRASES:
+        assert phrase.lower() not in txt.lower(), f"{deck} still says: {phrase}"
+
+
+@pytest.mark.parametrize("deck", ["dnssec_software_summary", "dnssec_program_rfc_cases"])
+def test_decks_say_the_trigger_is_not_identifiable(deck):
+    p = ROOT / f"out/analysis/{deck}_slides.json"
+    if not p.exists():
+        pytest.skip("deck not built")
+    txt = " ".join(t for s in json.loads(p.read_text("utf-8")) for t in s["text"]).lower()
+    assert "different one each time" in txt or "not identifiable" in txt

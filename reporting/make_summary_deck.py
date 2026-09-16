@@ -48,6 +48,7 @@ def main() -> int:
     CH = AT["chance_a_month_follows_an_os_release"]
     ST = AT["families"]["ECDSA"]["steps"][0]
     n_ec = len(AT["families"]["ECDSA"]["steps"])
+    Q5 = {r["q"]: r["share_pct"] for r in AT["families"]["RSA/SHA-256"]["quarterly"]}
     od = {o["rfc"]: o for o in SC["onset_decomposition"]}
     code = [o["code_lag_years"] for o in SC["onset_decomposition"] if o.get("code_lag_years") is not None]
     dep = [o["deployment_lag_years"] for o in SC["onset_decomposition"] if o.get("deployment_lag_years") is not None]
@@ -75,8 +76,9 @@ def main() -> int:
         "BIND 9, Unbound, NSD, Knot DNS, Knot Resolver, PowerDNS Auth/Recursor and OpenDNSSEC: when each one implemented "
         "an RFC, when it made it the default, when Ubuntu and Debian shipped that version, and which CVEs touched it -- "
         "lined up against what zones actually did in the OpenINTEL zone files and in reverse DNS.",
-        "Short version: code is never the wait; defaults do reach zones, through OS releases and only on newly signed zones, so they "
-        "never show as a spike; one RFC was forced by validators before it was published; no CVE led a push.",
+        "Short version: code is never the wait; a default only ever changes what a newly signed zone gets, so it never shows as a spike; "
+        "operators switch in sudden batches and the trigger cannot be identified; one RFC was forced by validators before it was "
+        "published; no CVE led a push.",
     ], size=14, color=INK_2)
 
     # 2 what we did
@@ -85,9 +87,9 @@ def main() -> int:
         ("Software", f"{len(R)} projects cloned; {n_rel:,} stable release dates from git tags (BIND development branches excluded). "
                      "For each RFC: the first release that signs or validates it, the release that changed the default, and "
                      "validator caps -- each backed by the commit and checked to be contained in the cited release."),
-        ("OS packages", "the first Ubuntu LTS (16.04 to 24.04) and Debian (9 to 13) release carrying each version, from Launchpad and "
-                        "sources.debian.org: the path by which most operators actually receive a new default. The new-signings test is "
-                        "run around each OS release as well as around the upstream one."),
+        ("OS packages", "Debian 9-13 and Ubuntu LTS 16.04-24.04 by version (Launchpad, sources.debian.org) and RHEL majors by date. "
+                        "One delivery path among several, and a partial one: RHEL base carries only BIND, Knot and PowerDNS come from "
+                        "EPEL, and FreeBSD, Alpine, containers and source builds are not represented at all."),
         ("CVEs", f"{n_cve} CVEs across the eight products from NVD; {n_dnssec} are DNSSEC mechanisms, classified by the mechanism the "
                  f"description names (NSEC3, validation, trust anchor, algorithm...) and attributed to a product only by NVD CPE."),
         ("Zones", "OpenINTEL zone files for .se .nu .ch .li .ee .gov .fed.us (2016-06 to 2023-12) and reverse DNS for five RIRs "
@@ -119,8 +121,8 @@ def main() -> int:
         f"waiting for an implementation; it is waiting for an operator.",
         f"Defaults sit closer to take-off than RFCs do, but no event study or release scan finds a release month that moves the curve: after "
         f"detrending, the smallest circular-shift p across the eight projects is {smallest_p:.2f}. {dens*100:.0f}% of months in the release-scan span contain "
-        f"a stable release of one of the eight, so 'a release came just before' is always true and never evidence. Where defaults do show is "
-        f"in what newly signed zones choose, after the OS release that carries them (slide 5).",
+        f"a stable release of one of the eight, so 'a release came just before' is always true and never evidence. Where a default could show "
+        f"at all is in what newly signed zones choose, and there the picture is sudden batches, not diffusion (slide 5).",
         "Verdict rule: FAST = first zone within a year of the RFC and 10% of signed delegations within four; SLOW = reached 10%, later; "
         "NEVER = under 1% of signed zones today.",
     ], size=12, color=INK, space=8)
@@ -157,8 +159,9 @@ def main() -> int:
         f'An OS release precedes each of those steps, but a different one each time (Debian 9, Ubuntu 18.04, RHEL 8 / Debian 10, Ubuntu 20.04), '
         f'{CH["within_3m"]*100:.0f}% of all months follow some OS release within 3 months anyway, and two of the five RSA/SHA-256 steps have none '
         f'at all. The timing cannot name a delivery path, and RHEL -- which ships no Knot or PowerDNS in base -- had no ECDSA-default signer until 2022.',
-        f'RSA/SHA-256: new signings choosing it went {ar5["1.2.0"]["share_before_pct"]}% -> {ar5["1.2.0"]["share_after_pct"]}% across OpenDNSSEC 1.2.0\'s '
-        f'default (2011-03) and kept rising for two years; BIND 9.7.0 had shipped it 13 months earlier, so it reads as availability, not one vendor.',
+        f'RSA/SHA-256 is the same story earlier: new signings go from {Q5["2010Q4"]:.0f}% in 2010Q4 to {Q5["2011Q2"]:.0f}% in 2011Q2 and '
+        f'{Q5["2012Q2"]:.0f}% in 2012Q2, and the step detector puts the step at 2012Q2 -- 15 months after OpenDNSSEC 1.2.0 made RSASHA256 its '
+        f'default and 27 after BIND 9.7.0 shipped it. The 2011 rise is 88 signings across three RIRs with one parent block a third of them.',
         f'EdDSA: never a default anywhere; {sum(r["hit"] for r in c8["new_signings"]["rollovers_to_by_year"])} rollovers to it in the whole ledger; '
         f'two forward episodes, both withdrawn. No default, no adoption.',
     ], size=11, color=INK, space=6)
@@ -199,8 +202,9 @@ def main() -> int:
     s = blank(prs); kicker(s, "SO WHY FAST, SLOW OR NEVER", "How a change reaches a zone decides its speed")
     rows = [["RFC", "verdict", "how it reaches a zone", "what the data shows"]]
     rows += [
-        ["RFC 5702 RSA/SHA-256", T["RFC 5702"]["verdict"], "signer default, inherited by new zones",
-         f'first zone {od["RFC 5702"]["first_zone_seen"]}; new reverse signings {ar5["1.2.0"]["share_before_pct"]}% -> {ar5["1.2.0"]["share_after_pct"]}% across the 2011 default'],
+        ["RFC 5702 RSA/SHA-256", T["RFC 5702"]["verdict"], "signer default from 2011, acting on new zones only",
+         f'first zone {od["RFC 5702"]["first_zone_seen"]}; new signings {Q5["2010Q4"]:.0f}% (2010Q4) -> {Q5["2011Q2"]:.0f}% (2011Q2) -> '
+         f'{Q5["2012Q2"]:.0f}% (2012Q2)'],
         ["RFC 6605 ECDSA", T["RFC 6605"]["verdict"], "signer default from 2016, acting on new zones only; majority by operator rollovers",
          f'first zone {od["RFC 6605"]["first_zone_seen"]}; majority only via 2019 rollovers and the 2021 .ch wave'],
         ["RFC 5155 NSEC3", T["RFC 5155"]["verdict"], "signer option; BIND default from 9.7.0", f'first zone {T["RFC 5155"]["lags"]["first_zone_seen"]}; 10% at {T["RFC 5155"]["adoption"][0]["t_10pct"]}'],
@@ -237,8 +241,8 @@ def main() -> int:
     text(s, Inches(0.62), Inches(1.35), Inches(12.1), Inches(5.6), [
         f'1.  Code is never the bottleneck. Every RFC studied was implemented within {min(code):+.1f} to {max(code):+.1f} years of publication; the first '
         f'zone then took {min(dep):.1f} to {max(dep):.1f} years. The wait is operators, not vendors.',
-        "2.  Defaults are what move zones, and they move only newly signed zones. A default change never re-signs an existing zone, so it never shows as a "
-        "spike; it shows in what new zones choose, months to years later.",
+        "2.  A default can only ever change what a newly signed zone gets. It never re-signs an existing zone, so it cannot produce a spike; the only "
+        "place it could show is in what new zones choose, months to years later.",
         f'3.  Operators switch in sudden batches, and the trigger is not identifiable. New reverse signings jumped to ECDSA in {n_ec} steps, each one '
         f'month and a few parent blocks. An OS release precedes every step but a different one each time, {CH["within_3m"]*100:.0f}% of months follow '
         f'one anyway, and two RSA/SHA-256 steps have none.',

@@ -61,10 +61,12 @@ the short answer is no.
 
 **RFC 5702 (RSA/SHA-256).** Adopted before the forward corpus begins (99% of
 signed .se zones in 2016-06). Forward spikes are later signing waves that used
-it (.se 2017-11 +123,402 new signings). In reverse DNS the share of new
-signings choosing it went from 0.9% to 20.0% across OpenDNSSEC 1.2.0's default
-(2011-03) and kept rising for two years; BIND 9.7.0 had enabled it 13 months
-earlier, so this reads as availability, not one vendor's default.
+it (.se 2017-11 +123,402 new signings). In reverse DNS new signings
+choosing it go from 0% in 2010Q4 to 20% in 2011Q2 and 81% in 2012Q2; the step
+detector puts the step at 2012Q2, 15 months after OpenDNSSEC 1.2.0 made
+RSASHA256 its default and 27 after BIND 9.7.0 shipped it. The 2011 rise is 88
+signings across three RIRs with one parent block a third of them. Same
+batching as ECDSA, same absence of an identifiable trigger.
 
 **RFC 8080 (EdDSA).** No default anywhere, no OS package carrying one. Two
 forward episodes, both .se/.nu, both withdrawn: 2020-04..06 (+18,746, 11,718
