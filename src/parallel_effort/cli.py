@@ -71,6 +71,23 @@ def _build_inventory(args: argparse.Namespace):
     return inventory
 
 
+def _add_duckdb_tuning_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--threads", type=int, default=None, help="DuckDB thread count.")
+    parser.add_argument(
+        "--memory-limit",
+        default=None,
+        help="DuckDB memory_limit (e.g. '32GB'). Default: DuckDB's own heuristic "
+        "based on available RAM.",
+    )
+    parser.add_argument(
+        "--temp-directory",
+        default=None,
+        help="Where DuckDB spills intermediate data once memory_limit is exceeded. "
+        "Default: the OS temp folder, which may not be the drive with the most "
+        "free space -- set this explicitly for a large merge.",
+    )
+
+
 def _add_common_scan_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--cache-root",
@@ -120,7 +137,7 @@ def _add_common_scan_args(parser: argparse.ArgumentParser) -> None:
         action="store_false",
         help="Recompute every day's checkpoint even if a valid one already exists.",
     )
-    parser.add_argument("--threads", type=int, default=None, help="DuckDB thread count.")
+    _add_duckdb_tuning_args(parser)
     parser.set_defaults(resume=True)
 
 
@@ -135,6 +152,7 @@ def _add_merge_only_args(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--start", default=None)
     parser.add_argument("--end", default=None)
+    _add_duckdb_tuning_args(parser)
 
 
 def cmd_scan(args: argparse.Namespace) -> int:
@@ -156,6 +174,8 @@ def cmd_scan(args: argparse.Namespace) -> int:
         max_days=args.max_days,
         resume=args.resume,
         threads=args.threads,
+        memory_limit=args.memory_limit,
+        temp_directory=args.temp_directory,
     )
     for message in summary.warnings:
         print(f"warning: {message}", file=sys.stderr)
@@ -178,6 +198,9 @@ def cmd_merge(args: argparse.Namespace) -> int:
         start=_parse_date(args.start),
         end=_parse_date(args.end),
         csv=args.csv,
+        threads=args.threads,
+        memory_limit=args.memory_limit,
+        temp_directory=args.temp_directory,
     )
     for message in result.warnings:
         print(f"warning: {message}", file=sys.stderr)

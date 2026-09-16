@@ -346,6 +346,58 @@ def process_day(
 
 
 # --------------------------------------------------------------------------- #
+# DuckDB connection tuning (shared by the scan and the merge)
+# --------------------------------------------------------------------------- #
+
+
+def _configure_connection(
+    connection: duckdb.DuckDBPyConnection,
+    *,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
+) -> None:
+    """Apply resource limits to a DuckDB connection, one setting at a time.
+
+    Each setting is applied independently and a build that rejects one is not
+    fatal -- losing a tuning knob is not worth failing a run that would
+    otherwise work (mirrors ``openintel_source._apply_http_resilience``).
+
+    ``preserve_insertion_order`` is always turned off: nothing in this module
+    relies on row order surviving a scan or a merge (the merge's output is
+    unordered by design -- see :func:`merge_domain_month_table`), and
+    preserving it costs DuckDB buffering it does not need to pay for.
+
+    ``temp_directory`` matters more than any size cap on it: DuckDB spills to
+    the OS temp folder by default, and if that drive is not the one with the
+    most free space, a large merge runs out of room however the cap is set.
+    """
+    settings: dict[str, str] = {"preserve_insertion_order": "false"}
+    if threads:
+        settings["threads"] = str(int(threads))
+    if memory_limit:
+        settings["memory_limit"] = quote_string(str(memory_limit))
+    if temp_directory:
+        settings["temp_directory"] = quote_string(Path(temp_directory).as_posix())
+
+    applied: list[str] = []
+    for name, value in settings.items():
+        try:
+            connection.execute(f"SET {name}={value}")
+        except Exception as exc:  # unknown on this build; keep going
+            LOGGER.debug("DuckDB rejected SET %s=%s (%s)", name, value, exc)
+            continue
+        applied.append(f"{name}={value}")
+    if applied:
+        LOGGER.info("DuckDB tuning: %s", ", ".join(applied))
+
+    try:
+        connection.execute("SET enable_progress_bar=false")
+    except Exception:  # pragma: no cover - setting exists in all builds
+        pass
+
+
+# --------------------------------------------------------------------------- #
 # Orchestration across many source-days
 # --------------------------------------------------------------------------- #
 
@@ -370,12 +422,18 @@ def scan_cache(
     max_days: int | None = None,
     resume: bool = True,
     threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
 ) -> ScanSummary:
     """Run :func:`process_day` over every selected source-day in ``inventory``.
 
     One DuckDB connection is reused across days (each query is independent, so
     there is nothing to isolate), which is what lets ``threads`` parallelize
     within a day's scan without spinning up a new connection per day.
+    ``memory_limit`` / ``temp_directory`` are the same knobs
+    :func:`merge_domain_month_table` takes; a single day's scan is normally
+    small enough not to need them, but they are accepted here too so a
+    resource-constrained host can set them once for the whole run.
 
     A day whose scan fails is recorded as a failure and the walk continues:
     thousands of source-days are in play, and one unreadable file should not
@@ -388,12 +446,9 @@ def scan_cache(
         days = days[: max(int(max_days), 0)]
 
     connection = duckdb.connect(database=":memory:")
-    if threads:
-        connection.execute(f"SET threads={int(threads)}")
-    try:
-        connection.execute("SET enable_progress_bar=false")
-    except Exception:  # pragma: no cover - setting exists in all builds
-        pass
+    _configure_connection(
+        connection, threads=threads, memory_limit=memory_limit, temp_directory=temp_directory
+    )
 
     warnings: list[str] = []
     failures: list[str] = []
@@ -494,6 +549,9 @@ def merge_domain_month_table(
     start: date | None = None,
     end: date | None = None,
     csv: bool = False,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
 ) -> MergeSummary:
     """Merge every selected day checkpoint into the final (month, domain, tld) table.
 
@@ -502,6 +560,15 @@ def merge_domain_month_table(
     (``max`` over 0/1) across every day of the month and collapses repeat
     domain sightings, so a domain seen on 30 days of the month still produces
     exactly one output row.
+
+    The output is **not sorted**. A full sort over the merged history is a
+    second expensive, spill-heavy pass on top of the GROUP BY, and Parquet
+    (and the optional CSV) does not need pre-sorted rows to be read correctly
+    later -- a consumer can order at read time far more cheaply than this
+    function can order the whole corpus once. Across a large cache, this
+    single query is still the most memory/disk-hungry step in the pipeline;
+    ``memory_limit`` and especially ``temp_directory`` (point it at whichever
+    drive actually has room to spill) are there for that.
     """
     warnings: list[str] = []
     checkpoints = _select_day_checkpoints(
@@ -516,6 +583,9 @@ def merge_domain_month_table(
     output_path = Path(output_path)
     ensure_dir(output_path.parent)
     connection = duckdb.connect(database=":memory:")
+    _configure_connection(
+        connection, threads=threads, memory_limit=memory_limit, temp_directory=temp_directory
+    )
     try:
         literal = ", ".join(quote_string(p.as_posix()) for p in checkpoints)
         merge_sql = (
@@ -527,8 +597,7 @@ def merge_domain_month_table(
             "  CAST(max(dnskey_present) AS TINYINT) AS dnskey_present,\n"
             "  CAST(max(rrsig_present) AS TINYINT) AS rrsig_present\n"
             f"FROM read_parquet([{literal}], union_by_name = true)\n"
-            "GROUP BY month, domain, tld\n"
-            "ORDER BY month, tld, domain"
+            "GROUP BY month, domain, tld"
         )
         tmp = output_path.with_suffix(output_path.suffix + ".tmp")
         if tmp.exists():
@@ -546,9 +615,8 @@ def merge_domain_month_table(
             if csv_tmp.exists():
                 csv_tmp.unlink()
             connection.execute(
-                f"COPY (SELECT * FROM read_parquet({quote_string(str(output_path))}) "
-                f"ORDER BY month, tld, domain) TO {quote_string(str(csv_tmp))} "
-                "(FORMAT CSV, HEADER)"
+                f"COPY (SELECT * FROM read_parquet({quote_string(str(output_path))})) "
+                f"TO {quote_string(str(csv_tmp))} (FORMAT CSV, HEADER)"
             )
             os.replace(csv_tmp, csv_path)
     finally:
