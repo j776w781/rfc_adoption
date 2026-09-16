@@ -4426,7 +4426,9 @@
      "months_after_rfc": 143,
      "split": {
       "new_signings_at_most": 73741,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 433843,
+      "share_of_new_signings_pct": 17.0
      },
      "nearest_signer_release": {
       "what": "Knot DNS 2.0.0",
@@ -4463,7 +4465,9 @@
      "months_after_rfc": 146,
      "split": {
       "new_signings_at_most": 1012,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 1804,
+      "share_of_new_signings_pct": 56.1
      },
      "nearest_signer_release": {
       "what": "Knot DNS 2.0.0",
@@ -4500,7 +4504,9 @@
      "months_after_rfc": 97,
      "split": {
       "new_signings_at_most": 38615,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 38626,
+      "share_of_new_signings_pct": 100.0
      },
      "nearest_signer_release": {
       "what": "Knot DNS 2.0.0",
@@ -4537,7 +4543,9 @@
      "months_after_rfc": 97,
      "split": {
       "new_signings_at_most": 123031,
-      "rollovers_at_least": 371
+      "rollovers_at_least": 371,
+      "signed_zones_delta": 123031,
+      "share_of_new_signings_pct": 100.3
      },
      "nearest_signer_release": {
       "what": "Knot DNS 2.0.0",
@@ -10323,7 +10331,9 @@
      "months_after_rfc": 110,
      "split": {
       "new_signings_at_most": 591333,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 598654,
+      "share_of_new_signings_pct": 98.8
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
@@ -10364,7 +10374,9 @@
      "months_after_rfc": 88,
      "split": {
       "new_signings_at_most": 1637,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 1643,
+      "share_of_new_signings_pct": 99.6
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10405,7 +10417,9 @@
      "months_after_rfc": 110,
      "split": {
       "new_signings_at_most": 8047,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 8183,
+      "share_of_new_signings_pct": 98.3
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
@@ -10446,7 +10460,9 @@
      "months_after_rfc": 127,
      "split": {
       "new_signings_at_most": 5168,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 5195,
+      "share_of_new_signings_pct": 99.5
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
@@ -10487,7 +10503,9 @@
      "months_after_rfc": 54,
      "split": {
       "new_signings_at_most": 0,
-      "rollovers_at_least": 857
+      "rollovers_at_least": 857,
+      "signed_zones_delta": -151,
+      "share_of_new_signings_pct": null
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10524,7 +10542,9 @@
      "months_after_rfc": 81,
      "split": {
       "new_signings_at_most": 0,
-      "rollovers_at_least": 18247
+      "rollovers_at_least": 18247,
+      "signed_zones_delta": -4777,
+      "share_of_new_signings_pct": null
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10565,7 +10585,9 @@
      "months_after_rfc": 83,
      "split": {
       "new_signings_at_most": 1586,
-      "rollovers_at_least": 610
+      "rollovers_at_least": 610,
+      "signed_zones_delta": 1586,
+      "share_of_new_signings_pct": 138.5
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10606,7 +10628,9 @@
      "months_after_rfc": 85,
      "split": {
       "new_signings_at_most": 1037,
-      "rollovers_at_least": 5443
+      "rollovers_at_least": 5443,
+      "signed_zones_delta": 1037,
+      "share_of_new_signings_pct": 624.9
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10647,7 +10671,9 @@
      "months_after_rfc": 89,
      "split": {
       "new_signings_at_most": 4398,
-      "rollovers_at_least": 487
+      "rollovers_at_least": 487,
+      "signed_zones_delta": 4398,
+      "share_of_new_signings_pct": 111.1
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10688,7 +10714,9 @@
      "months_after_rfc": 91,
      "split": {
       "new_signings_at_most": 33,
-      "rollovers_at_least": 9664
+      "rollovers_at_least": 9664,
+      "signed_zones_delta": 33,
+      "share_of_new_signings_pct": 29384.8
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10729,7 +10757,9 @@
      "months_after_rfc": 112,
      "split": {
       "new_signings_at_most": 0,
-      "rollovers_at_least": 6089
+      "rollovers_at_least": 6089,
+      "signed_zones_delta": -103,
+      "share_of_new_signings_pct": null
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
@@ -10770,7 +10800,9 @@
      "months_after_rfc": 117,
      "split": {
       "new_signings_at_most": 5867,
-      "rollovers_at_least": 850
+      "rollovers_at_least": 850,
+      "signed_zones_delta": 5867,
+      "share_of_new_signings_pct": 114.5
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
@@ -10811,7 +10843,9 @@
      "months_after_rfc": 54,
      "split": {
       "new_signings_at_most": 6445,
-      "rollovers_at_least": 10748
+      "rollovers_at_least": 10748,
+      "signed_zones_delta": 6445,
+      "share_of_new_signings_pct": 266.8
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10848,7 +10882,9 @@
      "months_after_rfc": 60,
      "split": {
       "new_signings_at_most": 16925,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 19119,
+      "share_of_new_signings_pct": 88.5
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10885,7 +10921,9 @@
      "months_after_rfc": 67,
      "split": {
       "new_signings_at_most": 3476,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 123031,
+      "share_of_new_signings_pct": 2.8
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10922,7 +10960,9 @@
      "months_after_rfc": 81,
      "split": {
       "new_signings_at_most": 0,
-      "rollovers_at_least": 119500
+      "rollovers_at_least": 119500,
+      "signed_zones_delta": -24436,
+      "share_of_new_signings_pct": null
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -10963,7 +11003,9 @@
      "months_after_rfc": 86,
      "split": {
       "new_signings_at_most": 0,
-      "rollovers_at_least": 217437
+      "rollovers_at_least": 217437,
+      "signed_zones_delta": -1179,
+      "share_of_new_signings_pct": null
      },
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
@@ -13559,7 +13601,9 @@
      "months_after_rfc": 71,
      "split": {
       "new_signings_at_most": 490,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 47725,
+      "share_of_new_signings_pct": 1.0
      },
      "nearest_signer_release": {
       "what": "OpenDNSSEC 2.1.7",
@@ -13594,7 +13638,9 @@
      "months_after_rfc": 38,
      "split": {
       "new_signings_at_most": 1125,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 1321,
+      "share_of_new_signings_pct": 85.2
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.12.0",
@@ -13625,7 +13671,9 @@
      "months_after_rfc": 71,
      "split": {
       "new_signings_at_most": 0,
-      "rollovers_at_least": 735
+      "rollovers_at_least": 735,
+      "signed_zones_delta": -782,
+      "share_of_new_signings_pct": null
      },
      "nearest_signer_release": {
       "what": "OpenDNSSEC 2.1.7",
@@ -13660,7 +13708,9 @@
      "months_after_rfc": 38,
      "split": {
       "new_signings_at_most": 7028,
-      "rollovers_at_least": 11718
+      "rollovers_at_least": 11718,
+      "signed_zones_delta": 7028,
+      "share_of_new_signings_pct": 266.7
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.12.0",
@@ -13691,7 +13741,9 @@
      "months_after_rfc": 71,
      "split": {
       "new_signings_at_most": 509,
-      "rollovers_at_least": 12748
+      "rollovers_at_least": 12748,
+      "signed_zones_delta": 509,
+      "share_of_new_signings_pct": 2604.5
      },
      "nearest_signer_release": {
       "what": "OpenDNSSEC 2.1.7",
@@ -17953,7 +18005,9 @@
      "months_after_rfc": 160,
      "split": {
       "new_signings_at_most": 296470,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 448980,
+      "share_of_new_signings_pct": 66.0
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
@@ -17999,7 +18053,9 @@
      "months_after_rfc": 171,
      "split": {
       "new_signings_at_most": 51077,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 68440,
+      "share_of_new_signings_pct": 74.6
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
@@ -18045,7 +18101,9 @@
      "months_after_rfc": 178,
      "split": {
       "new_signings_at_most": 43894,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 47725,
+      "share_of_new_signings_pct": 92.0
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
@@ -18091,7 +18149,9 @@
      "months_after_rfc": 137,
      "split": {
       "new_signings_at_most": 1615,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 1643,
+      "share_of_new_signings_pct": 98.3
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
@@ -18137,7 +18197,9 @@
      "months_after_rfc": 161,
      "split": {
       "new_signings_at_most": 4368,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 5295,
+      "share_of_new_signings_pct": 82.5
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
@@ -18183,7 +18245,9 @@
      "months_after_rfc": 116,
      "split": {
       "new_signings_at_most": 19582,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 38626,
+      "share_of_new_signings_pct": 50.7
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
@@ -18224,7 +18288,9 @@
      "months_after_rfc": 121,
      "split": {
       "new_signings_at_most": 12989,
-      "rollovers_at_least": 0
+      "rollovers_at_least": 0,
+      "signed_zones_delta": 13282,
+      "share_of_new_signings_pct": 97.8
      },
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",

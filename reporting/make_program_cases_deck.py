@@ -109,11 +109,13 @@ def reading(rfc, c):
             f'{se16["nearest_default_change"]["lag_months"]} months after PowerDNS Auth {pd4["version"]} made '
             f'ECDSA its default ({pd4["date"][:7]}), and {se16["split"]["rollovers_at_least"]:,} of them were '
             f'existing zones rolling over -- a deliberate migration by whoever runs them, not an update side-effect.',
-            f'The moves that made ECDSA the majority came much later and were all rollovers: .se {se19["start"]} '
+            f'In .se the moves that took ECDSA to the majority came much later and were entirely rollovers: {se19["start"]} '
             f'+{se19["delta"]:,} ({se19["nearest_default_change"]["lag_months"]} months after that default) and '
             f'.se {top[1]["start"]} +{top[1]["delta"]:,}. The largest of all, .ch {ch21["start"]}..{ch21["end"]} '
             f'+{ch21["delta"]:,}, was a signing wave in which the new zones chose ECDSA '
-            f'{ch21["share_after_pct"]:.0f}% of the time: by 2021 every signer default had been ECDSA for five years.',
+            f'{ch21["split"]["share_of_new_signings_pct"]:.0f}% of the time (that is the flow share of the zones that became signed, not the '
+            f'stock share of ECDSA among all signed .ch zones, which ended at {ch21["share_after_pct"]:.0f}%). By 2021 every signer default had '
+            f'been ECDSA for five years. .nu instead crossed 50% on new signings in 2022-01, and .ch and .li were already past it on entry.',
             f'Chance check: {s["spikes_within_3m_of_default_change"]} of {s["n_spikes"]} spikes fall within {W3} '
             f'months after a default change; a random forward month does so {ch["forward"]["within_3m_after_default_change"]*100:.0f}% '
             f'of the time, so about {round(ch["forward"]["within_3m_after_default_change"]*s["n_forward"] + ch["reverse"]["within_3m_after_default_change"]*s["n_reverse"], 1)} '

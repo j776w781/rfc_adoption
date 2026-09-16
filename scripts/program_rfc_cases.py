@@ -268,10 +268,18 @@ def all_release_dates(rel):
 def rollover_split(delta_alg, delta_signed):
     """How much of a jump in algorithm-X zones could be newly signed zones.
     New signings are bounded by the growth in signed zones that month; the rest
-    are existing zones that rolled. If signed zones shrank, none are new."""
+    are existing zones that rolled. If signed zones shrank, none are new.
+
+    `share_of_new_signings_pct` is the FLOW share: of the zones that became
+    signed over the episode, how many took this algorithm. It is not the stock
+    share of the algorithm among all signed zones, which is a different number
+    and must not be quoted as if it were this one."""
     new_max = max(0, min(delta_alg, delta_signed))
     return {"new_signings_at_most": int(new_max),
-            "rollovers_at_least": int(max(0, delta_alg - new_max))}
+            "rollovers_at_least": int(max(0, delta_alg - new_max)),
+            "signed_zones_delta": int(delta_signed),
+            "share_of_new_signings_pct": (round(delta_alg / delta_signed * 100, 1)
+                                          if delta_signed > 0 else None)}
 
 
 def build_case(rfc, spec, srv, pan, ledger, sup, rel, cves):
