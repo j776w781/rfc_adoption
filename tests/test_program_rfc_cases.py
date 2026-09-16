@@ -66,16 +66,38 @@ def test_reverse_new_signings_ignored_2016_defaults_and_moved_with_bind(cases):
     assert ar["9.16.0"]["share_after_pct"] - ar["9.16.0"]["share_before_pct"] > 10
 
 
-def test_debian_9_is_the_ecdsa_step_in_reverse_new_signings(cases):
-    ns = cases["RFC 6605"]["new_signings"]
-    by = {r["os"]: r for r in ns["around_os_ships"]}
-    assert set(by["Debian 9"]["carries"]) == {"Knot DNS 2.1.0", "PowerDNS Auth 4.0.0"}
-    assert by["Debian 9"]["date"] == "2017-06-17"
-    assert by["Debian 9"]["share_before_pct"] < 1 and by["Debian 9"]["share_after_pct"] > 40
-    assert by["Debian 9"]["blocks_choosing_before"] <= 5 and by["Debian 9"]["blocks_choosing_after"] >= 40
-    # Ubuntu 16.04 carried a pre-release PowerDNS (4.0.0~alpha2), so only Knot's default
-    assert by["Ubuntu 16.04"]["carries"] == ["Knot DNS 2.1.0"]
-    assert by["Ubuntu 16.04"]["share_after_pct"] < 1
+def test_no_single_os_release_explains_the_ecdsa_steps():
+    """The withdrawn claim: Debian 9 delivered the ECDSA default and the step
+    followed. There are four steps with a different OS release behind each."""
+    at = json.loads((ROOT / "out/analysis/os_release_attribution.json").read_text("utf-8"))
+    steps = at["families"]["ECDSA"]["steps"]
+    assert len(steps) >= 4
+    names = [tuple(r["name"] for r in st["os_releases_within_12m_before"]) for st in steps]
+    assert len({n for n in names}) == len(names)          # a different release each time
+    rsa = at["families"]["RSA/SHA-256"]["steps"]
+    assert any(not st["os_releases_within_12m_before"] for st in rsa)   # steps without any release
+    assert at["chance_a_month_follows_an_os_release"]["within_3m"] > 0.25
+    assert at["the_claim_tested"]["verdict"].startswith("not supported")
+
+
+def test_first_ecdsa_step_is_a_few_operators_in_one_region():
+    at = json.loads((ROOT / "out/analysis/os_release_attribution.json").read_text("utf-8"))
+    d = at["families"]["ECDSA"]["steps"][0]["detail"]
+    assert d["quarter"] == "2017Q3"
+    assert max(d["by_month"].values()) / d["signings"] > 0.9      # one month
+    assert d["by_rir"]["apnic"] / d["signings"] > 0.9             # one region
+    assert d["largest_block_share"] > 0.3                         # one block a third of it
+
+
+def test_rhel_family_ships_no_knot_or_powerdns_in_base():
+    d = json.loads((ROOT / "data/software/distro_ships.json").read_text("utf-8"))
+    obs = {o["repo"]: o for o in d["base_repo_coverage"]["observations"]}
+    for repo in obs:
+        if "EPEL" in repo:
+            assert obs[repo]["knot"] != "absent" and obs[repo]["pdns"] != "absent"
+        else:
+            assert obs[repo]["knot"] == "absent" and obs[repo]["pdns"] == "absent"
+            assert obs[repo]["bind"].startswith("9.")
 
 
 def test_rsasha256_new_signings_stepped_after_opendnssec_default(cases):
@@ -155,10 +177,11 @@ def test_cve_attribution_is_by_product_only(cases):
 
 def test_distro_ships_have_sources_and_dates():
     d = json.loads((ROOT / "data/software/distro_ships.json").read_text("utf-8"))
-    assert {s["name"] for s in d["ships"]} >= {"Ubuntu 16.04", "Debian 9", "Ubuntu 20.04", "Debian 11"}
+    assert {s["name"] for s in d["ships"]} >= {"Ubuntu 16.04", "Debian 9", "Ubuntu 20.04", "Debian 11", "RHEL 9"}
     for s in d["ships"]:
-        assert len(s["released"]) == 10 and set(s["versions"]) == {"bind9", "pdns", "knot"}
+        assert len(s["released"]) == 10 and set(s["versions"]) <= {"bind9", "pdns", "knot"}
     assert "launchpad" in d["sources"]["ubuntu_versions"]
+    assert len(d["major_releases"]["releases"]) >= 14
 
 
 @pytest.mark.skipif(not SLIDES.exists(), reason="deck not built")

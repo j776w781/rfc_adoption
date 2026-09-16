@@ -44,7 +44,10 @@ def main() -> int:
     c6, c9, c5, c8 = C["RFC 6605"], C["RFC 9276"], C["RFC 5702"], C["RFC 8080"]
     ar6 = {r["version"]: r for r in c6["new_signings"]["around_releases"] if r["kind"] == "default"}
     ar5 = {r["version"]: r for r in c5["new_signings"]["around_releases"]}
-    os9 = next(r for r in c6["new_signings"]["around_os_ships"] if r["os"] == "Debian 9")
+    AT = json.loads(Path("out/analysis/os_release_attribution.json").read_text("utf-8"))
+    CH = AT["chance_a_month_follows_an_os_release"]
+    ST = AT["families"]["ECDSA"]["steps"][0]
+    n_ec = len(AT["families"]["ECDSA"]["steps"])
     od = {o["rfc"]: o for o in SC["onset_decomposition"]}
     code = [o["code_lag_years"] for o in SC["onset_decomposition"] if o.get("code_lag_years") is not None]
     dep = [o["deployment_lag_years"] for o in SC["onset_decomposition"] if o.get("deployment_lag_years") is not None]
@@ -140,17 +143,20 @@ def main() -> int:
     ], size=11, color=INK, space=6)
 
     # 5 auto-update
-    s = blank(prs); kicker(s, "FINDING 3  ·  THE AUTO-UPDATE TEST", "Updates work: the OS release is the event, and it acts on new zones only", ACCENT)
-    fit_picture(s, figs / "rfc_6605_new_signings.png", Inches(1.25), Inches(2.6))
+    s = blank(prs); kicker(s, "FINDING 3  ·  THE AUTO-UPDATE TEST", "Updates change what a new zone gets, never an existing one", ACCENT)
+    fit_picture(s, Path("reporting/charts/os_release_attribution.png"), Inches(1.2), Inches(2.75), max_w=Inches(9.6))
     text(s, Inches(0.62), Inches(4.0), Inches(12.1), Inches(3.2), [
         "An update cannot roll an existing zone; it can only change what a zone signed after the update gets. So the test is the share of "
         "NEW signings choosing the algorithm, which the reverse ledger records per delegation.",
         f'ECDSA: on their upstream dates the 2016 Knot and PowerDNS defaults left no trace ({ar6["2.1.0"]["share_before_pct"]}% -> '
-        f'{ar6["2.1.0"]["share_after_pct"]}%, {ar6["4.0.0"]["share_before_pct"]}% -> {ar6["4.0.0"]["share_after_pct"]}%), and neither did Ubuntu 16.04, '
-        f'which carried only Knot. Debian 9 ({os9["date"]}) was the first OS release to ship both ECDSA-default signers: in the year after it, '
-        f'{os9["share_after_pct"]}% of new reverse signings chose ECDSA ({os9["share_before_pct"]}% the year before), from {os9["blocks_choosing_after"]} '
-        f'blocks ({os9["blocks_choosing_before"]} before). A second step, {ar6["9.16.0"]["share_before_pct"]}% -> {ar6["9.16.0"]["share_after_pct"]}%, '
-        f'came with BIND 9.16.0 in Ubuntu 20.04 and Debian 11.',
+        f'{ar6["2.1.0"]["share_after_pct"]}%, {ar6["4.0.0"]["share_before_pct"]}% -> {ar6["4.0.0"]["share_after_pct"]}%). Instead new signings stepped '
+        f'{n_ec} times between 2017 and 2020. The first, {ST["quarter"]}, is {ST["detail"]["signings"]} signings with '
+        f'{max(ST["detail"]["by_month"].values())} of them in one month, all but '
+        f'{sum(v for k, v in ST["detail"]["by_rir"].items() if k != "apnic")} in APNIC and one parent block '
+        f'{ST["detail"]["largest_block_share"]*100:.0f}% of it. Operators moved in batches, not as a population.',
+        f'An OS release precedes each of those steps, but a different one each time (Debian 9, Ubuntu 18.04, RHEL 8 / Debian 10, Ubuntu 20.04), '
+        f'{CH["within_3m"]*100:.0f}% of all months follow some OS release within 3 months anyway, and two of the five RSA/SHA-256 steps have none '
+        f'at all. The timing cannot name a delivery path, and RHEL -- which ships no Knot or PowerDNS in base -- had no ECDSA-default signer until 2022.',
         f'RSA/SHA-256: new signings choosing it went {ar5["1.2.0"]["share_before_pct"]}% -> {ar5["1.2.0"]["share_after_pct"]}% across OpenDNSSEC 1.2.0\'s '
         f'default (2011-03) and kept rising for two years; BIND 9.7.0 had shipped it 13 months earlier, so it reads as availability, not one vendor.',
         f'EdDSA: never a default anywhere; {sum(r["hit"] for r in c8["new_signings"]["rollovers_to_by_year"])} rollovers to it in the whole ledger; '
@@ -195,7 +201,7 @@ def main() -> int:
     rows += [
         ["RFC 5702 RSA/SHA-256", T["RFC 5702"]["verdict"], "signer default, inherited by new zones",
          f'first zone {od["RFC 5702"]["first_zone_seen"]}; new reverse signings {ar5["1.2.0"]["share_before_pct"]}% -> {ar5["1.2.0"]["share_after_pct"]}% across the 2011 default'],
-        ["RFC 6605 ECDSA", T["RFC 6605"]["verdict"], "signer defaults reach new zones via Debian 9 (2017); majority by operator rollovers",
+        ["RFC 6605 ECDSA", T["RFC 6605"]["verdict"], "signer default from 2016, acting on new zones only; majority by operator rollovers",
          f'first zone {od["RFC 6605"]["first_zone_seen"]}; majority only via 2019 rollovers and the 2021 .ch wave'],
         ["RFC 5155 NSEC3", T["RFC 5155"]["verdict"], "signer option; BIND default from 9.7.0", f'first zone {T["RFC 5155"]["lags"]["first_zone_seen"]}; 10% at {T["RFC 5155"]["adoption"][0]["t_10pct"]}'],
         ["RFC 9276 iterations", T["RFC 9276"]["verdict"], "validator caps force re-signing", "collapse 2021-10, ten months before the RFC"],
@@ -210,7 +216,44 @@ def main() -> int:
         "moved on a vendor's schedule was the one where validators refused the old value.",
     ], size=12, color=INK)
 
-    # 9 limits
+    # 9 CVE patches vs RFC publications
+    VR = json.loads(Path("out/analysis/cve_vs_rfc_rates.json").read_text("utf-8"))
+    rv = VR["overall"]["reverse signed share (strict panel)"]["raw"]
+    s = blank(prs); kicker(s, "FINDING 6  ·  CVE PATCHES vs RFC PUBLICATIONS", "Adoption moves at the same speed after either")
+    fit_picture(s, Path("reporting/charts/rate_hist_both.png"), Inches(1.25), Inches(3.6), max_w=Inches(7.5))
+    text(s, Inches(0.62), Inches(5.3), Inches(12.1), Inches(1.9), [
+        f'Take every month in which a DNSSEC CVE was patched ({rv["cve_patches"]["n"]} months; {rv["cve_events"]} CVEs, several sharing a fix month) '
+        f'and every month in which a DNSSEC RFC was published ({rv["rfc_publications"]["n"]} months inside the reverse series). The adoption rate over '
+        f'that month and the three after it has the same distribution in both groups and in ordinary months: medians '
+        f'{rv["cve_patches"]["median"]*1000:.1f}, {rv["rfc_publications"]["median"]*1000:.1f} and {rv["all_months"]["median"]*1000:.1f} thousandths of a '
+        f'point per month; permutation p = {rv["p_cve_vs_rfc"]:.2f}.',
+        "Measured on each event\'s own mechanism instead, RFC publications sit in ordinary or dead months (RFC 6605 at the 3rd percentile of the ECDSA "
+        "curve) and two CVE patch months are extreme: CVE-2021-40083 is the NSEC3 iteration collapse, and CVE-2022-38177/38178 coincides with one "
+        "ARIN block re-signing to ECDSA -- timing, not cause.",
+    ], size=11, color=INK, space=6)
+
+    # 10 summary and takeaways
+    s = blank(prs); kicker(s, "SUMMARY AND TAKEAWAYS", "What decides whether a DNSSEC RFC gets adopted")
+    text(s, Inches(0.62), Inches(1.35), Inches(12.1), Inches(5.6), [
+        f'1.  Code is never the bottleneck. Every RFC studied was implemented within {min(code):+.1f} to {max(code):+.1f} years of publication; the first '
+        f'zone then took {min(dep):.1f} to {max(dep):.1f} years. The wait is operators, not vendors.',
+        "2.  Defaults are what move zones, and they move only newly signed zones. A default change never re-signs an existing zone, so it never shows as a "
+        "spike; it shows in what new zones choose, months to years later.",
+        f'3.  Operators switch in sudden batches, and the trigger is not identifiable. New reverse signings jumped to ECDSA in {n_ec} steps, each one '
+        f'month and a few parent blocks. An OS release precedes every step but a different one each time, {CH["within_3m"]*100:.0f}% of months follow '
+        f'one anyway, and two RSA/SHA-256 steps have none.',
+        "4.  Spikes in the adoption curve are operator decisions: six-figure rollovers by a registry or hoster, years after any default. No release month "
+        "moves the curve; 97% of months contain a release, so a nearby release is never evidence.",
+        "5.  Validators can force an RFC before it exists. The NSEC3 iteration collapse of 2021-10 followed the resolver caps and CVE-2021-40083 by two "
+        "months and preceded RFC 9276 by ten. It is the only vendor-timed adoption event in the data.",
+        "6.  CVEs do not lead adoption. CVE-patch months and RFC-publication months have the same adoption rate as any other month; the one CVE inside a "
+        "causal chain is a symptom of the problem the caps fixed.",
+        "7.  Never-adopted RFCs (EdDSA, GOST) share one trait: no signer ever made them a default. Niche ones (CDS) only matter where the parent acts on them.",
+        "Takeaway: to predict an RFC\'s adoption, look at whether a signer makes it the default, not at the RFC date, the first implementation, "
+        "or the CVEs. Which delivery path carries a default to a given operator is not visible in published DNS records.",
+    ], size=11.5, color=INK, space=7)
+
+    # 11 limits
     s = blank(prs); kicker(s, "LIMITS", "What this cannot show")
     text(s, Inches(0.62), Inches(1.4), Inches(12.1), Inches(5.5), [
         "Which software signs a zone is never visible from its records; 'nearest release' is timing evidence. Registry and registrar signing "
@@ -218,8 +261,8 @@ def main() -> int:
         "OpenINTEL here is monthly aggregates for seven TLDs from 2016-06 (2020-05 for .ch/.li) to 2023-12, so RSA/SHA-256 and NSEC3 adoption "
         "are visible only in reverse DNS, and forward spikes cannot be attributed to an operator.",
         "Reverse DNS is small (25,930 change events on 13,654 delegations) and NSEC3 is visible there only through algorithm 7.",
-        "OS package dates bound when a default became reachable by apt, not when anyone upgraded. The Debian 9 step rests on 55 blocks in one "
-        "corpus, APNIC-heavy, with one block a third of it.",
+        "The OS package table is Debian, Ubuntu and RHEL only. FreeBSD ports, Alpine, containers, appliances and source builds are absent, and "
+        "RHEL base ships no Knot or PowerDNS at all. Package dates bound when a default became reachable, never what an operator ran.",
         "With 3 to 31 spikes per RFC, 'beats chance' is a reading, not a test with a p-value. CVE attribution is by NVD product only.",
         "Decks with every figure and ledger: dnssec_rfc_why.pptx (per-RFC timelines), dnssec_program_rfc_cases.pptx (per-program case studies), "
         "dnssec_algorithm_flows.pptx (what zones move between). CSVs: dns_software_*.csv, dns_cve_list.csv, dns_program_rfc_spikes.csv.",

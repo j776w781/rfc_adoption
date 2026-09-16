@@ -94,8 +94,8 @@
   "n": 5,
   "text": [
    "FINDING 3  \u00b7  THE AUTO-UPDATE TEST",
-   "Updates work: the OS release is the event, and it acts on new zones only",
-   "An update cannot roll an existing zone; it can only change what a zone signed after the update gets. So the test is the share of NEW signings choosing the algorithm, which the reverse ledger records per delegation.\nECDSA: on their upstream dates the 2016 Knot and PowerDNS defaults left no trace (0.2% -> 0.3%, 0.3% -> 0.2%), and neither did Ubuntu 16.04, which carried only Knot. Debian 9 (2017-06-17) was the first OS release to ship both ECDSA-default signers: in the year after it, 57.1% of new reverse signings chose ECDSA (0.2% the year before), from 55 blocks (3 before). A second step, 22.8% -> 38.8%, came with BIND 9.16.0 in Ubuntu 20.04 and Debian 11.\nRSA/SHA-256: new signings choosing it went 0.9% -> 20.0% across OpenDNSSEC 1.2.0's default (2011-03) and kept rising for two years; BIND 9.7.0 had shipped it 13 months earlier, so it reads as availability, not one vendor.\nEdDSA: never a default anywhere; 14 rollovers to it in the whole ledger; two forward episodes, both withdrawn. No default, no adoption."
+   "Updates change what a new zone gets, never an existing one",
+   "An update cannot roll an existing zone; it can only change what a zone signed after the update gets. So the test is the share of NEW signings choosing the algorithm, which the reverse ledger records per delegation.\nECDSA: on their upstream dates the 2016 Knot and PowerDNS defaults left no trace (0.2% -> 0.3%, 0.3% -> 0.2%). Instead new signings stepped 4 times between 2017 and 2020. The first, 2017Q3, is 157 signings with 155 of them in one month, all but 2 in APNIC and one parent block 40% of it. Operators moved in batches, not as a population.\nAn OS release precedes each of those steps, but a different one each time (Debian 9, Ubuntu 18.04, RHEL 8 / Debian 10, Ubuntu 20.04), 31% of all months follow some OS release within 3 months anyway, and two of the five RSA/SHA-256 steps have none at all. The timing cannot name a delivery path, and RHEL -- which ships no Knot or PowerDNS in base -- had no ECDSA-default signer until 2022.\nRSA/SHA-256: new signings choosing it went 0.9% -> 20.0% across OpenDNSSEC 1.2.0's default (2011-03) and kept rising for two years; BIND 9.7.0 had shipped it 13 months earlier, so it reads as availability, not one vendor.\nEdDSA: never a default anywhere; 14 rollovers to it in the whole ledger; two forward episodes, both withdrawn. No default, no adoption."
   ]
  },
  {
@@ -130,7 +130,7 @@
    "first zone 2010-03; new reverse signings 0.9% -> 20.0% across the 2011 default",
    "RFC 6605 ECDSA",
    "slow",
-   "signer defaults reach new zones via Debian 9 (2017); majority by operator rollovers",
+   "signer default from 2016, acting on new zones only; majority by operator rollovers",
    "first zone 2015-11; majority only via 2019 rollovers and the 2021 .ch wave",
    "RFC 5155 NSEC3",
    "slow",
@@ -157,9 +157,25 @@
  {
   "n": 9,
   "text": [
+   "FINDING 6  \u00b7  CVE PATCHES vs RFC PUBLICATIONS",
+   "Adoption moves at the same speed after either",
+   "Take every month in which a DNSSEC CVE was patched (21 months; 39 CVEs, several sharing a fix month) and every month in which a DNSSEC RFC was published (16 months inside the reverse series). The adoption rate over that month and the three after it has the same distribution in both groups and in ordinary months: medians 4.0, 4.2 and 3.9 thousandths of a point per month; permutation p = 0.93.\nMeasured on each event's own mechanism instead, RFC publications sit in ordinary or dead months (RFC 6605 at the 3rd percentile of the ECDSA curve) and two CVE patch months are extreme: CVE-2021-40083 is the NSEC3 iteration collapse, and CVE-2022-38177/38178 coincides with one ARIN block re-signing to ECDSA -- timing, not cause."
+  ]
+ },
+ {
+  "n": 10,
+  "text": [
+   "SUMMARY AND TAKEAWAYS",
+   "What decides whether a DNSSEC RFC gets adopted",
+   "1.  Code is never the bottleneck. Every RFC studied was implemented within -0.4 to +1.8 years of publication; the first zone then took 0.1 to 3.8 years. The wait is operators, not vendors.\n2.  Defaults are what move zones, and they move only newly signed zones. A default change never re-signs an existing zone, so it never shows as a spike; it shows in what new zones choose, months to years later.\n3.  Operators switch in sudden batches, and the trigger is not identifiable. New reverse signings jumped to ECDSA in 4 steps, each one month and a few parent blocks. An OS release precedes every step but a different one each time, 31% of months follow one anyway, and two RSA/SHA-256 steps have none.\n4.  Spikes in the adoption curve are operator decisions: six-figure rollovers by a registry or hoster, years after any default. No release month moves the curve; 97% of months contain a release, so a nearby release is never evidence.\n5.  Validators can force an RFC before it exists. The NSEC3 iteration collapse of 2021-10 followed the resolver caps and CVE-2021-40083 by two months and preceded RFC 9276 by ten. It is the only vendor-timed adoption event in the data.\n6.  CVEs do not lead adoption. CVE-patch months and RFC-publication months have the same adoption rate as any other month; the one CVE inside a causal chain is a symptom of the problem the caps fixed.\n7.  Never-adopted RFCs (EdDSA, GOST) share one trait: no signer ever made them a default. Niche ones (CDS) only matter where the parent acts on them.\nTakeaway: to predict an RFC's adoption, look at whether a signer makes it the default, not at the RFC date, the first implementation, or the CVEs. Which delivery path carries a default to a given operator is not visible in published DNS records."
+  ]
+ },
+ {
+  "n": 11,
+  "text": [
    "LIMITS",
    "What this cannot show",
-   "Which software signs a zone is never visible from its records; 'nearest release' is timing evidence. Registry and registrar signing platforms are closed source and are not in the release list.\nOpenINTEL here is monthly aggregates for seven TLDs from 2016-06 (2020-05 for .ch/.li) to 2023-12, so RSA/SHA-256 and NSEC3 adoption are visible only in reverse DNS, and forward spikes cannot be attributed to an operator.\nReverse DNS is small (25,930 change events on 13,654 delegations) and NSEC3 is visible there only through algorithm 7.\nOS package dates bound when a default became reachable by apt, not when anyone upgraded. The Debian 9 step rests on 55 blocks in one corpus, APNIC-heavy, with one block a third of it.\nWith 3 to 31 spikes per RFC, 'beats chance' is a reading, not a test with a p-value. CVE attribution is by NVD product only.\nDecks with every figure and ledger: dnssec_rfc_why.pptx (per-RFC timelines), dnssec_program_rfc_cases.pptx (per-program case studies), dnssec_algorithm_flows.pptx (what zones move between). CSVs: dns_software_*.csv, dns_cve_list.csv, dns_program_rfc_spikes.csv."
+   "Which software signs a zone is never visible from its records; 'nearest release' is timing evidence. Registry and registrar signing platforms are closed source and are not in the release list.\nOpenINTEL here is monthly aggregates for seven TLDs from 2016-06 (2020-05 for .ch/.li) to 2023-12, so RSA/SHA-256 and NSEC3 adoption are visible only in reverse DNS, and forward spikes cannot be attributed to an operator.\nReverse DNS is small (25,930 change events on 13,654 delegations) and NSEC3 is visible there only through algorithm 7.\nThe OS package table is Debian, Ubuntu and RHEL only. FreeBSD ports, Alpine, containers, appliances and source builds are absent, and RHEL base ships no Knot or PowerDNS at all. Package dates bound when a default became reachable, never what an operator ran.\nWith 3 to 31 spikes per RFC, 'beats chance' is a reading, not a test with a p-value. CVE attribution is by NVD product only.\nDecks with every figure and ledger: dnssec_rfc_why.pptx (per-RFC timelines), dnssec_program_rfc_cases.pptx (per-program case studies), dnssec_algorithm_flows.pptx (what zones move between). CSVs: dns_software_*.csv, dns_cve_list.csv, dns_program_rfc_spikes.csv."
   ]
  }
 ]

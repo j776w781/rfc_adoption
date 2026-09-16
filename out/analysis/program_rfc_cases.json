@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-15",
+ "generated": "2026-09-16",
  "method": "Case studies: for a few RFCs, does a program's release explain a spike?\n\nFor each chosen RFC this lines up, per program (BIND 9, Knot, PowerDNS,\nOpenDNSSEC, Unbound, Knot Resolver):\n\n    RFC published -> the program's first release that implements it\n                  -> the release that made it the default (or capped it)\n                  -> the program's CVEs on that mechanism, before and after\n\nand then asks the OpenINTEL zone files (per TLD) and the reverse-DNS corpus\n(per RIR, and the strict AFRINIC+ARIN panel for shares) the only question that\nmatters: when the adoption curve jumped, what had just happened in software?\n\nThree things are measured for every spike:\n\n  1. the nearest preceding *relevant* release -- one that implements, defaults\n     or caps the mechanism -- and the lag to it, per program;\n  2. the nearest preceding CVE on the mechanism, and the lag;\n  3. whether the spike was new signings or existing zones rolling over. An\n     automatic update changes what a *newly signed* zone gets; it never\n     re-signs an existing zone. So a spike made of rollovers cannot be an\n     update effect, whatever the lag says.\n\nThe lag alone proves nothing: 97% of months contain some DNS release. So the\nlag to the nearest relevant release is compared with the same lag measured\nat every month of the series -- the chance rate. A spike is \"release-timed\"\nonly if its lag is short by that standard.\n\nThe auto-update proxy. The reverse ledger records every sign event with the\nalgorithm chosen. If a default change propagates through updates, the share\nof *new* signings choosing the new algorithm should step up after the\nrelease. That is measured directly, per default change, over the twelve\nmonths either side.\n\nReads out/server_run/timeline_monthly.parquet, out/panel_run/timeline_monthly.parquet,\nout/analysis/delegation_changes.parquet, data/software/*.json,\nout/analysis/cve_crossref.json. Writes out/analysis/program_rfc_cases.json and\nout/analysis/dns_program_rfc_spikes.csv, dns_program_rfc_new_signings.csv.",
  "window_months": 3,
  "floors": {
@@ -19248,6 +19248,19 @@
       "new_signings_12m_after": 597,
       "share_after_pct": 21.1,
       "blocks_choosing_after": 20
+     },
+     {
+      "os": "RHEL 9",
+      "date": "2022-05-17",
+      "carries": [
+       "BIND 9 9.7.0"
+      ],
+      "new_signings_12m_before": 1231,
+      "share_before_pct": 2.9,
+      "blocks_choosing_before": 7,
+      "new_signings_12m_after": 1671,
+      "share_after_pct": 3.4,
+      "blocks_choosing_after": 11
      }
     ]
    },

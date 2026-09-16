@@ -1,10 +1,22 @@
 {
-  "purpose": "The version of each DNS program that an operating-system release first shipped. Operators mostly meet a new default through the OS package, not the upstream tarball, so these dates are the 'automatic update' path. Versions are the release pocket (what an install of that OS gets before any security update); Debian rows show the point-release string sources.debian.org lists for the suite.",
+  "purpose": "The version of each DNS program that an operating-system release shipped, and which signers each distribution family carries at all. Operators mostly meet a new default through the OS package rather than the upstream tarball, so these dates are the 'automatic update' path -- but they are only one path, and this file exists to bound how much weight the timing can carry.",
   "sources": {
-    "ubuntu_versions": "https://launchpad.net/ubuntu/+source/bind9, https://launchpad.net/ubuntu/+source/pdns, https://launchpad.net/ubuntu/+source/knot (release pocket, read 2026-09-15)",
+    "ubuntu_versions": "https://launchpad.net/ubuntu/+source/bind9, /pdns, /knot (release pocket, read 2026-09-15)",
     "ubuntu_dates": "https://en.wikipedia.org/wiki/Ubuntu_version_history (16.04, 18.04, 20.04); https://launchpad.net/ubuntu/jammy and /noble (22.04, 24.04)",
-    "debian_versions": "https://sources.debian.org/api/src/bind9/, /pdns/, /knot/ (versions per suite, read 2026-09-15); Debian 11-13 cross-checked against https://tracker.debian.org/pkg/<name>",
-    "debian_dates": "https://www.debian.org/releases/"
+    "debian_versions": "https://sources.debian.org/api/src/bind9/, /pdns/, /knot/ (versions per suite, read 2026-09-15)",
+    "debian_dates": "https://www.debian.org/releases/",
+    "rhel_dates": "https://en.wikipedia.org/wiki/Red_Hat_Enterprise_Linux (GA dates, read 2026-09-16)",
+    "rhel_versions": "directory listings read 2026-09-16: https://vault.centos.org/7.9.2009/os/x86_64/Packages/ , https://dl.rockylinux.org/vault/rocky/8.5/AppStream/x86_64/os/Packages/ , https://dl.rockylinux.org/pub/rocky/9/AppStream/x86_64/os/Packages/ , https://dl.fedoraproject.org/pub/epel/9/Everything/x86_64/Packages/"
+  },
+  "base_repo_coverage": {
+    "note": "Which signers a family ships in its base repositories, from anchored directory listings read 2026-09-16. This decides whether an OS release could deliver a signer default at all.",
+    "observations": [
+      {"repo": "CentOS 7.9 base (RHEL 7)", "bind": "9.11.4", "knot": "absent", "pdns": "absent"},
+      {"repo": "Rocky 8.5 AppStream (RHEL 8)", "bind": "9.11.26", "knot": "absent", "pdns": "absent"},
+      {"repo": "Rocky 9 AppStream (RHEL 9)", "bind": "9.16.23", "knot": "absent", "pdns": "absent"},
+      {"repo": "EPEL 9", "bind": "absent", "knot": "3.3.10", "pdns": "5.0.7"}
+    ],
+    "consequence": "On RHEL and its rebuilds the only base-repo signer is BIND, and BIND gained an ECDSA-default policy in 9.16, which reached that family with RHEL 9 on 2022-05-17. Knot and PowerDNS require EPEL. An operator on this family could not receive an ECDSA signing default through the OS before 2022."
   },
   "ships": [
     {"distribution": "Ubuntu", "name": "Ubuntu 16.04", "released": "2016-04-21",
@@ -21,11 +33,35 @@
      "versions": {"bind9": "9.16.50", "pdns": "4.4.1", "knot": "3.0.5"}},
     {"distribution": "Ubuntu", "name": "Ubuntu 22.04", "released": "2022-04-21",
      "versions": {"bind9": "9.18.1", "pdns": "4.5.3", "knot": "3.1.6"}},
+    {"distribution": "Red Hat", "name": "RHEL 9", "released": "2022-05-17",
+     "versions": {"bind9": "9.16.23"},
+     "note": "base repositories carry no Knot and no PowerDNS"},
     {"distribution": "Debian", "name": "Debian 12", "released": "2023-06-10",
      "versions": {"bind9": "9.18.49", "pdns": "4.7.3", "knot": "3.2.6"}},
     {"distribution": "Ubuntu", "name": "Ubuntu 24.04", "released": "2024-04-25",
      "versions": {"bind9": "9.18.24", "pdns": "4.8.3", "knot": "3.3.4"}},
     {"distribution": "Debian", "name": "Debian 13", "released": "2025-08-09",
      "versions": {"bind9": "9.20.23", "pdns": "4.9.16", "knot": "3.4.6"}}
-  ]
+  ],
+  "major_releases": {
+    "note": "Dated OS releases used to compute how often a month follows some OS release. Only families whose dates are sourced above are listed, so any chance rate computed from it is a floor: the six-month distributions (Fedora, Alpine, Ubuntu interim) and the rolling ones (FreeBSD ports, Arch, Gentoo) would only raise it.",
+    "releases": [
+      {"name": "Debian 8", "date": "2015-04-25"},
+      {"name": "Ubuntu 16.04", "date": "2016-04-21"},
+      {"name": "Debian 9", "date": "2017-06-17"},
+      {"name": "Ubuntu 18.04", "date": "2018-04-26"},
+      {"name": "RHEL 8", "date": "2019-05-07"},
+      {"name": "Debian 10", "date": "2019-07-06"},
+      {"name": "Ubuntu 20.04", "date": "2020-04-23"},
+      {"name": "Debian 11", "date": "2021-08-14"},
+      {"name": "Ubuntu 22.04", "date": "2022-04-21"},
+      {"name": "RHEL 9", "date": "2022-05-17"},
+      {"name": "Debian 12", "date": "2023-06-10"},
+      {"name": "Ubuntu 24.04", "date": "2024-04-25"},
+      {"name": "RHEL 10", "date": "2025-05-20"},
+      {"name": "Debian 13", "date": "2025-08-09"},
+      {"name": "RHEL 7", "date": "2014-06-09"},
+      {"name": "Ubuntu 14.04", "date": "2014-04-17"}
+    ]
+  }
 }

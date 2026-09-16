@@ -55,13 +55,9 @@ rollovers, 30-35 months after any default. The .ch wave of 2021-06..11
 (+591,333) was new signings that chose ECDSA 96% of the time. Two of 31 spikes
 fall within three months of a default, against a 9% forward chance rate. In
 reverse DNS, new signings ignored the 2016 defaults on their upstream dates
-(0.2% -> 0.3%, 0.3% -> 0.2%) and ignored Ubuntu 16.04, which carried only
-Knot's. Debian 9 (2017-06-17) was the first OS release shipping both
-ECDSA-default signers (PowerDNS 4.0.3, Knot 2.4.0): in the year after it 57.1%
-of new reverse signings chose ECDSA against 0.2% the year before, from 55
-blocks against 3. A second step (22.8% -> 38.8%) came with BIND 9.16.0 via
-Ubuntu 20.04 and Debian 11. The update path works, one OS release at a time,
-on new zones only, and it never shows as a spike in the adoption curve.
+(0.2% -> 0.3%, 0.3% -> 0.2%) and then stepped four times: 2017Q3, 2019Q1,
+2019Q4 and 2020Q3. See "Can a step be attributed to an OS release?" below;
+the short answer is no.
 
 **RFC 5702 (RSA/SHA-256).** Adopted before the forward corpus begins (99% of
 signed .se zones in 2016-06). Forward spikes are later signing waves that used
@@ -102,16 +98,52 @@ many iterations). All three spikes are within three months of a cap against a
   so before the RFC.
 * No CVE led a push; the one inside a causal chain (CVE-2021-40083) is a
   symptom of the problem the caps fixed.
-* Defaults reach operators through OS releases, not upstream tarballs: the
-  ECDSA step in reverse DNS is Debian 9, thirteen months after PowerDNS 4.0.0
-  and seventeen after Knot 2.1.0.
+* New signings switch in sudden batches, months to years after the upstream
+  default, and no delivery path can be identified from published records.
 
 ## Limits
 
 The program that signs a zone is never visible; "nearest release" is timing
 only. Forward per-zone records are not in this repo, so forward spikes cannot
 be attributed to an operator. Reverse DNS is small (25,930 events). Package
-dates bound when a default became reachable, not when anyone upgraded; the
-Debian 9 step rests on 55 blocks in one corpus, APNIC-heavy, one block a third
-of it. Counts
+dates bound when a default became reachable, not when anyone upgraded. Counts
 of 3-31 spikes per RFC make "beats chance" a reading, not a test.
+
+
+## Can a step be attributed to an OS release?
+
+`scripts/os_release_attribution.py` -> `out/analysis/os_release_attribution.json`;
+`reporting/os_release_attribution.py` -> `reporting/charts/os_release_attribution.png`.
+
+An earlier version of this document attributed the ECDSA step in new reverse
+signings to Debian 9 (2017-06-17), the first OS release carrying both
+ECDSA-default signers. That attribution does not hold and has been withdrawn.
+
+* **There is not one step, there are four.** ECDSA steps at 2017Q3, 2019Q1,
+  2019Q4 and 2020Q3. Each has an OS release in the preceding year and a
+  different one each time: Debian 9, Ubuntu 18.04, RHEL 8 with Debian 10, and
+  Ubuntu 20.04. Picking the first and naming Debian 9 was selection.
+* **Steps happen without OS releases.** Of the five RSA/SHA-256 steps, those
+  at 2012Q2 and 2014Q1 have no sourced OS release in the twelve months before
+  them.
+* **OS releases are dense.** 31% of months in the ledger follow some sourced
+  OS release within three months, 51% within six, 79% within twelve. That is a
+  floor: it counts only Debian, Ubuntu LTS and RHEL, so adding Fedora, Alpine,
+  Ubuntu interim and the rolling distributions raises it.
+* **Each step is a few operators.** 2017Q3 is 157 signings, 155 of them in
+  September 2017, all but two in APNIC, with one parent block 40% of the step
+  and an HHI of 0.19 over blocks. That is a handful of operators deciding, not
+  a population receiving an update.
+* **Most operators could not have received it that way.** Anchored directory
+  listings (2026-09-16) show CentOS 7.9, Rocky 8.5 and Rocky 9 base
+  repositories carry BIND and neither Knot nor PowerDNS; both come from EPEL.
+  BIND gained an ECDSA-default policy in 9.16, which reached that family with
+  RHEL 9 on 2022-05-17, five years after the step. FreeBSD ports, Alpine,
+  containers, appliances and source builds are not represented in the table at
+  all.
+
+What survives: an update changes only what a zone signed after it gets, never
+an existing zone, so new signings are where a default would act; and the steps
+show operators moving in batches once the defaults existed upstream. Which
+path carried a default to any operator is not identifiable from published DNS
+records.
