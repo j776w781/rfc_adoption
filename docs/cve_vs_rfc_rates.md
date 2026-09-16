@@ -65,3 +65,29 @@ The forward series covers 2016-06 to 2023-12, so it sees 9 CVE fix months and
 7 RFC publications. Reverse rates are tiny in absolute terms (the signed share
 is about 1%), so the comparison is of ranks, not magnitudes. The 4-month
 window is a choice; the conclusion did not change at the event month alone.
+
+## On each event's own mechanism
+
+`reporting/cve_vs_rfc_mechanism.py` -> `reporting/charts/cve_vs_rfc_mechanism.png`,
+`out/analysis/dns_cve_vs_rfc_mechanism_events.csv`.
+
+The overall signed share is the wrong ruler for a single RFC or CVE, since
+neither touches it directly. Measured on the mechanism each event concerns
+(ECDSA/EdDSA share for RFC 6605/8080 and the algorithm CVEs; NSEC3 share for
+RFC 9276 and the nsec3 CVEs), as the percentile of the four-month window
+among all months of that curve:
+
+* RFC publications sit in ordinary or dead months: RFC 6605 at the 3rd
+  percentile of the reverse ECDSA curve (nothing moved for 3.6 years), RFC
+  8080 at the 32nd (reverse) and 79th (forward), RFC 9276 at the 10th to
+  19th (the NSEC3 share was already falling after the 2021 collapse).
+* Two CVE patch months are extreme. CVE-2021-40083 (2021-10) is the NSEC3
+  iteration collapse, 6th and 11th percentile: caps, CVE and re-signing were
+  one event. CVE-2022-38177/38178 (2022-09) sits at the 97th percentile of the
+  reverse ECDSA curve, which is the ARIN block re-signing of 2022-11 in the
+  spike ledger; the CVE is a BIND validator memory leak, so this is timing,
+  not cause.
+* The remaining NSEC3 CVEs (2024-02, 2026) sit in the middle half.
+
+Only three RFCs and a handful of CVEs fall inside the curves' coverage, so
+this is a table of cases, not a distribution.

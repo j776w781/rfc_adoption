@@ -1,0 +1,13 @@
+mechanism,corpus,kind,month,event,events,rate_window_pp,series_median_pp,percentile
+ECDSA/EdDSA,forward,rfc_published,2017-02,RFC 8080,RFC 8080,0.536,0.139,78.7
+ECDSA/EdDSA,forward,cve_patch,2022-09,CVE-2022-38177 +1 more,"CVE-2022-38177, CVE-2022-38178",0.288,0.139,61.8
+ECDSA/EdDSA,reverse panel,rfc_published,2012-04,RFC 6605,RFC 6605,0.0,0.349,3.4
+ECDSA/EdDSA,reverse panel,rfc_published,2017-02,RFC 8080,RFC 8080,0.004,0.349,31.8
+ECDSA/EdDSA,reverse panel,cve_patch,2022-09,CVE-2022-38177 +1 more,"CVE-2022-38177, CVE-2022-38178",1.606,0.349,97.2
+NSEC3,forward,cve_patch,2021-10,CVE-2021-40083,CVE-2021-40083,-0.684,0.075,11.2
+NSEC3,forward,rfc_published,2022-08,RFC 9276,RFC 9276,-0.153,0.075,19.1
+NSEC3,reverse panel,cve_patch,2021-10,CVE-2021-40083,CVE-2021-40083,-0.874,-0.118,5.7
+NSEC3,reverse panel,rfc_published,2022-08,RFC 9276,RFC 9276,-0.561,-0.118,10.2
+NSEC3,reverse panel,cve_patch,2024-02,CVE-2023-50868,CVE-2023-50868,-0.091,-0.118,60.2
+NSEC3,reverse panel,cve_patch,2026-05,CVE-2026-42923,CVE-2026-42923,-0.136,-0.118,42.6
+NSEC3,reverse panel,cve_patch,2026-07,CVE-2026-10723 +2 more,"CVE-2026-10723, CVE-2026-13204, CVE-2026-33278",-0.139,-0.118,40.3
