@@ -635,8 +635,9 @@ ax.set_ylabel("NSEC3 owner names at >= 100 iterations", color=INK_2)
 ax.set_xlabel("year", color=INK_2)
 year_axis(ax)
 ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{int(v):,}"))
-title(ax, "Zones moved when resolvers stopped accepting them",
-      "Owner names, not zones: NSEC3 owners are hashed, so a zone contributes one per owner")
+title(ax, "Names moved when signers and validators both capped the iteration count",
+      "Owner names, not zones: NSEC3 owners are hashed, so a zone contributes one per owner. "
+      "PowerDNS Auth 4.5.0 is a signer limiting what it will sign; Unbound 1.13.2 is a validator refusing what it reads.")
 save(fig, "10_nsec3_collapse")
 """)
 
@@ -661,8 +662,9 @@ ax.set_ylim(0, 105)
 ax.set_ylabel("share of signed zones", color=INK_2)
 ax.set_xlabel("year", color=INK_2)
 year_axis(ax)
-title(ax, "NSEC3 is the most deployed optional mechanism in DNSSEC",
-      "NSEC3PARAM at the zone apex, forward corpus. Algorithm 7 peaks at 29% and is a bad proxy.")
+title(ax, "Most signed zones use NSEC3, and the share has been falling since 2017",
+      "NSEC3PARAM at the zone apex, forward corpus. Algorithm 7 peaks at 29% and is a bad proxy. "
+      "Not the most deployed mechanism: ECDSA is on 76.1% of signed forward zones against NSEC3's 61.9%.")
 save(fig, "11_nsec3_prevalence")
 """)
 
@@ -774,8 +776,9 @@ ax.set_xticklabels([f'{NAME[p]}\n{CV["project_roles"][p]}' for p in cpe], fontsi
 style(ax)
 ax.set_ylabel("CVEs", color=INK_2)
 ax.legend(frameon=False, loc="upper right", fontsize=10, labelcolor=INK_2)
-title(ax, "NSD has 14 CVEs and none is DNSSEC; OpenDNSSEC has one, a dependency",
-      "CPE-attributed products only; Knot and OpenDNSSEC have no usable CPE")
+title(ax, "NSD has 14 CVEs and none of them is DNSSEC",
+      "CPE-attributed products only. Knot, Knot Resolver and OpenDNSSEC have no usable CPE, so they are "
+      "keyword-matched and are not counted here; no CVE count is claimed for them.")
 save(fig, "14_cve_by_project")
 """)
 

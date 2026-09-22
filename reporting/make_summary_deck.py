@@ -67,8 +67,13 @@ def main() -> int:
     studied = {"5155", "9276", "5011", "5702", "6605", "8080", "7344", "5933"}
     cite_studied = [(cv, [n for n in ns if n in studied]) for cv, ns in cite if any(n in studied for n in ns)]
     import collections
-    prod = collections.Counter(pr for c in CV["cves"] if c["scope"] == "dnssec" and "nvd-product" in c["sources"]
-                               for pr in c["products"])
+    # Count every DNSSEC CVE attributed to a product, whether the attribution
+    # came from the CPE or from the fixing commit sitting in that project's own
+    # repository. Requiring the CPE tag drops 9 of BIND's 40 whose fix is in the
+    # BIND repo, which undercounts rather than tightens.
+    prod = collections.Counter(pr for c in CV["cves"] if c["scope"] == "dnssec" for pr in c["products"])
+    prod_cpe = collections.Counter(pr for c in CV["cves"] if c["scope"] == "dnssec"
+                                   and "nvd-product" in c["sources"] for pr in c["products"])
     keyword_only = [k for k, v in CV["query_method"].items() if v != "cpe"]
     ss = json.loads(Path("data/software/software_support.json").read_text("utf-8"))
     sup_rows = ss["support"] + ss["default_changes"] + ss["validator_limits"]
@@ -227,7 +232,8 @@ def main() -> int:
         "The one CVE inside a causal chain is CVE-2021-40083: a symptom of the iteration problem the 2021 caps fixed, published the month the caps "
         f'shipped. The DNSSEC CVE surface sits on the resolvers: Unbound {prod["unbound"]}, PowerDNS Recursor {prod["pdns-rec"]}, Knot Resolver '
         f'{prod["kresd"]}. The pure signers publish almost none (Knot {prod["knot"]}, PowerDNS Auth {prod["pdns-auth"]}, OpenDNSSEC 0) -- but BIND, '
-        f'which both signs and validates, carries {prod["bind9"]}, more than any other product.',
+        f'which both signs and validates, carries {prod["bind9"]}, more than any other product, of which {prod_cpe["bind9"]} are matched by CPE and '
+        f'the rest by the fix landing in BIND\'s own repository. Knot and Knot Resolver have no usable CPE, so their counts are keyword-derived.',
         "NSEC3 order of events: BIND 9.6.0 signs it 2008-12, the first NSEC3-signed reverse delegations appear 2009-07, the first CVE 2009-10. "
         "Code, then deployment, then CVEs, each within a year.",
     ], size=12, color=INK, space=8)
