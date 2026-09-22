@@ -18,7 +18,7 @@
    "Nearest release",
    "for each spike, the latest preceding release that implements, defaults or caps the mechanism, per program, and the lag in months. Also the latest preceding release of any of the eight projects.",
    "The trap",
-   "97% of months contain some DNS release, so 'a release came shortly before' is always true. Each lag is compared with the same lag at every month of the series: the chance rate. A spike is release-timed only if it beats that.",
+   "95% of months contain some DNS release, so 'a release came shortly before' is always true. Each lag is compared with the same lag at every month of the series: the chance rate. A spike is release-timed only if it beats that.",
    "New vs rolled",
    "a jump in zones on algorithm X is split into at most the growth in signed zones that month (could be new signings) and the rest (existing zones that rolled over). An automatic update can change what a NEW zone gets; it never re-signs an existing one. Rollovers are operator decisions.",
    "Auto-update proxy",
@@ -639,7 +639,7 @@
   "text": [
    "ACROSS THE FIVE RFCs",
    "Spikes within 3 months of a software event, against chance",
-   "Only RFC 9276 beats chance: 3 of 3 spikes within 3 months of a validator cap against a 14% chance rate, and they are one coordinated event (caps + CVE-2021-40083) ten months before the RFC. For the algorithm RFCs the counts are what luck predicts: 2 of 31 ECDSA spikes after a default against a 9% forward rate.\nWhat the spikes are made of decides the causal story. Of the 1,035,884 forward ECDSA zones in spikes, at least 389,932 were existing zones rolling over -- deliberate migrations that no update performs. The rest were signing waves whose new zones took whatever the signer defaulted to; that is where defaults act, silently and years after they changed.\nCVEs did not lead any push. Every CVE nearest to a spike is a validator bug (memory leak, assertion failure); the one CVE that sits inside a causal chain, CVE-2021-40083, is a symptom of the same iteration problem the caps fixed. Median lag from a spike to the nearest CVE: 16 months for ECDSA, 57 for NSEC3.",
+   "Only RFC 9276 beats chance: 3 of 3 spikes within 3 months of a validator cap against a 14% chance rate, and they are one coordinated event (caps + CVE-2021-40083) ten months before the RFC. For the algorithm RFCs the counts are what luck predicts: 2 of 31 ECDSA spikes after a default against a 9% forward rate.\nWhat the spikes are made of decides the causal story. Of the 1,035,884 forward ECDSA zones in spikes, at least 389,932 were existing zones rolling over -- deliberate migrations that no update performs. The rest were signing waves whose new zones took whatever the signer defaulted to; that is where defaults act, silently and years after they changed.\nCVEs did not lead any push. Every CVE nearest to a spike is a validator bug (memory leak, assertion failure); the one CVE that sits inside a causal chain, CVE-2021-40083, is a symptom of the same iteration problem the caps fixed. Median lag from a spike to the nearest CVE: 16.5 months for ECDSA, 57 for NSEC3. Most are resolver bugs, but CVE-2014-0591, nearest to 16 of the NSEC3 spikes, is an assertion failure in BIND's authoritative NSEC3 code.",
    "RFC",
    "spikes",
    "after signer release",

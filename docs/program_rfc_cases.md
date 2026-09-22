@@ -25,7 +25,7 @@ and ask what had just happened in software.
   implements or defaults the mechanism, the latest default change, the latest
   validator cap, the latest CVE on the mechanism, and the latest release of any
   of the eight projects, each with its lag in months.
-* **Chance rate**: 97% of months contain some DNS release, so a short lag to
+* **Chance rate**: 95% of months contain some DNS release, so a short lag to
   "some release" is meaningless. The fraction of series months lying within 3
   months after a relevant event is reported alongside each count.
 * **New vs rolled**: a jump in zones on algorithm X is at most the growth in
@@ -85,8 +85,8 @@ as the ECDSA one and lands in the month of the PowerDNS 4.5.0 and Unbound
 1.13.2 caps; it signed with 1 iteration.
 
 **RFC 9276 (NSEC3 iterations).** The one vendor-triggered case. Names with
->= 100 iterations collapsed in 2021-10..11 in every TLD that had them (.nu
-12,145 -> 110; .ch 3,618 -> 252; .se 1,476 -> 88), ten months before the RFC,
+>= 100 iterations collapsed in 2021-10..11 in five of the six TLDs that had any (.nu
+12,145 -> 110; .ch 3,618 -> 252; .se 1,476 -> 88; only .gov, with 38 names, did not move), ten months before the RFC,
 two to three months after the Unbound 1.13.2 and PowerDNS 4.5.0 caps and two
 months after CVE-2021-40083 (Knot Resolver assertion failure on NSEC3 with too
 many iterations). All three spikes are within three months of a cap against a

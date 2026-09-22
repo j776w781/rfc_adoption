@@ -331,6 +331,11 @@ def main() -> int:
     globals()["CH"] = AT["chance_a_month_follows_an_os_release"]
     globals()["ST"] = AT["families"]["ECDSA"]["steps"][0]
     globals()["Q5"] = {r["q"]: r["share_pct"] for r in AT["families"]["RSA/SHA-256"]["quarterly"]}
+    _R = json.loads(Path("data/software/release_dates.json").read_text("utf-8"))
+    _rel = {d[:7] for v in _R.values() for d in v["releases"].values()}
+    _mo = [f"{y:04d}-{m:02d}" for y in range(2009, 2027) for m in range(1, 13)
+           if (y, m) >= (2009, 3) and (y, m) <= (2026, 8)]
+    globals()["DENS"] = sum(x in _rel for x in _mo) / len(_mo)
 
     prs = Presentation()
     prs.slide_width, prs.slide_height = W, H
@@ -359,7 +364,7 @@ def main() -> int:
         ("Spike", doc["spike_rule"] + f'. Floors: {doc["floors"]["forward_zones"]} zones forward, {doc["floors"]["reverse_zones"]} reverse.'),
         ("Nearest release", "for each spike, the latest preceding release that implements, defaults or caps the mechanism, per program, "
                             "and the lag in months. Also the latest preceding release of any of the eight projects."),
-        ("The trap", "97% of months contain some DNS release, so 'a release came shortly before' is always true. Each lag is compared "
+        ("The trap", f"{DENS*100:.0f}% of months contain some DNS release, so 'a release came shortly before' is always true. Each lag is compared "
                      "with the same lag at every month of the series: the chance rate. A spike is release-timed only if it beats that."),
         ("New vs rolled", "a jump in zones on algorithm X is split into at most the growth in signed zones that month (could be new signings) "
                           "and the rest (existing zones that rolled over). An automatic update can change what a NEW zone gets; it never "
@@ -410,7 +415,8 @@ def main() -> int:
         f'signing waves whose new zones took whatever the signer defaulted to; that is where defaults act, silently and years after they changed.',
         f'CVEs did not lead any push. Every CVE nearest to a spike is a validator bug (memory leak, assertion failure); the one CVE that sits inside a causal '
         f'chain, CVE-2021-40083, is a symptom of the same iteration problem the caps fixed. Median lag from a spike to the nearest CVE: '
-        f'{C["RFC 6605"]["summary"]["median_lag_to_cve_months"]:.0f} months for ECDSA, {C["RFC 5155"]["summary"]["median_lag_to_cve_months"]:.0f} for NSEC3.',
+        f'{C["RFC 6605"]["summary"]["median_lag_to_cve_months"]:.1f} months for ECDSA, {C["RFC 5155"]["summary"]["median_lag_to_cve_months"]:.0f} for NSEC3. '
+        f'Most are resolver bugs, but CVE-2014-0591, nearest to 16 of the NSEC3 spikes, is an assertion failure in BIND\'s authoritative NSEC3 code.',
     ], size=11, color=INK, space=6)
 
     # auto-update synthesis
