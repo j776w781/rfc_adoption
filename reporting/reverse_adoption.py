@@ -179,16 +179,21 @@ save(fig, "reverse_signed_share.png")
 share, delegations, signed = stable_share, stable_total, stable_signed
 
 # --------------------------------------------------------------------------- #
-# 2. Algorithm mix over time, from the scan
+# 2. Algorithm mix over time -- moved to reporting/algorithm_mix.py
 # --------------------------------------------------------------------------- #
-
-ALGORITHM_RFC = {
-    "RFC 6605": "ECDSA (13/14)",
-    "RFC 8080": "EdDSA (15/16)",
-    "RFC 4509": "SHA-256 DS",
-    "RFC 4033": "DNSSEC present",
-    "RFC 5155": "NSEC3",
-}
+#
+# This section built reverse_algorithm_mix.png from the reverse RFC-match
+# checkpoints. None of the 1,174 partitions in this checkout carries a
+# .status.json completion marker, so merge_checkpoints declines to count them
+# and the chart rendered empty. Its axis label also disagreed with its
+# denominator: it divided matched records by every scanned record and called the
+# result a share of DS records.
+#
+# The chart is now built in reporting/algorithm_mix.py from
+# out/server_run/timeline_monthly.parquet and out/panel_run/timeline_monthly.parquet,
+# with the denominator the project settled on (signed delegations). The
+# first-observation table below still uses the checkpoints, and still degrades
+# to "not observed" when they cannot be counted.
 
 per_year_rfc: dict[tuple[str, str], int] = collections.defaultdict(int)
 scanned_year: dict[str, int] = collections.defaultdict(int)
@@ -208,33 +213,6 @@ if have_scan:
             prior = first_seen.get(row.rfc_id)
             if prior is None or row.year_month < prior:
                 first_seen[row.rfc_id] = row.year_month
-
-    years = sorted(scanned_year)
-    fig, ax = plt.subplots(figsize=(12, 5.4))
-    for (rfc, label), colour in zip(
-        [(r, ALGORITHM_RFC[r]) for r in ("RFC 6605", "RFC 4509", "RFC 8080")],
-        (S1, S2, S3),
-    ):
-        ys, xs2 = [], []
-        for i, year in enumerate(years):
-            total = scanned_year[year]
-            if not total:
-                continue
-            xs2.append(i)
-            ys.append(per_year_rfc[(rfc, year)] / total * 100)
-        if not ys:
-            continue
-        ax.plot(xs2, ys, color=colour, linewidth=2.4, marker="o", markersize=7,
-                markerfacecolor=colour, markeredgecolor=SURFACE, markeredgewidth=2,
-                label=label, zorder=3)
-    style(ax)
-    ax.set_xticks(range(len(years)))
-    ax.set_xticklabels(years, rotation=0)
-    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:.0f}%"))
-    ax.set_ylabel("share of DS records in reverse delegations", color=INK_2,
-                  fontsize=12, labelpad=10)
-    ax.legend(frameon=False, fontsize=13, labelcolor=INK_2)
-    save(fig, "reverse_algorithm_mix.png")
 
 # --------------------------------------------------------------------------- #
 # 3. First observation versus publication -- now with pre-2018 evidence
