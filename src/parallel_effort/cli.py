@@ -43,6 +43,7 @@ from openintel_rfc.checklist_loader import load_dictionary, validate_dictionary
 from openintel_rfc.utils import PipelineError, get_logger, warn
 
 from . import presence_table as pt
+from . import prevalence as pv
 
 LOGGER = get_logger(__name__)
 
@@ -211,6 +212,15 @@ def cmd_merge(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_rollup(args: argparse.Namespace) -> int:
+    result = pv.rollup_tld_month_prevalence(args.input, args.out, csv=args.csv)
+    print(
+        f"Wrote {result.row_count} (tld, month) row(s) to {result.output_path} "
+        f"across {len(result.tlds)} TLD(s): {', '.join(result.tlds)}"
+    )
+    return 0
+
+
 def cmd_run(args: argparse.Namespace) -> int:
     scan_rc = cmd_scan(args)
     if scan_rc != 0:
@@ -251,6 +261,21 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--csv", action="store_true", help="Also write a CSV copy next to the Parquet output."
     )
     run_parser.set_defaults(func=cmd_run)
+
+    rollup_parser = subparsers.add_parser(
+        "rollup",
+        help="Aggregate a merged domain-month table into per-TLD monthly prevalence.",
+    )
+    rollup_parser.add_argument(
+        "--input", required=True, help="Path to domain_month_table.parquet (from `merge`)."
+    )
+    rollup_parser.add_argument(
+        "--out", required=True, help="Output Parquet path for the per-(tld, month) table."
+    )
+    rollup_parser.add_argument(
+        "--csv", action="store_true", help="Also write a CSV copy next to the Parquet output."
+    )
+    rollup_parser.set_defaults(func=cmd_rollup)
 
     return parser
 
