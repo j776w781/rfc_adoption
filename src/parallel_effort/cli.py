@@ -44,6 +44,7 @@ from openintel_rfc.utils import PipelineError, get_logger, warn
 
 from . import presence_table as pt
 from . import prevalence as pv
+from . import segmented_regression as sr
 
 LOGGER = get_logger(__name__)
 
@@ -221,6 +222,18 @@ def cmd_rollup(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_regress(args: argparse.Namespace) -> int:
+    out_path = sr.run_segmented_regression(
+        args.input,
+        args.tld,
+        args.cutoff,
+        metrics=args.metrics if args.metrics else sr.DEFAULT_METRICS,
+        out_path=args.out,
+    )
+    print(f"\nSaved plot to {out_path}")
+    return 0
+
+
 def cmd_run(args: argparse.Namespace) -> int:
     scan_rc = cmd_scan(args)
     if scan_rc != 0:
@@ -277,6 +290,31 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     rollup_parser.set_defaults(func=cmd_rollup)
 
+    regress_parser = subparsers.add_parser(
+        "regress",
+        help="Fit a segmented regression (level/slope break at a cutoff month) for one TLD.",
+    )
+    regress_parser.add_argument(
+        "--input", required=True, help="Path to the per-(tld, month) table (from `rollup`)."
+    )
+    regress_parser.add_argument("--tld", required=True, help="Which TLD to fit.")
+    regress_parser.add_argument(
+        "--cutoff",
+        required=True,
+        help="Cutoff month, YYYY-MM (e.g. the RFC's publication month).",
+    )
+    regress_parser.add_argument(
+        "--metrics",
+        nargs="+",
+        default=None,
+        help="Which prevalence columns to fit (default: ds_prevalence dnskey_prevalence "
+        "rrsig_prevalence).",
+    )
+    regress_parser.add_argument(
+        "--out", default=None, help="Output PNG path (default: <tld>_segmented_regression.png)."
+    )
+    regress_parser.set_defaults(func=cmd_regress)
+
     return parser
 
 
@@ -284,6 +322,7 @@ def main(argv: list[str] | None = None) -> int:
     logging.basicConfig(
         level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s"
     )
+    logging.getLogger("matplotlib").setLevel(logging.WARNING)
     parser = build_arg_parser()
     args = parser.parse_args(argv)
     try:

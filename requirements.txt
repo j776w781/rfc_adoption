@@ -9,6 +9,10 @@ streamlit>=1.30        # Multipage management + visualization dashboard
 plotly>=5.18           # Interactive charts inside the dashboard
 pytest>=7.4            # Test suite
 
+# --- parallel_effort (src/parallel_effort) -- standalone adoption-analysis POC ---
+statsmodels>=0.14      # Segmented regression (OLS + HAC-corrected standard errors)
+matplotlib>=3.8        # Segmented regression plots
+
 # --- Optional extras (not required for the demo; see the tool survey) ---
 # polars>=0.20         # Lazy Parquet scans if the corpus outgrows DuckDB single-node
 # pandera>=0.18        # DataFrame-level schema validation of extracted signals
