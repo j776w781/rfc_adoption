@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+
+    <script type="text/javascript" src="js/secspider.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/secspider.css">
+    <title>SecSpider</title>
+
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38066643-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+  </head>
+  <body>
+
+        <div id="header">
+      <table cellpadding="0" border="0" width="100%">
+        <tr>
+          <td width="80" align="left">
+            <img height="80" src="pix/icon_labs-secspider-color-mod.png"/>
+          </td>
+          <td align="left">
+            <h1>SecSpider</h1>
+            <h2>Global DNSSEC deployment tracking</h2>
+          </td>
+          <td align="right">
+            <img height="80" src="https://cs.gmu.edu/static/images/logo.png"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+    
+    <div id="navigation">
+      &nbsp;<br/>
+      <font size="+1">
+        Useful Links<br/>
+      </font>
+      <font>
+        <a href="https://twitter.com/SecSpider">@SecSpider</a><br/>
+        <a href="http://www.dnssec.net/why-deploy-dnssec">Why Deploy DNSSEC</a><br/>
+        <a href="http://www.dnssec-deployment.org/">DNSSEC Deployment</a><br/>
+        <a href="http://www.nlnetlabs.nl/publications/dnssec_howto/">DNSSEC HOWTO</a><br/>
+        <a href="http://www.internetsociety.org/deploy360/dnssec/">Deploy360: DNSSEC</a><br/>
+        <a href="https://en.wikipedia.org/wiki/DNS-based_Authentication_of_Named_Entities">DANE Info</a><br/>
+        <a href="https://datatracker.ietf.org/wg/dane/charter/">DANE Working Group</a><br/>
+        <a href="http://msl.cs.gmu.edu">Measurable Security Lab</a><br/>
+      </font>
+    </div>
+
+
+
+    <div id="content">
+
+            <div id="tabs-header">
+        <ul>
+          <li><a href="./">Status</a></li><!--
+          --><li id="selected"><a href="stats.html">Deployment&nbsp;Stats </a></li><!--
+          --><li><a href="growth.html">Deployment&nbsp;Growth </a></li><!--
+          --><li><a href="islands.html">Hierarchy </a></li><!--
+          --><li><a href="pollers.html">Pollers </a></li><!--
+          --><li><a href="docs.html">Docs </a></li><!--
+          --><li><a href="search.html">Search </a></li>
+        </ul>
+      </div>
+
+
+
+      <div id="tabs-content">
+        <p>
+
+
+        <table bgcolor="white" width="100%">
+          <tr>
+            <td colspan="2" align="center">
+          <H2>Detailed Monitoring Summary:</H2>
+            </td>
+          </tr>
+          <tr colspan="2" bgcolor="BLUE">
+            <td colspan=3></td>
+          </tr>
+          <tr>
+            <td>
+            <TABLE BORDER=0>
+              <tr>
+                <font size="+1">DNSSEC Summary</font>
+              </tr>
+              <TR>
+                <TD VALIGN=TOP>960,264</TD>
+                <TD>Zones</TD>
+              </TR>
+              <!--
+              <TR>
+                <TD></TD>
+                <TD>
+                  <TABLE BORDER=0>
+                    <TR>
+                      <TD VALIGN=TOP></TD>
+                      <TD>Zones have NS sets that match their parents' delegation set</TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              -->
+              <TR>
+                <TD VALIGN=TOP>819,564</TD>
+                <TD>DNSSEC enabled zones</TD>
+              </TR>
+              <TR>
+                <TD></TD>
+                <TD>
+                  <TABLE BORDER=0>
+                    <TR>
+                <TD VALIGN=TOP>743,510</TD>
+                <TD>Zones use both KSKs and ZSKs</TD>
+                    </TR>
+                    <TR>
+                <TD VALIGN=TOP>3</TD>
+                <TD>Zones are serving revoked keys</TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              <TR>
+                <TD VALIGN=TOP>981,380</TD>
+                <TD>DNSSEC verified zones</TD>
+              </TR>
+              <TR>
+                <TD VALIGN=TOP>1,135,208</TD>
+                <TD>Production DNSSEC-enabled zones</TD>
+              </TR>
+              <TR BGCOLOR="BLUE">
+                <TD COLSPAN=2></TD>
+              </TR>
+              <TR>
+                <TD></TD>
+                <TD>
+                  <STRONG>Distribution of key algorithms in use:</STRONG>
+                  <TABLE BORDER=0>
+                    <TR>
+                      <TD>
+                        <STRONG>Algorithm</STRONG>
+                      </TD>
+                      <TD>
+                        <STRONG># Keys</STRONG>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA/SHA-1 [RSASHA1]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">5,106</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">ECC/GOST [ECC-GOST]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">2</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">ECDSA Curve P-256 with SHA-256 [ECDSAP256SHA256]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">369,427</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA/SHA512 [RSASHA512]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">6,626</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">Private [PRIVATEOID]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">1</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">DSA/SHA-1 [DSA]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">2</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">Unknown Algorithm</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">31</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">ECDSA Curve P-384 with SHA-384 [ECDSAP384SHA384]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">7,531</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA/SHA256 [RSASHA256]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">1,258,307</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA-NSEC3-SHA1 [RSASHA1-NSEC3-SHA1]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">8,624</FONT>
+                      </TD>
+                    </TR>
+                    
+                  </TABLE>
+                </TD>
+              </TR>
+            </TABLE>
+            </td>
+            <td valign="top">
+              <table border=0>
+                <tr>
+                  <td colspan="3">
+                    <font size="+1">DANE Summary</font>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    16,299
+                  </td>
+                  <td colspan="2">
+                    DANE enabled zones with TLSA records
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    19
+                  </td>
+                  <td>
+                    PKIX based Trust Anchor TLSA records (Cert Usage 0)
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    42
+                  </td>
+                  <td>
+                    PKIX based End Entity TLSA records (Cert Usage 1)
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    603
+                  </td>
+                  <td>
+                    DANE based Trust Anchor TLSA records (Cert Usage 2)
+                  </td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    10,757
+                  </td>
+                  <td>
+                    DANE based End Entity TLSA records (Cert Usage 3)
+                  </td>
+                </tr>
+                <tr bgcolor="BLUE">
+                  <td colspan=3></td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    179
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for IMAP (Port 143)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    30
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for Alternate SMTP (Port 2525)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    221
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for Secure IMAP (Port 993)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    4,022
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for SMTP (Port 25)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    6,041
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for HTTPS (Port 443)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    131
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for POP3 (Port 110)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    282
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for Secure SMTP (Port 465)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    332
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for SMTP with STARTTLS (Port 587)
+                  </td>
+                </tr>
+                  
+                <tr>
+                  <td>
+                  </td>
+                  <td>
+                    183
+                  </td>
+                  <td>
+                    Zones have deployed TLSA for Secure POP3 (Port 995)
+                  </td>
+                </tr>
+                  
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <!--
+          <TABLE BORDER=0>
+            <TR>
+              <TD ALIGN="CENTER">
+          <A HREF=""><IMG SRC="" BORDER="0" WIDTH="100%">
+          <BR>
+          Distribution of RRSIG lifetimes on DNSKEY RRsets</A>
+              </TD>
+            </TR>
+          </TABLE>
+              -->
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <center>
+                <a href="pix/avail.png"><img width="100%" src="pix/avail.png" border="0"/></a>
+              </center>
+            </td>
+            <td>
+              <center>
+                <a href="pix/verif.png"><img width="100%" src="pix/verif.png" border="0"/></a>
+              </center>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <center>
+                <a href="pix/valid.png"><img width="100%" src="pix/valid.png" border="0"/></a>
+              </center>
+            </td>
+            <td>
+              <center>
+                <a href="pix/valid_deleg.png"><img width="100%" src="pix/valid_deleg.png" border="0"/></a>
+              </center>
+            </td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+

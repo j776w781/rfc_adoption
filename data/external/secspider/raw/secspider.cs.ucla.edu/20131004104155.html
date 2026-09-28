@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+
+    <script type="text/javascript" src="js/secspider.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/secspider.css">
+    <title>SecSpider</title>
+
+  </head>
+  <body>
+
+        <div id="header">
+      <table cellpadding="0" border="0" width="100%">
+        <tr>
+          <td width="80" align="left">
+            <img height="80" src="pix/secspider-logo.png"/>
+          </td>
+          <td align="left">
+            <h1>SecSpider</h1>
+            <h2>Global DNSSEC deployment tracking</h2>
+          </td>
+          <td align="right">
+            <img height="80" src="pix/labs-logo.gif"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+    
+    <div id="navigation">
+      &nbsp;<br/>
+      <font size="+2">
+        Useful Links<br/>
+      </font>
+      <font size="+1">
+        <a href="http://www.verisignlabs.com">VeriSign Labs</a><br/>
+        <a href="http://irl.cs.ucla.edu">IRL, UCLA</a><br/>
+        <a href="http://www.nlnetlabs.nl">NLnet Labs</a><br/>
+        <a href="http://www.ietf.org">IETF</a><br/>
+        <a href="http://www.nanog.org">NANOG</a><br/>
+        <a href="http://www.ripe.net">RIPE</a><br/>
+      </font>
+    </div>
+
+
+
+    <div id="content">
+
+            <div id="tabs-header">
+        <ul>
+          <li id="selected"><a href="./">Status</a></li><!--
+          --><li><a href="stats.html">Deployment&nbsp;Stats </a></li><!--
+          --><li><a href="growth.html">Deployment&nbsp;Growth </a></li><!--
+          --><li><a href="islands.html">TLDs </a></li><!--
+          --><li><a href="pollers.html">Pollers </a></li><!--
+          --><li><a href="docs.html">Docs </a></li><!--
+          --><li><a href="search.html">Search </a></li>
+        </ul>
+      </div>
+
+
+
+      <div id="tabs-content">
+        <p>
+
+        <table bgcolor="white" border="0" width="100%">
+          <tr>
+            <td>
+              <font size="+1">
+              <form name="search" action="./chain-of-trust.cgi" method="get">
+                <label for="z">Lookup zone:</label>
+                <input type="text" name="z">
+                <input type="submit" value="Search">
+              </form>
+              <p/>
+              </font>
+            </td>
+          </tr>
+          <tr bgcolor="blue">
+            <td></td>
+          </tr>
+          <tr>
+            <td>
+              <p/>
+              <h2>Health Metrics for the Global Deployment</h2>as of Thu Oct  3 17:32:46 2013 GMT
+              <p/>
+              <table bgcolor="white" border="0" width="100%">
+                <tr>
+                  <td bgcolor="#33cc00">
+                    <font size="+1">
+                    <center>
+                      Availability&nbsp;Metric:&nbsp;0.980
+                    </center>
+                    </font>
+                  </td>
+                  <td bgcolor="#33cc00">
+                    <font size="+1">
+                    <center>
+                      Verifiability&nbsp;Metric:&nbsp;0.851
+                    </center>
+                    </font>
+                  </td>
+                  <td bgcolor="#ffcc00">
+                    <font size="+1">
+                    <center>
+                      Validity&nbsp;Metric:&nbsp;&lt;&nbsp;0.643,&nbsp;0.646&nbsp;&gt;
+                    </center>
+                    </font>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="3" align="left">
+                    <font size="-1">[&nbsp;<a target=+_top" href="docs.html#metrics">What are these?</a>&nbsp;]</font>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <center>
+                      <a href="pix/avail_trend.png"><img width="100%" src="pix/avail_trend.png" border="0"/></a>
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      <a href="pix/verif_trend.png"><img width="100%" src="pix/verif_trend.png" border="0"/></a>
+                    </center>
+                  </td>
+                  <td>
+                    <center>
+                      <a href="pix/valid_trend.png"><img width="100%" src="pix/valid_trend.png" border="0"/></a>
+                    </center>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+
