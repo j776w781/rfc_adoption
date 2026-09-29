@@ -37,6 +37,23 @@ Repo root `/mnt/shared/Documents/University/year2/DNSSEC/rfc_adoption`, branch
 Do not recompute any statistic Phase 4 or 7 already produced; plot and quote it. If a
 number you need is missing, compute it in a clearly marked cell and say it is new.
 
+## Data conventions fixed on 2026-09-29 (use them; do not reintroduce the old ones)
+
+- **Reverse month labels:** label M = the zone state at 00:00 UTC on the 1st of M, in the server
+  run, the panel run and the delegation ledger alike (the server run was relabelled; see
+  `out/server_run/month_labels_utc.json`). A change between labels M-1 and M happened in calendar
+  month M-1; say so on any chart that marks a release against reverse data.
+- **Forward shares** are mean daily shares: summed daily numerator counts over summed daily
+  denominator counts (`domain_days`), never a ratio of two peak days. `prevalence_metrics.csv`
+  carries `numerator_domain_days` / `denominator_domain_days`; its `pct` is already correct.
+- **Reverse shares** come from the strict panel `_pooled-afrinic-arin` only.
+- **Phase 7's primary test** is the step test (departure from the 24-month pre-event trend over
+  the 12 months after); its "transient deviation" test is secondary. Plot the step test's
+  percentile per event against its null; say which programs have no Q1 test and why (bind9:
+  releases fill most months, so a shifted schedule cannot differ from the real one).
+- Phase 7 has a second verification running (`docs/handoff/verify/phase7_revision.md`); if it
+  exists when you finish, check whether any number you quote changed, and say so.
+
 ## Build method (learned the hard way)
 
 - Write `notebooks/build_software_vs_adoption_notebook.py` that assembles the notebook
