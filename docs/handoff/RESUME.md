@@ -140,17 +140,18 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
   (2) domains_peak non-additive across values (Phase 7 uses domain_days). Apply its corrections
   and any "impact on earlier analyses" fixes, then Phase 8 with `08_phase8_brief.md` (4d337c09).
 
-### Data fixes in progress (after Phase 7 verifier section A/B)
+### Data fixes (done unless marked)
 
-- Root cause fixed and committed (d5121351): month labels are UTC regardless of host.
-- `scripts/fix_server_run_month_labels.py` (4a777bda) shifts server-run reverse months +1;
-  dry run matches the panel on all 2,235 rows. RUN IT once the Phase 7 verifier is done.
-- `scripts/prevalence_metrics.py`: pct now from domain_days (UNCOMMITTED in working tree);
-  after the relabel, rerun it, update tests/test_prevalence_metrics.py pins (se 2023-12 ds 60.582
-  -> 60.6306; reverse endpoints move one month), and fix 03 doc (.gov 2018-02 is 88.7 -> 31.2
-  -> 21.4, spread over two months).
-- Then regenerate every consumer the verifier listed in A.3/B.3 (program_rfc_cases, cve_adoption
-  _crossref which also sums RIRs for a share, software_crossref, decks) and the Phase 7 script.
+- d5121351 UTC month labels at the source; 4a777bda + applied: server-run reverse relabelled +1
+  (backup `out/server_run/timeline_monthly.pre_utc_fix.parquet`, marker `month_labels_utc.json`).
+- 9855efd0 prevalence metrics: mean daily share (domain_days), 03 doc regenerated.
+- 6e7f3ff6 strict panel instead of summed RIRs (cve_adoption_crossref, summary deck); downstream
+  JSON, decks, rfc charts regenerated.
+- RUNNING: Phase 7 agent revising with a step-sensitive test (departure from pre-trend), calibrated
+  null, reverse dating convention (a change labelled M happened in M-1), wording fixes. When it lands:
+  commit, verify the revision (fresh agent), then add "superseded by Phase 7" notices to
+  docs/releases_vs_adoption.md and docs/release_scan.md (their windows include a pre-release month),
+  then Phase 8.
 
 ## To resume
 
