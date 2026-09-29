@@ -367,3 +367,7 @@ Phase 3 adversarial check: **PASS WITH CORRECTIONS** (170 checks, 23 failed, 8 c
 - Validation is enabled by default since 0.5 only in the sense that the validator module is loaded; Unbound ships no built-in trust anchor in unbound.conf, so a stock configuration without auto-trust-anchor-file/trust-anchor-file does not validate. Whether a given deployment validated therefore depends on packaging (e.g. distribution unbound-anchor units), which this clone cannot show.
 - Algorithm support dates before the SVN-to-git switch (RSASHA256/512 draft 1.1.0, GOST 1.4.0/1.4.7, ECDSA 1.4.17) rely on the Changelog line plus the configure.ac commit; the ldns tarball bundled at the time also had to support the algorithm, which is not tracked here.
 - val-clean-additional at 1.26.1: the man page at the tag still says 'Default: yes' (doc/unbound.conf.5.in:2608-2616) while util/config_file.c sets 0 -- documentation lag; the row follows the code.
+
+## Phase 5 addition
+
+* 1.4.7 (2010-11-05, release-1.4.7): unbound-anchor ships a built-in root trust anchor (KSK-2010, DS 19036) used to bootstrap root.key. smallapp/unbound-anchor.c at release-1.4.7 contains '. IN DS 19036'; file absent at release-1.4.6. Commit 1c2a8d977c. opt-in.

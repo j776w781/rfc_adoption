@@ -47108,7 +47108,7 @@
   {
    "id": "d10-dsa-removed",
    "kind": "removal",
-   "mechanism": "alg-rsa-sha2",
+   "mechanism": "other",
    "component": "libdns / dnssec tools",
    "description": "DSA (algorithm 3) and DSA-NSEC3-SHA1 (algorithm 6) support removed; algorithm numbers kept only as name mapping.",
    "before": "DSA algorithms supported",
@@ -47171,7 +47171,7 @@
     }
    ],
    "changelog_line": "Remove support for DNSSEC algorithms 3 (DSA)\nand 6 (DSA-NSEC3-SHA1). [GL #22]",
-   "note": null,
+   "note": " Phase 5: mechanism alg-rsa-sha2 -> other (DSA removal; matches knot and unbound DSA rows).",
    "siblings": [],
    "default_related": true,
    "value_changed": true
@@ -47982,8 +47982,8 @@
     }
    ],
    "changelog_line": "Remove revoked root DNSKEY from bind.keys. [GL #945]",
-   "note": null,
-   "value_changed": false,
+   "note": " Phase 5: value_changed false -> true. bind.keys lost KSK-2010 (19036) at v9.14.1 (present at v9.14.0); the effective trust set did not change because the key was already revoked, which is also true of the pdns-rec and unbound rows recording the same removal.",
+   "value_changed": true,
    "siblings": [],
    "default_related": true
   },
@@ -48414,6 +48414,102 @@
    "siblings": [],
    "default_related": true,
    "value_changed": true
+  },
+  {
+   "id": "d29-trust-anchor-telemetry-default-yes",
+   "kind": "default-changed",
+   "mechanism": "trust-anchor-5011",
+   "component": "named (resolver)",
+   "description": "Trust-anchor telemetry (RFC 8145 key-tag signalling, _ta-XXXX queries) on by default.",
+   "before": "no trust-anchor telemetry queries",
+   "after": "trust-anchor-telemetry yes (named sends _ta-XXXX.<anchor>/NULL)",
+   "applies_on_upgrade": true,
+   "opt_in": false,
+   "attribution": "exact",
+   "first_tag": "v9.11.0b3",
+   "first_tag_date": "2016-07-28",
+   "first_stable_tag": "v9.11.0",
+   "first_stable_date": "2016-09-29",
+   "first_stable_tag_verify": "git -C out/software_repos/bind9.git grep -n 'trust-anchor-telemetry yes' v9.11.0 -- bin/named/config.c   # absent at v9.10.4",
+   "first_tag_basis": "tree content of bin/named/config.c defaults; earliest stable tag by UTC instant",
+   "commits": [
+    {
+     "commit": "f20179857a8512441c3be7ad33f1c84e367de041",
+     "commit_date": "2016-07-22T20:02:17+10:00",
+     "subject": "4424.   [experimental]  Named now sends _ta-XXXX.<trust-anchor>/NULL queries                         to provide feedback to the trust-anchor administrators                         about how key rollovers are progressing as per                         draft-ietf-dnsop-edns-key-tag-02.  This can be                         disabled using 'trust-anchor-telemetry no;'.                         [RT #40583]",
+     "first_tag": "v9.11.0b3",
+     "product_files": [
+      "bin/named/config.c"
+     ]
+    },
+    {
+     "commit": "b7161f9898405faee05ba72a63ad10e4541f1346",
+     "commit_date": "2016-07-22T20:03:06+10:00",
+     "subject": "4424.   [experimental]  Named now sends _ta-XXXX.<trust-anchor>/NULL queries                         to provide feedback to the trust-anchor administrators                         about how key rollovers are progressing as per                         draft-ietf-dnsop-edns-key-tag-02.  This can be                         disabled using 'trust-anchor-telemetry no;'.                         [RT #40583]",
+     "first_stable_tag": "v9.11.0",
+     "product_files": [
+      "bin/named/config.c"
+     ]
+    }
+   ],
+   "changelog_line": "CHANGES 4424 [experimental]: Named now sends _ta-XXXX.<trust-anchor>/NULL queries ... can be disabled using 'trust-anchor-telemetry no;'.",
+   "note": "Added in Phase 5 (found by the Phase 4 verifier). Same-day stable siblings: none. RFC 8145.",
+   "siblings": [],
+   "default_related": true,
+   "value_changed": true,
+   "rfcs": [
+    "8145"
+   ]
+  },
+  {
+   "id": "d30-root-key-sentinel-default-yes",
+   "kind": "default-changed",
+   "mechanism": "trust-anchor-5011",
+   "component": "named (resolver)",
+   "description": "Root key sentinel (RFC 8509) answering on by default.",
+   "before": "no root-key-sentinel handling",
+   "after": "root-key-sentinel yes",
+   "applies_on_upgrade": true,
+   "opt_in": false,
+   "attribution": "exact",
+   "first_tag": "v9.13.0",
+   "first_tag_date": "2018-05-22",
+   "first_stable_tag": "v9.9.13",
+   "first_stable_date": "2018-07-03",
+   "first_stable_tag_verify": "git -C out/software_repos/bind9.git grep -n 'root-key-sentinel yes' v9.9.13 -- bin/named/config.c   # absent at v9.9.12",
+   "first_tag_basis": "tree content of bin/named/config.c defaults; earliest stable tag by UTC instant",
+   "commits": [
+    {
+     "commit": "68e9315c7d3e3800527385be67d6a2e8c8fc6ba0",
+     "commit_date": "2018-04-18T08:49:55-07:00",
+     "subject": "add named.conf option root-key-sentinel",
+     "first_tag": "v9.13.0",
+     "product_files": [
+      "bin/named/config.c"
+     ]
+    },
+    {
+     "commit": "3890b5d7bad0472634902ef126d0e1b4a691ff02",
+     "commit_date": "2018-06-04T21:30:33-07:00",
+     "subject": "add named.conf option root-key-sentinel",
+     "first_stable_tag": "v9.9.13",
+     "product_files": [
+      "bin/named/config.c"
+     ]
+    }
+   ],
+   "changelog_line": "commit 'add named.conf option root-key-sentinel'",
+   "note": "Added in Phase 5 (found by the Phase 4 verifier). Same-day stable siblings: v9.10.8, v9.11.4, v9.12.2. RFC 8509.",
+   "siblings": [
+    "v9.10.8",
+    "v9.11.4",
+    "v9.12.2"
+   ],
+   "default_related": true,
+   "value_changed": true,
+   "rfcs": [
+    "8509"
+   ]
   }
  ],
  "cve_fixes": [

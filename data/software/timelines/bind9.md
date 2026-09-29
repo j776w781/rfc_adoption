@@ -457,6 +457,13 @@ Items d01-d04 predate 2012-03 (cvs2git-manufactured tags): `git tag --contains` 
 
 16 default-changed, 4 limit-changed, 4 removal, 3 support-added, 1 other (28 rows). Rows with `value_changed=false` (d22, d23) record new options / no-op edits whose default equals prior behaviour.
 
+Rows added in Phase 5 (found by the Phase 4 verifier):
+
+| d29-trust-anchor-telemetry-default-yes | default-changed | Trust-anchor telemetry (RFC 8145 key-tag signalling, _ta-XXXX queries) on by default. | no trust-anchor telemetry queries | trust-anchor-telemetry yes (named sends _ta-XXXX.<anchor>/NULL) | yes | no | f20179857a, b7161f9898 | v9.11.0b3 (2016-07-28) | v9.11.0 (2016-09-29) |
+| d30-root-key-sentinel-default-yes | default-changed | Root key sentinel (RFC 8509) answering on by default. | no root-key-sentinel handling | root-key-sentinel yes | yes | no | 68e9315c7d, 3890b5d7ba | v9.13.0 (2018-05-22) | v9.9.13 (2018-07-03) |
+
+Phase 5: d10 mechanism alg-rsa-sha2 -> other; d23 value_changed false -> true (bind.keys lost 19036 at v9.14.1).
+
 ### Notes per row
 
 * **d01-validation-default-yes** basis: tree content: git show v9.5.0-P1:bin/named/config.c has "dnssec-validation yes;" and v9.5.0:bin/named/config.c has "dnssec-validation no;" (git tag --contains lists cvs2git tags that do not contain the change). Changelog: "The default value for dnssec-validation was changed to "yes" in 9.5.0-P1 and all subsequent releases; this was inadvertently omitted from CHANGES at the time." Note: sibling commit 3634531310 is the same change on the development trunk (first appears in 9.5.1b1 / later 9.6). The 2006 CHANGES 2007 entry announced the switch ("default dnssec-validation no; to be changed to yes in 9.5.0") but the code change landed only in 9.5.0-P1 and the CHANGES line was omitted until 9.5.0-P2.

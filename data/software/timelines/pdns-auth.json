@@ -8011,11 +8011,11 @@
   {
    "version": "4.0.0",
    "tag": "auth-4.0.0-alpha1",
-   "stable_tag": "auth-4.0.0",
+   "stable_tag": null,
    "kind": "default-changed",
    "title": "default-ksk-algorithms rsasha256 -> \"\" (no separate KSK; combined signing key)",
    "before": "default-ksk-algorithms=rsasha256 (2048-bit) + default-zsk-algorithms=rsasha256 (1024-bit)",
-   "after": "default-ksk-algorithms=\"\" ; default-zsk-algorithms still rsasha256 (intermediate step; pre-release only)",
+   "after": "default-ksk-algorithms=\"\" (no separate KSK) together with default-zsk-algorithms=ecdsa256 at auth-4.0.0-alpha1/alpha2 (row [6] is the same pre-release state); superseded at alpha3",
    "commits": [
     {
      "commit": "5209ee174acc101b37b3764d8242f05271d51a5a",
@@ -8051,12 +8051,13 @@
    "released": "2015-12-24",
    "cves": [],
    "attribution": "exact",
-   "is_default_change": true
+   "is_default_change": true,
+   "note": "Phase 5: pre-release only. KSK \"\" / ZSK ecdsa256 exists only at auth-4.0.0-alpha1 and alpha2; from alpha3 (1fe96a070, row [8]) through auth-4.0.0 it is KSK ecdsa256 / ZSK \"\". No stable release shipped this state."
   },
   {
    "version": "4.0.0",
    "tag": "auth-4.0.0-alpha1",
-   "stable_tag": "auth-4.0.0",
+   "stable_tag": null,
    "kind": "default-changed",
    "title": "default-zsk-algorithms rsasha256 -> ecdsa256",
    "before": "default-zsk-algorithms=rsasha256",
@@ -8100,7 +8101,8 @@
    "released": "2015-12-24",
    "cves": [],
    "attribution": "exact",
-   "is_default_change": true
+   "is_default_change": true,
+   "note": "Phase 5: pre-release only. KSK \"\" / ZSK ecdsa256 exists only at auth-4.0.0-alpha1 and alpha2; from alpha3 (1fe96a070, row [8]) through auth-4.0.0 it is KSK ecdsa256 / ZSK \"\". No stable release shipped this state."
   },
   {
    "version": "4.0.0",

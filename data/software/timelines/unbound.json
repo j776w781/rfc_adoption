@@ -19833,6 +19833,33 @@
       "is_default_change": true
     },
     {
+      "version": "1.4.7",
+      "title": "unbound-anchor ships a built-in root trust anchor (KSK-2010, DS 19036) used to bootstrap root.key",
+      "mechanism": "trust-anchor-5011",
+      "before": "no unbound-anchor tool; the root anchor had to be configured by the operator",
+      "after": "unbound-anchor with built-in root DS 19036 creates and maintains root.key (RFC 5011)",
+      "applies_on_upgrade": false,
+      "opt_in": true,
+      "commits": [
+        {
+          "commit": "1c2a8d977c4f9e0751d5935b41fd09621d747e76",
+          "commit_date": "2010-09-23T13:51:29Z",
+          "subject": "unbound-anchor work",
+          "tag_contains_confirmed": true
+        }
+      ],
+      "documentation": "smallapp/unbound-anchor.c at release-1.4.7 contains '. IN DS 19036'; file absent at release-1.4.6",
+      "rfcs": [
+        "5011"
+      ],
+      "cves": [],
+      "attribution": "exact",
+      "note": "Added in Phase 5 (found by the Phase 4 verifier). opt_in: the operator must run unbound-anchor and configure auto-trust-anchor-file.",
+      "released": "2010-11-05",
+      "tag": "release-1.4.7",
+      "is_default_change": true
+    },
+    {
       "version": "1.6.1",
       "title": "unbound-anchor built-in root keys gain KSK-2017 (key id 20326)",
       "mechanism": "trust-anchor-5011",
