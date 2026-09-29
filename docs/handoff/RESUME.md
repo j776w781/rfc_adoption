@@ -159,15 +159,14 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - Open item: push `software-timelines-v2` when the owner confirms (nothing pushed yet); the server needs this
   branch to run the above.
 
-### Adoption = prevalence (2026-09-30)
+### Adoption = prevalence (done 2026-09-30)
 
-The team defines adoption as prevalence: % of unique domains in a month with >= 1 DS / DNSKEY / RRSIG
-(Phase 6). Phase 7 had tested only feature shares among signed zones (algorithm, digest, NSEC3
-iterations, key size, opt-out, CDS), so its "no effect" is about feature mix, not prevalence. RUNNING:
-Phase 7 agent extending scripts/software_vs_adoption.py with ds_prev / dnskey_prev / rrsig_prev (equal to
-prevalence_metrics.csv by assertion), Q1 for every program incl. NSD, Q2 on rows that could change
-whether zones are signed (mapping table with reasons), Q4 spikes; existing feature results must stay
-byte-identical. Then: notebook section for prevalence, fresh verifier, commit, push.
+Phase 7 now tests adoption as the team defines it (prevalence: % of domains with >= 1 DS / DNSKEY /
+RRSIG, equal to Phase 6 by assertion) as well as feature mix, after two verification rounds
+(verify/phase7_prevalence*.md). Headline at the right unit (ds_prev): releases 4 of 28 program x corpus
+vs 3.0 (P 0.36; 3 of 28 with breaks masked, P 0.60); signing defaults 2 of 8 vs 1.05; spikes 3 of 59
+vs 2.7. Measurement breaks by rule (denominator >15% in 6 months with DS share >5 pp): .se 2017,
+.se 2018-19, .nu 2017, .nu 2018-19, .gov 2018. Notebook separates adoption from feature use.
 
 ## To resume
 
