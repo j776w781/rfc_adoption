@@ -41789,7 +41789,7 @@
      "entry": null,
      "category": "Security Fixes",
      "line": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``",
-     "text": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress \u2014 for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
+     "text": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress — for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
      "mechanism": "rrsig",
      "rfcs": [],
      "cves": [
@@ -41798,7 +41798,7 @@
      "kind": "cve-fix",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress \u2014 for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
+      "changelog_line": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress — for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
       "changelog_path": "doc/changelog/changelog-9.21.22.rst",
       "first_tag": "v9.21.22",
       "gitlab_refs": [
@@ -42138,14 +42138,14 @@
      "entry": null,
      "category": "Bug Fixes",
      "line": "Avoid named assertion failure during parent-NS lookups when none exist. ``90c7385000``",
-     "text": "Avoid named assertion failure during parent-NS lookups when none exist. ``90c7385000``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset \u2014 the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`!11909`",
+     "text": "Avoid named assertion failure during parent-NS lookups when none exist. ``90c7385000``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset — the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`!11909`",
      "mechanism": "other",
      "rfcs": [],
      "cves": [],
      "kind": "other",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Avoid named assertion failure during parent-NS lookups when none exist. ``90c7385000``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset \u2014 the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`!11909`",
+      "changelog_line": "Avoid named assertion failure during parent-NS lookups when none exist. ``90c7385000``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset — the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`!11909`",
       "changelog_path": "doc/changelog/changelog-9.21.22.rst",
       "first_tag": "v9.21.22",
       "gitlab_refs": [
@@ -42506,7 +42506,7 @@
      "entry": null,
      "category": "Security Fixes",
      "line": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``",
-     "text": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress \u2014 for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
+     "text": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress — for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
      "mechanism": "rrsig",
      "rfcs": [],
      "cves": [
@@ -42515,7 +42515,7 @@
      "kind": "cve-fix",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress \u2014 for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
+      "changelog_line": "[CVE-2026-5947] Fix crash in resolver when SIG(0)-signed responses are received under load. ``9831f41894``\nA resolver could crash when handling a SIG(0)-signed response if the matching client query was cancelled while signature verification was still in progress — for example, when the recursive-clients quota was exhausted. This has been fixed. :gl:`#5819`",
       "changelog_path": "doc/changelog/changelog-9.20.23.rst",
       "first_tag": "v9.20.23",
       "gitlab_refs": [
@@ -43125,7 +43125,7 @@
      "entry": null,
      "category": "Removed Features",
      "line": "Remove legacy special handling for SIG, NXT, and KEY records. ``ac342bf652``",
-     "text": "Remove legacy special handling for SIG, NXT, and KEY records. ``ac342bf652``\nBIND no longer applies legacy RFC 2535 handling to the obsolete ``SIG``, ``NXT`` and ``KEY`` record types; they are now served as plain zone data. Zones with both a ``CNAME`` and a ``KEY`` and or ``NXT`` at the same name \u2014 invalid under :rfc:`2181` \u2014 will now fail to load and must be corrected. :gl:`#6007` :gl:`!12056`",
+     "text": "Remove legacy special handling for SIG, NXT, and KEY records. ``ac342bf652``\nBIND no longer applies legacy RFC 2535 handling to the obsolete ``SIG``, ``NXT`` and ``KEY`` record types; they are now served as plain zone data. Zones with both a ``CNAME`` and a ``KEY`` and or ``NXT`` at the same name — invalid under :rfc:`2181` — will now fail to load and must be corrected. :gl:`#6007` :gl:`!12056`",
      "mechanism": "rrsig",
      "rfcs": [
       "2535"
@@ -43134,7 +43134,7 @@
      "kind": "removal",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Remove legacy special handling for SIG, NXT, and KEY records. ``ac342bf652``\nBIND no longer applies legacy RFC 2535 handling to the obsolete ``SIG``, ``NXT`` and ``KEY`` record types; they are now served as plain zone data. Zones with both a ``CNAME`` and a ``KEY`` and or ``NXT`` at the same name \u2014 invalid under :rfc:`2181` \u2014 will now fail to load and must be corrected. :gl:`#6007` :gl:`!12056`",
+      "changelog_line": "Remove legacy special handling for SIG, NXT, and KEY records. ``ac342bf652``\nBIND no longer applies legacy RFC 2535 handling to the obsolete ``SIG``, ``NXT`` and ``KEY`` record types; they are now served as plain zone data. Zones with both a ``CNAME`` and a ``KEY`` and or ``NXT`` at the same name — invalid under :rfc:`2181` — will now fail to load and must be corrected. :gl:`#6007` :gl:`!12056`",
       "changelog_path": "doc/changelog/changelog-9.21.23.rst",
       "first_tag": "v9.21.23",
       "gitlab_refs": [
@@ -43379,14 +43379,14 @@
      "entry": null,
      "category": "Bug Fixes",
      "line": "Avoid named assertion failure during parent-NS lookups when none exist. ``5c0c4786dd``",
-     "text": "Avoid named assertion failure during parent-NS lookups when none exist. ``5c0c4786dd``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset \u2014 the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`#5996` :gl:`!12053`",
+     "text": "Avoid named assertion failure during parent-NS lookups when none exist. ``5c0c4786dd``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset — the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`#5996` :gl:`!12053`",
      "mechanism": "other",
      "rfcs": [],
      "cves": [],
      "kind": "other",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Avoid named assertion failure during parent-NS lookups when none exist. ``5c0c4786dd``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset \u2014 the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`#5996` :gl:`!12053`",
+      "changelog_line": "Avoid named assertion failure during parent-NS lookups when none exist. ``5c0c4786dd``\nConfiguring the root zone as a signed primary with parental agents (or with notify-on-cds-changes) caused named to exit on an internal assertion as soon as the DS-publication machinery tried to look up the parent NS RRset — the root has no parent. The lookup is now short-circuited cleanly.\nSimilar, a zone with no NS records in the parent caused named to exit in the same way. :gl:`#5910` :gl:`#5996` :gl:`!12053`",
       "changelog_path": "doc/changelog/changelog-9.20.24.rst",
       "first_tag": "v9.20.24",
       "gitlab_refs": [
@@ -43656,14 +43656,14 @@
      "entry": null,
      "category": "Security Fixes",
      "line": "Reclaim memory promptly when DNSSEC validations are canceled. ``4e5a5201f26``",
-     "text": "Reclaim memory promptly when DNSSEC validations are canceled. ``4e5a5201f26``\nWhen a resolver is flooded with queries that require DNSSEC validation \u2014 for example during a random-subdomain attack \u2014 many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
+     "text": "Reclaim memory promptly when DNSSEC validations are canceled. ``4e5a5201f26``\nWhen a resolver is flooded with queries that require DNSSEC validation — for example during a random-subdomain attack — many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
      "mechanism": "validation",
      "rfcs": [],
      "cves": [],
      "kind": "cve-fix",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Reclaim memory promptly when DNSSEC validations are canceled. ``4e5a5201f26``\nWhen a resolver is flooded with queries that require DNSSEC validation \u2014 for example during a random-subdomain attack \u2014 many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
+      "changelog_line": "Reclaim memory promptly when DNSSEC validations are canceled. ``4e5a5201f26``\nWhen a resolver is flooded with queries that require DNSSEC validation — for example during a random-subdomain attack — many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
       "changelog_path": "doc/changelog/changelog-9.21.24.rst",
       "first_tag": "v9.21.24",
       "gitlab_refs": [],
@@ -44063,14 +44063,14 @@
      "entry": null,
      "category": "Bug Fixes",
      "line": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``1b8bae505e7``",
-     "text": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``1b8bae505e7``\nApplying changes to a signed zone \u2014 via DNS UPDATE or the inline-signing raw-to-secure sync \u2014 leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12328`",
+     "text": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``1b8bae505e7``\nApplying changes to a signed zone — via DNS UPDATE or the inline-signing raw-to-secure sync — leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12328`",
      "mechanism": "rrsig",
      "rfcs": [],
      "cves": [],
      "kind": "other",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``1b8bae505e7``\nApplying changes to a signed zone \u2014 via DNS UPDATE or the inline-signing raw-to-secure sync \u2014 leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12328`",
+      "changelog_line": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``1b8bae505e7``\nApplying changes to a signed zone — via DNS UPDATE or the inline-signing raw-to-secure sync — leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12328`",
       "changelog_path": "doc/changelog/changelog-9.21.24.rst",
       "first_tag": "v9.21.24",
       "gitlab_refs": [
@@ -44407,14 +44407,14 @@
      "entry": null,
      "category": "Security Fixes",
      "line": "Reclaim memory promptly when DNSSEC validations are canceled. ``b8f9d7657ac``",
-     "text": "Reclaim memory promptly when DNSSEC validations are canceled. ``b8f9d7657ac``\nWhen a resolver is flooded with queries that require DNSSEC validation \u2014 for example during a random-subdomain attack \u2014 many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
+     "text": "Reclaim memory promptly when DNSSEC validations are canceled. ``b8f9d7657ac``\nWhen a resolver is flooded with queries that require DNSSEC validation — for example during a random-subdomain attack — many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
      "mechanism": "validation",
      "rfcs": [],
      "cves": [],
      "kind": "cve-fix",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Reclaim memory promptly when DNSSEC validations are canceled. ``b8f9d7657ac``\nWhen a resolver is flooded with queries that require DNSSEC validation \u2014 for example during a random-subdomain attack \u2014 many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
+      "changelog_line": "Reclaim memory promptly when DNSSEC validations are canceled. ``b8f9d7657ac``\nWhen a resolver is flooded with queries that require DNSSEC validation — for example during a random-subdomain attack — many of those validations are canceled before they complete. Previously a canceled validation still kept its place in the internal work queue and held the associated response in memory until that queued work eventually ran, so memory could climb sharply under sustained load. The canceled work is now dropped as soon as the validation is canceled, releasing the memory it was holding.",
       "changelog_path": "doc/changelog/changelog-9.20.26.rst",
       "first_tag": "v9.20.26",
       "gitlab_refs": [],
@@ -44794,14 +44794,14 @@
      "entry": null,
      "category": "Bug Fixes",
      "line": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``73440816e41``",
-     "text": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``73440816e41``\nApplying changes to a signed zone \u2014 via DNS UPDATE or the inline-signing raw-to-secure sync \u2014 leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12332`",
+     "text": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``73440816e41``\nApplying changes to a signed zone — via DNS UPDATE or the inline-signing raw-to-secure sync — leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12332`",
      "mechanism": "rrsig",
      "rfcs": [],
      "cves": [],
      "kind": "other",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``73440816e41``\nApplying changes to a signed zone \u2014 via DNS UPDATE or the inline-signing raw-to-secure sync \u2014 leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12332`",
+      "changelog_line": "Fix a memory leak when updating a zone with more than 32 DNSSEC keys. ``73440816e41``\nApplying changes to a signed zone — via DNS UPDATE or the inline-signing raw-to-secure sync — leaked the surplus keys when the zone's key directory held more than 32, slowly growing named's memory use. :gl:`#6051` :gl:`!12332`",
       "changelog_path": "doc/changelog/changelog-9.20.26.rst",
       "first_tag": "v9.20.26",
       "gitlab_refs": [
@@ -44948,7 +44948,7 @@
      "entry": null,
      "category": "Removed Features",
      "line": "Remove unused closest encloser proof caching. ``de7f34fb44b``",
-     "text": "Remove unused closest encloser proof caching. ``de7f34fb44b``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record \u2014 RFC 5155 requires only the next closer name proof \u2014 and the closest encloser came to be derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!11779`",
+     "text": "Remove unused closest encloser proof caching. ``de7f34fb44b``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record — RFC 5155 requires only the next closer name proof — and the closest encloser came to be derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!11779`",
      "mechanism": "nsec3",
      "rfcs": [
       "5155"
@@ -44957,7 +44957,7 @@
      "kind": "removal",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Remove unused closest encloser proof caching. ``de7f34fb44b``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record \u2014 RFC 5155 requires only the next closer name proof \u2014 and the closest encloser came to be derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!11779`",
+      "changelog_line": "Remove unused closest encloser proof caching. ``de7f34fb44b``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record — RFC 5155 requires only the next closer name proof — and the closest encloser came to be derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!11779`",
       "changelog_path": "doc/changelog/changelog-9.21.25.rst",
       "first_tag": "v9.21.25",
       "gitlab_refs": [
@@ -45558,7 +45558,7 @@
      "entry": null,
      "category": "Security Fixes",
      "line": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``62e1be3cb4``",
-     "text": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``62e1be3cb4``\nWhen a zone database contained records for names outside the zone \u2014 such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary \u2014 the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
+     "text": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``62e1be3cb4``\nWhen a zone database contained records for names outside the zone — such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary — the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
      "mechanism": "other",
      "rfcs": [],
      "cves": [
@@ -45567,7 +45567,7 @@
      "kind": "cve-fix",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``62e1be3cb4``\nWhen a zone database contained records for names outside the zone \u2014 such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary \u2014 the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
+      "changelog_line": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``62e1be3cb4``\nWhen a zone database contained records for names outside the zone — such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary — the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
       "changelog_path": "doc/changelog/changelog-9.21.26.rst",
       "first_tag": "v9.21.26",
       "gitlab_refs": [
@@ -46165,7 +46165,7 @@
      "entry": null,
      "category": "Security Fixes",
      "line": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``72a10c3a0b``",
-     "text": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``72a10c3a0b``\nWhen a zone database contained records for names outside the zone \u2014 such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary \u2014 the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
+     "text": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``72a10c3a0b``\nWhen a zone database contained records for names outside the zone — such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary — the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
      "mechanism": "other",
      "rfcs": [],
      "cves": [
@@ -46174,7 +46174,7 @@
      "kind": "cve-fix",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``72a10c3a0b``\nWhen a zone database contained records for names outside the zone \u2014 such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary \u2014 the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
+      "changelog_line": "[CVE-2026-78301] Out-of-zone records in a zone database could be served as authoritative. ``72a10c3a0b``\nWhen a zone database contained records for names outside the zone — such as a delegation above the zone apex, left behind by a secondary that had accepted out-of-zone data from its primary — the server could treat them as authoritative and answer queries for names inside the zone with that out-of-zone data instead of the zone's own. A server that was also a resolver could follow such a delegation and cache the answers of the server it named, affecting names outside the configured zone. Zone database lookups are now confined to names at or below the zone's origin.\nISC would like to thank Henrique Pereira for reporting the issue. :gl:`#6361`",
       "changelog_path": "doc/changelog/changelog-9.20.29.rst",
       "first_tag": "v9.20.29",
       "gitlab_refs": [
@@ -46236,7 +46236,7 @@
      "entry": null,
      "category": "Removed Features",
      "line": "Remove unused closest encloser proof caching. ``abd8b5bfd8``",
-     "text": "Remove unused closest encloser proof caching. ``abd8b5bfd8``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record \u2014 RFC 5155 requires only the next closer name proof \u2014 and the closest encloser came to be  derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!12660`",
+     "text": "Remove unused closest encloser proof caching. ``abd8b5bfd8``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record — RFC 5155 requires only the next closer name proof — and the closest encloser came to be  derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!12660`",
      "mechanism": "nsec3",
      "rfcs": [
       "5155"
@@ -46245,7 +46245,7 @@
      "kind": "removal",
      "is_default_change": false,
      "evidence": {
-      "changelog_line": "Remove unused closest encloser proof caching. ``abd8b5bfd8``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record \u2014 RFC 5155 requires only the next closer name proof \u2014 and the closest encloser came to be  derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!12660`",
+      "changelog_line": "Remove unused closest encloser proof caching. ``abd8b5bfd8``\nBIND used to cache an NSEC3 closest encloser proof alongside positive wildcard answers so that a resolver could re-send it when answering from its cache. That stopped being used in BIND 9.9 (2011), when positive wildcard responses were changed to omit that NSEC3 record — RFC 5155 requires only the next closer name proof — and the closest encloser came to be  derived during validation instead. The caching code has been unreachable ever since, so this removes it with no change in behaviour. :gl:`#5803` :gl:`!12660`",
       "changelog_path": "doc/changelog/changelog-9.20.29.rst",
       "first_tag": "v9.20.29",
       "gitlab_refs": [
@@ -46662,7 +46662,7 @@
     }
    ],
    "changelog_line": "Added a default trust anchor for the root zone, which\ncan be switched on by setting \"dnssec-validation auto;\"\nin the named.conf options. [RT #21727]",
-   "note": "opt-in: default dnssec-validation stayed \"yes\" until 9.13.1 (d08).",
+   "note": "opt-in: default dnssec-validation stayed \"yes\" until 9.13.1 (d07).",
    "siblings": [],
    "default_related": true,
    "value_changed": true
@@ -46678,7 +46678,7 @@
    "applies_on_upgrade": false,
    "opt_in": true,
    "attribution": "exact",
-   "first_tag": "v9.11.1rc1",
+   "first_tag": "v9.10.5rc1",
    "first_tag_date": "2017-02-06",
    "first_stable_tag": "v9.9.9-P8",
    "first_stable_date": "2017-03-29",
@@ -46834,7 +46834,7 @@
     }
    ],
    "changelog_line": null,
-   "note": "takes effect only under \"dnssec-validation auto;\" (built-in keys); earliest stable tag is the minimum over the seven per-branch commits.",
+   "note": "takes effect only under \"dnssec-validation auto;\" (built-in keys); earliest stable tag is the minimum over the seven per-branch commits. Phase 3 correction: earliest tag re-chosen by UTC instant of <tag>^{commit}; the earlier choice compared committer-local timestamps. first_tag was v9.11.1rc1.",
    "siblings": [],
    "default_related": true,
    "value_changed": true
@@ -47480,8 +47480,8 @@
      "in_first_stable_tag_basis": "git tag --contains"
     }
    ],
-   "changelog_line": "dnssec-policy created new KSK keys for zones in the\ninitial stage of signing (with the DS not yet in the\nrumoured or omnipresent states).  Fix by checking the\nkey goals rather than the active state when determining\nwhether new keys are needed. [GL #1593]",
-   "note": "7bfac50336 sets key->algorithm = DNS_KEYALG_ECDSA256 for the default kasp; a339a6df48 adds dnssec-policy.default.conf documenting \"csk key-directory lifetime 0 algorithm 13\" and states \"none\" is the default. Earlier work-in-progress copies (b54aba9f10, 2019-10-18) are in no release tag. Later commit 5ff414e986 (2022-06-28) moves the built-ins into named -C output (defaultconf).",
+   "changelog_line": null,
+   "note": "7bfac50336 sets key->algorithm = DNS_KEYALG_ECDSA256 for the default kasp; a339a6df48 adds dnssec-policy.default.conf documenting \"csk key-directory lifetime 0 algorithm 13\" and states \"none\" is the default. Earlier work-in-progress copies (b54aba9f10, 2019-10-18) are in no release tag. Later commit 5ff414e986 (2022-06-28) moves the built-ins into named -C output (defaultconf). Phase 3 correction: the earlier changelog_line was an unrelated GL #1593 bugfix and was removed; commit and first stable tag are unchanged.",
    "siblings": [],
    "default_related": true,
    "value_changed": true
@@ -47996,7 +47996,7 @@
    "before": "bind.keys without key 38696",
    "after": "bind.keys with key 38696",
    "applies_on_upgrade": false,
-   "opt_in": true,
+   "opt_in": false,
    "attribution": "exact",
    "first_tag": "v9.21.3",
    "first_tag_date": "2024-12-03",
@@ -48082,7 +48082,7 @@
     }
    ],
    "changelog_line": null,
-   "note": "per-branch commits; a2f8b76c5e (9.16 line) is in no release tag.",
+   "note": "per-branch commits; a2f8b76c5e (9.16 line) is in no release tag. Phase 3 correction: opt_in false. bind.keys at v9.20.4 says the built-in key is used when dnssec-validation is unset, and auto is the default since v9.14.0 (d07).",
    "siblings": [],
    "default_related": true,
    "value_changed": true
@@ -49581,7 +49581,7 @@
    "inventory_fix_release": null,
    "inventory_fix_sha": null,
    "candidates": {},
-   "first_stable_tag": "v9.4.3-P5",
+   "first_stable_tag": "v9.6.1-P3",
    "basis": "nvd-description-stated-fix-version",
    "commits": [],
    "n_commits_found": 0,
@@ -49597,10 +49597,14 @@
     "2772.\t[security]\tWhen validating, track whether pending data was from the additional section or not and only return it if validates as secure. [RT #20438]"
    ],
    "fix_release_date": "2010-01-07",
-   "fix_release_commit": "22ae16e540160f198dabdaae8ae47d0e38e572c2",
+   "fix_release_commit": "7508907262afc615714bb5ec86210a774d2a97a8",
    "latency_days": -15,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.4.3-P5:CHANGES | head -60   # compare [security] entries with the NVD description; NVD text names v9.4.3-P5"
+   "verify": "git -C out/software_repos/bind9.git show v9.6.1-P3:CHANGES | head -60   # compare [security] entries with the NVD description; NVD text names v9.6.1-P3",
+   "same_day_tags": [
+    "v9.4.3-P5"
+   ],
+   "correction": "Phase 3 correction: earliest tag re-chosen by UTC instant of <tag>^{commit}; the earlier choice compared committer-local timestamps. Was v9.4.3-P5."
   },
   {
    "cve": "CVE-2010-3613",
@@ -49925,17 +49929,22 @@
    "inventory_fix_release": null,
    "inventory_fix_sha": null,
    "candidates": {},
-   "first_stable_tag": null,
-   "basis": null,
+   "first_stable_tag": "v9.4-ESV-R5-P1",
+   "basis": "changelog-entry-text",
    "commits": [],
    "n_commits_found": 0,
-   "status": "not-found",
-   "attribution": "n/a",
-   "reason": "no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text",
-   "fix_release_date": null,
-   "latency_days": null,
+   "attribution": "changelog-verified: CHANGES entry 3218 [security] 'Cache lookup could return RRSIG data associated with nonexistent records, leading to an assertion failure. [RT #26590]' matches the NVD description; CHANGES carries no CVE id",
+   "fix_release_date": "2011-11-16",
+   "latency_days": -13,
    "differs_from_inventory": false,
-   "verify": null
+   "verify": "git -C out/software_repos/bind9.git show v9.4-ESV-R5-P1:CHANGES | grep -n -A3 '^3218\\.'",
+   "fix_release_commit": "00a93b246610516865ce85c654349f50027dedb4",
+   "same_day_tags": [
+    "v9.6-ESV-R5-P1",
+    "v9.7.4-P1",
+    "v9.8.1-P1"
+   ],
+   "correction": "Phase 3 correction: was not-found; the fix is CHANGES 3218, first tagged v9.4-ESV-R5-P1 (09:33:41Z), minutes before v9.8.1-P1, v9.6-ESV-R5-P1 and v9.7.4-P1."
   },
   {
    "cve": "CVE-2012-1033",
@@ -50737,7 +50746,7 @@
     "commit-containment": "v9.10.1-P2",
     "kept-changelog-entry": "v9.10.1-P2"
    },
-   "first_stable_tag": "v9.10.1-P2",
+   "first_stable_tag": "v9.9.6-P2",
    "basis": "changelog-or-notes-mention",
    "commits": [
     {
@@ -50812,11 +50821,12 @@
     "9.18": "v9.18.0",
     "9.20": "v9.20.0"
    },
-   "fix_release_date": "2015-02-10",
-   "fix_release_commit": "58bfdeb650c2b3324597164cc61032a45e557208",
-   "latency_days": -9,
+   "fix_release_date": "2015-02-11",
+   "fix_release_commit": "6e349439f0478bc456ffb8a1181576dd1b92c185",
+   "latency_days": -8,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.10.1-P2:CHANGES | grep -n -F CVE-2015-1349"
+   "verify": "git -C out/software_repos/bind9.git show v9.9.6-P2:CHANGES | grep -n -F CVE-2015-1349",
+   "correction": "Phase 3 correction: earliest tag re-chosen by UTC instant of <tag>^{commit}; the earlier choice compared committer-local timestamps. Was v9.10.1-P2."
   },
   {
    "cve": "CVE-2015-4620",
@@ -51122,7 +51132,7 @@
     "commit-containment": "v9.10.3-P2",
     "kept-changelog-entry": "v9.10.3-P2"
    },
-   "first_stable_tag": "v9.10.3-P2",
+   "first_stable_tag": "v9.9.8-P2",
    "basis": "changelog-or-notes-mention",
    "commits": [
     {
@@ -51185,8 +51195,7 @@
    "n_commits_found": 8,
    "attribution": "commit/changelog-verified",
    "same_day_tags": [
-    "v9.10.3-P2",
-    "v9.9.8-P2"
+    "v9.10.3-P2"
    ],
    "earliest_tag_per_branch": {
     "9.10": "v9.10.3-P2",
@@ -51199,10 +51208,11 @@
     "9.20": "v9.20.0"
    },
    "fix_release_date": "2015-12-06",
-   "fix_release_commit": "f9be8b2189e49a354210237e55054b9399f03c96",
+   "fix_release_commit": "8f4dc43fe932252669a55d1c7adda6b8d448962c",
    "latency_days": -10,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.10.3-P2:CHANGES | grep -n -F CVE-2015-8000"
+   "verify": "git -C out/software_repos/bind9.git show v9.9.8-P2:CHANGES | grep -n -F CVE-2015-8000",
+   "correction": "Phase 3 correction: earliest tag re-chosen by UTC instant of <tag>^{commit}; the earlier choice compared committer-local timestamps. Was v9.10.3-P2."
   },
   {
    "cve": "CVE-2015-8461",
@@ -51215,7 +51225,7 @@
     "commit-containment": "v9.10.3-P2",
     "kept-changelog-entry": "v9.10.3-P2"
    },
-   "first_stable_tag": "v9.10.3-P2",
+   "first_stable_tag": "v9.9.8-P2",
    "basis": "changelog-or-notes-mention",
    "commits": [
     {
@@ -51257,8 +51267,7 @@
    "n_commits_found": 5,
    "attribution": "commit/changelog-verified",
    "same_day_tags": [
-    "v9.10.3-P2",
-    "v9.9.8-P2"
+    "v9.10.3-P2"
    ],
    "earliest_tag_per_branch": {
     "9.10": "v9.10.3-P2",
@@ -51271,10 +51280,11 @@
     "9.20": "v9.20.0"
    },
    "fix_release_date": "2015-12-06",
-   "fix_release_commit": "f9be8b2189e49a354210237e55054b9399f03c96",
+   "fix_release_commit": "8f4dc43fe932252669a55d1c7adda6b8d448962c",
    "latency_days": -10,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.10.3-P2:CHANGES | grep -n -F CVE-2015-8461"
+   "verify": "git -C out/software_repos/bind9.git show v9.9.8-P2:CHANGES | grep -n -F CVE-2015-8461",
+   "correction": "Phase 3 correction: earliest tag re-chosen by UTC instant of <tag>^{commit}; the earlier choice compared committer-local timestamps. Was v9.10.3-P2."
   },
   {
    "cve": "CVE-2015-8704",
@@ -52354,7 +52364,8 @@
    "fix_release_commit": "1ab232a0c0ae0882b1f50d82112175c0c1d9e92c",
    "latency_days": -766,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.9.9-P5:doc/arm/notes.xml | grep -n -F CVE-2016-9778"
+   "verify": "git -C out/software_repos/bind9.git show v9.9.9-P5:doc/arm/notes.xml | grep -n -F CVE-2016-9778",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2017-3135",
@@ -52636,7 +52647,8 @@
    "fix_release_commit": "af51affcff016f48f5e221ffddd795865cea80d4",
    "latency_days": -658,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.9.9-P8:CHANGES | grep -n -F CVE-2017-3137"
+   "verify": "git -C out/software_repos/bind9.git show v9.9.9-P8:CHANGES | grep -n -F CVE-2017-3137",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2017-3138",
@@ -53276,7 +53288,8 @@
    "fix_release_commit": "14b0e01fee2e288e01eef3dd88f3212030ad3c42",
    "latency_days": -245,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.12.1-P2:CHANGES | grep -n -F CVE-2018-5737"
+   "verify": "git -C out/software_repos/bind9.git show v9.12.1-P2:CHANGES | grep -n -F CVE-2018-5737",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2018-5738",
@@ -53368,7 +53381,8 @@
    "fix_release_commit": "8914b8391d0228de35f6ad44a1521ca2b1fa48e1",
    "latency_days": -176,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.12.2-P1:CHANGES | grep -n -F CVE-2018-5740"
+   "verify": "git -C out/software_repos/bind9.git show v9.12.2-P1:CHANGES | grep -n -F CVE-2018-5740",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2018-5741",
@@ -53393,7 +53407,8 @@
    "fix_release_commit": "3b0b2047cea8d9e61d0c1eabe2d3c958997e8be4",
    "latency_days": -102,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.11.5:CHANGES | head -60   # compare [security] entries with the NVD description; NVD text names v9.11.5"
+   "verify": "git -C out/software_repos/bind9.git show v9.11.5:CHANGES | head -60   # compare [security] entries with the NVD description; NVD text names v9.11.5",
+   "correction": "Phase 3: tag confirmed; v9.11.5:README and README.md name CVE-2018-5741 (CHANGES at v9.11.5 does not). Fix commit still not located, so attribution stays approximate."
   },
   {
    "cve": "CVE-2018-5742",
@@ -53597,7 +53612,8 @@
    "fix_release_commit": "28e45cd00e2e1e621a2e97ba1ee6bdc6a4102e16",
    "latency_days": -186,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.12.4-P1:CHANGES | grep -n -F CVE-2019-6467"
+   "verify": "git -C out/software_repos/bind9.git show v9.12.4-P1:CHANGES | grep -n -F CVE-2019-6467",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2019-6468",
@@ -53773,7 +53789,8 @@
    "fix_release_commit": "abcf57d5886f15b927d5bf61e2f2a8d492091a35",
    "latency_days": -20,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.14.8:CHANGES | grep -n -F CVE-2019-6477"
+   "verify": "git -C out/software_repos/bind9.git show v9.14.8:CHANGES | grep -n -F CVE-2019-6477",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2020-8616",
@@ -53864,7 +53881,8 @@
    "fix_release_commit": "5ea41c14fb01966ba38ad96666168763c82fd767",
    "latency_days": -13,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.16.3:CHANGES | grep -n -F CVE-2020-8616"
+   "verify": "git -C out/software_repos/bind9.git show v9.16.3:CHANGES | grep -n -F CVE-2020-8616",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2020-8617",
@@ -53941,7 +53959,8 @@
    "fix_release_commit": "5ea41c14fb01966ba38ad96666168763c82fd767",
    "latency_days": -13,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.16.3:CHANGES | grep -n -F CVE-2020-8617"
+   "verify": "git -C out/software_repos/bind9.git show v9.16.3:CHANGES | grep -n -F CVE-2020-8617",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2020-8618",
@@ -53985,7 +54004,8 @@
    "fix_release_commit": "0849b42333d63f418665ea5306c4db0da2d6230d",
    "latency_days": -7,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.16.4:CHANGES | grep -n -F CVE-2020-8618"
+   "verify": "git -C out/software_repos/bind9.git show v9.16.4:CHANGES | grep -n -F CVE-2020-8618",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2020-8619",
@@ -54038,7 +54058,8 @@
    "fix_release_commit": "f3d1d66bb90ac16ba4245f475d16988fcec296fc",
    "latency_days": -7,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.11.20:CHANGES | grep -n -F CVE-2020-8619"
+   "verify": "git -C out/software_repos/bind9.git show v9.11.20:CHANGES | grep -n -F CVE-2020-8619",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2020-8620",
@@ -54863,7 +54884,8 @@
    "fix_release_commit": "68dbd5b966f4ecea28ed4915580edd330bc481a3",
    "latency_days": -16,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.11.36:CHANGES | grep -n -F CVE-2021-25219"
+   "verify": "git -C out/software_repos/bind9.git show v9.11.36:CHANGES | grep -n -F CVE-2021-25219",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2021-25220",
@@ -54876,7 +54898,7 @@
     "commit-containment": "v9.16.27",
     "kept-changelog-entry": "v9.16.27"
    },
-   "first_stable_tag": "v9.16.27",
+   "first_stable_tag": "v9.18.1",
    "basis": "changelog-or-notes-mention",
    "commits": [
     {
@@ -54940,8 +54962,7 @@
    "attribution": "commit/changelog-verified",
    "same_day_tags": [
     "v9.11.37",
-    "v9.16.27",
-    "v9.18.1"
+    "v9.16.27"
    ],
    "earliest_tag_per_branch": {
     "9.16": "v9.16.27",
@@ -54950,10 +54971,11 @@
     "9.20": "v9.20.0"
    },
    "fix_release_date": "2022-03-07",
-   "fix_release_commit": "96094c577f5aa8bf8d6dd7533d7be39effb3a243",
+   "fix_release_commit": "1a4e4c2989ede3f993fc352b6c77929f8c286887",
    "latency_days": -16,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.16.27:CHANGES | grep -n -F CVE-2021-25220"
+   "verify": "git -C out/software_repos/bind9.git show v9.18.1:CHANGES | grep -n -F CVE-2021-25220",
+   "correction": "Phase 3 correction: earliest tag re-chosen by UTC instant of <tag>^{commit}; the earlier choice compared committer-local timestamps. Was v9.16.27."
   },
   {
    "cve": "CVE-2022-0396",
@@ -54966,7 +54988,7 @@
     "commit-containment": "v9.16.27",
     "kept-changelog-entry": "v9.16.27"
    },
-   "first_stable_tag": "v9.16.27",
+   "first_stable_tag": "v9.18.1",
    "basis": "changelog-or-notes-mention",
    "commits": [
     {
@@ -55015,8 +55037,7 @@
    "n_commits_found": 6,
    "attribution": "commit/changelog-verified",
    "same_day_tags": [
-    "v9.16.27",
-    "v9.18.1"
+    "v9.16.27"
    ],
    "earliest_tag_per_branch": {
     "9.16": "v9.16.27",
@@ -55024,10 +55045,11 @@
     "9.20": "v9.20.0"
    },
    "fix_release_date": "2022-03-07",
-   "fix_release_commit": "96094c577f5aa8bf8d6dd7533d7be39effb3a243",
+   "fix_release_commit": "1a4e4c2989ede3f993fc352b6c77929f8c286887",
    "latency_days": -16,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.16.27:CHANGES | grep -n -F CVE-2022-0396"
+   "verify": "git -C out/software_repos/bind9.git show v9.18.1:CHANGES | grep -n -F CVE-2022-0396",
+   "correction": "Phase 3 correction: earliest tag re-chosen by UTC instant of <tag>^{commit}; the earlier choice compared committer-local timestamps. Was v9.16.27."
   },
   {
    "cve": "CVE-2022-0635",
@@ -55329,7 +55351,8 @@
    "fix_release_commit": "85a6eb108e884467c4b3af414140d6b033a89a62",
    "latency_days": -13,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.18.7:CHANGES | grep -n -F CVE-2022-2795"
+   "verify": "git -C out/software_repos/bind9.git show v9.18.7:CHANGES | grep -n -F CVE-2022-2795",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2022-2881",
@@ -55907,7 +55930,8 @@
    "fix_release_commit": "8193c9b8628580df04320a98c69adcb9e761d214",
    "latency_days": -12,
    "differs_from_inventory": false,
-   "verify": "git -C out/software_repos/bind9.git show v9.18.16:CHANGES | grep -n -F CVE-2023-2828"
+   "verify": "git -C out/software_repos/bind9.git show v9.18.16:CHANGES | grep -n -F CVE-2023-2828",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2023-2829",
@@ -56099,7 +56123,8 @@
    "fix_release_commit": "cd2b4602b03027790908c2870b8a42c0870de489",
    "latency_days": -12,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.16.44:CHANGES | grep -n -F CVE-2023-3341"
+   "verify": "git -C out/software_repos/bind9.git show v9.16.44:CHANGES | grep -n -F CVE-2023-3341",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2023-4236",
@@ -56362,7 +56387,8 @@
    "latency_days": -3,
    "note": "inventory names v9.16.50 because the CVE-id mention commit ec1afa639f (2024-02-14) is the only commit whose message names CVE-2023-50868; the code fix is the KeyTrap change shipped in 9.16.48 / 9.18.24 / 9.19.21.",
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.18.24:CHANGES | grep -n -A3 '^6322'  # and git log -1 6a40a5eada"
+   "verify": "git -C out/software_repos/bind9.git show v9.18.24:CHANGES | grep -n -A3 '^6322'  # and git log -1 6a40a5eada",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2023-5517",
@@ -56965,7 +56991,7 @@
   {
    "cve": "CVE-2026-5946",
    "nvd_published": "2026-05-20",
-   "description": "Multiple flaws have been identified in `named` related to the handling of DNS messages whose CLASS is not Internet (`IN`) \u2014 for example, `CHAOS` or `HESIOD`, or DNS messages that specify meta-classes (`ANY` or `NONE`) in the question sectio",
+   "description": "Multiple flaws have been identified in `named` related to the handling of DNS messages whose CLASS is not Internet (`IN`) — for example, `CHAOS` or `HESIOD`, or DNS messages that specify meta-classes (`ANY` or `NONE`) in the question sectio",
    "inventory_fix_release": "9.20.26",
    "inventory_fix_sha": "1af9f2830179e7e3c9b40f858eb06aab4f56c1bf",
    "candidates": {
@@ -57075,7 +57101,8 @@
    "fix_release_commit": "7d0b4d4d436e7b950225a533e5bc56d8f935cc1c",
    "latency_days": -12,
    "differs_from_inventory": true,
-   "verify": "git -C out/software_repos/bind9.git show v9.20.23:doc/changelog/changelog-9.20.23.rst | grep -n -F CVE-2026-5947"
+   "verify": "git -C out/software_repos/bind9.git show v9.20.23:doc/changelog/changelog-9.20.23.rst | grep -n -F CVE-2026-5947",
+   "commit_containment_note": "Phase 3: none of the listed commits is an ancestor of the fix tag. The patch tag was built on an embargoed security branch; the listed commits are later public merges. The tag is confirmed by the CHANGES text at the tag."
   },
   {
    "cve": "CVE-2026-5950",
@@ -57249,18 +57276,22 @@
   ]
  },
  "gaps": [
-  "CVE fix tag NOT FOUND for 27 inventory CVEs (no fix commit in inventory, no CVE id in CHANGES/notes at any tag, no fixed version in NVD text): CVE-1999-0024, CVE-1999-0184, CVE-1999-0837, CVE-1999-0848, CVE-1999-0849, CVE-2000-1029, CVE-2001-0497, CVE-2002-0029, CVE-2002-0684, CVE-2002-1219, CVE-2005-0034, CVE-2006-2073, CVE-2007-0493, CVE-2007-0494, CVE-2007-2241, CVE-2007-2925, CVE-2007-2926, CVE-2009-0025, CVE-2009-0265, CVE-2010-0213, CVE-2010-0218, CVE-2011-0414, CVE-2011-2465, CVE-2011-4313, CVE-2012-1033, CVE-2013-5661, CVE-2016-2848",
+  "CVE fix tag NOT FOUND for 26 inventory CVEs (no fix commit in inventory, no CVE id in CHANGES/notes at any tag, no fixed version in NVD text): CVE-1999-0024, CVE-1999-0184, CVE-1999-0837, CVE-1999-0848, CVE-1999-0849, CVE-2000-1029, CVE-2001-0497, CVE-2002-0029, CVE-2002-0684, CVE-2002-1219, CVE-2005-0034, CVE-2006-2073, CVE-2007-0493, CVE-2007-0494, CVE-2007-2241, CVE-2007-2925, CVE-2007-2926, CVE-2009-0025, CVE-2009-0265, CVE-2010-0213, CVE-2010-0218, CVE-2011-0414, CVE-2011-2465, CVE-2012-1033, CVE-2013-5661, CVE-2016-2848",
   "31 inventory CVEs are not BIND 9 stable-release issues (BIND 4/8, glibc/libbind or other vendors, Windows -W rebuilds, Supported Preview -S only, Red Hat builds): CVE-1999-0009, CVE-1999-0010, CVE-1999-0011, CVE-1999-0833, CVE-1999-1499, CVE-2000-0335, CVE-2000-0887, CVE-2000-0888, CVE-2001-0010, CVE-2001-0011, CVE-2001-0012, CVE-2001-0013, CVE-2002-0651, CVE-2002-1220, CVE-2002-1221, CVE-2002-2211, CVE-2002-2212, CVE-2002-2213, CVE-2003-0914, CVE-2005-0033, CVE-2006-0527, CVE-2007-2930, CVE-2008-4163, CVE-2016-1284, CVE-2018-5734, CVE-2018-5742, CVE-2019-6468, CVE-2019-6469, CVE-2022-3488, CVE-2023-2829, CVE-2023-5680 - status not-applicable-or-not-bind9-release, no tag emitted.",
   "25 CVE fix tags are attribution:approximate (taken from the NVD description 'before X' / 'prior to X'; the tag exists in the clone and the top [security] entries of that tag's CHANGES are stored, but the fixing commit was not located): CVE-2002-0400, CVE-2006-0987, CVE-2006-4095, CVE-2006-4096, CVE-2008-1447, CVE-2009-0696, CVE-2009-4022, CVE-2010-0097, CVE-2010-0290, CVE-2010-0382, CVE-2010-3762, CVE-2011-1907, CVE-2011-1910, CVE-2011-2464, CVE-2012-1667, CVE-2012-3817, CVE-2012-3868, CVE-2012-4244, CVE-2012-5166, CVE-2012-5688, CVE-2013-2266, CVE-2013-3919, CVE-2013-6230, CVE-2014-0591, CVE-2018-5741",
   "cds/cdnskey: the commit that first made dnssec-policy publish CDS/CDNSKEY (9.16.0 keymgr code) was not located; only the later cds-digest-type / cdnskey options (d22, value_changed=false) are recorded. So no default_change row asserts a CDS/CDNSKEY default change.",
-  "Introduction of the first (key-size dependent, 150/500/2500) NSEC3 iteration limit in 2009 (CHANGES around 9.6.1/9.7.0) was not located; l01 records the change from that scheme to a fixed 150 (2021).",
+  "The first key-size dependent NSEC3 iteration limit (150/500/2500) is already present in lib/dns/nsec3.c at v9.6.0a1 (v9.5.2 has no nsec3.c), so it shipped with NSEC3 support itself; no default_change row is recorded for it. l01 records the change from that scheme to a fixed 150 (2021). (Located in Phase 3.)",
   "Stage-2 changelog_entries[].commits arrays are empty for all 1,383 kept entries (stage 2 attributed entries to tags, not commits); commit evidence exists only on default_changes rows and cve_fixes rows produced here.",
   "cvs2git-era tags (<= 2012-02) make git tag --contains unreliable (e.g. v9.0.1, v9.4.3-P3, v9.6.1-P1 'contain' 2009-2011 commits). Defaults d01-d04 were therefore verified by tree content at the tag; pre-2012-03 commit containment is not used for cve_fixes.",
   "Defaults changed after v9.20.0 (9.20.x, 9.21 development) were only sampled through the kept changelog entries (e.g. dnssec-policy key tag range handling, dnssec-keygen option removals, RSASHA1/DS-SHA1 deprecation warnings 2025); no additional default_changes rows were verified for them. 9.21 development releases are stable:false.",
   "max-* limit options not tied to DNSSEC validation (max-records-per-type, max-rrtypes-per-name, max-recursion-queries) are not recorded as limit_changed rows; CVE-2026-xxxx validation-limit fixes (e.g. 9.20.29 key-tag limit) appear only as cve-fix entries.",
   "Effect of 'dnssec-validation yes' requiring an explicit trust-anchors statement (GL #4373, 9.19.22 -> 9.20.0) and of removal of managed-keys/trusted-keys (9.21.4) is only in the kept changelog entries, not as default_changes rows.",
   "43 cve_fixes rows name an earlier tag than the inventory fix_release (see differs_from_inventory); the inventory generally names the next master release, the branch/point release shipped first. CVE-2023-50868 inventory value v9.16.50 is the CVE-id mention commit, not the fix (see news_edits n02).",
-  "Embargo effect: for several security releases the tag commit date precedes NVD/ISC public disclosure by days to weeks (negative latency); the tag commit date is used as instructed and is not the public announcement date."
+  "Embargo effect: for several security releases the tag commit date precedes NVD/ISC public disclosure by days to weeks (negative latency); the tag commit date is used as instructed and is not the public announcement date.",
+  "total_entries counts entries after cross-branch de-duplication: an entry already attributed to an earlier-dated tag on another branch is not counted again (v9.16.1 records 6; a raw CHANGES diff against v9.16.0 gives 8 because 5357 and 5358 shipped first in v9.11.17). v9.4.0 records 180 where the Phase 3 raw diff reproduced 156; not reconciled. (Phase 3.)",
+  "rst era (per-release doc/changelog/changelog-<ver>.rst): 150 changelog lines appear under two or three releases (e.g. 'Update bind.keys with the new 2025 IANA root key' under v9.21.3, v9.20.4 and v9.18.32). The earliest-dated-final-tag rule stated in branch_note was not applied to rst-era entries. (Phase 3.)",
+  "released is the committer-local calendar date of <tag>^{commit}, not the UTC date; about 60 rows differ (e.g. v9.9.1 released 2012-05-10, instant 2012-05-09T22:39:51Z). Earliest-tag choices use the UTC instant after Phase 3. (Phase 3.)",
+  "Public announcement dates of embargoed releases (e.g. v9.4.2-P1, v9.3.5-P1, v9.5.0-P1: tag commits 2008-05-28, ISC public 2008-07-08) are outside the clone; d01's date and the CVE-2008-1447 latency of -41 days use the tag commit date. (Phase 3.)"
  ],
  "verification": {
   "default_changes": 28,
@@ -57282,6 +57313,34 @@
   },
   "default_changed_rows": 16,
   "limit_changed_rows": 4,
-  "cve_fix_rows_with_tag": 126
+  "cve_fix_rows_with_tag": 126,
+  "phase3": {
+   "report": "docs/handoff/verify/bind9.md",
+   "verdict": "PASS WITH CORRECTIONS",
+   "corrections_applied": [
+    ".md CVE-2015-1349",
+    "CVE-2015-1349: v9.10.1-P2 -> v9.9.6-P2 (2015-02-11, latency -8)",
+    ".md CVE-2015-8000",
+    "CVE-2015-8000: v9.10.3-P2 -> v9.9.8-P2 (2015-12-06, latency -10)",
+    ".md CVE-2015-8461",
+    "CVE-2015-8461: v9.10.3-P2 -> v9.9.8-P2 (2015-12-06, latency -10)",
+    ".md CVE-2021-25220",
+    "CVE-2021-25220: v9.16.27 -> v9.18.1 (2022-03-07, latency -16)",
+    ".md CVE-2022-0396",
+    "CVE-2022-0396: v9.16.27 -> v9.18.1 (2022-03-07, latency -16)",
+    ".md CVE-2010-0382",
+    "CVE-2010-0382: v9.4.3-P5 -> v9.6.1-P3 (2010-01-07, latency -15)",
+    ".md d05 first_tag",
+    ".md d24 opt-in",
+    ".md d24 note",
+    ".md d15 changelog",
+    ".md d04 ref",
+    ".md remove 4313 not-found",
+    ".md insert 4313 row",
+    ".md gap 27->26",
+    ".md nsec3 gap",
+    ".md gaps appended"
+   ]
+  }
  }
 }
