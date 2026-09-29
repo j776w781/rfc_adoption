@@ -71,7 +71,24 @@ def test_keytrap_and_nsec3_are_the_multi_vendor_events(a):
     for cve in ("CVE-2023-50387", "CVE-2023-50868"):
         row = next(c for c in a["coordinated"] if c["cve"] == cve)
         assert len(row["vendors"]) >= 3, cve
-        assert row["spread_days"] > 100, cve
+        # Corrected 2026-09-29: the Recursor fix shipped in rec-5.0.2 / 4.8.6 / 4.9.3
+        # (tag commits 2024-02-06), not 5.1.0 (2024-07-08), and the Authoritative
+        # Server never carried a KeyTrap fix (it does not validate). The spread is a
+        # week, not five months.
+        assert row["projects"]["pdns-rec"] == "2024-02-06", cve
+        assert "pdns-auth" not in row["projects"], cve
+        assert row["spread_days"] <= 14, cve
+
+
+def test_not_applicable_inventory_rows_are_not_counted_as_fixes(a):
+    import json
+    from pathlib import Path
+    inv = json.loads(Path("data/software/cve_inventory.json").read_text(encoding="utf-8"))
+    by = {c["cve"]: c for c in a["cves"]}
+    for proj, recs in inv["fixes"].items():
+        for rec in recs:
+            if rec.get("not_applicable") and rec["cve"] in by:
+                assert proj not in by[rec["cve"]].get("fixes", {}), (proj, rec["cve"])
 
 
 def test_signers_and_authoritative_only_servers_carry_no_dnssec_cves(a):

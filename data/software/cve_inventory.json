@@ -9182,7 +9182,9 @@
         "sha": "fa3f820bbfd355ffcd0d8f498e672b7ee73561bd",
         "subject": "upgrade to webrick 1.4.2 (CVE-2009-4492)",
         "fix_release": "4.2.0",
-        "fix_released": "2019-08-27"
+        "fix_released": "2019-08-27",
+        "not_applicable": true,
+        "not_applicable_reason": "commit fa3f820bb changes only modules/remotebackend Gemfile.lock files (webrick test dependency); no shipped server code. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2012-0206",
@@ -9223,7 +9225,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-04-05"
+        "fix_released": "2020-04-05",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9514",
@@ -9231,7 +9235,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-04-05"
+        "fix_released": "2020-04-05",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9515",
@@ -9239,7 +9245,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-04-05"
+        "fix_released": "2020-04-05",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2020-25829",
@@ -9247,7 +9255,9 @@
         "sha": "e0386c2225c730191dab7f971eb3a46828ed8e7b",
         "subject": "Backport of CVE-2020-25829 (any-cache-update) to 4.2.x",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor code (pdns/syncres.cc, any-cache-update). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2022-37428",
@@ -9255,7 +9265,9 @@
         "sha": "21f3d92144bc6a65483a363f6be7237d714c1936",
         "subject": "Backport of protobuf PSA 2022-02 (CVE-2022-37428) to rec-4.5.x",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor protobuf logging (pdns/recursordist, remote_logger.cc). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-26437",
@@ -9263,7 +9275,9 @@
         "sha": "94fccab63457f8327add3a8e1e2b7876234e4989",
         "subject": "PowerDNS Security Advisory 2023-02: Deterred spoofing attempts can lead to authoritative servers being marked unavailable (CVE-2023-26437)",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor code (pdns_recursor.cc, syncres.cc). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-50387",
@@ -9271,7 +9285,9 @@
         "sha": "15e973d6d882ed51fbad70dd082b11c7ad299466",
         "subject": "rec: CVE-2023-50387 and CVE-2023-50868",
         "fix_release": "4.9.0",
-        "fix_released": "2024-03-14"
+        "fix_released": "2024-03-14",
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor validation commit 15e973d6d ('rec: ...'); the Authoritative Server does not validate. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-50868",
@@ -9279,7 +9295,9 @@
         "sha": "15e973d6d882ed51fbad70dd082b11c7ad299466",
         "subject": "rec: CVE-2023-50387 and CVE-2023-50868",
         "fix_release": "4.9.0",
-        "fix_released": "2024-03-14"
+        "fix_released": "2024-03-14",
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor validation commit 15e973d6d ('rec: ...'); the Authoritative Server does not validate. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-6193",
@@ -9287,7 +9305,9 @@
         "sha": "91a4477f798c31f598e8e49068c0cd973bc7d162",
         "subject": "dnsdist: Update Quiche to 0.20.0",
         "fix_release": "4.9.0",
-        "fix_released": "2024-03-14"
+        "fix_released": "2024-03-14",
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist Quiche update (builder-support, tasks.py). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2024-25583",
@@ -9295,7 +9315,9 @@
         "sha": "e1247da968077ee7c58fa41447057ee2a2b09fc9",
         "subject": "rec: backport CVE-2024-25583 to rel/rec-4.8.8-branch",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor backport (rel/rec-4.8.8 branch). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2024-25590",
@@ -9303,7 +9325,9 @@
         "sha": "6083aa60363ca247ed43908f55156a1752401725",
         "subject": "Merge pull request #14745 from omoerbeek/rec-4.9.9-branch",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor branch merge (rec-4.9.9). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33257",
@@ -9377,7 +9401,9 @@
         "sha": "4e368fb0480e0384cb1ca5f6fdf003f3944f4802",
         "subject": "Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist h2o update merge (PR #17669). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       }
     ],
     "pdns-rec": [
@@ -9387,7 +9413,9 @@
         "sha": "fa3f820bbfd355ffcd0d8f498e672b7ee73561bd",
         "subject": "upgrade to webrick 1.4.2 (CVE-2009-4492)",
         "fix_release": "4.2.0",
-        "fix_released": "2019-07-12"
+        "fix_released": "2019-07-12",
+        "not_applicable": true,
+        "not_applicable_reason": "commit fa3f820bb changes only modules/remotebackend Gemfile.lock files (webrick test dependency); no shipped server code. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2012-0206",
@@ -9395,7 +9423,9 @@
         "sha": "6a90bacffe780bc25068b9a8774bc39c37ccf239",
         "subject": "fix CVE-2012-0206, and PowerDNS Authoritative Server Security Notification 2012-01",
         "fix_release": "3.5.1",
-        "fix_released": "2013-05-03"
+        "fix_released": "2013-05-03",
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative code (pdns/common_startup.cc); verified auth fix auth-3.0.1. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2015-1868",
@@ -9414,7 +9444,9 @@
         "sha": "caaa00dea3113ed34476f1df459b6cfb57b993fb",
         "subject": "Merge pull request #6581 from rgacogne/docs-sec-2018-02",
         "fix_release": "4.2.0",
-        "fix_released": "2019-07-12"
+        "fix_released": "2019-07-12",
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative dnsreplay fix (verified auth-4.1.2); cited commit is a docs merge. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9512",
@@ -9422,7 +9454,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-02-26"
+        "fix_released": "2020-02-26",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9514",
@@ -9430,7 +9464,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-02-26"
+        "fix_released": "2020-02-26",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9515",
@@ -9438,7 +9474,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-02-26"
+        "fix_released": "2020-02-26",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2020-25829",
@@ -9498,7 +9536,9 @@
         "sha": "91a4477f798c31f598e8e49068c0cd973bc7d162",
         "subject": "dnsdist: Update Quiche to 0.20.0",
         "fix_release": "5.1.0",
-        "fix_released": "2024-07-08"
+        "fix_released": "2024-07-08",
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist Quiche update (builder-support, tasks.py). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2024-25583",
@@ -9550,7 +9590,9 @@
         "sha": "9244f6aea9501d217e36e48ed0296912e40389da",
         "subject": "Prevent creadeSecondaryDomain from creating an invalid bind configuration.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative modules (createSecondaryDomain). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33609",
@@ -9558,7 +9600,9 @@
         "sha": "2a2d1b620224cf0ef8eed3994e6af1dc626e5da7",
         "subject": "Rewrite the ldap escape function, and always escape network-controlled input.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative LDAP backend module. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33610",
@@ -9566,7 +9610,9 @@
         "sha": "6d3dd870ee5bd12469e4eb226f8c623d4041c482",
         "subject": "Make sure to wrap the socket in a unique_ptr to close it in all cases.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative dynamic update handler (pdns/rfc2136handler.cc). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33611",
@@ -9582,7 +9628,9 @@
         "sha": "4e368fb0480e0384cb1ca5f6fdf003f3944f4802",
         "subject": "Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist h2o update merge (PR #17669). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       }
     ],
     "unbound": [
@@ -10052,6 +10100,17 @@
       "from": "verified timeline data/software/timelines/pdns-rec.json (Phase 3 report docs/handoff/verify/pdns-rec.md)",
       "pattern": "KeyTrap CVE-2023-50387/50868: 5.1.0 (2024-07-08, master line) -> 5.0.2 (tag commit 2024-02-06; public 2024-02-13 per changelog). Same cause as earlier batches.",
       "not_adjudicated": "12 fixes.pdns-rec rows have no Recursor timeline row; the builder judged them Authoritative/dnsdist-only or not Recursor issues (CVE-2009-4492, CVE-2012-0206, CVE-2018-1046, CVE-2019-9512/9514/9515, CVE-2023-6193, CVE-2026-33608..33611, CVE-2026-49975). Left unchanged."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 24,
+      "detail": {
+        "pdns-auth": 13,
+        "pdns-rec": 11
+      },
+      "kind": "not_applicable",
+      "from": "pdns-auth timeline section 'Inventory fix rows judged not applicable' and pdns-rec builder gap 10, each checked against the cited commit's changed files",
+      "note": "Rows kept; not_applicable excludes them from per-program fix counts and fix dates in scripts/cve_crossref.py. CVE-2026-33611 for pdns-rec left unmarked: its commit changes shared record-parsing code (dnswriter.cc, rcpgenerator.cc) that the Recursor also builds."
     }
   ]
 }

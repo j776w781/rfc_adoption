@@ -582,7 +582,7 @@
   "text": [
    "THE RFC IN EACH PROGRAM  \u00b7  RFC 9276",
    "RFC 9276 published 2022-08: what each program did, in months from that date",
-   "BIND 9: default from 9.7.0, 2010-02 (150 mo before the RFC); CVE-2023-50868 2024-02.\nKnot DNS: caps it from 3.1.5, 2021-12 (8 mo before the RFC).\nPowerDNS Auth: caps it from 4.5.0, 2021-07 (13 mo before the RFC); CVE-2023-50868 2024-02.\nUnbound: caps it from 1.13.2, 2021-08 (12 mo before the RFC); CVE-2023-50868 2024-02; CVE-2026-33278 2026-05; CVE-2026-42923 2026-05.\nKnot Resolver: CVE-2021-40083 2021-08; CVE-2023-50868 2024-02.\nPowerDNS Rec: caps it from 4.1.0, 2017-12 (56 mo before the RFC); CVE-2023-50868 2024-02; CVE-2026-33261 2026-04."
+   "BIND 9: default from 9.7.0, 2010-02 (150 mo before the RFC); CVE-2023-50868 2024-02.\nKnot DNS: caps it from 3.1.5, 2021-12 (8 mo before the RFC).\nPowerDNS Auth: caps it from 4.5.0, 2021-07 (13 mo before the RFC).\nUnbound: caps it from 1.13.2, 2021-08 (12 mo before the RFC); CVE-2023-50868 2024-02; CVE-2026-33278 2026-05; CVE-2026-42923 2026-05.\nKnot Resolver: CVE-2021-40083 2021-08; CVE-2023-50868 2024-02.\nPowerDNS Rec: caps it from 4.1.0, 2017-12 (56 mo before the RFC); CVE-2023-50868 2024-02; CVE-2026-33261 2026-04."
   ]
  },
  {

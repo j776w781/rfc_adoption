@@ -122,6 +122,10 @@ def build_index(inv: dict) -> dict[str, dict]:
             note(rec, "nvd-keyword", keyword=term)
     for proj, recs in inv["fixes"].items():
         for rec in recs:
+            if rec.get("not_applicable"):
+                # Judged not a fix in this program (see not_applicable_reason); the CVE
+                # still counts through its other sources, but not as this program's fix.
+                continue
             note({"cve": rec["cve"], "description": rec.get("subject", "")}, "git", project=proj)
             rows[rec["cve"]]["fixes"][proj] = {
                 "commit_date": rec.get("commit_date"), "release": rec.get("fix_release"),

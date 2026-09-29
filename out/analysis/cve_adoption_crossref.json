@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-09",
+  "generated": "2026-09-29",
   "method": {
     "join": "CVE description must name the algorithm or mechanism.",
     "why_narrow": "A bug in the shared validation path is not evidence against any one algorithm. Those are counted under shared_core.",

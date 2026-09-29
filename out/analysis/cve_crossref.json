@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-09",
+  "generated": "2026-09-29",
   "totals": {
-    "distinct_cves": 441,
+    "distinct_cves": 435,
     "by_scope": {
       "dnssec": 97,
-      "dns": 322,
-      "dependency": 22
+      "dns": 321,
+      "dependency": 17
     },
     "by_mechanism": {
       "nsec3": 12,
@@ -19,7 +19,7 @@
       "algorithm": 4,
       "ds-digest": 3
     },
-    "with_a_dated_fix": 133
+    "with_a_dated_fix": 164
   },
   "per_project": {
     "bind9": {
@@ -42,14 +42,12 @@
       "dependency": 1
     },
     "pdns-auth": {
-      "dnssec": 3,
-      "dns": 19,
-      "dependency": 6
+      "dns": 15
     },
     "pdns-rec": {
       "dnssec": 12,
-      "dns": 45,
-      "dependency": 7
+      "dns": 39,
+      "dependency": 2
     },
     "unbound": {
       "dnssec": 16,
@@ -79,13 +77,13 @@
   "attribution_caveat": "Knot, Knot Resolver and OpenDNSSEC have no usable CPE, so their CVE lists come from keyword search and overlap by substring. Their product membership is not used to decide who a CVE affected.",
   "fix_latency_days": {
     "all": {
-      "n": 141,
-      "median": 0,
-      "p90": 65
+      "n": 172,
+      "median": -9,
+      "p90": 6
     },
     "dnssec": {
-      "n": 37,
-      "median": 0
+      "n": 40,
+      "median": -4
     },
     "negative_are_embargo": "A fix released before the CVE was published is a coordinated disclosure, not a time machine."
   },
@@ -160,7 +158,6 @@
       ],
       "affected_evidence": {
         "bind9": "git-fix",
-        "pdns-auth": "git-fix",
         "pdns-rec": "git-fix",
         "unbound": "git-fix"
       },
@@ -171,14 +168,13 @@
       "rfc": "RFC 4034",
       "cvss": 7.5,
       "projects": {
+        "pdns-rec": "2024-02-06",
         "bind9": "2024-02-11",
-        "unbound": "2024-02-13",
-        "pdns-auth": "2024-03-14",
-        "pdns-rec": "2024-07-08"
+        "unbound": "2024-02-13"
       },
-      "first_release": "2024-02-11",
-      "last_release": "2024-07-08",
-      "spread_days": 148,
+      "first_release": "2024-02-06",
+      "last_release": "2024-02-13",
+      "spread_days": 7,
       "description": "Certain DNSSEC aspects of the DNS protocol (in RFC 4033, 4034, 4035, 6840, and related RFCs) allow remote attackers to cause a denial of service (CPU consumption) via one or more DNSSEC responses, aka the \"KeyTrap\" issue"
     },
     {
@@ -197,7 +193,6 @@
       ],
       "affected_evidence": {
         "bind9": "git-fix",
-        "pdns-auth": "git-fix",
         "pdns-rec": "git-fix",
         "unbound": "git-fix"
       },
@@ -208,14 +203,13 @@
       "rfc": "RFC 5155",
       "cvss": 7.5,
       "projects": {
-        "unbound": "2024-02-13",
-        "pdns-auth": "2024-03-14",
-        "bind9": "2024-04-03",
-        "pdns-rec": "2024-07-08"
+        "pdns-rec": "2024-02-06",
+        "bind9": "2024-02-11",
+        "unbound": "2024-02-13"
       },
-      "first_release": "2024-02-13",
-      "last_release": "2024-07-08",
-      "spread_days": 146,
+      "first_release": "2024-02-06",
+      "last_release": "2024-02-13",
+      "spread_days": 7,
       "description": "The Closest Encloser Proof aspect of the DNS protocol (in RFC 5155 when RFC 9276 guidance is skipped) allows remote attackers to cause a denial of service (CPU consumption for SHA-1 computations) via DNSSEC responses in "
     }
   ],
@@ -1673,8 +1667,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2008-01-15",
-          "release": "9.4.3",
-          "released": "2008-11-12",
+          "release": "9.3.5",
+          "released": "2008-04-03",
           "subject": "2305.   [security]      inet_network() buffer overflow. CVE-2008-0122."
         }
       },
@@ -2302,40 +2296,6 @@
       "rule": "validation"
     },
     {
-      "cve": "CVE-2009-4492",
-      "published": null,
-      "description": "upgrade to webrick 1.4.2 (CVE-2009-4492)",
-      "cvss": null,
-      "severity": null,
-      "cwe": [],
-      "sources": [
-        "git"
-      ],
-      "products": [
-        "pdns-auth",
-        "pdns-rec"
-      ],
-      "keywords": [],
-      "fixes": {
-        "pdns-auth": {
-          "commit_date": "2018-01-09",
-          "release": "4.2.0",
-          "released": "2019-08-27",
-          "subject": "upgrade to webrick 1.4.2 (CVE-2009-4492)"
-        },
-        "pdns-rec": {
-          "commit_date": "2018-01-09",
-          "release": "4.2.0",
-          "released": "2019-07-12",
-          "subject": "upgrade to webrick 1.4.2 (CVE-2009-4492)"
-        }
-      },
-      "scope": "dependency",
-      "mechanism": null,
-      "rfc": null,
-      "rule": "DEPENDENCY"
-    },
-    {
       "cve": "CVE-2010-0097",
       "published": "2010-01-22",
       "description": "ISC BIND 9.0.x through 9.3.x, 9.4 before 9.4.3-P5, 9.5 before 9.5.2-P2, 9.6 before 9.6.1-P3, and 9.7.0 beta does not properly validate DNSSEC (1) NSEC and (2) NSEC3 records, which allows remote attackers to add the Authenticated Data (AD) flag to a forged NXDOMAIN response for an existing domain.",
@@ -2498,8 +2458,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2010-11-25",
-          "release": null,
-          "released": null,
+          "release": "9.4-ESV-R4",
+          "released": "2010-11-29",
           "subject": "CVE-2010-3613 Reduce complexity from M to L raising score from 7.1 to 7.8. Just have the base CVSS vectors."
         }
       },
@@ -2803,21 +2763,14 @@
         "nvd-product"
       ],
       "products": [
-        "pdns-auth",
-        "pdns-rec"
+        "pdns-auth"
       ],
       "keywords": [],
       "fixes": {
         "pdns-auth": {
           "commit_date": "2012-01-10",
-          "release": "3.3.1",
-          "released": "2013-12-17",
-          "subject": "fix CVE-2012-0206, and PowerDNS Authoritative Server Security Notification 2012-01"
-        },
-        "pdns-rec": {
-          "commit_date": "2012-01-10",
-          "release": "3.5.1",
-          "released": "2013-05-03",
+          "release": "3.0.1",
+          "released": "2012-01-10",
           "subject": "fix CVE-2012-0206, and PowerDNS Authoritative Server Security Notification 2012-01"
         }
       },
@@ -3105,8 +3058,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2013-07-17",
-          "release": "9.8.6",
-          "released": "2013-09-04",
+          "release": "9.8.5-P2",
+          "released": "2013-07-17",
           "subject": "3621.   [security]      Incorrect bounds checking on private type 'keydata'                         can lead to a remotely triggerable REQUIRE failure"
         }
       },
@@ -3230,8 +3183,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2014-05-09",
-          "release": null,
-          "released": null,
+          "release": "9.10.0-P2",
+          "released": "2014-05-27",
           "subject": "Add CVE-2014-3214 to README"
         }
       },
@@ -3260,8 +3213,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2014-05-26",
-          "release": "9.8.8",
-          "released": "2014-09-16",
+          "release": "9.10.0-P2",
+          "released": "2014-05-27",
           "subject": "add CVE-2014-3859"
         }
       },
@@ -3290,8 +3243,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2014-11-17",
-          "release": "9.9.7",
-          "released": "2015-02-18",
+          "release": "9.10.1-P1",
+          "released": "2014-11-20",
           "subject": "[v9_9] limit recursion depth and iterative queries"
         }
       },
@@ -3398,8 +3351,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-02-03",
-          "release": null,
-          "released": null,
+          "release": "9.9.6-P2",
+          "released": "2015-02-11",
           "subject": "[v9_10_1_patch] avoid crash due to managed-key rollover"
         }
       },
@@ -3429,14 +3382,14 @@
       "fixes": {
         "pdns-auth": {
           "commit_date": "2015-05-01",
-          "release": "3.3.2",
-          "released": "2015-05-01",
+          "release": "3.4.4",
+          "released": "2015-04-23",
           "subject": "import CVE-2015-1868 patch"
         },
         "pdns-rec": {
           "commit_date": "2015-05-01",
-          "release": null,
-          "released": null,
+          "release": "3.7.2",
+          "released": "2015-04-21",
           "subject": "import CVE-2015-1868 patch"
         }
       },
@@ -3495,8 +3448,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-06-17",
-          "release": null,
-          "released": null,
+          "release": "9.9.7-P1",
+          "released": "2015-06-17",
           "subject": "add release notes for CVE-2015-4620"
         }
       },
@@ -3547,8 +3500,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-07-14",
-          "release": null,
-          "released": null,
+          "release": "9.9.7-P2",
+          "released": "2015-07-14",
           "subject": "4165.   [bug]           An failure to reset a value to NULL in tkey.c could                         result in an assertion failure. (CVE-2015-5477)   "
         }
       },
@@ -3580,8 +3533,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-08-07",
-          "release": null,
-          "released": null,
+          "release": "9.10.2-P4",
+          "released": "2015-08-15",
           "subject": "[v9_9_7_patch] address buffer accounting error"
         }
       },
@@ -3632,8 +3585,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-11-16",
-          "release": null,
-          "released": null,
+          "release": "9.9.8-P2",
+          "released": "2015-12-06",
           "subject": "4260.   [security]      Insufficient testing when parsing a message allowed                         records with an incorrect class to be be accepted,"
         }
       },
@@ -3662,8 +3615,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-12-03",
-          "release": null,
-          "released": null,
+          "release": "9.9.8-P2",
+          "released": "2015-12-06",
           "subject": "Add CVE-2015-8461"
         }
       },
@@ -3692,8 +3645,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-12-31",
-          "release": null,
-          "released": null,
+          "release": "9.9.8-P3",
+          "released": "2016-01-06",
           "subject": "4285.   [security]      Specific APL data could trigger a INSIST.                         (CVE-2015-8704) [RT #41396]"
         }
       },
@@ -3722,8 +3675,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2015-12-31",
-          "release": "9.11.0",
-          "released": "2016-09-29",
+          "release": "9.10.3-P3",
+          "released": "2016-01-06",
           "subject": "4286.   [security]      render_ecs errors were mishandled when printing out                         a OPT record resulting in a assertion failure.    "
         }
       },
@@ -3792,8 +3745,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-02-18",
-          "release": null,
-          "released": null,
+          "release": "9.10.3-P4",
+          "released": "2016-02-29",
           "subject": "4318.   [security]      Malformed control messages can trigger assertions                         in named and rndc. (CVE-2016-1285) [RT #41666]"
         }
       },
@@ -3820,8 +3773,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-02-22",
-          "release": null,
-          "released": null,
+          "release": "9.10.3-P4",
+          "released": "2016-02-29",
           "subject": "add CVE-2016-1286 to -P4 summary. Fix misspelling"
         }
       },
@@ -3850,8 +3803,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-02-27",
-          "release": "9.11.0",
-          "released": "2016-09-29",
+          "release": "9.10.3-P4",
+          "released": "2016-02-29",
           "subject": "add CVE-2016-2088"
         }
       },
@@ -3880,8 +3833,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-07-12",
-          "release": "9.9.10",
-          "released": "2017-04-14",
+          "release": "9.9.9-P2",
+          "released": "2016-07-13",
           "subject": "add CVE-2016-2775"
         }
       },
@@ -3910,8 +3863,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-09-09",
-          "release": null,
-          "released": null,
+          "release": "9.9.9-P3",
+          "released": "2016-09-09",
           "subject": "add CVE-2016-2776"
         }
       },
@@ -3982,7 +3935,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-11-02",
-          "release": "9.10.5",
+          "release": "9.9.10",
           "released": "2017-04-14",
           "subject": "4504.   [security]      Allow the maximum number of records in a zone to                         be specified.  This provides a control for issues    "
         }
@@ -4161,8 +4114,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-10-21",
-          "release": null,
-          "released": null,
+          "release": "9.10.4-P4",
+          "released": "2016-10-21",
           "subject": "CVE-2016-8864"
         }
       },
@@ -4191,8 +4144,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-11-03",
-          "release": null,
-          "released": null,
+          "release": "9.9.9-P5",
+          "released": "2016-12-11",
           "subject": "CVE-2016-9131"
         }
       },
@@ -4224,8 +4177,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-11-04",
-          "release": null,
-          "released": null,
+          "release": "9.9.9-P5",
+          "released": "2016-12-11",
           "subject": "CVE-2016-9147"
         }
       },
@@ -4254,8 +4207,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-11-22",
-          "release": "9.9.10",
-          "released": "2017-04-14",
+          "release": "9.9.9-P5",
+          "released": "2016-12-11",
           "subject": "4517.   [security]      Named could mishandle authority sections that were                         missing RRSIGs triggering an assertion failure.    "
         }
       },
@@ -4284,8 +4237,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2016-12-09",
-          "release": null,
-          "released": null,
+          "release": "9.9.9-P5",
+          "released": "2016-12-11",
           "subject": "4531.   [security]      'is_zone' was not being properly updated by redirect2                         and subsequently preserved leading to an asserti"
         }
       },
@@ -4461,8 +4414,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2018-01-19",
-          "release": "1.7.0",
-          "released": "2018-03-12",
+          "release": "1.6.8",
+          "released": "2018-01-19",
           "subject": "- patch for CVE-2017-15105: vulnerability in the processing of   wildcard synthesized NSEC records."
         }
       },
@@ -4553,8 +4506,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-01-24",
-          "release": null,
-          "released": null,
+          "release": "9.11.0-P3",
+          "released": "2017-01-31",
           "subject": "4556.   [security]      Combining dns64 and rpz can result in dereferencing                         a NULL pointer (read).  (CVE-2017-3135) [RT#44434]"
         }
       },
@@ -4583,8 +4536,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-02-15",
-          "release": "9.12.0",
-          "released": "2018-01-17",
+          "release": "9.9.9-P8",
+          "released": "2017-03-29",
           "subject": "add CVE-2017-3136 note"
         }
       },
@@ -4613,8 +4566,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-02-23",
-          "release": null,
-          "released": null,
+          "release": "9.9.9-P8",
+          "released": "2017-03-29",
           "subject": "[v9_11_0_patch] remove unnecessary INSIST and prep 9.11.1-P4"
         }
       },
@@ -4643,8 +4596,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-03-25",
-          "release": null,
-          "released": null,
+          "release": "9.9.9-P8",
+          "released": "2017-03-29",
           "subject": "4582.   [security]      'rndc \"\"' could trigger a assertion failure in named.                         (CVE-2017-3138) [RT #44924]"
         }
       },
@@ -4693,8 +4646,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-05-30",
-          "release": null,
-          "released": null,
+          "release": "9.9.10-P1",
+          "released": "2017-05-31",
           "subject": "[v9_9_10_patch] fix rpz formerr loop"
         }
       },
@@ -4723,8 +4676,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-05-30",
-          "release": null,
-          "released": null,
+          "release": "9.9.10-P1",
+          "released": "2017-05-31",
           "subject": "[v9_9_10_patch] quote service registry paths"
         }
       },
@@ -4753,8 +4706,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-06-27",
-          "release": null,
-          "released": null,
+          "release": "9.11.1-P2",
+          "released": "2017-06-28",
           "subject": "[v9_9_10_patch] address TSIG bypass/forgery vulnerabilities"
         }
       },
@@ -4781,8 +4734,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2017-06-27",
-          "release": null,
-          "released": null,
+          "release": "9.11.1-P2",
+          "released": "2017-06-28",
           "subject": "[v9_9_10_patch] address TSIG bypass/forgery vulnerabilities"
         }
       },
@@ -4811,8 +4764,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2018-01-03",
-          "release": null,
-          "released": null,
+          "release": "9.11.2-P1",
+          "released": "2018-01-04",
           "subject": "[v9_9_11_patch] prevent use-after-free"
         }
       },
@@ -4891,21 +4844,14 @@
         "git"
       ],
       "products": [
-        "pdns-auth",
-        "pdns-rec"
+        "pdns-auth"
       ],
       "keywords": [],
       "fixes": {
         "pdns-auth": {
           "commit_date": "2018-05-08",
-          "release": "4.2.0",
-          "released": "2019-08-27",
-          "subject": "Merge pull request #6581 from rgacogne/docs-sec-2018-02"
-        },
-        "pdns-rec": {
-          "commit_date": "2018-05-08",
-          "release": "4.2.0",
-          "released": "2019-07-12",
+          "release": "4.1.2",
+          "released": "2018-05-07",
           "subject": "Merge pull request #6581 from rgacogne/docs-sec-2018-02"
         }
       },
@@ -5152,8 +5098,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2018-05-21",
-          "release": "9.13.0",
-          "released": "2018-05-22",
+          "release": "9.12.1-P2",
+          "released": "2018-05-16",
           "subject": "Merge branch '185-fix-changes-entry' into 'master'"
         }
       },
@@ -5204,8 +5150,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2018-08-08",
-          "release": "9.11.5",
-          "released": "2018-10-06",
+          "release": "9.12.2-P1",
+          "released": "2018-07-24",
           "subject": "Merge branch 'security-v9_11' into 'v9_11'"
         }
       },
@@ -5419,13 +5365,14 @@
     },
     {
       "cve": "CVE-2019-13207",
-      "published": null,
-      "description": "- Fix #20: CVE-2019-13207 Stack-based Buffer Overflow in the   dname_concatenate() function.  Reported by Frederic Cambus.   It causes the zone parser",
+      "published": "2019-07-03",
+      "description": "Stack-based buffer overflow in the dname_concatenate() function in NSD 4.2.0 (see fixes.nsd).",
       "cvss": null,
       "severity": null,
       "cwe": [],
       "sources": [
-        "git"
+        "git",
+        "nvd-product"
       ],
       "products": [
         "nsd"
@@ -5465,8 +5412,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2019-10-03",
-          "release": "1.9.6",
-          "released": "2019-12-06",
+          "release": "1.9.4",
+          "released": "2019-10-03",
           "subject": "- Merge 1.9.4 release with fix for vulnerability CVE-2019-16866. - Continue with development of 1.9.5."
         }
       },
@@ -5933,8 +5880,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2019-04-25",
-          "release": null,
-          "released": null,
+          "release": "9.12.4-P1",
+          "released": "2019-04-06",
           "subject": "Merge branch '880-secure-asdfasdfasdf-abacadabra-crash-v9_12_4_patch-v9_12' into 'v9_12'"
         }
       },
@@ -6080,8 +6027,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2019-12-11",
-          "release": "9.15.7",
-          "released": "2019-12-13",
+          "release": "9.14.8",
+          "released": "2019-11-06",
           "subject": "Fix release notes for BIND 9.15.6"
         }
       },
@@ -6089,108 +6036,6 @@
       "mechanism": null,
       "rfc": null,
       "rule": "PRODUCT_CPE"
-    },
-    {
-      "cve": "CVE-2019-9512",
-      "published": null,
-      "description": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
-      "cvss": null,
-      "severity": null,
-      "cwe": [],
-      "sources": [
-        "git"
-      ],
-      "products": [
-        "pdns-auth",
-        "pdns-rec"
-      ],
-      "keywords": [],
-      "fixes": {
-        "pdns-auth": {
-          "commit_date": "2019-08-14",
-          "release": "4.3.0",
-          "released": "2020-04-05",
-          "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6"
-        },
-        "pdns-rec": {
-          "commit_date": "2019-08-14",
-          "release": "4.3.0",
-          "released": "2020-02-26",
-          "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6"
-        }
-      },
-      "scope": "dependency",
-      "mechanism": null,
-      "rfc": null,
-      "rule": "DEPENDENCY"
-    },
-    {
-      "cve": "CVE-2019-9514",
-      "published": null,
-      "description": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
-      "cvss": null,
-      "severity": null,
-      "cwe": [],
-      "sources": [
-        "git"
-      ],
-      "products": [
-        "pdns-auth",
-        "pdns-rec"
-      ],
-      "keywords": [],
-      "fixes": {
-        "pdns-auth": {
-          "commit_date": "2019-08-14",
-          "release": "4.3.0",
-          "released": "2020-04-05",
-          "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6"
-        },
-        "pdns-rec": {
-          "commit_date": "2019-08-14",
-          "release": "4.3.0",
-          "released": "2020-02-26",
-          "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6"
-        }
-      },
-      "scope": "dependency",
-      "mechanism": null,
-      "rfc": null,
-      "rule": "DEPENDENCY"
-    },
-    {
-      "cve": "CVE-2019-9515",
-      "published": null,
-      "description": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
-      "cvss": null,
-      "severity": null,
-      "cwe": [],
-      "sources": [
-        "git"
-      ],
-      "products": [
-        "pdns-auth",
-        "pdns-rec"
-      ],
-      "keywords": [],
-      "fixes": {
-        "pdns-auth": {
-          "commit_date": "2019-08-14",
-          "release": "4.3.0",
-          "released": "2020-04-05",
-          "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6"
-        },
-        "pdns-rec": {
-          "commit_date": "2019-08-14",
-          "release": "4.3.0",
-          "released": "2020-02-26",
-          "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6"
-        }
-      },
-      "scope": "dependency",
-      "mechanism": null,
-      "rfc": null,
-      "rule": "DEPENDENCY"
     },
     {
       "cve": "CVE-2020-10030",
@@ -6571,23 +6416,16 @@
         "nvd-product"
       ],
       "products": [
-        "pdns-auth",
         "pdns-rec"
       ],
       "keywords": [
         "DNSSEC"
       ],
       "fixes": {
-        "pdns-auth": {
-          "commit_date": "2020-10-12",
-          "release": null,
-          "released": null,
-          "subject": "Backport of CVE-2020-25829 (any-cache-update) to 4.2.x"
-        },
         "pdns-rec": {
           "commit_date": "2020-10-12",
-          "release": "4.2.5",
-          "released": "2020-10-13",
+          "release": "4.1.18",
+          "released": "2020-10-12",
           "subject": "Backport of CVE-2020-25829 (any-cache-update) to 4.2.x"
         }
       },
@@ -6693,8 +6531,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2020-05-19",
-          "release": "9.11.20",
-          "released": "2020-06-10",
+          "release": "9.16.3",
+          "released": "2020-05-06",
           "subject": "Merge branch 'v9_11_19-release' into 'v9_11'"
         }
       },
@@ -6723,8 +6561,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2020-05-19",
-          "release": "9.11.20",
-          "released": "2020-06-10",
+          "release": "9.16.3",
+          "released": "2020-05-06",
           "subject": "Merge branch 'v9_11_19-release' into 'v9_11'"
         }
       },
@@ -6753,8 +6591,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2020-06-18",
-          "release": "9.16.5",
-          "released": "2020-07-03",
+          "release": "9.16.4",
+          "released": "2020-06-10",
           "subject": "Merge branch 'v9_16_4-release' into 'v9_16'"
         }
       },
@@ -6783,8 +6621,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2020-06-18",
-          "release": "9.11.21",
-          "released": "2020-07-03",
+          "release": "9.11.20",
+          "released": "2020-06-10",
           "subject": "Merge branch 'v9_11_20-release' into 'v9_11'"
         }
       },
@@ -6963,8 +6801,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2021-02-04",
-          "release": "9.11.29",
-          "released": "2021-03-09",
+          "release": "9.16.12",
+          "released": "2021-02-04",
           "subject": "Merge branch '2354-security-off-by-one-error-in-spnego-v9_11' into 'security-v9_11'"
         }
       },
@@ -6993,8 +6831,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2021-04-12",
-          "release": "9.11.32",
-          "released": "2021-05-12",
+          "release": "9.16.15",
+          "released": "2021-04-19",
           "subject": "Merge branch '2467-confidential-issue-ixfr-checks-v9_11' into 'security-v9_11'"
         }
       },
@@ -7023,8 +6861,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2021-04-12",
-          "release": "9.11.32",
-          "released": "2021-05-12",
+          "release": "9.16.15",
+          "released": "2021-04-19",
           "subject": "Merge branch '2540-confidential-issue-existing-dname-v9_11' into 'security-v9_11'"
         }
       },
@@ -7053,8 +6891,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2021-04-12",
-          "release": "9.11.32",
-          "released": "2021-05-12",
+          "release": "9.16.15",
+          "released": "2021-04-19",
           "subject": "Merge branch '2604-confidential-issue-spnego-v9_11' into 'security-v9_11'"
         }
       },
@@ -7083,8 +6921,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2021-08-06",
-          "release": "9.17.18",
-          "released": "2021-09-07",
+          "release": "9.16.20",
+          "released": "2021-08-10",
           "subject": "Merge branch '2839-confidential-rrl-msgsize' into 'security-main'"
         }
       },
@@ -7111,8 +6949,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2021-10-11",
-          "release": "9.11.37",
-          "released": "2022-03-07",
+          "release": "9.11.36",
+          "released": "2021-10-11",
           "subject": "Merge branch '2899-security-disable-lame-cache-v9_11' into 'security-v9_11'"
         }
       },
@@ -7141,8 +6979,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-03-03",
-          "release": "9.16.28",
-          "released": "2022-04-11",
+          "release": "9.18.1",
+          "released": "2022-03-07",
           "subject": "Merge branch '2950-confidential-cache-acceptance-rules-v9_16' into 'security-v9_16'"
         }
       },
@@ -7213,8 +7051,8 @@
       "fixes": {
         "kresd": {
           "commit_date": "2021-08-25",
-          "release": "5.4.2",
-          "released": "2021-10-13",
+          "release": "5.3.2",
+          "released": "2021-05-05",
           "subject": "NEWS 5.3.2: add CVE-2021-40083 reference"
         }
       },
@@ -7263,8 +7101,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-03-03",
-          "release": "9.16.28",
-          "released": "2022-04-11",
+          "release": "9.18.1",
+          "released": "2022-03-07",
           "subject": "Merge branch '3112-ensure-correct-ordering-in-isc__nm_process_sock_buffer-v9_16' into 'security-v9_16'"
         }
       },
@@ -7293,8 +7131,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-02-17",
-          "release": "9.18.2",
-          "released": "2022-04-11",
+          "release": "9.18.1",
+          "released": "2022-03-07",
           "subject": "Add regression test for CVE-2022-0635"
         }
       },
@@ -7323,8 +7161,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-03-03",
-          "release": "9.18.2",
-          "released": "2022-04-11",
+          "release": "9.18.1",
+          "released": "2022-03-07",
           "subject": "Merge branch '3129-check-fetch-shutting-down-in-resume_dslookup-v9_18' into 'security-v9_18'"
         }
       },
@@ -7402,8 +7240,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-09-06",
-          "release": null,
-          "released": null,
+          "release": "9.18.7",
+          "released": "2022-09-08",
           "subject": "Add tests for CVE-2022-2795"
         }
       },
@@ -7572,7 +7410,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-09-08",
-          "release": "9.16.33",
+          "release": "9.18.7",
           "released": "2022-09-08",
           "subject": "Merge branch '3517-serve-stale-client-timeout-0-cname-crash-v9_16' into 'security-v9_16'"
         }
@@ -7603,7 +7441,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2023-01-12",
-          "release": "9.16.37",
+          "release": "9.18.11",
           "released": "2023-01-12",
           "subject": "Merge branch '3523-confidential-update-quota-v9_16' into 'security-v9_16'"
         }
@@ -7838,7 +7676,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2023-01-12",
-          "release": "9.16.37",
+          "release": "9.18.11",
           "released": "2023-01-12",
           "subject": "Merge branch '3622-serve-stale-rrsig-fix-security-v9_16' into 'security-v9_16'"
         }
@@ -7862,17 +7700,10 @@
         "nvd-product"
       ],
       "products": [
-        "pdns-auth",
         "pdns-rec"
       ],
       "keywords": [],
       "fixes": {
-        "pdns-auth": {
-          "commit_date": "2022-08-03",
-          "release": null,
-          "released": null,
-          "subject": "Backport of protobuf PSA 2022-02 (CVE-2022-37428) to rec-4.5.x"
-        },
         "pdns-rec": {
           "commit_date": "2022-08-03",
           "release": "4.5.10",
@@ -7935,7 +7766,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-09-08",
-          "release": "9.16.33",
+          "release": "9.18.7",
           "released": "2022-09-08",
           "subject": "Merge branch '3487-eddsa-verify-leak-v9_16' into 'security-v9_16'"
         }
@@ -7965,8 +7796,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2022-11-11",
-          "release": "9.16.39",
-          "released": "2023-03-06",
+          "release": "9.18.11",
+          "released": "2023-01-12",
           "subject": "Add tests for CVE-2022-3924"
         }
       },
@@ -8084,20 +7915,13 @@
         "nvd-product"
       ],
       "products": [
-        "pdns-auth",
         "pdns-rec"
       ],
       "keywords": [],
       "fixes": {
-        "pdns-auth": {
-          "commit_date": "2023-03-16",
-          "release": null,
-          "released": null,
-          "subject": "PowerDNS Security Advisory 2023-02: Deterred spoofing attempts can lead to authoritative servers being marked unavailable (CVE-2023-26437)"
-        },
         "pdns-rec": {
           "commit_date": "2023-03-16",
-          "release": "4.6.6",
+          "release": "4.8.4",
           "released": "2023-03-29",
           "subject": "PowerDNS Security Advisory 2023-02: Deterred spoofing attempts can lead to authoritative servers being marked unavailable (CVE-2023-26437)"
         }
@@ -8127,8 +7951,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2023-07-26",
-          "release": null,
-          "released": null,
+          "release": "9.18.16",
+          "released": "2023-06-09",
           "subject": "Merge branch '4055-improve-the-overmem-cache-cleaning-9.11' into 'bind-9.11'"
         }
       },
@@ -8200,7 +8024,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2023-06-09",
-          "release": "9.16.42",
+          "release": "9.18.16",
           "released": "2023-06-09",
           "subject": "Merge branch '4089-confidential-stale-query-loop-bind-9.16' into 'security-bind-9.16'"
         }
@@ -8251,8 +8075,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2023-07-12",
-          "release": "9.18.20",
-          "released": "2023-11-09",
+          "release": "9.16.44",
+          "released": "2023-09-08",
           "subject": "Add test for CVE-2023-3341"
         }
       },
@@ -8331,7 +8155,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-01-05",
-          "release": "9.16.48",
+          "release": "9.18.24",
           "released": "2024-02-11",
           "subject": "Merge branch '4234-confidential-use-hashmap-when-parsing-9.16' into 'v9.16.46-release'"
         }
@@ -8386,7 +8210,6 @@
       "products": [
         "bind9",
         "kresd",
-        "pdns-auth",
         "pdns-rec",
         "unbound"
       ],
@@ -8398,7 +8221,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-02-01",
-          "release": "9.16.48",
+          "release": "9.18.24",
           "released": "2024-02-11",
           "subject": "Merge branch 'ondrej/split-taskmgr-9.16' into 'v9.16.47-release'"
         },
@@ -8408,16 +8231,10 @@
           "released": null,
           "subject": "mitigate KeyTrap DoS = CVE-2023-50387"
         },
-        "pdns-auth": {
-          "commit_date": "2024-02-09",
-          "release": "4.9.0",
-          "released": "2024-03-14",
-          "subject": "rec: CVE-2023-50387 and CVE-2023-50868"
-        },
         "pdns-rec": {
           "commit_date": "2024-02-09",
-          "release": "5.1.0",
-          "released": "2024-07-08",
+          "release": "5.0.2",
+          "released": "2024-02-06",
           "subject": "rec: CVE-2023-50387 and CVE-2023-50868"
         },
         "unbound": {
@@ -8449,7 +8266,6 @@
       "products": [
         "bind9",
         "kresd",
-        "pdns-auth",
         "pdns-rec",
         "unbound"
       ],
@@ -8459,8 +8275,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-02-14",
-          "release": "9.16.50",
-          "released": "2024-04-03",
+          "release": "9.18.24",
+          "released": "2024-02-11",
           "subject": "Mention CVE-2023-50868 in CHANGES entry 6322"
         },
         "kresd": {
@@ -8469,16 +8285,10 @@
           "released": null,
           "subject": "validator: refuse to validate answers with more than 8 NSEC3 records"
         },
-        "pdns-auth": {
-          "commit_date": "2024-02-09",
-          "release": "4.9.0",
-          "released": "2024-03-14",
-          "subject": "rec: CVE-2023-50387 and CVE-2023-50868"
-        },
         "pdns-rec": {
           "commit_date": "2024-02-09",
-          "release": "5.1.0",
-          "released": "2024-07-08",
+          "release": "5.0.2",
+          "released": "2024-02-06",
           "subject": "rec: CVE-2023-50387 and CVE-2023-50868"
         },
         "unbound": {
@@ -8513,7 +8323,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-01-05",
-          "release": "9.16.48",
+          "release": "9.18.24",
           "released": "2024-02-11",
           "subject": "Merge branch '4281-confidential-redirect-rfc1918-check-failure-bind-9.16' into 'v9.16.46-release'"
         }
@@ -8543,7 +8353,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-01-05",
-          "release": "9.16.48",
+          "release": "9.18.24",
           "released": "2024-02-11",
           "subject": "Merge branch '4334-confidential-dns64-and-serve-stale-bind-9.16' into 'v9.16.46-release'"
         }
@@ -8572,40 +8382,6 @@
       "mechanism": null,
       "rfc": null,
       "rule": "DNS_GENERIC"
-    },
-    {
-      "cve": "CVE-2023-6193",
-      "published": null,
-      "description": "dnsdist: Update Quiche to 0.20.0",
-      "cvss": null,
-      "severity": null,
-      "cwe": [],
-      "sources": [
-        "git"
-      ],
-      "products": [
-        "pdns-auth",
-        "pdns-rec"
-      ],
-      "keywords": [],
-      "fixes": {
-        "pdns-auth": {
-          "commit_date": "2024-01-23",
-          "release": "4.9.0",
-          "released": "2024-03-14",
-          "subject": "dnsdist: Update Quiche to 0.20.0"
-        },
-        "pdns-rec": {
-          "commit_date": "2024-01-23",
-          "release": "5.1.0",
-          "released": "2024-07-08",
-          "subject": "dnsdist: Update Quiche to 0.20.0"
-        }
-      },
-      "scope": "dns",
-      "mechanism": null,
-      "rfc": null,
-      "rule": "PRODUCT_CPE"
     },
     {
       "cve": "CVE-2023-6516",
@@ -8786,8 +8562,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2024-03-07",
-          "release": "1.19.3",
-          "released": "2024-03-11",
+          "release": "1.19.2",
+          "released": "2024-03-07",
           "subject": "- Version set to 1.19.3 for release. After 1.19.2 point release with   security fix for CVE-2024-1931, Denial of service when trimming   EDE text on p"
         }
       },
@@ -8837,20 +8613,13 @@
         "git"
       ],
       "products": [
-        "pdns-auth",
         "pdns-rec"
       ],
       "keywords": [],
       "fixes": {
-        "pdns-auth": {
-          "commit_date": "2024-04-09",
-          "release": null,
-          "released": null,
-          "subject": "rec: backport CVE-2024-25583 to rel/rec-4.8.8-branch"
-        },
         "pdns-rec": {
           "commit_date": "2024-04-09",
-          "release": "4.8.8",
+          "release": "5.0.4",
           "released": "2024-04-09",
           "subject": "rec: backport CVE-2024-25583 to rel/rec-4.8.8-branch"
         }
@@ -8871,21 +8640,14 @@
         "git"
       ],
       "products": [
-        "pdns-auth",
         "pdns-rec"
       ],
       "keywords": [],
       "fixes": {
-        "pdns-auth": {
-          "commit_date": "2024-10-03",
-          "release": null,
-          "released": null,
-          "subject": "Merge pull request #14745 from omoerbeek/rec-4.9.9-branch"
-        },
         "pdns-rec": {
           "commit_date": "2024-10-03",
-          "release": null,
-          "released": null,
+          "release": "5.0.9",
+          "released": "2024-08-26",
           "subject": "Merge pull request #14745 from omoerbeek/rec-4.9.9-branch"
         }
       },
@@ -9009,8 +8771,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2024-10-03",
-          "release": "1.22.0",
-          "released": "2024-10-16",
+          "release": "1.21.1",
+          "released": "2024-10-03",
           "subject": "- The fix for CVE-2024-8508 was part of 1.21.1, a security point release   on 1.21.0. The code repository continues with this fix and the version   nu"
         }
       },
@@ -9838,7 +9600,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-02-03",
-          "release": "9.18.47",
+          "release": "9.20.21",
           "released": "2026-03-13",
           "subject": "Reproducer for CVE-2026-1519"
         }
@@ -10054,8 +9816,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-05-01",
-          "release": null,
-          "released": null,
+          "release": "9.20.23",
+          "released": "2026-05-08",
           "subject": "[9.11] [CVE-2026-3039] sec: usr: Fix GSS-API resource leak"
         }
       },
@@ -10229,14 +9991,14 @@
       "fixes": {
         "pdns-auth": {
           "commit_date": "2026-04-22",
-          "release": "5.0.4",
+          "release": "4.9.14",
           "released": "2026-04-22",
           "subject": "Fixes for CVE-2026-33257; part of PowerDNS Security Advisory 2026-05"
         },
         "pdns-rec": {
           "commit_date": "2026-04-22",
-          "release": null,
-          "released": null,
+          "release": "5.2.9",
+          "released": "2026-04-02",
           "subject": "Fixes for CVE-2026-33257; part of PowerDNS Security Advisory 2026-05"
         }
       },
@@ -10310,14 +10072,14 @@
       "fixes": {
         "pdns-auth": {
           "commit_date": "2026-04-22",
-          "release": "5.0.4",
+          "release": "4.9.14",
           "released": "2026-04-22",
           "subject": "Fixes for CVE-2026-33260; part of PowerDNS Security Advisory 2026-05"
         },
         "pdns-rec": {
           "commit_date": "2026-04-22",
-          "release": null,
-          "released": null,
+          "release": "5.2.9",
+          "released": "2026-04-02",
           "subject": "Fixes for CVE-2026-33260; part of PowerDNS Security Advisory 2026-05"
         }
       },
@@ -10463,21 +10225,14 @@
         "git"
       ],
       "products": [
-        "pdns-auth",
-        "pdns-rec"
+        "pdns-auth"
       ],
       "keywords": [],
       "fixes": {
         "pdns-auth": {
           "commit_date": "2026-04-22",
-          "release": "5.1.0",
-          "released": "2026-06-02",
-          "subject": "Prevent creadeSecondaryDomain from creating an invalid bind configuration."
-        },
-        "pdns-rec": {
-          "commit_date": "2026-04-22",
-          "release": null,
-          "released": null,
+          "release": "4.9.14",
+          "released": "2026-04-22",
           "subject": "Prevent creadeSecondaryDomain from creating an invalid bind configuration."
         }
       },
@@ -10497,21 +10252,14 @@
         "git"
       ],
       "products": [
-        "pdns-auth",
-        "pdns-rec"
+        "pdns-auth"
       ],
       "keywords": [],
       "fixes": {
         "pdns-auth": {
           "commit_date": "2026-04-22",
-          "release": "5.1.0",
-          "released": "2026-06-02",
-          "subject": "Rewrite the ldap escape function, and always escape network-controlled input."
-        },
-        "pdns-rec": {
-          "commit_date": "2026-04-22",
-          "release": null,
-          "released": null,
+          "release": "4.9.14",
+          "released": "2026-04-22",
           "subject": "Rewrite the ldap escape function, and always escape network-controlled input."
         }
       },
@@ -10531,21 +10279,14 @@
         "git"
       ],
       "products": [
-        "pdns-auth",
-        "pdns-rec"
+        "pdns-auth"
       ],
       "keywords": [],
       "fixes": {
         "pdns-auth": {
           "commit_date": "2026-04-22",
-          "release": "5.1.0",
-          "released": "2026-06-02",
-          "subject": "Make sure to wrap the socket in a unique_ptr to close it in all cases."
-        },
-        "pdns-rec": {
-          "commit_date": "2026-04-22",
-          "release": null,
-          "released": null,
+          "release": "4.9.14",
+          "released": "2026-04-22",
           "subject": "Make sure to wrap the socket in a unique_ptr to close it in all cases."
         }
       },
@@ -10572,8 +10313,8 @@
       "fixes": {
         "pdns-auth": {
           "commit_date": "2026-04-22",
-          "release": "5.1.0",
-          "released": "2026-06-02",
+          "release": "4.9.14",
+          "released": "2026-04-22",
           "subject": "Fix writer and text parser for too long alpn values."
         },
         "pdns-rec": {
@@ -10639,8 +10380,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-04-30",
-          "release": null,
-          "released": null,
+          "release": "9.20.23",
+          "released": "2026-05-08",
           "subject": "[v9_11] [CVE-2026-3592] sec: usr: Limit resolver server list size"
         }
       },
@@ -10670,7 +10411,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-05-05",
-          "release": "9.21.22",
+          "release": "9.20.23",
           "released": "2026-05-08",
           "subject": "[CVE-2026-3593] sec: usr: Fix use-after-free in DNS-over-HTTPS when processing HTTP/2 SETTINGS frames"
         }
@@ -11333,40 +11074,6 @@
       "rule": "validation"
     },
     {
-      "cve": "CVE-2026-49975",
-      "published": null,
-      "description": "Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4",
-      "cvss": null,
-      "severity": null,
-      "cwe": [],
-      "sources": [
-        "git"
-      ],
-      "products": [
-        "pdns-auth",
-        "pdns-rec"
-      ],
-      "keywords": [],
-      "fixes": {
-        "pdns-auth": {
-          "commit_date": "2026-07-02",
-          "release": null,
-          "released": null,
-          "subject": "Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4"
-        },
-        "pdns-rec": {
-          "commit_date": "2026-07-02",
-          "release": null,
-          "released": null,
-          "subject": "Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4"
-        }
-      },
-      "scope": "dependency",
-      "mechanism": null,
-      "rfc": null,
-      "rule": "DEPENDENCY"
-    },
-    {
       "cve": "CVE-2026-50045",
       "published": "2026-07-22",
       "description": "In NLnet Labs Unbound 1.22.0 up to and including 1.25.1, a single client query for a deeply nested name under a DNSSEC-signed parent can cause Unbound to send more upstream packets per client query than the configured 'max-global-quota'. This effectively bypasses a security configuration that limits upstream amplification traffic.",
@@ -11919,8 +11626,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-03-11",
-          "release": "9.20.26",
-          "released": "2026-07-20",
+          "release": "9.20.23",
+          "released": "2026-05-08",
           "subject": "Document that non-IN RR class issues are out of CVE scope"
         }
       },
@@ -11951,7 +11658,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-05-01",
-          "release": "9.21.22",
+          "release": "9.20.23",
           "released": "2026-05-08",
           "subject": "[CVE-2026-5947] sec: usr: Fix crash in resolver when SIG(0)-signed responses are received under load"
         }
@@ -11981,8 +11688,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-04-30",
-          "release": null,
-          "released": null,
+          "release": "9.20.23",
+          "released": "2026-05-08",
           "subject": "[v9_11] [CVE-2026-5950] sec: usr: Avoid unbounded recursion loop"
         }
       },
