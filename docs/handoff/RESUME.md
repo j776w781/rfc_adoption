@@ -159,6 +159,16 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - Open item: push `software-timelines-v2` when the owner confirms (nothing pushed yet); the server needs this
   branch to run the above.
 
+### Adoption = prevalence (2026-09-30)
+
+The team defines adoption as prevalence: % of unique domains in a month with >= 1 DS / DNSKEY / RRSIG
+(Phase 6). Phase 7 had tested only feature shares among signed zones (algorithm, digest, NSEC3
+iterations, key size, opt-out, CDS), so its "no effect" is about feature mix, not prevalence. RUNNING:
+Phase 7 agent extending scripts/software_vs_adoption.py with ds_prev / dnskey_prev / rrsig_prev (equal to
+prevalence_metrics.csv by assertion), Q1 for every program incl. NSD, Q2 on rows that could change
+whether zones are signed (mapping table with reasons), Q4 spikes; existing feature results must stay
+byte-identical. Then: notebook section for prevalence, fresh verifier, commit, push.
+
 ## To resume
 
 1. `git checkout software-timelines-v2`; list `data/software/timelines/` and `docs/handoff/`.
