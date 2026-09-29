@@ -1302,7 +1302,7 @@
      "row_id": "l02-nsec3-max-iterations-50",
      "mechanism": "nsec3-iterations",
      "timing_date": "2024-07-08",
-     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-policy and signzone refuse iterations above 50)"
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-signzone's limit lowered to 50; dnssec-policy refuses any non-zero iteration count)"
     },
     {
      "program": "bind9",
@@ -1456,7 +1456,7 @@
      "row_id": "knot[19]@3.6.0",
      "mechanism": "nsec3-iterations",
      "timing_date": "2026-09-08",
-     "reason": "changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (NSEC3PARAM with more than 256 iterations refused)"
     },
     {
      "program": "knot",
@@ -1743,7 +1743,7 @@
      "row_id": "pdns-auth[3]@3.4.0",
      "mechanism": "nsec3-iterations",
      "timing_date": "2014-09-30",
-     "reason": "changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (set-nsec3 above the 500-iteration cap throws)"
     },
     {
      "program": "pdns-auth",
@@ -2998,24 +2998,73 @@
   },
   "measurement_breaks": [
    {
-    "source": "gov",
-    "first": "2018-02",
-    "last": "2018-03",
-    "description": ".gov NS denominator from 1,234 in 2018-01 to 5,553 in 2018-02; DS share 88.7% to 31.2%, then 21.3% as the mean daily share catches up. The measured population widened; signing did not collapse"
-   },
-   {
-    "source": "nu",
-    "first": "2018-10",
-    "last": "2019-02",
-    "description": ".nu NS denominator from 413,121 in 2018-09 to 363,900 in 2018-10 and 232,995 in 2019-02, -44%, while the DS count also fell, 127,794 to 92,722; DS share rose 33% to 39% as unsigned names left the measured set"
+    "source": "se",
+    "first": "2017-05",
+    "last": "2017-11",
+    "denominator_before": 1326434,
+    "denominator_after": 1663208,
+    "denominator_change": 0.253894,
+    "ds_share_before": 51.557651,
+    "ds_share_after": 45.707563,
+    "description": ".se: denominator 1,326,434 in 2017-04 to 1,663,208 in 2017-11, +25%; DS share 51.6% to 45.7%; the DS count did not follow"
    },
    {
     "source": "se",
     "first": "2018-10",
+    "last": "2019-01",
+    "denominator_before": 1621745,
+    "denominator_after": 1338823,
+    "denominator_change": -0.174455,
+    "ds_share_before": 51.085135,
+    "ds_share_after": 43.678484,
+    "description": ".se: denominator 1,621,745 in 2018-09 to 1,338,823 in 2019-01, -17%; DS share 51.1% to 43.7%; the DS count did not follow"
+   },
+   {
+    "source": "nu",
+    "first": "2017-06",
+    "last": "2017-09",
+    "denominator_before": 281539,
+    "denominator_after": 356341,
+    "denominator_change": 0.26569,
+    "ds_share_before": 31.692444,
+    "ds_share_after": 24.781699,
+    "description": ".nu: denominator 281,539 in 2017-05 to 356,341 in 2017-09, +27%; DS share 31.7% to 24.8%; the DS count did not follow"
+   },
+   {
+    "source": "nu",
+    "first": "2018-06",
     "last": "2019-02",
-    "description": ".se NS denominator from 1,621,745 in 2018-09 to 1,338,823 in 2019-01; DS count and share dip, 44.98% in 2018-12 and 43.68% in 2019-01, back to 50.74% in 2019-02; signed zones dip too, 821,692 to 745,073"
+    "denominator_before": 454465,
+    "denominator_after": 232995,
+    "denominator_change": -0.48732,
+    "ds_share_before": 30.087073,
+    "ds_share_after": 39.067428,
+    "description": ".nu: denominator 454,465 in 2018-05 to 232,995 in 2019-02, -49%; DS share 30.1% to 39.1%; the DS count did not follow"
+   },
+   {
+    "source": "gov",
+    "first": "2018-02",
+    "last": "2018-03",
+    "denominator_before": 1234,
+    "denominator_after": 5564,
+    "denominator_change": 3.508914,
+    "ds_share_before": 88.697155,
+    "ds_share_after": 21.349226,
+    "description": ".gov: denominator 1,234 in 2018-01 to 5,564 in 2018-03, +351%; DS share 88.7% to 21.3%; the DS count did not follow"
    }
-  ]
+  ],
+  "measurement_break_rule": {
+   "rule": "within at most 6 months the peak denominator (rr_type NS forward, dimension all on the panel) changes by more than the threshold while the DS share moves by more than 5.0 pp; pairs trimmed to the months the denominator moved, minimal pairs merged, span extended by up to 2 months while the share keeps moving the same way by more than 2 pp",
+   "threshold_used": 0.15,
+   "threshold_asked": 0.25,
+   "breaks_at_threshold_asked": [
+    "nu 2017-06..2017-09",
+    "nu 2018-10..2019-02",
+    "gov 2018-02..2018-03"
+   ],
+   "why_threshold_used": "at 25% the rule misses the .se 2018-10..2019-01 break, a -17% fall in the NS denominator with the DS share falling 7 pp; 15% is the largest round threshold that finds it, and it adds no source without a visible population change",
+   "sensitivity_minimum": "break-masked runs lower the 24-month minimum to 12 only for sources with a break; every other source keeps 24"
+  }
  },
  "q1_per_program_releases": {
   "method": "Event = each stable, publicly shipped release, one per calendar month per program. Primary statistic step12: the mean over the 12 after-months of the share minus a linear trend fitted to the 24 before-months and extrapolated; it keeps a lasting level shift. Secondary statistic transient3, the transient deviation: mean detrended share over 3 after-months minus 3 before-months, detrended by a centred 25-month rolling median, which absorbs any lasting step. Reverse dating: for a release in calendar month r, before = labels <= r and after = labels r+1 on. Program statistic = mean over tested release months. Null: the release months that fall inside the series' own testable window circularly shifted by one uniform offset within that window, 1000 draws; the zero offset, which would return the events themselves, is excluded. Sensitivity, nonoverlap_p_two_sided: offsets restricted so every shifted month lies outside its own event's window; it rejects far above 10% on no-effect series and is not used for conclusions. BIND 9 is also tested with its feature releases, tags vX.Y.0, as the event set. A test needs a window of at least 24 months with release months filling at most 75% of it; otherwise every shift covers nearly the same months. Single-release band: 5th-95th percentile of the statistic over every testable month of the series.",
@@ -31300,18 +31349,61 @@
      },
      "step12_breaks_masked": {
       "unit": "program x corpus, ds_prev",
-      "units": 35,
-      "outside_90pct_null": 4,
+      "units": 28,
+      "outside_90pct_null": 3,
       "rate": 0.108,
-      "expected": 3.78,
-      "p_at_least_observed": 0.5316,
+      "expected": 3.024,
+      "p_at_least_observed": 0.595213,
       "units_outside": [
-       "knot .ee",
        "knot .nu",
-       "nsd .ee",
-       "opendnssec .gov"
+       "opendnssec .gov",
+       "pdns-rec .se"
       ],
       "dropped_sources": []
+     },
+     "step12_breaks_masked_like_for_like": {
+      "units": 28,
+      "units_list": [
+       "knot .gov",
+       "knot .nu",
+       "knot .se",
+       "knot panel",
+       "kresd .gov",
+       "kresd .nu",
+       "kresd .se",
+       "kresd panel",
+       "nsd .gov",
+       "nsd .nu",
+       "nsd .se",
+       "nsd panel",
+       "opendnssec .gov",
+       "opendnssec .nu",
+       "opendnssec .se",
+       "opendnssec panel",
+       "pdns-auth .gov",
+       "pdns-auth .nu",
+       "pdns-auth .se",
+       "pdns-auth panel",
+       "pdns-rec .gov",
+       "pdns-rec .nu",
+       "pdns-rec .se",
+       "pdns-rec panel",
+       "unbound .gov",
+       "unbound .nu",
+       "unbound .se",
+       "unbound panel"
+      ],
+      "outside_unmasked": [
+       "nsd .gov",
+       "opendnssec .nu",
+       "pdns-rec .se",
+       "unbound .nu"
+      ],
+      "outside_masked": [
+       "knot .nu",
+       "opendnssec .gov",
+       "pdns-rec .se"
+      ]
      },
      "transient3": {
       "unit": "program x corpus, ds_prev",
@@ -31331,17 +31423,18 @@
      "transient3_breaks_masked": {
       "unit": "program x corpus, ds_prev",
       "units": 50,
-      "outside_90pct_null": 6,
+      "outside_90pct_null": 7,
       "rate": 0.1,
       "expected": 5.0,
-      "p_at_least_observed": 0.383877,
+      "p_at_least_observed": 0.229773,
       "units_outside": [
+       "knot .nu",
        "nsd .li",
+       "opendnssec .nu",
        "opendnssec .se",
        "pdns-auth .gov",
        "pdns-auth panel",
-       "pdns-rec .gov",
-       "pdns-rec .se"
+       "pdns-rec .gov"
       ],
       "dropped_sources": []
      }
@@ -31352,31 +31445,37 @@
      "step12": {
       "tested": 70,
       "outside": 12,
-      "tested_masked": 91,
-      "outside_masked": 11
+      "tested_masked": 70,
+      "outside_masked": 7,
+      "like_for_like_tests": 70,
+      "like_for_like_outside_unmasked": 12,
+      "like_for_like_outside_masked": 7
      },
      "transient3": {
       "tested": 128,
       "outside": 9,
       "tested_masked": 134,
-      "outside_masked": 13
+      "outside_masked": 18,
+      "like_for_like_tests": 128,
+      "like_for_like_outside_unmasked": 9,
+      "like_for_like_outside_masked": 18
      }
     },
     "untestable_when_masked": [],
     "outside_flag_changes": [
-     {
-      "test": "knot step12 dnskey_prev forward se",
-      "was_outside": false,
-      "now_outside": true,
-      "percentile_before": 64.3,
-      "percentile_masked": 96.0
-     },
      {
       "test": "knot step12 dnskey_prev forward nu",
       "was_outside": false,
       "now_outside": true,
       "percentile_before": 45.5,
       "percentile_masked": 95.9
+     },
+     {
+      "test": "knot transient3 dnskey_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 67.8,
+      "percentile_masked": 99.3
      },
      {
       "test": "knot step12 ds_prev forward nu",
@@ -31386,18 +31485,39 @@
       "percentile_masked": 0.0
      },
      {
+      "test": "knot transient3 ds_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 70.5,
+      "percentile_masked": 97.1
+     },
+     {
+      "test": "knot transient3 rrsig_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 69.5,
+      "percentile_masked": 99.1
+     },
+     {
       "test": "kresd transient3 ds_prev forward nu",
       "was_outside": true,
       "now_outside": false,
       "percentile_before": 1.4,
-      "percentile_masked": 10.5
+      "percentile_masked": 18.4
+     },
+     {
+      "test": "nsd transient3 dnskey_prev forward se",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 79.8,
+      "percentile_masked": 2.8
      },
      {
       "test": "nsd transient3 dnskey_prev forward nu",
       "was_outside": true,
       "now_outside": false,
       "percentile_before": 98.9,
-      "percentile_masked": 92.1
+      "percentile_masked": 57.3
      },
      {
       "test": "nsd step12 dnskey_prev forward gov",
@@ -31414,11 +31534,18 @@
       "percentile_masked": 31.6
      },
      {
+      "test": "nsd transient3 rrsig_prev forward se",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 80.6,
+      "percentile_masked": 3.3
+     },
+     {
       "test": "nsd transient3 rrsig_prev forward nu",
       "was_outside": true,
       "now_outside": false,
       "percentile_before": 98.8,
-      "percentile_masked": 92.9
+      "percentile_masked": 57.7
      },
      {
       "test": "nsd step12 rrsig_prev forward gov",
@@ -31432,7 +31559,7 @@
       "was_outside": true,
       "now_outside": false,
       "percentile_before": 3.3,
-      "percentile_masked": 33.2
+      "percentile_masked": 39.5
      },
      {
       "test": "opendnssec step12 dnskey_prev forward nu",
@@ -31446,7 +31573,7 @@
       "was_outside": false,
       "now_outside": true,
       "percentile_before": 9.2,
-      "percentile_masked": 2.1
+      "percentile_masked": 1.8
      },
      {
       "test": "opendnssec step12 ds_prev forward nu",
@@ -31454,6 +31581,13 @@
       "now_outside": false,
       "percentile_before": 3.4,
       "percentile_masked": 69.1
+     },
+     {
+      "test": "opendnssec transient3 ds_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 73.3,
+      "percentile_masked": 98.7
      },
      {
       "test": "opendnssec step12 ds_prev forward gov",
@@ -31467,7 +31601,7 @@
       "was_outside": true,
       "now_outside": false,
       "percentile_before": 4.0,
-      "percentile_masked": 30.7
+      "percentile_masked": 37.4
      },
      {
       "test": "opendnssec step12 rrsig_prev forward nu",
@@ -31505,13 +31639,6 @@
       "percentile_masked": 2.5
      },
      {
-      "test": "pdns-rec step12 dnskey_prev forward se",
-      "was_outside": true,
-      "now_outside": false,
-      "percentile_before": 0.0,
-      "percentile_masked": 18.2
-     },
-     {
       "test": "pdns-rec transient3 dnskey_prev forward gov",
       "was_outside": false,
       "now_outside": true,
@@ -31519,32 +31646,11 @@
       "percentile_masked": 0.0
      },
      {
-      "test": "pdns-rec step12 ds_prev forward se",
-      "was_outside": true,
-      "now_outside": false,
-      "percentile_before": 0.0,
-      "percentile_masked": 18.5
-     },
-     {
-      "test": "pdns-rec transient3 ds_prev forward se",
-      "was_outside": false,
-      "now_outside": true,
-      "percentile_before": 72.0,
-      "percentile_masked": 96.7
-     },
-     {
       "test": "pdns-rec transient3 ds_prev forward gov",
       "was_outside": false,
       "now_outside": true,
       "percentile_before": 52.1,
       "percentile_masked": 2.9
-     },
-     {
-      "test": "pdns-rec step12 rrsig_prev forward se",
-      "was_outside": true,
-      "now_outside": false,
-      "percentile_before": 0.0,
-      "percentile_masked": 20.3
      },
      {
       "test": "pdns-rec transient3 rrsig_prev forward gov",
@@ -31558,7 +31664,7 @@
       "was_outside": true,
       "now_outside": false,
       "percentile_before": 0.0,
-      "percentile_masked": 7.3
+      "percentile_masked": 20.4
      },
      {
       "test": "unbound step12 ds_prev forward nu",
@@ -31566,6 +31672,13 @@
       "now_outside": false,
       "percentile_before": 96.1,
       "percentile_masked": 90.3
+     },
+     {
+      "test": "x.y.0 feature releases bind9 transient3 dnskey_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 97.3,
+      "percentile_masked": 66.7
      },
      {
       "test": "x.y.0 feature releases bind9 step12 dnskey_prev forward nu",
@@ -31582,11 +31695,25 @@
       "percentile_masked": 0.0
      },
      {
+      "test": "x.y.0 feature releases bind9 transient3 ds_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 98.2,
+      "percentile_masked": 23.2
+     },
+     {
       "test": "x.y.0 feature releases bind9 step12 ds_prev forward gov",
       "was_outside": false,
       "now_outside": true,
       "percentile_before": 57.4,
       "percentile_masked": 3.3
+     },
+     {
+      "test": "x.y.0 feature releases bind9 transient3 rrsig_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 98.0,
+      "percentile_masked": 69.4
      },
      {
       "test": "x.y.0 feature releases bind9 step12 rrsig_prev forward nu",
@@ -31610,14 +31737,20 @@
     "step12": {
      "tested": 76,
      "outside": 7,
-     "tested_masked": 96,
-     "outside_masked": 14
+     "tested_masked": 76,
+     "outside_masked": 9,
+     "like_for_like_tests": 76,
+     "like_for_like_outside_unmasked": 7,
+     "like_for_like_outside_masked": 9
     },
     "transient3": {
      "tested": 126,
      "outside": 8,
      "tested_masked": 146,
-     "outside_masked": 15
+     "outside_masked": 15,
+     "like_for_like_tests": 126,
+     "like_for_like_outside_unmasked": 8,
+     "like_for_like_outside_masked": 14
     }
    },
    "untestable_when_masked": [],
@@ -31630,18 +31763,18 @@
      "percentile_masked": 100.0
     },
     {
-     "test": "knot step12 alg5_7 forward se",
+     "test": "knot transient3 alg5_7 forward nu",
      "was_outside": false,
      "now_outside": true,
-     "percentile_before": 10.5,
-     "percentile_masked": 4.7
+     "percentile_before": 53.7,
+     "percentile_masked": 3.0
     },
     {
      "test": "knot transient3 alg8 forward nu",
      "was_outside": true,
      "now_outside": false,
      "percentile_before": 2.9,
-     "percentile_masked": 5.0
+     "percentile_masked": 14.6
     },
     {
      "test": "knot step12 cds forward gov",
@@ -31665,18 +31798,46 @@
      "percentile_masked": 95.5
     },
     {
-     "test": "knot step12 rsa1024 forward se",
-     "was_outside": false,
-     "now_outside": true,
-     "percentile_before": 56.5,
-     "percentile_masked": 100.0
-    },
-    {
      "test": "knot step12 rsa_lt1024 forward gov",
      "was_outside": false,
      "now_outside": true,
      "percentile_before": 83.8,
      "percentile_masked": 97.0
+    },
+    {
+     "test": "kresd step12 iter_gt150 forward se",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 5.0,
+     "percentile_masked": 4.7
+    },
+    {
+     "test": "kresd transient3 iter_gt150 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 19.0,
+     "percentile_masked": 4.7
+    },
+    {
+     "test": "kresd transient3 iter_gt50 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 52.8,
+     "percentile_masked": 3.4
+    },
+    {
+     "test": "opendnssec transient3 alg7 forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 95.3,
+     "percentile_masked": 86.1
+    },
+    {
+     "test": "opendnssec transient3 alg7 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 55.5,
+     "percentile_masked": 99.1
     },
     {
      "test": "opendnssec step12 alg7 forward gov",
@@ -31690,21 +31851,21 @@
      "was_outside": false,
      "now_outside": true,
      "percentile_before": 5.6,
-     "percentile_masked": 2.5
+     "percentile_masked": 1.7
     },
     {
      "test": "opendnssec transient3 digest1 forward nu",
      "was_outside": false,
      "now_outside": true,
      "percentile_before": 56.6,
-     "percentile_masked": 100.0
+     "percentile_masked": 98.8
     },
     {
      "test": "pdns-auth step12 alg13 forward se",
      "was_outside": true,
      "now_outside": false,
      "percentile_before": 100.0,
-     "percentile_masked": 25.0
+     "percentile_masked": 12.2
     },
     {
      "test": "pdns-auth step12 alg8 forward nu",
@@ -31718,7 +31879,7 @@
      "was_outside": true,
      "now_outside": false,
      "percentile_before": 0.0,
-     "percentile_masked": 48.1
+     "percentile_masked": 75.7
     },
     {
      "test": "pdns-auth transient3 optout forward nu",
@@ -31733,13 +31894,6 @@
      "now_outside": true,
      "percentile_before": 6.3,
      "percentile_masked": 0.0
-    },
-    {
-     "test": "unbound step12 iter_gt150 forward se",
-     "was_outside": false,
-     "now_outside": true,
-     "percentile_before": 88.0,
-     "percentile_masked": 100.0
     },
     {
      "test": "x.y.0 feature releases bind9 step12 alg13 forward gov",
@@ -31770,18 +31924,25 @@
      "percentile_masked": 0.0
     },
     {
+     "test": "x.y.0 feature releases bind9 transient3 digest1 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 10.8,
+     "percentile_masked": 4.4
+    },
+    {
      "test": "x.y.0 feature releases bind9 step12 iter_gt150 forward se",
      "was_outside": true,
      "now_outside": false,
      "percentile_before": 98.7,
-     "percentile_masked": 47.6
+     "percentile_masked": 50.2
     },
     {
      "test": "x.y.0 feature releases bind9 transient3 rsa1024 forward nu",
      "was_outside": true,
      "now_outside": false,
      "percentile_before": 100.0,
-     "percentile_masked": 92.9
+     "percentile_masked": 93.7
     }
    ]
   }
@@ -50459,6 +50620,19 @@
      ],
      "dropped_sources": []
     },
+    "step12_breaks_masked_like_for_like": {
+     "units": [
+      "d15-dnssec-policy-default-ecdsap256 panel",
+      "knot[1]@2.0.0 panel",
+      "knot[9]@2.7.5 panel"
+     ],
+     "outside_unmasked": [
+      "knot[9]@2.7.5 panel"
+     ],
+     "outside_masked": [
+      "knot[9]@2.7.5 panel"
+     ]
+    },
     "transient12": {
      "unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev",
      "units": 9,
@@ -50471,9 +50645,9 @@
     },
     "transient12_breaks_masked": {
      "unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev",
-     "units": 4,
+     "units": 5,
      "outside_90_band": 0,
-     "expected_discrete": 0.449961,
+     "expected_discrete": 0.616628,
      "p_at_least_observed": 1.0,
      "in_expected_direction": 0,
      "units_outside": [],
@@ -50486,22 +50660,24 @@
       "tested": 14,
       "outside": 4,
       "tested_masked": 3,
-      "outside_masked": 1
+      "outside_masked": 1,
+      "like_for_like_tests": 3,
+      "like_for_like_outside_unmasked": 1,
+      "like_for_like_outside_masked": 1
      },
      "transient12": {
       "tested": 15,
       "outside": 0,
-      "tested_masked": 6,
-      "outside_masked": 0
+      "tested_masked": 9,
+      "outside_masked": 0,
+      "like_for_like_tests": 9,
+      "like_for_like_outside_unmasked": 0,
+      "like_for_like_outside_masked": 0
      }
     },
     "untestable_when_masked": [
      {
       "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 ds_prev forward se",
-      "was_outside": false
-     },
-     {
-      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 ds_prev forward se",
       "was_outside": false
      },
      {
@@ -50521,10 +50697,6 @@
       "was_outside": false
      },
      {
-      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 dnskey_prev forward se",
-      "was_outside": false
-     },
-     {
       "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 dnskey_prev forward nu",
       "was_outside": true
      },
@@ -50538,10 +50710,6 @@
      },
      {
       "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 rrsig_prev forward se",
-      "was_outside": false
-     },
-     {
-      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 rrsig_prev forward se",
       "was_outside": false
      },
      {
@@ -50876,9 +51044,9 @@
      "testable_months": 56,
      "band_lo": -2.874402,
      "band_hi": 4.428337,
-     "testable_months_breaks_masked": 23,
-     "band_lo_breaks_masked": -3.219018,
-     "band_hi_breaks_masked": 3.469842
+     "testable_months_breaks_masked": 24,
+     "band_lo_breaks_masked": -3.207801,
+     "band_hi_breaks_masked": 3.469485
     },
     {
      "observable": "ds_prev",
@@ -50946,9 +51114,9 @@
      "testable_months": 56,
      "band_lo": -3.089208,
      "band_hi": 6.243924,
-     "testable_months_breaks_masked": 23,
-     "band_lo_breaks_masked": -3.29226,
-     "band_hi_breaks_masked": 2.859951
+     "testable_months_breaks_masked": 24,
+     "band_lo_breaks_masked": -3.284824,
+     "band_hi_breaks_masked": 2.858823
     },
     {
      "observable": "dnskey_prev",
@@ -51006,9 +51174,9 @@
      "testable_months": 56,
      "band_lo": -3.086886,
      "band_hi": 6.28008,
-     "testable_months_breaks_masked": 23,
-     "band_lo_breaks_masked": -3.290344,
-     "band_hi_breaks_masked": 2.842685
+     "testable_months_breaks_masked": 24,
+     "band_lo_breaks_masked": -3.282896,
+     "band_hi_breaks_masked": 2.842496
     },
     {
      "observable": "rrsig_prev",
@@ -51067,14 +51235,20 @@
     "step12": {
      "tested": 68,
      "outside": 7,
-     "tested_masked": 49,
-     "outside_masked": 5
+     "tested_masked": 43,
+     "outside_masked": 4,
+     "like_for_like_tests": 43,
+     "like_for_like_outside_unmasked": 6,
+     "like_for_like_outside_masked": 4
     },
     "transient12": {
      "tested": 85,
      "outside": 6,
-     "tested_masked": 82,
-     "outside_masked": 6
+     "tested_masked": 67,
+     "outside_masked": 4,
+     "like_for_like_tests": 67,
+     "like_for_like_outside_unmasked": 2,
+     "like_for_like_outside_masked": 4
     }
    },
    "untestable_when_masked": [
@@ -51111,10 +51285,6 @@
      "was_outside": false
     },
     {
-     "test": "bind9 d13-ds-cds-sha1-dropped transient12 digest1 forward se",
-     "was_outside": false
-    },
-    {
      "test": "bind9 d13-ds-cds-sha1-dropped step12 digest1 forward nu",
      "was_outside": false
     },
@@ -51128,10 +51298,6 @@
     },
     {
      "test": "bind9 d14-keygen-rsa-zsk-2048 step12 rsa1024 forward se",
-     "was_outside": false
-    },
-    {
-     "test": "bind9 d14-keygen-rsa-zsk-2048 transient12 rsa1024 forward se",
      "was_outside": false
     },
     {
@@ -51151,10 +51317,6 @@
      "was_outside": false
     },
     {
-     "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 alg13 forward se",
-     "was_outside": false
-    },
-    {
      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 alg13 forward nu",
      "was_outside": false
     },
@@ -51168,10 +51330,6 @@
     },
     {
      "test": "bind9 d16-dnssec-policy-default-key-size-2048 step12 rsa1024 forward se",
-     "was_outside": false
-    },
-    {
-     "test": "bind9 d16-dnssec-policy-default-key-size-2048 transient12 rsa1024 forward se",
      "was_outside": false
     },
     {
@@ -51193,6 +51351,10 @@
     {
      "test": "bind9 d17-nsec3param-default-in-policy step12 iter5 forward nu",
      "was_outside": false
+    },
+    {
+     "test": "knot knot[7]@2.6.0 transient12 alg3_6 forward se",
+     "was_outside": true
     },
     {
      "test": "knot knot[8]@2.7.0 step12 rsa_lt1024 forward se",
@@ -51269,28 +51431,14 @@
      "was_outside": false,
      "now_outside": true,
      "percentile_before": 74.9,
-     "percentile_masked": 98.1
-    },
-    {
-     "test": "bind9 d21-signzone-nsec3-iterations-0 step12 iter0 forward se",
-     "was_outside": true,
-     "now_outside": false,
-     "percentile_before": 98.4,
-     "percentile_masked": 94.7
-    },
-    {
-     "test": "knot knot[7]@2.6.0 transient12 alg3_6 forward se",
-     "was_outside": true,
-     "now_outside": false,
-     "percentile_before": 4.2,
-     "percentile_masked": 7.6
+     "percentile_masked": 96.9
     },
     {
      "test": "kresd kresd[9]@5.3.1 step12 iter_gt150 forward se",
      "was_outside": true,
      "now_outside": false,
      "percentile_before": 5.0,
-     "percentile_masked": 13.7
+     "percentile_masked": 13.1
     },
     {
      "test": "kresd kresd[9]@5.3.1 transient12 iter_gt150 forward se",
@@ -51304,7 +51452,7 @@
      "was_outside": true,
      "now_outside": false,
      "percentile_before": 4.0,
-     "percentile_masked": 8.1
+     "percentile_masked": 7.1
     }
    ]
   }

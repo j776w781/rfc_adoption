@@ -413,6 +413,7 @@ def test_prevalence_mapping_table(doc):
         assert exc[rid].startswith("configuration-now-fails class"), rid
     assert exc["knot[10]@2.8.0"].startswith("CDS/CDNSKEY narrowed")
     assert len(m["rows_excluded"]) == 147 and len({r["row_id"] for r in m["rows_included"]}) == 7
+    assert sum(r["reason"].startswith("configuration-now-fails") for r in m["rows_excluded"]) == 8
 
 
 def test_hand_knot9_ds_prevalence_on_panel(doc):
@@ -460,15 +461,43 @@ def test_prevalence_unit_of_comparison(doc):
 
 
 def test_measurement_breaks(mod, doc):
-    """The .gov and .se/.nu breaks are named, and a masked series drops every break-affected window."""
-    br = {b["source"]: b for b in doc["notes"]["measurement_breaks"]}
-    assert (br["gov"]["first"], br["nu"]["first"], br["se"]["last"]) == ("2018-02", "2018-10", "2019-02")
+    """Breaks come from one rule; it finds the three named breaks, .nu 2017 and .se 2017, and a masked series
+    drops every break-affected window."""
+    spans = {(b["source"], b["first"], b["last"]) for b in doc["notes"]["measurement_breaks"]}
+    assert spans == {("se", "2017-05", "2017-11"), ("se", "2018-10", "2019-01"), ("nu", "2017-06", "2017-09"),
+                     ("nu", "2018-06", "2019-02"), ("gov", "2018-02", "2018-03")}
+    rule = doc["notes"]["measurement_break_rule"]
+    assert rule["threshold_used"] == 0.15 and rule["threshold_asked"] == 0.25
+    assert "se 2018-10..2019-01" not in rule["breaks_at_threshold_asked"]
+    assert mod.find_breaks(mod.Data()) == doc["notes"]["measurement_breaks"]
     s = mod.Series(mod.Data(), "ds_prev", "forward", "gov")
-    before = s.at("step12", mod.m2i("2019-06"))
-    assert before > 20       # the .gov break alone lifts step12 by tens of points
-    s.apply_break_mask()
+    assert s.at("step12", mod.m2i("2019-06")) > 20       # the .gov break alone lifts step12 by tens of points
+    s.apply_break_mask(doc["notes"]["measurement_breaks"])
     assert np.isnan(s.at("step12", mod.m2i("2019-06"))) and not np.isnan(s.at("step12", mod.m2i("2020-06")))
     assert doc["q2_default_change_events"]["break_sensitivity_feature"]["per_test"]["step12"]["tested"] == 68
+
+
+def test_break_sensitivity_like_for_like(doc):
+    """The lowered minimum applies only to sources with a break, so .ee is never admitted by it: the masked
+    Q1 runs test exactly the same units and tests as the headline."""
+    u = doc["q1_per_program_releases"]["prevalence"]["aggregate"]["unit_program_x_corpus"]
+    assert u["step12_breaks_masked"]["units"] == u["step12"]["units"] == 28
+    assert not any(".ee" in x for x in u["step12_breaks_masked"]["units_outside"])
+    lf = u["step12_breaks_masked_like_for_like"]
+    assert (len(lf["outside_unmasked"]), len(lf["outside_masked"])) == (4, 3)
+    f1 = doc["q1_per_program_releases"]["break_sensitivity_feature"]["per_test"]["step12"]
+    assert (f1["like_for_like_tests"], f1["like_for_like_outside_unmasked"], f1["like_for_like_outside_masked"]) == (76, 7, 9)
+    assert "only for sources with a break" in doc["notes"]["measurement_break_rule"]["sensitivity_minimum"]
+
+
+def test_labels_and_q4_column(doc):
+    exc = {r["row_id"]: r["reason"] for r in doc["observable_mapping"]["prevalence"]["rows_excluded"]}
+    assert "dnssec-policy refuses any non-zero iteration count" in exc["l02-nsec3-max-iterations-50"]
+    for rid in ("knot[19]@3.6.0", "pdns-auth[3]@3.4.0"):
+        assert exc[rid].startswith("configuration-now-fails class")
+    q4 = pd.read_csv(ROOT / "out/analysis/software_vs_adoption_q4.csv")
+    prev = q4[q4.observable.isin(PREV)]
+    assert prev.reverses_dip_within_2m.astype(bool).sum() == 2 and q4[~q4.observable.isin(PREV)].reverses_dip_within_2m.isna().all()
 
 
 def test_prevalence_power_and_dips(doc):

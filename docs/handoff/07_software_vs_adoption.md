@@ -30,11 +30,15 @@ changes that could change whether zones get signed give 2 of 8 row
 and corpus units against 1.05, P = 0.28, one of
 them in the expected direction; with break-affected windows dropped, 1 of
 3, knot[9] on the panel. Prevalence spikes line up with those defaults
-3 times against 2.7 expected. So neither
+3 times against 2.7 expected, and
+2 of 57 against
+2.6 without the 2 spikes that only
+reverse a measurement dip. So neither
 releases nor defaults are shown to move the share of domains that are signed. The largest share moves in the tested
-windows come from changes in the measured denominator, .gov in 2018-02 and .se and .nu in 2018-10 to 2019-02, not from
-signing. The prevalence tests can miss a lasting step smaller than about 5 pp in .se or 9 pp in .nu, and have no usable
-power in .gov; on the panel they detect about 0.1 pp.
+windows come from changes in the measured denominator, .gov in 2018-02 and .se and .nu in 2017 and 2018 to 2019, not
+from signing. The tests have limited power: in .se a lasting 2 pp step is detected at a favourable month, but a 5 pp
+step only at 41% of event months and 10 pp at 89%; in .nu a 10 pp step is caught at only 39% of months and is missed at
+the chosen month; .gov has no usable power; on the panel about 0.1 pp is detected.
 
 On the feature mix, the answer below is the same: no lasting departure beyond chance, with one timing alignment for
 zero-iteration NSEC3, within the power limits of the feature detection-power table. The prevalence section gives the
@@ -1075,19 +1079,40 @@ each row and corpus once in question 2, on `ds_prev`, the one series defined in 
 kept as secondary figures. Both are in the JSON: `aggregate.unit_program_x_corpus` for question 1 and
 `unit_row_x_corpus` for question 2.
 
-**Measurement breaks.** Three months-long changes in the measured population drive most of the unusual prevalence
-results. They are listed in `MEASUREMENT_BREAKS` in the script and under `notes.measurement_breaks`:
+**Measurement breaks.** Changes in the measured population drive most of the unusual prevalence results. They are
+found by one rule applied to every forward source and the panel, recorded under `notes.measurement_break_rule`: within
+at most 6 months the peak denominator, rr_type NS forward and dimension all on the panel, changes by more than 15% while
+the DS share moves by more than 5 pp, so the DS count did not follow the denominator. Each flagged pair is trimmed to
+the months in which the denominator actually moved, overlapping pairs are merged, and the span is extended by up to two
+months while the share keeps moving the same way by more than 2 pp. The threshold asked for was 25%; at 25% the rule
+finds .gov 2018 and both .nu breaks but misses the .se 2018 break, a -17% fall in the NS denominator with the DS share
+falling 7 pp, so the rule uses 15%, the largest round threshold that finds it. At 15% it also finds .se 2017, and
+nothing in .ee, .ch, .li or the panel. The breaks are listed in `notes.measurement_breaks`:
 
-- **gov, 2018-02 to 2018-03.** .gov NS denominator from 1,234 in 2018-01 to 5,553 in 2018-02; DS share 88.7% to 31.2%, then 21.3% as the mean daily share catches up. The measured population widened; signing did not collapse.
-- **nu, 2018-10 to 2019-02.** .nu NS denominator from 413,121 in 2018-09 to 363,900 in 2018-10 and 232,995 in 2019-02, -44%, while the DS count also fell, 127,794 to 92,722; DS share rose 33% to 39% as unsigned names left the measured set.
-- **se, 2018-10 to 2019-02.** .se NS denominator from 1,621,745 in 2018-09 to 1,338,823 in 2019-01; DS count and share dip, 44.98% in 2018-12 and 43.68% in 2019-01, back to 50.74% in 2019-02; signed zones dip too, 821,692 to 745,073.
+- **se, 2017-05 to 2017-11.** .se: denominator 1,326,434 in 2017-04 to 1,663,208 in 2017-11, +25%; DS share 51.6% to 45.7%; the DS count did not follow.
+- **se, 2018-10 to 2019-01.** .se: denominator 1,621,745 in 2018-09 to 1,338,823 in 2019-01, -17%; DS share 51.1% to 43.7%; the DS count did not follow.
+- **nu, 2017-06 to 2017-09.** .nu: denominator 281,539 in 2017-05 to 356,341 in 2017-09, +27%; DS share 31.7% to 24.8%; the DS count did not follow.
+- **nu, 2018-06 to 2019-02.** .nu: denominator 454,465 in 2018-05 to 232,995 in 2019-02, -49%; DS share 30.1% to 39.1%; the DS count did not follow.
+- **gov, 2018-02 to 2018-03.** .gov: denominator 1,234 in 2018-01 to 5,564 in 2018-03, +351%; DS share 88.7% to 21.3%; the DS count did not follow.
+
+The .nu 2017 break is the one the rule places at 2017-06 to 2017-09: the NS denominator rose from 281,539 to 356,341
+while the DS count stayed flat; the further NS rise to 466,775 by 2017-12 came with real signing, the 2017-11 DS jump,
+so the share did not move by 5 pp there.
 
 These are share moves from a changing denominator, with no domain signed or unsigned because of software. A step or
 transient window that overlaps a break, from the month before its first month to its last, is break-affected. The
 sensitivity drops every break-affected event and placebo month. Dropping is cleaner than restarting the series after the
 break: restarting gives the same testable months in .se and .nu, 2021-03 on, but also discards the clean years before
-the break in .gov. Masking leaves only 23 testable step months in .se and .nu, so the sensitivity uses a minimum of 12
-testable months instead of 24; it is labelled as a sensitivity everywhere.
+the break in .gov. Masking leaves only 23 testable step months in .se and .nu, so the sensitivity lowers the minimum from
+24 to 12 testable months for the sources with a break, .se, .nu and .gov, and keeps 24 everywhere else; .ee, with 19
+step months and no break, stays untested. Every masked result below is compared like for like: the same tests, with and
+without masking.
+
+Two caveats. The transient tests detrend with a centred 25-month rolling median, so a break up to 12 months outside a
+masked window still reaches them through the trend; the masked transient counts are therefore less clean than the step
+counts. And two results depend on the random draw: OpenDNSSEC in .se, p = 0.11 in the question 1 unit headline, falls
+outside the band with 45% of other seeds, which would make that headline 5 of 28, P = 0.18, still at chance; and the
+masked bind9 d21 in .se rests on 23 placebo months.
 
 **Power.** A lasting step of h pp was injected into `ds_prev` from a chosen month on, and the test rerun with its null,
 as for the feature series. Recorded under `q2_default_change_events.prevalence.detection_power` and in
@@ -1115,7 +1140,8 @@ In .se a 2 pp step is detected at the chosen month, but only a 10 pp step at hal
 not even 10 pp is detected at half of them. On the panel, where DS prevalence is 0.1 to 0.9%, 0.05 pp is detected at the
 chosen month and 0.1 pp at most months. The step12 90% bands, over all testable months, are about -2.9 to +4.4 pp for
 .se DS, -4.2 to +8.9 pp for .nu DS, -0.9 to +42.9 pp for .gov DS, which is the break, and -0.05 to +0.06 pp on the panel.
-A lasting shift smaller than about 5 pp in .se or 9 pp in .nu would pass as chance, and .gov has no usable power.
+Steps well beyond those band edges are often missed too: a 5 pp step in .se passes at 59% of event months and a 10 pp
+step in .nu at 61%. .gov has no usable power.
 
 Recompute: `python scripts/software_vs_adoption.py && python -c "import json;d=json.load(open('out/analysis/software_vs_adoption.json'));print(d['notes']['prevalence_check']);print(json.dumps(d['q1_per_program_releases']['prevalence']['aggregate']['unit_program_x_corpus'],indent=1));print(json.dumps(d['q2_default_change_events']['prevalence']['unit_row_x_corpus'],indent=1));print(d['q4_spikes']['prevalence']['summary'])"`
 
@@ -1129,24 +1155,33 @@ releases.
 |---|---|---|---|---|---|
 | program x corpus, ds_prev, step, the headline | 28 | 4 | 3.0 | 0.36 | nsd .gov, opendnssec .nu, pdns-rec .se, unbound .nu |
 | same, without .gov | 21 | 3 | 2.3 | 0.40 | opendnssec .nu, pdns-rec .se, unbound .nu |
-| same, break-affected windows dropped, sensitivity | 35 | 4 | 3.8 | 0.53 | knot .ee, knot .nu, nsd .ee, opendnssec .gov |
+| same, break-affected windows dropped, sensitivity | 28 | 3 | 3.0 | 0.60 | knot .nu, opendnssec .gov, pdns-rec .se |
 | program x corpus, ds_prev, transient | 48 | 4 | 4.8 | 0.72 | kresd .nu, nsd .li, pdns-auth panel, unbound .se |
-| same, breaks dropped | 50 | 6 | 5.0 | 0.38 | nsd .li, opendnssec .se, pdns-auth .gov, pdns-auth panel, pdns-rec .gov, pdns-rec .se |
+| same, breaks dropped | 50 | 7 | 5.0 | 0.23 | knot .nu, nsd .li, opendnssec .nu, opendnssec .se, pdns-auth .gov, pdns-auth panel, pdns-rec .gov |
 
 Secondary, per test: the step test puts 12 of 70 tests
 outside against 7.6, the transient test 9
 of 128 against 12.8, and BIND 9's feature
 releases 0 of
-10 step tests. The per-test step count of 12 is 4 program and corpus
-units counted up to three times.
+10 step tests. The 12 per-test results come from 5 program and corpus
+pairs: NSD in .gov 3, OpenDNSSEC in .nu 3, PowerDNS Recursor in .se 3, OpenDNSSEC in .se 2 and Unbound in .nu 1. The 4
+ds_prev units carry 10 of them; OpenDNSSEC's .se ds_prev test is inside the band.
 
 At the headline unit question 1 is at chance: 4 of 28 against 3.0, P = 0.36. The four units disagree in direction:
 OpenDNSSEC in .nu and PowerDNS Recursor in .se sit below nearly every shifted schedule, NSD in .gov and Unbound in .nu
 above. NSD's .gov result is the .gov break: every step12 whose 24-month pre-window contains 2018-02, event months 2019-05
 to 2020-02, is large and positive, +45.8 pp decaying to +1.5 pp, and 5 of NSD's 19 release months fall in those months.
-Without .gov it is 3 of 21 against 2.3, P = 0.40. With break-affected windows dropped it is 4 of 35 against 3.8, P =
-0.53, and the units outside change entirely, to Knot in .ee and .nu, NSD in .ee and OpenDNSSEC in .gov: the earlier
-outside units depended on windows that straddle a break.
+Without .gov it is 3 of 21 against 2.3, P = 0.40. With break-affected windows dropped, on the same 28 units, it is
+3 of 28 against 3.0, P = 0.60:
+NSD in .gov, OpenDNSSEC in .nu and Unbound in .nu drop inside, PowerDNS Recursor in .se stays outside, and Knot in .nu
+and OpenDNSSEC in .gov move outside. Per test, like for like, the step count goes from
+12 to
+7 of
+70. The transient count rises, from
+9 to
+18 of
+128, against 12.8 expected, P about 0.09, subject to
+the detrend caveat above.
 
 Recompute: `python -c "import pandas as pd;d=pd.read_csv('out/analysis/software_vs_adoption_q1.csv');d=d[d.observable.isin(['ds_prev','dnskey_prev','rrsig_prev'])];print(d[d.status=='tested'][['event_set','test','program','observable','source','release_months_tested','observed_mean','percentile','p_two_sided']].to_string())"`
 
@@ -1190,19 +1225,21 @@ Excluded rows other than the validator-only and parameter rows:
 | bind9 | d10-dsa-removed | removes an algorithm used by a handful of zones at most |
 | bind9 | d17-nsec3param-default-in-policy | changes the denial type of zones that are signed anyway |
 | bind9 | d22-cdns-cdnskey-options | not a default change: CDS and CDNSKEY publication was already on |
-| bind9 | l02-nsec3-max-iterations-50 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-policy and signzone refuse iterations above 50) |
+| bind9 | l02-nsec3-max-iterations-50 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-signzone's limit lowered to 50; dnssec-policy refuses any non-zero iteration count) |
 | knot | knot[7]@2.6.0 | removes DSA, used by a handful of zones at most |
 | knot | knot[8]@2.7.0 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (RSA keys under 1024 bits rejected) |
 | knot | knot[10]@2.8.0 | CDS/CDNSKEY narrowed from always to rollover: they are still published during KSK submission, when a parent adds the first DS, so the share of domains with a DS is not affected. Its mirror, Knot 2.5.0's default-always CDS publication, is recorded as support-added and is not in the normalised table; both are left out |
 | knot | knot[12]@3.0.2 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (RSASHA1 refused under a SHA-1-disabling crypto policy; its effect could not begin before RHEL 9, 2022-05) |
 | knot | knot[15]@3.2.0 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (too-low rrsig-refresh makes zone signing fail) |
 | knot | knot[17]@3.4.0 | validation of the zone Knot signs; failing zones are refused, rare and not a default to publish |
+| knot | knot[19]@3.6.0 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (NSEC3PARAM with more than 256 iterations refused) |
 | nsd | nsd[3]@3.0.0 | CD-bit handling in responses, not whether signed zones are served |
 | nsd | nsd[4]@3.1.0 | NSEC3 support changes the denial type served, not whether a zone is served signed |
 | nsd | nsd[6]@3.2.9 | changes how NSD detects that a zone is signed, not what it serves |
 | opendnssec | opendnssec[2]@1.0.0b8 | KSK rollovers wait for ds-seen: changes key rollover, not whether a zone is signed |
 | opendnssec | opendnssec[5]@1.2.0b1 | changes the example policy's algorithm, not whether zones are signed |
 | pdns-auth | pdns-auth[0]@3.2 | changes the default algorithm of a key the operator asks for |
+| pdns-auth | pdns-auth[3]@3.4.0 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (set-nsec3 above the 500-iteration cap throws) |
 | pdns-auth | pdns-auth[7]@4.0.0 | changes the default algorithm of a key the operator asks for |
 | pdns-auth | pdns-auth[8]@4.0.0 | changes the default algorithm of secure-zone, which the operator still has to run |
 | pdns-auth | pdns-auth[9]@4.0.0 | configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (addKey without a size throws for RSA) |
@@ -1211,8 +1248,8 @@ Excluded rows other than the validator-only and parameter rows:
 | pdns-rec | ed25519-validation | not a default change (is_default_change false) |
 | pdns-rec | revoked-dnskey-rejected | not a default change (is_default_change false) |
 
-The excluded rows add up to 147: 79 validator-only, 41 that change a parameter of zones
-that are signed anyway, and the 27 in the table above, which include the four pdns-rec rows that are not
+The excluded rows add up to 147: 79 validator-only, 39 that change a parameter of zones
+that are signed anyway, and the 29 in the table above, which include the four pdns-rec rows that are not
 default changes and bind9 d22. With the 7 included rows that makes all 154.
 
 | unit | units | outside the 90% band | expected, discrete null | P | in the expected direction | units outside |
@@ -1221,7 +1258,7 @@ default changes and bind9 d22. With the 7 included rows that makes all 154.
 | same, without .gov | 7 | 2 | 0.92 | 0.23 | 1 | d15-dnssec-policy-default-ecdsap256 .nu ds_prev, knot[9]@2.7.5 panel ds_prev |
 | same, break-affected windows dropped, sensitivity | 3 | 1 | 0.34 | 0.31 | 1 | knot[9]@2.7.5 panel ds_prev |
 | row x corpus, transient | 9 | 0 | 1.07 | 1.00 | 0 | none |
-| same, breaks dropped | 4 | 0 | 0.45 | 1.00 | 0 | none |
+| same, breaks dropped | 5 | 0 | 0.62 | 1.00 | 0 | none |
 
 Secondary, per test: 14 step tests, 4 outside against
 1.9, 1 in the expected
@@ -1247,14 +1284,15 @@ direction; 15 transient tests, 0 outside.
 The outside tests are two movements:
 
 - bind9 d15, the opt-in dnssec-policy default of 2020-02, in .nu: DS, DNSKEY and RRSIG prevalence fall 4 to 10 pp below
-  the trend of the two years before, at the 0.0th to 2.0th percentiles. That trend is the .nu break: from 2018-10 to
-  2019-02 the .nu NS denominator fell from 413,121 to 232,995 while the DS count also fell, 127,794 to 92,722, so the DS
+  the trend of the two years before, at the 0.0th to 2.0th percentiles. That trend is the .nu break: from 2018-09
+  (413,121) to 2019-02 (232,995) the .nu NS denominator fell by 44% while the DS count also fell, 127,794 to 92,722, so the DS
   share rose from 33% to 39% with no domain signed. The fitted pre-trend of 0.83 pp a month carries that rise forward and
   overshoots; .nu DS prevalence itself kept rising after 2020-02. With break-affected windows dropped, d15 in .nu has no
   test.
 - knot[9], 2019-01, on the panel: DS prevalence rose above its trend at label 2019-06, at the 98.3rd percentile, in the
-  expected direction. It is the only unusual prevalence result that survives the break sensitivity, 1 of 3 units against
-  0.34 expected, P = 0.31, and knot[9]'s effect is weak: it concerns only KSKs made by hand with keymgr.
+  expected direction. It is the only question 2 result that survives the break sensitivity, 1 of 3 units against 0.34
+  expected, P = 0.31, and knot[9]'s effect is weak: it concerns only KSKs made by hand with keymgr. In question 1,
+  Knot in .nu and OpenDNSSEC in .gov are outside in the masked run.
 
 No default that makes signing easier is followed by a rise in the share of domains that are signed beyond chance.
 
@@ -1264,12 +1302,12 @@ forward corpus.
 ### Question 4: prevalence spikes and their alignment
 
 The spike rule of `scripts/program_rfc_cases.py` on the prevalence numerators, forward per TLD and reverse per RIR,
-gives {PJ4['summary']['spikes']} spikes. {PJ4['summary']['aligned_within_3m']} have a relevant prevalence default within 3
-months before them, against {PJ4['summary']['expected_aligned']:.1f} expected from the chance rates; no observable,
-corpus and direction beats chance. {PJ4['summary']['dip_reversals']} spikes only reverse an opposite spike of at least
+gives 59 spikes. 3 have a relevant prevalence default within 3
+months before them, against 2.7 expected from the chance rates; no observable,
+corpus and direction beats chance. 2 spikes only reverse an opposite spike of at least
 half their size one or two months earlier, the second half of a measurement dip. Without them it is
-{PJ4['summary']['aligned_excluding_dip_reversals']} of {PJ4['summary']['spikes_excluding_dip_reversals']} against
-{PJ4['summary']['expected_excluding_dip_reversals']:.1f}.
+2 of 57 against
+2.6.
 
 | observable | corpus | direction | spikes | aligned | expected | p |
 |---|---|---|---|---|---|---|
@@ -1298,21 +1336,20 @@ too, 821,692 to 745,073 in .se over 2018-10 to 2019-01. The same sensitivity was
 `break_sensitivity_feature` under question 1 and question 2. The feature headline is unchanged; this is a sensitivity
 only.
 
-- Question 1 feature step test: 7 of 76 tests
-  outside in the headline, 14 of 96
-  with break-affected windows dropped, against about 10.4 expected. Four of the seven headline results do not survive:
-  PowerDNS Authoritative's algorithm 13 and opt-out in .se and algorithm 8 in .nu fall to the 25th to 48th percentiles,
-  and OpenDNSSEC's algorithm 7 in .gov moves just inside, to the 93.4th. New outside results appear in their place,
-  most of them Knot in .se and .nu, so the set of outside results depends on the breaks while their number stays near
-  chance.
-- Question 2 feature step test: 7 of 68 outside
-  in the headline, 5 of 49 masked.
-  bind9 d21 in .se moves from the 98.4th to the 94.7th percentile, and kresd[9] and the PowerDNS Recursor cap of 150 in
-  .se move inside their bands, because the placebo months that remain no longer include the break. knot[14] and bind9
-  l01 in .se and knot[1] on the panel stay outside. knot[8] in .nu becomes untestable.
+- Question 1 feature step test, like for like: 7 of 76
+  tests outside unmasked, 9 of the same 76 masked, against
+  8.2 expected, P = 0.44. Four of the seven headline results drop inside: PowerDNS Authoritative's algorithm 13 and
+  opt-out in .se and algorithm 8 in .nu, and OpenDNSSEC's algorithm 7 in .gov. Six move outside: Knot's algorithm 3 and
+  6 in .se, iter0 and NSEC3 above 256 iterations in .nu, CDS and RSA under 1024 bits in .gov, and Knot Resolver's NSEC3
+  above 150 in .se. Their number stays near chance; which tests are outside depends on the breaks.
+- Question 2 feature step test, like for like: 6 of 43
+  outside unmasked, 4 of the same masked; 25
+  tests become untestable, knot[8] in .nu among them. kresd[9] and the PowerDNS Recursor cap of 150 in .se move inside
+  their bands, because the placebo months that remain no longer include the break. bind9 d21 in .se stays outside, at the
+  95.3rd percentile on 23 placebo months, and knot[14] and bind9 l01 in .se and knot[1] on the panel stay outside.
 
-So the breaks also shape the feature results in .se, .nu and .gov, but they do not change the feature conclusion: at
-chance with or without them.
+So the breaks also shape which feature results are outside in .se, .nu and .gov, but not the feature conclusion: at chance
+with or without them.
 
 
 ## What could not be determined
@@ -1390,6 +1427,15 @@ chance with or without them.
 | Wording | how many domains are signed | the share of domains that are signed, with the denominator breaks named | verifier F |
 | Exclusion table | 15 named rows | every excluded row accounted for, 147 with the 7 included | verifier F |
 | Feature results | as above | byte-identical; break sensitivity added as `break_sensitivity_feature` only | coordinator |
+| Break list | three breaks set by hand | five found by one rule, 15% denominator change and 5 pp share move within 6 months: .se 2017-05..11 and 2018-10..2019-01, .nu 2017-06..09 and 2018-06..2019-02, .gov 2018-02..03; the asked 25% misses .se 2018 | second verification, item 1 |
+| Sensitivity minimum | 12 months everywhere, which admitted .ee | 12 only for sources with a break; masked runs test the same units and tests as the headline | second verification, item 2 |
+| Q1 prevalence masked | 4 of 35, P 0.53, two of them .ee | 3 of the same 28 units, P 0.60 | like for like |
+| Q1 feature masked | 14 of 96 | 9 of the same 76 tests | like for like |
+| Q2 feature masked | 5 of 49 | 4 of the same 43 tests, 6 unmasked | like for like |
+| Power wording | band edges read as detection limits | detection shares: .se 5 pp at 41% and 10 pp at 89% of months; .nu 10 pp at 39% | second verification, item 3 |
+| Q4 paragraph | unrendered placeholders | 59 spikes, 3 aligned against 2.7; 2 of 57 against 2.6 without the 2 dip reversals, .se 2019-02 and ARIN 2013-01 | second verification, item 4 |
+| Labels | l02 reason misstated; knot[19] and pdns-auth[3] as parameter rows | l02 corrected; knot[19] and pdns-auth[3] in the configuration-now-fails class | second verification, item 7 |
+| q4 CSV | no dip-reversal column | `reverses_dip_within_2m` column, filled for prevalence spikes, empty for feature rows | second verification, item 9 |
 
 
 ## Changed from the earlier analysis

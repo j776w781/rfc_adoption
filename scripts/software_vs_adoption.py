@@ -72,7 +72,12 @@ ALL_STABLE = "all stable public releases"
 FEATURE_SET = "x.y.0 feature releases"
 FEATURE_TAG = re.compile(r"v9\.\d+\.0")
 Q2_MIN_PLACEBOS = 24    # q2: placebo months outside the event's window needed for a test
-SENS_MIN = 12           # break sensitivity only: masking the .se/.nu break leaves 23 testable step months
+SENS_MIN = 12           # break sensitivity only, and only for sources with a break: masking the .se/.nu
+                        # break leaves 23 testable step months; every other source keeps 24
+
+
+def break_sources() -> set:
+    return {b["source"] for b in MEASUREMENT_BREAKS}
 Q2_TESTS = ("step12", "transient12")
 TEST_ROLE = {"step12": "primary: departure from the pre-event trend",
              "transient3": "secondary: transient deviation, blind to a lasting step",
@@ -495,11 +500,11 @@ class Series:
         self.stat = {"transient3": window_stat(det, Q1_W), "transient12": window_stat(det, Q2_W),
                      "step12": step_stat(sh)}
 
-    def apply_break_mask(self) -> int:
+    def apply_break_mask(self, breaks=None) -> int:
         """Set every event statistic to NaN whose window overlaps a measurement break of this source,
         so break-affected events and placebos drop out. Returns the number of masked cells."""
         n = 0
-        for br in MEASUREMENT_BREAKS:
+        for br in (MEASUREMENT_BREAKS if breaks is None else breaks):
             if br["source"] != self.source:
                 continue
             lo, hi = m2i(br["first"]) - 1 - self.start, m2i(br["last"]) - self.start
@@ -747,7 +752,10 @@ PREV_EXCLUDED_ROW = {
     "knot[8]@2.7.0": _FAILS + " (RSA keys under 1024 bits rejected)",
     "knot[15]@3.2.0": _FAILS + " (too-low rrsig-refresh makes zone signing fail)",
     "pdns-auth[9]@4.0.0": _FAILS + " (addKey without a size throws for RSA)",
-    "l02-nsec3-max-iterations-50": _FAILS + " (dnssec-policy and signzone refuse iterations above 50)",
+    "l02-nsec3-max-iterations-50": _FAILS + " (dnssec-signzone's limit lowered to 50; dnssec-policy refuses any "
+                                            "non-zero iteration count)",
+    "knot[19]@3.6.0": _FAILS + " (NSEC3PARAM with more than 256 iterations refused)",
+    "pdns-auth[3]@3.4.0": _FAILS + " (set-nsec3 above the 500-iteration cap throws)",
     "knot[10]@2.8.0": "CDS/CDNSKEY narrowed from always to rollover: they are still published during KSK "
                       "submission, when a parent adds the first DS, so the share of domains with a DS is not "
                       "affected. Its mirror, Knot 2.5.0's default-always CDS publication, is recorded as "
@@ -769,22 +777,77 @@ PREV_EXCLUDED_ROW = {
     "knot[17]@3.4.0": "validation of the zone Knot signs; failing zones are refused, rare and not a default "
                       "to publish",
 }
-#: Measurement breaks in the forward prevalence series: months in which the measured population
-#: changed, not signing. A step or transient window overlapping [first-1, last] is break-affected.
-MEASUREMENT_BREAKS = [
-    {"source": "gov", "first": "2018-02", "last": "2018-03",
-     "description": ".gov NS denominator from 1,234 in 2018-01 to 5,553 in 2018-02; DS share 88.7% to 31.2%, "
-                    "then 21.3% as the mean daily share catches up. The measured population widened; signing "
-                    "did not collapse"},
-    {"source": "nu", "first": "2018-10", "last": "2019-02",
-     "description": ".nu NS denominator from 413,121 in 2018-09 to 363,900 in 2018-10 and 232,995 in 2019-02, "
-                    "-44%, while the DS count also fell, 127,794 to 92,722; DS share rose 33% to 39% as "
-                    "unsigned names left the measured set"},
-    {"source": "se", "first": "2018-10", "last": "2019-02",
-     "description": ".se NS denominator from 1,621,745 in 2018-09 to 1,338,823 in 2019-01; DS count and share "
-                    "dip, 44.98% in 2018-12 and 43.68% in 2019-01, back to 50.74% in 2019-02; signed zones dip "
-                    "too, 821,692 to 745,073"},
-]
+#: Measurement breaks, found by one rule on every forward source and the panel: within at most
+#: BREAK_MAX_MONTHS months the peak denominator (rr_type NS forward, dimension all on the panel) changes by
+#: more than BREAK_DEN_REL while the DS share moves by more than BREAK_SHARE_PP percentage points, i.e.
+#: the DS numerator does not follow the denominator. Each flagged pair is trimmed to the months in which
+#: the denominator actually moved (within 2% of its end values), minimal pairs are merged, and the span
+#: is extended by up to two months while the share keeps moving the same way by more than 2 pp (the
+#: mean daily share catching up with a mid-month change). Filled in by main() via find_breaks().
+BREAK_DEN_REL = 0.15
+BREAK_DEN_REL_ASKED = 0.25
+BREAK_SHARE_PP = 5.0
+BREAK_MAX_MONTHS = 6
+MEASUREMENT_BREAKS: list = []
+
+
+def _break_pairs(sh: pd.Series, den: pd.Series, thr: float) -> list:
+    m = [x for x in sh.index if not pd.isna(sh[x]) and den[x] >= MIN_DEN]
+    pairs = []
+    for a in range(len(m)):
+        for b in range(a + 1, len(m)):
+            if m2i(m[b]) - m2i(m[a]) > BREAK_MAX_MONTHS:
+                break
+            if abs(den[m[b]] / den[m[a]] - 1) > thr and abs(sh[m[b]] - sh[m[a]]) > BREAK_SHARE_PP:
+                pairs.append((m[a], m[b]))
+    return pairs
+
+
+def find_breaks(data, thr: float = None) -> list:
+    thr = BREAK_DEN_REL if thr is None else thr
+    out = []
+    for corpus, src in [("forward", t) for t in FORWARD_TLDS] + [("reverse_panel", PANEL)]:
+        s = Series(data, "ds_prev", corpus, src)
+        if not s.ok or s.first_valid is None:
+            continue
+        sh, den = s.share, s.den
+        pairs = _break_pairs(sh, den, thr)
+        mins = [(a, b) for a, b in pairs if not any((c, d) != (a, b) and a <= c and d <= b for c, d in pairs)]
+        spans = []
+        for a, b in mins:
+            months = [x for x in sh.index if a <= x <= b]
+            ai = max(i for i, x in enumerate(months[:-1]) if abs(den[x] / den[a] - 1) <= 0.02)
+            bi = min(i for i, x in enumerate(months) if i > ai and abs(den[b] / den[x] - 1) <= 0.02)
+            spans.append([months[ai + 1], months[bi], a, b])
+        spans.sort()
+        merged = []
+        for sp in spans:
+            if merged and m2i(sp[0]) <= m2i(merged[-1][1]) + 1:
+                merged[-1][1] = max(merged[-1][1], sp[1])
+                merged[-1][2] = min(merged[-1][2], sp[2])
+                merged[-1][3] = max(merged[-1][3], sp[3])
+            else:
+                merged.append(list(sp))
+        for first, last, a, b in merged:
+            direction = np.sign(sh[b] - sh[a])
+            for _ in range(2):
+                nxt = i2m(m2i(last) + 1)
+                if nxt in sh.index and not pd.isna(sh[nxt]) and (sh[nxt] - sh[last]) * direction > 2.0:
+                    last = nxt
+                else:
+                    break
+            pre = i2m(m2i(first) - 1)
+            num_pre, num_last = s.num[pre] if pre in s.num.index else float("nan"), s.num[last]
+            out.append({"source": src, "first": first, "last": last,
+                        "denominator_before": int(den[pre]) if pre in den.index else None,
+                        "denominator_after": int(den[last]),
+                        "denominator_change": r6(den[last] / den[pre] - 1) if pre in den.index else None,
+                        "ds_share_before": r6(sh[pre]) if pre in sh.index else None,
+                        "ds_share_after": r6(sh[last]),
+                        "description": (f"{src_label(src)}: denominator {int(den[pre]):,} in {pre} to "
+                                        f"{int(den[last]):,} in {last}, {den[last] / den[pre] - 1:+.0%}; DS share "
+                                        f"{sh[pre]:.1f}% to {sh[last]:.1f}%; the DS count did not follow")})
+    return out
 PREV_VALIDATOR_MECH = {"validation", "trust-anchor", "trust-anchor-5011"}
 
 
@@ -909,7 +972,7 @@ def q1(rows, releases, data, family: str = "feature", mask_breaks: bool = False)
                     L = b - a + 1
                     in_win = [mm for mm in rel_months if a <= mm <= b and not math.isnan(s.at(test, mm))]
                     occ = len(in_win) / L
-                    min_win = SENS_MIN if mask_breaks else Q1_MIN_WINDOW
+                    min_win = SENS_MIN if (mask_breaks and src in break_sources()) else Q1_MIN_WINDOW
                     if L < min_win or occ > Q1_MAX_OCC:
                         why = (f"the testable window {i2m(a)}..{i2m(b)} is {L} months, fewer than {min_win}"
                                if L < min_win else
@@ -1075,7 +1138,7 @@ def q2(rows, data, family: str = "feature", mask_breaks: bool = False):
                                           f"{i2m(e + s.lag - before)}..{i2m(e + s.lag + after - 1)}"})
                     continue
                 tm = s.testable_months(test)
-                min_tm = SENS_MIN if mask_breaks else Q2_MIN_PLACEBOS
+                min_tm = SENS_MIN if (mask_breaks and src in break_sources()) else Q2_MIN_PLACEBOS
                 if len(tm) < min_tm:
                     out.append({**base, "status": "no test", "testable_months_in_series": int(len(tm)),
                                 "reason": f"only {len(tm)} testable months in this series, fewer than "
@@ -1866,6 +1929,24 @@ def q2_unit(events: list, test: str = "step12", drop_sources=()) -> dict:
             "dropped_sources": list(drop_sources)}
 
 
+def unit_like_for_like(u_base: dict, u_masked: dict, base_units: list, masked_units: list) -> dict:
+    """The same units, tested in both runs, with and without masking."""
+    same = sorted(set(base_units) & set(masked_units))
+    return {"units": len(same), "units_list": same,
+            "outside_unmasked": sorted(set(u_base["units_outside"]) & set(same)),
+            "outside_masked": sorted(set(u_masked["units_outside"]) & set(same))}
+
+
+def q1_unit_names(summ: list, test: str) -> list:
+    return [f"{r['program']} {src_label(r['source'])}" for r in summ if r["status"] == "tested" and r["test"] == test
+            and r["event_set"] == ALL_STABLE and r["observable"] == "ds_prev"]
+
+
+def q2_unit_names(events: list, test: str = "step12") -> list:
+    return sorted({f"{e['row_id']} {src_label(e['source'])}" for e in events
+                   if e["status"] == "tested" and e["test"] == test})
+
+
 def test_key(r: dict) -> tuple:
     return tuple(r.get(k) for k in ("event_set", "program", "row_id", "test", "observable", "corpus", "source"))
 
@@ -1889,8 +1970,14 @@ def break_changes(base: list, masked: list) -> dict:
     for test in sorted({r["test"] for r in base}):
         b = [r for r in base if r["test"] == test and r["status"] == "tested" and r.get("event_set", ALL_STABLE) == ALL_STABLE]
         mm = [r for r in masked if r["test"] == test and r["status"] == "tested" and r.get("event_set", ALL_STABLE) == ALL_STABLE]
+        both = {test_key(r) for r in b} & {test_key(r) for r in mm}
+        bk = {test_key(r): r for r in b}
+        mkk = {test_key(r): r for r in mm}
         per_test[test] = {"tested": len(b), "outside": sum(bool(r.get(flag)) for r in b),
-                          "tested_masked": len(mm), "outside_masked": sum(bool(r.get(flag)) for r in mm)}
+                          "tested_masked": len(mm), "outside_masked": sum(bool(r.get(flag)) for r in mm),
+                          "like_for_like_tests": len(both),
+                          "like_for_like_outside_unmasked": sum(bool(bk[k].get(flag)) for k in both),
+                          "like_for_like_outside_masked": sum(bool(mkk[k].get(flag)) for k in both)}
     return {"per_test": per_test, "untestable_when_masked": lost, "outside_flag_changes": flipped}
 
 
@@ -2005,7 +2092,23 @@ def main(argv=None) -> int:
                          "Phase 4 timing_* columns, which already apply first_public_tag",
     }
     doc["notes"]["prevalence_check"] = check_prevalence(data)   # raises on any mismatch
+    global MEASUREMENT_BREAKS
+    MEASUREMENT_BREAKS = find_breaks(data)
+    asked = find_breaks(data, BREAK_DEN_REL_ASKED)
     doc["notes"]["measurement_breaks"] = MEASUREMENT_BREAKS
+    doc["notes"]["measurement_break_rule"] = {
+        "rule": (f"within at most {BREAK_MAX_MONTHS} months the peak denominator (rr_type NS forward, dimension all on "
+                 f"the panel) changes by more than the threshold while the DS share moves by more than "
+                 f"{BREAK_SHARE_PP} pp; pairs trimmed to the months the denominator moved, minimal pairs merged, "
+                 f"span extended by up to 2 months while the share keeps moving the same way by more than 2 pp"),
+        "threshold_used": BREAK_DEN_REL,
+        "threshold_asked": BREAK_DEN_REL_ASKED,
+        "breaks_at_threshold_asked": [f"{b['source']} {b['first']}..{b['last']}" for b in asked],
+        "why_threshold_used": ("at 25% the rule misses the .se 2018-10..2019-01 break, a -17% fall in the NS "
+                               "denominator with the DS share falling 7 pp; 15% is the largest round threshold that "
+                               "finds it, and it adds no source without a visible population change"),
+        "sensitivity_minimum": (f"break-masked runs lower the 24-month minimum to {SENS_MIN} only for sources with "
+                                f"a break; every other source keeps 24")}
     p_inc, p_exc = prevalence_mapping(rows)
     doc["observable_mapping"]["prevalence"] = {
         "observables": {k: {"label": v["label"], "forward": _spec_text(v["fwd"]),
@@ -2035,6 +2138,9 @@ def main(argv=None) -> int:
             "step12": q1_unit(psumm, "step12", rate),
             "step12_without_gov": q1_unit(psumm, "step12", rate, ("gov",)),
             "step12_breaks_masked": q1_unit(psumm_m, "step12", rate),
+            "step12_breaks_masked_like_for_like": unit_like_for_like(
+                q1_unit(psumm, "step12", rate), q1_unit(psumm_m, "step12", rate),
+                q1_unit_names(psumm, "step12"), q1_unit_names(psumm_m, "step12")),
             "transient3": q1_unit(psumm, "transient3", 0.10),
             "transient3_breaks_masked": q1_unit(psumm_m, "transient3", 0.10)}
         res["prevalence"]["break_sensitivity"] = break_changes(psumm, psumm_m)
@@ -2059,6 +2165,11 @@ def main(argv=None) -> int:
                      "per-test counts in summary are secondary"),
             "step12": q2_unit(precs), "step12_without_gov": q2_unit(precs, drop_sources=("gov",)),
             "step12_breaks_masked": q2_unit(precs_m),
+            "step12_breaks_masked_like_for_like": {
+                "units": sorted(set(q2_unit_names(precs)) & set(q2_unit_names(precs_m))),
+                "outside_unmasked": sorted({x.rsplit(" ", 1)[0] for x in q2_unit(precs)["units_outside"]}
+                                           & set(q2_unit_names(precs_m))),
+                "outside_masked": sorted({x.rsplit(" ", 1)[0] for x in q2_unit(precs_m)["units_outside"]})},
             "transient12": q2_unit(precs, "transient12"),
             "transient12_breaks_masked": q2_unit(precs_m, "transient12")}
         res["prevalence"]["break_sensitivity"] = break_changes(precs, precs_m)
@@ -2080,13 +2191,16 @@ def main(argv=None) -> int:
         res, recs = q4(rows, releases, data)
         doc["q4_spikes"] = res
         save(doc)
-        write_csv("q4", recs)
+        # the q4 CSV carries reverses_dip_within_2m, computed for prevalence spikes only; feature rows leave it
+        # empty, their values are unchanged
+        pd.DataFrame(recs).assign(reverses_dip_within_2m=pd.NA).to_csv(
+            OUT / "software_vs_adoption_q4.csv", index=False, float_format="%.6g")
         write_csv("q4_alignment", res["alignment_vs_chance"])
         pres, precs = q4(rows, releases, data, "prevalence", n0=len(recs))
         al = pres["alignment_vs_chance"]
+        n_rev = mark_dip_reversals(precs)
         append_csv("q4", precs)
         append_csv("q4_alignment", al)
-        n_rev = mark_dip_reversals(precs)
         keep = [x for x in precs if not x["reverses_dip_within_2m"]]
         res["prevalence"] = {"spikes": pres["spikes"], "chance": pres["chance"], "alignment_vs_chance": al,
                              "summary": {"spikes": len(precs),
