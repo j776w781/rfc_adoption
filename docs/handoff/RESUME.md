@@ -30,6 +30,39 @@ Phase 1 outputs present at stop time -- check `ls data/software/timelines/`:
   while the five run. Verifier output goes to `docs/handoff/verify/<program>.md`.
 - Scratch venv rebuilt; full suite green on the branch.
 
+## Update 2026-09-29, second cutoff (usage limit hit again mid-run)
+
+Done and committed this session:
+- d07f9e97 knot + nsd Phase 1 outputs (wip, unverified)
+- 2a7c4d42 `02_phase3_verify_brief.md`
+- 86035c04 kresd: Phase 3 PASS WITH CORRECTIONS, all 5 corrections applied -> kresd is the
+  first fully verified timeline. Its report also proved the CVE INVENTORY is wrong for
+  CVE-2021-40083 (fix is first in v5.3.2, inventory says 5.4.2) -- `data/software/
+  cve_inventory.json` `fixes.kresd` still needs that correction; deferred while Phase 1
+  agents were reading the file.
+- this commit: nsd Phase 3 report `docs/handoff/verify/nsd.md` (PASS WITH CORRECTIONS,
+  201 checks / 10 failed / 8 corrections). **Corrections NOT yet applied.**
+
+Agents that were still running at cutoff (they write files, never commit; whatever exists
+when you resume is theirs -- a missing file means re-run with the brief):
+- Phase 1: bind9, unbound, opendnssec, pdns-auth, pdns-rec -> `data/software/timelines/<p>.{json,md}`
+- Phase 3: knot -> `docs/handoff/verify/knot.md`
+
+## Next steps, in order
+
+1. `git status`; commit any timeline / verify files the agents left, as wip.
+2. Apply nsd's 8 corrections from `docs/handoff/verify/nsd.md` to `nsd.{json,md}` -- same
+   method as kresd (86035c04): assert each current value before changing it, re-run one
+   proving command per correction, commit. The two SVN-era default-change rows (2.2.0,
+   2.3.0) are the substantive ones: wrong commit attribution and a tag that does not
+   contain its commit.
+3. Apply knot's corrections when `verify/knot.md` exists; same method.
+4. Fix `cve_inventory.json` `fixes.kresd` CVE-2021-40083 -> 5.3.2 (only once no Phase 1
+   agent is running).
+5. Spawn Phase 3 verifiers for the five new timelines with `02_phase3_verify_brief.md`;
+   apply their corrections.
+6. Phase 2 `01_program_timelines.md` index, then Phase 4 onward per the task list.
+
 ## To resume
 
 1. `git checkout software-timelines-v2`; list `data/software/timelines/` and `docs/handoff/`.
