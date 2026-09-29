@@ -150,7 +150,14 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - Phase 7 final after two verifications (998c35db); old docs marked superseded (ac547268).
 - Phase 8 DONE: notebook verified and corrected (report `verify/phase8_notebook.md`); rebuild with
   `python notebooks/build_software_vs_adoption_notebook.py`. All eight phases complete.
-- Only open item: push `software-timelines-v2` when the owner confirms (nothing pushed yet).
+- Full-corpus run (9695760a): on the server,
+  `python scripts/run_openintel_full.py --main <main drive> --spill <spill drive> --threads N --memory-limit XGB`
+  (resumable; `--dry-run` prints the commands, `--max-days 300` is a smoke test), then
+  `python notebooks/build_software_vs_adoption_notebook.py`. Section 0 of the notebook shows which run the
+  analyses read and what each drive contributed. The committed server run used one drive only
+  (/mnt/nas_share/Josh), which is why every forward TLD ends 2023-12.
+- Open item: push `software-timelines-v2` when the owner confirms (nothing pushed yet); the server needs this
+  branch to run the above.
 
 ## To resume
 
