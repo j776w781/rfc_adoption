@@ -48,6 +48,18 @@ when you resume is theirs -- a missing file means re-run with the brief):
 - Phase 1: bind9, unbound, opendnssec, pdns-auth, pdns-rec -> `data/software/timelines/<p>.{json,md}`
 - Phase 3: knot -> `docs/handoff/verify/knot.md`
 
+## Update 2026-09-29, third resume
+
+- knot and nsd corrections applied and committed (this commit); with kresd that is three of
+  eight timelines fully verified. Each pass asserted every current value before changing it
+  and wrote nothing on any failure -- two early runs were stopped that way (a guessed .md
+  anchor; a `\1084c...` group-reference trap) before touching a file.
+- opendnssec Phase 1 output exists (144 tags, 65 stable); its Phase 3 verifier is running.
+- bind9 and unbound Phase 1 running (third attempt). pdns-auth, pdns-rec still to run;
+  keep concurrency at three -- six-plus agents exhausted the session limit twice.
+- Inventory edits still pending (blocked while Phase 1 agents read the file):
+  `fixes.kresd` CVE-2021-40083 -> 5.3.2; `by_product.nsd` CVE-2019-13207 published 2019-07-03.
+
 ## Next steps, in order
 
 1. `git status`; commit any timeline / verify files the agents left, as wip.

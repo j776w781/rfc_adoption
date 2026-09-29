@@ -25,7 +25,7 @@ git -C $C show <tag>:configure.ac | sed -n "<lines>p"        # compile-default e
 |---|---|---|---|---|---|---|---|
 | 2.0.0ws | 2004-01-09 | support-added | no | rrsig | DNSSEC implemented. | b0de617861, acb6794503 | yes |
 | 2.0.0 | 2004-02-12 | support-added | yes | rrsig | Experimental DNSSEC support implemented, but disabled by | acb6794503, b2d80474e1 | yes |
-| 2.3.0 | 2005-01-10* | default-changed | yes | rrsig | DNSSEC is now enabled by default. NSD should be fully | 9203aba7a5 | no |
+| 2.3.0 | 2005-05-02† | default-changed | yes | rrsig | DNSSEC is now enabled by default. NSD should be fully | 9203aba7a5 | no |
 | 3.0.0 | 2006-09-05 | default-changed | yes | rrsig | Fixed RFC 4035 says CD flag SHOULD be cleared on authoritative | 8b51cb2ee9 | yes |
 | 3.0.0 | 2006-09-05 | support-added | no | nsec3 | configure option to enable NSEC3 (--enable-nsec3) support. | e9743fda73 | yes |
 | 3.0.5 | 2007-06-26 | support-added | no | nsec3 | NSEC3 new wireformat and presentation format from draft-09. | a7d6d473f6 | yes |
@@ -48,7 +48,7 @@ git -C $C show <tag>:configure.ac | sed -n "<lines>p"        # compile-default e
 |---|---|---|---|---|---|---|---|---|
 | 2.0.0 | 2004-02-12 | DNSSEC answer composition compiled in (configure default yes; RELNOTES says disabled) | no DNSSEC code (1.x) | configure.ac@NSD_2_0_0_REL:333-340 defines DNSSEC unless --disable-dnssec; RRSIG/NSEC added to answers when DO is set | yes | no | b2d80474e1, acb6794503 | exact |
 | 2.2.0 | 2005-01-10 | DNSSEC compile default flipped to off on trunk | configure.ac@NSD_2_1_2_REL:333-340: DNSSEC defined unless --disable-dnssec | configure.ac@NSD_2_2_0_REL:331-338: DNSSEC defined only with --enable-dnssec | yes | yes | fc944b1d26 | approximate |
-| 2.3.0 | 2005-01-10 | DNSSEC enabled by default (compile-time) | configure.ac@NSD_2_2_0_REL:331-338: --enable-dnssec needed | configure.ac@NSD_2_3_1_REL: --disable-dnssec to turn off; DNSSEC (RFC 4033-4035) always compiled in unless disabled | yes | no | 9203aba7a5(!) | approximate |
+| 2.3.0 | 2005-05-02 | DNSSEC enabled by default (compile-time) | configure.ac@NSD_2_2_0_REL:331-338: --enable-dnssec needed | configure.ac@NSD_2_3_1_REL: --disable-dnssec to turn off; DNSSEC (RFC 4033-4035) always compiled in unless disabled | yes | no | 9203aba7a5(!) | approximate |
 | 3.0.0 | 2006-09-05 | CD bit cleared in authoritative responses (RFC 4035 bug #140) | CD bit copied from query to response when DNSSEC compiled in | CD bit cleared in all authoritative responses | yes | no | 8b51cb2ee9 | exact |
 | 3.1.0 | 2008-06-23 | NSEC3 compiled in by default | configure.ac@NSD_3_0_8_REL: NSEC3 defined only with --enable-nsec3 | configure.ac@NSD_3_1_0_REL:563-570: NSEC3 defined unless --disable-nsec3 (later: unless no SSL) | yes | no | e77877aec0 | exact |
 | 3.2.6 | 2010-07-20 | --disable-dnssec removed: DNSSEC serving can no longer be compiled out | configure --disable-dnssec builds a server that ignores DO/RRSIG | DNSSEC answer composition unconditional | yes | no | bcede5dc3a | exact |
@@ -64,7 +64,7 @@ git -C $C show <tag>:configure.ac | sed -n "<lines>p"        # compile-default e
 | CVE-2012-2978 | 2012-07-27 | NSD_3_2_13_REL | 2012-07-19 | -8 | no | 793547222d | ChangeLog 3.2.13 (19 July 2012) names the CVE; the code commit 79354722 "Update branche to have DOS vulnerability fixed" is the only commit in the window |
 | CVE-2013-5661 | 2019-11-05 | - | - | - | no | fecd050ac3, 029d25ddfc | no NSD commit or ChangeLog line names CVE-2013-5661 (generic RRL slip cache-poisoning id, NVD-published 2019); the related change is the rrl-slip option (ChangeLog "18 Jun 2013: Add rrl-slip config option", first in NSD_3_2_16_REL 2013-07-09 and NSD_4_0_0_REL). fix_tag left null because no commit is attributable to the CVE |
 | CVE-2016-6173 | 2017-02-09 | NSD_4_1_11_REL | 2016-08-01 | -192 | no | 7fc93931a8 | ChangeLog line "Fix #790: size-limit-xfr ..." (5 July 2016) has no CVE id; the commit subject does |
-| CVE-2019-13207 | - | NSD_4_2_2_REL | 2019-08-13 | - | no | 91102da24d | not in by_product (inventory fixes list only); NVD date absent from the inventory, so latency is null. A second, related overflow (NSEC3 255-octet names, 58ed7127) shipped in 4.15.0 with commit body "incomplete fix of CVE-2019-13207" |
+| CVE-2019-13207 | 2019-07-03 | NSD_4_2_2_REL | 2019-08-13 | 41 | no | 91102da24d | not in by_product (inventory fixes list only); NVD date absent from the inventory, so latency is null. A second, related overflow (NSEC3 255-octet names, 58ed7127) shipped in 4.15.0 with commit body "incomplete fix of CVE-2019-13207" |
 | CVE-2020-28935 | 2020-12-07 | NSD_4_3_4_REL | 2020-11-24 | -13 | no | a4caec3137 | not in by_product (inventory fixes list only); NVD date taken from cve_crossref.json (2020-12-07) |
 | CVE-2026-12244 | 2026-06-25 | NSD_4_14_3_REL | 2026-06-24 | -1 | no | 289d78b366 |  |
 | CVE-2026-12245 | 2026-06-25 | NSD_4_14_3_REL | 2026-06-24 | -1 | no | 188cb02ba1 |  |
@@ -255,12 +255,18 @@ Negative latency = fix released before NVD publication. None of the NSD CVEs in 
 | 4.15.1 | NSD_4_15_1_REL | 2026-08-26 | yes | tag commit | doc/ChangeLog | 4 | 4 |
 | 4.15.2 | NSD_4_15_2_REL | 2026-09-02 | yes | tag commit | doc/ChangeLog | 43 | 7 |
 
+## Verification
+
+Phase 3 adversarial check: **PASS WITH CORRECTIONS** (201 checks, 10 failed, 8 corrections applied 2026-09-29). Report: `docs/handoff/verify/nsd.md`.
+
+Corrections not visible in the tables above: 2.2.0's flip is non-merge commit 466770f2 on the NSD_2_1 branch (fc944b1d only merged it), first shipped by 2.1.4 whose tag is manufactured; NSD_2_3_0_REL does not contain 9203aba7 (earliest containing tag NSD_2_3_1_REL) and 2.3.0's date above is the release commit's, marked †; 4.0.0's "Don't return SERVFAIL ... NSEC3" entry is a re-wrapped 3.2.9 line; 3.0.5 has 32 new entries, not 48; real release dates for 14 of the 15 manufactured tags are in the JSON's `release_commit_dates`.
+
 ## Gaps
 
 - NSD is an authoritative server that does not sign: there are no default signing algorithm, key size, NSEC3 iteration/salt or CDS-publication defaults to record. default_changes therefore holds only compile-time DNSSEC/NSEC3 availability and answer-composition behaviour (CD bit, is_secure trigger).
 - Algorithm awareness is parse-and-serve only: NSD never verifies RRSIGs, so "support" for RSASHA256/512, ECDSA, Ed25519/Ed448 or GOST means the zone parser accepts the mnemonic. git log --all -i --grep for gost and rsasha returns nothing; ECDSA (3.2.11) and ED25519/ED448 (4.1.16) are the only algorithm-mnemonic commits. RSA/SHA-2 mnemonics were probably covered by "Allow reading in new DNSKEY algorithm mnemonics" (3.2.11, f854e3f8) but the commit does not list them; not asserted.
 - No NSEC3 iteration cap exists in the serving code at any tag (nsec3.c@NSD_4_15_2_REL:127 only asserts iterations <= 65536); no limit-changed rows.
-- 13 of the 1.x/2.x tags (1.0.3, 1.1.0, 1.1.0B2, 1.2.0-1.2.4, 2.0.1, 2.0.2, 2.1.3-2.1.5, 2.2.1, 2.3.0) were manufactured by the 2017 SVN import on commits whose RELNOTES lack the version's own section; their dates (date_reliability="suspect") are lower bounds, several tags share one commit, and 1.0.3 is dated before 1.0.2. Entries for those versions are read from NSD_2_3_7_REL:RELNOTES. The real release dates are not recoverable from the clone.
+- 15 of the 1.x/2.x tags (1.0.3, 1.1.0, 1.1.0B2, 1.2.0-1.2.4, 2.0.1, 2.0.2, 2.1.3-2.1.5, 2.2.1, 2.3.0) were manufactured by the 2017 SVN import on commits whose RELNOTES lack the version's own section; their dates (date_reliability="suspect") are lower bounds, several tags share one commit, and 1.0.3 is dated before 1.0.2. Entries for those versions are read from NSD_2_3_7_REL:RELNOTES. The real release dates are not recoverable from the clone.
 - RELNOTES 2.0.0 says DNSSEC is "disabled by default. Enable using --enable-dnssec" but configure.ac at NSD_2_0_0_REL (and 2.1.x) defines DNSSEC unless --disable-dnssec is given (b2d80474 "default: yes"). Trunk flipped the default to off in merge fc944b1d (first in NSD_2_2_0_REL) and back on in 9203aba7 for 2.3.0. Which binary default 2.0.x packagers actually shipped cannot be settled from the clone.
 - NSD_2_3_0_REL (the "DNSSEC enabled by default" release) does not contain its own release commit; first tag containing 9203aba7 is NSD_2_3_1_REL (2005-08-30). Attribution marked approximate.
 - doc/ChangeLog first appears at NSD_3_0_0_REL and holds the whole 3.0 development log (548 entries back to 2004), so 3.0.0 "new entries" are the 3.0 branch history, not one release cycle.

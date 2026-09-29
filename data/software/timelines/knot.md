@@ -46,7 +46,7 @@ git -C $C show <commit> --stat                        # what it changed
 | 2.6.1 | 2017-11-02 | yes | support-added | no | cds-cdnskey | New CDS/CDNSKEY publish configuration option | 5a242bfc0d, f503b0d2fb | yes |
 | 2.6.2 | 2017-11-23 | yes | support-added | no | dnskey | CSK algorithm rollover and (KSK, ZSK) <-> CSK rollover support | 34f7638e9e | yes |
 | 2.7.0 | 2018-08-03 | yes | support-added | no | other | Online Signing support for automatic key rollover | 36bb621616 | yes |
-| 2.7.4 | 2018-11-13 | yes | support-added | no | cds-cdnskey | Reintroduced 'rollover' configuration option for CDS/CDNSKEY publication | (approximate: no commit identified between the two tags) | - |
+| 2.7.4 | 2018-11-13 | yes | support-added | no | cds-cdnskey | Reintroduced 'rollover' configuration option for CDS/CDNSKEY publication | e16da2dc7 (doc-only; schema value since v2.6.1) | yes |
 | 2.7.5 | 2019-01-07 | yes | default-changed | yes | dnskey | Manually generated KSK is 'ready' by default | 8e2530f02c | yes |
 | 2.8.0 | 2019-03-05 | yes | support-added | no | dnskey | New offline-KSK mode of operation | 8bb97c6ad0 | yes |
 | 2.8.0 | 2019-03-05 | yes | support-added | no | other | Configurable multithreaded DNSSEC signing for large zones | 59ffc11226 | yes |
@@ -76,7 +76,7 @@ git -C $C show <commit> --stat                        # what it changed
 | 3.2.0 | 2022-08-22 | yes | support-added | no | other | knotd: DNSSEC-related records can be updated via DDNS | 1f9f05d847 | yes |
 | 3.2.0 | 2022-08-22 | yes | default-changed | yes | nsec3-iterations | knotd: default value for 'policy.nsec3-iterations' was lowered to 0 | 0009836974 | yes |
 | 3.2.0 | 2022-08-22 | yes | default-changed | yes | rrsig | knotd: default value for 'policy.rrsig-refresh' is propagation delay + zone maximum TTL | 084c8ab842 | yes |
-| 3.2.0 | 2022-08-22 | yes | limit-changed | yes | rrsig | knotd: server fails to load configuration if 'policy.rrsig-refresh' is too low | 084c8ab842 | yes |
+| 3.2.0 | 2022-08-22 | yes | limit-changed | yes | rrsig | knotd: server fails to load configuration if 'policy.rrsig-refresh' is too low | 084c8ab842, d8b1e148f7 | yes |
 | 3.3.0 | 2023-08-28 | yes | support-added | no | dnskey | knotd: new multi-signer operation mode (see 'policy.dnskey-sync' and 'DNSSEC multi-signer') | 92e6be3cc2 | yes |
 | 3.3.3 | 2023-12-13 | yes | default-changed | yes | rrsig | knotd: increased default for 'policy.rrsig-refresh' by (0.1 * 'rrsig-lifetime') | 3c7449eafa | yes |
 | 3.3.5 | 2024-03-06 | yes | support-added | no | other | knotd: new module mod-authsignal for automatic authenticated DNSSEC bootstrapping records synthesis (Thanks to | b37888237c | yes |
@@ -114,7 +114,7 @@ git -C $C show <commit> --stat                        # what it changed
 | 3.0.2 | 2020-11-11 | libdnssec honours the local GnuTLS crypto policy | algorithm support decided by libdnssec alone | dnssec_algorithm_key_support()/digest_support() return false for algorithms the system policy disables (e.g. SHA-1 on RHEL 9); signing/validation with such keys fails | yes | no | 5994a92c04 | exact |
 | 3.1.0 | 2021-08-01 | NSEC/NSEC3/NSEC3PARAM TTL = min(SOA TTL, SOA minimum) | NSEC(3) TTL = SOA minimum | NSEC(3) TTL = min(SOA TTL, SOA minimum); NSEC3PARAM TTL follows NSEC3 | yes | no | f86cc39e0e, 99e401a5d1 | exact |
 | 3.2.0 | 2022-08-22 | default policy.nsec3-iterations 10 -> 0 | schema default 10 (src/knot/conf/scheme.c@v2.3.0:166 .. schema.c@v3.1.9); documented as 5 until 3.0.6 | schema default 0 (schema.c C_NSEC3_ITER); doc/reference.rst "Default: 0" | yes | no | 0009836974 | exact |
-| 3.2.0 | 2022-08-22 | default policy.rrsig-refresh computed; too-low value is a hard error | rrsig-refresh default 7 days; too-low values warned | default = propagation-delay + zone-max-ttl; configuration fails to load if rrsig-refresh is too low | yes | no | 084c8ab842 | exact |
+| 3.2.0 | 2022-08-22 | default policy.rrsig-refresh computed; too-low value is a hard error | rrsig-refresh default 7 days; too-low values warned | default = propagation-delay + zone-max-ttl; zone signing fails with an error if rrsig-refresh is too low (NEWS overstates it as a config-load failure) | yes | no | 084c8ab842 | exact |
 | 3.3.3 | 2023-12-13 | default policy.rrsig-refresh increased by 0.1 * rrsig-lifetime | propagation-delay + zone-max-ttl | propagation-delay + zone-max-ttl + 0.1 * rrsig-lifetime | yes | no | 3c7449eafa | exact |
 | 3.4.0 | 2024-09-02 | validation requires remaining RRSIG validity > rrsig-refresh | any unexpired RRSIG accepted by zone.dnssec-validation | RRSIGs expiring within rrsig-refresh make validation fail (validation re-run as a scheduled event) | yes | no | a7a739faab | exact |
 | 3.5.0 | 2025-09-18 | default policy.nsec3-salt-length 8 -> 0 | schema default 8 (schema.c C_NSEC3_SALT_LEN since 2.3.0) | schema default 0; empty salt (notice added in 3.4.3, 7ed353619) | yes | no | edcb6b09f7 | exact |
@@ -179,7 +179,7 @@ Source: `scratchpad/knot/docdefaults.py` diff of `doc/reference.rst` `*Default:*
 | CVE-2020-12667 | 2020-05-19 | n/a | n/a | n/a | n/a | - | Knot Resolver (kresd) CVE listed under "knot" only because the NVD keyword search "Knot DNS" matches "Knot Resolver"; not a Knot DNS issue (verified: id absent from Knot DNS NEWS and git log) |
 | CVE-2022-32983 | 2022-06-20 | n/a | n/a | n/a | n/a | - | Knot Resolver (kresd) CVE listed under "knot" only because the NVD keyword search "Knot DNS" matches "Knot Resolver"; not a Knot DNS issue (verified: id absent from Knot DNS NEWS and git log) |
 | CVE-2023-26249 | 2023-02-21 | n/a | n/a | n/a | n/a | - | Knot Resolver (kresd) CVE listed under "knot" only because the NVD keyword search "Knot DNS" matches "Knot Resolver"; not a Knot DNS issue (verified: id absent from Knot DNS NEWS and git log) |
-| CVE-2026-39155 | 2026-07-23 | v3.4.10 | 2026-04-02 | -112 | yes | 605b3d1700(v3.4.10), 15647ab26d(v3.5.4) | mod-onlinesign NSEC successor bug (aggressive-NSEC downstream DoS). Fixed in v3.4.10 and v3.5.4, both released 2026-04-02 (v3.5.4 14 minutes earlier); CVE id not in NEWS, mapped from the NVD description. Inventory also lists it under kresd by keyword overlap. |
+| CVE-2026-39155 | 2026-07-23 | v3.5.4 | 2026-04-02 | -112 | yes | 605b3d1700(v3.4.10), 15647ab26d(v3.5.4) | mod-onlinesign NSEC successor bug (aggressive-NSEC downstream DoS). Fixed in v3.4.10 and v3.5.4, both released 2026-04-02 (v3.5.4 14 minutes earlier); CVE id not in NEWS, mapped from the NVD description. Inventory also lists it under kresd by keyword overlap. |
 
 Negative latency = fix released before NVD publication (coordinated disclosure or late CVE assignment).
 
@@ -211,7 +211,6 @@ Negative latency = fix released before NVD publication (coordinated disclosure o
 - 2.5.3 (vs v3.6.0): added 1, removed 1
   - + Allowed binding to non-local addresses for TCP (Thanks to Julian Brost!)
   - - Allowed binding to non-local adresses for TCP (Thanks to Julian Brost!)
-- 2.5.7 (vs v3.6.0): added 0, removed 6
   - - CVE-2017-11104: Improper TSIG validity period check can allow TSIG forgery (Thanks to Synacktiv!)
   - - Unexpected response for DS query below delegation poing
   - - Zone events not rescheduled upon server reload (Thanks to Mark Warren)
@@ -486,6 +485,10 @@ Negative latency = fix released before NVD publication (coordinated disclosure o
 | 3.5.8 | v3.5.8 | 2026-09-04 | yes | 6 | 1 |
 | 3.6.0 | v3.6.0 | 2026-09-08 | yes | 40 | 13 |
 | 3.7.dev | v3.7.dev | 2026-09-08 | no | 0 | 0 |
+
+## Verification
+
+Phase 3 adversarial check: **PASS WITH CORRECTIONS** (397 checks, 9 failed, 7 corrections applied 2026-09-29). Report: `docs/handoff/verify/knot.md`.
 
 ## Gaps
 
