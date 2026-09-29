@@ -57,7 +57,8 @@ export. The two setup cells below have their code hidden; the short answer follo
 md(r"""
 ## Setup
 
-Paths, palette and small drawing helpers. The palette is the project's validated one: three categorical colours
+Paths, palette and small drawing helpers. Note: running the setup cell deletes and rewrites every PNG in
+`reporting/charts/software_vs_adoption/`, which are tracked files. The palette is the project's validated one: three categorical colours
 in fixed order (blue, orange, green), a blue ramp for ordered values, and red only for a highlighted event.
 """)
 
@@ -280,6 +281,86 @@ def find_key(obj, needle, path=()):
 DRAWS = jget(J7, "notes", "draws", default=1000)
 PRE, POST = sva.STEP_PRE, sva.STEP_POST
 POWER = find_key(J7, "power")
+# The q-value statement concerns the primary step test, so take its placebo count only
+# (the transient test has up to 160 placebo months, the step test up to 148).
+_Q2S = Q2[Q2.test == "step12"] if "test" in Q2.columns else Q2
+MAXPLAC = int(_Q2S.placebo_months.max()) if "placebo_months" in _Q2S.columns and _Q2S.placebo_months.notna().any() else None
+NEAR0 = 0.01   # pp: a statistic smaller than this means the share barely moved
+
+
+def near0(v):
+    return "" if v is None or (isinstance(v, float) and math.isnan(v)) or abs(v) >= NEAR0 else (
+        f", a change of under {NEAR0:g} percentage points; the share barely moved")
+
+
+def pval(p):
+    return NA if p is None or (isinstance(p, float) and math.isnan(p)) else ("p < 0.001" if p < 0.001 else f"p = {p:.3f}")
+
+
+def pp(v):
+    # a gap in percentage points, readable at any size (no scientific notation)
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return NA
+    a = abs(v)
+    if a >= 10:
+        return f"{v:+.1f} pp"
+    if a >= 0.1:
+        return f"{v:+.2f} pp"
+    if a == 0:
+        return "0 pp"
+    return np.format_float_positional(v, precision=2, unique=False, fractional=False, sign=True) + " pp"
+
+
+def pnice(sr):
+    return str(sr).replace("panel", "reverse panel").replace("alg13", "ECDSA").replace("digest1", "SHA-1 DS")
+
+
+def power_facts():
+    # (smallest step above the band at the one chosen event month, smallest step detected across event months)
+    if not POWER or not isinstance(POWER[1], dict):
+        return {}, {}
+    rows_ = pd.DataFrame(POWER[1].get("rows", []))
+    one = {}
+    if len(rows_) and {"series", "step_pp", "above_band"} <= set(rows_.columns):
+        for ser, g_ in rows_.groupby("series", sort=False):
+            hit = g_[g_.above_band.astype(bool) & (g_.step_pp > 0)].step_pp
+            one[ser] = None if hit.empty else float(hit.min())
+    return one, dict(POWER[1].get("smallest_detectable_step_pp", {}) or {})
+
+
+PW_ONE, PW_ALL = power_facts()
+
+
+def _pw(d):
+    return "; ".join(f"{pnice(k)}: {'not even 10 pp' if v is None else f'{v:g} pp'}" for k, v in d.items())
+
+
+PW_TEXT = (f"at one chosen event month, the smallest step detected is {_pw(PW_ONE)}; across all possible event "
+           f"months (what the notebook calls 'detected'), {_pw(PW_ALL)}") if PW_ONE or PW_ALL else None
+
+# New computation (not a Phase 7 output): what the reverse-ledger window of a default change is made of.
+CL = pd.read_parquet(ROOT / "out/analysis/delegation_change_clusters.parquet")
+EV3 = {e["row_id"]: e for e in jget(J7, "q3_manual_vs_automatic", "events", default=[])}
+
+
+def block_caveat(group):
+    e = EV3.get(group)
+    if e is None:
+        return ""
+    w0, w1 = e["window"]
+    x = CL[(CL.month >= w0) & (CL.month <= w1) & CL.kind.isin(["sign", "rollover"])
+           & (CL.to_alg.astype(str) == str(e["to_alg"]))].sort_values("n_delegations", ascending=False)
+    if x.empty:
+        return ""
+    big, tot = x.iloc[0], int(x.n_delegations.sum())
+    if big.n_delegations * 2 < tot:
+        return ""
+    cm = pd.Period(big.month, "M") - 1          # label M holds changes made during calendar month M-1
+    verb = {"sign": "signed", "rollover": "rolled over"}.get(big.kind, big.kind)
+    when = (f"possibly before the release on the {int(e['timing_date'][8:10])}th"
+            if str(cm) == e["timing_date"][:7] else f"after the release of {e['timing_date']}")
+    return (f"this is one {big.source.upper()} block ({big.block}, {int(big.n_delegations)} of the window's {tot} "
+            f"matching delegations) {verb} during {cm.strftime('%B %Y')}, {when}")
 
 
 print({p: len(v) for p, v in RELEASES.items()})
@@ -308,8 +389,19 @@ if ext:
 else:
     q2s = Q2[(Q2.test == "step12") & (Q2.status == "tested")].sort_values("p_two_sided")
     top = [(r.row_id, r.source, r.percentile, r.in_expected_direction) for r in q2s.head(2).itertuples()]
+def _obs(rid, src):
+    x = Q2[(Q2.row_id == rid) & (Q2.source == src) & (Q2.test == "step12")].observed
+    return None if x.empty else float(x.iloc[0])
+
+
+def _tiny(rid, src):
+    v = _obs(rid, src)
+    return "" if not near0(v) else f"; a change of {pp(v)}: ranked extreme, but the share hardly moved"
+
+
 tops = "; ".join(f"{rid} in {SRC.get(src, src)}, at percentile {p:.1f}" +
-                 ("" if d is None else f" ({'in' if d else 'against'} the expected direction)") for rid, src, p, d in top)
+                 ("" if d is None else f" ({'in' if d else 'against'} the expected direction{_tiny(rid, src)})")
+                 for rid, src, p, d in top)
 exp1 = max(x for x in (e1, e1c) if x is not None) if (e1 is not None or e1c is not None) else None
 exp2 = max(x for x in (e2, e2d) if x is not None) if (e2 is not None or e2d is not None) else None
 more1 = o1 is not None and exp1 is not None and o1 > exp1 * 1.5
@@ -336,12 +428,13 @@ say(f'''
    exactly 1 test in 10 did so by chance{'' if e1c is None else f' (or {e1c:.1f} at the rate the null actually rejects on data with no effect)'}. {bind_txt}
 2. **Default changes (section 3).** {fmtv(o2)} of {fmtv(n2)} default-change events are followed by a departure from
    trend outside the band, against {fmtv(e2, 'g')} expected at 1 in 10{'' if e2d is None else f' ({e2d:.1f} under the exact placebo null, whose band is set by a finite number of months)'}{', which is more than chance' if more2 else ', which is about what chance produces'}.
-   The two most extreme: {tops}. This is judged by counts against chance, not by q-values: with at most about 150
+   The two most extreme: {tops}. This is judged by counts against chance, not by q-values: with at most {fmtv(MAXPLAC)}
    placebo months per series no single test can reach a Benjamini-Hochberg q below 0.10. The step test also detects
-   only steps above a certain size (see the box below), so "inside the band" means "no large lasting shift".
+   only steps above a certain size (chart 1, in the box below{': ' + PW_TEXT if PW_TEXT else ''}), so "inside the band"
+   means "no large lasting shift".
 3. **Manual against automatic (section 5).** In the reverse data, large batches of changes are {'not ' if lower > len(q3t) / 2 else ''}more common after
    a signer default change: the share moved in actions of 10 or more delegations is lower in the window than in
-   other months in {lower} of {len(q3t)} tested cells.{(' The closest case, ' + c3.group + ', has p = ' + format(c3.p_block_ge_observed, '.3f') + ' at the block level, and it rests on one address block that may have changed before the release (section 5).') if c3 is not None else ''}
+   other months in {lower} of {len(q3t)} tested cells.{(' The closest case, ' + c3.group + ', has p = ' + format(c3.p_block_ge_observed, '.3f') + ' at the block level; ' + (block_caveat(c3.group) or 'see section 5') + '.') if c3 is not None else ''}
 4. **Across programs (section 4).** {'No program ships new DNSSEC defaults first more often than chance' if (minp or 1) >= 0.1 else 'One program ships new defaults first more often than chance'} (smallest
    p = {fmtv(minp, '.2f')}). The coordination that is clearly real is the KeyTrap fix of February 2024: {kt.program.nunique()}
    codebases shipped it within {fmtv(kt_days)} days{', all before NVD published the CVE' if kt_before else ''}.
@@ -374,15 +467,16 @@ say(f'''
 > **The step test ("departure from trend").** It asks "did the share jump after the event and stay there?" A
 > straight line is fitted to the {PRE} months *before* the event and extended over the {POST} months *after*; the
 > statistic is the average gap, in percentage points (pp), between what happened and what the line predicted.
-> **It only detects steps above a certain size**, and a larger one in noisy series; {'the detection-power table below gives the sizes for this run' if POWER else 'this run of Phase 7 exports no detection-power table, and the second Phase 7 verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series'}.
+> **It only detects steps above a certain size**, and a larger one in noisy series; {'chart 1 below gives the sizes for this run' if POWER else 'this run of Phase 7 exports no detection-power table, and the second Phase 7 verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series'}.
 >
 > **Chance band.** To judge a gap, the same statistic is computed at {DRAWS:,} placebo dates: for a default change,
 > random months of the same series; for a program's release schedule, the whole schedule shifted in time. The
 > **90% chance band** holds the middle 90% of those placebo values. By chance alone about one test in ten lands
 > outside it, so the text under every chart gives **how many fell outside against how many chance predicts**.
 >
-> **Percentile.** A percentile of 97 means the real value is larger than 97% of the placebo values; below 5 or above
-> 95 is outside the band.
+> **Percentile.** A percentile of 97 means the real value is larger than 97% of the placebo values. About 5 or less,
+> or about 95 or more, is outside the band; the exact edge is the placebo values' own 5th and 95th percentile, so a
+> value printed as 5.0 can fall on either side of it (the dot colour shows which).
 >
 > **Action size** (section 5 only): how many reverse delegations changed the same way in the same month and address
 > block. It is only a proxy for "automatic".
@@ -392,36 +486,50 @@ if POWER:
     rows = pd.DataFrame(tab.get("rows", []) if isinstance(tab, dict) else tab)
     need = {"series", "step_pp", "share_of_event_months_above_band"}
     if len(rows) and need <= set(rows.columns):
-        smallest = tab.get("smallest_detectable_step_pp", {}) if isinstance(tab, dict) else {}
-        def nice(sr):
-            return sr.replace("panel", "reverse panel").replace("alg13", "ECDSA share").replace("digest1", "SHA-1 DS share")
-        sm_txt = "; ".join(f"{nice(k)}: {'not even 10 pp' if v is None else f'{v:g} pp'}" for k, v in smallest.items())
-        fig, ax = plt.subplots(figsize=(12.5, 4.4))
-        frame(fig, "The step test only sees large steps. Smallest step it detects: " + (sm_txt or "see the table"),
-              "Phase 7 added an artificial lasting step of 0 to 10 percentage points to real series, at every possible "
-              "event month, and reran the test. Height: share of event months at which the step landed above the 90% "
-              "band. Dashed line: the detection rule, half of the event months. Source: Phase 7 detection-power table.",
-              bottom=1.2, right=0.97)
-        for k, (ser, gdf) in enumerate(rows.groupby("series", sort=False)):
-            if k >= 3:
-                break
-            gdf = gdf.sort_values("step_pp")
-            ax.plot(gdf.step_pp, gdf.share_of_event_months_above_band * 100, marker="o", color=[S1, S2, S3][k], lw=2,
-                    label=nice(ser))
+        pan = [k for k, v in PW_ALL.items() if v is not None]
+        rest = [k for k, v in PW_ALL.items() if v is None]
+        ttl_ = ("The step test only catches large, lasting steps: "
+                + (" and ".join(f"a {PW_ALL[k]:g} pp step shows at half the possible event months in {pnice(k)}" for k in pan)
+                   or "no step up to 10 pp shows at half the event months in any series")
+                + ("" if not rest or not pan else f", and no step up to 10 pp does in {' or '.join(pnice(k) for k in rest)}"))
+        fig, ax = plt.subplots(figsize=(12.5, 4.6))
+        frame(fig, ttl_,
+              "Phase 7 added an artificial lasting step of 0 to 10 percentage points to real series and reran the test. "
+              "Height: share of all possible event months at which the stepped series lands above the 90% band. We call "
+              "a step 'detected' when that share reaches half (dashed line). Points are measured at "
+              + ", ".join(f"{v:g}" for v in sorted(rows.step_pp.unique())) + " pp only; the thin lines only join them. "
+              "Source: Phase 7 detection-power table.", bottom=1.2, right=0.97)
+        styles = [(S1, "o", "--", 4), (S2, "s", "-", 3), (S3, "D", "-", 2)]
+        order_ = list(rows.series.unique())[:3]
+        for k, ser in enumerate(order_):
+            gdf = rows[rows.series == ser].sort_values("step_pp")
+            col, mk, ls, z = styles[k]
+            off = (k - 1) * 0.08       # small horizontal offset so overlapping lines stay visible
+            ax.plot(gdf.step_pp + off, gdf.share_of_event_months_above_band * 100, color=col, lw=1.1, ls=ls, zorder=z,
+                    alpha=0.8)
+            ax.scatter(gdf.step_pp + off, gdf.share_of_event_months_above_band * 100, color=col, marker=mk, s=46,
+                       zorder=z + 1, label=pnice(ser))
         ax.axhline(50, color=INK_2, ls="--", lw=1)
         ax.axhline(5, color=MUTED, ls=":", lw=1)
-        ax.set_xlim(-0.3, rows.step_pp.max() + 0.3); ax.set_ylim(0, 100)
+        ax.set_xlim(-0.5, rows.step_pp.max() + 0.5); ax.set_ylim(0, 100)
+        ax.set_xticks(sorted(rows.step_pp.unique()))
         ax.set_xlabel("size of the added step, percentage points"); ax.set_ylabel("event months detected")
         pct_axis(ax); style(ax)
         legend_below(fig, ax.get_legend_handles_labels()[0] + [
-            Line2D([], [], color=INK_2, ls="--", lw=1, label="detection rule: half the event months"),
+            Line2D([], [], color=INK_2, ls="--", lw=1, label="detected: half the event months"),
             Line2D([], [], color=MUTED, ls=":", lw=1, label="chance level, 5%")], ncol=3)
         save(fig, "detection_power")
-        say("**How to read it.** Each line is one real series. With no step added (left end) only about 5% of months "
-            "land above the band, as they should. A test that worked well would climb steeply to 100% after a step "
-            "of 1 or 2 pp. These lines stay low: the placebo months near the event carry the same step and widen the "
-            "band with it. So a result 'inside the band' anywhere in this notebook rules out only very large lasting "
-            "shifts, and in volatile series not even those.")
+        top_ = rows.groupby("series").share_of_event_months_above_band.max() * 100
+        low_ = [pnice(k) for k, v in top_.items() if v < 20]
+        say("**How to read it.** Each line is one real series, measured only at the marked points; where two lines "
+            "overlap they are drawn slightly apart. With no step added, about 5% of event months land above the band, "
+            "as they should. A test with good power would climb to 100% after a step of 1 or 2 pp. Here "
+            + "; ".join(f"{pnice(k)} reaches {v:.0f}% at the largest step" for k, v in top_.items())
+            + (f", so {' and '.join(low_)} stay far below the detection line" if low_ else "")
+            + ": the placebo months next to the event carry the same step and widen the band with it. There are two "
+            "ways to state this power, and Phase 7 reports both. " + (PW_TEXT[0].upper() + PW_TEXT[1:] if PW_TEXT else "")
+            + ". So 'inside the band' anywhere below means 'no lasting step larger than about 5 to 10 pp', and in "
+            "volatile series not even that.")
     else:
         say(f"**Detection power**, from `{'/'.join(map(str, path))}` in the Phase 7 JSON:")
         display(rows)
@@ -487,10 +595,33 @@ say("**How to read it.** One line: the percentage of reverse delegations on the 
 """)
 
 code(r"""
+_s57, _, _d57 = series_full("alg5_7", PANEL)
+_over = _s57[_s57 > 100].dropna()
+RSA_NOTE = ("" if _over.empty else
+            f"The panel's RSASHA1 line starts slightly above 100% ({_over.max():.0f}% in {_over.idxmax()}) because a "
+            "delegation carrying both algorithm 5 and algorithm 7 DS records counts once in each; the panel then held "
+            f"at most {int(_d57[_over.index].max()):,} signed delegations.")
 ALG = [("alg8", S1, "RSASHA256 (algorithm 8)"), ("alg13", S2, "ECDSA P-256 (algorithm 13)"),
        ("alg5_7", S3, "RSASHA1 family (algorithms 5 and 7)")]
+def crossover(src):
+    # first month from which the ECDSA share stays above the RSASHA256 share; None if never; "start" if from the start
+    a8, a13 = series("alg8", src), series("alg13", src)
+    if a8 is None or a13 is None:
+        return None
+    d = (a13 - a8).dropna()
+    if d.empty or (d <= 0).iloc[-1]:
+        return None
+    last_below = d[d <= 0].index.max() if (d <= 0).any() else None
+    if last_below is None:
+        return "start"
+    return d.index[d.index > last_below][0]
+
+
+XO = {src: crossover(src) for src in TLDS + [PANEL]}
+xo_dated = sorted(((m, src) for src, m in XO.items() if m not in (None, "start")), key=lambda t: t[0])
 fig, axes = plt.subplots(2, 4, figsize=(13.5, 7.2), sharey=True)
-frame(fig, "ECDSA replaced RSASHA256 as the main algorithm: in .se and .nu from 2019, on the reverse panel by 2023",
+frame(fig, "ECDSA replaced RSASHA256 as the main algorithm: " + ", ".join(
+          f"{'on the ' if src == PANEL else 'in '}{SRC[src]} in {m[:4]}" for m, src in xo_dated),
       "Share of signed zones using each algorithm (%). Forward: zones whose DNSKEY set has the algorithm, out of "
       "zones serving any DNSKEY. Reverse panel: delegations whose DS has the algorithm, out of DS-carrying "
       "delegations. A zone with two algorithms counts in both, so lines can sum to more than 100%.",
@@ -510,9 +641,14 @@ axes.flat[-1].axis("off")
 legend_below(fig, [Line2D([], [], color=c, lw=2, label=l) for _, c, l in ALG])
 save(fig, "algorithm_shares")
 say("**How to read it.** Each panel is one corpus. Blue is the old RSA-with-SHA-256 algorithm, orange the newer "
-    "ECDSA, green the deprecated RSA-with-SHA-1 family. In .se, .nu and .ch the switch from blue to orange happens "
-    "in a few large steps: whole registrars or DNS operators re-signing their customers' zones at once. "
+    "ECDSA, green the deprecated RSA-with-SHA-1 family. Orange stays above blue from "
+    + ", ".join(f"{m} in {SRC[src]}" for m, src in xo_dated)
+    + (("; it is already above when the corpus starts in " + ", ".join(SRC[k] for k, v in XO.items() if v == "start"))
+       if any(v == "start" for v in XO.values()) else "")
+    + ". In .se, .nu and .ch the switch happens in a few large steps, which is consistent with a few large operators "
+    "re-signing many zones at once; the zone files do not record who signed, so this cannot be confirmed. "
     "The reverse panel (bottom right, note its longer time axis) has a much slower, smoother move. "
+    + RSA_NOTE + " "
     "These are the lines the release and default-change tests in section 3 look for bends in.")
 """)
 
@@ -540,7 +676,9 @@ def short_id(prog, rid):
     if prog == "bind9":
         return rid.split("-")[0]
     if prog == "pdns-rec":
-        return rid if len(rid) <= 16 else rid[:15] + "…"
+        if rid.startswith("nsec3-max-iterations-"):
+            return "cap-" + rid.rsplit("-", 1)[1]
+        return rid if len(rid) <= 22 else rid[:21] + "…"
     i = rid.find("[")
     return rid[i:].replace("@", " ") if i >= 0 else rid
 
@@ -552,13 +690,17 @@ def cadence_strip(prog):
     mapped = set(MAP[MAP.program == prog].row_id)
     rows["y"] = rows.timing_date.map(d2y)
     rows["obs"] = rows.row_id.isin(mapped)
-    x0 = math.floor(min(ry.min(), rows.y.min() if len(rows) else ry.min())) - 0.3
+    x0 = math.floor(min(ry.min(), rows.y.min() if len(rows) else ry.min(), 2011.3)) - 0.3
     x1 = 2026.9
     # group rows shipped on the same day into one label, then stack labels in lanes so none overlap
     groups = []
     for date, g in rows.sort_values(["timing_date", "row_id"]).groupby("timing_date", sort=True):
         ids = [short_id(prog, r) for r in g.sort_values("obs", ascending=False).row_id]
-        lab_ = ", ".join(ids) if len(ids) <= 3 else ", ".join(ids[:2]) + f" +{len(ids) - 2} more"
+        pref = {}
+        for i_ in ids:
+            pref.setdefault(i_.split("-")[0] if prog == "pdns-rec" else i_, []).append(i_)
+        # collapse only a family of three or more same-prefix keys (pdns-rec's keytrap-* rows); list everything else
+        lab_ = ", ".join(f"{k} ×{len(v)}" if len(v) >= 3 else ", ".join(v) for k, v in pref.items())
         groups.append((d2y(date), bool(g.obs.any()), lab_, g.obs.tolist(), g))
     W = 13.0
     chars_per_year = (W * 0.86 * 72 / (8.2 * 0.62)) / (x1 - x0)
@@ -608,7 +750,10 @@ def cadence_strip(prog):
     ax.spines["left"].set_visible(False)
     save(fig, f"{prog}_cadence")
     cad = next((r for r in jget(J4, "q7_release_cadence", "per_program", default=[]) if r["program"] == prog), {})
-    say(f"**How to read it.** Time runs left to right. {NAME[prog]} shipped {len(rel)} stable public releases "
+    fam = [g_ for _, g_ in rows.groupby("timing_date") if prog == "pdns-rec" and len(g_) >= 3]
+    fam_txt = "".join(f" The label '{short_id(prog, g_.row_id.iloc[0]).split('-')[0]} ×{len(g_)}' stands for "
+                      + ", ".join(sorted(g_.row_id)) + "." for g_ in fam)
+    say(fam_txt.strip() + (" " if fam_txt else "") + f"**How to read it.** Time runs left to right. {NAME[prog]} shipped {len(rel)} stable public releases "
         f"on {fmtv(cad.get('n_release_days_utc'))} different days; with parallel branches counted once, the median gap "
         f"between releases is {fmtv(cad.get('median_days_between_collapsed'), 'g')} days. Of its {len(rows)} default changes, "
         f"{n_obs} can be seen in zone data at all; only those can be tested against adoption, and only when they "
@@ -634,22 +779,6 @@ def es_label(es):
     return "" if es == ALL_REL else f" [{es}]"
 
 
-def pval(p):
-    return NA if p is None or (isinstance(p, float) and math.isnan(p)) else ("p < 0.001" if p < 0.001 else f"p = {p:.3f}")
-
-
-def pp(v):
-    # a gap in percentage points, readable at any size (no scientific notation)
-    if v is None or (isinstance(v, float) and math.isnan(v)):
-        return NA
-    a = abs(v)
-    if a >= 10:
-        return f"{v:+.1f} pp"
-    if a >= 0.1:
-        return f"{v:+.2f} pp"
-    if a == 0:
-        return "0 pp"
-    return np.format_float_positional(v, precision=2, unique=False, fractional=False, sign=True) + " pp"
 OBS_NAME = {"alg1": "RSAMD5 share", "alg3_6": "DSA share", "alg5": "RSASHA1 (alg. 5) share",
             "alg5_7": "RSASHA1 family (alg. 5, 7) share", "alg7": "alg. 7 share", "alg8": "RSASHA256 (alg. 8) share",
             "alg8_13": "alg. 8 + 13 share", "alg12": "GOST share", "alg13": "ECDSA P-256 (alg. 13) share",
@@ -694,6 +823,8 @@ def q2_table(prog):
 
 
 def q2_dotplot(prog):
+    if MAP[MAP.program == prog].empty:
+        return      # q2_table has already said that nothing is observable
     st = Q2[(Q2.program == prog) & (Q2.test == "step12") & (Q2.status == "tested")].copy()
     if st.empty:
         say(f"**No default-change chart for {NAME[prog]}:** none of its mapped default changes has 24 months of "
@@ -718,7 +849,7 @@ def q2_dotplot(prog):
         ax.text(1.015, yi, pp(r.observed), transform=ax.get_yaxis_transform(), va="center",
                 fontsize=9, color=INK_2)
     ax.set_yticks(y); ax.set_yticklabels(st.lab, fontsize=9)
-    ax.set_xlim(0, 100); ax.set_ylim(-0.7, n - 0.3)
+    ax.set_xlim(-2, 102); ax.set_ylim(-0.7, n - 0.3)
     ax.set_xlabel("percentile among 1,000 placebo months (50 = typical month)")
     style(ax, grid="x")
     legend_below(fig, [Patch(color=RAMP[0], label="90% chance band (5th to 95th percentile of placebo months)"),
@@ -731,7 +862,7 @@ def q2_dotplot(prog):
            f"1 in 10 lands outside. Here {len(out)} of {n} are outside, against {0.1 * n:.1f} expected by chance.")
     if len(out):
         txt += " Outside: " + "; ".join(
-            f"{r.row_id} in {SRC[r.source]} at percentile {r.percentile:.1f} ({pp(r.observed)}, "
+            f"{r.row_id} in {SRC[r.source]} at percentile {r.percentile:.1f} ({pp(r.observed)}{near0(r.observed)}, "
             f"{'in' if r.in_expected_direction else 'against'} the expected direction)" for r in out.itertuples()) + "."
     say(txt)
 """)
@@ -753,12 +884,21 @@ def q1_release_dots(prog, max_series=3):
     n_all = int(pick.release_months_tested.sum())
     fig, axes = plt.subplots(k, 1, figsize=(12.5, 1.9 + 2.25 * k), sharex=True, squeeze=False)
     kind_ = "feature-release" if set(pick.es) != {ALL_REL} else "release"
-    frame(fig, f"{NAME[prog]}: {n_out} of {n_all} {kind_} months fall outside the usual range "
-               f"({n_out / n_all:.0%}), against about 10% for any month",
+    k_out = int(pick.beats_chance_mean.astype(bool).sum())
+    if k == 1:
+        r0 = pick.iloc[0]
+        ttl_ = (f"{NAME[prog]}: after its {kind_.replace('-', ' ')}s, {OBS_NAME.get(r0.observable, r0.observable)} in {SRC[r0.source]} "
+                + ("departs from trend more than under shifted schedules" if r0.beats_chance_mean else
+                   "departs from trend no more than under shifted schedules") + f" (percentile {r0.percentile:.1f})")
+    else:
+        ttl_ = (f"{NAME[prog]}: after its {kind_.replace('-', ' ')}s, {k_out} of the {k} series shown depart from trend beyond the "
+                f"chance band (every tested series: next chart)")
+    frame(fig, ttl_,
           ("Each dot: one month with a feature release (x.y.0)" if kind_ == "feature-release" else "Each dot: one month with a stable release")
           + " (reverse panel: plotted at the first label after the release). Height = step statistic for that month: the average gap "
           f"(percentage points) between the share over the next {POST} months and the straight line through the {PRE} "
-          "months before. Shaded: 90% of the same statistic over every testable month of the series.",
+          "months before. Shaded: 90% of the same statistic over every testable month of the series. Reverse panel: "
+          "a dot at label M covers changes made during calendar month M-1 and after.",
           bottom=0.75, left=0.08, hspace=0.55)
     for ax, (_, row) in zip(axes[:, 0], pick.iterrows()):
         pr = Q1R[(Q1R.program == prog) & (Q1R.test == row.test) & (Q1R.observable == row.observable)
@@ -791,13 +931,19 @@ def q1_release_dots(prog, max_series=3):
     save(fig, f"{prog}_release_dots")
     parts = []
     for _, row in pick.iterrows():
+        pr = Q1R[(Q1R.program == prog) & (Q1R.test == row.test) & (Q1R.observable == row.observable)
+                 & (Q1R.source == row.source) & (es_of(Q1R) == row.es)]
+        tiny = (f"; every gap in this series is under {NEAR0:g} pp, so the share barely moves and an 'outside' result "
+                "here is a ranking artefact, not an adoption change") if len(pr) and pr.value.abs().max() < NEAR0 else ""
         parts.append(f"{OBS_NAME[row.observable]} in {SRC[row.source]}: {row.share_release_months_outside_band:.0%} of "
                      f"{int(row.release_months_tested)} release months outside the band, against "
-                     f"{row.null_mean_share_outside:.0%} under shifted schedules")
+                     f"{row.null_mean_share_outside:.0%} under shifted schedules{tiny}")
     say("**How to read it.** If releases pushed adoption, the dots would sit mostly above (or below) the shaded "
         "band. Dots scattered across it, with a few outside, is what any random set of months looks like. "
         + "; ".join(parts) + ". Neighbouring dots form smooth waves because consecutive months share 11 of "
-        "their 12 after-months; that is why the test shifts the whole schedule instead of counting dots. "
+        "their 12 after-months; that is why the test shifts the whole schedule instead of counting dots, and why the "
+        "title reports the test, not the dots. An orange ring marks a release month that is also the month of a "
+        "tested default change. "
         "Series with a result outside the band are shown first. Series shown: up to three, one per observable, the reverse panel first where "
         "tested; every tested series is in the next chart.")
     return True
@@ -823,7 +969,7 @@ def q1_summary(prog):
     for yi, m in zip(y, t.release_months_tested):
         ax.text(1.015, yi, f"{int(m)}", transform=ax.get_yaxis_transform(), va="center", fontsize=9, color=INK_2)
     ax.set_yticks(y); ax.set_yticklabels(t.lab, fontsize=8.8)
-    ax.set_xlim(0, 100); ax.set_ylim(-0.7, n - 0.3)
+    ax.set_xlim(-2, 102); ax.set_ylim(-0.7, n - 0.3)
     ax.set_xlabel("percentile among 1,000 shifted release schedules (50 = typical)")
     style(ax, grid="x")
     legend_below(fig, [Patch(color=RAMP[0], label="90% of shifted schedules"),
@@ -879,7 +1025,8 @@ def occupancy(prog):
     inwin = [f"{y}-{m:02d}" for y in range(2016, 2024) for m in range(1, 13)]
     inwin = [m for m in inwin if "2016-06" <= m <= "2023-12"]
     share = sum(m in months for m in inwin) / len(inwin)
-    frame(fig, f"{NAME[prog]} ships in almost every month, so its release schedule cannot be tested",
+    frame(fig, f"{NAME[prog]} ships in almost every month, so its every-release schedule cannot be tested; "
+               "its x.y.0 feature releases can (next charts)",
           f"Each square is one calendar month; filled = at least one stable public {NAME[prog]} release that month. "
           f"In the forward corpus window 2016-06 to 2023-12, {share:.0%} of months have a release.",
           bottom=0.55, left=0.06)
@@ -923,7 +1070,7 @@ def cve_strip(prog):
           "days are drawn as triangles at the edge.", bottom=0.55)
     ax.axhline(0, color=INK_2, lw=1)
     known = c.dnssec_related.astype(str)
-    groups = [("True", S2, "DNSSEC-related CVE"), ("False", S1, "other CVE"), ("not classified", S1, "CVE (not classified as DNSSEC or not)")]
+    groups = [("True", S2, "DNSSEC-related CVE"), ("False", S1, "other CVE"), ("not classified", S1, "CVE (DNSSEC classification not recorded)")]
     handles = []
     for key, col, lab in groups:
         gg = c[known == key]
@@ -937,6 +1084,10 @@ def cve_strip(prog):
         handles.append(Line2D([], [], marker="o", ls="", color=col, label=f"{lab} (n = {len(gg)})"))
     ax.axhline(med, color=S3, lw=1.6, ls="--", zorder=2)
     handles.append(Line2D([], [], color=S3, ls="--", lw=1.6, label=f"median {med:+g} days"))
+    n0 = int((c.latency_days == 0).sum())
+    if n0 >= 5:
+        ax.text(0.005, 4, f"{n0} CVEs overlap at 0 days", transform=ax.get_yaxis_transform(), va="bottom",
+                ha="left", fontsize=9, color=INK)
     ax.set_ylim(lo - 15, hi + 15)
     ax.set_ylabel("days from NVD publication to fix")
     year_axis(ax, 12); style(ax)
@@ -947,6 +1098,10 @@ def cve_strip(prog):
     s = (f"**How to read it.** Negative days are normal for embargoed security releases: the vendor tags the "
          f"fix a few days before the CVE goes public. The middle half of {NAME[prog]}'s fixes lie between "
          f"{iqr[0]:+g} and {iqr[1]:+g} days. {n_edge} CVE(s) fall beyond the axis and are drawn at the edge.")
+    n0 = int((c.latency_days == 0).sum())
+    if n0:
+        s += (f" {n0} of {len(c)} CVEs were fixed in a release dated the same day NVD published them, so they sit on "
+              "the zero line on top of each other.")
     if per.get("n_latency", 99) < 10:
         s += (f" With n = {per.get('n_latency')} this median says little; for Knot it mostly measures NVD's delay in "
               "publishing old CVEs, not the vendor's speed.")
@@ -975,8 +1130,48 @@ def exp_dir(prog, obs):
     return None if m.empty else int(np.sign(m.expected_direction.iloc[0]))
 
 
+def binom_tail(k, n, p=0.1):
+    return sum(math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k, n + 1))
+
+
+def headline(prog):
+    # one plain sentence: does adoption follow this program? generated from the step-test results
+    if MAP[MAP.program == prog].empty:
+        return (f"The zone data cannot show whether adoption follows {NAME[prog]}: none of its default changes leaves "
+                "a trace in the zone files.")
+    q1t = Q1[(Q1.program == prog) & is_step(Q1) & (Q1.status == "tested") & (Q1.source != "fed.us")]
+    q2t = Q2[(Q2.program == prog) & (Q2.test == "step12") & (Q2.status == "tested")]
+    n, k = len(q1t) + len(q2t), int(q1t.beats_chance_mean.astype(bool).sum() + q2t.outside_90_band.astype(bool).sum())
+    if n == 0:
+        return f"No test of {NAME[prog]} could run, so the data cannot say whether adoption follows it."
+    o2 = q2t[q2t.outside_90_band.astype(bool)]
+    tiny = int((o2.observed.abs() < NEAR0).sum())
+    against = int((~o2.in_expected_direction.astype(bool)).sum())
+    for r in q1t[q1t.beats_chance_mean.astype(bool)].itertuples():
+        pr = Q1R[(Q1R.program == prog) & (Q1R.test == r.test) & (Q1R.observable == r.observable) & (Q1R.source == r.source)
+                 & (es_of(Q1R) == (r.event_set if "event_set" in Q1.columns and isinstance(r.event_set, str) else ALL_REL))]
+        tiny += int(len(pr) > 0 and pr.value.abs().max() < NEAR0)
+        d = exp_dir(prog, r.observable)
+        against += int(d is not None and (r.percentile > 50) != (d > 0))
+    ptail = binom_tail(k, n)
+    if ptail < 0.05:
+        return (f"Some {NAME[prog]} results fall outside the band more often than chance ({k} of {n} tests, against "
+                f"about {0.1 * n:.1f}); they are timing, not attribution, and are listed below.")
+    s_ = (f"Adoption does not bend after {NAME[prog]}'s releases or default changes more often than chance: {k} of "
+          f"{n} tests fall outside the band, against about {0.1 * n:.1f}.")
+    if k:
+        bits = []
+        if tiny:
+            bits.append(f"{tiny} on series that barely move (under {NEAR0:g} pp)")
+        if against:
+            bits.append(f"{against} against the direction the program's defaults would push")
+        if bits:
+            s_ += " Of the results outside the band, " + " and ".join(bits) + "."
+    return s_
+
+
 def verdict(prog):
-    out = []
+    out = [headline(prog)]
     # releases
     if MAP[MAP.program == prog].empty:
         out.append(f"Nothing to test: no {NAME[prog]} default change maps to anything the zone files record, so there "
@@ -1002,6 +1197,10 @@ def verdict(prog):
                 way = ("higher" if hi else "lower") + " than under shifted schedules"
                 if d is not None:
                     way += ", " + ("in" if hi == (d > 0) else "against") + " the direction its defaults push"
+                pr = Q1R[(Q1R.program == prog) & (Q1R.test == r.test) & (Q1R.observable == r.observable)
+                         & (Q1R.source == r.source) & (es_of(Q1R) == es)]
+                if len(pr) and pr.value.abs().max() < NEAR0:
+                    way += f"; every gap is under {NEAR0:g} pp, so the share barely moved"
                 bits.append(f"{OBS_NAME.get(r.observable, r.observable)} in {SRC[r.source]}, {pval(r.p_two_sided)} ({way})")
             s_ += " Outside: " + "; ".join(bits) + "."
             if len(o) >= 2 and len(o) > 0.15 * len(t) and set(o.source) <= {"se", "nu"}:
@@ -1018,7 +1217,8 @@ def verdict(prog):
         if len(o):
             s_ += " Outside: " + "; ".join(
                 f"{r.row_id} in {SRC[r.source]}, {pp(r.observed)} at percentile {r.percentile:.1f}, "
-                f"{'in' if r.in_expected_direction else 'against'} the expected direction" for r in o.itertuples()) + "."
+                f"{'in' if r.in_expected_direction else 'against'} the expected direction{near0(r.observed)}"
+                for r in o.itertuples()) + "."
         big = tt[(~tt.outside_90_band.astype(bool)) & (tt.observed.abs() >= 10)]
         if len(big):
             s_ += (" Large moves can still sit inside the band of a volatile series: " + "; ".join(
@@ -1045,11 +1245,17 @@ def verdict(prog):
     if len(g3):
         out.append("**Reverse ledger (section 5).** " + "; ".join(
             f"{r.group}: large-action p = {r.p_large_ge_observed:.3f}, block-level p = {r.p_block_ge_observed:.3f}"
+            + (f" ({block_caveat(r.group)})" if min(r.p_large_ge_observed, r.p_block_ge_observed) < 0.10
+               and block_caveat(r.group) else "")
             for r in g3.itertuples()) + ".")
     per = next((r for r in jget(J4, "q6_cve_latency", "per_program", default=[]) if r["program"] == prog), {})
     if per.get("n_latency"):
         out.append(f"**Security fixes.** Median {per['latency_days_median']:+g} days from NVD publication "
                    f"(n = {per['n_latency']}).")
+    else:
+        nofix = CVE6[(CVE6.program == prog)]
+        out.append("**Security fixes.** No datable CVE fix"
+                   + (f" ({', '.join(nofix.cve)} has no fix commit)" if 0 < len(nofix) <= 3 else "") + ".")
     say("\n\n".join(out))
 """)
 
@@ -1089,13 +1295,14 @@ INTRO["opendnssec"] = r"""
 ### 3.6 OpenDNSSEC
 
 OpenDNSSEC is a signer: a key and signing policy enforcer plus a signing engine. Its most important default change,
-the switch from algorithm 7 to 8 in 1.2.0b1 (2011-03), predates every corpus.
+the switch from algorithm 7 to 8 (row id 1.2.0b1, first stable release 1.2.0, 2011-03), predates every corpus.
 """
 INTRO["pdns-auth"] = r"""
 ### 3.7 PowerDNS Authoritative
 
 PowerDNS Authoritative serves and signs zones. Its ECDSA default of 4.0.0 (2016-07) is the second ECDSA signing
-default after Knot's, and its RSASHA256 default of 3.2 (2013-01) is the one closest to a signal in section 5.
+default after Knot's, and its RSASHA256 default of 3.2 (2013-01) gives the smallest p in section 5, which rests on
+one RIPE block that may have changed before the release.
 """
 INTRO["pdns-rec"] = r"""
 ### 3.8 PowerDNS Recursor
@@ -1287,7 +1494,7 @@ q8 = J4["q8_coordinated_releases"]["variants"]["tag_dates"]["tests"]["distinct_r
 say("**How to read it.** Each row is one program, each dot the day its fixed release was tagged. PowerDNS "
     "Recursor's rec-5.0.2 is tagged on 6 February, but its changelog gives 13 February as the public date. "
     "Across the whole record Phase 4 counted pairs of codebases shipping the same fix or default within 3 days: "
-    f"{q8['observed']} such release pairs, against {q8['null_mean']:.2f} on average when each codebase's calendar is "
+    f"{q8['observed']} such release pairs, against {q8['null_mean']:g} on average when each codebase's calendar is "
     f"shifted at random (p = {q8['p_value_ge']}). All of them are this one embargoed event. The only other "
     "same-day coincidence, BIND 9 9.18.0 and PowerDNS Authoritative 4.6.0 both moving NSEC3 to 0 iterations on "
     "2022-01-24, cannot be told apart from chance.")
@@ -1310,9 +1517,12 @@ al["lab"] = [f"{OBS_NAME.get(o, o)}, {'rise' if str(d) in UP else 'fall'} · {c}
 al = al.sort_values("expected_aligned")
 fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.36 * len(al)))
 beat = al[al.beats_chance.astype(bool)]
-ttl = ("No kind of spike follows default changes more often than chance" if beat.empty else
-       "Only " + " and ".join(sorted({OBS_NAME.get(o, o) for o in beat.observable})) +
-       " spikes follow default changes more often than chance")
+n_ser, n10 = len(al), int((al.p_at_least_observed < 0.10).sum())
+_names = " and ".join(sorted({ {"iter0": "zero-iteration NSEC3"}.get(o, OBS_NAME.get(o, o)) for o in beat.observable}))
+ttl = ("No kind of spike lines up with default changes more often than its chance rate" if beat.empty else
+       f"{n10} of {n_ser} spike series lines up with default changes beyond its own chance rate ({_names}, p = "
+       + ", ".join(f"{p:.3f}" for p in beat.p_at_least_observed)
+       + f"); about {0.10 * n_ser:.1f} such series are expected by chance, so this is timing, not attribution")
 frame(fig, ttl,
       "For each value, corpus and direction: number of spikes with a relevant default change 0 to 3 months before "
       "them (blue), against the number expected from the series' chance rate (orange tick). Right-hand text: aligned "
@@ -1328,7 +1538,7 @@ ax.set_yticks(y); ax.set_yticklabels(al.lab, fontsize=9)
 ax.set_xlabel("spikes with a relevant default change 0 to 3 months before")
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 style(ax, grid="x")
-legend_below(fig, [Patch(color=S1, label="aligned spikes"), Patch(color=RED, label="aligned beyond chance (p < 0.10)"),
+legend_below(fig, [Patch(color=S1, label="aligned spikes"), Patch(color=RED, label="p < 0.10 (single test)"),
                    Line2D([], [], marker="|", ls="", color=S2, ms=14, mew=3, label="expected by chance")], ncol=3)
 save(fig, "spike_alignment")
 txt = ("**How to read it.** A bar well past its orange tick means spikes follow default changes more often than "
@@ -1336,13 +1546,29 @@ txt = ("**How to read it.** A bar well past its orange tick means spikes follow 
 if beat.empty:
     txt += "No bar does."
 for r in beat.itertuples():
-    sp = Q4[(Q4.observable == r.observable) & (Q4.direction == r.direction) & (Q4.corpus == r.corpus)
-            & Q4.relevant_default_within_3m.astype(bool)]
-    defs = sorted(set(sp.nearest_relevant_default.dropna().astype(str)))
-    txt += (f"{OBS_NAME.get(r.observable, r.observable)}, {'rise' if str(r.direction) in UP else 'fall'} ({r.corpus}): {int(r.aligned_within_3m)} of {int(r.spikes)} "
-            f"spikes aligned against {r.expected_aligned:.2f} expected (p = {r.p_at_least_observed:.3f}), in "
-            f"{sp.source.nunique()} corpora: {', '.join(sorted(SRC.get(x, x) for x in sp.source.unique()))}. "
-            f"The defaults they follow: {'; '.join(defs)}. ")
+    allsp = Q4[(Q4.observable == r.observable) & (Q4.direction == r.direction) & (Q4.corpus == r.corpus)]
+    sp = allsp[allsp.relevant_default_within_3m.astype(bool)]
+    un = allsp[~allsp.relevant_default_within_3m.astype(bool)]
+    rel = MAP[(MAP.observable == r.observable) & (MAP.expected_direction.astype(str).isin(UP) if str(r.direction) in UP
+                                                  else ~MAP.expected_direction.astype(str).isin(UP))]
+    sp_m = [pd.Period(m[:7], "M") for m in sp.change_calendar_month_start.astype(str)]
+    defs = sorted({f"{x.program} {x.row_id} {x.timing_date}" for x in rel.itertuples()
+                   if any(0 <= (m - pd.Period(x.timing_date[:7], "M")).n <= 3 for m in sp_m)})
+    first_def = rel.timing_date.min()[:7] if len(rel) else None
+    before = un[un.change_calendar_month_start.astype(str).str[:7] < first_def] if first_def else un.iloc[0:0]
+    by_src = sp.source.value_counts()
+    txt += (f"{OBS_NAME.get(r.observable, r.observable)}, {'rise' if str(r.direction) in UP else 'fall'} ({r.corpus}): "
+            f"{int(r.aligned_within_3m)} of {int(r.spikes)} spikes aligned against {r.expected_aligned:.2f} expected "
+            f"(p = {r.p_at_least_observed:.3f}), in {sp.source.nunique()} corpora: "
+            f"{', '.join(sorted(SRC.get(x, x) for x in sp.source.unique()))}. The defaults they follow: {'; '.join(defs)}. "
+            f"With {n_ser} series tested, about {0.1 * n_ser:.1f} would reach p < 0.10 by chance, and "
+            f"{r.p_at_least_observed:.3f} is {'above' if r.p_at_least_observed > 0.10 / n_ser else 'below'} a Bonferroni "
+            f"0.10/{n_ser} = {0.10 / n_ser:.4f}. {by_src.iloc[0]} of the {len(sp)} aligned spikes are one "
+            f"{SRC.get(by_src.index[0], by_src.index[0])} series"
+            + (f", and {len(before)} of the {len(un)} unaligned spikes fall in "
+               f"{before.change_calendar_month_start.astype(str).str[:7].min()} to "
+               f"{before.change_calendar_month_start.astype(str).str[:7].max()}, before any such signer default shipped"
+               if len(before) else "") + ". ")
 if not beat.empty and "iter0" in set(beat.observable):
     txt += ("This is timing, not attribution: those defaults and RFC 9276 (2022-08) fall within the same few months, "
             "the IETF draft behind them was public by 2021-10, .se/.nu and .ch/.li are each run by one registry, and "
@@ -1475,28 +1701,37 @@ frame(fig, f"{int((pv.p < 0.05).sum())} of {len(pv)} manual-against-automatic p-
            f"against {0.05 * len(pv):.1f} expected by chance",
       "Each dot: one test cell (default-change group x RIR scope) and one statistic; position = p-value against 1,000 "
       "random sets of months drawn from the whole ledger span. Dashed line: p = 0.05. Source: Phase 7 question 3.",
-      bottom=0.6, left=0.20)
+      bottom=0.95, left=0.20)
 rng_ = np.random.default_rng(0)  # vertical jitter only, for legibility
 for i, (stat, g) in enumerate(pv.groupby("stat", sort=False)):
     yy = i + rng_.uniform(-0.18, 0.18, len(g))
     ax.scatter(g.p, yy, s=40, color=[RED if p < 0.05 else S1 for p in g.p], zorder=3)
+    for p_, y_, r_ in zip(g.p, yy, g.itertuples()):
+        if p_ < 0.05:
+            ax.annotate(f"{r_.group}, {r_.scope}", (p_, y_), xytext=(8, -12), textcoords="offset points", fontsize=8.5,
+                        color=INK)
 ax.axvline(0.05, color=INK_2, ls="--", lw=1)
 ax.set_yticks([0, 1]); ax.set_yticklabels(pv.stat.unique())
 ax.set_xlim(0, 1); ax.set_ylim(1.5, -0.5)
 ax.set_xlabel("p-value (small = window months differ from other months)")
 style(ax, grid="x")
+legend_below(fig, [Line2D([], [], marker="o", ls="", color=S1, label="p ≥ 0.05"),
+                   Line2D([], [], marker="o", ls="", color=RED, label="p < 0.05")], y_in=0.02)
 save(fig, "manual_automatic_pvalues")
 lo_ = pv[pv.p < 0.05]
 txt = ("**How to read it.** With no effect anywhere, p-values spread evenly between 0 and 1, and about 1 in 20 falls "
        f"below 0.05. Here {len(lo_)} of {len(pv)} do. ")
 if len(lo_):
     txt += "Below 0.05: " + "; ".join(f"{r.group} in {r.scope} ({r.stat.splitlines()[0]}, p = {r.p:.3f})"
+                                      + (f"; {block_caveat(r.group)}" if block_caveat(r.group) else "")
                                       for r in lo_.itertuples()) + ". "
 if close is not None:
     txt += (f"Pooled over all RIRs, {close.group} has p = {close.p_large_ge_observed:.3f} (large actions) and "
             f"{close.p_block_ge_observed:.3f} (block level); the era-matched version, which draws only months within "
             f"36 months of the window because ledger activity grew strongly from 2009 to 2019, gives "
-            f"{close.p_large_era_matched:.3f} and {close.p_block_era_matched:.3f}.")
+            f"{close.p_large_era_matched:.3f} and {close.p_block_era_matched:.3f}"
+            + (f"; {block_caveat(close.group)}" if block_caveat(close.group) and close.group not in set(lo_.group)
+               else "") + ".")
 say(txt)
 """)
 
@@ -1574,7 +1809,7 @@ say("**How to read it.** At RFC 8624's publication SHA-1 DS was carried by "
     + "RSASHA1 was " + ", ".join(f"{v:.0f}% in {SRC[k]}" for k, v in
                                   g8.xs("alg5_7", level="observable").share_at_successor.items())
     + ". On the reverse panel RSASHA1 was on a long decline that began well before the RFC: " + trail
-    + " signed delegations. The early panel years rest on very few signed delegations, so their swings are noisy; "
+    + " signed delegations. " + RSA_NOTE + " The early panel years rest on very few signed delegations, so their swings are noisy; "
     "2014-08 is simply the first month with at least 300.")
 """)
 
@@ -1617,11 +1852,6 @@ md(r"""
   and all RSASHA256 signer defaults of 2011 to 2015 from the forward corpus, and BIND 9 d02 and d03, OpenDNSSEC's
   1.1 and 1.2 changes and PowerDNS 3.3's opt-out change from every test. Nothing after 2023-12 in the forward
   corpus, which removes the NSEC3 caps of 50 and Knot 3.6.0.
-* **Multiple testing by q-value.** With at most 149 placebo months per series, no single test can reach a
-  Benjamini-Hochberg q below 0.10 whatever the data, so the multiple-testing view here is judged by counts.
-* **A program-level test for BIND 9 on every stable release.** Its releases fill most months. The second
-  verification notes that a schedule of feature releases (x.y.0) would be testable; it tried eight cells and all
-  were inside the band, but this is not part of Phase 7's output.
 * **Settings the zone files do not record:** NSEC3 salt length, NSEC and NSEC3 TTLs, RRSIG timing, key-management
   state, and everything a validator does (validation, trust anchors, limits other than the NSEC3 caps, which are
   tested only indirectly).
@@ -1633,9 +1863,16 @@ md(r"""
 """)
 
 code(r"""
+bf_ = ("q1_per_program_releases", "aggregate", "bind9_feature_releases", "step12")
+bn_, bo_ = val("J7", *bf_, "tested"), val("J7", *bf_, "mean_outside_90pct_null")
+say(f"* **Multiple testing by q-value.** With at most {fmtv(MAXPLAC)} placebo months per series, no single test can "
+    "reach a Benjamini-Hochberg q below 0.10 whatever the data, so the multiple-testing view here is judged by counts.\n"
+    "* **A program-level test for BIND 9 on every stable release.** Its releases fill most months, so a shifted "
+    "schedule cannot differ from the real one. "
+    + (f"Its x.y.0 feature releases are tested instead (section 3.1: {bo_} of {bn_} outside the band, against "
+       f"{0.1 * bn_:.1f} by chance)." if bn_ else "No other BIND 9 schedule is tested in this run."))
 say("* **Small or noisy effects.** The step test detects only steps above a certain size, and a larger one in noisy "
-    "series. " + ("The detection-power table printed in the 'how to read' box gives those sizes for this run. "
-                  if POWER else "This run of Phase 7 exports no detection-power table; the second Phase 7 "
+    "series. " + (f"Chart 1 gives the sizes: {PW_TEXT}. " if PW_TEXT else "") + ("" if POWER else "This run of Phase 7 exports no detection-power table; the second Phase 7 "
                   "verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series. ")
     + "'Inside the band' therefore means 'no large lasting shift', not 'no effect'.")
 """)
