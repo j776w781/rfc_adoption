@@ -1,4 +1,8 @@
 {
+ "inputs": {
+  "server_run": "out/server_run/timeline_monthly.parquet",
+  "panel_run": "out/panel_run/timeline_monthly.parquet"
+ },
  "observable_mapping": {
   "by_mechanism": [
    {

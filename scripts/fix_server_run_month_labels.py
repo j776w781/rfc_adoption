@@ -59,6 +59,11 @@ def main() -> int:
         print(json.dumps(agreement(srv, pan), indent=1))
         return 0
     before = agreement(srv, pan)
+    if all(v["compared"] > 0 and v["equal"] == v["compared"] for v in before.values()):
+        # A run extracted after d5121351 is already UTC-labelled; shifting it would
+        # break it. Nothing to do.
+        print("labels already agree with the panel run (UTC); nothing to do:", json.dumps(before))
+        return 0
     fixed = srv.copy()
     rev = fixed.basis == "reverse"
     fixed.loc[rev, "month"] = fixed.loc[rev, "month"].map(shift)

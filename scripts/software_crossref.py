@@ -25,6 +25,10 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 #: Publication dates of the RFCs that introduce each observable.
 RFC_PUBLISHED = {
@@ -284,7 +288,7 @@ def iteration_collapse(fwd: pd.DataFrame, limits: list[dict]) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--timeline", type=Path, default=Path("out/server_run/timeline_monthly.parquet"))
+    ap.add_argument("--timeline", type=Path, default=_run_paths.server_timeline())
     ap.add_argument("--support", type=Path, default=Path("data/software/software_support.json"))
     ap.add_argument("--out", type=Path, default=Path("out/analysis/software_crossref.json"))
     args = ap.parse_args()

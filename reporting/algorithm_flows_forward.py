@@ -25,6 +25,10 @@ import textwrap
 from pathlib import Path
 
 import matplotlib
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -54,7 +58,7 @@ def to_year(m: str) -> float:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--timeline", type=Path,
-                    default=Path("out/server_run/timeline_monthly.parquet"))
+                    default=_run_paths.server_timeline())
     ap.add_argument("--out", type=Path, default=Path("reporting/charts/flows"))
     ap.add_argument("--bare", action="store_true")
     args = ap.parse_args()

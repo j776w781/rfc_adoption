@@ -46,11 +46,13 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 from program_rfc_cases import spikes as _spikes  # noqa: E402  (the spike rule, reused verbatim)
+import _run_paths  # noqa: E402  (which server / panel run to read; env-configurable)
 
 SEED = 20260929
 N_DRAWS = 1000
 PANEL = "_pooled-afrinic-arin"
-FORWARD_TLDS = ["se", "nu", "gov", "fed.us", "ee", "ch", "li"]
+FORWARD_TLDS = ["se", "nu", "gov", "fed.us", "ee", "ch", "li"]   # order kept for reproducibility;
+# main() appends any other zonefile source a run contains (e.g. the full server corpus), so none is dropped.
 RIRS = ["afrinic", "apnic", "arin", "lacnic", "ripe"]
 MIN_DEN = 30            # signed zones / delegations / NSEC3 names needed for a share
 SHARE_COL = "domain_days"   # shares = mean daily share; spike counts keep domains_peak
@@ -340,8 +342,8 @@ def load_releases() -> dict:
 
 class Data:
     def __init__(self):
-        self.srv = pd.read_parquet(ROOT / "out/server_run/timeline_monthly.parquet")
-        self.pan = pd.read_parquet(ROOT / "out/panel_run/timeline_monthly.parquet")
+        self.srv = pd.read_parquet(_run_paths.server_timeline())
+        self.pan = pd.read_parquet(_run_paths.panel_timeline())
         self._cache = {}
 
     def pivot(self, which: str, source: str, dim: str, col: str = "domains_peak") -> pd.DataFrame:
@@ -1622,6 +1624,10 @@ def main(argv=None) -> int:
     rows = load_rows()
     releases = load_releases()
     data = Data()
+    global FORWARD_TLDS
+    present = set(data.srv.loc[data.srv.basis == "zonefile", "source"].unique())
+    FORWARD_TLDS = [t for t in FORWARD_TLDS if t in present] + sorted(present - set(FORWARD_TLDS))
+    print(f"reading {_run_paths.describe()}; forward sources: {', '.join(FORWARD_TLDS)}")
     doc = json.loads(JSON_OUT.read_text("utf-8")) if (a.only and JSON_OUT.exists()) else {}
     mapped, unmapped = mapping_table(rows)
     doc["observable_mapping"] = {"by_mechanism": MECH_TABLE, "rows": mapped,
@@ -1631,6 +1637,7 @@ def main(argv=None) -> int:
     doc["excluded"] = {"rows_not_observable": unmapped, "rows_excluded_upstream": EXCLUDED_UPSTREAM,
                        "releases_excluded": ["pdns-rec aliases (alias_of)",
                                              "tags never released publicly: pdns-rec rec-4.5.0, rec-4.5.3, rec-5.0.0"]}
+    doc["inputs"] = _run_paths.inputs_record()
     doc["notes"] = {
         "seed": SEED, "draws": N_DRAWS, "min_denominator": MIN_DEN,
         "detrend": f"centred {TREND_WIN}-month rolling median, min_periods {TREND_MIN}",
@@ -1698,7 +1705,7 @@ def main(argv=None) -> int:
         write_csv("q5", recs)
         print("q5 saved", len(recs))
     # fixed key order
-    order = ["observable_mapping", "excluded", "notes", "q1_per_program_releases", "q2_default_change_events",
+    order = ["inputs", "observable_mapping", "excluded", "notes", "q1_per_program_releases", "q2_default_change_events",
              "q3_manual_vs_automatic", "q4_spikes", "q5_successor_rfc"]
     save({k: doc[k] for k in order if k in doc})
     return 0

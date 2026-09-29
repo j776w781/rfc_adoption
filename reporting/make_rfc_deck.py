@@ -20,6 +20,10 @@ from pptx.dml.color import RGBColor
 from pptx.util import Emu, Inches, Pt
 
 from make_flows_deck import ACCENT, INK, INK_2, MUTED, SURFACE, W, H, blank, text  # noqa
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 CRIT = RGBColor(0xD0, 0x3B, 0x3B)
 GOOD = RGBColor(0x1B, 0xAF, 0x7A)
@@ -208,7 +212,7 @@ def facts():
     RA = json.loads(Path("out/analysis/release_vs_adoption.json").read_text("utf-8"))
     RS = json.loads(Path("out/analysis/release_scan.json").read_text("utf-8"))
     SUP = json.loads(Path("data/software/software_support.json").read_text("utf-8"))
-    srv = pd.read_parquet("out/server_run/timeline_monthly.parquet")
+    srv = pd.read_parquet(_run_paths.server_timeline())
     X = {}
 
     def months(a, b):

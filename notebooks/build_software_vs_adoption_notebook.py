@@ -4,7 +4,14 @@ Every figure is drawn from the verified outputs of Phases 1-7 (see docs/handoff/
 No statistic that Phase 4 or Phase 7 produced is recomputed; the notebook plots and quotes them.
 
 Run from the repository root:
+    python notebooks/build_software_vs_adoption_notebook.py            # analyses already in out/analysis
+    python notebooks/build_software_vs_adoption_notebook.py bind9 knot # only these program sections
+
+Full OpenINTEL corpus on the server (main drive + spill drive with the remaining years):
+    python scripts/run_openintel_full.py --main /mnt/nas_share/Josh --spill /mnt/spill/openintel   # hours, resumable
     python notebooks/build_software_vs_adoption_notebook.py
+or in one go (the pipeline then runs inside the notebook's section 0):
+    python notebooks/build_software_vs_adoption_notebook.py --main /mnt/nas_share/Josh --spill /mnt/spill/openintel --run-pipeline
 """
 import sys
 from pathlib import Path
@@ -14,6 +21,27 @@ from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT_NB = ROOT / "notebooks" / "dnssec_software_vs_adoption.ipynb"
+
+# ---- data-source flags -> environment of the executing kernel (section 0 of the notebook reads them)
+import argparse
+import os
+
+_ap = argparse.ArgumentParser(description="Build and execute the notebook. Positional args: programs to include "
+                              "(default all). The flags set section 0's data source.")
+_ap.add_argument("programs", nargs="*")
+_ap.add_argument("--main", help="main OpenINTEL drive (sets OPENINTEL_MAIN)")
+_ap.add_argument("--spill", help="spill drive with the remaining years (sets OPENINTEL_SPILL)")
+_ap.add_argument("--reverse-corpus", help="RIR reverse corpus root (sets OPENINTEL_REVERSE)")
+_ap.add_argument("--run-dir", help="where the pipeline writes its runs (sets OPENINTEL_RUN_DIR)")
+_ap.add_argument("--run-pipeline", action="store_true",
+                 help="build the runs from the drives inside the notebook before analysing (hours)")
+ARGS = _ap.parse_args()
+for _flag, _env in (("main", "OPENINTEL_MAIN"), ("spill", "OPENINTEL_SPILL"),
+                    ("reverse_corpus", "OPENINTEL_REVERSE"), ("run_dir", "OPENINTEL_RUN_DIR")):
+    if getattr(ARGS, _flag):
+        os.environ[_env] = getattr(ARGS, _flag)
+if ARGS.run_pipeline:
+    os.environ["OPENINTEL_RUN_PIPELINE"] = "1"
 
 NB = nbf.v4.new_notebook()
 cells = []
@@ -51,6 +79,83 @@ OpenDNSSEC, PowerDNS Authoritative and PowerDNS Recursor**.
 Every number comes from the verified outputs of Phases 1 to 7 and is read from those files when the notebook runs;
 none is typed into the text. A cell says **new computation** where it computes something the phases did not
 export. The two setup cells below have their code hidden; the short answer follows them.
+""")
+
+# ====================================================================== 0. data source ==
+md(r"""
+## 0. Which OpenINTEL data this notebook reads
+
+Every number below comes from two monthly timelines: the **server run** (OpenINTEL forward TLDs plus the five RIRs)
+and the **panel run** (AFRINIC and ARIN pooled). The committed ones were built from a single drive, so the forward
+TLDs stop where that drive stops. To analyse the **full** corpus, whose remaining years sit on a second "spill"
+drive, set the two paths in the next cell, or export them before building:
+
+```
+OPENINTEL_MAIN=/mnt/nas_share/Josh OPENINTEL_SPILL=/mnt/spill/openintel \
+    python notebooks/build_software_vs_adoption_notebook.py --run-pipeline
+```
+
+The pipeline takes hours on the full corpus. The usual way is to run it once in the background
+(`python scripts/run_openintel_full.py --main ... --spill ...`, resumable) and then build this notebook normally:
+it reads whatever run the analyses last used, and the cell after next says which one that is and what each drive
+contributed. A source-day whose files are split across the two drives is merged, never counted twice.
+""")
+
+code(r"""
+# ---- data source: set MAIN_DRIVE and SPILL_DRIVE to analyse the full OpenINTEL corpus --------- #
+import os
+MAIN_DRIVE     = os.environ.get("OPENINTEL_MAIN", "")      # e.g. "/mnt/nas_share/Josh"
+SPILL_DRIVE    = os.environ.get("OPENINTEL_SPILL", "")     # e.g. "/mnt/spill/openintel" -- the remaining years
+REVERSE_CORPUS = os.environ.get("OPENINTEL_REVERSE", "out/reverse/corpus")   # RIR reverse zones
+RUN_DIR        = os.environ.get("OPENINTEL_RUN_DIR", "out/openintel_full")   # where the new runs go
+RUN_PIPELINE   = os.environ.get("OPENINTEL_RUN_PIPELINE", "0") == "1"        # True: build the runs now (hours)
+print(f"main drive: {MAIN_DRIVE or '(not set)'} | spill drive: {SPILL_DRIVE or '(not set)'} | "
+      f"run dir: {RUN_DIR} | run pipeline now: {RUN_PIPELINE}")
+""")
+
+code(r"""
+# ---- optionally build the runs, then report which run the analyses read ---------------------- #
+import json, subprocess, sys
+from pathlib import Path
+_R = Path.cwd()
+while not (_R / "scripts" / "run_openintel_full.py").exists():
+    if _R == _R.parent:
+        raise RuntimeError("run this notebook from inside the rfc_adoption repository")
+    _R = _R.parent
+
+if RUN_PIPELINE:
+    if not MAIN_DRIVE:
+        raise ValueError("RUN_PIPELINE is on but MAIN_DRIVE is empty: set it in the cell above.")
+    _cmd = [sys.executable, str(_R / "scripts" / "run_openintel_full.py"), "--main", MAIN_DRIVE,
+            "--run-dir", RUN_DIR, "--reverse-corpus", REVERSE_CORPUS]
+    if SPILL_DRIVE:
+        _cmd += ["--spill", SPILL_DRIVE]
+    print("running:", " ".join(_cmd), flush=True)
+    if subprocess.run(_cmd, cwd=_R).returncode:
+        raise RuntimeError("the pipeline failed; its output above says where. Re-running resumes it.")
+
+_inp7 = json.loads((_R / "out/analysis/software_vs_adoption.json").read_text("utf-8")).get("inputs", {})
+_inpP = json.loads((_R / "out/analysis/prevalence_metrics.json").read_text("utf-8")).get("inputs", {})
+print("Phase 7 (software vs adoption) read:", _inp7.get("server_run", "?"), "and", _inp7.get("panel_run", "?"))
+print("Prevalence metrics read:            ", _inpP.get("server", "?"), "and", _inpP.get("panel", "?"))
+_srv = Path(_inp7.get("server_run", "out/server_run/timeline_monthly.parquet"))
+_srv = _srv if _srv.is_absolute() else _R / _srv
+_srvP = Path(_inpP.get("server", "out/server_run/timeline_monthly.parquet"))
+_srvP = _srvP if _srvP.is_absolute() else _R / _srvP
+if _srvP.resolve() != _srv.resolve():
+    print("WARNING: the two analyses read different server runs; rerun both "
+          "(scripts/run_openintel_full.py ... --step analyses).")
+_cov = _srv.parent.parent / "coverage.json"
+if _srv.parent.name == "server_run" or not _cov.exists():
+    print("These are the committed local runs: the forward TLDs come from a single drive. Set MAIN_DRIVE and "
+          "SPILL_DRIVE above to use the full corpus.")
+else:
+    _c = json.loads(_cov.read_text("utf-8"))
+    print(f"Coverage of this run ({_cov}), days per source and which drive held them:")
+    for _k, _v in _c["per_source"].items():
+        print(f"  {_k:24s} {_v['days']:6d} days  {_v['first_day']} .. {_v['last_day']}  {_v['by_drive']}")
+    if _c.get("unmatched_files"):
+        print(f"WARNING: {_c['unmatched_files']} file(s) matched no layout and are not in the run.")
 """)
 
 # ====================================================================== setup ==
@@ -199,6 +304,48 @@ Q4A = pd.read_csv(A7 / "software_vs_adoption_q4_alignment.csv")
 Q5 = pd.read_csv(A7 / "software_vs_adoption_q5.csv")
 MAP = pd.read_csv(A7 / "software_vs_adoption_mapping.csv")
 PREV = pd.read_csv(A7 / "prevalence_metrics.csv")
+# Coverage is read from the data, never typed: a full server run adds years and possibly TLDs.
+_fw = PREV[(PREV.corpus == "forward") & (PREV.metric == "ds_share")]
+FWD_SPAN = {s_: (g_.month.min(), g_.month.max()) for s_, g_ in _fw.groupby("source")}
+_signed = set(_fw.loc[_fw.numerator > 0, "source"])
+FWD_NEVER_SIGNED = sorted(set(FWD_SPAN) - _signed)
+TLDS = [t_ for t_ in TLDS if t_ in _signed] + sorted(_signed - set(TLDS))
+for t_ in TLDS:
+    SRC.setdefault(t_, "." + t_)
+FWD_START = min(FWD_SPAN[t_][0] for t_ in TLDS)
+FWD_END = max(FWD_SPAN[t_][1] for t_ in TLDS)
+_pn = PREV[(PREV.corpus == "reverse_panel") & (PREV.metric == "ds_share") & (PREV.numerator > 0)]
+PANEL_START, PANEL_END = _pn.month.min(), _pn.month.max()
+FWD_XLIM = (m2y(FWD_START) - 0.25, m2y(FWD_END) + 0.15)
+PANEL_XLIM = (m2y(PANEL_START, True) - 0.3, m2y(PANEL_END, True) + 0.2)
+
+
+def _join(xs):
+    xs = list(xs)
+    return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1]
+
+
+def fwd_coverage_text():
+    by_start = {}
+    for t_ in TLDS:
+        by_start.setdefault(FWD_SPAN[t_][0], []).append(SRC[t_])
+    starts = ", ".join(f"**{_join(v)}** from {k}" for k, v in sorted(by_start.items()))
+    ends = sorted({FWD_SPAN[t_][1] for t_ in TLDS})
+    end_txt = (f"all end in {ends[0]}" if len(ends) == 1 else
+               "ending " + ", ".join(f"{SRC[t_]} {FWD_SPAN[t_][1]}" for t_ in TLDS))
+    never = (f" ({_join([SRC.get(t_, '.' + t_) for t_ in FWD_NEVER_SIGNED])} "
+             f"{'is' if len(FWD_NEVER_SIGNED) == 1 else 'are'} also scanned but never "
+             "has a signed zone, so it appears nowhere.)") if FWD_NEVER_SIGNED else ""
+    return f"{starts}; {end_txt}.{never}"
+
+
+def tld_grid(n, ncols, width, row_h, **kw):
+    # as many rows as the TLD list needs; unused panels hidden (a new TLD is drawn, never dropped)
+    nrows = max(1, math.ceil(n / ncols))
+    fig_, axes_ = plt.subplots(nrows, ncols, figsize=(width, row_h * nrows + 0.8), squeeze=False, **kw)
+    for ax_ in axes_.flat[n:]:
+        ax_.set_visible(False)
+    return fig_, axes_
 DEF4 = pd.read_csv(A7 / "cross_program_defaults_normalised.csv")
 CVE6 = pd.read_csv(A7 / "cross_program_q6_cve_latency.csv")
 MAT4 = pd.read_csv(A7 / "cross_program_q1_mechanism_matrix.csv")
@@ -451,12 +598,11 @@ code(r"""
 say(f'''
 > **Two corpora, never mixed.**
 >
-> * **Forward** means OpenINTEL's daily scans of whole TLD zone files: **.se and .nu** from 2016-06, **.gov** from
->   2017-05, **.ee** from 2019-07, **.ch and .li** from 2020-05; all end in 2023-12. (.fed.us is also scanned but
->   never has a signed zone, so it appears nowhere.) A forward monthly share is the **mean daily share**: summed
+> * **Forward** means OpenINTEL's daily scans of whole TLD zone files: {fwd_coverage_text()} A forward monthly
+>   share is the **mean daily share**: summed
 >   daily numerator counts over summed daily denominator counts.
 > * **Reverse** means the RIR reverse-DNS zones (`in-addr.arpa`). Every reverse share uses the **strict panel**,
->   AFRINIC and ARIN pooled (`_pooled-afrinic-arin`), from 2011-05, when it first held signed delegations. A reverse
+>   AFRINIC and ARIN pooled (`_pooled-afrinic-arin`), from {PANEL_START}, when it first held signed delegations. A reverse
 >   month label M is the zone state at **00:00 UTC on the 1st of M**, so a change between labels M-1 and M happened
 >   during calendar month M-1. Every chart that marks a release against reverse data follows this rule.
 >
@@ -544,8 +690,11 @@ Everything later measures movement in these lines, so here they are first, with 
 
 code(r"""
 fwd = PREV[(PREV.corpus == "forward") & PREV.source.isin(TLDS)]
-fig, axes = plt.subplots(2, 3, figsize=(12.5, 7.4), sharey=True)
-frame(fig, "About half of .se, .nu and .ch zones are signed; .gov and .ee are far behind",
+fig, axes = tld_grid(len(TLDS), 3, 12.5, 3.3, sharey=True)
+_lastds = {t_: fwd[(fwd.source == t_) & (fwd.metric == "ds_share") & (fwd.month == FWD_SPAN[t_][1])].pct.iloc[0]
+           for t_ in TLDS}
+frame(fig, "Latest share of delegated zones with a DS: " + ", ".join(
+          f"{SRC[t_]} {_lastds[t_]:.0f}%" for t_ in sorted(TLDS, key=lambda x: -_lastds[x])),
       "Share of delegated zones (%). Numerator: zones with a DS at the parent (blue), zones serving a DNSKEY "
       "(orange), zones with an RRSIG over their DNSKEY (green, dotted). Denominator: delegated zones (names with "
       "an NS record). Forward corpus, OpenINTEL TLD zone files, mean daily share per month.",
@@ -557,21 +706,24 @@ for ax, tld in zip(axes.flat, TLDS):
         s = fwd[(fwd.source == tld) & (fwd.metric == met)].sort_values("month")
         ax.plot([m2y(m) for m in s.month], s.pct, color=col, ls=ls, lw=1.9 if ls == "-" else 2.2)
     ax.set_title("." + tld, loc="left", fontweight="bold")
-    ax.set_xlim(2016.3, 2024.1)
+    ax.set_xlim(*FWD_XLIM)
     ax.set_ylim(0, 100)
     pct_axis(ax); year_axis(ax, 5); style(ax)
 legend_below(fig, [Line2D([], [], color=c, ls=ls, lw=2, label=l) for _, c, ls, l in metric_style])
 save(fig, "forward_ds_dnskey_rrsig")
-last = fwd[fwd.month == "2023-12"].pivot(index="source", columns="metric", values="pct")
 say("**How to read it.** Each panel is one TLD; each line is the percentage of that TLD's delegated zones "
     "that have the thing in the legend. Orange above blue means some zones serve keys without a DS at the parent "
     "(signed but not chained). The green dotted line sits on the orange one because every signed zone signs its "
     "own DNSKEY set; it is drawn to show that RRSIG adds no new information at zone level. "
-    f"In 2023-12 the DS share is {last.loc['se','ds_share']:.1f}% in .se, {last.loc['nu','ds_share']:.1f}% in .nu, "
-    f"{last.loc['ch','ds_share']:.1f}% in .ch, {last.loc['li','ds_share']:.1f}% in .li, "
-    f"{last.loc['ee','ds_share']:.1f}% in .ee and {last.loc['gov','ds_share']:.1f}% in .gov. "
+    "In each TLD's last month the DS share is " + _join([f"{_lastds[t_]:.1f}% in {SRC[t_]} ({FWD_SPAN[t_][1]})"
+                                                         for t_ in TLDS]) + ". "
     "The .gov drop in early 2018 is the scanned zone list growing from about 1,200 to 5,600 zones, not signing "
-    "collapsing; .ch/.li in 2020-05 and .ee in 2019-07 start with partial months.")
+    "collapsing. " + (("First months measured on only part of the month: " + _join(
+        [f"{SRC[t_]} {FWD_SPAN[t_][0]} ({int(_md)} days)" for t_ in TLDS
+         for _md in [_fw[(_fw.source == t_) & (_fw.month == FWD_SPAN[t_][0])].measured_days.max()]
+         if _md < pd.Period(FWD_SPAN[t_][0], freq="M").days_in_month - 1]) + ".")
+        if any(_fw[(_fw.source == t_) & (_fw.month == FWD_SPAN[t_][0])].measured_days.max()
+               < pd.Period(FWD_SPAN[t_][0], freq="M").days_in_month - 1 for t_ in TLDS) else ""))
 """)
 
 code(r"""
@@ -583,7 +735,7 @@ frame(fig, "Under 1% of reverse-DNS delegations are signed, and the share is sti
       "at 00:00 UTC on the 1st of each month.", bottom=0.45)
 x = [m2y(m, start=True) for m in rp.month]
 ax.plot(x, rp.pct, color=S1, lw=2)
-ax.set_xlim(2009.2, 2026.8); ax.set_ylim(0, None)
+ax.set_xlim(2009.2, PANEL_XLIM[1]); ax.set_ylim(0, None)
 pct_axis(ax); year_axis(ax, 10); style(ax)
 save(fig, "reverse_panel_ds_share")
 r_last = rp.iloc[-1]
@@ -619,7 +771,7 @@ def crossover(src):
 
 XO = {src: crossover(src) for src in TLDS + [PANEL]}
 xo_dated = sorted(((m, src) for src, m in XO.items() if m not in (None, "start")), key=lambda t: t[0])
-fig, axes = plt.subplots(2, 4, figsize=(13.5, 7.2), sharey=True)
+fig, axes = tld_grid(len(TLDS) + 1, 4, 13.5, 3.2, sharey=True)
 frame(fig, "ECDSA replaced RSASHA256 as the main algorithm: " + ", ".join(
           f"{'on the ' if src == PANEL else 'in '}{SRC[src]} in {m[:4]}" for m, src in xo_dated),
       "Share of signed zones using each algorithm (%). Forward: zones whose DNSKEY set has the algorithm, out of "
@@ -634,7 +786,7 @@ for ax, src in zip(axes.flat, TLDS + [PANEL]):
         s = s.dropna()
         ax.plot([m2y(m, start=(src == PANEL)) for m in s.index], s.values, color=col, lw=1.9)
     ax.set_title(SRC[src], loc="left", fontweight="bold")
-    ax.set_xlim((2011, 2026.8) if src == PANEL else (2016.3, 2024.1))
+    ax.set_xlim(PANEL_XLIM if src == PANEL else FWD_XLIM)
     ax.set_ylim(0, 105)
     pct_axis(ax); year_axis(ax, 5); style(ax)
 axes.flat[-1].axis("off")
@@ -737,8 +889,10 @@ def cadence_strip(prog):
         off = 0.012 * (x1 - x0)
         ax.text(y - off if left_side else y + off, yy, lab, fontsize=8.2, va="center",
                 ha="right" if left_side else "left", color=INK if anyobs else INK_2)
-    cov = [(-1.0, 2016 + 5 / 12, 2024.0, "forward TLDs (.se/.nu from 2016-06; others later; all end 2023-12)"),
-           (-1.7, 2011 + 4 / 12, 2026 + 8 / 12, "reverse panel (signed delegations 2011-05 to 2026-08)")]
+    cov = [(-1.0, m2y(FWD_START, True), m2y(FWD_END, True) + 1 / 12,
+            f"forward TLDs ({FWD_START} to {FWD_END}; see the coverage box)"),
+           (-1.7, m2y(PANEL_START, True), m2y(PANEL_END, True) + 1 / 12,
+            f"reverse panel (signed delegations {PANEL_START} to {PANEL_END})")]
     for yy, a, b, lab in cov:
         ax.plot([max(a, x0), b], [yy, yy], color=RAMP[1], lw=7, solid_capstyle="butt", zorder=2)
         ax.text(max(a, x0) + 0.08, yy - 0.34, lab, fontsize=8.2, color=INK_2, va="center")
@@ -1022,13 +1176,13 @@ def occupancy(prog):
     years = list(range(2011, 2027))
     grid = np.array([[1 if f"{y}-{m:02d}" in months else 0 for m in range(1, 13)] for y in years], dtype=float)
     fig, ax = plt.subplots(figsize=(12.5, 3.9))
-    inwin = [f"{y}-{m:02d}" for y in range(2016, 2024) for m in range(1, 13)]
-    inwin = [m for m in inwin if "2016-06" <= m <= "2023-12"]
+    inwin = [f"{y}-{m:02d}" for y in range(int(FWD_START[:4]), int(FWD_END[:4]) + 1) for m in range(1, 13)]
+    inwin = [m for m in inwin if FWD_START <= m <= FWD_END]
     share = sum(m in months for m in inwin) / len(inwin)
     frame(fig, f"{NAME[prog]} ships in almost every month, so its every-release schedule cannot be tested; "
                "its x.y.0 feature releases can (next charts)",
           f"Each square is one calendar month; filled = at least one stable public {NAME[prog]} release that month. "
-          f"In the forward corpus window 2016-06 to 2023-12, {share:.0%} of months have a release.",
+          f"In the forward corpus window {FWD_START} to {FWD_END}, {share:.0%} of months have a release.",
           bottom=0.55, left=0.06)
     ax.imshow(grid.T, aspect="auto", cmap=plt.matplotlib.colors.ListedColormap([GRID, S1]), vmin=0, vmax=1,
               extent=(years[0] - 0.5, years[-1] + 0.5, 12.5, 0.5))
@@ -1333,7 +1487,7 @@ NAME_PY = {"bind9": "BIND 9", "unbound": "Unbound", "knot": "Knot DNS", "kresd":
            "nsd": "NSD", "opendnssec": "OpenDNSSEC", "pdns-auth": "PowerDNS Authoritative",
            "pdns-rec": "PowerDNS Recursor"}
 
-ONLY = sys.argv[1:]  # optional list of programs, for quick partial builds
+ONLY = ARGS.programs  # optional list of programs, for quick partial builds
 for p in PROGRAMS:
     if ONLY and p not in ONLY:
         continue
@@ -1745,7 +1899,7 @@ published, and how it moved in the year after. Descriptive only: this says nothi
 
 code(r"""
 q5 = Q5[(Q5.predecessor == "RFC 5155") & (Q5.status == "covered")].set_index("source")
-fig, axes = plt.subplots(2, 3, figsize=(12.5, 6.8), sharey=True)
+fig, axes = tld_grid(len(TLDS), 3, 12.5, 3.0, sharey=True)
 frame(fig, f"When RFC 9276 asked for zero NSEC3 iterations (2022-08), at least {q5.share_at_successor.min():.0f}% of "
            "NSEC3 names in every TLD still used more",
       "Share of NSEC3 owner names with more than 0 iterations (%). Numerator: NSEC3 owner names whose NSEC3 record "
@@ -1759,7 +1913,7 @@ for ax, tld in zip(axes.flat, TLDS):
     ax.scatter([m2y("2022-08")], [r.share_at_successor], s=40, color=INK, zorder=4)
     ax.text(m2y("2022-08") - 0.15, 8, f"{r.share_at_successor:.1f}%", ha="right", fontsize=9, color=INK)
     ax.set_title("." + tld, loc="left", fontweight="bold")
-    ax.set_xlim(2016.3, 2024.1); ax.set_ylim(0, 105)
+    ax.set_xlim(*FWD_XLIM); ax.set_ylim(0, 105)
     pct_axis(ax); year_axis(ax, 5); style(ax)
 legend_below(fig, [Line2D([], [], color=S1, lw=2, label="NSEC3 names with more than 0 iterations"),
                    Line2D([], [], color=RED, lw=1.4, label="RFC 9276 published (2022-08)"),
@@ -1771,7 +1925,7 @@ say("**How to read it.** Each panel is one TLD. The line is how much of the NSEC
     + ", ".join(f"{q5.loc[t_].share_at_successor:.1f}% in .{t_}" for t_ in TLDS if t_ in q5.index)
     + ". Up to 12 months later it was " + "; ".join(f"{k} in {', '.join(v)}" for k, v in traj.items() if v)
     + " (a change of more than 10% relative counts as rising or falling). "
-    + ("It never fell below half its peak before the forward corpus ends in 2023-12. "
+    + (f"It never fell below half its peak before the forward corpus ends in {FWD_END}. "
        if q5.first_below_half_peak_after_peak.isna().all() else "")
     + "The reverse corpus cannot see NSEC3.")
 """)
@@ -1791,7 +1945,7 @@ for ax, src in zip(axes, ["se", "nu", "gov", PANEL]):
         ax.plot([m2y(m, src == PANEL) for m in s.index], s.values, color=col, lw=1.9)
     ax.axvline(m2y("2019-06", src == PANEL), color=RED, lw=1.4)
     ax.set_title(SRC[src], loc="left", fontweight="bold")
-    ax.set_xlim((2011.3, 2026.8) if src == PANEL else (2016.3, 2024.1)); ax.set_ylim(0, 105)
+    ax.set_xlim(PANEL_XLIM if src == PANEL else FWD_XLIM); ax.set_ylim(0, 105)
     pct_axis(ax); year_axis(ax, 4); style(ax)
 legend_below(fig, [Line2D([], [], color=S1, lw=2, label="SHA-1 DS"),
                    Line2D([], [], color=S2, lw=2, label="RSASHA1 family (alg. 5, 7)"),
@@ -1826,7 +1980,7 @@ for obs, col in (("alg8_13", S1), ("alg5_7", S2)):
     s = s[s.index >= "2019-01"]
     ax.plot([m2y(m, True) for m in s.index], s.values, color=col, lw=2)
 ax.axvline(m2y("2025-11", True), color=RED, lw=1.4)
-ax.set_ylim(0, 100); ax.set_xlim(2019, 2026.8)
+ax.set_ylim(0, 100); ax.set_xlim(2019, PANEL_XLIM[1])
 pct_axis(ax); year_axis(ax, 8); style(ax)
 legend_below(fig, [Line2D([], [], color=S1, lw=2, label="algorithms 8 or 13"),
                    Line2D([], [], color=S2, lw=2, label="RSASHA1 family (5, 7)"),
@@ -1847,11 +2001,6 @@ md(r"""
 
 * **Who signed a zone, and with which software.** Neither corpus records the signer or the DNS operator. Every
   alignment in this notebook is timing, not attribution.
-* **Events outside the corpora.** Nothing before 2011-05 in the reverse panel or before 2016-06 in the forward TLDs,
-  and, for the step test, nothing without 24 months of data before it. That removes both 2016 ECDSA signing defaults
-  and all RSASHA256 signer defaults of 2011 to 2015 from the forward corpus, and BIND 9 d02 and d03, OpenDNSSEC's
-  1.1 and 1.2 changes and PowerDNS 3.3's opt-out change from every test. Nothing after 2023-12 in the forward
-  corpus, which removes the NSEC3 caps of 50 and Knot 3.6.0.
 * **Settings the zone files do not record:** NSEC3 salt length, NSEC and NSEC3 TTLs, RRSIG timing, key-management
   state, and everything a validator does (validation, trust anchors, limits other than the NSEC3 caps, which are
   tested only indirectly).
@@ -1863,6 +2012,21 @@ md(r"""
 """)
 
 code(r"""
+# the corpus limits, from the data and from Phase 7's own "no test" reasons (never typed)
+_s2 = Q2[is_step(Q2)]
+_tested_any = set(_s2.loc[_s2.status == "tested", "row_id"])
+_nt = _s2[_s2.status != "tested"]
+_nobefore = sorted(set(_nt.loc[_nt.reason.astype(str).str.startswith("no before-period"), "row_id"]) - _tested_any)
+_fwd_tested = set(_s2.loc[(_s2.corpus == "forward") & (_s2.status == "tested"), "row_id"])
+_noafter = sorted(set(_nt.loc[(_nt.corpus == "forward") & _nt.reason.astype(str).str.startswith("no after-period"),
+                              "row_id"]) - _fwd_tested)
+say(f"* **Events outside the corpora.** Nothing before {PANEL_START} in the reverse panel or before {FWD_START} in "
+    f"the forward TLDs, nothing after {PANEL_END} and {FWD_END} respectively, and, for the step test, nothing "
+    "without 24 months of data before it and 12 after. "
+    + (f"Default changes with no step test in any corpus because the data start too late: {len(_nobefore)} "
+       f"({', '.join(_nobefore)}). " if _nobefore else "")
+    + (f"Default changes the forward corpus cannot test because it ends in {FWD_END}: {len(_noafter)} "
+       f"({', '.join(_noafter)})." if _noafter else f"No default change is lost to the forward corpus ending in {FWD_END}."))
 bf_ = ("q1_per_program_releases", "aggregate", "bind9_feature_releases", "step12")
 bn_, bo_ = val("J7", *bf_, "tested"), val("J7", *bf_, "mean_outside_90pct_null")
 say(f"* **Multiple testing by q-value.** With at most {fmtv(MAXPLAC)} placebo months per series, no single test can "
@@ -1915,7 +2079,9 @@ print("figures written:", len(list(FIGDIR.glob('*.png'))))
 NB["cells"] = cells
 NB["metadata"] = {"kernelspec": {"display_name": "rfcadopt", "language": "python", "name": "rfcadopt"},
                   "language_info": {"name": "python"}}
-client = NotebookClient(NB, timeout=900, kernel_name="rfcadopt",
+# the pipeline cell can run for hours on the full corpus; otherwise keep a per-cell limit
+client = NotebookClient(NB, timeout=None if os.environ.get("OPENINTEL_RUN_PIPELINE") == "1" else 900,
+                        kernel_name="rfcadopt",
                         resources={"metadata": {"path": str(ROOT / "notebooks")}})
 client.execute()
 nbf.write(NB, OUT_NB)

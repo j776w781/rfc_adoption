@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-29T16:27:39+00:00",
+  "generated": "2026-09-29T20:36:16+00:00",
   "inputs": {
     "server": "out/server_run/timeline_monthly.parquet",
     "panel": "out/panel_run/timeline_monthly.parquet"

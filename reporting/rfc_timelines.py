@@ -31,6 +31,10 @@ import textwrap
 from pathlib import Path
 
 import matplotlib
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -560,8 +564,8 @@ def main() -> int:
     cves = json.loads(Path("out/analysis/cve_crossref.json").read_text("utf-8"))
     am = json.loads(Path("out/analysis/adoption_measures.json").read_text("utf-8"))
     sc = json.loads(Path("out/analysis/software_crossref.json").read_text("utf-8"))
-    srv = pd.read_parquet("out/server_run/timeline_monthly.parquet")
-    pan = pd.read_parquet("out/panel_run/timeline_monthly.parquet")
+    srv = pd.read_parquet(_run_paths.server_timeline())
+    pan = pd.read_parquet(_run_paths.panel_timeline())
 
     results = {}
     for rfc, spec in RFCS.items():

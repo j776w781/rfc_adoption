@@ -70,8 +70,11 @@ from pathlib import Path
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-SERVER = ROOT / "out/server_run/timeline_monthly.parquet"
-PANEL = ROOT / "out/panel_run/timeline_monthly.parquet"
+sys.path.insert(0, str(ROOT / "scripts"))
+import _run_paths  # noqa: E402  (env-configurable: DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN)
+
+SERVER = _run_paths.server_timeline()
+PANEL = _run_paths.panel_timeline()
 SECSPIDER_DIR = ROOT / "data/external/secspider"
 OUT = ROOT / "out/analysis"
 
@@ -194,7 +197,9 @@ def load_reverse(server: Path) -> pd.DataFrame:
 
 def load_forward(server: Path) -> pd.DataFrame:
     df = pd.read_parquet(server)
-    return df[(df.basis == "zonefile") & (df.source.isin(FORWARD_SOURCES))]
+    # Every zonefile source the run contains: the seven known TLDs first, then any others
+    # (a full server run may carry more), so a new TLD is measured rather than dropped.
+    return df[(df.basis == "zonefile") & (df.source.isin(_run_paths.forward_sources(df)))]
 
 
 def load_panel(panel: Path) -> pd.DataFrame:

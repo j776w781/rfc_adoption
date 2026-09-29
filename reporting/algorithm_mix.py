@@ -29,6 +29,10 @@ import argparse
 from pathlib import Path
 
 import matplotlib
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -81,8 +85,8 @@ def main() -> int:
     ap.add_argument("--out", default="reporting/charts")
     a = ap.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
-    srv = pd.read_parquet("out/server_run/timeline_monthly.parquet")
-    pan = pd.read_parquet("out/panel_run/timeline_monthly.parquet")
+    srv = pd.read_parquet(_run_paths.server_timeline())
+    pan = pd.read_parquet(_run_paths.panel_timeline())
     rev = pan[(pan.basis == "reverse") & (pan.source == PANEL)]
     fwd = srv[srv.basis == "zonefile"]
 

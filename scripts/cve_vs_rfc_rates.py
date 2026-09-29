@@ -42,6 +42,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 PANEL = "_pooled-afrinic-arin"
 AFTER = 3            # months after the event included in the window
@@ -261,8 +265,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--out", default="out/analysis/cve_vs_rfc_rates.json")
     a = ap.parse_args()
-    srv = pd.read_parquet("out/server_run/timeline_monthly.parquet")
-    pan = pd.read_parquet("out/panel_run/timeline_monthly.parquet")
+    srv = pd.read_parquet(_run_paths.server_timeline())
+    pan = pd.read_parquet(_run_paths.panel_timeline())
     cves = json.loads(Path("out/analysis/cve_crossref.json").read_text("utf-8"))
     rc = json.loads(Path("reporting/rfc_classification.json").read_text("utf-8"))
     cases = json.loads(Path("out/analysis/program_rfc_cases.json").read_text("utf-8"))["cases"]

@@ -46,6 +46,10 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 PANEL = "_pooled-afrinic-arin"
 NAME = {"unbound": "Unbound", "nsd": "NSD", "bind9": "BIND 9", "knot": "Knot DNS",
@@ -112,8 +116,8 @@ def month_of(d: str) -> str:
 # ----------------------------------------------------------------- inputs --
 
 def load():
-    srv = pd.read_parquet("out/server_run/timeline_monthly.parquet")
-    pan = pd.read_parquet("out/panel_run/timeline_monthly.parquet")
+    srv = pd.read_parquet(_run_paths.server_timeline())
+    pan = pd.read_parquet(_run_paths.panel_timeline())
     ledger = pd.read_parquet("out/analysis/delegation_changes.parquet")
     sup = json.loads(Path("data/software/software_support.json").read_text("utf-8"))
     rel = json.loads(Path("data/software/release_dates.json").read_text("utf-8"))

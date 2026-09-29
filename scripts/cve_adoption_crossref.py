@@ -24,6 +24,10 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 #: change name -> pattern that must appear in a CVE description for the CVE to be
 #: about *that* mechanism. Deliberately strict: "DNSSEC validation crashes" is not
@@ -110,9 +114,9 @@ def main() -> int:
     ap.add_argument("--adoption", type=Path, default=Path("out/analysis/adoption_measures.json"))
     ap.add_argument("--cves", type=Path, default=Path("out/analysis/cve_crossref.json"))
     ap.add_argument("--timeline", type=Path,
-                    default=Path("out/server_run/timeline_monthly.parquet"))
+                    default=_run_paths.server_timeline())
     ap.add_argument("--panel", type=Path,
-                    default=Path("out/panel_run/timeline_monthly.parquet"))
+                    default=_run_paths.panel_timeline())
     ap.add_argument("--out", type=Path,
                     default=Path("out/analysis/cve_adoption_crossref.json"))
     args = ap.parse_args()

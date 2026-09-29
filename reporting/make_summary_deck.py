@@ -17,6 +17,10 @@ from pptx.util import Emu, Inches, Pt
 
 from make_flows_deck import ACCENT, INK, INK_2, MUTED, SURFACE, W, H, blank, text  # noqa
 from make_program_cases_deck import table, fit_picture, pct
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 CRIT = RGBColor(0xD0, 0x3B, 0x3B)
 GOOD = RGBColor(0x1B, 0xAF, 0x7A)
@@ -80,11 +84,11 @@ def main() -> int:
     n_approx = sum(1 for x in sup_rows if x.get("attribution") == "approximate")
     near = collections.Counter(j["nearest_cve"]["what"].split(" ")[0]
                                for c in C.values() for j in c["spikes"] if j.get("nearest_cve"))
-    _tm = pd.read_parquet("out/server_run/timeline_monthly.parquet")
+    _tm = pd.read_parquet(_run_paths.server_timeline())
     # Reverse shares from the strict panel, never the five RIRs summed (their name sets
     # overlap). Forward shares pool the TLDs (disjoint name sets) by domain_days, so
     # numerator and denominator come from the same days. Corrected 2026-09-29.
-    _pan = pd.read_parquet("out/panel_run/timeline_monthly.parquet")
+    _pan = pd.read_parquet(_run_paths.panel_timeline())
     _r = _pan[(_pan.source == "_pooled-afrinic-arin") & (_pan.dimension == "algorithm_ds")]
     _den = _r[_r.value == "_total"].groupby("month").domains_peak.sum()
     _n3 = (_r[_r.value == "7"].groupby("month").domains_peak.sum() / _den * 100).dropna()
