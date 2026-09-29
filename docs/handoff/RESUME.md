@@ -133,8 +133,10 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
   `docs/rfc_why.md` and both affected decks regenerated. Suite: 943 passed.
 - Phase 4 committed unverified (02650d6b): `scripts/cross_program.py`, `out/analysis/cross_program*`,
   `docs/handoff/04_cross_program.md`. Phase 5 verifier was running -> `verify/phase4_cross_program.md`.
-- Phase 7 brief ready (`07_phase7_brief.md`, 58011261); start it after Phase 5 corrections land,
-  because it reads Phase 4's normalised CSVs. Then Phase 8 notebook.
+- Phase 5 done (report `verify/phase4_cross_program.md`); data fixes 54400276; Phase 4 rerun 263b2d90.
+- Phase 7 agent was running with `07_phase7_brief.md` -> `scripts/software_vs_adoption.py`,
+  `docs/handoff/07_software_vs_adoption.md`. If it did not finish, re-spawn with the brief.
+  Then a fresh verifier for Phase 7, then Phase 8 notebook.
 
 ## To resume
 
