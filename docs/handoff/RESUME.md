@@ -54,8 +54,8 @@ when you resume is theirs -- a missing file means re-run with the brief):
   eight timelines fully verified. Each pass asserted every current value before changing it
   and wrote nothing on any failure -- two early runs were stopped that way (a guessed .md
   anchor; a `\1084c...` group-reference trap) before touching a file.
-- opendnssec Phase 1 output exists (144 tags, 65 stable); its Phase 3 verifier is running.
-- bind9 and unbound Phase 1 running (third attempt). pdns-auth, pdns-rec still to run;
+- opendnssec verified and corrected (136cce6d) -- FOUR of eight timelines done: kresd, knot, nsd, opendnssec.
+- bind9, unbound (writing incrementally) and pdns-auth Phase 1 running. pdns-rec still to run;
   keep concurrency at three -- six-plus agents exhausted the session limit twice.
 - Inventory edits still pending (blocked while Phase 1 agents read the file):
   `fixes.kresd` CVE-2021-40083 -> 5.3.2; `by_product.nsd` CVE-2019-13207 published 2019-07-03.
