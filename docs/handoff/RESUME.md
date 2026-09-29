@@ -115,9 +115,9 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 
 - Verified and corrected (7/8): kresd, knot, nsd, opendnssec, unbound, bind9 (`verify/bind9.md`).
 - pdns-auth verified and corrected (26dbf70b); verifier confirmed all five inventory disagreements.
-- pdns-rec: stages 3-4 builder (Sonnet) was running; spawn its verifier after it lands.
-- Held until no builder reads `cve_inventory.json`: bind9 43 inventory disagreements
-  (timeline tags now UTC-ordered, see bind9.json `differs_from_inventory`) and pdns-auth five.
+- pdns-rec: stages 3-4 committed 6e24c14d (21 default rows, 52 CVE rows); Phase 3 verifier (Sonnet) was running.
+- Inventory: 82 bind9/pdns-auth corrections applied (52290c82). pdns-rec's disagreements (its gap 10) after its verifier.
+- Phase 4 brief ready: `04_phase4_brief.md` (3b263234); add pdns-rec's field mapping once verified.
 - Then regenerate `01_program_timelines.md` (stale for bind9/pdns-auth/pdns-rec) and
   `cve_crossref` once; Phase 4 onward.
 
