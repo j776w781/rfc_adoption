@@ -68,10 +68,12 @@ md(r"""
 This notebook answers four questions for eight DNS programs: **BIND 9, Unbound, Knot DNS, Knot Resolver, NSD,
 OpenDNSSEC, PowerDNS Authoritative and PowerDNS Recursor**.
 
-1. After each version release, do the adoption numbers in OpenINTEL (forward TLD zones) and in the RIR reverse data
-   move?
+1. After each version release, does DNSSEC **adoption** move in OpenINTEL (forward TLD zones) and in the RIR
+   reverse data? Adoption means what the team means by it: **the % of domains in a month with at least one DS,
+   DNSKEY or RRSIG record**. Separately: does the **feature use** of the zones that are already signed move, meaning
+   which algorithms, DS digests and NSEC3 settings they use?
 2. When a release changes a **default** (for example "sign with ECDSA unless told otherwise"), is the change
-   followed by adoption?
+   followed by a change in adoption, or in feature use?
 3. Are changes made by hand, one zone at a time, or in large automatic-looking batches, and at which level of
    the operator hierarchy?
 4. Is a newer RFC published while its predecessor is still being deployed?
@@ -303,6 +305,25 @@ Q4 = pd.read_csv(A7 / "software_vs_adoption_q4.csv")
 Q4A = pd.read_csv(A7 / "software_vs_adoption_q4_alignment.csv")
 Q5 = pd.read_csv(A7 / "software_vs_adoption_q5.csv")
 MAP = pd.read_csv(A7 / "software_vs_adoption_mapping.csv")
+# Adoption (prevalence) rows are appended to the same CSVs; keep the two claims apart from here on.
+PREV_OBS = ["ds_prev", "dnskey_prev", "rrsig_prev"]
+PNAME = {"ds_prev": "DS", "dnskey_prev": "DNSKEY", "rrsig_prev": "RRSIG"}
+
+
+def _split(df):
+    m_ = df.observable.isin(PREV_OBS)
+    return df[~m_].copy(), df[m_].copy()
+
+
+Q1, Q1P = _split(Q1)
+Q1R, Q1RP = _split(Q1R)
+Q2, Q2P = _split(Q2)
+Q4, Q4P = _split(Q4)
+Q4A, Q4AP = _split(Q4A)
+_pm, _pe = A7 / "software_vs_adoption_prevalence_mapping.csv", A7 / "software_vs_adoption_prevalence_excluded.csv"
+PMAP = pd.read_csv(_pm) if _pm.exists() else pd.DataFrame(columns=["program", "row_id", "observable", "reason"])
+PEXC = pd.read_csv(_pe) if _pe.exists() else pd.DataFrame(columns=["program", "row_id", "reason"])
+ADOPT_DEF = "the % of domains in a month with at least one DS, DNSKEY or RRSIG record"
 PREV = pd.read_csv(A7 / "prevalence_metrics.csv")
 # Coverage is read from the data, never typed: a full server run adds years and possibly TLDs.
 _fw = PREV[(PREV.corpus == "forward") & (PREV.metric == "ds_share")]
@@ -440,6 +461,42 @@ def near0(v):
         f", a change of under {NEAR0:g} percentage points; the share barely moved")
 
 
+def is_step(df):
+    return df.test.astype(str).str.startswith("step")
+
+
+ALL_REL = "all stable public releases"
+
+
+def es_of(df):
+    return df.event_set.fillna(ALL_REL) if "event_set" in df.columns else pd.Series(ALL_REL, index=df.index)
+
+
+def es_label(es):
+    return "" if es == ALL_REL else f" [{es}]"
+
+
+REASONS = [("release months fill", "releases fill more than 75% of the testable window"),
+           ("the testable window", "the testable window is shorter than 24 months"),
+           ("the value never", "the value never appears in that corpus"),
+           ("the value is present", "the value is present in fewer than 12 months"),
+           ("no release month", "no release falls in the testable window"),
+           ("no month with at least", "the denominator never reaches the minimum count"),
+           ("no before-period", "there are not enough months before the event"),
+           ("no after-period", "there are not enough months after the event"),
+           ("the value is absent in every month", "the value is absent throughout the window"),
+           ("only ", "the series has too few testable months"),
+           ("no series", "there is no series"), ("the series is too short", "the series is too short")]
+
+
+def reason_counts(df):
+    out = {}
+    for r in df.reason.fillna(""):
+        lab = next((l for k, l in REASONS if r.startswith(k)), r[:60] or "no reason given")
+        out[lab] = out.get(lab, 0) + 1
+    return out
+
+
 def pval(p):
     return NA if p is None or (isinstance(p, float) and math.isnan(p)) else ("p < 0.001" if p < 0.001 else f"p = {p:.3f}")
 
@@ -456,6 +513,19 @@ def pp(v):
     if a == 0:
         return "0 pp"
     return np.format_float_positional(v, precision=2, unique=False, fractional=False, sign=True) + " pp"
+
+
+def binom_tail(k, n, p=0.1):
+    return sum(math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k, n + 1))
+
+
+def ds_unit(q1p, rate):
+    # new computation from Phase 7's rows: one test per program and corpus (DS prevalence only)
+    d_ = q1p[is_step(q1p) & (q1p.status == "tested") & (q1p.observable == "ds_prev") & (es_of(q1p) == ALL_REL)]
+    if d_.empty or rate is None:
+        return None
+    k_ = int(d_.beats_chance_mean.astype(bool).sum())
+    return k_, len(d_), rate * len(d_), binom_tail(k_, len(d_), rate)
 
 
 def pnice(sr):
@@ -569,8 +639,51 @@ sh8624 = val("J7", "q5_successor_rfc", "pairs", i8624, "share_at_successor")
 bind_txt = (f"BIND 9 cannot be tested on every stable release, because it ships in almost every month; on its x.y.0 "
             f"feature releases instead, {fmtv(bo)} of {fmtv(bn)} tests fall outside the band." if bn else
             "BIND 9 cannot be tested on every stable release, because it ships in almost every month.")
+# ---- adoption (prevalence) ----
+pa = ("q1_per_program_releases", "prevalence", "aggregate", "step12")
+pn1, po1 = val("J7", *pa, "tested"), val("J7", *pa, "mean_outside_90pct_null")
+pe1c, pe1 = val("J7", *pa, "expected_by_calibrated_rate"), val("J7", *pa, "expected_by_chance_at_10pct")
+pbf = ("q1_per_program_releases", "prevalence", "aggregate", "bind9_feature_releases", "step12")
+pbn, pbo = val("J7", *pbf, "tested"), val("J7", *pbf, "mean_outside_90pct_null")
+ps2 = ("q2_default_change_events", "prevalence", "summary", "step12")
+pn2, po2 = val("J7", *ps2, "n_tests"), val("J7", *ps2, "n_outside_band")
+pod, pe2d = val("J7", *ps2, "n_outside_and_expected_direction"), val("J7", *ps2, "expected_outside_discrete")
+p4 = ("q4_spikes", "prevalence", "summary")
+p4n, p4a, p4e = val("J7", *p4, "spikes"), val("J7", *p4, "aligned_within_3m"), val("J7", *p4, "expected_aligned")
+_pu = Q1P[is_step(Q1P) & (Q1P.status == "tested") & (es_of(Q1P) == ALL_REL) & Q1P.beats_chance_mean.astype(bool)]
+_pairs = _pu.groupby(["program", "source"]).percentile.median()
+_up = [f"{NAME[p_]} in {SRC[s_]}" for (p_, s_), v in _pairs.items() if v > 50]
+_dn = [f"{NAME[p_]} in {SRC[s_]}" for (p_, s_), v in _pairs.items() if v <= 50]
+_rate = (pe1c or pe1 or 0) / pn1 if pn1 else None
+_tail1 = binom_tail(po1, pn1, _rate) if (pn1 and po1 is not None and _rate) else None
+adopt_txt = (
+    f"**Two separate claims.** *Adoption* means what the team means by it: {ADOPT_DEF}. *Feature use* means which "
+    "algorithms, DS digests and NSEC3 settings the zones that are already signed use. Software could move either one.\n\n"
+    "**A. Adoption: does software change how many domains are signed?** (section 2b)\n\n"
+    f"1. **Releases.** {fmtv(po1)} of {fmtv(pn1)} tests are *unusual*, meaning the share of signed domains departs "
+    f"from its own trend after the program's releases by more than in 9 of 10 shifted release schedules, against "
+    f"{fmtv(pe1c if pe1c is not None else pe1, '.1f')} expected. "
+    + (f"Treated as independent tests, that many or more has a chance of about {_tail1:.2f}, which is borderline. "
+       if _tail1 is not None else "")
+    + (f"But they come from only {len(_pairs)} program-and-corpus pairs, because DS, DNSKEY and RRSIG move together, and "
+       f"the directions conflict: " + (f"after the releases of {_join(_up)}, more domains were signed than the trend "
+       "predicted" if _up else "") + ("; " if _up and _dn else "") + (f"after those of {_join(_dn)}, fewer" if _dn else "")
+       + ". " if len(_pairs) else "")
+    + (lambda u_: f"Counted once per program and corpus (DS only, a new count from Phase 7's rows), it is {u_[0]} of "
+       f"{u_[1]} against {u_[2]:.1f} expected, a chance of about {u_[3]:.2f}. " if u_ else "")(ds_unit(Q1P, _rate))
+    + (f"BIND 9 is tested on its x.y.0 feature releases: {fmtv(pbo)} of {fmtv(pbn)} unusual." if pbn else "") + "\n"
+    f"2. **Default changes that could change whether zones get signed.** {fmtv(po2)} of {fmtv(pn2)} are unusual, "
+    f"against {fmtv(pe2d, '.1f')} expected, and only {fmtv(pod)} of them in the direction the change should push.\n"
+    f"3. **Sudden jumps.** {fmtv(p4a)} of {fmtv(p4n)} jumps in the number of signed domains follow such a default "
+    f"change within 3 months, against {fmtv(p4e, '.1f')} expected.\n\n"
+    + ("So neither releases nor default changes are shown to move how many domains are signed, within the power "
+       "limits of chart 1.\n\n" if not (_tail1 is not None and _tail1 < 0.01) else
+       "Releases are followed by unusual adoption moves more often than chance; see section 2b before reading "
+       "anything into it.\n\n")
+    + "**B. Feature use: does software change which DNSSEC features signed zones use?**")
+say(adopt_txt)
 say(f'''
-1. **Releases (section 3).** After a program's releases, adoption {'departs from its own trend more often than chance' if more1 else 'does not depart from its own trend more often than chance'}:
+1. **Releases (section 3).** After a program's releases, feature use {'departs from its own trend more often than chance' if more1 else 'does not depart from its own trend more often than chance'}:
    {fmtv(o1)} of {fmtv(n1)} program-level step tests fall outside the 90% chance band, against {fmtv(e1, 'g')} expected if
    exactly 1 test in 10 did so by chance{'' if e1c is None else f' (or {e1c:.1f} at the rate the null actually rejects on data with no effect)'}. {bind_txt}
 2. **Default changes (section 3).** {fmtv(o2)} of {fmtv(n2)} default-change events are followed by a departure from
@@ -596,6 +709,15 @@ md("## How to read every chart in this notebook")
 
 code(r"""
 say(f'''
+> **Adoption and feature use, never mixed.** **Adoption** is {ADOPT_DEF} (the team's definition; also called
+> prevalence). **Feature use** is a share *among signed zones*: which algorithm, DS digest or NSEC3 setting they use.
+> A default change such as "sign with ECDSA" can change feature use without changing adoption at all. Section 2b tests
+> adoption; sections 3 to 6 test feature use unless they say otherwise.
+>
+> **Unusual.** A result is *unusual* when the move after an event is bigger, up or down, than after 9 of 10 random
+> months (for a default change) or 9 of 10 shifted copies of the release schedule (for a program). The charts shade
+> the usual range, and with no effect at all about 1 test in 10 is unusual anyway.
+>
 > **Two corpora, never mixed.**
 >
 > * **Forward** means OpenINTEL's daily scans of whole TLD zone files: {fwd_coverage_text()} A forward monthly
@@ -804,6 +926,166 @@ say("**How to read it.** Each panel is one corpus. Blue is the old RSA-with-SHA-
     "These are the lines the release and default-change tests in section 3 look for bends in.")
 """)
 
+
+# ====================================================================== 2b. adoption as prevalence ==
+md(r"""
+## 2b. Adoption: does software change how many domains are signed?
+
+Here adoption is the team's measure, the % of domains with at least one DS, DNSKEY or RRSIG record: the lines of the
+first chart in section 2 (and, for the reverse panel, DS only, because a reverse zone file holds no DNSKEY or RRSIG).
+The tests are the same as for feature use: does the line leave its own trend after a program's releases, or after a
+default change that could change whether zones get signed? A result is **unusual** when the move is bigger than after
+9 of 10 random months or shifted release schedules. DS, DNSKEY and RRSIG move almost together, so one real movement
+usually shows up as two or three unusual tests.
+""")
+
+code(r"""
+t = Q1P[is_step(Q1P) & (Q1P.status == "tested") & (Q1P.source != "fed.us")].copy()
+if t.empty:
+    say(f"**Release schedules against adoption:** {NA}.")
+else:
+    t["es"] = es_of(t)
+    order_p = {p_: i for i, p_ in enumerate(NAME)}
+    t["pair"] = [f"{NAME[p_]}{es_label(e_)} · {SRC[s_]}" for p_, e_, s_ in zip(t.program, t.es, t.source)]
+    t["k"] = [(order_p.get(p_, 99), e_, TLDS.index(s_) if s_ in TLDS else 99) for p_, e_, s_ in
+              zip(t.program, t.es, t.source)]
+    pairs = sorted(t.pair.unique(), key=lambda x: t[t.pair == x].k.iloc[0])
+    ypos = {p_: i for i, p_ in enumerate(pairs)}
+    ta = t[t.es == ALL_REL]             # the headline count: every stable release; BIND 9 x.y.0 is reported apart
+    n_, o_ = len(ta), int(ta.beats_chance_mean.astype(bool).sum())
+    u_ = ta[ta.beats_chance_mean.astype(bool)]
+    tb = t[t.es != ALL_REL]
+    bxt = (f" BIND 9's x.y.0 feature releases, shown separately: {int(tb.beats_chance_mean.astype(bool).sum())} of "
+           f"{len(tb)} unusual." if len(tb) else "")
+    exp_ = jget(J7, "q1_per_program_releases", "prevalence", "aggregate", "step12", "expected_by_calibrated_rate")
+    fig, ax = plt.subplots(figsize=(12.5, max(4.0, 2.6 + 0.30 * len(pairs))))
+    frame(fig, f"Adoption after releases: {o_} of {n_} tests are unusual, against about "
+               f"{exp_ if exp_ is not None else 0.1 * n_:.1f} expected, and they come from only "
+               f"{u_.groupby(['program', 'source']).ngroups} program-and-corpus pairs that point both ways",
+          "Counts in the title: every stable release as the event. Each marker: one adoption series (share of domains "
+          "with a DS, DNSKEY or RRSIG record) for one program's release "
+          "schedule in one corpus. Position = how the average departure from trend after its release months ranks among "
+          f"{DRAWS:,} shifted copies of the schedule (50 = typical; right = more domains signed than the trend "
+          "predicted). Shaded: the usual range, 9 of 10 shifted schedules. Right-hand numbers: release months tested.",
+          bottom=0.95, left=0.27, right=0.90)
+    ax.axvspan(5, 95, color=RAMP[0], zorder=0)
+    mk = {"ds_prev": ("o", S1, -0.2), "dnskey_prev": ("s", S2, 0.0), "rrsig_prev": ("D", S3, 0.2)}
+    for obs, (m_, c_, dy) in mk.items():
+        g_ = t[t.observable == obs]
+        ax.scatter(g_.percentile, [ypos[p_] + dy for p_ in g_.pair], marker=m_, color=c_, s=38, zorder=3,
+                   label=f"{PNAME[obs]} prevalence")
+    uu_ = t[t.beats_chance_mean.astype(bool)]
+    ax.scatter(uu_.percentile, [ypos[p_] + mk[o][2] for p_, o in zip(uu_.pair, uu_.observable)], s=170,
+               facecolor="none", edgecolor=RED, lw=1.6, zorder=4, label="unusual")
+    for p_ in pairs:
+        ax.text(1.015, ypos[p_], f"{int(t[t.pair == p_].release_months_tested.max())}",
+                transform=ax.get_yaxis_transform(), va="center", fontsize=9, color=INK_2)
+    ax.set_yticks(range(len(pairs))); ax.set_yticklabels(pairs, fontsize=9)
+    ax.set_xlim(-2, 102); ax.set_ylim(len(pairs) - 0.5, -0.6)
+    ax.set_xlabel(f"rank among {DRAWS:,} shifted release schedules (percentile)")
+    style(ax, grid="x")
+    h_, l_ = ax.get_legend_handles_labels()
+    legend_below(fig, [Patch(color=RAMP[0], label="usual range")] + h_, ncol=5)
+    save(fig, "adoption_release_tests")
+    grp = u_.groupby(["program", "source"])
+    lines = []
+    for (p_, s_), g_ in grp:
+        lines.append(f"{NAME[p_]} in {SRC[s_]} ({', '.join(PNAME[o] for o in g_.observable)}; "
+                     f"{'more' if g_.percentile.median() > 50 else 'fewer'} domains signed than predicted, over "
+                     f"{int(g_.release_months_tested.max())} release months)")
+    un = Q1P[is_step(Q1P) & (Q1P.status != "tested") & (Q1P.source != "fed.us")]
+    c_ = reason_counts(un)
+    tail_ = binom_tail(o_, n_, (exp_ or 0.1 * n_) / n_)
+    say("**How to read it.** Each row is one program in one corpus; the three markers are its DS, DNSKEY and RRSIG "
+        "adoption lines, which move almost together. A red ring marks an unusual result. "
+        f"{o_} of {n_} are unusual. Treated as independent tests, that many or more would happen by chance about "
+        f"{tail_:.2f} of the time, which is borderline. But the unusual results are only {grp.ngroups} movements: "
+        + "; ".join(lines) + ". Their directions disagree, so they do not add up to 'releases raise adoption'."
+        + (lambda u2: f" Counted once per program and corpus (DS only; new count from Phase 7's rows): {u2[0]} of {u2[1]} "
+           f"unusual against {u2[2]:.1f} expected, a chance of about {u2[3]:.2f}." if u2 else "")(ds_unit(Q1P, (exp_ or 0.1 * n_) / n_))
+        + bxt + " "
+        + (f"Not tested ({len(un)} cells, besides .fed.us): " + "; ".join(
+            f"{v} because {k}" for k, v in sorted(c_.items(), key=lambda kv: -kv[1])) + "." if len(un) else ""))
+""")
+
+code(r"""
+st = Q2P[(Q2P.test == "step12") & (Q2P.status == "tested")].copy()
+if st.empty:
+    say(f"**Default changes against adoption:** {NA}.")
+else:
+    st["lab"] = [f"{r.row_id} · {SRC[r.source]} · {PNAME[r.observable]} (expect {'up' if r.expected_direction > 0 else 'down'})"
+                 for r in st.itertuples()]
+    st = st.sort_values(["timing_date", "row_id", "source", "observable"])
+    n_ = len(st)
+    u_ = st[st.outside_90_band.astype(bool)]
+    e_ = jget(J7, "q2_default_change_events", "prevalence", "summary", "step12", "expected_outside_discrete")
+    fig, ax = plt.subplots(figsize=(12.5, max(4.0, 2.6 + 0.30 * n_)))
+    frame(fig, f"Default changes that could change signing: {len(u_)} of {n_} tests unusual, against about "
+               f"{e_ if e_ is not None else 0.1 * n_:.1f} expected, and {int(u_.in_expected_direction.astype(bool).sum())} "
+               "of them in the expected direction",
+          "Each marker: one default change, one corpus, one adoption series (DS, DNSKEY or RRSIG prevalence). Position = "
+          f"how the departure from the {PRE}-month pre-trend over the {POST} months after the change ranks among the "
+          "same series' other months (50 = typical; right = more domains signed than predicted). Shaded: the usual "
+          "range. Right-hand numbers: the departure in percentage points.", bottom=0.95, left=0.40, right=0.90)
+    y = np.arange(n_)
+    ax.axvspan(5, 95, color=RAMP[0], zorder=0)
+    mk = {"ds_prev": ("o", S1), "dnskey_prev": ("s", S2), "rrsig_prev": ("D", S3)}
+    for obs, (m_, c_) in mk.items():
+        sel = (st.observable == obs).values
+        ax.scatter(st.percentile[sel], y[sel], marker=m_, color=c_, s=40, zorder=3, label=f"{PNAME[obs]} prevalence")
+    sel = st.outside_90_band.astype(bool).values
+    ax.scatter(st.percentile[sel], y[sel], s=170, facecolor="none", edgecolor=RED, lw=1.6, zorder=4, label="unusual")
+    for yi, r in zip(y, st.itertuples()):
+        ax.text(1.015, yi, pp(r.observed), transform=ax.get_yaxis_transform(), va="center", fontsize=9, color=INK_2)
+    ax.set_yticks(y); ax.set_yticklabels(st.lab, fontsize=8.8)
+    ax.set_xlim(-2, 102); ax.set_ylim(n_ - 0.5, -0.6)
+    ax.set_xlabel("rank among the series' other months (percentile)")
+    style(ax, grid="x")
+    h_, l_ = ax.get_legend_handles_labels()
+    legend_below(fig, [Patch(color=RAMP[0], label="usual range")] + h_, ncol=5)
+    save(fig, "adoption_default_changes")
+    by_row = u_.groupby("row_id")
+    say("**How to read it.** A marker far right means more domains were signed after the change than the trend "
+        "predicted; far left, fewer. Unusual results by default change: "
+        + ("; ".join(f"{rid}: {len(g_)} test(s), {int((~g_.in_expected_direction.astype(bool)).sum())} against the "
+                     f"expected direction ({', '.join(sorted({SRC[x] for x in g_.source}))})" for rid, g_ in by_row)
+           if len(u_) else "none")
+        + ". A pre-trend that was already rising steeply can make an ordinary year after it look like a fall, so a "
+        "result against the expected direction says more about the trend than about the default.")
+
+# why these rows: the mapping, row by row, from Phase 7's prevalence mapping
+inc = PMAP.drop_duplicates("row_id") if len(PMAP) else PMAP
+lines = []
+for r in inc.itertuples():
+    obs_ = ", ".join(PNAME.get(o, o) for o in PMAP[PMAP.row_id == r.row_id].observable)
+    tested = len(Q2P[(Q2P.row_id == r.row_id) & (Q2P.test == "step12") & (Q2P.status == "tested")])
+    note = f"{tested} step test{'s' if tested != 1 else ''}" if tested else "no step test (" + (
+        Q2P[(Q2P.row_id == r.row_id) & (Q2P.test == "step12")].reason.dropna().astype(str).str.split(" in ").str[0]
+        .value_counts().index[0] if len(Q2P[(Q2P.row_id == r.row_id) & (Q2P.test == "step12")].reason.dropna())
+        else NA) + ")"
+    lines.append(f"* **{r.row_id}** ({NAME.get(r.program, r.program)}, {r.timing_date}; {obs_}, expected "
+                 f"{'up' if r.expected_direction > 0 else 'down'}): {r.reason}. {note}.")
+exc = PEXC.reason.astype(str)
+cats = {"validator-only rows (validation defaults, trust anchors, validator limits: they do not change what zones "
+        "publish)": exc.str.startswith("validator-only").sum(),
+        "rows that change a parameter of zones that are signed anyway (algorithm, digest, key size, NSEC3, timing)":
+        exc.str.startswith("changes a parameter").sum()}
+other = len(PEXC) - sum(cats.values())
+say("**Which default changes count here, and why.** Phase 7 read every default change and kept only those that could "
+    "change whether a zone gets signed, gets a DS at its parent, or is served with its DNSSEC records:\n\n"
+    + "\n".join(lines) + "\n\n"
+    + f"Left out: {len(PEXC)} rows, of which " + "; ".join(f"{int(v)} {k}" for k, v in cats.items())
+    + f"; and {other} rows read one by one (for example a change of the default algorithm of a key the operator "
+    "still has to ask for). The full list is in `software_vs_adoption_prevalence_excluded.csv`.")
+
+sm = jget(J7, "q4_spikes", "prevalence", "summary", default={}) or {}
+say(f"**Sudden jumps.** Phase 7 also looked for months in which the number of signed domains jumps or drops sharply: "
+    f"{fmtv(sm.get('spikes'))} such jumps, of which {fmtv(sm.get('aligned_within_3m'))} follow one of the default "
+    f"changes above within 3 months, against {fmtv(sm.get('expected_aligned'), '.1f')} expected by chance"
+    + (", and no kind of jump beats chance." if not sm.get("cells_beating_chance") else
+       f"; beating chance: {sm.get('cells_beating_chance')}."))
+""")
+
 # ====================================================================== 3. per program ==
 md(r"""
 ## 3. One section per program
@@ -820,7 +1102,8 @@ Every program section has the same layout:
    shifted, fake schedules? First the per-release dots for up to three series, then the summary for every
    series tested.
 4. **CVE fix latency.** How many days before (negative) or after (positive) NVD publication the fix shipped.
-5. **Verdict** in a few sentences.
+5. **Verdict** in a few sentences: first the program's **adoption** result (section 2b's tests for this program),
+   then its **feature use** result (everything else in the section).
 """)
 
 code(r"""
@@ -910,27 +1193,12 @@ def cadence_strip(prog):
     say(fam_txt.strip() + (" " if fam_txt else "") + f"**How to read it.** Time runs left to right. {NAME[prog]} shipped {len(rel)} stable public releases "
         f"on {fmtv(cad.get('n_release_days_utc'))} different days; with parallel branches counted once, the median gap "
         f"between releases is {fmtv(cad.get('median_days_between_collapsed'), 'g')} days. Of its {len(rows)} default changes, "
-        f"{n_obs} can be seen in zone data at all; only those can be tested against adoption, and only when they "
+        f"{n_obs} can be seen in zone data at all; only those can be tested against the zone data, and only when they "
         f"fall inside a covered stretch of a corpus with 24 months of data before them.")
 """)
 
 code(r"""
 OBS_SHORT = {k: v["label"] for k, v in jget(J7, "observable_mapping", "observables", default={}).items()}
-
-
-def is_step(df):
-    return df.test.astype(str).str.startswith("step")
-
-
-ALL_REL = "all stable public releases"
-
-
-def es_of(df):
-    return df.event_set.fillna(ALL_REL) if "event_set" in df.columns else pd.Series(ALL_REL, index=df.index)
-
-
-def es_label(es):
-    return "" if es == ALL_REL else f" [{es}]"
 
 
 OBS_NAME = {"alg1": "RSAMD5 share", "alg3_6": "DSA share", "alg5": "RSASHA1 (alg. 5) share",
@@ -1088,11 +1356,11 @@ def q1_release_dots(prog, max_series=3):
         pr = Q1R[(Q1R.program == prog) & (Q1R.test == row.test) & (Q1R.observable == row.observable)
                  & (Q1R.source == row.source) & (es_of(Q1R) == row.es)]
         tiny = (f"; every gap in this series is under {NEAR0:g} pp, so the share barely moves and an 'outside' result "
-                "here is a ranking artefact, not an adoption change") if len(pr) and pr.value.abs().max() < NEAR0 else ""
+                "here is a ranking artefact, not a real change") if len(pr) and pr.value.abs().max() < NEAR0 else ""
         parts.append(f"{OBS_NAME[row.observable]} in {SRC[row.source]}: {row.share_release_months_outside_band:.0%} of "
                      f"{int(row.release_months_tested)} release months outside the band, against "
                      f"{row.null_mean_share_outside:.0%} under shifted schedules{tiny}")
-    say("**How to read it.** If releases pushed adoption, the dots would sit mostly above (or below) the shaded "
+    say("**How to read it.** If releases pushed feature use, the dots would sit mostly above (or below) the shaded "
         "band. Dots scattered across it, with a few outside, is what any random set of months looks like. "
         + "; ".join(parts) + ". Neighbouring dots form smooth waves because consecutive months share 11 of "
         "their 12 after-months; that is why the test shifts the whole schedule instead of counting dots, and why the "
@@ -1138,27 +1406,6 @@ def q1_summary(prog):
         s += " Outside: " + "; ".join(f"{OBS_NAME[r.observable]} in {SRC[r.source]} "
                                       f"({pval(r.p_two_sided)})" for r in out.itertuples()) + "."
     say(s)
-
-
-REASONS = [("release months fill", "releases fill more than 75% of the testable window"),
-           ("the testable window", "the testable window is shorter than 24 months"),
-           ("the value never", "the value never appears in that corpus"),
-           ("the value is present", "the value is present in fewer than 12 months"),
-           ("no release month", "no release falls in the testable window"),
-           ("no month with at least", "the denominator never reaches the minimum count"),
-           ("no before-period", "there are not enough months before the event"),
-           ("no after-period", "there are not enough months after the event"),
-           ("the value is absent in every month", "the value is absent throughout the window"),
-           ("only ", "the series has too few testable months"),
-           ("no series", "there is no series"), ("the series is too short", "the series is too short")]
-
-
-def reason_counts(df):
-    out = {}
-    for r in df.reason.fillna(""):
-        lab = next((l for k, l in REASONS if r.startswith(k)), r[:60] or "no reason given")
-        out[lab] = out.get(lab, 0) + 1
-    return out
 
 
 def q1_untestable(prog):
@@ -1284,20 +1531,16 @@ def exp_dir(prog, obs):
     return None if m.empty else int(np.sign(m.expected_direction.iloc[0]))
 
 
-def binom_tail(k, n, p=0.1):
-    return sum(math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k, n + 1))
-
-
 def headline(prog):
     # one plain sentence: does adoption follow this program? generated from the step-test results
     if MAP[MAP.program == prog].empty:
-        return (f"The zone data cannot show whether adoption follows {NAME[prog]}: none of its default changes leaves "
-                "a trace in the zone files.")
+        return (f"The zone data cannot show whether feature use follows {NAME[prog]}: none of its default changes "
+                "changes a feature the zone files record.")
     q1t = Q1[(Q1.program == prog) & is_step(Q1) & (Q1.status == "tested") & (Q1.source != "fed.us")]
     q2t = Q2[(Q2.program == prog) & (Q2.test == "step12") & (Q2.status == "tested")]
     n, k = len(q1t) + len(q2t), int(q1t.beats_chance_mean.astype(bool).sum() + q2t.outside_90_band.astype(bool).sum())
     if n == 0:
-        return f"No test of {NAME[prog]} could run, so the data cannot say whether adoption follows it."
+        return f"No feature-use test of {NAME[prog]} could run, so the data cannot say whether feature use follows it."
     o2 = q2t[q2t.outside_90_band.astype(bool)]
     tiny = int((o2.observed.abs() < NEAR0).sum())
     against = int((~o2.in_expected_direction.astype(bool)).sum())
@@ -1309,9 +1552,9 @@ def headline(prog):
         against += int(d is not None and (r.percentile > 50) != (d > 0))
     ptail = binom_tail(k, n)
     if ptail < 0.05:
-        return (f"Some {NAME[prog]} results fall outside the band more often than chance ({k} of {n} tests, against "
+        return (f"Some {NAME[prog]} feature-use results fall outside the band more often than chance ({k} of {n} tests, against "
                 f"about {0.1 * n:.1f}); they are timing, not attribution, and are listed below.")
-    s_ = (f"Adoption does not bend after {NAME[prog]}'s releases or default changes more often than chance: {k} of "
+    s_ = (f"Feature use does not shift after {NAME[prog]}'s releases or default changes more often than chance: {k} of "
           f"{n} tests fall outside the band, against about {0.1 * n:.1f}.")
     if k:
         bits = []
@@ -1324,12 +1567,54 @@ def headline(prog):
     return s_
 
 
+def prev_line(prog):
+    # adoption (prevalence) result for one program, read from Phase 7's prevalence rows
+    q = Q1P[(Q1P.program == prog) & is_step(Q1P) & (Q1P.source != "fed.us")].copy()
+    if q.empty and Q2P[Q2P.program == prog].empty:
+        return f"**Adoption (share of domains signed).** {NA}."
+    q["es"] = es_of(q)
+    parts = []
+    for es, g_ in q.groupby("es", sort=True):
+        t_ = g_[g_.status == "tested"]
+        lab = "release schedule" + es_label(es)
+        if t_.empty:
+            c = reason_counts(g_)
+            parts.append(f"{lab}: no test ({max(c, key=c.get) if c else NA})")
+            continue
+        u = t_[t_.beats_chance_mean.astype(bool)]
+        txt = f"{lab}: {len(u)} of {len(t_)} tests unusual, about {0.1 * len(t_):.1f} expected"
+        if len(u):
+            txt += " (" + "; ".join(f"{PNAME[r.observable]} in {SRC[r.source]}, "
+                                   f"{'more' if r.percentile > 50 else 'fewer'} domains signed than the trend predicted"
+                                   for r in u.itertuples()) + ")"
+        parts.append(txt)
+    d = Q2P[(Q2P.program == prog) & (Q2P.test == "step12")]
+    dt = d[d.status == "tested"]
+    rows_ = PMAP[PMAP.program == prog].row_id.unique() if "row_id" in PMAP.columns else []
+    if len(dt):
+        u = dt[dt.outside_90_band.astype(bool)]
+        txt = f"default changes that could change signing: {len(u)} of {len(dt)} tests unusual"
+        if len(u):
+            txt += " (" + "; ".join(f"{r.row_id}, {PNAME[r.observable]} in {SRC[r.source]}, {pp(r.observed)}, "
+                                   f"{'in' if r.in_expected_direction else 'against'} the expected direction"
+                                   for r in u.itertuples()) + ")"
+        parts.append(txt)
+    elif len(rows_):
+        c = reason_counts(d[d.status != "tested"])
+        parts.append(f"its {len(rows_)} default change(s) that could change signing have no step test "
+                     f"({max(c, key=c.get) if c else NA})")
+    else:
+        parts.append("none of its default changes could change whether zones get signed")
+    return "**Adoption (share of domains signed, section 2b).** " + "; ".join(parts) + "."
+
+
 def verdict(prog):
-    out = [headline(prog)]
+    out = [prev_line(prog), "**Feature use.** " + headline(prog)]
     # releases
     if MAP[MAP.program == prog].empty:
-        out.append(f"Nothing to test: no {NAME[prog]} default change maps to anything the zone files record, so there "
-                   "is no default-change test and no release-schedule test. This is 'not observable', not 'no effect'.")
+        out.append(f"Nothing to test for feature use: no {NAME[prog]} default change alters a feature the zone files "
+                   "record, so there is no feature-use test of its defaults or releases. This is 'not observable', not "
+                   "'no effect'; its adoption result is above.")
     q1p = Q1[(Q1.program == prog) & is_step(Q1) & (Q1.source != "fed.us")].copy()
     q1p["es"] = es_of(q1p)
     for es, part in q1p.groupby("es", sort=True):
@@ -1471,9 +1756,10 @@ def program_section(prog):
     code(f'cadence_strip("{prog}")')
     md(f"#### Default changes of {NAME_PY[prog]} and what the step test found")
     code(f'q2_table("{prog}")\nq2_dotplot("{prog}")')
-    md(f"#### Does adoption bend after {NAME_PY[prog]}'s releases?")
+    md(f"#### Does feature use shift after {NAME_PY[prog]}'s releases?")
     if prog == "nsd":
-        md("NSD has no mapped observable, so its release schedule is not tested against any series.")
+        md("NSD has no default change that alters a feature the zone files record, so its release schedule is not "
+           "tested against any feature-use series. It is tested against adoption: see the verdict below.")
     else:
         pre_ = f'occupancy("{prog}")\n' if prog == "bind9" else ""
         code(pre_ + f'q1_release_dots("{prog}")\nq1_summary("{prog}")\nq1_untestable("{prog}")')
@@ -1499,7 +1785,7 @@ for p in PROGRAMS:
 md(r"""
 ## 4. Across programs
 
-The per-program sections asked "does adoption follow this program?". This section compares the programs with each
+The per-program sections asked "does the zone data follow this program?". This section compares the programs with each
 other, using Phase 4's verified results: when each mechanism first appears in each program, how far code lags the
 RFC, whether any program systematically goes first, and the one release that was clearly coordinated.
 """)
@@ -2012,6 +2298,14 @@ md(r"""
 """)
 
 code(r"""
+_no = jget(J7, "observable_mapping", "prevalence", "not_observable", default={}) or {}
+_pn = jget(J7, "q2_default_change_events", "prevalence", "summary", "step12", "rows_with_no_test_in_any_corpus", default=[])
+say("* **Adoption and feature use are different claims.** Section 2b asks whether software changes how many domains "
+    f"are signed ({ADOPT_DEF}); the rest asks whether it changes which features signed zones use. A null result for "
+    "one says nothing about the other. "
+    + ("In the reverse corpus only DS adoption can be measured: " + "; ".join(f"{PNAME.get(k, k)}: {v}" for k, v in _no.items())
+       + ". " if _no else "")
+    + (f"Default changes that could change signing but have no adoption test: {', '.join(_pn)}." if _pn else ""))
 # the corpus limits, from the data and from Phase 7's own "no test" reasons (never typed)
 _s2 = Q2[is_step(Q2)]
 _tested_any = set(_s2.loc[_s2.status == "tested", "row_id"])
@@ -2057,6 +2351,16 @@ for path in [("q1_per_program_releases", "aggregate", "step12", "tested"),
              ("q2_default_change_events", "summary", "step12", "n_tests"),
              ("q2_default_change_events", "summary", "step12", "n_outside_band")]:
     val("J7", *path)
+for path in [("q1_per_program_releases", "prevalence", "aggregate", "step12", "tested"),
+             ("q1_per_program_releases", "prevalence", "aggregate", "step12", "mean_outside_90pct_null"),
+             ("q1_per_program_releases", "prevalence", "aggregate", "step12", "expected_by_calibrated_rate"),
+             ("q2_default_change_events", "prevalence", "summary", "step12", "n_tests"),
+             ("q2_default_change_events", "prevalence", "summary", "step12", "n_outside_band"),
+             ("q2_default_change_events", "prevalence", "summary", "step12", "n_outside_and_expected_direction"),
+             ("q4_spikes", "prevalence", "summary", "aligned_within_3m")]:
+    val("J7", *path)
+_pv = [q for q in QUOTED if "prevalence" in q[3]]
+assert len(_pv) >= 4, f"only {len(_pv)} adoption (prevalence) numbers were registered"
 i8 = ("q8_coordinated_releases", "variants", "tag_dates", "tests", "distinct_release_pairs")
 val("J4", *i8, "observed"); val("J4", *i8, "p_value_ge")
 seen, rows = set(), []
