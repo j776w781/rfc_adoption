@@ -22,6 +22,14 @@ Phase 1 outputs present at stop time -- check `ls data/software/timelines/`:
 - The other seven agents (bind9, unbound, nsd, knot, opendnssec, pdns-auth, pdns-rec) were still running. They write only to `data/software/timelines/<program>.{json,md}` and do not commit. Whatever files exist when you resume are their output; a missing file means that agent did not finish -- re-run that program with the brief.
 - Phase 6 agent was still running; expected outputs: `scripts/prevalence_metrics.py`, `out/analysis/prevalence_metrics.{json,csv}`, `reporting/charts/prevalence/`, `docs/handoff/03_prevalence_metrics.md`, `tests/test_prevalence_metrics.py`, `data/external/secspider/README.md`.
 
+## Update 2026-09-29 (second resume)
+
+- knot and nsd outputs found complete; committed as wip alongside kresd (d07f9e97).
+- bind9, unbound, opendnssec, pdns-auth, pdns-rec re-spawned with the Phase 1 brief.
+- `02_phase3_verify_brief.md` written; Phase 3 verifiers launched for kresd, knot, nsd
+  while the five run. Verifier output goes to `docs/handoff/verify/<program>.md`.
+- Scratch venv rebuilt; full suite green on the branch.
+
 ## To resume
 
 1. `git checkout software-timelines-v2`; list `data/software/timelines/` and `docs/handoff/`.
