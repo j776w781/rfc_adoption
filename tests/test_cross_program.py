@@ -24,10 +24,11 @@ spec.loader.exec_module(cp)
 def ctx():
     data = {p: cp.load_program(p) for p in cp.PROGRAMS}
     rel = cp.build_release_index(data)
-    suspects = []
-    defaults, failures = cp.norm_defaults(data, rel, suspects)
+    suspects, null_tag = [], []
+    defaults, failures = cp.norm_defaults(data, rel, suspects, null_tag)
     cves = cp.norm_cves(data, rel)
-    return {"data": data, "rel": rel, "defaults": defaults, "failures": failures, "suspects": suspects, "cves": cves}
+    return {"data": data, "rel": rel, "defaults": defaults, "failures": failures, "suspects": suspects, "cves": cves,
+            "null_tag": null_tag}
 
 
 @pytest.fixture()
@@ -40,14 +41,14 @@ def tmp_out(tmp_path, monkeypatch):
 # ---------------------------------------------------------------- normalisation counts
 EXPECTED_COUNTS = {
     # program: (default rows normalised, of which default changes, CVE included, CVE excluded, CVE disputed, stable releases)
-    "bind9": (28, 26, 149, 58, 0, 444),
+    "bind9": (30, 29, 149, 58, 0, 444),
     "knot": (21, 21, 4, 9, 0, 174),
     "kresd": (18, 18, 14, 2, 0, 89),
     "nsd": (7, 7, 13, 1, 0, 130),
     "opendnssec": (15, 15, 0, 1, 0, 65),
-    "pdns-auth": (12, 12, 15, 0, 0, 132),
+    "pdns-auth": (10, 10, 15, 0, 0, 132),
     "pdns-rec": (22, 18, 52, 0, 0, 174),
-    "unbound": (30, 30, 65, 2, 12, 120),
+    "unbound": (31, 31, 65, 2, 12, 120),
 }
 
 
@@ -98,7 +99,7 @@ def test_nsd_230_uses_release_commit(ctx):
 CLONE_CHECKED = [
     # (row id, program, repo, tag, UTC instant from the clone)
     ("knot[2]@2.1.0", "knot", "knot", "v2.1.0", "2016-01-14T09:15:02Z"),               # ECDSA P-256 default
-    ("unbound[19]@1.13.2", "unbound", "unbound", "release-1.13.2", "2021-08-05T15:10:56Z"),  # NSEC3 cap 150
+    ("unbound[20]@1.13.2", "unbound", "unbound", "release-1.13.2", "2021-08-05T15:10:56Z"),  # NSEC3 cap 150
     ("nsec3-max-iterations-150", "pdns-rec", "pdns", "rec-4.5.2", "2021-06-07T11:54:06Z"),    # NSEC3 cap 150
     ("l01-nsec3-max-iterations-150", "bind9", "bind9", "v9.16.16", "2021-05-12T09:53:16Z"),   # NSEC3 cap 150
     ("kresd[14]@5.7.4", "kresd", "kresd", "v5.7.4", "2024-07-23T17:39:18Z"),            # KSK-2024 added
@@ -125,7 +126,9 @@ def test_topic_assignment_is_checked(ctx):
     mem = cp.topic_memberships(ctx["defaults"])
     assert len({m["topic"] for m in mem}) == 6
     # rows that are not default changes never enter a topic
-    assert not {"d22-cdns-cdnskey-options", "d23-bindkeys-revoked-key-removed"} & {m["row_id"] for m in mem}
+    assert "d22-cdns-cdnskey-options" not in {m["row_id"] for m in mem}
+    # d23 is a default change since 54400276 and joins the KSK-2010 removal milestone
+    assert any(m["row_id"] == "d23-bindkeys-revoked-key-removed" and m["sub"] == "ksk2010-19036-removed" for m in mem)
 
 
 def test_poisson_binomial():
@@ -163,3 +166,42 @@ def test_cve_latency_medians(ctx, tmp_out):
     assert q["bind9"]["latency_days_median"] == -13
     assert q["unbound"]["latency_days_median"] == 0
     assert q["bind9"]["dnssec_subset"].startswith("not classified")
+
+
+# ---------------------------------------------------------------- corrections after Phase 5
+def test_null_stable_tag_rows_are_excluded_not_failures(ctx):
+    assert ctx["failures"] == []
+    assert sorted(r["row_id"] for r in ctx["null_tag"]) == ["pdns-auth[5]@4.0.0", "pdns-auth[6]@4.0.0"]
+    assert all("pre-release only" in r["reason"] for r in ctx["null_tag"])
+    assert not {"pdns-auth[5]@4.0.0", "pdns-auth[6]@4.0.0"} & {r["row_id"] for r in ctx["defaults"]}
+
+
+def test_q7_collapsed_medians_values(ctx, tmp_out):
+    q = {r["program"]: r for r in cp.q7(ctx["data"])["per_program"]}
+    got = {p: (q[p]["n_release_days_utc"], q[p]["median_days_between_collapsed"]) for p in cp.PROGRAMS}
+    assert got == {"bind9": (242, 30), "knot": (157, 34.0), "kresd": (82, 37), "nsd": (119, 68.5),
+                   "opendnssec": (60, 61), "pdns-auth": (112, 50), "pdns-rec": (117, 34.5), "unbound": (118, 56)}
+    assert q["bind9"]["median_days_between"] == 3.39 and q["bind9"]["n_intervals_under_24h"] == 208
+
+
+def test_q2_pdns_auth_cites_row_7_and_bind9_sensitivity(ctx, tmp_out):
+    checklist = __import__("json").loads(cp.CHECKLIST.read_text())
+    q = cp.q2(ctx["defaults"], checklist)
+    first = {(c["rfc"], o["program"]): o["row_id"] for c in q["per_rfc"] for o in c["order"]}
+    assert first[("RFC 6605", "pdns-auth")] == "pdns-auth[7]@4.0.0"
+    assert first[("RFC 8624", "pdns-auth")] == "pdns-auth[7]@4.0.0"
+    sens = {(r["rfc"], r["row_id"]): r["lag_months"] for r in q["bind9_derived_sensitivity"]["rows"]}
+    assert sens == {("RFC 5011", "d04-root-trust-anchor-builtin"): 41.7, ("RFC 9276", "d18-nsec3param-default-0-0"): -6.2,
+                    ("RFC 9276", "l01-nsec3-max-iterations-150"): -14.7,
+                    ("RFC 5155", "d03-signzone-nsec3-iterations-100-to-10"): 23.6,
+                    ("RFC 6605", "d15-dnssec-policy-default-ecdsap256"): 94.4}
+    assert q["bind9_derived_sensitivity"]["chance_result_changes"] is False
+    assert (q["n_negative_lag_rows"], q["n_negative_lag_program_rfc"]) == (9, 6)
+
+
+def test_builtin_root_anchor_leader_is_unbound(ctx):
+    q = cp.q4(ctx["defaults"])
+    sub = next(r for r in q["sub_milestones"] if r["sub"] == "builtin-root-anchor-available")
+    assert (sub["leader"], sub["leader_row"], sub["leader_date"]) == ("unbound", "unbound[12]@1.4.7", "2010-11-05")
+    ksk = next(r for r in q["sub_milestones"] if r["sub"] == "ksk2010-19036-removed")
+    assert ksk["leader"] == "bind9"

@@ -30,10 +30,10 @@ bind9,,,,9.7.0,2010-02-16,True,,default_changes,NSEC3 iterations default 100 -> 
 opendnssec,,,,1.2.0,2011-03-18,True,,default_changes,default signing algorithm -> 8 (RSASHA256),"[""opendnssec[5]@1.2.0b1""]"
 knot,,,,2.0.0,2015-06-26,True,,default_changes,default signing algorithm -> RSASHA256,"[""knot[1]@2.0.0""]"
 knot,,,,2.1.0,2016-01-14,True,,default_changes,default signing algorithm -> ECDSAP256SHA256,"[""knot[2]@2.1.0""]"
-pdns-auth,,,,4.0.0,2016-07-08,True,,default_changes,default ZSK algorithm -> ECDSA P-256,"[""pdns-auth[5]@4.0.0"", ""pdns-auth[6]@4.0.0"", ""pdns-auth[7]@4.0.0"", ""pdns-auth[8]@4.0.0"", ""pdns-auth[9]@4.0.0""]"
-pdns-auth,,,,4.0.0,2016-07-08,True,,default_changes,default KSK algorithm -> ECDSA P-256,"[""pdns-auth[5]@4.0.0"", ""pdns-auth[6]@4.0.0"", ""pdns-auth[7]@4.0.0"", ""pdns-auth[8]@4.0.0"", ""pdns-auth[9]@4.0.0""]"
+pdns-auth,,,,4.0.0,2016-07-08,True,,default_changes,default ZSK algorithm -> ECDSA P-256,"[""pdns-auth[7]@4.0.0"", ""pdns-auth[8]@4.0.0"", ""pdns-auth[9]@4.0.0""]"
+pdns-auth,,,,4.0.0,2016-07-08,True,,default_changes,default KSK algorithm -> ECDSA P-256,"[""pdns-auth[7]@4.0.0"", ""pdns-auth[8]@4.0.0"", ""pdns-auth[9]@4.0.0""]"
 bind9,,,,9.16.0,2020-02-12,True,,default_changes,built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK,"[""d13-ds-cds-sha1-dropped"", ""d14-keygen-rsa-zsk-2048"", ""d15-dnssec-policy-default-ecdsap256"", ""d16-dnssec-policy-default-key-size-2048""]"
 pdns-rec,,,,4.1.0,2017-12-04,True,,validator_limits,reject zones with too many NSEC3 iterations,"[""nsec3-max-iterations-2500""]"
-unbound,,,,1.13.2,2021-08-05,True,,validator_limits,"NSEC3 max iterations lowered to 150, matching other vendors","[""unbound[19]@1.13.2""]"
+unbound,,,,1.13.2,2021-08-05,True,,validator_limits,"NSEC3 max iterations lowered to 150, matching other vendors","[""unbound[20]@1.13.2""]"
 pdns-auth,,,,4.5.0,2021-07-12,True,,validator_limits,max-nsec3-iterations lowered to 100,"[""pdns-auth[10]@4.5.0""]"
 knot,,,,3.1.5,2021-12-20,False,no timeline default_changes row has stable tag v3.1.5,validator_limits,config check on the default NSEC3 iteration count,[]

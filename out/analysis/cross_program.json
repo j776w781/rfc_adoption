@@ -57,16 +57,40 @@
    "pdns-auth": "tag = fix_tag; date = fix_released; always included; latency_days_public reported beside latency_days",
    "pdns-rec": "tag = fix_tag; date = fix_released; included when applicable is True; fix_changelog_released_text and latency_days_public reported beside",
    "others": "tag = fix_tag; date = fix_released; included when applicable is True and the tag is not null; applicable == 'disputed' reported as a separate group; latency_days used as recorded",
-   "pre_release_fix_tags": "where fix_tag is not a stable release (five unbound rows and the twelve disputed rows) the recorded latency_days is kept as the headline figure, as the brief requires, and latency_days_stable (first_stable_tag date minus nvd_published) is reported beside it; question 8 timing always uses the stable release"
+   "pre_release_fix_tags": "where fix_tag is not a stable release (counts per program in q6 n_pre_release_fix_tags) the recorded latency_days is kept as the headline figure, as the brief requires, and latency_days_stable (first_stable_tag date minus nvd_published) is reported beside it; question 8 timing always uses the stable release"
   },
   "dnssec_related": "used as recorded; bind9 rows carry no dnssec_related field and are reported as 'not classified'. knot rows DO carry dnssec_related (the brief said they did not); the recorded values are used, not keyword inference",
   "codebases": "pdns-auth and pdns-rec share pdns.git and are one codebase 'pdns' in question 8"
  },
+ "normalisation_counts": {
+  "opendnssec_rows_using_version_fallback": [
+   "opendnssec[4]@1.1.1",
+   "opendnssec[6]@1.3.11",
+   "opendnssec[9]@1.3.17",
+   "opendnssec[10]@1.4.4",
+   "opendnssec[12]@2.0.2",
+   "opendnssec[13]@2.1.0",
+   "opendnssec[14]@2.1.3"
+  ],
+  "cve_rows_with_pre_release_fix_tag": {
+   "bind9": 0,
+   "knot": 0,
+   "kresd": 0,
+   "nsd": 0,
+   "opendnssec": 0,
+   "pdns-auth": 0,
+   "pdns-rec": 0,
+   "unbound": 4
+  },
+  "disputed_rows_with_pre_release_fix_tag": 12,
+  "default_rows_null_stable_tag": 2,
+  "row_id_warning": "index-based row ids shift when a row is inserted: commit 54400276 inserted unbound[12]@1.4.7, so unbound rows from 1.6.1 on moved up by one index; the version part of the id is stable"
+ },
  "row_counts": {
   "bind9": {
-   "default_changes_rows": 28,
-   "default_changes_normalised": 28,
-   "default_changes_is_default_change": 26,
+   "default_changes_rows": 30,
+   "default_changes_normalised": 30,
+   "default_changes_is_default_change": 29,
    "cve_rows": 207,
    "cve_included": 149,
    "cve_disputed": 0,
@@ -115,8 +139,8 @@
   },
   "pdns-auth": {
    "default_changes_rows": 12,
-   "default_changes_normalised": 12,
-   "default_changes_is_default_change": 12,
+   "default_changes_normalised": 10,
+   "default_changes_is_default_change": 10,
    "cve_rows": 15,
    "cve_included": 15,
    "cve_disputed": 0,
@@ -134,9 +158,9 @@
    "stable_releases": 174
   },
   "unbound": {
-   "default_changes_rows": 30,
-   "default_changes_normalised": 30,
-   "default_changes_is_default_change": 30,
+   "default_changes_rows": 31,
+   "default_changes_normalised": 31,
+   "default_changes_is_default_change": 31,
    "cve_rows": 79,
    "cve_included": 65,
    "cve_disputed": 12,
@@ -146,17 +170,25 @@
  },
  "excluded_rows": {
   "default_changes_failing_stable_tag_assert": [],
+  "default_changes_null_stable_tag": [
+   {
+    "program": "pdns-auth",
+    "row_id": "pdns-auth[5]@4.0.0",
+    "row_tag": "auth-4.0.0-alpha1",
+    "reason": "stable tag is null: the state was pre-release only and no stable release shipped it (Phase 5: pre-release only. KSK \"\" / ZSK ecdsa256 exists only at auth-4.0.0-alpha1 and alpha2; from alpha3 (1fe96a070, row [8]) through auth-4.0.0 it is KSK ecdsa256 / ZSK \"\". No stable release shipped this state.)"
+   },
+   {
+    "program": "pdns-auth",
+    "row_id": "pdns-auth[6]@4.0.0",
+    "row_tag": "auth-4.0.0-alpha1",
+    "reason": "stable tag is null: the state was pre-release only and no stable release shipped it (Phase 5: pre-release only. KSK \"\" / ZSK ecdsa256 exists only at auth-4.0.0-alpha1 and alpha2; from alpha3 (1fe96a070, row [8]) through auth-4.0.0 it is KSK ecdsa256 / ZSK \"\". No stable release shipped this state.)"
+   }
+  ],
   "default_changes_not_default_change": [
    {
     "program": "bind9",
     "row_id": "d22-cdns-cdnskey-options",
     "kind": "support-added",
-    "reason": "value_changed false (bind9) / is_default_change false (pdns): kept in question 1, left out of questions 3, 4 and 8"
-   },
-   {
-    "program": "bind9",
-    "row_id": "d23-bindkeys-revoked-key-removed",
-    "kind": "other",
     "reason": "value_changed false (bind9) / is_default_change false (pdns): kept in question 1, left out of questions 3, 4 and 8"
    },
    {
@@ -738,12 +770,10 @@
     "first_stable_date": "2016-07-08",
     "public_tag": null,
     "public_date": null,
-    "row_id": "pdns-auth[5]@4.0.0",
+    "row_id": "pdns-auth[7]@4.0.0",
     "is_default_change": true,
-    "n_rows": 4,
+    "n_rows": 2,
     "all_row_ids": [
-     "pdns-auth[5]@4.0.0",
-     "pdns-auth[6]@4.0.0",
      "pdns-auth[7]@4.0.0",
      "pdns-auth[8]@4.0.0"
     ]
@@ -806,21 +836,6 @@
     "n_rows": 1,
     "all_row_ids": [
      "unbound[7]@1.4.7"
-    ]
-   },
-   {
-    "mechanism": "alg-rsa-sha2",
-    "program": "bind9",
-    "kind": "removal",
-    "first_stable_tag": "v9.14.0",
-    "first_stable_date": "2019-03-20",
-    "public_tag": null,
-    "public_date": null,
-    "row_id": "d10-dsa-removed",
-    "is_default_change": true,
-    "n_rows": 1,
-    "all_row_ids": [
-     "d10-dsa-removed"
     ]
    },
    {
@@ -1110,11 +1125,11 @@
     "first_stable_date": "2017-04-13",
     "public_tag": null,
     "public_date": null,
-    "row_id": "unbound[13]@1.6.2",
+    "row_id": "unbound[14]@1.6.2",
     "is_default_change": true,
     "n_rows": 1,
     "all_row_ids": [
-     "unbound[13]@1.6.2"
+     "unbound[14]@1.6.2"
     ]
    },
    {
@@ -1328,8 +1343,23 @@
     "n_rows": 3,
     "all_row_ids": [
      "unbound[1]@0.5",
-     "unbound[19]@1.13.2",
-     "unbound[23]@1.19.1"
+     "unbound[20]@1.13.2",
+     "unbound[24]@1.19.1"
+    ]
+   },
+   {
+    "mechanism": "other",
+    "program": "bind9",
+    "kind": "removal",
+    "first_stable_tag": "v9.14.0",
+    "first_stable_date": "2019-03-20",
+    "public_tag": null,
+    "public_date": null,
+    "row_id": "d10-dsa-removed",
+    "is_default_change": true,
+    "n_rows": 1,
+    "all_row_ids": [
+     "d10-dsa-removed"
     ]
    },
    {
@@ -1396,7 +1426,7 @@
     "n_rows": 2,
     "all_row_ids": [
      "unbound[10]@1.4.19",
-     "unbound[17]@1.10.0"
+     "unbound[18]@1.10.0"
     ]
    },
    {
@@ -1478,11 +1508,11 @@
     "first_stable_date": "2026-04-23",
     "public_tag": null,
     "public_date": null,
-    "row_id": "unbound[27]@1.25.0",
+    "row_id": "unbound[28]@1.25.0",
     "is_default_change": true,
     "n_rows": 1,
     "all_row_ids": [
-     "unbound[27]@1.25.0"
+     "unbound[28]@1.25.0"
     ]
    },
    {
@@ -1527,10 +1557,12 @@
     "public_date": null,
     "row_id": "d04-root-trust-anchor-builtin",
     "is_default_change": true,
-    "n_rows": 4,
+    "n_rows": 6,
     "all_row_ids": [
      "d04-root-trust-anchor-builtin",
+     "d29-trust-anchor-telemetry-default-yes",
      "d05-builtin-root-ksk-2017",
+     "d30-root-key-sentinel-default-yes",
      "d07-validation-auto-default",
      "d24-bindkeys-root-2025-ds"
     ]
@@ -1544,7 +1576,7 @@
     "public_tag": null,
     "public_date": null,
     "row_id": "d23-bindkeys-revoked-key-removed",
-    "is_default_change": false,
+    "is_default_change": true,
     "n_rows": 1,
     "all_row_ids": [
      "d23-bindkeys-revoked-key-removed"
@@ -1573,19 +1605,20 @@
     "mechanism": "trust-anchor-5011",
     "program": "unbound",
     "kind": "not-recorded",
-    "first_stable_tag": "release-1.6.1",
-    "first_stable_date": "2017-02-14",
+    "first_stable_tag": "release-1.4.7",
+    "first_stable_date": "2010-11-05",
     "public_tag": null,
     "public_date": null,
-    "row_id": "unbound[12]@1.6.1",
+    "row_id": "unbound[12]@1.4.7",
     "is_default_change": true,
-    "n_rows": 5,
+    "n_rows": 6,
     "all_row_ids": [
-     "unbound[12]@1.6.1",
-     "unbound[14]@1.6.7",
-     "unbound[15]@1.7.1",
-     "unbound[18]@1.11.0",
-     "unbound[24]@1.21.0"
+     "unbound[12]@1.4.7",
+     "unbound[13]@1.6.1",
+     "unbound[15]@1.6.7",
+     "unbound[16]@1.7.1",
+     "unbound[19]@1.11.0",
+     "unbound[25]@1.21.0"
     ]
    },
    {
@@ -1725,14 +1758,14 @@
      "unbound[3]@1.1.0",
      "unbound[8]@1.4.8",
      "unbound[11]@1.5.5",
-     "unbound[16]@1.8.0",
-     "unbound[20]@1.15.0",
-     "unbound[21]@1.16.1",
-     "unbound[22]@1.19.1",
-     "unbound[25]@1.22.0",
-     "unbound[26]@1.23.0",
-     "unbound[28]@1.26.0",
-     "unbound[29]@1.26.1"
+     "unbound[17]@1.8.0",
+     "unbound[21]@1.15.0",
+     "unbound[22]@1.16.1",
+     "unbound[23]@1.19.1",
+     "unbound[26]@1.22.0",
+     "unbound[27]@1.23.0",
+     "unbound[29]@1.26.0",
+     "unbound[30]@1.26.1"
     ]
    }
   ],
@@ -1824,6 +1857,11 @@
    },
    {
     "mechanism": "alg-rsa-sha2",
+    "program": "bind9",
+    "meaning": "no default_changes row for this mechanism in this program's timeline; this is not evidence that the program never supported it (support additions are recorded only where they came with a default change)"
+   },
+   {
+    "mechanism": "alg-rsa-sha2",
     "program": "kresd",
     "meaning": "no default_changes row for this mechanism in this program's timeline; this is not evidence that the program never supported it (support additions are recorded only where they came with a default change)"
    },
@@ -1905,11 +1943,6 @@
    {
     "mechanism": "nsec3-iterations",
     "program": "opendnssec",
-    "meaning": "no default_changes row for this mechanism in this program's timeline; this is not evidence that the program never supported it (support additions are recorded only where they came with a default change)"
-   },
-   {
-    "mechanism": "other",
-    "program": "bind9",
     "meaning": "no default_changes row for this mechanism in this program's timeline; this is not evidence that the program never supported it (support additions are recorded only where they came with a default change)"
    },
    {
@@ -2094,6 +2127,8 @@
    "d22-cdns-cdnskey-options",
    "d23-bindkeys-revoked-key-removed",
    "d24-bindkeys-root-2025-ds",
+   "d29-trust-anchor-telemetry-default-yes",
+   "d30-root-key-sentinel-default-yes",
    "dnssec-default-process",
    "dnssec-default-process-no-validate",
    "dnssec-disabled-algorithms-auto",
@@ -2181,8 +2216,6 @@
    "pdns-auth[2]@3.3.2",
    "pdns-auth[3]@3.4.0",
    "pdns-auth[4]@3.4.7",
-   "pdns-auth[5]@4.0.0",
-   "pdns-auth[6]@4.0.0",
    "pdns-auth[7]@4.0.0",
    "pdns-auth[8]@4.0.0",
    "pdns-auth[9]@4.0.0",
@@ -2195,26 +2228,27 @@
    "unbound[0]@0.5",
    "unbound[10]@1.4.19",
    "unbound[11]@1.5.5",
-   "unbound[12]@1.6.1",
-   "unbound[13]@1.6.2",
-   "unbound[14]@1.6.7",
-   "unbound[15]@1.7.1",
-   "unbound[16]@1.8.0",
-   "unbound[17]@1.10.0",
-   "unbound[18]@1.11.0",
-   "unbound[19]@1.13.2",
+   "unbound[12]@1.4.7",
+   "unbound[13]@1.6.1",
+   "unbound[14]@1.6.2",
+   "unbound[15]@1.6.7",
+   "unbound[16]@1.7.1",
+   "unbound[17]@1.8.0",
+   "unbound[18]@1.10.0",
+   "unbound[19]@1.11.0",
    "unbound[1]@0.5",
-   "unbound[20]@1.15.0",
-   "unbound[21]@1.16.1",
-   "unbound[22]@1.19.1",
+   "unbound[20]@1.13.2",
+   "unbound[21]@1.15.0",
+   "unbound[22]@1.16.1",
    "unbound[23]@1.19.1",
-   "unbound[24]@1.21.0",
-   "unbound[25]@1.22.0",
-   "unbound[26]@1.23.0",
-   "unbound[27]@1.25.0",
-   "unbound[28]@1.26.0",
-   "unbound[29]@1.26.1",
+   "unbound[24]@1.19.1",
+   "unbound[25]@1.21.0",
+   "unbound[26]@1.22.0",
+   "unbound[27]@1.23.0",
+   "unbound[28]@1.25.0",
+   "unbound[29]@1.26.0",
    "unbound[2]@0.6",
+   "unbound[30]@1.26.1",
    "unbound[3]@1.1.0",
    "unbound[4]@1.3.0",
    "unbound[5]@1.4.0",
@@ -2225,17 +2259,16 @@
   ]
  },
  "q2_code_lag_vs_rfc": {
-  "description": "For each default_changes row naming a checklist RFC in rfcs: timing date (public release for pdns-rec rows citing never-public tags; otherwise the first stable release) minus the RFC publication_date, in months of 30.44 days. Per RFC, each program's earliest such row, in order, and the spread from first to last program.",
-  "caveat": "Rows cite an RFC when the default change relates to it; the earliest row per program is the first DEFAULT change citing the RFC, not necessarily first support. bind9 rows carry no rfcs field, so bind9 is absent from this question; that is a gap in the timeline schema, not a finding.",
-  "programs_without_rfcs_field": [
-   "bind9"
-  ],
+  "description": "For each default_changes row naming a checklist RFC in its recorded rfcs field, default change or not (support-added and limit-changed rows are included): timing date (public release for pdns-rec rows citing never-public tags; otherwise the first stable release) minus the RFC publication_date, in months of 30.44 days. Per RFC, each program's earliest such row, in order, and the spread from first to last program.",
+  "caveat": "The earliest row per program is the first row of any kind citing the RFC, not necessarily first support. bind9 rows carry no rfcs field, so bind9 is absent from the main table; four bind9 rows name RFC 5011 or RFC 9276 in their own text, and bind9_derived_sensitivity shows the effect of including them.",
+  "programs_without_rfcs_field": [],
   "rows": [
    {
     "rfc": "RFC 4033",
     "publication_date": "2005-03-01",
     "program": "nsd",
     "row_id": "nsd[2]@2.3.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "rrsig",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2254,6 +2287,7 @@
     "publication_date": "2005-03-01",
     "program": "unbound",
     "row_id": "unbound[0]@0.5",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2272,6 +2306,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "dnssec-setting-introduced",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "support-added",
     "is_default_change": false,
@@ -2290,6 +2325,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "dnssec-default-process-no-validate",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "default-changed",
     "is_default_change": true,
@@ -2308,6 +2344,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "dnssec-default-process",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "default-changed",
     "is_default_change": true,
@@ -2326,6 +2363,7 @@
     "publication_date": "2005-03-01",
     "program": "nsd",
     "row_id": "nsd[2]@2.3.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "rrsig",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2344,6 +2382,7 @@
     "publication_date": "2005-03-01",
     "program": "unbound",
     "row_id": "unbound[0]@0.5",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2362,6 +2401,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "dnssec-setting-introduced",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "support-added",
     "is_default_change": false,
@@ -2380,6 +2420,7 @@
     "publication_date": "2005-03-01",
     "program": "opendnssec",
     "row_id": "opendnssec[13]@2.1.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "ds-digest",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2398,6 +2439,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "revoked-dnskey-rejected",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "dnskey",
     "kind": "support-added",
     "is_default_change": false,
@@ -2416,6 +2458,7 @@
     "publication_date": "2005-03-01",
     "program": "nsd",
     "row_id": "nsd[2]@2.3.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "rrsig",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2434,6 +2477,7 @@
     "publication_date": "2005-03-01",
     "program": "nsd",
     "row_id": "nsd[3]@3.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "rrsig",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2452,6 +2496,7 @@
     "publication_date": "2005-03-01",
     "program": "unbound",
     "row_id": "unbound[0]@0.5",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2470,6 +2515,7 @@
     "publication_date": "2005-03-01",
     "program": "unbound",
     "row_id": "unbound[6]@1.4.6",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "dnskey",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2488,6 +2534,7 @@
     "publication_date": "2005-03-01",
     "program": "unbound",
     "row_id": "unbound[8]@1.4.8",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2506,6 +2553,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "dnssec-setting-introduced",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "support-added",
     "is_default_change": false,
@@ -2524,6 +2572,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "signature-inception-skew",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "rrsig",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2542,6 +2591,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-rrsigs-per-record",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2560,6 +2610,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-nsec3s-per-record",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2578,6 +2629,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-signature-validations-per-query",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2596,6 +2648,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-nsec3-hash-computations-per-query",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2614,6 +2667,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-aggressive-cache-max-nsec3-hash-cost",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2632,6 +2686,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-ds-per-zone",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2650,6 +2705,7 @@
     "publication_date": "2005-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-dnskeys",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -2667,7 +2723,8 @@
     "rfc": "RFC 4035",
     "publication_date": "2005-03-01",
     "program": "unbound",
-    "row_id": "unbound[22]@1.19.1",
+    "row_id": "unbound[23]@1.19.1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2686,6 +2743,7 @@
     "publication_date": "2006-05-01",
     "program": "opendnssec",
     "row_id": "opendnssec[13]@2.1.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "ds-digest",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2703,7 +2761,8 @@
     "rfc": "RFC 4509",
     "publication_date": "2006-05-01",
     "program": "unbound",
-    "row_id": "unbound[13]@1.6.2",
+    "row_id": "unbound[14]@1.6.2",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "ds-digest",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2722,6 +2781,7 @@
     "publication_date": "2006-05-01",
     "program": "knot",
     "row_id": "knot[11]@2.8.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "ds-digest",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2740,6 +2800,7 @@
     "publication_date": "2006-05-01",
     "program": "kresd",
     "row_id": "kresd[10]@5.5.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "ds-digest",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2757,7 +2818,27 @@
     "rfc": "RFC 5011",
     "publication_date": "2007-09-01",
     "program": "unbound",
-    "row_id": "unbound[12]@1.6.1",
+    "row_id": "unbound[12]@1.4.7",
+    "rfc_source": "recorded rfcs field",
+    "mechanism": "trust-anchor-5011",
+    "kind": "not-recorded",
+    "is_default_change": true,
+    "stable_tag": "release-1.4.7",
+    "stable_date": "2010-11-05",
+    "public_tag": null,
+    "public_date": null,
+    "timing_date": "2010-11-05",
+    "lag_days": 1161,
+    "lag_months": 38.1,
+    "lag_months_stable_tag": 38.1,
+    "negative_lag": false
+   },
+   {
+    "rfc": "RFC 5011",
+    "publication_date": "2007-09-01",
+    "program": "unbound",
+    "row_id": "unbound[13]@1.6.1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "trust-anchor-5011",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2776,6 +2857,7 @@
     "publication_date": "2007-09-01",
     "program": "kresd",
     "row_id": "kresd[4]@2.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "trust-anchor-5011",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2793,7 +2875,8 @@
     "rfc": "RFC 5011",
     "publication_date": "2007-09-01",
     "program": "unbound",
-    "row_id": "unbound[18]@1.11.0",
+    "row_id": "unbound[19]@1.11.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "trust-anchor-5011",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2812,6 +2895,7 @@
     "publication_date": "2007-09-01",
     "program": "pdns-rec",
     "row_id": "revoked-dnskey-rejected",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "dnskey",
     "kind": "support-added",
     "is_default_change": false,
@@ -2829,7 +2913,8 @@
     "rfc": "RFC 5011",
     "publication_date": "2007-09-01",
     "program": "unbound",
-    "row_id": "unbound[24]@1.21.0",
+    "row_id": "unbound[25]@1.21.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "trust-anchor-5011",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2848,6 +2933,7 @@
     "publication_date": "2008-03-01",
     "program": "unbound",
     "row_id": "unbound[1]@0.5",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2866,6 +2952,7 @@
     "publication_date": "2008-03-01",
     "program": "nsd",
     "row_id": "nsd[4]@3.1.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2884,6 +2971,7 @@
     "publication_date": "2008-03-01",
     "program": "opendnssec",
     "row_id": "opendnssec[3]@1.1.0rc1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2902,6 +2990,7 @@
     "publication_date": "2008-03-01",
     "program": "opendnssec",
     "row_id": "opendnssec[6]@1.3.11",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2920,6 +3009,7 @@
     "publication_date": "2008-03-01",
     "program": "opendnssec",
     "row_id": "opendnssec[7]@1.4.0b2",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2938,6 +3028,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[1]@3.3",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "default-changed",
     "is_default_change": true,
@@ -2956,6 +3047,7 @@
     "publication_date": "2008-03-01",
     "program": "opendnssec",
     "row_id": "opendnssec[10]@1.4.4",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2974,6 +3066,7 @@
     "publication_date": "2008-03-01",
     "program": "opendnssec",
     "row_id": "opendnssec[9]@1.3.17",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -2992,6 +3085,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[3]@3.4.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3010,6 +3104,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[2]@3.3.2",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "default-changed",
     "is_default_change": true,
@@ -3028,6 +3123,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[4]@3.4.7",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3046,6 +3142,7 @@
     "publication_date": "2008-03-01",
     "program": "knot",
     "row_id": "knot[4]@2.3.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3064,6 +3161,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "nsec3-max-iterations-2500",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3082,6 +3180,7 @@
     "publication_date": "2008-03-01",
     "program": "kresd",
     "row_id": "kresd[9]@5.3.1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3100,6 +3199,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "nsec3-max-iterations-150",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3118,6 +3218,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[10]@4.5.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3135,7 +3236,8 @@
     "rfc": "RFC 5155",
     "publication_date": "2008-03-01",
     "program": "unbound",
-    "row_id": "unbound[19]@1.13.2",
+    "row_id": "unbound[20]@1.13.2",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3154,6 +3256,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[11]@4.6.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "default-changed",
     "is_default_change": true,
@@ -3172,6 +3275,7 @@
     "publication_date": "2008-03-01",
     "program": "knot",
     "row_id": "knot[14]@3.2.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3190,6 +3294,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "nsec3-max-iterations-50",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3208,6 +3313,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-rrsigs-per-record",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3226,6 +3332,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-nsec3s-per-record",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3244,6 +3351,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-signature-validations-per-query",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3262,6 +3370,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-nsec3-hash-computations-per-query",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3280,6 +3389,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-aggressive-cache-max-nsec3-hash-cost",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3298,6 +3408,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-ds-per-zone",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3316,6 +3427,7 @@
     "publication_date": "2008-03-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-dnskeys",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3333,7 +3445,8 @@
     "rfc": "RFC 5155",
     "publication_date": "2008-03-01",
     "program": "unbound",
-    "row_id": "unbound[23]@1.19.1",
+    "row_id": "unbound[24]@1.19.1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3352,6 +3465,7 @@
     "publication_date": "2009-10-01",
     "program": "unbound",
     "row_id": "unbound[4]@1.3.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-rsa-sha2",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3370,6 +3484,7 @@
     "publication_date": "2009-10-01",
     "program": "unbound",
     "row_id": "unbound[5]@1.4.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-rsa-sha2",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3388,6 +3503,7 @@
     "publication_date": "2009-10-01",
     "program": "opendnssec",
     "row_id": "opendnssec[5]@1.2.0b1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-rsa-sha2",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3406,6 +3522,7 @@
     "publication_date": "2009-10-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[0]@3.2",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-rsa-sha2",
     "kind": "default-changed",
     "is_default_change": true,
@@ -3424,6 +3541,7 @@
     "publication_date": "2009-10-01",
     "program": "knot",
     "row_id": "knot[1]@2.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-rsa-sha2",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3442,6 +3560,7 @@
     "publication_date": "2009-10-01",
     "program": "knot",
     "row_id": "knot[3]@2.2.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-rsa-sha2",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3460,6 +3579,7 @@
     "publication_date": "2010-07-01",
     "program": "unbound",
     "row_id": "unbound[7]@1.4.7",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-gost",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3478,6 +3598,7 @@
     "publication_date": "2012-04-01",
     "program": "unbound",
     "row_id": "unbound[9]@1.4.17",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-ecdsa",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3496,6 +3617,7 @@
     "publication_date": "2012-04-01",
     "program": "knot",
     "row_id": "knot[2]@2.1.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-ecdsa",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3513,43 +3635,8 @@
     "rfc": "RFC 6605",
     "publication_date": "2012-04-01",
     "program": "pdns-auth",
-    "row_id": "pdns-auth[5]@4.0.0",
-    "mechanism": "alg-ecdsa",
-    "kind": "default-changed",
-    "is_default_change": true,
-    "stable_tag": "auth-4.0.0",
-    "stable_date": "2016-07-08",
-    "public_tag": null,
-    "public_date": null,
-    "timing_date": "2016-07-08",
-    "lag_days": 1559,
-    "lag_months": 51.2,
-    "lag_months_stable_tag": 51.2,
-    "negative_lag": false
-   },
-   {
-    "rfc": "RFC 6605",
-    "publication_date": "2012-04-01",
-    "program": "pdns-auth",
-    "row_id": "pdns-auth[6]@4.0.0",
-    "mechanism": "alg-ecdsa",
-    "kind": "default-changed",
-    "is_default_change": true,
-    "stable_tag": "auth-4.0.0",
-    "stable_date": "2016-07-08",
-    "public_tag": null,
-    "public_date": null,
-    "timing_date": "2016-07-08",
-    "lag_days": 1559,
-    "lag_months": 51.2,
-    "lag_months_stable_tag": 51.2,
-    "negative_lag": false
-   },
-   {
-    "rfc": "RFC 6605",
-    "publication_date": "2012-04-01",
-    "program": "pdns-auth",
     "row_id": "pdns-auth[7]@4.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-ecdsa",
     "kind": "default-changed",
     "is_default_change": true,
@@ -3568,6 +3655,7 @@
     "publication_date": "2012-04-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[8]@4.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-ecdsa",
     "kind": "default-changed",
     "is_default_change": true,
@@ -3586,6 +3674,7 @@
     "publication_date": "2013-02-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-rrsigs-per-record",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3604,6 +3693,7 @@
     "publication_date": "2013-02-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-nsec3s-per-record",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3622,6 +3712,7 @@
     "publication_date": "2013-02-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-signature-validations-per-query",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3640,6 +3731,7 @@
     "publication_date": "2013-02-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-nsec3-hash-computations-per-query",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3658,6 +3750,7 @@
     "publication_date": "2013-02-01",
     "program": "pdns-rec",
     "row_id": "keytrap-aggressive-cache-max-nsec3-hash-cost",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3676,6 +3769,7 @@
     "publication_date": "2013-02-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-ds-per-zone",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3694,6 +3788,7 @@
     "publication_date": "2013-02-01",
     "program": "pdns-rec",
     "row_id": "keytrap-max-dnskeys",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -3711,7 +3806,8 @@
     "rfc": "RFC 6840",
     "publication_date": "2013-02-01",
     "program": "unbound",
-    "row_id": "unbound[22]@1.19.1",
+    "row_id": "unbound[23]@1.19.1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3730,6 +3826,7 @@
     "publication_date": "2014-09-01",
     "program": "knot",
     "row_id": "knot[10]@2.8.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "cds-cdnskey",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3748,6 +3845,7 @@
     "publication_date": "2017-02-01",
     "program": "pdns-rec",
     "row_id": "ed25519-validation",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-eddsa",
     "kind": "support-added",
     "is_default_change": false,
@@ -3766,6 +3864,7 @@
     "publication_date": "2017-07-01",
     "program": "kresd",
     "row_id": "kresd[2]@2.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "other",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3784,6 +3883,7 @@
     "publication_date": "2017-07-01",
     "program": "kresd",
     "row_id": "kresd[5]@2.4.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3802,6 +3902,7 @@
     "publication_date": "2017-07-01",
     "program": "kresd",
     "row_id": "kresd[8]@4.1.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "other",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3820,6 +3921,7 @@
     "publication_date": "2017-07-01",
     "program": "pdns-rec",
     "row_id": "aggressive-nsec-cache",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "support-added",
     "is_default_change": true,
@@ -3837,7 +3939,8 @@
     "rfc": "RFC 8198",
     "publication_date": "2017-07-01",
     "program": "unbound",
-    "row_id": "unbound[20]@1.15.0",
+    "row_id": "unbound[21]@1.15.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3856,6 +3959,7 @@
     "publication_date": "2017-07-01",
     "program": "kresd",
     "row_id": "kresd[11]@5.6.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "other",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3873,7 +3977,8 @@
     "rfc": "RFC 8198",
     "publication_date": "2017-07-01",
     "program": "unbound",
-    "row_id": "unbound[25]@1.22.0",
+    "row_id": "unbound[26]@1.22.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3891,43 +3996,8 @@
     "rfc": "RFC 8624",
     "publication_date": "2019-06-01",
     "program": "pdns-auth",
-    "row_id": "pdns-auth[5]@4.0.0",
-    "mechanism": "alg-ecdsa",
-    "kind": "default-changed",
-    "is_default_change": true,
-    "stable_tag": "auth-4.0.0",
-    "stable_date": "2016-07-08",
-    "public_tag": null,
-    "public_date": null,
-    "timing_date": "2016-07-08",
-    "lag_days": -1058,
-    "lag_months": -34.8,
-    "lag_months_stable_tag": -34.8,
-    "negative_lag": true
-   },
-   {
-    "rfc": "RFC 8624",
-    "publication_date": "2019-06-01",
-    "program": "pdns-auth",
-    "row_id": "pdns-auth[6]@4.0.0",
-    "mechanism": "alg-ecdsa",
-    "kind": "default-changed",
-    "is_default_change": true,
-    "stable_tag": "auth-4.0.0",
-    "stable_date": "2016-07-08",
-    "public_tag": null,
-    "public_date": null,
-    "timing_date": "2016-07-08",
-    "lag_days": -1058,
-    "lag_months": -34.8,
-    "lag_months_stable_tag": -34.8,
-    "negative_lag": true
-   },
-   {
-    "rfc": "RFC 8624",
-    "publication_date": "2019-06-01",
-    "program": "pdns-auth",
     "row_id": "pdns-auth[7]@4.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-ecdsa",
     "kind": "default-changed",
     "is_default_change": true,
@@ -3946,6 +4016,7 @@
     "publication_date": "2019-06-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[8]@4.0.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-ecdsa",
     "kind": "default-changed",
     "is_default_change": true,
@@ -3964,6 +4035,7 @@
     "publication_date": "2019-06-01",
     "program": "knot",
     "row_id": "knot[7]@2.6.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "other",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3982,6 +4054,7 @@
     "publication_date": "2019-06-01",
     "program": "knot",
     "row_id": "knot[11]@2.8.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "ds-digest",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -3999,7 +4072,8 @@
     "rfc": "RFC 8624",
     "publication_date": "2019-06-01",
     "program": "unbound",
-    "row_id": "unbound[17]@1.10.0",
+    "row_id": "unbound[18]@1.10.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "other",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4018,6 +4092,7 @@
     "publication_date": "2019-06-01",
     "program": "knot",
     "row_id": "knot[12]@3.0.2",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "other",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4035,7 +4110,8 @@
     "rfc": "RFC 8624",
     "publication_date": "2019-06-01",
     "program": "unbound",
-    "row_id": "unbound[21]@1.16.1",
+    "row_id": "unbound[22]@1.16.1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4054,6 +4130,7 @@
     "publication_date": "2019-06-01",
     "program": "pdns-rec",
     "row_id": "dnssec-disabled-algorithms-auto",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "alg-rsa-sha2",
     "kind": "default-changed",
     "is_default_change": true,
@@ -4072,6 +4149,7 @@
     "publication_date": "2021-07-01",
     "program": "knot",
     "row_id": "knot[13]@3.1.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4089,7 +4167,8 @@
     "rfc": "RFC 9077",
     "publication_date": "2021-07-01",
     "program": "unbound",
-    "row_id": "unbound[25]@1.22.0",
+    "row_id": "unbound[26]@1.22.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "validation",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4108,6 +4187,7 @@
     "publication_date": "2022-08-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[10]@4.5.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -4125,7 +4205,8 @@
     "rfc": "RFC 9276",
     "publication_date": "2022-08-01",
     "program": "unbound",
-    "row_id": "unbound[19]@1.13.2",
+    "row_id": "unbound[20]@1.13.2",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4144,6 +4225,7 @@
     "publication_date": "2022-08-01",
     "program": "pdns-auth",
     "row_id": "pdns-auth[11]@4.6.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "default-changed",
     "is_default_change": true,
@@ -4162,6 +4244,7 @@
     "publication_date": "2022-08-01",
     "program": "knot",
     "row_id": "knot[14]@3.2.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4180,6 +4263,7 @@
     "publication_date": "2022-08-01",
     "program": "pdns-rec",
     "row_id": "nsec3-max-iterations-50",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "limit-changed",
     "is_default_change": true,
@@ -4198,6 +4282,7 @@
     "publication_date": "2022-08-01",
     "program": "kresd",
     "row_id": "kresd[12]@5.7.1",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4216,6 +4301,7 @@
     "publication_date": "2022-08-01",
     "program": "kresd",
     "row_id": "kresd[15]@6.0.6",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4234,6 +4320,7 @@
     "publication_date": "2022-08-01",
     "program": "knot",
     "row_id": "knot[18]@3.5.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4252,6 +4339,7 @@
     "publication_date": "2022-08-01",
     "program": "knot",
     "row_id": "knot[19]@3.6.0",
+    "rfc_source": "recorded rfcs field",
     "mechanism": "nsec3-iterations",
     "kind": "not-recorded",
     "is_default_change": true,
@@ -4266,6 +4354,8 @@
     "negative_lag": false
    }
   ],
+  "n_negative_lag_rows": 9,
+  "n_negative_lag_program_rfc": 6,
   "per_rfc": [
    {
     "rfc": "RFC 4033",
@@ -4277,6 +4367,7 @@
       "row_id": "nsd[2]@2.3.0",
       "date": "2005-05-02",
       "lag_months": 2.0,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4284,6 +4375,7 @@
       "row_id": "unbound[0]@0.5",
       "date": "2007-09-25",
       "lag_months": 30.8,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4291,6 +4383,7 @@
       "row_id": "dnssec-default-process-no-validate",
       "date": "2016-07-08",
       "lag_months": 136.2,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
@@ -4313,6 +4406,7 @@
       "row_id": "nsd[2]@2.3.0",
       "date": "2005-05-02",
       "lag_months": 2.0,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4320,6 +4414,7 @@
       "row_id": "unbound[0]@0.5",
       "date": "2007-09-25",
       "lag_months": 30.8,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4327,6 +4422,7 @@
       "row_id": "dnssec-setting-introduced",
       "date": "2016-07-08",
       "lag_months": 136.2,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4334,6 +4430,7 @@
       "row_id": "opendnssec[13]@2.1.0",
       "date": "2017-02-22",
       "lag_months": 143.8,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      }
     ],
@@ -4356,6 +4453,7 @@
       "row_id": "nsd[2]@2.3.0",
       "date": "2005-05-02",
       "lag_months": 2.0,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4363,6 +4461,7 @@
       "row_id": "unbound[0]@0.5",
       "date": "2007-09-25",
       "lag_months": 30.8,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4370,6 +4469,7 @@
       "row_id": "dnssec-setting-introduced",
       "date": "2016-07-08",
       "lag_months": 136.2,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
@@ -4389,7 +4489,7 @@
      "keytrap-aggressive-cache-max-nsec3-hash-cost",
      "keytrap-max-ds-per-zone",
      "keytrap-max-dnskeys",
-     "unbound[22]@1.19.1"
+     "unbound[23]@1.19.1"
     ]
    },
    {
@@ -4402,13 +4502,15 @@
       "row_id": "opendnssec[13]@2.1.0",
       "date": "2017-02-22",
       "lag_months": 129.8,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
       "program": "unbound",
-      "row_id": "unbound[13]@1.6.2",
+      "row_id": "unbound[14]@1.6.2",
       "date": "2017-04-13",
       "lag_months": 131.4,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4416,6 +4518,7 @@
       "row_id": "knot[11]@2.8.0",
       "date": "2019-03-05",
       "lag_months": 154.1,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4423,13 +4526,14 @@
       "row_id": "kresd[10]@5.5.0",
       "date": "2022-03-15",
       "lag_months": 190.5,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
     "spread_months_first_to_last": 60.7,
     "all_row_ids": [
      "opendnssec[13]@2.1.0",
-     "unbound[13]@1.6.2",
+     "unbound[14]@1.6.2",
      "knot[11]@2.8.0",
      "kresd[10]@5.5.0"
     ]
@@ -4441,9 +4545,10 @@
     "order": [
      {
       "program": "unbound",
-      "row_id": "unbound[12]@1.6.1",
-      "date": "2017-02-14",
-      "lag_months": 113.5,
+      "row_id": "unbound[12]@1.4.7",
+      "date": "2010-11-05",
+      "lag_months": 38.1,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4451,6 +4556,7 @@
       "row_id": "kresd[4]@2.0.0",
       "date": "2018-01-31",
       "lag_months": 125.0,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4458,16 +4564,18 @@
       "row_id": "revoked-dnskey-rejected",
       "date": "2020-10-13",
       "lag_months": 157.4,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
-    "spread_months_first_to_last": 43.9,
+    "spread_months_first_to_last": 119.3,
     "all_row_ids": [
-     "unbound[12]@1.6.1",
+     "unbound[12]@1.4.7",
+     "unbound[13]@1.6.1",
      "kresd[4]@2.0.0",
-     "unbound[18]@1.11.0",
+     "unbound[19]@1.11.0",
      "revoked-dnskey-rejected",
-     "unbound[24]@1.21.0"
+     "unbound[25]@1.21.0"
     ]
    },
    {
@@ -4480,6 +4588,7 @@
       "row_id": "unbound[1]@0.5",
       "date": "2007-09-25",
       "lag_months": -5.2,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4487,6 +4596,7 @@
       "row_id": "nsd[4]@3.1.0",
       "date": "2008-06-23",
       "lag_months": 3.7,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4494,6 +4604,7 @@
       "row_id": "opendnssec[3]@1.1.0rc1",
       "date": "2010-05-26",
       "lag_months": 26.8,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4501,6 +4612,7 @@
       "row_id": "pdns-auth[1]@3.3",
       "date": "2013-07-05",
       "lag_months": 64.1,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4508,6 +4620,7 @@
       "row_id": "knot[4]@2.3.0",
       "date": "2016-08-09",
       "lag_months": 101.3,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4515,6 +4628,7 @@
       "row_id": "nsec3-max-iterations-2500",
       "date": "2017-12-04",
       "lag_months": 117.1,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4522,6 +4636,7 @@
       "row_id": "kresd[9]@5.3.1",
       "date": "2021-03-31",
       "lag_months": 157.0,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
@@ -4543,7 +4658,7 @@
      "kresd[9]@5.3.1",
      "nsec3-max-iterations-150",
      "pdns-auth[10]@4.5.0",
-     "unbound[19]@1.13.2",
+     "unbound[20]@1.13.2",
      "pdns-auth[11]@4.6.0",
      "knot[14]@3.2.0",
      "nsec3-max-iterations-50",
@@ -4554,7 +4669,7 @@
      "keytrap-aggressive-cache-max-nsec3-hash-cost",
      "keytrap-max-ds-per-zone",
      "keytrap-max-dnskeys",
-     "unbound[23]@1.19.1"
+     "unbound[24]@1.19.1"
     ]
    },
    {
@@ -4567,6 +4682,7 @@
       "row_id": "unbound[4]@1.3.0",
       "date": "2009-06-03",
       "lag_months": -3.9,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4574,6 +4690,7 @@
       "row_id": "opendnssec[5]@1.2.0b1",
       "date": "2011-03-18",
       "lag_months": 17.5,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4581,6 +4698,7 @@
       "row_id": "pdns-auth[0]@3.2",
       "date": "2013-01-17",
       "lag_months": 39.6,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4588,6 +4706,7 @@
       "row_id": "knot[1]@2.0.0",
       "date": "2015-06-26",
       "lag_months": 68.8,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      }
     ],
@@ -4611,6 +4730,7 @@
       "row_id": "unbound[7]@1.4.7",
       "date": "2010-11-05",
       "lag_months": 4.2,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
@@ -4629,6 +4749,7 @@
       "row_id": "unbound[9]@1.4.17",
       "date": "2012-05-18",
       "lag_months": 1.5,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4636,13 +4757,15 @@
       "row_id": "knot[2]@2.1.0",
       "date": "2016-01-14",
       "lag_months": 45.4,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
       "program": "pdns-auth",
-      "row_id": "pdns-auth[5]@4.0.0",
+      "row_id": "pdns-auth[7]@4.0.0",
       "date": "2016-07-08",
       "lag_months": 51.2,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      }
     ],
@@ -4650,8 +4773,6 @@
     "all_row_ids": [
      "unbound[9]@1.4.17",
      "knot[2]@2.1.0",
-     "pdns-auth[5]@4.0.0",
-     "pdns-auth[6]@4.0.0",
      "pdns-auth[7]@4.0.0",
      "pdns-auth[8]@4.0.0"
     ]
@@ -4666,13 +4787,15 @@
       "row_id": "keytrap-aggressive-cache-max-nsec3-hash-cost",
       "date": "2024-02-06",
       "lag_months": 132.1,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
       "program": "unbound",
-      "row_id": "unbound[22]@1.19.1",
+      "row_id": "unbound[23]@1.19.1",
       "date": "2024-02-13",
       "lag_months": 132.4,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
@@ -4685,7 +4808,7 @@
      "keytrap-aggressive-cache-max-nsec3-hash-cost",
      "keytrap-max-ds-per-zone",
      "keytrap-max-dnskeys",
-     "unbound[22]@1.19.1"
+     "unbound[23]@1.19.1"
     ]
    },
    {
@@ -4698,6 +4821,7 @@
       "row_id": "knot[10]@2.8.0",
       "date": "2019-03-05",
       "lag_months": 54.1,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      }
     ],
@@ -4716,6 +4840,7 @@
       "row_id": "ed25519-validation",
       "date": "2017-06-13",
       "lag_months": 4.3,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
@@ -4734,6 +4859,7 @@
       "row_id": "kresd[2]@2.0.0",
       "date": "2018-01-31",
       "lag_months": 7.0,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4741,13 +4867,15 @@
       "row_id": "aggressive-nsec-cache",
       "date": "2021-05-10",
       "lag_months": 46.3,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
       "program": "unbound",
-      "row_id": "unbound[20]@1.15.0",
+      "row_id": "unbound[21]@1.15.0",
       "date": "2022-02-03",
       "lag_months": 55.1,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
@@ -4757,9 +4885,9 @@
      "kresd[5]@2.4.0",
      "kresd[8]@4.1.0",
      "aggressive-nsec-cache",
-     "unbound[20]@1.15.0",
+     "unbound[21]@1.15.0",
      "kresd[11]@5.6.0",
-     "unbound[25]@1.22.0"
+     "unbound[26]@1.22.0"
     ]
    },
    {
@@ -4769,9 +4897,10 @@
     "order": [
      {
       "program": "pdns-auth",
-      "row_id": "pdns-auth[5]@4.0.0",
+      "row_id": "pdns-auth[7]@4.0.0",
       "date": "2016-07-08",
       "lag_months": -34.8,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4779,13 +4908,15 @@
       "row_id": "knot[7]@2.6.0",
       "date": "2017-09-29",
       "lag_months": -20.0,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
       "program": "unbound",
-      "row_id": "unbound[17]@1.10.0",
+      "row_id": "unbound[18]@1.10.0",
       "date": "2020-02-20",
       "lag_months": 8.7,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4793,20 +4924,19 @@
       "row_id": "dnssec-disabled-algorithms-auto",
       "date": "2023-06-29",
       "lag_months": 48.9,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
     "spread_months_first_to_last": 83.7,
     "all_row_ids": [
-     "pdns-auth[5]@4.0.0",
-     "pdns-auth[6]@4.0.0",
      "pdns-auth[7]@4.0.0",
      "pdns-auth[8]@4.0.0",
      "knot[7]@2.6.0",
      "knot[11]@2.8.0",
-     "unbound[17]@1.10.0",
+     "unbound[18]@1.10.0",
      "knot[12]@3.0.2",
-     "unbound[21]@1.16.1",
+     "unbound[22]@1.16.1",
      "dnssec-disabled-algorithms-auto"
     ]
    },
@@ -4820,20 +4950,22 @@
       "row_id": "knot[13]@3.1.0",
       "date": "2021-08-01",
       "lag_months": 1.0,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
       "program": "unbound",
-      "row_id": "unbound[25]@1.22.0",
+      "row_id": "unbound[26]@1.22.0",
       "date": "2024-10-16",
       "lag_months": 39.5,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
     "spread_months_first_to_last": 38.5,
     "all_row_ids": [
      "knot[13]@3.1.0",
-     "unbound[25]@1.22.0"
+     "unbound[26]@1.22.0"
     ]
    },
    {
@@ -4846,13 +4978,15 @@
       "row_id": "pdns-auth[10]@4.5.0",
       "date": "2021-07-12",
       "lag_months": -12.6,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
       "program": "unbound",
-      "row_id": "unbound[19]@1.13.2",
+      "row_id": "unbound[20]@1.13.2",
       "date": "2021-08-05",
       "lag_months": -11.9,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4860,6 +4994,7 @@
       "row_id": "knot[14]@3.2.0",
       "date": "2022-08-22",
       "lag_months": 0.7,
+      "rfc_source": "recorded rfcs field",
       "role": "signer/authoritative"
      },
      {
@@ -4867,6 +5002,7 @@
       "row_id": "nsec3-max-iterations-50",
       "date": "2024-01-09",
       "lag_months": 17.3,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      },
      {
@@ -4874,13 +5010,14 @@
       "row_id": "kresd[12]@5.7.1",
       "date": "2024-02-13",
       "lag_months": 18.4,
+      "rfc_source": "recorded rfcs field",
       "role": "validating resolver"
      }
     ],
     "spread_months_first_to_last": 31.1,
     "all_row_ids": [
      "pdns-auth[10]@4.5.0",
-     "unbound[19]@1.13.2",
+     "unbound[20]@1.13.2",
      "pdns-auth[11]@4.6.0",
      "knot[14]@3.2.0",
      "nsec3-max-iterations-50",
@@ -4892,6 +5029,16 @@
    }
   ],
   "rows_citing_rfcs_not_in_checklist": [
+   {
+    "program": "bind9",
+    "row_id": "d29-trust-anchor-telemetry-default-yes",
+    "rfc": "RFC 8145"
+   },
+   {
+    "program": "bind9",
+    "row_id": "d30-root-key-sentinel-default-yes",
+    "rfc": "RFC 8509"
+   },
    {
     "program": "kresd",
     "row_id": "kresd[1]@1.5.0",
@@ -4914,17 +5061,17 @@
    },
    {
     "program": "unbound",
-    "row_id": "unbound[14]@1.6.7",
+    "row_id": "unbound[15]@1.6.7",
     "rfc": "RFC 8145"
    },
    {
     "program": "unbound",
-    "row_id": "unbound[15]@1.7.1",
+    "row_id": "unbound[16]@1.7.1",
     "rfc": "RFC 8509"
    },
    {
     "program": "unbound",
-    "row_id": "unbound[16]@1.8.0",
+    "row_id": "unbound[17]@1.8.0",
     "rfc": "RFC 8020"
    }
   ],
@@ -5066,7 +5213,7 @@
       "pdns-rec"
      ],
      "leader": "unbound",
-     "leader_row": "unbound[12]@1.6.1"
+     "leader_row": "unbound[12]@1.4.7"
     },
     {
      "label": "RFC 5155",
@@ -5131,7 +5278,7 @@
       "pdns-rec"
      ],
      "leader": "pdns-auth",
-     "leader_row": "pdns-auth[5]@4.0.0"
+     "leader_row": "pdns-auth[7]@4.0.0"
     },
     {
      "label": "RFC 9077",
@@ -5269,7 +5416,7 @@
       "unbound"
      ],
      "leader": "unbound",
-     "leader_row": "unbound[12]@1.6.1"
+     "leader_row": "unbound[12]@1.4.7"
     },
     {
      "label": "RFC 5155",
@@ -5334,7 +5481,7 @@
       "unbound"
      ],
      "leader": "pdns-auth",
-     "leader_row": "pdns-auth[5]@4.0.0"
+     "leader_row": "pdns-auth[7]@4.0.0"
     },
     {
      "label": "RFC 9077",
@@ -5359,6 +5506,1133 @@
     }
    ],
    "note": "RFCs whose first program is decided by the same row are merged into one contest in the *_merged variant; the merged variant is the one to quote. Programs of different roles are compared here because the question is about the RFC, not the role; each order entry carries the program's role."
+  },
+  "bind9_derived_sensitivity": {
+   "label": "DERIVED SENSITIVITY, not recorded data: bind9 lags taken from the rows' text or by mechanism analogue",
+   "rows": [
+    {
+     "rfc": "RFC 5011",
+     "publication_date": "2007-09-01",
+     "program": "bind9",
+     "row_id": "d04-root-trust-anchor-builtin",
+     "rfc_source": "derived, text-cited",
+     "mechanism": "trust-anchor-5011",
+     "kind": "default-changed",
+     "is_default_change": true,
+     "stable_tag": "v9.8.0",
+     "stable_date": "2011-02-21",
+     "public_tag": null,
+     "public_date": null,
+     "timing_date": "2011-02-21",
+     "lag_days": 1269,
+     "lag_months": 41.7,
+     "lag_months_stable_tag": 41.7,
+     "negative_lag": false
+    },
+    {
+     "rfc": "RFC 9276",
+     "publication_date": "2022-08-01",
+     "program": "bind9",
+     "row_id": "d18-nsec3param-default-0-0",
+     "rfc_source": "derived, text-cited",
+     "mechanism": "nsec3-iterations",
+     "kind": "default-changed",
+     "is_default_change": true,
+     "stable_tag": "v9.18.0",
+     "stable_date": "2022-01-24",
+     "public_tag": null,
+     "public_date": null,
+     "timing_date": "2022-01-24",
+     "lag_days": -189,
+     "lag_months": -6.2,
+     "lag_months_stable_tag": -6.2,
+     "negative_lag": true
+    },
+    {
+     "rfc": "RFC 9276",
+     "publication_date": "2022-08-01",
+     "program": "bind9",
+     "row_id": "l01-nsec3-max-iterations-150",
+     "rfc_source": "derived, mechanism analogue: fixed 150 cap, like unbound[20] and pdns-auth[10]",
+     "mechanism": "nsec3-iterations",
+     "kind": "limit-changed",
+     "is_default_change": true,
+     "stable_tag": "v9.16.16",
+     "stable_date": "2021-05-12",
+     "public_tag": null,
+     "public_date": null,
+     "timing_date": "2021-05-12",
+     "lag_days": -446,
+     "lag_months": -14.7,
+     "lag_months_stable_tag": -14.7,
+     "negative_lag": true
+    },
+    {
+     "rfc": "RFC 5155",
+     "publication_date": "2008-03-01",
+     "program": "bind9",
+     "row_id": "d03-signzone-nsec3-iterations-100-to-10",
+     "rfc_source": "derived, mechanism analogue: nsec3-iterations -> RFC 5155",
+     "mechanism": "nsec3-iterations",
+     "kind": "default-changed",
+     "is_default_change": true,
+     "stable_tag": "v9.7.0",
+     "stable_date": "2010-02-16",
+     "public_tag": null,
+     "public_date": null,
+     "timing_date": "2010-02-16",
+     "lag_days": 717,
+     "lag_months": 23.6,
+     "lag_months_stable_tag": 23.6,
+     "negative_lag": false
+    },
+    {
+     "rfc": "RFC 6605",
+     "publication_date": "2012-04-01",
+     "program": "bind9",
+     "row_id": "d15-dnssec-policy-default-ecdsap256",
+     "rfc_source": "derived, mechanism analogue: alg-ecdsa -> RFC 6605",
+     "mechanism": "alg-ecdsa",
+     "kind": "support-added",
+     "is_default_change": true,
+     "stable_tag": "v9.16.0",
+     "stable_date": "2020-02-12",
+     "public_tag": null,
+     "public_date": null,
+     "timing_date": "2020-02-12",
+     "lag_days": 2873,
+     "lag_months": 94.4,
+     "lag_months_stable_tag": 94.4,
+     "negative_lag": false
+    }
+   ],
+   "orders_that_change": [
+    {
+     "rfc": "RFC 5011",
+     "main_first": "unbound",
+     "sensitivity_first": "unbound",
+     "main_spread": 119.3,
+     "sensitivity_spread": 119.3,
+     "sensitivity_order": [
+      [
+       "unbound",
+       38.1
+      ],
+      [
+       "bind9",
+       41.7
+      ],
+      [
+       "kresd",
+       125.0
+      ],
+      [
+       "pdns-rec",
+       157.4
+      ]
+     ]
+    },
+    {
+     "rfc": "RFC 5155",
+     "main_first": "unbound",
+     "sensitivity_first": "unbound",
+     "main_spread": 162.2,
+     "sensitivity_spread": 162.2,
+     "sensitivity_order": [
+      [
+       "unbound",
+       -5.2
+      ],
+      [
+       "nsd",
+       3.7
+      ],
+      [
+       "bind9",
+       23.6
+      ],
+      [
+       "opendnssec",
+       26.8
+      ],
+      [
+       "pdns-auth",
+       64.1
+      ],
+      [
+       "knot",
+       101.3
+      ],
+      [
+       "pdns-rec",
+       117.1
+      ],
+      [
+       "kresd",
+       157.0
+      ]
+     ]
+    },
+    {
+     "rfc": "RFC 6605",
+     "main_first": "unbound",
+     "sensitivity_first": "unbound",
+     "main_spread": 49.7,
+     "sensitivity_spread": 92.8,
+     "sensitivity_order": [
+      [
+       "unbound",
+       1.5
+      ],
+      [
+       "knot",
+       45.4
+      ],
+      [
+       "pdns-auth",
+       51.2
+      ],
+      [
+       "bind9",
+       94.4
+      ]
+     ]
+    },
+    {
+     "rfc": "RFC 9276",
+     "main_first": "pdns-auth",
+     "sensitivity_first": "bind9",
+     "main_spread": 31.1,
+     "sensitivity_spread": 33.1,
+     "sensitivity_order": [
+      [
+       "bind9",
+       -14.7
+      ],
+      [
+       "pdns-auth",
+       -12.6
+      ],
+      [
+       "unbound",
+       -11.9
+      ],
+      [
+       "knot",
+       0.7
+      ],
+      [
+       "pdns-rec",
+       17.3
+      ],
+      [
+       "kresd",
+       18.4
+      ]
+     ]
+    }
+   ],
+   "per_rfc_all_derived": [
+    {
+     "rfc": "RFC 4033",
+     "publication_date": "2005-03-01",
+     "n_programs": 3,
+     "order": [
+      {
+       "program": "nsd",
+       "row_id": "nsd[2]@2.3.0",
+       "date": "2005-05-02",
+       "lag_months": 2.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[0]@0.5",
+       "date": "2007-09-25",
+       "lag_months": 30.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "dnssec-default-process-no-validate",
+       "date": "2016-07-08",
+       "lag_months": 136.2,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 134.2,
+     "all_row_ids": [
+      "nsd[2]@2.3.0",
+      "unbound[0]@0.5",
+      "dnssec-setting-introduced",
+      "dnssec-default-process-no-validate",
+      "dnssec-default-process"
+     ]
+    },
+    {
+     "rfc": "RFC 4034",
+     "publication_date": "2005-03-01",
+     "n_programs": 4,
+     "order": [
+      {
+       "program": "nsd",
+       "row_id": "nsd[2]@2.3.0",
+       "date": "2005-05-02",
+       "lag_months": 2.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[0]@0.5",
+       "date": "2007-09-25",
+       "lag_months": 30.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "dnssec-setting-introduced",
+       "date": "2016-07-08",
+       "lag_months": 136.2,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "opendnssec",
+       "row_id": "opendnssec[13]@2.1.0",
+       "date": "2017-02-22",
+       "lag_months": 143.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      }
+     ],
+     "spread_months_first_to_last": 141.7,
+     "all_row_ids": [
+      "nsd[2]@2.3.0",
+      "unbound[0]@0.5",
+      "dnssec-setting-introduced",
+      "opendnssec[13]@2.1.0",
+      "revoked-dnskey-rejected"
+     ]
+    },
+    {
+     "rfc": "RFC 4035",
+     "publication_date": "2005-03-01",
+     "n_programs": 3,
+     "order": [
+      {
+       "program": "nsd",
+       "row_id": "nsd[2]@2.3.0",
+       "date": "2005-05-02",
+       "lag_months": 2.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[0]@0.5",
+       "date": "2007-09-25",
+       "lag_months": 30.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "dnssec-setting-introduced",
+       "date": "2016-07-08",
+       "lag_months": 136.2,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 134.2,
+     "all_row_ids": [
+      "nsd[2]@2.3.0",
+      "nsd[3]@3.0.0",
+      "unbound[0]@0.5",
+      "unbound[6]@1.4.6",
+      "unbound[8]@1.4.8",
+      "dnssec-setting-introduced",
+      "signature-inception-skew",
+      "keytrap-max-rrsigs-per-record",
+      "keytrap-max-nsec3s-per-record",
+      "keytrap-max-signature-validations-per-query",
+      "keytrap-max-nsec3-hash-computations-per-query",
+      "keytrap-aggressive-cache-max-nsec3-hash-cost",
+      "keytrap-max-ds-per-zone",
+      "keytrap-max-dnskeys",
+      "unbound[23]@1.19.1"
+     ]
+    },
+    {
+     "rfc": "RFC 4509",
+     "publication_date": "2006-05-01",
+     "n_programs": 4,
+     "order": [
+      {
+       "program": "opendnssec",
+       "row_id": "opendnssec[13]@2.1.0",
+       "date": "2017-02-22",
+       "lag_months": 129.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[14]@1.6.2",
+       "date": "2017-04-13",
+       "lag_months": 131.4,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "knot",
+       "row_id": "knot[11]@2.8.0",
+       "date": "2019-03-05",
+       "lag_months": 154.1,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "kresd",
+       "row_id": "kresd[10]@5.5.0",
+       "date": "2022-03-15",
+       "lag_months": 190.5,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 60.7,
+     "all_row_ids": [
+      "opendnssec[13]@2.1.0",
+      "unbound[14]@1.6.2",
+      "knot[11]@2.8.0",
+      "kresd[10]@5.5.0"
+     ]
+    },
+    {
+     "rfc": "RFC 5011",
+     "publication_date": "2007-09-01",
+     "n_programs": 4,
+     "order": [
+      {
+       "program": "unbound",
+       "row_id": "unbound[12]@1.4.7",
+       "date": "2010-11-05",
+       "lag_months": 38.1,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "bind9",
+       "row_id": "d04-root-trust-anchor-builtin",
+       "date": "2011-02-21",
+       "lag_months": 41.7,
+       "rfc_source": "derived, text-cited",
+       "role": "signer/authoritative+validating resolver"
+      },
+      {
+       "program": "kresd",
+       "row_id": "kresd[4]@2.0.0",
+       "date": "2018-01-31",
+       "lag_months": 125.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "revoked-dnskey-rejected",
+       "date": "2020-10-13",
+       "lag_months": 157.4,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 119.3,
+     "all_row_ids": [
+      "unbound[12]@1.4.7",
+      "d04-root-trust-anchor-builtin",
+      "unbound[13]@1.6.1",
+      "kresd[4]@2.0.0",
+      "unbound[19]@1.11.0",
+      "revoked-dnskey-rejected",
+      "unbound[25]@1.21.0"
+     ]
+    },
+    {
+     "rfc": "RFC 5155",
+     "publication_date": "2008-03-01",
+     "n_programs": 8,
+     "order": [
+      {
+       "program": "unbound",
+       "row_id": "unbound[1]@0.5",
+       "date": "2007-09-25",
+       "lag_months": -5.2,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "nsd",
+       "row_id": "nsd[4]@3.1.0",
+       "date": "2008-06-23",
+       "lag_months": 3.7,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "bind9",
+       "row_id": "d03-signzone-nsec3-iterations-100-to-10",
+       "date": "2010-02-16",
+       "lag_months": 23.6,
+       "rfc_source": "derived, mechanism analogue: nsec3-iterations -> RFC 5155",
+       "role": "signer/authoritative+validating resolver"
+      },
+      {
+       "program": "opendnssec",
+       "row_id": "opendnssec[3]@1.1.0rc1",
+       "date": "2010-05-26",
+       "lag_months": 26.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "pdns-auth",
+       "row_id": "pdns-auth[1]@3.3",
+       "date": "2013-07-05",
+       "lag_months": 64.1,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "knot",
+       "row_id": "knot[4]@2.3.0",
+       "date": "2016-08-09",
+       "lag_months": 101.3,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "nsec3-max-iterations-2500",
+       "date": "2017-12-04",
+       "lag_months": 117.1,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "kresd",
+       "row_id": "kresd[9]@5.3.1",
+       "date": "2021-03-31",
+       "lag_months": 157.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 162.2,
+     "all_row_ids": [
+      "unbound[1]@0.5",
+      "nsd[4]@3.1.0",
+      "d03-signzone-nsec3-iterations-100-to-10",
+      "opendnssec[3]@1.1.0rc1",
+      "opendnssec[6]@1.3.11",
+      "opendnssec[7]@1.4.0b2",
+      "pdns-auth[1]@3.3",
+      "opendnssec[10]@1.4.4",
+      "opendnssec[9]@1.3.17",
+      "pdns-auth[3]@3.4.0",
+      "pdns-auth[2]@3.3.2",
+      "pdns-auth[4]@3.4.7",
+      "knot[4]@2.3.0",
+      "nsec3-max-iterations-2500",
+      "kresd[9]@5.3.1",
+      "nsec3-max-iterations-150",
+      "pdns-auth[10]@4.5.0",
+      "unbound[20]@1.13.2",
+      "pdns-auth[11]@4.6.0",
+      "knot[14]@3.2.0",
+      "nsec3-max-iterations-50",
+      "keytrap-max-rrsigs-per-record",
+      "keytrap-max-nsec3s-per-record",
+      "keytrap-max-signature-validations-per-query",
+      "keytrap-max-nsec3-hash-computations-per-query",
+      "keytrap-aggressive-cache-max-nsec3-hash-cost",
+      "keytrap-max-ds-per-zone",
+      "keytrap-max-dnskeys",
+      "unbound[24]@1.19.1"
+     ]
+    },
+    {
+     "rfc": "RFC 5702",
+     "publication_date": "2009-10-01",
+     "n_programs": 4,
+     "order": [
+      {
+       "program": "unbound",
+       "row_id": "unbound[4]@1.3.0",
+       "date": "2009-06-03",
+       "lag_months": -3.9,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "opendnssec",
+       "row_id": "opendnssec[5]@1.2.0b1",
+       "date": "2011-03-18",
+       "lag_months": 17.5,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "pdns-auth",
+       "row_id": "pdns-auth[0]@3.2",
+       "date": "2013-01-17",
+       "lag_months": 39.6,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "knot",
+       "row_id": "knot[1]@2.0.0",
+       "date": "2015-06-26",
+       "lag_months": 68.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      }
+     ],
+     "spread_months_first_to_last": 72.7,
+     "all_row_ids": [
+      "unbound[4]@1.3.0",
+      "unbound[5]@1.4.0",
+      "opendnssec[5]@1.2.0b1",
+      "pdns-auth[0]@3.2",
+      "knot[1]@2.0.0",
+      "knot[3]@2.2.0"
+     ]
+    },
+    {
+     "rfc": "RFC 5933",
+     "publication_date": "2010-07-01",
+     "n_programs": 1,
+     "order": [
+      {
+       "program": "unbound",
+       "row_id": "unbound[7]@1.4.7",
+       "date": "2010-11-05",
+       "lag_months": 4.2,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": null,
+     "all_row_ids": [
+      "unbound[7]@1.4.7"
+     ]
+    },
+    {
+     "rfc": "RFC 6605",
+     "publication_date": "2012-04-01",
+     "n_programs": 4,
+     "order": [
+      {
+       "program": "unbound",
+       "row_id": "unbound[9]@1.4.17",
+       "date": "2012-05-18",
+       "lag_months": 1.5,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "knot",
+       "row_id": "knot[2]@2.1.0",
+       "date": "2016-01-14",
+       "lag_months": 45.4,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "pdns-auth",
+       "row_id": "pdns-auth[7]@4.0.0",
+       "date": "2016-07-08",
+       "lag_months": 51.2,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "bind9",
+       "row_id": "d15-dnssec-policy-default-ecdsap256",
+       "date": "2020-02-12",
+       "lag_months": 94.4,
+       "rfc_source": "derived, mechanism analogue: alg-ecdsa -> RFC 6605",
+       "role": "signer/authoritative+validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 92.8,
+     "all_row_ids": [
+      "unbound[9]@1.4.17",
+      "knot[2]@2.1.0",
+      "pdns-auth[7]@4.0.0",
+      "pdns-auth[8]@4.0.0",
+      "d15-dnssec-policy-default-ecdsap256"
+     ]
+    },
+    {
+     "rfc": "RFC 6840",
+     "publication_date": "2013-02-01",
+     "n_programs": 2,
+     "order": [
+      {
+       "program": "pdns-rec",
+       "row_id": "keytrap-aggressive-cache-max-nsec3-hash-cost",
+       "date": "2024-02-06",
+       "lag_months": 132.1,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[23]@1.19.1",
+       "date": "2024-02-13",
+       "lag_months": 132.4,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 0.2,
+     "all_row_ids": [
+      "keytrap-max-rrsigs-per-record",
+      "keytrap-max-nsec3s-per-record",
+      "keytrap-max-signature-validations-per-query",
+      "keytrap-max-nsec3-hash-computations-per-query",
+      "keytrap-aggressive-cache-max-nsec3-hash-cost",
+      "keytrap-max-ds-per-zone",
+      "keytrap-max-dnskeys",
+      "unbound[23]@1.19.1"
+     ]
+    },
+    {
+     "rfc": "RFC 7344",
+     "publication_date": "2014-09-01",
+     "n_programs": 1,
+     "order": [
+      {
+       "program": "knot",
+       "row_id": "knot[10]@2.8.0",
+       "date": "2019-03-05",
+       "lag_months": 54.1,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      }
+     ],
+     "spread_months_first_to_last": null,
+     "all_row_ids": [
+      "knot[10]@2.8.0"
+     ]
+    },
+    {
+     "rfc": "RFC 8080",
+     "publication_date": "2017-02-01",
+     "n_programs": 1,
+     "order": [
+      {
+       "program": "pdns-rec",
+       "row_id": "ed25519-validation",
+       "date": "2017-06-13",
+       "lag_months": 4.3,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": null,
+     "all_row_ids": [
+      "ed25519-validation"
+     ]
+    },
+    {
+     "rfc": "RFC 8198",
+     "publication_date": "2017-07-01",
+     "n_programs": 3,
+     "order": [
+      {
+       "program": "kresd",
+       "row_id": "kresd[2]@2.0.0",
+       "date": "2018-01-31",
+       "lag_months": 7.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "aggressive-nsec-cache",
+       "date": "2021-05-10",
+       "lag_months": 46.3,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[21]@1.15.0",
+       "date": "2022-02-03",
+       "lag_months": 55.1,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 48.1,
+     "all_row_ids": [
+      "kresd[2]@2.0.0",
+      "kresd[5]@2.4.0",
+      "kresd[8]@4.1.0",
+      "aggressive-nsec-cache",
+      "unbound[21]@1.15.0",
+      "kresd[11]@5.6.0",
+      "unbound[26]@1.22.0"
+     ]
+    },
+    {
+     "rfc": "RFC 8624",
+     "publication_date": "2019-06-01",
+     "n_programs": 4,
+     "order": [
+      {
+       "program": "pdns-auth",
+       "row_id": "pdns-auth[7]@4.0.0",
+       "date": "2016-07-08",
+       "lag_months": -34.8,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "knot",
+       "row_id": "knot[7]@2.6.0",
+       "date": "2017-09-29",
+       "lag_months": -20.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[18]@1.10.0",
+       "date": "2020-02-20",
+       "lag_months": 8.7,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "dnssec-disabled-algorithms-auto",
+       "date": "2023-06-29",
+       "lag_months": 48.9,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 83.7,
+     "all_row_ids": [
+      "pdns-auth[7]@4.0.0",
+      "pdns-auth[8]@4.0.0",
+      "knot[7]@2.6.0",
+      "knot[11]@2.8.0",
+      "unbound[18]@1.10.0",
+      "knot[12]@3.0.2",
+      "unbound[22]@1.16.1",
+      "dnssec-disabled-algorithms-auto"
+     ]
+    },
+    {
+     "rfc": "RFC 9077",
+     "publication_date": "2021-07-01",
+     "n_programs": 2,
+     "order": [
+      {
+       "program": "knot",
+       "row_id": "knot[13]@3.1.0",
+       "date": "2021-08-01",
+       "lag_months": 1.0,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[26]@1.22.0",
+       "date": "2024-10-16",
+       "lag_months": 39.5,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 38.5,
+     "all_row_ids": [
+      "knot[13]@3.1.0",
+      "unbound[26]@1.22.0"
+     ]
+    },
+    {
+     "rfc": "RFC 9276",
+     "publication_date": "2022-08-01",
+     "n_programs": 6,
+     "order": [
+      {
+       "program": "bind9",
+       "row_id": "l01-nsec3-max-iterations-150",
+       "date": "2021-05-12",
+       "lag_months": -14.7,
+       "rfc_source": "derived, mechanism analogue: fixed 150 cap, like unbound[20] and pdns-auth[10]",
+       "role": "signer/authoritative+validating resolver"
+      },
+      {
+       "program": "pdns-auth",
+       "row_id": "pdns-auth[10]@4.5.0",
+       "date": "2021-07-12",
+       "lag_months": -12.6,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "unbound",
+       "row_id": "unbound[20]@1.13.2",
+       "date": "2021-08-05",
+       "lag_months": -11.9,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "knot",
+       "row_id": "knot[14]@3.2.0",
+       "date": "2022-08-22",
+       "lag_months": 0.7,
+       "rfc_source": "recorded rfcs field",
+       "role": "signer/authoritative"
+      },
+      {
+       "program": "pdns-rec",
+       "row_id": "nsec3-max-iterations-50",
+       "date": "2024-01-09",
+       "lag_months": 17.3,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      },
+      {
+       "program": "kresd",
+       "row_id": "kresd[12]@5.7.1",
+       "date": "2024-02-13",
+       "lag_months": 18.4,
+       "rfc_source": "recorded rfcs field",
+       "role": "validating resolver"
+      }
+     ],
+     "spread_months_first_to_last": 33.1,
+     "all_row_ids": [
+      "l01-nsec3-max-iterations-150",
+      "pdns-auth[10]@4.5.0",
+      "unbound[20]@1.13.2",
+      "d18-nsec3param-default-0-0",
+      "pdns-auth[11]@4.6.0",
+      "knot[14]@3.2.0",
+      "nsec3-max-iterations-50",
+      "kresd[12]@5.7.1",
+      "kresd[15]@6.0.6",
+      "knot[18]@3.5.0",
+      "knot[19]@3.6.0"
+     ]
+    }
+   ],
+   "baseline_all_derived": [
+    {
+     "program": "bind9",
+     "contests_entered": 4,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 0.792,
+     "p_at_least_observed": 0.5898,
+     "led": [
+      "RFC 9276"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "knot",
+     "contests_entered": 7,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 1.792,
+     "p_at_least_observed": 0.8846,
+     "led": [
+      "RFC 9077"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "kresd",
+     "contests_entered": 5,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 1.125,
+     "p_at_least_observed": 0.7266,
+     "led": [
+      "RFC 8198"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "nsd",
+     "contests_entered": 2,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 0.375,
+     "p_at_least_observed": 0.3438,
+     "led": [
+      "RFC 4033+RFC 4034+RFC 4035"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "opendnssec",
+     "contests_entered": 4,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 0.875,
+     "p_at_least_observed": 0.6309,
+     "led": [
+      "RFC 4509"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "pdns-auth",
+     "contests_entered": 5,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 1.042,
+     "p_at_least_observed": 0.6924,
+     "led": [
+      "RFC 8624"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "pdns-rec",
+     "contests_entered": 7,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 1.875,
+     "p_at_least_observed": 0.8975,
+     "led": [
+      "RFC 6840"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "unbound",
+     "contests_entered": 11,
+     "observed_leads": 4,
+     "expected_leads_by_chance": 3.125,
+     "p_at_least_observed": 0.3817,
+     "led": [
+      "RFC 5011",
+      "RFC 5155",
+      "RFC 5702",
+      "RFC 6605"
+     ],
+     "called_leader": false
+    }
+   ],
+   "baseline_text_cited_only": [
+    {
+     "program": "bind9",
+     "contests_entered": 2,
+     "observed_leads": 0,
+     "expected_leads_by_chance": 0.417,
+     "p_at_least_observed": 1.0,
+     "led": [],
+     "called_leader": false
+    },
+    {
+     "program": "knot",
+     "contests_entered": 7,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 1.893,
+     "p_at_least_observed": 0.8996,
+     "led": [
+      "RFC 9077"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "kresd",
+     "contests_entered": 5,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 1.143,
+     "p_at_least_observed": 0.7321,
+     "led": [
+      "RFC 8198"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "nsd",
+     "contests_entered": 2,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 0.393,
+     "p_at_least_observed": 0.3571,
+     "led": [
+      "RFC 4033+RFC 4034+RFC 4035"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "opendnssec",
+     "contests_entered": 4,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 0.893,
+     "p_at_least_observed": 0.6384,
+     "led": [
+      "RFC 4509"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "pdns-auth",
+     "contests_entered": 5,
+     "observed_leads": 2,
+     "expected_leads_by_chance": 1.143,
+     "p_at_least_observed": 0.3214,
+     "led": [
+      "RFC 8624",
+      "RFC 9276"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "pdns-rec",
+     "contests_entered": 7,
+     "observed_leads": 1,
+     "expected_leads_by_chance": 1.893,
+     "p_at_least_observed": 0.8996,
+     "led": [
+      "RFC 6840"
+     ],
+     "called_leader": false
+    },
+    {
+     "program": "unbound",
+     "contests_entered": 11,
+     "observed_leads": 4,
+     "expected_leads_by_chance": 3.226,
+     "p_at_least_observed": 0.4096,
+     "led": [
+      "RFC 5011",
+      "RFC 5155",
+      "RFC 5702",
+      "RFC 6605"
+     ],
+     "called_leader": false
+    }
+   ],
+   "called_leader": {
+    "main": [],
+    "all_derived": [],
+    "text_cited_only": []
+   },
+   "chance_result_changes": false,
+   "note": "bind9 d07 and l02 also name RFC 5011 / RFC 9276 in their text but are later than d04 and d18, so they cannot change bind9's position. d29 (RFC 8145) and d30 (RFC 8509) carry a recorded rfcs field, but neither RFC is in the checklist."
   }
  },
  "q3_default_flip_topics": {
@@ -5386,8 +6660,6 @@
      }
     },
     "not_assigned": {
-     "pdns-auth[5]@4.0.0": "alg-ecdsa, but its after text names no ECDSA algorithm (default-ksk-algorithms emptied, intermediate state)",
-     "pdns-auth[6]@4.0.0": "after text calls it an intermediate pre-release state, replaced by pdns-auth[8] before auth-4.0.0 (same stable date, so no timing effect)",
      "unbound[9]@1.4.17": "alg-ecdsa, but it enables ECDSA validation, not a signing default"
     }
    },
@@ -5442,7 +6714,7 @@
         "nsec3-max-iterations-150"
        ],
        "unbound": [
-        "unbound[19]@1.13.2"
+        "unbound[20]@1.13.2"
        ]
       }
      },
@@ -5485,7 +6757,7 @@
      }
     },
     "not_assigned": {
-     "unbound[23]@1.19.1": "nsec3-iterations, but it caps NSEC3 hash computations per message, not the iteration count",
+     "unbound[24]@1.19.1": "nsec3-iterations, but it caps NSEC3 hash computations per message, not the iteration count",
      "pdns-auth[1]@3.3": "nsec3, but the change is the opt-out flag of set-nsec3 defaults (iterations stay 1)",
      "knot[4]@2.3.0": "nsec3, re-salting schedule; iterations default 10 is the pre-existing schema value"
     }
@@ -5542,6 +6814,9 @@
        ],
        "kresd": [
         "kresd[6]@4.0.0"
+       ],
+       "unbound": [
+        "unbound[12]@1.4.7"
        ]
       }
      },
@@ -5552,7 +6827,7 @@
         "d05-builtin-root-ksk-2017"
        ],
        "unbound": [
-        "unbound[12]@1.6.1"
+        "unbound[13]@1.6.1"
        ],
        "pdns-rec": [
         "root-ds-2017-added"
@@ -5560,10 +6835,13 @@
       }
      },
      "ksk2010-19036-removed": {
-      "regex": "19036",
+      "regex": "19036|revoked key removed",
       "rows": {
+       "bind9": [
+        "d23-bindkeys-revoked-key-removed"
+       ],
        "unbound": [
-        "unbound[18]@1.11.0"
+        "unbound[19]@1.11.0"
        ],
        "pdns-rec": [
         "root-ds-19036-removed"
@@ -5581,7 +6859,7 @@
         "kresd[17]@6.0.8"
        ],
        "unbound": [
-        "unbound[24]@1.21.0"
+        "unbound[25]@1.21.0"
        ],
        "pdns-rec": [
         "root-ds-38696"
@@ -5591,22 +6869,28 @@
      "rfc8145-key-tag-signalling-on": {
       "regex": "_ta-",
       "rows": {
+       "bind9": [
+        "d29-trust-anchor-telemetry-default-yes"
+       ],
        "kresd": [
         "kresd[1]@1.5.0"
        ],
        "unbound": [
-        "unbound[14]@1.6.7"
+        "unbound[15]@1.6.7"
        ]
       }
      },
      "rfc8509-root-key-sentinel-on": {
       "regex": "sentinel",
       "rows": {
+       "bind9": [
+        "d30-root-key-sentinel-default-yes"
+       ],
        "kresd": [
         "kresd[3]@2.0.0"
        ],
        "unbound": [
-        "unbound[15]@1.7.1"
+        "unbound[16]@1.7.1"
        ]
       }
      },
@@ -5623,7 +6907,6 @@
      }
     },
     "not_assigned": {
-     "d23-bindkeys-revoked-key-removed": "value_changed false: not a default change",
      "trust-anchor-ta-nta-management": "is_default_change false (support-added)"
     }
    },
@@ -5672,7 +6955,7 @@
         "knot[12]@3.0.2"
        ],
        "unbound": [
-        "unbound[21]@1.16.1"
+        "unbound[22]@1.16.1"
        ],
        "pdns-rec": [
         "dnssec-disabled-algorithms-auto"
@@ -5689,10 +6972,10 @@
      }
     },
     "not_assigned": {
-     "unbound[13]@1.6.2": "ds-digest, but it tolerates DS digest downgrade: the opposite direction",
-     "d10-dsa-removed": "DSA removal, not RSASHA1 or SHA-1 DS",
-     "knot[7]@2.6.0": "DSA removal",
-     "unbound[17]@1.10.0": "DSA removal"
+     "unbound[14]@1.6.2": "ds-digest, but it tolerates DS digest downgrade: the opposite direction",
+     "d10-dsa-removed": "DSA removal: algorithms 3 and 6 are SHA-1 based, but the removal is driven by DSA itself, not by the RSASHA1 / SHA-1 DS deprecation this topic tracks",
+     "knot[7]@2.6.0": "DSA removal, as d10",
+     "unbound[18]@1.10.0": "DSA removal, as d10"
     }
    },
    "cds-cdnskey-publication": {
@@ -5700,7 +6983,7 @@
      "cds-cdnskey"
     ],
     "subs": {
-     "cds-publication-default": {
+     "cds-publication-narrowed-to-rollover": {
       "regex": "CDS/CDNSKEY",
       "rows": {
        "knot": [
@@ -5830,8 +7113,6 @@
      }
     ],
     "rows_considered_not_assigned": {
-     "pdns-auth[5]@4.0.0": "alg-ecdsa, but its after text names no ECDSA algorithm (default-ksk-algorithms emptied, intermediate state)",
-     "pdns-auth[6]@4.0.0": "after text calls it an intermediate pre-release state, replaced by pdns-auth[8] before auth-4.0.0 (same stable date, so no timing effect)",
      "unbound[9]@1.4.17": "alg-ecdsa, but it enables ECDSA validation, not a signing default"
     }
    },
@@ -6121,7 +7402,7 @@
        },
        {
         "sub": "iteration-cap-at-or-below-150",
-        "row_id": "unbound[19]@1.13.2",
+        "row_id": "unbound[20]@1.13.2",
         "date": "2021-08-05",
         "stable_tag": "release-1.13.2",
         "stable_date": "2021-08-05",
@@ -6226,7 +7507,7 @@
        {
         "program": "unbound",
         "date": "2021-08-05",
-        "row_id": "unbound[19]@1.13.2",
+        "row_id": "unbound[20]@1.13.2",
         "stable_tag": "release-1.13.2",
         "public_tag": null
        }
@@ -6304,7 +7585,7 @@
      }
     ],
     "rows_considered_not_assigned": {
-     "unbound[23]@1.19.1": "nsec3-iterations, but it caps NSEC3 hash computations per message, not the iteration count",
+     "unbound[24]@1.19.1": "nsec3-iterations, but it caps NSEC3 hash computations per message, not the iteration count",
      "pdns-auth[1]@3.3": "nsec3, but the change is the opt-out flag of set-nsec3 defaults (iterations stay 1)",
      "knot[4]@2.3.0": "nsec3, re-salting schedule; iterations default 10 is the pre-existing schema value"
     }
@@ -6474,6 +7755,16 @@
         "opt_in": true
        },
        {
+        "sub": "rfc8145-key-tag-signalling-on",
+        "row_id": "d29-trust-anchor-telemetry-default-yes",
+        "date": "2016-09-29",
+        "stable_tag": "v9.11.0",
+        "stable_date": "2016-09-29",
+        "public_tag": null,
+        "public_date": null,
+        "opt_in": false
+       },
+       {
         "sub": "ksk2017-20326-added",
         "row_id": "d05-builtin-root-ksk-2017",
         "date": "2017-03-29",
@@ -6484,11 +7775,31 @@
         "opt_in": true
        },
        {
+        "sub": "rfc8509-root-key-sentinel-on",
+        "row_id": "d30-root-key-sentinel-default-yes",
+        "date": "2018-07-03",
+        "stable_tag": "v9.9.13",
+        "stable_date": "2018-07-03",
+        "public_tag": null,
+        "public_date": null,
+        "opt_in": false
+       },
+       {
         "sub": "context",
         "row_id": "d07-validation-auto-default",
         "date": "2019-03-20",
         "stable_tag": "v9.14.0",
         "stable_date": "2019-03-20",
+        "public_tag": null,
+        "public_date": null,
+        "opt_in": false
+       },
+       {
+        "sub": "ksk2010-19036-removed",
+        "row_id": "d23-bindkeys-revoked-key-removed",
+        "date": "2019-04-06",
+        "stable_tag": "v9.14.1",
+        "stable_date": "2019-04-06",
         "public_tag": null,
         "public_date": null,
         "opt_in": false
@@ -6610,16 +7921,26 @@
         "opt_in": false
        }
       ],
-      "no_row_note": "no RFC 5011 rollover at any tag (pdns-rec gaps); only static built-in DS changes"
+      "no_row_note": "no RFC 5011 rollover at any tag (pdns-rec gaps); only static built-in DS changes; built-in root DS present from rec-4.0.0 without a default row"
      },
      {
       "program": "unbound",
-      "first_date": "2017-02-14",
-      "first_row": "unbound[12]@1.6.1",
+      "first_date": "2010-11-05",
+      "first_row": "unbound[12]@1.4.7",
       "rows": [
        {
+        "sub": "builtin-root-anchor-available",
+        "row_id": "unbound[12]@1.4.7",
+        "date": "2010-11-05",
+        "stable_tag": "release-1.4.7",
+        "stable_date": "2010-11-05",
+        "public_tag": null,
+        "public_date": null,
+        "opt_in": true
+       },
+       {
         "sub": "ksk2017-20326-added",
-        "row_id": "unbound[12]@1.6.1",
+        "row_id": "unbound[13]@1.6.1",
         "date": "2017-02-14",
         "stable_tag": "release-1.6.1",
         "stable_date": "2017-02-14",
@@ -6629,7 +7950,7 @@
        },
        {
         "sub": "rfc8145-key-tag-signalling-on",
-        "row_id": "unbound[14]@1.6.7",
+        "row_id": "unbound[15]@1.6.7",
         "date": "2017-10-10",
         "stable_tag": "release-1.6.7",
         "stable_date": "2017-10-10",
@@ -6639,7 +7960,7 @@
        },
        {
         "sub": "rfc8509-root-key-sentinel-on",
-        "row_id": "unbound[15]@1.7.1",
+        "row_id": "unbound[16]@1.7.1",
         "date": "2018-04-26",
         "stable_tag": "release-1.7.1",
         "stable_date": "2018-04-26",
@@ -6649,7 +7970,7 @@
        },
        {
         "sub": "ksk2010-19036-removed",
-        "row_id": "unbound[18]@1.11.0",
+        "row_id": "unbound[19]@1.11.0",
         "date": "2020-07-20",
         "stable_tag": "release-1.11.0",
         "stable_date": "2020-07-20",
@@ -6659,7 +7980,7 @@
        },
        {
         "sub": "ksk2024-38696-added",
-        "row_id": "unbound[24]@1.21.0",
+        "row_id": "unbound[25]@1.21.0",
         "date": "2024-08-09",
         "stable_tag": "release-1.21.0",
         "stable_date": "2024-08-09",
@@ -6675,8 +7996,15 @@
      {
       "sub": "builtin-root-anchor-available",
       "is_milestone": true,
-      "note": null,
+      "note": "pdns-rec had a built-in root DS from rec-4.0.0, 2016-07-08, per the before text of trust-anchor-ta-nta-management, but has no default row for it; it would not lead",
       "per_program": [
+       {
+        "program": "unbound",
+        "date": "2010-11-05",
+        "row_id": "unbound[12]@1.4.7",
+        "stable_tag": "release-1.4.7",
+        "public_tag": null
+       },
        {
         "program": "bind9",
         "date": "2011-02-21",
@@ -6701,7 +8029,7 @@
        {
         "program": "unbound",
         "date": "2017-02-14",
-        "row_id": "unbound[12]@1.6.1",
+        "row_id": "unbound[13]@1.6.1",
         "stable_tag": "release-1.6.1",
         "public_tag": null
        },
@@ -6724,8 +8052,15 @@
      {
       "sub": "ksk2010-19036-removed",
       "is_milestone": true,
-      "note": null,
+      "note": "bind9 d23 text says only 'revoked key removed'; the revoked root key in 2019 is KSK-2010 19036, shown in the clone by the Phase 5 report (base64 prefix AwEAAagAIKlVZrpC6Ia7gEz present at v9.14.0, absent at v9.14.1)",
       "per_program": [
+       {
+        "program": "bind9",
+        "date": "2019-04-06",
+        "row_id": "d23-bindkeys-revoked-key-removed",
+        "stable_tag": "v9.14.1",
+        "public_tag": null
+       },
        {
         "program": "pdns-rec",
         "date": "2019-07-12",
@@ -6736,7 +8071,7 @@
        {
         "program": "unbound",
         "date": "2020-07-20",
-        "row_id": "unbound[18]@1.11.0",
+        "row_id": "unbound[19]@1.11.0",
         "stable_tag": "release-1.11.0",
         "public_tag": null
        }
@@ -6757,7 +8092,7 @@
        {
         "program": "unbound",
         "date": "2024-08-09",
-        "row_id": "unbound[24]@1.21.0",
+        "row_id": "unbound[25]@1.21.0",
         "stable_tag": "release-1.21.0",
         "public_tag": null
        },
@@ -6783,9 +8118,16 @@
       "note": null,
       "per_program": [
        {
+        "program": "bind9",
+        "date": "2016-09-29",
+        "row_id": "d29-trust-anchor-telemetry-default-yes",
+        "stable_tag": "v9.11.0",
+        "public_tag": null
+       },
+       {
         "program": "unbound",
         "date": "2017-10-10",
-        "row_id": "unbound[14]@1.6.7",
+        "row_id": "unbound[15]@1.6.7",
         "stable_tag": "release-1.6.7",
         "public_tag": null
        },
@@ -6813,8 +8155,15 @@
        {
         "program": "unbound",
         "date": "2018-04-26",
-        "row_id": "unbound[15]@1.7.1",
+        "row_id": "unbound[16]@1.7.1",
         "stable_tag": "release-1.7.1",
+        "public_tag": null
+       },
+       {
+        "program": "bind9",
+        "date": "2018-07-03",
+        "row_id": "d30-root-key-sentinel-default-yes",
+        "stable_tag": "v9.9.13",
         "public_tag": null
        }
       ]
@@ -6842,7 +8191,6 @@
      }
     ],
     "rows_considered_not_assigned": {
-     "d23-bindkeys-revoked-key-removed": "value_changed false: not a default change",
      "trust-anchor-ta-nta-management": "is_default_change false (support-added)"
     }
    },
@@ -7002,11 +8350,11 @@
      {
       "program": "unbound",
       "first_date": "2022-07-04",
-      "first_row": "unbound[21]@1.16.1",
+      "first_row": "unbound[22]@1.16.1",
       "rows": [
        {
         "sub": "crypto-policy-sha1-refusal-handled",
-        "row_id": "unbound[21]@1.16.1",
+        "row_id": "unbound[22]@1.16.1",
         "date": "2022-07-04",
         "stable_tag": "release-1.16.1",
         "stable_date": "2022-07-04",
@@ -7090,7 +8438,7 @@
        {
         "program": "unbound",
         "date": "2022-07-04",
-        "row_id": "unbound[21]@1.16.1",
+        "row_id": "unbound[22]@1.16.1",
         "stable_tag": "release-1.16.1",
         "public_tag": null
        },
@@ -7119,10 +8467,10 @@
      }
     ],
     "rows_considered_not_assigned": {
-     "unbound[13]@1.6.2": "ds-digest, but it tolerates DS digest downgrade: the opposite direction",
-     "d10-dsa-removed": "DSA removal, not RSASHA1 or SHA-1 DS",
-     "knot[7]@2.6.0": "DSA removal",
-     "unbound[17]@1.10.0": "DSA removal"
+     "unbound[14]@1.6.2": "ds-digest, but it tolerates DS digest downgrade: the opposite direction",
+     "d10-dsa-removed": "DSA removal: algorithms 3 and 6 are SHA-1 based, but the removal is driven by DSA itself, not by the RSASHA1 / SHA-1 DS deprecation this topic tracks",
+     "knot[7]@2.6.0": "DSA removal, as d10",
+     "unbound[18]@1.10.0": "DSA removal, as d10"
     }
    },
    {
@@ -7143,7 +8491,7 @@
       "first_row": "knot[10]@2.8.0",
       "rows": [
        {
-        "sub": "cds-publication-default",
+        "sub": "cds-publication-narrowed-to-rollover",
         "row_id": "knot[10]@2.8.0",
         "date": "2019-03-05",
         "stable_tag": "v2.8.0",
@@ -7172,9 +8520,9 @@
     ],
     "sub_milestones": [
      {
-      "sub": "cds-publication-default",
+      "sub": "cds-publication-narrowed-to-rollover",
       "is_milestone": true,
-      "note": null,
+      "note": "knot[10] narrows publication from always to the KSK submission phase; its before text says publication was default since 2.5.0/2.6.1, which has no row",
       "per_program": [
        {
         "program": "knot",
@@ -7482,7 +8830,7 @@
     "sub": "iteration-cap-at-or-below-150",
     "program": "unbound",
     "codebase": "unbound",
-    "row_id": "unbound[19]@1.13.2",
+    "row_id": "unbound[20]@1.13.2",
     "mechanism": "nsec3-iterations",
     "evidence": "150",
     "stable_tag": "release-1.13.2",
@@ -7840,6 +9188,25 @@
    },
    {
     "topic": "root-trust-anchor",
+    "sub": "builtin-root-anchor-available",
+    "program": "unbound",
+    "codebase": "unbound",
+    "row_id": "unbound[12]@1.4.7",
+    "mechanism": "trust-anchor-5011",
+    "evidence": "built-in root",
+    "stable_tag": "release-1.4.7",
+    "stable_date": "2010-11-05",
+    "public_tag": null,
+    "public_date": null,
+    "timing_date": "2010-11-05",
+    "timing_instant": "2010-11-05T15:45:53Z",
+    "opt_in": true,
+    "applies_on_upgrade": false,
+    "before": "no unbound-anchor tool; the root anchor had to be configured by the operator",
+    "after": "unbound-anchor with built-in root DS 19036 creates and maintains root.key (RFC 5011)"
+   },
+   {
+    "topic": "root-trust-anchor",
     "sub": "ksk2017-20326-added",
     "program": "bind9",
     "codebase": "bind9",
@@ -7862,7 +9229,7 @@
     "sub": "ksk2017-20326-added",
     "program": "unbound",
     "codebase": "unbound",
-    "row_id": "unbound[12]@1.6.1",
+    "row_id": "unbound[13]@1.6.1",
     "mechanism": "trust-anchor-5011",
     "evidence": "20326",
     "stable_tag": "release-1.6.1",
@@ -7898,9 +9265,28 @@
    {
     "topic": "root-trust-anchor",
     "sub": "ksk2010-19036-removed",
+    "program": "bind9",
+    "codebase": "bind9",
+    "row_id": "d23-bindkeys-revoked-key-removed",
+    "mechanism": "trust-anchor-5011",
+    "evidence": "revoked key removed",
+    "stable_tag": "v9.14.1",
+    "stable_date": "2019-04-06",
+    "public_tag": null,
+    "public_date": null,
+    "timing_date": "2019-04-06",
+    "timing_instant": "2019-04-06T20:09:59Z",
+    "opt_in": false,
+    "applies_on_upgrade": false,
+    "before": "bind.keys carries revoked root key",
+    "after": "revoked key removed"
+   },
+   {
+    "topic": "root-trust-anchor",
+    "sub": "ksk2010-19036-removed",
     "program": "unbound",
     "codebase": "unbound",
-    "row_id": "unbound[18]@1.11.0",
+    "row_id": "unbound[19]@1.11.0",
     "mechanism": "trust-anchor-5011",
     "evidence": "19036",
     "stable_tag": "release-1.11.0",
@@ -7995,7 +9381,7 @@
     "sub": "ksk2024-38696-added",
     "program": "unbound",
     "codebase": "unbound",
-    "row_id": "unbound[24]@1.21.0",
+    "row_id": "unbound[25]@1.21.0",
     "mechanism": "trust-anchor-5011",
     "evidence": "38696",
     "stable_tag": "release-1.21.0",
@@ -8031,6 +9417,25 @@
    {
     "topic": "root-trust-anchor",
     "sub": "rfc8145-key-tag-signalling-on",
+    "program": "bind9",
+    "codebase": "bind9",
+    "row_id": "d29-trust-anchor-telemetry-default-yes",
+    "mechanism": "trust-anchor-5011",
+    "evidence": "_ta-",
+    "stable_tag": "v9.11.0",
+    "stable_date": "2016-09-29",
+    "public_tag": null,
+    "public_date": null,
+    "timing_date": "2016-09-29",
+    "timing_instant": "2016-09-29T07:01:06Z",
+    "opt_in": false,
+    "applies_on_upgrade": true,
+    "before": "no trust-anchor telemetry queries",
+    "after": "trust-anchor-telemetry yes (named sends _ta-XXXX.<anchor>/NULL)"
+   },
+   {
+    "topic": "root-trust-anchor",
+    "sub": "rfc8145-key-tag-signalling-on",
     "program": "kresd",
     "codebase": "kresd",
     "row_id": "kresd[1]@1.5.0",
@@ -8052,7 +9457,7 @@
     "sub": "rfc8145-key-tag-signalling-on",
     "program": "unbound",
     "codebase": "unbound",
-    "row_id": "unbound[14]@1.6.7",
+    "row_id": "unbound[15]@1.6.7",
     "mechanism": "trust-anchor-5011",
     "evidence": "_ta-",
     "stable_tag": "release-1.6.7",
@@ -8065,6 +9470,25 @@
     "applies_on_upgrade": true,
     "before": "cfg->trust_anchor_signaling = 0 (option added 1.6.4)",
     "after": "cfg->trust_anchor_signaling = 1: _ta-<keytag> queries sent to the root"
+   },
+   {
+    "topic": "root-trust-anchor",
+    "sub": "rfc8509-root-key-sentinel-on",
+    "program": "bind9",
+    "codebase": "bind9",
+    "row_id": "d30-root-key-sentinel-default-yes",
+    "mechanism": "trust-anchor-5011",
+    "evidence": "sentinel",
+    "stable_tag": "v9.9.13",
+    "stable_date": "2018-07-03",
+    "public_tag": null,
+    "public_date": null,
+    "timing_date": "2018-07-03",
+    "timing_instant": "2018-07-03T05:28:20Z",
+    "opt_in": false,
+    "applies_on_upgrade": true,
+    "before": "no root-key-sentinel handling",
+    "after": "root-key-sentinel yes"
    },
    {
     "topic": "root-trust-anchor",
@@ -8090,7 +9514,7 @@
     "sub": "rfc8509-root-key-sentinel-on",
     "program": "unbound",
     "codebase": "unbound",
-    "row_id": "unbound[15]@1.7.1",
+    "row_id": "unbound[16]@1.7.1",
     "mechanism": "trust-anchor-5011",
     "evidence": "sentinel",
     "stable_tag": "release-1.7.1",
@@ -8299,7 +9723,7 @@
     "sub": "crypto-policy-sha1-refusal-handled",
     "program": "unbound",
     "codebase": "unbound",
-    "row_id": "unbound[21]@1.16.1",
+    "row_id": "unbound[22]@1.16.1",
     "mechanism": "validation",
     "evidence": "SHA-1",
     "stable_tag": "release-1.16.1",
@@ -8353,7 +9777,7 @@
    },
    {
     "topic": "cds-cdnskey-publication",
-    "sub": "cds-publication-default",
+    "sub": "cds-publication-narrowed-to-rollover",
     "program": "knot",
     "codebase": "knot",
     "row_id": "knot[10]@2.8.0",
@@ -8500,7 +9924,7 @@
      },
      {
       "program": "unbound",
-      "row_id": "unbound[19]@1.13.2",
+      "row_id": "unbound[20]@1.13.2",
       "date": "2021-08-05"
      }
     ],
@@ -8610,8 +10034,13 @@
    {
     "topic": "root-trust-anchor",
     "sub": "builtin-root-anchor-available",
-    "k": 2,
+    "k": 3,
     "order": [
+     {
+      "program": "unbound",
+      "row_id": "unbound[12]@1.4.7",
+      "date": "2010-11-05"
+     },
      {
       "program": "bind9",
       "row_id": "d04-root-trust-anchor-builtin",
@@ -8623,14 +10052,15 @@
       "date": "2019-04-18"
      }
     ],
-    "leader": "bind9",
-    "leader_row": "d04-root-trust-anchor-builtin",
-    "leader_date": "2011-02-21",
+    "leader": "unbound",
+    "leader_row": "unbound[12]@1.4.7",
+    "leader_date": "2010-11-05",
     "gaps_days_to_rest": {
-     "kresd": 2978
+     "bind9": 108,
+     "kresd": 3086
     },
-    "median_gap_days": 2978,
-    "median_gap_months": 97.8,
+    "median_gap_days": 1597.0,
+    "median_gap_months": 52.5,
     "same_day_tie": false
    },
    {
@@ -8640,7 +10070,7 @@
     "order": [
      {
       "program": "unbound",
-      "row_id": "unbound[12]@1.6.1",
+      "row_id": "unbound[13]@1.6.1",
       "date": "2017-02-14"
      },
      {
@@ -8655,7 +10085,7 @@
      }
     ],
     "leader": "unbound",
-    "leader_row": "unbound[12]@1.6.1",
+    "leader_row": "unbound[13]@1.6.1",
     "leader_date": "2017-02-14",
     "gaps_days_to_rest": {
      "bind9": 43,
@@ -8668,8 +10098,13 @@
    {
     "topic": "root-trust-anchor",
     "sub": "ksk2010-19036-removed",
-    "k": 2,
+    "k": 3,
     "order": [
+     {
+      "program": "bind9",
+      "row_id": "d23-bindkeys-revoked-key-removed",
+      "date": "2019-04-06"
+     },
      {
       "program": "pdns-rec",
       "row_id": "root-ds-19036-removed",
@@ -8677,18 +10112,19 @@
      },
      {
       "program": "unbound",
-      "row_id": "unbound[18]@1.11.0",
+      "row_id": "unbound[19]@1.11.0",
       "date": "2020-07-20"
      }
     ],
-    "leader": "pdns-rec",
-    "leader_row": "root-ds-19036-removed",
-    "leader_date": "2019-07-12",
+    "leader": "bind9",
+    "leader_row": "d23-bindkeys-revoked-key-removed",
+    "leader_date": "2019-04-06",
     "gaps_days_to_rest": {
-     "unbound": 374
+     "pdns-rec": 97,
+     "unbound": 471
     },
-    "median_gap_days": 374,
-    "median_gap_months": 12.3,
+    "median_gap_days": 284.0,
+    "median_gap_months": 9.3,
     "same_day_tie": false
    },
    {
@@ -8703,7 +10139,7 @@
      },
      {
       "program": "unbound",
-      "row_id": "unbound[24]@1.21.0",
+      "row_id": "unbound[25]@1.21.0",
       "date": "2024-08-09"
      },
      {
@@ -8732,11 +10168,16 @@
    {
     "topic": "root-trust-anchor",
     "sub": "rfc8145-key-tag-signalling-on",
-    "k": 2,
+    "k": 3,
     "order": [
      {
+      "program": "bind9",
+      "row_id": "d29-trust-anchor-telemetry-default-yes",
+      "date": "2016-09-29"
+     },
+     {
       "program": "unbound",
-      "row_id": "unbound[14]@1.6.7",
+      "row_id": "unbound[15]@1.6.7",
       "date": "2017-10-10"
      },
      {
@@ -8745,20 +10186,21 @@
       "date": "2017-11-02"
      }
     ],
-    "leader": "unbound",
-    "leader_row": "unbound[14]@1.6.7",
-    "leader_date": "2017-10-10",
+    "leader": "bind9",
+    "leader_row": "d29-trust-anchor-telemetry-default-yes",
+    "leader_date": "2016-09-29",
     "gaps_days_to_rest": {
-     "kresd": 23
+     "unbound": 376,
+     "kresd": 399
     },
-    "median_gap_days": 23,
-    "median_gap_months": 0.8,
+    "median_gap_days": 387.5,
+    "median_gap_months": 12.7,
     "same_day_tie": false
    },
    {
     "topic": "root-trust-anchor",
     "sub": "rfc8509-root-key-sentinel-on",
-    "k": 2,
+    "k": 3,
     "order": [
      {
       "program": "kresd",
@@ -8767,18 +10209,24 @@
      },
      {
       "program": "unbound",
-      "row_id": "unbound[15]@1.7.1",
+      "row_id": "unbound[16]@1.7.1",
       "date": "2018-04-26"
+     },
+     {
+      "program": "bind9",
+      "row_id": "d30-root-key-sentinel-default-yes",
+      "date": "2018-07-03"
      }
     ],
     "leader": "kresd",
     "leader_row": "kresd[3]@2.0.0",
     "leader_date": "2018-01-31",
     "gaps_days_to_rest": {
-     "unbound": 85
+     "unbound": 85,
+     "bind9": 153
     },
-    "median_gap_days": 85,
-    "median_gap_months": 2.8,
+    "median_gap_days": 119.0,
+    "median_gap_months": 3.9,
     "same_day_tie": false
    },
    {
@@ -8857,7 +10305,7 @@
      },
      {
       "program": "unbound",
-      "row_id": "unbound[21]@1.16.1",
+      "row_id": "unbound[22]@1.16.1",
       "date": "2022-07-04"
      },
      {
@@ -8879,7 +10327,7 @@
    },
    {
     "topic": "cds-cdnskey-publication",
-    "sub": "cds-publication-default",
+    "sub": "cds-publication-narrowed-to-rollover",
     "k": 1,
     "order": [
      {
@@ -9006,16 +10454,16 @@
     "k": 4,
     "order": [
      {
+      "program": "unbound",
+      "row_id": "unbound[12]@1.4.7",
+      "sub": "builtin-root-anchor-available",
+      "date": "2010-11-05"
+     },
+     {
       "program": "bind9",
       "row_id": "d04-root-trust-anchor-builtin",
       "sub": "builtin-root-anchor-available",
       "date": "2011-02-21"
-     },
-     {
-      "program": "unbound",
-      "row_id": "unbound[12]@1.6.1",
-      "sub": "ksk2017-20326-added",
-      "date": "2017-02-14"
      },
      {
       "program": "pdns-rec",
@@ -9030,10 +10478,10 @@
       "date": "2017-11-02"
      }
     ],
-    "leader": "bind9",
-    "leader_row": "d04-root-trust-anchor-builtin",
-    "median_gap_days": 2304,
-    "median_gap_months": 75.7
+    "leader": "unbound",
+    "leader_row": "unbound[12]@1.4.7",
+    "median_gap_days": 2412,
+    "median_gap_months": 79.2
    },
    {
     "topic": "sha1-deprecation",
@@ -9071,7 +10519,7 @@
      },
      {
       "program": "unbound",
-      "row_id": "unbound[21]@1.16.1",
+      "row_id": "unbound[22]@1.16.1",
       "sub": "crypto-policy-sha1-refusal-handled",
       "date": "2022-07-04"
      },
@@ -9094,7 +10542,7 @@
      {
       "program": "knot",
       "row_id": "knot[10]@2.8.0",
-      "sub": "cds-publication-default",
+      "sub": "cds-publication-narrowed-to-rollover",
       "date": "2019-03-05"
      }
     ]
@@ -9103,13 +10551,14 @@
   "baseline_sub_milestones": [
    {
     "program": "bind9",
-    "contests_entered": 10,
-    "observed_leads": 2,
-    "expected_leads_by_chance": 3.45,
-    "p_at_least_observed": 0.9133,
+    "contests_entered": 13,
+    "observed_leads": 3,
+    "expected_leads_by_chance": 4.283,
+    "p_at_least_observed": 0.8574,
     "led": [
      "validation-default-on/validates-out-of-the-box",
-     "root-trust-anchor/builtin-root-anchor-available"
+     "root-trust-anchor/ksk2010-19036-removed",
+     "root-trust-anchor/rfc8145-key-tag-signalling-on"
     ],
     "called_leader": false
    },
@@ -9129,8 +10578,8 @@
     "program": "kresd",
     "contests_entered": 7,
     "observed_leads": 3,
-    "expected_leads_by_chance": 2.617,
-    "p_at_least_observed": 0.525,
+    "expected_leads_by_chance": 2.117,
+    "p_at_least_observed": 0.358,
     "led": [
      "nsec3-iterations-rfc9276/iteration-cap-at-or-below-150",
      "root-trust-anchor/ksk2024-38696-added",
@@ -9162,25 +10611,24 @@
    {
     "program": "pdns-rec",
     "contests_entered": 7,
-    "observed_leads": 2,
-    "expected_leads_by_chance": 2.283,
-    "p_at_least_observed": 0.7284,
+    "observed_leads": 1,
+    "expected_leads_by_chance": 2.117,
+    "p_at_least_observed": 0.921,
     "led": [
-     "nsec3-iterations-rfc9276/iteration-cap-at-or-below-50",
-     "root-trust-anchor/ksk2010-19036-removed"
+     "nsec3-iterations-rfc9276/iteration-cap-at-or-below-50"
     ],
     "called_leader": false
    },
    {
     "program": "unbound",
-    "contests_entered": 8,
+    "contests_entered": 9,
     "observed_leads": 3,
-    "expected_leads_by_chance": 3.117,
-    "p_at_least_observed": 0.6694,
+    "expected_leads_by_chance": 2.95,
+    "p_at_least_observed": 0.6115,
     "led": [
      "validation-default-on/validator-enabled-needs-configured-anchor",
-     "root-trust-anchor/ksk2017-20326-added",
-     "root-trust-anchor/rfc8145-key-tag-signalling-on"
+     "root-trust-anchor/builtin-root-anchor-available",
+     "root-trust-anchor/ksk2017-20326-added"
     ],
     "called_leader": false
    }
@@ -9189,12 +10637,10 @@
    {
     "program": "bind9",
     "contests_entered": 5,
-    "observed_leads": 1,
+    "observed_leads": 0,
     "expected_leads_by_chance": 1.143,
-    "p_at_least_observed": 0.7321,
-    "led": [
-     "root-trust-anchor"
-    ],
+    "p_at_least_observed": 1.0,
+    "led": [],
     "called_leader": false
    },
    {
@@ -9249,17 +10695,287 @@
    {
     "program": "unbound",
     "contests_entered": 4,
-    "observed_leads": 2,
+    "observed_leads": 3,
     "expected_leads_by_chance": 0.81,
-    "p_at_least_observed": 0.183,
+    "p_at_least_observed": 0.0268,
     "led": [
      "nsec3-iterations-rfc9276",
-     "validation-default-on"
+     "validation-default-on",
+     "root-trust-anchor"
+    ],
+    "called_leader": true
+   }
+  ],
+  "topics_note": "'topics' and 'baseline_topics' include context rows, so a context row can lead a topic (unbound[1]@0.5 leads the NSEC3 topic); 'topics_milestones_only' leaves them out.",
+  "topics_milestones_only": [
+   {
+    "topic": "ecdsa-p256-default",
+    "k": 3,
+    "order": [
+     {
+      "program": "knot",
+      "row_id": "knot[2]@2.1.0",
+      "sub": "default-signing-alg-ecdsap256",
+      "date": "2016-01-14"
+     },
+     {
+      "program": "pdns-auth",
+      "row_id": "pdns-auth[7]@4.0.0",
+      "sub": "default-signing-alg-ecdsap256",
+      "date": "2016-07-08"
+     },
+     {
+      "program": "bind9",
+      "row_id": "d15-dnssec-policy-default-ecdsap256",
+      "sub": "default-signing-alg-ecdsap256",
+      "date": "2020-02-12"
+     }
+    ],
+    "leader": "knot"
+   },
+   {
+    "topic": "nsec3-iterations-rfc9276",
+    "k": 6,
+    "order": [
+     {
+      "program": "kresd",
+      "row_id": "kresd[9]@5.3.1",
+      "sub": "iteration-cap-at-or-below-150",
+      "date": "2021-03-31"
+     },
+     {
+      "program": "bind9",
+      "row_id": "l01-nsec3-max-iterations-150",
+      "sub": "iteration-cap-at-or-below-150",
+      "date": "2021-05-12"
+     },
+     {
+      "program": "pdns-rec",
+      "row_id": "nsec3-max-iterations-150",
+      "sub": "iteration-cap-at-or-below-150",
+      "date": "2021-06-07"
+     },
+     {
+      "program": "pdns-auth",
+      "row_id": "pdns-auth[10]@4.5.0",
+      "sub": "iteration-cap-at-or-below-150",
+      "date": "2021-07-12"
+     },
+     {
+      "program": "unbound",
+      "row_id": "unbound[20]@1.13.2",
+      "sub": "iteration-cap-at-or-below-150",
+      "date": "2021-08-05"
+     },
+     {
+      "program": "knot",
+      "row_id": "knot[14]@3.2.0",
+      "sub": "signer-default-iterations-0",
+      "date": "2022-08-22"
+     }
+    ],
+    "leader": "kresd"
+   },
+   {
+    "topic": "validation-default-on",
+    "k": 4,
+    "order": [
+     {
+      "program": "unbound",
+      "row_id": "unbound[0]@0.5",
+      "sub": "validator-enabled-needs-configured-anchor",
+      "date": "2007-09-25"
+     },
+     {
+      "program": "bind9",
+      "row_id": "d01-validation-default-yes",
+      "sub": "validator-enabled-needs-configured-anchor",
+      "date": "2008-05-28"
+     },
+     {
+      "program": "kresd",
+      "row_id": "kresd[6]@4.0.0",
+      "sub": "validates-out-of-the-box",
+      "date": "2019-04-18"
+     },
+     {
+      "program": "pdns-rec",
+      "row_id": "dnssec-default-process",
+      "sub": "validates-out-of-the-box",
+      "date": "2021-05-10"
+     }
+    ],
+    "leader": "unbound"
+   },
+   {
+    "topic": "root-trust-anchor",
+    "k": 4,
+    "order": [
+     {
+      "program": "unbound",
+      "row_id": "unbound[12]@1.4.7",
+      "sub": "builtin-root-anchor-available",
+      "date": "2010-11-05"
+     },
+     {
+      "program": "bind9",
+      "row_id": "d04-root-trust-anchor-builtin",
+      "sub": "builtin-root-anchor-available",
+      "date": "2011-02-21"
+     },
+     {
+      "program": "pdns-rec",
+      "row_id": "root-ds-2017-added",
+      "sub": "ksk2017-20326-added",
+      "date": "2017-06-13"
+     },
+     {
+      "program": "kresd",
+      "row_id": "kresd[1]@1.5.0",
+      "sub": "rfc8145-key-tag-signalling-on",
+      "date": "2017-11-02"
+     }
+    ],
+    "leader": "unbound"
+   },
+   {
+    "topic": "sha1-deprecation",
+    "k": 6,
+    "order": [
+     {
+      "program": "opendnssec",
+      "row_id": "opendnssec[5]@1.2.0b1",
+      "sub": "signer-default-alg-moves-off-sha1",
+      "date": "2011-03-18"
+     },
+     {
+      "program": "pdns-auth",
+      "row_id": "pdns-auth[0]@3.2",
+      "sub": "signer-default-alg-moves-off-sha1",
+      "date": "2013-01-17"
+     },
+     {
+      "program": "bind9",
+      "row_id": "d06-keygen-no-default-alg",
+      "sub": "signer-default-alg-moves-off-sha1",
+      "date": "2018-01-17"
+     },
+     {
+      "program": "knot",
+      "row_id": "knot[11]@2.8.0",
+      "sub": "sha1-ds-no-longer-generated",
+      "date": "2019-03-05"
+     },
+     {
+      "program": "unbound",
+      "row_id": "unbound[22]@1.16.1",
+      "sub": "crypto-policy-sha1-refusal-handled",
+      "date": "2022-07-04"
+     },
+     {
+      "program": "pdns-rec",
+      "row_id": "dnssec-disabled-algorithms-auto",
+      "sub": "crypto-policy-sha1-refusal-handled",
+      "date": "2023-06-29"
+     }
+    ],
+    "leader": "opendnssec"
+   },
+   {
+    "topic": "cds-cdnskey-publication",
+    "k": 1,
+    "order": [
+     {
+      "program": "knot",
+      "row_id": "knot[10]@2.8.0",
+      "sub": "cds-publication-narrowed-to-rollover",
+      "date": "2019-03-05"
+     }
+    ]
+   }
+  ],
+  "baseline_topics_milestones_only": [
+   {
+    "program": "bind9",
+    "contests_entered": 5,
+    "observed_leads": 0,
+    "expected_leads_by_chance": 1.167,
+    "p_at_least_observed": 1.0,
+    "led": [],
+    "called_leader": false
+   },
+   {
+    "program": "knot",
+    "contests_entered": 3,
+    "observed_leads": 1,
+    "expected_leads_by_chance": 0.667,
+    "p_at_least_observed": 0.537,
+    "led": [
+     "ecdsa-p256-default"
+    ],
+    "called_leader": false
+   },
+   {
+    "program": "kresd",
+    "contests_entered": 3,
+    "observed_leads": 1,
+    "expected_leads_by_chance": 0.667,
+    "p_at_least_observed": 0.5312,
+    "led": [
+     "nsec3-iterations-rfc9276"
+    ],
+    "called_leader": false
+   },
+   {
+    "program": "opendnssec",
+    "contests_entered": 1,
+    "observed_leads": 1,
+    "expected_leads_by_chance": 0.167,
+    "p_at_least_observed": 0.1667,
+    "led": [
+     "sha1-deprecation"
+    ],
+    "called_leader": false
+   },
+   {
+    "program": "pdns-auth",
+    "contests_entered": 3,
+    "observed_leads": 0,
+    "expected_leads_by_chance": 0.667,
+    "p_at_least_observed": 1.0,
+    "led": [],
+    "called_leader": false
+   },
+   {
+    "program": "pdns-rec",
+    "contests_entered": 4,
+    "observed_leads": 0,
+    "expected_leads_by_chance": 0.833,
+    "p_at_least_observed": 1.0,
+    "led": [],
+    "called_leader": false
+   },
+   {
+    "program": "unbound",
+    "contests_entered": 4,
+    "observed_leads": 2,
+    "expected_leads_by_chance": 0.833,
+    "p_at_least_observed": 0.1927,
+    "led": [
+     "validation-default-on",
+     "root-trust-anchor"
     ],
     "called_leader": false
    }
   ],
   "programs_called_leader": [],
+  "programs_called_leader_by_level": {
+   "sub_milestones": [],
+   "topics_with_context_rows": [
+    "unbound"
+   ],
+   "topics_milestones_only": []
+  },
   "tied_sub_milestones_left_out_of_baseline": [
    "nsec3-iterations-rfc9276/signer-default-iterations-0",
    "nsec3-iterations-rfc9276/signer-default-salt-empty"
@@ -9280,7 +10996,7 @@
     "predecessor_published": "2019-06-01",
     "successor": "RFC 9904",
     "successor_published": "2025-11-01",
-    "n_rows_predecessor": 10,
+    "n_rows_predecessor": 8,
     "n_rows_successor": 0,
     "per_program": [
      {
@@ -9343,44 +11059,12 @@
      },
      {
       "program": "pdns-auth",
-      "first_predecessor_row": "pdns-auth[5]@4.0.0",
+      "first_predecessor_row": "pdns-auth[7]@4.0.0",
       "first_predecessor_date": "2016-07-08",
       "first_successor_row": null,
       "first_successor_date": null,
       "successor_minus_predecessor_months": null,
       "predecessor_rows": [
-       {
-        "row_id": "pdns-auth[5]@4.0.0",
-        "mechanism": "alg-ecdsa",
-        "date": "2016-07-08",
-        "stable_tag": "auth-4.0.0",
-        "after": "default-ksk-algorithms=\"\" ; default-zsk-algorithms still rsasha256 (intermediate step; pre-release only)",
-        "later_rows_same_mechanism": [],
-        "still_current_default": false,
-        "intermediate_pre_release_state": true,
-        "shipped_after_successor_publication": false,
-        "releases_after_successor": 17,
-        "latest_stable_release": [
-         "auth-5.1.4",
-         "2026-08-03"
-        ]
-       },
-       {
-        "row_id": "pdns-auth[6]@4.0.0",
-        "mechanism": "alg-ecdsa",
-        "date": "2016-07-08",
-        "stable_tag": "auth-4.0.0",
-        "after": "default-zsk-algorithms=ecdsa256 (common_startup.cc, pdnsutil.cc, pdns.conf-dist); intermediate state",
-        "later_rows_same_mechanism": [],
-        "still_current_default": false,
-        "intermediate_pre_release_state": true,
-        "shipped_after_successor_publication": false,
-        "releases_after_successor": 17,
-        "latest_stable_release": [
-         "auth-5.1.4",
-         "2026-08-03"
-        ]
-       },
        {
         "row_id": "pdns-auth[7]@4.0.0",
         "mechanism": "alg-ecdsa",
@@ -9443,14 +11127,14 @@
      },
      {
       "program": "unbound",
-      "first_predecessor_row": "unbound[17]@1.10.0",
+      "first_predecessor_row": "unbound[18]@1.10.0",
       "first_predecessor_date": "2020-02-20",
       "first_successor_row": null,
       "first_successor_date": null,
       "successor_minus_predecessor_months": null,
       "predecessor_rows": [
        {
-        "row_id": "unbound[17]@1.10.0",
+        "row_id": "unbound[18]@1.10.0",
         "mechanism": "other",
         "date": "2020-02-20",
         "stable_tag": "release-1.10.0",
@@ -9466,7 +11150,7 @@
         ]
        },
        {
-        "row_id": "unbound[21]@1.16.1",
+        "row_id": "unbound[22]@1.16.1",
         "mechanism": "validation",
         "date": "2022-07-04",
         "stable_tag": "release-1.16.1",
@@ -9723,6 +11407,7 @@
     "n_latency_public": 0,
     "dnssec_subset": {
      "n": 1,
+     "n_with_latency": 1,
      "median": -112,
      "iqr": [
       -112,
@@ -9773,6 +11458,7 @@
     "n_latency_public": 0,
     "dnssec_subset": {
      "n": 7,
+     "n_with_latency": 7,
      "median": -1,
      "iqr": [
       -6.0,
@@ -9838,6 +11524,7 @@
     "n_latency_public": 0,
     "dnssec_subset": {
      "n": 0,
+     "n_with_latency": 0,
      "median": null,
      "iqr": [
       null,
@@ -9894,6 +11581,7 @@
     "n_latency_public": 0,
     "dnssec_subset": {
      "n": 0,
+     "n_with_latency": 0,
      "median": null,
      "iqr": [
       null,
@@ -9940,6 +11628,7 @@
     "n_latency_public": 3,
     "dnssec_subset": {
      "n": 0,
+     "n_with_latency": 0,
      "median": null,
      "iqr": [
       null,
@@ -10003,6 +11692,7 @@
     "n_latency_public": 4,
     "dnssec_subset": {
      "n": 14,
+     "n_with_latency": 13,
      "median": -8,
      "iqr": [
       -20.0,
@@ -10134,6 +11824,7 @@
     "n_latency_public": 0,
     "dnssec_subset": {
      "n": 17,
+     "n_with_latency": 14,
      "median": 0.0,
      "iqr": [
       0.0,
@@ -10259,10 +11950,14 @@
     -0.25
    ]
   },
+  "small_n_warning": {
+   "knot": "n = 4 (latencies -1296, -184, -112, -15); the median mostly measures NVD's delay in publishing old knot CVEs, not knot's fix speed, and is not comparable to bind9's n = 135"
+  },
   "caveat": "NVD publication is often long after the vendor advisory for old CVEs (knot CVE-2014-0486 was published 3.5 years after the fix), so latency medians describe NVD lag as much as vendor speed."
  },
  "q7_release_cadence": {
   "description": "Stable releases (stable true, alias tags of the same commit dropped) per calendar year of releases[].released, and the median interval between consecutive stable releases ordered by UTC instant, overall and by the decade of the later release. Parallel maintenance branches make same-day releases common (bind9 ships several branches at once), which pulls the medians down.",
+  "collapsed": "median_days_between_collapsed collapses releases to one event per UTC calendar day, so parallel branches shipped together count once; use it for any cross-program comparison. Intervals are whole days.",
   "per_year": {
    "bind9": {
     "2000": 2,
@@ -10441,7 +12136,14 @@
     "first": "v9.0.0 2000-09-15",
     "last": "v9.20.29 2026-09-11",
     "median_days_between": 3.39,
-    "n_same_day_pairs": 208,
+    "n_release_days_utc": 242,
+    "median_days_between_collapsed": 30,
+    "per_decade_median_days_collapsed": {
+     "2000s": 49.0,
+     "2010s": 30.0,
+     "2020s": 28
+    },
+    "n_intervals_under_24h": 208,
     "per_decade_median_days": {
      "2000s": 11.34,
      "2010s": 0.13,
@@ -10460,7 +12162,13 @@
     "first": "v0.1 2011-02-02",
     "last": "v3.6.0 2026-09-08",
     "median_days_between": 30.04,
-    "n_same_day_pairs": 18,
+    "n_release_days_utc": 157,
+    "median_days_between_collapsed": 34.0,
+    "per_decade_median_days_collapsed": {
+     "2010s": 34,
+     "2020s": 34
+    },
+    "n_intervals_under_24h": 18,
     "per_decade_median_days": {
      "2010s": 29.13,
      "2020s": 30.19
@@ -10477,7 +12185,13 @@
     "first": "v1.0.0 2016-05-30",
     "last": "v6.4.2 2026-08-05",
     "median_days_between": 35.05,
-    "n_same_day_pairs": 7,
+    "n_release_days_utc": 82,
+    "median_days_between_collapsed": 37,
+    "per_decade_median_days_collapsed": {
+     "2010s": 27,
+     "2020s": 46.5
+    },
+    "n_intervals_under_24h": 7,
     "per_decade_median_days": {
      "2010s": 27.05,
      "2020s": 37.09
@@ -10494,7 +12208,14 @@
     "first": "NSD_1_0_3_REL 2002-09-26",
     "last": "NSD_4_15_2_REL 2026-09-02",
     "median_days_between": 64.09,
-    "n_same_day_pairs": 14,
+    "n_release_days_utc": 119,
+    "median_days_between_collapsed": 68.5,
+    "per_decade_median_days_collapsed": {
+     "2000s": 73,
+     "2010s": 64,
+     "2020s": 70.0
+    },
+    "n_intervals_under_24h": 14,
     "per_decade_median_days": {
      "2000s": 40.45,
      "2010s": 63.2,
@@ -10513,7 +12234,13 @@
     "first": "1.0.0 2010-02-28",
     "last": "2.1.14 2024-08-22",
     "median_days_between": 51.95,
-    "n_same_day_pairs": 5,
+    "n_release_days_utc": 60,
+    "median_days_between_collapsed": 61,
+    "per_decade_median_days_collapsed": {
+     "2010s": 46.5,
+     "2020s": 136
+    },
+    "n_intervals_under_24h": 5,
     "per_decade_median_days": {
      "2010s": 41.87,
      "2020s": 136.04
@@ -10530,7 +12257,14 @@
     "first": "pdns-2.9 2002-11-28",
     "last": "auth-5.1.4 2026-08-03",
     "median_days_between": 35.1,
-    "n_same_day_pairs": 21,
+    "n_release_days_utc": 112,
+    "median_days_between_collapsed": 50,
+    "per_decade_median_days_collapsed": {
+     "2000s": 41,
+     "2010s": 69,
+     "2020s": 39
+    },
+    "n_intervals_under_24h": 21,
     "per_decade_median_days": {
      "2000s": 41.42,
      "2010s": 57.33,
@@ -10549,7 +12283,14 @@
     "first": "rec-3.0 2006-04-20",
     "last": "rec-5.4.6 2026-09-02",
     "median_days_between": 16.03,
-    "n_same_day_pairs": 63,
+    "n_release_days_utc": 117,
+    "median_days_between_collapsed": 34.5,
+    "per_decade_median_days_collapsed": {
+     "2000s": 142,
+     "2010s": 49.5,
+     "2020s": 30
+    },
+    "n_intervals_under_24h": 63,
     "per_decade_median_days": {
      "2000s": 142.03,
      "2010s": 42.24,
@@ -10571,7 +12312,14 @@
     "first": "release-0.0 2007-02-19",
     "last": "release-1.26.1 2026-09-16",
     "median_days_between": 55.15,
-    "n_same_day_pairs": 2,
+    "n_release_days_utc": 118,
+    "median_days_between_collapsed": 56,
+    "per_decade_median_days_collapsed": {
+     "2000s": 24,
+     "2010s": 58.5,
+     "2020s": 63.0
+    },
+    "n_intervals_under_24h": 2,
     "per_decade_median_days": {
      "2000s": 23.87,
      "2010s": 57.2,
@@ -10625,7 +12373,7 @@
   },
   "variants": {
    "tag_dates": {
-    "n_events": 370,
+    "n_events": 374,
     "labels_shared_by_2plus_codebases": {
      "cve:CVE-2020-28935": [
       "nsd",
@@ -10786,7 +12534,7 @@
     "tests": {
      "label_pairs": {
       "observed": 7,
-      "null_mean": 0.208,
+      "null_mean": 0.241,
       "null_median": 0.0,
       "null_p95": 1,
       "null_max": 3,
@@ -10806,17 +12554,17 @@
      },
      "label_pairs_topic": {
       "observed": 1,
-      "null_mean": 0.196,
+      "null_mean": 0.229,
       "null_median": 0.0,
       "null_p95": 1,
       "null_max": 3,
-      "percentile_midrank": 90.2,
-      "p_value_ge": 0.1858,
+      "percentile_midrank": 88.6,
+      "p_value_ge": 0.2108,
       "distinguishable_from_null": false
      },
      "distinct_release_pairs": {
       "observed": 4,
-      "null_mean": 0.202,
+      "null_mean": 0.235,
       "null_median": 0.0,
       "null_p95": 1,
       "null_max": 3,
@@ -10827,7 +12575,7 @@
     }
    },
    "pdns_rec_changelog_public_dates": {
-    "n_events": 370,
+    "n_events": 374,
     "labels_shared_by_2plus_codebases": {
      "cve:CVE-2020-28935": [
       "nsd",
@@ -11078,7 +12826,7 @@
     "tests": {
      "label_pairs": {
       "observed": 13,
-      "null_mean": 0.2,
+      "null_mean": 0.233,
       "null_median": 0.0,
       "null_p95": 1,
       "null_max": 3,
@@ -11098,17 +12846,17 @@
      },
      "label_pairs_topic": {
       "observed": 1,
-      "null_mean": 0.196,
+      "null_mean": 0.229,
       "null_median": 0.0,
       "null_p95": 1,
       "null_max": 3,
-      "percentile_midrank": 90.2,
-      "p_value_ge": 0.1858,
+      "percentile_midrank": 88.6,
+      "p_value_ge": 0.2108,
       "distinguishable_from_null": false
      },
      "distinct_release_pairs": {
       "observed": 7,
-      "null_mean": 0.198,
+      "null_mean": 0.231,
       "null_median": 0.0,
       "null_p95": 1,
       "null_max": 3,
@@ -11121,7 +12869,7 @@
   },
   "headline": {
    "observed": 4,
-   "null_mean": 0.202,
+   "null_mean": 0.235,
    "null_median": 0.0,
    "null_p95": 1,
    "null_max": 3,
@@ -11467,8 +13215,6 @@
     "arc_a_first_release": "4.0.0",
     "arc_a_released": "2016-07-08",
     "timeline_rows_at_that_release": [
-     "pdns-auth[5]@4.0.0",
-     "pdns-auth[6]@4.0.0",
      "pdns-auth[7]@4.0.0",
      "pdns-auth[8]@4.0.0",
      "pdns-auth[9]@4.0.0"
@@ -11483,8 +13229,6 @@
     "arc_a_first_release": "4.0.0",
     "arc_a_released": "2016-07-08",
     "timeline_rows_at_that_release": [
-     "pdns-auth[5]@4.0.0",
-     "pdns-auth[6]@4.0.0",
      "pdns-auth[7]@4.0.0",
      "pdns-auth[8]@4.0.0",
      "pdns-auth[9]@4.0.0"
@@ -11526,7 +13270,7 @@
     "arc_a_first_release": "1.13.2",
     "arc_a_released": "2021-08-05",
     "timeline_rows_at_that_release": [
-     "unbound[19]@1.13.2"
+     "unbound[20]@1.13.2"
     ],
     "agrees": true,
     "issues": []
@@ -11558,26 +13302,33 @@
   ],
   "n_disagreements": 2
  },
- "suspect_rows": [
+ "suspect_rows": [],
+ "resolved_suspect_rows": [
   {
    "program": "bind9",
    "row_id": "d10-dsa-removed",
    "field": "mechanism",
-   "reason": "mechanism is alg-rsa-sha2 but the row removes DSA (algorithms 3 and 6); knot[7] and unbound[17] label the same kind of change 'other'",
+   "was": "alg-rsa-sha2",
+   "now": "other",
+   "resolved_in": "54400276",
    "command": "python3 -c \"import json;d=json.load(open('data/software/timelines/bind9.json'));r=[x for x in d['default_changes'] if x['id']=='d10-dsa-removed'][0];print(r['mechanism'],'|',r['description'])\""
   },
   {
    "program": "pdns-auth",
    "row_id": "pdns-auth[5]@4.0.0",
    "field": "stable_tag",
-   "reason": "stable_tag auth-4.0.0 is given for an intermediate pre-release state (default-ksk-algorithms emptied) that pdns-auth[8] replaced before auth-4.0.0 shipped, so no stable release carried this after-state",
+   "was": "auth-4.0.0",
+   "now": null,
+   "resolved_in": "54400276",
    "command": "python3 -c \"import json;d=json.load(open('data/software/timelines/pdns-auth.json'));[print(i,r['tag'],r['stable_tag'],'|',r['after'][:110]) for i,r in enumerate(d['default_changes']) if i in (5,6,8)]\""
   },
   {
    "program": "pdns-auth",
    "row_id": "pdns-auth[6]@4.0.0",
    "field": "stable_tag",
-   "reason": "same as pdns-auth[5]: the after text calls default-zsk-algorithms=ecdsa256 an intermediate state, superseded by pdns-auth[8] (ecdsa256 KSK as CSK, empty ZSK list) in auth-4.0.0",
+   "was": "auth-4.0.0",
+   "now": null,
+   "resolved_in": "54400276",
    "command": "python3 -c \"import json;d=json.load(open('data/software/timelines/pdns-auth.json'));[print(i,r['tag'],r['stable_tag'],'|',r['after'][:110]) for i,r in enumerate(d['default_changes']) if i in (5,6,8)]\""
   }
  ]

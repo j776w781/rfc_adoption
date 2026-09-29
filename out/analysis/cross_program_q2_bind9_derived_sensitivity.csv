@@ -1,0 +1,6 @@
+rfc,publication_date,program,row_id,rfc_source,mechanism,kind,is_default_change,stable_tag,stable_date,public_tag,public_date,timing_date,lag_days,lag_months,lag_months_stable_tag,negative_lag
+RFC 5011,2007-09-01,bind9,d04-root-trust-anchor-builtin,"derived, text-cited",trust-anchor-5011,default-changed,True,v9.8.0,2011-02-21,,,2011-02-21,1269,41.7,41.7,False
+RFC 9276,2022-08-01,bind9,d18-nsec3param-default-0-0,"derived, text-cited",nsec3-iterations,default-changed,True,v9.18.0,2022-01-24,,,2022-01-24,-189,-6.2,-6.2,True
+RFC 9276,2022-08-01,bind9,l01-nsec3-max-iterations-150,"derived, mechanism analogue: fixed 150 cap, like unbound[20] and pdns-auth[10]",nsec3-iterations,limit-changed,True,v9.16.16,2021-05-12,,,2021-05-12,-446,-14.7,-14.7,True
+RFC 5155,2008-03-01,bind9,d03-signzone-nsec3-iterations-100-to-10,"derived, mechanism analogue: nsec3-iterations -> RFC 5155",nsec3-iterations,default-changed,True,v9.7.0,2010-02-16,,,2010-02-16,717,23.6,23.6,False
+RFC 6605,2012-04-01,bind9,d15-dnssec-policy-default-ecdsap256,"derived, mechanism analogue: alg-ecdsa -> RFC 6605",alg-ecdsa,support-added,True,v9.16.0,2020-02-12,,,2020-02-12,2873,94.4,94.4,False

@@ -145,7 +145,7 @@ NORMALISATION = {
         "latency_days_public reported beside",
         "others": "tag = fix_tag; date = fix_released; included when applicable is True and the tag is not null; "
         "applicable == 'disputed' reported as a separate group; latency_days used as recorded",
-        "pre_release_fix_tags": "where fix_tag is not a stable release (five unbound rows and the twelve disputed rows) the recorded "
+        "pre_release_fix_tags": "where fix_tag is not a stable release (counts per program in q6 n_pre_release_fix_tags) the recorded "
         "latency_days is kept as the headline figure, as the brief requires, and latency_days_stable (first_stable_tag date minus "
         "nvd_published) is reported beside it; question 8 timing always uses the stable release",
     },
@@ -178,8 +178,11 @@ def stable_releases(d: dict) -> list[dict]:
     return out
 
 
-def norm_defaults(data, rel, suspects):
+def norm_defaults(data, rel, suspects, null_tag=None):
+    """Returns (rows, failures). Rows whose stable tag is null are appended to null_tag, not to failures."""
     rows, failures = [], []
+    if null_tag is None:
+        null_tag = []
     for p in PROGRAMS:
         d = data[p]
         by_version = {}
@@ -222,7 +225,12 @@ def norm_defaults(data, rel, suspects):
             elif p == "unbound":
                 rid, tag, rec_date = f"unbound[{i}]@{r['version']}", r.get("tag"), r.get("released")
                 is_dc, kind = bool(r.get("is_default_change")), None
-            R = rel[p].get(tag) if tag else None
+            if tag is None:
+                null_tag.append({"program": p, "row_id": rid, "row_tag": r.get("tag"),
+                                 "reason": "stable tag is null: the state was pre-release only and no stable release shipped it"
+                                           + (f" ({r.get('note')})" if r.get("note") else "")})
+                continue
+            R = rel[p].get(tag)
             ok = R is not None and R.get("stable") is True
             if not ok:
                 failures.append({"program": p, "row_id": rid, "tag": tag,
@@ -391,37 +399,44 @@ def lead_baseline(contests: list[dict]) -> list[dict]:
 
 
 # --------------------------------------------------------------------------- question 2
-def q2(defaults, checklist):
-    pub = {r["rfc_id"]: r["publication_date"] for r in checklist["rfcs"]}
-    rows = []
-    not_in_checklist = []
-    for r in defaults:
-        for rfc in r["rfcs"]:
-            if rfc not in pub:
-                not_in_checklist.append({"program": r["program"], "row_id": r["row_id"], "rfc": rfc})
-                continue
-            lag_days = days_between(pub[rfc], r["timing_date"])
-            rows.append({"rfc": rfc, "publication_date": pub[rfc], "program": r["program"], "row_id": r["row_id"],
-                         "mechanism": r["mechanism"], "kind": r["kind_col"], "is_default_change": r["is_default_change"],
-                         "stable_tag": r["stable_tag"], "stable_date": r["stable_date"],
-                         "public_tag": r["public_tag"], "public_date": r["public_date"],
-                         "timing_date": r["timing_date"], "lag_days": lag_days,
-                         "lag_months": round(lag_days / DAYS_PER_MONTH, 1),
-                         "lag_months_stable_tag": round(days_between(pub[rfc], r["stable_date"]) / DAYS_PER_MONTH, 1),
-                         "negative_lag": lag_days < 0})
-    rows.sort(key=lambda x: (int(x["rfc"].split()[1]), x["timing_date"], x["program"]))
-    per_rfc = []
-    contests = []
+# bind9 rows carry no rfcs field. This derived set is a SENSITIVITY only, never part of the main table; it
+# follows the Phase 5 report (section B): "text-cited" = the row's own text names the RFC; "mechanism analogue" =
+# the mechanism that every other program's curated rows map to that RFC.
+BIND9_DERIVED_RFCS = [
+    ("RFC 5011", "d04-root-trust-anchor-builtin", "text-cited", r"RFC 5011"),
+    ("RFC 9276", "d18-nsec3param-default-0-0", "text-cited", r"RFC 9276"),
+    ("RFC 9276", "l01-nsec3-max-iterations-150", "mechanism analogue: fixed 150 cap, like unbound[20] and pdns-auth[10]", None),
+    ("RFC 5155", "d03-signzone-nsec3-iterations-100-to-10", "mechanism analogue: nsec3-iterations -> RFC 5155", None),
+    ("RFC 6605", "d15-dnssec-policy-default-ecdsap256", "mechanism analogue: alg-ecdsa -> RFC 6605", None),
+]
+ANALOGUE_MECH = {"RFC 5155": {"nsec3", "nsec3-iterations"}, "RFC 6605": {"alg-ecdsa"}, "RFC 9276": {"nsec3-iterations"}}
+
+
+def q2_row(r, rfc, pub, rule="recorded rfcs field"):
+    lag_days = days_between(pub[rfc], r["timing_date"])
+    return {"rfc": rfc, "publication_date": pub[rfc], "program": r["program"], "row_id": r["row_id"],
+            "rfc_source": rule,
+            "mechanism": r["mechanism"], "kind": r["kind_col"], "is_default_change": r["is_default_change"],
+            "stable_tag": r["stable_tag"], "stable_date": r["stable_date"],
+            "public_tag": r["public_tag"], "public_date": r["public_date"],
+            "timing_date": r["timing_date"], "lag_days": lag_days,
+            "lag_months": round(lag_days / DAYS_PER_MONTH, 1),
+            "lag_months_stable_tag": round(days_between(pub[rfc], r["stable_date"]) / DAYS_PER_MONTH, 1),
+            "negative_lag": lag_days < 0}
+
+
+def q2_order(rows, pub):
+    per_rfc, contests = [], []
     for rfc in sorted({x["rfc"] for x in rows}, key=lambda s: int(s.split()[1])):
         rs = [x for x in rows if x["rfc"] == rfc]
         first = {}
         for x in sorted(rs, key=lambda x: (x["timing_date"], x["row_id"])):
             first.setdefault(x["program"], x)
-        order = sorted(first.values(), key=lambda x: x["timing_date"])
+        order = sorted(first.values(), key=lambda x: (x["timing_date"], x["row_id"]))
         spread = (days_between(order[0]["timing_date"], order[-1]["timing_date"]) / DAYS_PER_MONTH) if len(order) > 1 else None
         per_rfc.append({"rfc": rfc, "publication_date": pub[rfc], "n_programs": len(order),
                         "order": [{"program": x["program"], "row_id": x["row_id"], "date": x["timing_date"],
-                                   "lag_months": x["lag_months"],
+                                   "lag_months": x["lag_months"], "rfc_source": x["rfc_source"],
                                    "role": "+".join(k for k, v in ROLES.items() if x["program"] in v)} for x in order],
                         "spread_months_first_to_last": round(spread, 1) if spread is not None else None,
                         "all_row_ids": [x["row_id"] for x in rs]})
@@ -439,16 +454,67 @@ def q2(defaults, checklist):
         m["programs"] |= set(c["programs"])
     merged_contests = [{"label": "+".join(m["label"]), "programs": sorted(m["programs"]), "leader": m["leader"],
                         "leader_row": m["leader_row"]} for m in merged.values()]
+    return per_rfc, contests, merged_contests
+
+
+def q2(defaults, checklist):
+    pub = {r["rfc_id"]: r["publication_date"] for r in checklist["rfcs"]}
+    rows = []
+    not_in_checklist = []
+    for r in defaults:
+        for rfc in r["rfcs"]:
+            if rfc not in pub:
+                not_in_checklist.append({"program": r["program"], "row_id": r["row_id"], "rfc": rfc})
+                continue
+            rows.append(q2_row(r, rfc, pub))
+    rows.sort(key=lambda x: (int(x["rfc"].split()[1]), x["timing_date"], x["program"]))
+    per_rfc, contests, merged_contests = q2_order(rows, pub)
     write_csv("q2_code_lag", rows)
+
+    # derived bind9 sensitivity, applied only where bind9 has no recorded row for that RFC
+    by_id = {(r["program"], r["row_id"]): r for r in defaults}
+    recorded_bind9 = {x["rfc"] for x in rows if x["program"] == "bind9"}
+    derived = []
+    for rfc, rid, rule, rx in BIND9_DERIVED_RFCS:
+        if rfc in recorded_bind9:
+            continue
+        r = by_id[("bind9", rid)]
+        if rx:
+            assert re.search(rx, " ".join([r["title"], r["before"], r["after"]])), (rid, rx)
+        else:
+            assert r["mechanism"] in ANALOGUE_MECH[rfc], (rid, r["mechanism"])
+        derived.append(q2_row(r, rfc, pub, rule="derived, " + rule))
+    sens_rows = sorted(rows + derived, key=lambda x: (int(x["rfc"].split()[1]), x["timing_date"], x["program"]))
+    s_per_rfc, s_contests, s_merged = q2_order(sens_rows, pub)
+    text_only = [x for x in derived if x["rfc_source"].startswith("derived, text-cited")]
+    t_per_rfc, t_contests, t_merged = q2_order(sorted(rows + text_only, key=lambda x: (x["timing_date"], x["program"])), pub)
+    base_main = lead_baseline(merged_contests)
+    base_sens = lead_baseline(s_merged)
+    base_text = lead_baseline(t_merged)
+    write_csv("q2_bind9_derived_sensitivity", derived)
+    diffs = []
+    for c in s_per_rfc:
+        m = next((x for x in per_rfc if x["rfc"] == c["rfc"]), None)
+        if m is None or [o["program"] for o in m["order"]] != [o["program"] for o in c["order"]]:
+            diffs.append({"rfc": c["rfc"], "main_first": m["order"][0]["program"] if m else None,
+                          "sensitivity_first": c["order"][0]["program"],
+                          "main_spread": m["spread_months_first_to_last"] if m else None,
+                          "sensitivity_spread": c["spread_months_first_to_last"],
+                          "sensitivity_order": [(o["program"], o["lag_months"]) for o in c["order"]]})
+    called = lambda b: sorted(x["program"] for x in b if x["called_leader"])
     return {
-        "description": "For each default_changes row naming a checklist RFC in rfcs: timing date (public release for pdns-rec rows "
-                       "citing never-public tags; otherwise the first stable release) minus the RFC publication_date, in months "
-                       "of 30.44 days. Per RFC, each program's earliest such row, in order, and the spread from first to last program.",
-        "caveat": "Rows cite an RFC when the default change relates to it; the earliest row per program is the first DEFAULT change "
-                  "citing the RFC, not necessarily first support. bind9 rows carry no rfcs field, so bind9 is absent from this "
-                  "question; that is a gap in the timeline schema, not a finding.",
+        "description": "For each default_changes row naming a checklist RFC in its recorded rfcs field, default change or not "
+                       "(support-added and limit-changed rows are included): timing date (public release for pdns-rec rows "
+                       "citing never-public tags; otherwise the first stable release) minus the RFC publication_date, in "
+                       "months of 30.44 days. Per RFC, each program's earliest such row, in order, and the spread from "
+                       "first to last program.",
+        "caveat": "The earliest row per program is the first row of any kind citing the RFC, not necessarily first "
+                  "support. bind9 rows carry no rfcs field, so bind9 is absent from the main table; four bind9 rows name "
+                  "RFC 5011 or RFC 9276 in their own text, and bind9_derived_sensitivity shows the effect of including them.",
         "programs_without_rfcs_field": [p for p in PROGRAMS if not any(r["program"] == p and r["rfcs"] for r in defaults)],
         "rows": rows,
+        "n_negative_lag_rows": sum(1 for x in rows if x["negative_lag"]),
+        "n_negative_lag_program_rfc": sum(1 for c in per_rfc for o in c["order"] if o["lag_months"] < 0),
         "per_rfc": per_rfc,
         "rows_citing_rfcs_not_in_checklist": not_in_checklist,
         "first_to_ship_chance_baseline": {
@@ -456,10 +522,22 @@ def q2(defaults, checklist):
                       "p = P(leads >= observed) under independent contests (Poisson-binomial). No program is called a "
                       "leader on fewer than three leads or p >= 0.05.",
             "per_program": lead_baseline(contests), "contests": contests,
-            "per_program_same_row_merged": lead_baseline(merged_contests), "contests_same_row_merged": merged_contests,
+            "per_program_same_row_merged": base_main, "contests_same_row_merged": merged_contests,
             "note": "RFCs whose first program is decided by the same row are merged into one contest in the *_merged "
                     "variant; the merged variant is the one to quote. Programs of different roles are compared here because "
                     "the question is about the RFC, not the role; each order entry carries the program's role."},
+        "bind9_derived_sensitivity": {
+            "label": "DERIVED SENSITIVITY, not recorded data: bind9 lags taken from the rows' text or by mechanism analogue",
+            "rows": derived,
+            "orders_that_change": diffs,
+            "per_rfc_all_derived": s_per_rfc,
+            "baseline_all_derived": base_sens,
+            "baseline_text_cited_only": base_text,
+            "called_leader": {"main": called(base_main), "all_derived": called(base_sens), "text_cited_only": called(base_text)},
+            "chance_result_changes": called(base_main) != called(base_sens) or called(base_main) != called(base_text),
+            "note": "bind9 d07 and l02 also name RFC 5011 / RFC 9276 in their text but are later than d04 and d18, so they "
+                    "cannot change bind9's position. d29 (RFC 8145) and d30 (RFC 8509) carry a recorded rfcs field, but "
+                    "neither RFC is in the checklist."},
     }
 
 
@@ -480,8 +558,6 @@ TOPICS = {
                          "pdns-auth": ["pdns-auth[7]@4.0.0", "pdns-auth[8]@4.0.0"]}},
         },
         "not_assigned": {
-            "pdns-auth[5]@4.0.0": "alg-ecdsa, but its after text names no ECDSA algorithm (default-ksk-algorithms emptied, intermediate state)",
-            "pdns-auth[6]@4.0.0": "after text calls it an intermediate pre-release state, replaced by pdns-auth[8] before auth-4.0.0 (same stable date, so no timing effect)",
             "unbound[9]@1.4.17": "alg-ecdsa, but it enables ECDSA validation, not a signing default",
         },
         "no_row": {"opendnssec": "no row; opendnssec[5] after text says the example policy stays RSASHA256 through 2.1.14",
@@ -504,7 +580,7 @@ TOPICS = {
                 "regex": r"\b150\b|=100\b",
                 "rows": {"bind9": ["l01-nsec3-max-iterations-150"], "kresd": ["kresd[9]@5.3.1"],
                          "pdns-auth": ["pdns-auth[10]@4.5.0"], "pdns-rec": ["nsec3-max-iterations-150"],
-                         "unbound": ["unbound[19]@1.13.2"]}},
+                         "unbound": ["unbound[20]@1.13.2"]}},
             "iteration-cap-at-or-below-50": {
                 "regex": r"\b50\b",
                 "rows": {"bind9": ["l02-nsec3-max-iterations-50"], "kresd": ["kresd[12]@5.7.1", "kresd[15]@6.0.6"],
@@ -516,7 +592,7 @@ TOPICS = {
                          "pdns-rec": ["nsec3-max-iterations-2500"], "unbound": ["unbound[1]@0.5"]}},
         },
         "not_assigned": {
-            "unbound[23]@1.19.1": "nsec3-iterations, but it caps NSEC3 hash computations per message, not the iteration count",
+            "unbound[24]@1.19.1": "nsec3-iterations, but it caps NSEC3 hash computations per message, not the iteration count",
             "pdns-auth[1]@3.3": "nsec3, but the change is the opt-out flag of set-nsec3 defaults (iterations stay 1)",
             "knot[4]@2.3.0": "nsec3, re-salting schedule; iterations default 10 is the pre-existing schema value",
         },
@@ -551,33 +627,42 @@ TOPICS = {
         "subs": {
             "builtin-root-anchor-available": {
                 "regex": r"built-in root|root.keys",
-                "rows": {"bind9": ["d04-root-trust-anchor-builtin"], "kresd": ["kresd[6]@4.0.0"]}},
+                "rows": {"bind9": ["d04-root-trust-anchor-builtin"], "kresd": ["kresd[6]@4.0.0"],
+                         "unbound": ["unbound[12]@1.4.7"]},
+                "note": "pdns-rec had a built-in root DS from rec-4.0.0, 2016-07-08, per the before text of "
+                        "trust-anchor-ta-nta-management, but has no default row for it; it would not lead"},
             "ksk2017-20326-added": {
                 "regex": r"20326|upcoming root KSK",
-                "rows": {"bind9": ["d05-builtin-root-ksk-2017"], "unbound": ["unbound[12]@1.6.1"],
+                "rows": {"bind9": ["d05-builtin-root-ksk-2017"], "unbound": ["unbound[13]@1.6.1"],
                          "pdns-rec": ["root-ds-2017-added"]}},
             "ksk2010-19036-removed": {
-                "regex": r"19036",
-                "rows": {"unbound": ["unbound[18]@1.11.0"], "pdns-rec": ["root-ds-19036-removed"]}},
+                "regex": r"19036|revoked key removed",
+                "rows": {"bind9": ["d23-bindkeys-revoked-key-removed"], "unbound": ["unbound[19]@1.11.0"],
+                         "pdns-rec": ["root-ds-19036-removed"]},
+                "note": "bind9 d23 text says only 'revoked key removed'; the revoked root key in 2019 is KSK-2010 19036, "
+                        "shown in the clone by the Phase 5 report (base64 prefix AwEAAagAIKlVZrpC6Ia7gEz present at "
+                        "v9.14.0, absent at v9.14.1)"},
             "ksk2024-38696-added": {
                 "regex": r"38696",
                 "rows": {"bind9": ["d24-bindkeys-root-2025-ds"], "kresd": ["kresd[14]@5.7.4", "kresd[17]@6.0.8"],
-                         "unbound": ["unbound[24]@1.21.0"], "pdns-rec": ["root-ds-38696"]}},
+                         "unbound": ["unbound[25]@1.21.0"], "pdns-rec": ["root-ds-38696"]}},
             "rfc8145-key-tag-signalling-on": {
                 "regex": r"_ta-",
-                "rows": {"kresd": ["kresd[1]@1.5.0"], "unbound": ["unbound[14]@1.6.7"]}},
+                "rows": {"bind9": ["d29-trust-anchor-telemetry-default-yes"], "kresd": ["kresd[1]@1.5.0"],
+                         "unbound": ["unbound[15]@1.6.7"]}},
             "rfc8509-root-key-sentinel-on": {
                 "regex": r"sentinel",
-                "rows": {"kresd": ["kresd[3]@2.0.0"], "unbound": ["unbound[15]@1.7.1"]}},
+                "rows": {"bind9": ["d30-root-key-sentinel-default-yes"], "kresd": ["kresd[3]@2.0.0"],
+                         "unbound": ["unbound[16]@1.7.1"]}},
             "context": {
                 "regex": r"RFC 5011|5011",
                 "rows": {"bind9": ["d07-validation-auto-default"], "kresd": ["kresd[4]@2.0.0"]}},
         },
         "not_assigned": {
-            "d23-bindkeys-revoked-key-removed": "value_changed false: not a default change",
             "trust-anchor-ta-nta-management": "is_default_change false (support-added)",
         },
-        "no_row": {"pdns-rec": "no RFC 5011 rollover at any tag (pdns-rec gaps); only static built-in DS changes",
+        "no_row": {"pdns-rec": "no RFC 5011 rollover at any tag (pdns-rec gaps); only static built-in DS changes; "
+                               "built-in root DS present from rec-4.0.0 without a default row",
                    "kresd": "no row for KSK-2017 being added or KSK-2010 removed"},
     },
     "sha1-deprecation": {
@@ -596,16 +681,17 @@ TOPICS = {
                          "bind9": ["d13-ds-cds-sha1-dropped", "d20-dnssec-cds-sha2-only"]}},
             "crypto-policy-sha1-refusal-handled": {
                 "regex": r"SHA-1|crypto|policy",
-                "rows": {"knot": ["knot[12]@3.0.2"], "unbound": ["unbound[21]@1.16.1"],
+                "rows": {"knot": ["knot[12]@3.0.2"], "unbound": ["unbound[22]@1.16.1"],
                          "pdns-rec": ["dnssec-disabled-algorithms-auto"]}},
             "context": {
                 "regex": r"SHA-1",
                 "rows": {"kresd": ["kresd[10]@5.5.0"]}},
         },
         "not_assigned": {
-            "unbound[13]@1.6.2": "ds-digest, but it tolerates DS digest downgrade: the opposite direction",
-            "d10-dsa-removed": "DSA removal, not RSASHA1 or SHA-1 DS",
-            "knot[7]@2.6.0": "DSA removal", "unbound[17]@1.10.0": "DSA removal",
+            "unbound[14]@1.6.2": "ds-digest, but it tolerates DS digest downgrade: the opposite direction",
+            "d10-dsa-removed": "DSA removal: algorithms 3 and 6 are SHA-1 based, but the removal is driven by DSA itself, "
+                               "not by the RSASHA1 / SHA-1 DS deprecation this topic tracks",
+            "knot[7]@2.6.0": "DSA removal, as d10", "unbound[18]@1.10.0": "DSA removal, as d10",
         },
         "no_row": {},
     },
@@ -614,8 +700,10 @@ TOPICS = {
         "mechanisms": {"cds-cdnskey"},
         "role": "signer/authoritative",
         "subs": {
-            "cds-publication-default": {
+            "cds-publication-narrowed-to-rollover": {
                 "regex": r"CDS/CDNSKEY",
+                "note": "knot[10] narrows publication from always to the KSK submission phase; its before text says "
+                        "publication was default since 2.5.0/2.6.1, which has no row",
                 "rows": {"knot": ["knot[10]@2.8.0"]}},
         },
         "not_assigned": {"d22-cdns-cdnskey-options": "value_changed false: defaults equal the prior behaviour"},
@@ -740,8 +828,25 @@ def q4(defaults):
                         "median_gap_days": median(gaps), "median_gap_months": round(median(gaps) / DAYS_PER_MONTH, 1)})
             contests_topic.append({"label": t, "programs": [m["program"] for m in order], "leader": order[0]["program"]})
         topics_out.append(rec)
+    # topic level again, milestones only (context rows left out)
+    contests_topic_ms, topics_ms = [], []
+    for t in TOPICS:
+        first = {}
+        for m in sorted([m for m in mem if m["topic"] == t and m["sub"] != "context"], key=lambda m: m["timing_instant"]):
+            first.setdefault(m["program"], m)
+        order = sorted(first.values(), key=lambda m: m["timing_instant"])
+        rec = {"topic": t, "k": len(order), "order": [{"program": m["program"], "row_id": m["row_id"], "sub": m["sub"],
+                                                       "date": m["timing_date"]} for m in order]}
+        if len(order) >= 2:
+            tie = order[0]["timing_date"] == order[1]["timing_date"]
+            rec["leader"] = ("tie: " + "+".join(m["program"] for m in order if m["timing_date"] == order[0]["timing_date"])
+                             if tie else order[0]["program"])
+            if not tie:
+                contests_topic_ms.append({"label": t, "programs": [m["program"] for m in order], "leader": order[0]["program"]})
+        topics_ms.append(rec)
     base_sub = lead_baseline(contests_sub)
     base_topic = lead_baseline(contests_topic)
+    base_topic_ms = lead_baseline(contests_topic_ms)
     csv_rows = []
     for r in subs_out:
         for i, o in enumerate(r["order"]):
@@ -764,7 +869,14 @@ def q4(defaults):
                            "and p < 0.05.",
             "sub_milestones": subs_out, "topics": topics_out,
             "baseline_sub_milestones": base_sub, "baseline_topics": base_topic,
+            "topics_note": "'topics' and 'baseline_topics' include context rows, so a context row can lead a topic "
+                           "(unbound[1]@0.5 leads the NSEC3 topic); 'topics_milestones_only' leaves them out.",
+            "topics_milestones_only": topics_ms, "baseline_topics_milestones_only": base_topic_ms,
             "programs_called_leader": leaders,
+            "programs_called_leader_by_level": {
+                "sub_milestones": leaders,
+                "topics_with_context_rows": [b["program"] for b in base_topic if b["called_leader"]],
+                "topics_milestones_only": [b["program"] for b in base_topic_ms if b["called_leader"]]},
             "tied_sub_milestones_left_out_of_baseline": ties_sub,
             "caveat": "Contests mix programs of different roles only where the sub-milestone is role-independent in "
                       "substance (NSEC3 caps apply to validators and pdns-auth serving); sub-milestones are not independent "
@@ -862,7 +974,8 @@ def q6(cves):
             sub = [r for r in inc if r["dnssec_related"] is True]
             sl = [r["latency_days"] for r in sub if r["latency_days"] is not None]
             unc = [r for r in inc if r["dnssec_related"] not in (True, False)]
-            rec["dnssec_subset"] = {"n": len(sub), "median": median(sl), "iqr": iqr(sl), "cves": [r["cve"] for r in sub],
+            rec["dnssec_subset"] = {"n": len(sub), "n_with_latency": len(sl), "median": median(sl), "iqr": iqr(sl),
+                                    "cves": [r["cve"] for r in sub],
                                     "n_unclassified": len(unc)}
         if disp:
             dl = [r["latency_days"] for r in disp if r["latency_days"] is not None]
@@ -884,6 +997,10 @@ def q6(cves):
                            "the recorded fix tag is a pre-release) and of latency_days_public where present.",
             "per_program": per_prog,
             "pooled_all_programs": {"n": len(pooled), "median": median(pooled), "iqr": iqr(pooled)},
+            "small_n_warning": {"knot": "n = 4 (latencies " + ", ".join(str(r["latency_days"]) for r in sorted(
+                [r for r in cves if r["program"] == "knot" and r["include"]], key=lambda r: r["latency_days"])) +
+                "); the median mostly measures NVD's delay in publishing old knot CVEs, not knot's fix speed, and is not "
+                "comparable to bind9's n = 135"},
             "caveat": "NVD publication is often long after the vendor advisory for old CVEs (knot CVE-2014-0486 was published "
                       "3.5 years after the fix), so latency medians describe NVD lag as much as vendor speed."}
 
@@ -900,10 +1017,19 @@ def q7(data):
         dec = defaultdict(list)
         for r, g in zip(st[1:], gaps):
             dec[r["released"][:3] + "0s"].append(g)
+        # collapsed: one release event per UTC calendar day (the first release of that day)
+        days = sorted({i.date() for i in inst})
+        cgaps = [(b - a).days for a, b in zip(days, days[1:])]
+        cdec = defaultdict(list)
+        for d_, g in zip(days[1:], cgaps):
+            cdec[str(d_.year)[:3] + "0s"].append(g)
         per_prog.append({"program": p, "n_stable": len(st), "first": st[0]["tag"] + " " + st[0]["released"],
                          "last": st[-1]["tag"] + " " + st[-1]["released"],
                          "median_days_between": round(median(gaps), 2),
-                         "n_same_day_pairs": sum(1 for g in gaps if g < 1),
+                         "n_release_days_utc": len(days),
+                         "median_days_between_collapsed": median(cgaps),
+                         "per_decade_median_days_collapsed": {k: median(v) for k, v in sorted(cdec.items())},
+                         "n_intervals_under_24h": sum(1 for g in gaps if g < 1),
                          "per_decade_median_days": {k: round(median(v), 2) for k, v in sorted(dec.items())},
                          "per_decade_n_intervals": {k: len(v) for k, v in sorted(dec.items())},
                          "aliases_dropped": [r["tag"] for r in data[p]["releases"] if r.get("stable") and r.get("alias_of")]})
@@ -914,6 +1040,8 @@ def q7(data):
                            "releases[].released, and the median interval between consecutive stable releases ordered by UTC "
                            "instant, overall and by the decade of the later release. Parallel maintenance branches make "
                            "same-day releases common (bind9 ships several branches at once), which pulls the medians down.",
+            "collapsed": "median_days_between_collapsed collapses releases to one event per UTC calendar day, so parallel "
+                         "branches shipped together count once; use it for any cross-program comparison. Intervals are whole days.",
             "per_year": per_year, "per_program": per_prog,
             "pdns_rec_never_public": "rec-4.5.0, rec-4.5.3 and rec-5.0.0 are stable tags that were never released publicly; "
                                      "they are counted here as tags (the timeline marks them stable), which adds three to "
@@ -1145,18 +1273,18 @@ def _cmd(p, expr):
     return f"python3 -c \"import json;d=json.load(open('data/software/timelines/{p}.json'));{expr}\""
 
 
-MANUAL_SUSPECTS: list[dict] = [
+MANUAL_SUSPECTS: list[dict] = []
+
+# Suspect rows raised by Phase 4 and confirmed by Phase 5; the timeline data was corrected in commit 54400276.
+RESOLVED_SUSPECTS: list[dict] = [
     {"program": "bind9", "row_id": "d10-dsa-removed", "field": "mechanism",
-     "reason": "mechanism is alg-rsa-sha2 but the row removes DSA (algorithms 3 and 6); knot[7] and unbound[17] label the "
-               "same kind of change 'other'",
+     "was": "alg-rsa-sha2", "now": "other", "resolved_in": "54400276",
      "command": _cmd("bind9", "r=[x for x in d['default_changes'] if x['id']=='d10-dsa-removed'][0];print(r['mechanism'],'|',r['description'])")},
     {"program": "pdns-auth", "row_id": "pdns-auth[5]@4.0.0", "field": "stable_tag",
-     "reason": "stable_tag auth-4.0.0 is given for an intermediate pre-release state (default-ksk-algorithms emptied) that "
-               "pdns-auth[8] replaced before auth-4.0.0 shipped, so no stable release carried this after-state",
+     "was": "auth-4.0.0", "now": None, "resolved_in": "54400276",
      "command": _cmd("pdns-auth", "[print(i,r['tag'],r['stable_tag'],'|',r['after'][:110]) for i,r in enumerate(d['default_changes']) if i in (5,6,8)]")},
     {"program": "pdns-auth", "row_id": "pdns-auth[6]@4.0.0", "field": "stable_tag",
-     "reason": "same as pdns-auth[5]: the after text calls default-zsk-algorithms=ecdsa256 an intermediate state, "
-               "superseded by pdns-auth[8] (ecdsa256 KSK as CSK, empty ZSK list) in auth-4.0.0",
+     "was": "auth-4.0.0", "now": None, "resolved_in": "54400276",
      "command": _cmd("pdns-auth", "[print(i,r['tag'],r['stable_tag'],'|',r['after'][:110]) for i,r in enumerate(d['default_changes']) if i in (5,6,8)]")},
 ]
 
@@ -1185,7 +1313,8 @@ def main(argv=None) -> dict:
     support = json.loads(SUPPORT.read_text())
     rel = build_release_index(data)
     suspects: list[dict] = []
-    defaults, failures = norm_defaults(data, rel, suspects)
+    null_tag: list[dict] = []
+    defaults, failures = norm_defaults(data, rel, suspects, null_tag)
     cves = norm_cves(data, rel)
     only = [x for x in args.only.split(",") if x]
     result = json.loads(OUT_JSON.read_text()) if (only and OUT_JSON.exists()) else {}
@@ -1202,9 +1331,21 @@ def main(argv=None) -> dict:
                       "window_days": WINDOW_DAYS, "programs": PROGRAMS, "roles": ROLES,
                       "codebases": sorted(set(CODEBASE.values()))}
     result["normalisation"] = NORMALISATION
+    result["normalisation_counts"] = {
+        "opendnssec_rows_using_version_fallback": [f"opendnssec[{i}]@{r['version']}" for i, r in
+                                                   enumerate(data["opendnssec"]["default_changes"]) if not r.get("first_stable_tag")],
+        "cve_rows_with_pre_release_fix_tag": {p: sum(1 for r in cves if r["program"] == p and r["group"] == g
+                                                     and r["fix_tag_is_stable"] is False)
+                                              for p in PROGRAMS for g in ["included"]},
+        "disputed_rows_with_pre_release_fix_tag": sum(1 for r in cves if r["group"] == "disputed" and r["fix_tag_is_stable"] is False),
+        "default_rows_null_stable_tag": len(null_tag),
+        "row_id_warning": "index-based row ids shift when a row is inserted: commit 54400276 inserted unbound[12]@1.4.7, "
+                          "so unbound rows from 1.6.1 on moved up by one index; the version part of the id is stable",
+    }
     result["row_counts"] = counts
     result["excluded_rows"] = {
         "default_changes_failing_stable_tag_assert": failures,
+        "default_changes_null_stable_tag": null_tag,
         "default_changes_not_default_change": [
             {"program": r["program"], "row_id": r["row_id"], "kind": r["kind"],
              "reason": "value_changed false (bind9) / is_default_change false (pdns): kept in question 1, left out of questions 3, 4 and 8"}
@@ -1227,6 +1368,7 @@ def main(argv=None) -> dict:
             seen.add(k)
             uniq.append(s)
     result["suspect_rows"] = uniq
+    result["resolved_suspect_rows"] = RESOLVED_SUSPECTS
     write_csv("defaults_normalised", defaults)
     write_csv("cves_normalised", cves)
     save(result)
