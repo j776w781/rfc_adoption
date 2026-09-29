@@ -1,6 +1,6 @@
 # CVEs against RFCs and observed deployment
 
-441 distinct CVEs touching the eight DNS implementations this project tracks, or
+434 distinct CVEs touching the eight DNS implementations this project tracks, or
 naming DNS/DNSSEC itself. This asks what the vulnerability record says about the
 standards we measure, and whether any of it moved a zone.
 
@@ -12,10 +12,10 @@ needs network), analysis `scripts/cve_crossref.py` (offline), output
 
 | Source | What it is the authority on | Distinct CVEs |
 | --- | --- | --- |
-| NVD, per-product CPE query | what exists for a product | 330 |
+| NVD, per-product CPE query | what exists for a product | 331 |
 | NVD, protocol keyword query | flaws in DNS/DNSSEC across all vendors | 137 |
-| project git history | **when** it was fixed, and in which release | 200 |
-| **union** | | **441** |
+| project git history | **when** it was fixed, and in which release | 193 |
+| **union** | | **434** |
 
 None subsumes another. NVD does not record which release carried a fix, so the
 git history is the only source for latency. Conversely Unbound's changelog never
@@ -37,10 +37,10 @@ into a fake coordination event. Coordination is counted per codebase.
 
 ## The shape of the surface
 
-    441 CVEs
-      322  DNS, not DNSSEC        cache poisoning, TSIG, parsers, memory safety
+    434 CVEs
+      321  DNS, not DNSSEC        cache poisoning, TSIG, parsers, memory safety
        97  DNSSEC
-       22  dependency             OpenSSL, h2o, webrick, SPNEGO -- patched around, not in
+       16  dependency             OpenSSL and other libraries -- patched around, not in
 
 DNSSEC is **22%** of the CVE surface of DNS software. By the RFC each one
 touches:
@@ -66,10 +66,10 @@ CVEs per implementation, from the reliable CPE lists only:
 
 | Implementation | Role | Total | DNSSEC | Not DNSSEC |
 | --- | --- | --- | --- | --- |
-| BIND 9 | resolver + authoritative | 207 | 40 | 167 |
+| BIND 9 | resolver + authoritative | 206 | 40 | 166 |
 | Unbound | resolver | 70 | 16 | 54 |
-| PowerDNS Recursor | resolver | 64 | 12 | 52 |
-| PowerDNS Authoritative | authoritative | 28 | 3 | 25 |
+| PowerDNS Recursor | resolver | 53 | 12 | 41 |
+| **PowerDNS Authoritative** | **authoritative** | **15** | **0** | 15 |
 | **NSD** | **authoritative** | **14** | **0** | 14 |
 | **OpenDNSSEC** | **signer** | **1** | **0** | 1 (a dependency) |
 
@@ -77,8 +77,10 @@ CVEs per implementation, from the reliable CPE lists only:
 dependency.** Neither validates: NSD serves zones somebody else signed, and
 OpenDNSSEC signs them. Producing a signature is arithmetic on data you already
 own; checking one means parsing whatever an attacker sends. PowerDNS
-Authoritative's three DNSSEC CVEs are all shared with the Recursor, from the same
-repository.
+Authoritative, which signs but does not validate, also has none. The three DNSSEC
+CVEs once listed against it (CVE-2020-25829 and the two KeyTrap CVE-2023-50387 /
+50868) were Recursor fixes credited to the shared repository; checked against the
+files each fix commit touches, every one is Recursor code.
 
 This lands exactly on this project's blind spot. `vocabulary.md` Layer 4 excludes
 **verifiability** — whether cryptographic verification succeeds — because we read
@@ -90,11 +92,20 @@ quantified rather than asserted.
 
 ## Fixes, embargoes, and how long the ecosystem stays exposed
 
-Across 141 dated (CVE, project) fixes the median gap from publication to release
-is **0 days**, and **37% of fixes shipped before the CVE was published**. That is
-not vendors seeing the future — it is coordinated disclosure working: the release
-goes out, then the ID becomes public. A negative latency here is a success, and
-any analysis that averages it as a delay is measuring the wrong thing.
+Across 178 dated (CVE, project) fixes the median gap from publication to release
+is **-8 days**: **68% of fixes shipped before the CVE was published**, and most of
+the rest on the day. That is not vendors seeing the future. It is coordinated
+disclosure working: the release is tagged, then the ID becomes public. A negative
+latency here is a success, and any analysis that averages it as a delay is
+measuring the wrong thing. Release dates are the tag commit dates, which for
+embargoed security releases precede the public announcement by days; where a
+timeline records the public date too, it is kept beside the tag date.
+
+These figures changed on 2026-09-29, when the inventory's fix releases were
+replaced by the verified per-program timelines (`data/software/timelines/`). The
+earlier scrape named the next master release in most disagreements, while the
+branch or point release had shipped the fix first. The previous version of this
+page reported a median of 0 days over 141 fixes.
 
 Four CVEs required fixes in two or more independent codebases:
 
@@ -102,14 +113,19 @@ Four CVEs required fixes in two or more independent codebases:
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | CVE-2013-5661 | 2019-11-05 | 5.9 | — | bind9, nsd | — | — | — |
 | CVE-2020-28935 | 2020-12-07 | 5.5 | — | nsd, unbound | 2020-11-24 | 2020-12-03 | 9 d |
-| **CVE-2023-50387** (KeyTrap) | 2024-02-14 | 7.5 | DNSKEY | bind9, unbound, powerdns, kresd | 2024-02-11 | 2024-07-08 | **148 d** |
-| **CVE-2023-50868** | 2024-02-14 | 7.5 | NSEC3 | bind9, unbound, powerdns, kresd | 2024-02-13 | 2024-07-08 | **146 d** |
+| **CVE-2023-50387** (KeyTrap) | 2024-02-14 | 7.5 | DNSKEY | bind9, kresd, powerdns, unbound | 2024-02-06 | 2024-02-13 | **7 d** |
+| **CVE-2023-50868** | 2024-02-14 | 7.5 | NSEC3 | bind9, kresd, powerdns, unbound | 2024-02-06 | 2024-02-13 | **7 d** |
 
-The two 2024 entries are the ecosystem events. BIND shipped KeyTrap **three days
-before** publication and Unbound one day before; PowerDNS Authoritative followed
-a month later and the Recursor nearly five months later. So "patched on
-disclosure day" is true of the first two implementations and false of the
-ecosystem: the last fix landed **21 weeks** after the flaw was public.
+The two 2024 entries are the ecosystem events, and they were patched as one.
+PowerDNS Recursor tagged its fix (5.0.2, 4.8.6, 4.9.3) **eight days before**
+publication, BIND three days before, and Knot Resolver and Unbound one day before.
+Every major validator had a fixed release out before the CVE was public.
+
+An earlier version of this page said the last fix landed 21 weeks after
+publication. That was wrong. It rested on the inventory naming Recursor 5.1.0
+(July 2024), a master-line release, instead of the February branch releases, and
+on a Recursor commit being credited to the Authoritative Server, which does not
+validate and never needed a KeyTrap fix.
 
 ### Multi-CVE disclosure days
 
@@ -269,7 +285,7 @@ data is what converts one into the other.
 
 ## What this cannot show
 
-- **A CVE list is a discovery record, not a defect record.** BIND has 207 CVEs
+- **A CVE list is a discovery record, not a defect record.** BIND has 206 CVEs
   and NSD 14; BIND is also older, larger, does far more, and is examined far more
   closely. Nothing here ranks implementations by quality and nothing should be
   read that way.

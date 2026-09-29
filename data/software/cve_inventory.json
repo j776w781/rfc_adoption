@@ -7905,8 +7905,11 @@
         "commit_date": "2021-01-07",
         "sha": "abed9404d11049a9e6db5fcf9c13b986f6bfe5f2",
         "subject": "Fix off-by-one bug in ISC SPNEGO implementation",
-        "fix_release": "9.11.29",
-        "fix_released": "2021-03-09"
+        "fix_release": "9.16.12",
+        "fix_released": "2021-02-04",
+        "fix_release_was": "9.11.29",
+        "fix_released_was": "2021-03-09",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.16.12 by UTC instant."
       },
       {
         "cve": "CVE-2008-0122",
@@ -7991,7 +7994,9 @@
         "sha": "559236b5e4444a6d6f99d99c9446c52dcbc6dd22",
         "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "BIND only widened the OpenSSL version gate in configure (CHANGES 4270, 559236b5e4); no BIND source changed. Not counted as a BIND fix."
       },
       {
         "cve": "CVE-2015-4620",
@@ -8735,56 +8740,77 @@
         "commit_date": "2024-06-10",
         "sha": "3492c0deda5091a582ae46b60613ccfdb0e950b1",
         "subject": "Merge branch '4481-security-tcp-flood-9.18' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2024-11187",
         "commit_date": "2025-01-15",
         "sha": "c6e6a7af8ac6b575dd3657b0f5cf4248d734c2b0",
         "subject": "[9.18] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets",
-        "fix_release": "9.18.33",
-        "fix_released": "2025-01-20"
+        "fix_release": "9.20.5",
+        "fix_released": "2025-01-20",
+        "fix_release_was": "9.18.33",
+        "fix_released_was": "2025-01-20",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.5 by UTC instant."
       },
       {
         "cve": "CVE-2024-12705",
         "commit_date": "2025-01-15",
         "sha": "e733e624147155d6cbee7f0f150c79c7ac6b54bb",
         "subject": "[9.18] [CVE-2024-12705] sec: usr: DNS-over-HTTP(s) flooding fixes",
-        "fix_release": "9.18.33",
-        "fix_released": "2025-01-20"
+        "fix_release": "9.20.5",
+        "fix_released": "2025-01-20",
+        "fix_release_was": "9.18.33",
+        "fix_released_was": "2025-01-20",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.5 by UTC instant."
       },
       {
         "cve": "CVE-2024-1737",
         "commit_date": "2024-07-02",
         "sha": "050a88898a4d88267b85b39f9bdceeaa8f4855bc",
         "subject": "Merge branch '3405-security-limit-the-number-of-resource-records-in-rrset-nxdomain-9.18' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2024-1975",
         "commit_date": "2024-06-10",
         "sha": "1e6cf868dd01c1979bf83d2151e3dfe53fcf8e60",
         "subject": "Merge branch 'security-4480-drop-sig0-support' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2024-4076",
         "commit_date": "2024-06-10",
         "sha": "5b83419fa9789ca9723a5b50edbd8a9aa70629f5",
         "subject": "Merge branch '4507-confidential-clear-zversion-v9_18' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2025-13878",
         "commit_date": "2026-01-08",
         "sha": "d556bde1231edf81427d577e35f48f764b6a37b8",
         "subject": "[9.18] [CVE-2025-13878] sec: usr: Fix incorrect length checks for BRID and HHIT records",
-        "fix_release": "9.18.44",
-        "fix_released": "2026-01-09"
+        "fix_release": "9.20.18",
+        "fix_released": "2026-01-09",
+        "fix_release_was": "9.18.44",
+        "fix_released_was": "2026-01-09",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.18 by UTC instant."
       },
       {
         "cve": "CVE-2025-40775",
@@ -8807,48 +8833,66 @@
         "commit_date": "2025-07-11",
         "sha": "92907ffa146c026b04bbf85d9c0cfe0f1e2344aa",
         "subject": "Test that positive answer cannot overwrite sibling NS RRs",
-        "fix_release": "9.18.44",
-        "fix_released": "2026-01-09"
+        "fix_release": "9.20.15",
+        "fix_released": "2025-10-18",
+        "fix_release_was": "9.18.44",
+        "fix_released_was": "2026-01-09",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.15 by UTC instant."
       },
       {
         "cve": "CVE-2025-40780",
         "commit_date": "2025-10-02",
         "sha": "f74fb05265be32a8c9de31ec7298deba4a07d893",
         "subject": "[9.18] [CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator",
-        "fix_release": "9.18.41",
-        "fix_released": "2025-10-18"
+        "fix_release": "9.20.15",
+        "fix_released": "2025-10-18",
+        "fix_release_was": "9.18.41",
+        "fix_released_was": "2025-10-18",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.15 by UTC instant."
       },
       {
         "cve": "CVE-2025-8677",
         "commit_date": "2025-10-02",
         "sha": "85d08e068316fc9530965b56b3d99833d501ea12",
         "subject": "[9.18] [CVE-2025-8677] sec: usr: DNSSEC validation fails if matching but invalid DNSKEY is found",
-        "fix_release": "9.18.41",
-        "fix_released": "2025-10-18"
+        "fix_release": "9.20.15",
+        "fix_released": "2025-10-18",
+        "fix_release_was": "9.18.41",
+        "fix_released_was": "2025-10-18",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.15 by UTC instant."
       },
       {
         "cve": "CVE-2026-10723",
         "commit_date": "2026-07-02",
         "sha": "441e64d00961532a3c03d015d46822024f23d546",
         "subject": "[9.11] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-10822",
         "commit_date": "2026-06-15",
         "sha": "c5d2fc706ca3635d9928c1cc68db73bffb35d772",
         "subject": "[9.18] [CVE-2026-10822] sec: usr: Fix dns_name_fromwire to record boundaries",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-11331",
         "commit_date": "2026-06-12",
         "sha": "bdc56d93f7efbfb0de9bbe01e9fdd9a9adfce823",
         "subject": "[9.16] [CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-11605",
@@ -8863,24 +8907,33 @@
         "commit_date": "2026-06-26",
         "sha": "6e3c70a733744f3b18874249794a6cf55e951510",
         "subject": "[9.11] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-11721",
         "commit_date": "2026-06-22",
         "sha": "2dbb7461ce35baa2663e169a5b8d93edd8457c54",
         "subject": "[CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted",
-        "fix_release": "9.21.24",
-        "fix_released": "2026-07-13"
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": "9.21.24",
+        "fix_released_was": "2026-07-13",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-12617",
         "commit_date": "2026-06-15",
         "sha": "bb92832fb6ae899bee7206c2d8966258461c2f71",
         "subject": "Reproducer for #5946 (assertion in some CNAME/DNAME queries)",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-13204",
@@ -8895,8 +8948,11 @@
         "commit_date": "2026-07-03",
         "sha": "07455c02d7dde705d06a0a74ac1a8d2644267949",
         "subject": "[CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field",
-        "fix_release": "9.21.24",
-        "fix_released": "2026-07-13"
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": "9.21.24",
+        "fix_released_was": "2026-07-13",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-1519",
@@ -9089,8 +9145,11 @@
         "commit_date": "2022-08-17",
         "sha": "817586f8ee2e7f1f879ef5f76b19c2d67bce2e77",
         "subject": "lib/zonecut + iterator: limit large NS sets",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.5.3",
+        "fix_released": "2022-09-21",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Verified kresd timeline (docs/handoff/verify/kresd.md): filled from fix tag v5.5.3; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2023-46317",
@@ -9105,16 +9164,22 @@
         "commit_date": "2024-01-01",
         "sha": "151c2645135ae1331334338eee610abfaa480547",
         "subject": "mitigate KeyTrap DoS = CVE-2023-50387",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.7.1",
+        "fix_released": "2024-02-13",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Verified kresd timeline (docs/handoff/verify/kresd.md): filled from fix tag v5.7.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2023-50868",
         "commit_date": "2024-02-12",
         "sha": "96525e9a676ce98cdd40b2825d6dec85243d7e3f",
         "subject": "validator: refuse to validate answers with more than 8 NSEC3 records",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.7.1",
+        "fix_released": "2024-02-13",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Verified kresd timeline (docs/handoff/verify/kresd.md): filled from fix tag v5.7.1; the scrape named the next release after the branch or point release that shipped the fix."
       }
     ],
     "nsd": [
@@ -9147,32 +9212,44 @@
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-18916",
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-19401",
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-19538",
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       }
     ],
     "pdns-auth": [
@@ -9681,24 +9758,33 @@
         "commit_date": "2019-11-19",
         "sha": "09845779d5f2c96e3064ff398cad65c08357cfbf",
         "subject": "- Fix CVE-2019-18934, shell execution in ipsecmod.",
-        "fix_release": "1.9.6",
-        "fix_released": "2019-12-06"
+        "fix_release": "1.9.5",
+        "fix_released": "2019-11-19",
+        "fix_release_was": "1.9.6",
+        "fix_released_was": "2019-12-06",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.9.5; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2020-12662",
         "commit_date": "2020-05-19",
         "sha": "ba0f382eee814e56900a535778d13206b86b6d49",
         "subject": "- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf",
-        "fix_release": "1.11.0",
-        "fix_released": "2020-07-20"
+        "fix_release": "1.10.1",
+        "fix_released": "2020-05-19",
+        "fix_release_was": "1.11.0",
+        "fix_released_was": "2020-07-20",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.10.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2020-12663",
         "commit_date": "2020-05-19",
         "sha": "ba0f382eee814e56900a535778d13206b86b6d49",
         "subject": "- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf",
-        "fix_release": "1.11.0",
-        "fix_released": "2020-07-20"
+        "fix_release": "1.10.1",
+        "fix_released": "2020-05-19",
+        "fix_release_was": "1.11.0",
+        "fix_released_was": "2020-07-20",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.10.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2020-28935",
@@ -9787,8 +9873,11 @@
         "commit_date": "2025-07-16",
         "sha": "f49e6ccecd0b14f6e4539583d989d52c4a20cc6f",
         "subject": "- Fix for RebirthDay Attack CVE-2025-5994, reported by Xiang Li   from AOSP Lab Nankai University. - Tag for 1.23.1 with the release of 1.23.0 and the",
-        "fix_release": "1.24.0",
-        "fix_released": "2025-09-17"
+        "fix_release": "1.23.1",
+        "fix_released": "2025-07-16",
+        "fix_release_was": "1.24.0",
+        "fix_released_was": "2025-09-17",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.23.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-14586",
@@ -9819,16 +9908,22 @@
         "commit_date": "2026-05-20",
         "sha": "b46ff5c18eafa055378b7105c9c5e77454291a47",
         "subject": "- Unit test for CVE-2026-33278.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-40622",
         "commit_date": "2026-05-20",
         "sha": "b5f21f41658f65d6143df6a3208e8ccf1a01604d",
         "subject": "- Unit test for CVE-2026-40622.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-40691",
@@ -9875,40 +9970,55 @@
         "commit_date": "2026-05-20",
         "sha": "9d2e0f1c02f842d355809ffea28a1bd62bfe83ba",
         "subject": "- Unit test for CVE-2026-42944.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-42955",
         "commit_date": "2026-07-22",
         "sha": "9f757aa9f3e869a944f24acd64cadfde55269575",
         "subject": "- Unit test for CVE-2026-42955.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-42959",
         "commit_date": "2026-05-20",
         "sha": "d357935f662d239616fee1403f6799a66b60d986",
         "subject": "- Unit test for CVE-2026-42959.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-42960",
         "commit_date": "2026-05-20",
         "sha": "0d2282d5513e73b526a44483d63fc5d0f9c41439",
         "subject": "- Unit test for CVE-2026-42960.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-44390",
         "commit_date": "2026-05-20",
         "sha": "25e112c6749cf23f9551ff35e40b3a7769785f73",
         "subject": "- Unit test for CVE-2026-44390.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-44608",
@@ -9931,32 +10041,44 @@
         "commit_date": "2026-07-22",
         "sha": "23e19ca6fcffa68307dbb5cfc6a6251b3a8270ca",
         "subject": "- Unit test for CVE-2026-44687.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-44690",
         "commit_date": "2026-07-22",
         "sha": "3d5e6c06923eff9eac2f5e31a69c43a15ca9d3c2",
         "subject": "- Unit test for CVE-2026-44690.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-46582",
         "commit_date": "2026-07-22",
         "sha": "1ae2570bda9972aa0459e8650db2d6107f5f07d9",
         "subject": "- Unit test for CVE-2026-46582.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50045",
         "commit_date": "2026-07-22",
         "sha": "9ad825b267d5c3d5ccc804973fe6dc02b192cbfa",
         "subject": "- Unit test for CVE-2026-50045.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50046",
@@ -9971,16 +10093,22 @@
         "commit_date": "2026-07-22",
         "sha": "63501f51bb699cd47aca09c02fd8f6e24b6bf83c",
         "subject": "- Unit test for CVE-2026-50243.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50248",
         "commit_date": "2026-07-22",
         "sha": "cf5e6e89a582151d5875fbd5db7d29fb3d9dc0cf",
         "subject": "- Fix error in log printout in fix for CVE-2026-50248, when the   primary name is bogus.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50251",
@@ -10027,16 +10155,22 @@
         "commit_date": "2026-07-22",
         "sha": "c163fbc505283b1900d4ff10708ae6e2665239af",
         "subject": "- Unit test for CVE-2026-55717.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-55973",
         "commit_date": "2026-07-22",
         "sha": "b08723ef9736cd1246ef285360865f00cfa7e2ad",
         "subject": "- Unit test for CVE-2026-55973.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-55990",
@@ -10059,8 +10193,11 @@
         "commit_date": "2026-07-22",
         "sha": "4941edf2757d535504f46974b711783d702068b3",
         "subject": "- Unit test for CVE-2026-56416.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-56444",
@@ -10111,6 +10248,29 @@
       "kind": "not_applicable",
       "from": "pdns-auth timeline section 'Inventory fix rows judged not applicable' and pdns-rec builder gap 10, each checked against the cited commit's changed files",
       "note": "Rows kept; not_applicable excludes them from per-program fix counts and fix dates in scripts/cve_crossref.py. CVE-2026-33611 for pdns-rec left unmarked: its commit changes shared record-parsing code (dnswriter.cc, rcpgenerator.cc) that the Recursor also builds."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 19,
+      "detail": {
+        "bind9 replaced": 13,
+        "bind9 filled": 5,
+        "bind9 not_applicable": 1
+      },
+      "from": "bind9 timeline cve_fixes rows for 23 fixes-only CVEs (no NVD product tag)",
+      "pattern": "Inventory named the later branch (9.18.x) or a development release (9.21.24); the 9.20 or 9.16 release carried the fix earlier, usually minutes earlier the same day. CVE-2025-40778 moves from 9.18.44 (2026-01-09) to 9.20.15 (2025-10-18)."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 27,
+      "detail": {
+        "unbound replaced": 20,
+        "nsd replaced": 4,
+        "kresd filled": 3
+      },
+      "from": "verified unbound, nsd, kresd timelines (all applicable rows with a stable fix tag compared, not only the rows verifiers flagged)",
+      "pattern": "Unbound 2026 CVEs: inventory 1.26.0 (2026-07-24) vs 1.25.1 / 1.25.2 point releases; NSD 4.15.2 vs 4.15.1; kresd rows with no release filled, incl. KeyTrap v5.7.1 (2024-02-13).",
+      "not_changed": "unbound CVE-2017-15105, CVE-2020-28935, CVE-2024-33655: the timeline's fix tag is a release candidate; the inventory keeps the stable release."
     }
   ]
 }

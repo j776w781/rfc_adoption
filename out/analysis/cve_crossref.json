@@ -1,11 +1,11 @@
 {
   "generated": "2026-09-29",
   "totals": {
-    "distinct_cves": 435,
+    "distinct_cves": 434,
     "by_scope": {
       "dnssec": 97,
       "dns": 321,
-      "dependency": 17
+      "dependency": 16
     },
     "by_mechanism": {
       "nsec3": 12,
@@ -19,13 +19,13 @@
       "algorithm": 4,
       "ds-digest": 3
     },
-    "with_a_dated_fix": 164
+    "with_a_dated_fix": 168
   },
   "per_project": {
     "bind9": {
       "dnssec": 40,
       "dns": 154,
-      "dependency": 13
+      "dependency": 12
     },
     "knot": {
       "dns": 9,
@@ -77,13 +77,13 @@
   "attribution_caveat": "Knot, Knot Resolver and OpenDNSSEC have no usable CPE, so their CVE lists come from keyword search and overlap by substring. Their product membership is not used to decide who a CVE affected.",
   "fix_latency_days": {
     "all": {
-      "n": 172,
-      "median": -9,
-      "p90": 6
+      "n": 178,
+      "median": -8,
+      "p90": 0
     },
     "dnssec": {
-      "n": 40,
-      "median": -4
+      "n": 45,
+      "median": -3
     },
     "negative_are_embargo": "A fix released before the CVE was published is a coordinated disclosure, not a time machine."
   },
@@ -148,28 +148,30 @@
       "scope": "dnssec",
       "codebases": [
         "bind9",
+        "kresd",
         "powerdns",
         "unbound"
       ],
       "vendors": [
+        "cznic",
         "isc",
         "nlnetlabs",
         "powerdns"
       ],
       "affected_evidence": {
         "bind9": "git-fix",
+        "kresd": "git-fix",
         "pdns-rec": "git-fix",
         "unbound": "git-fix"
       },
-      "keyword_only_also_listed": [
-        "kresd"
-      ],
+      "keyword_only_also_listed": [],
       "mechanism": "dnskey",
       "rfc": "RFC 4034",
       "cvss": 7.5,
       "projects": {
         "pdns-rec": "2024-02-06",
         "bind9": "2024-02-11",
+        "kresd": "2024-02-13",
         "unbound": "2024-02-13"
       },
       "first_release": "2024-02-06",
@@ -183,28 +185,30 @@
       "scope": "dnssec",
       "codebases": [
         "bind9",
+        "kresd",
         "powerdns",
         "unbound"
       ],
       "vendors": [
+        "cznic",
         "isc",
         "nlnetlabs",
         "powerdns"
       ],
       "affected_evidence": {
         "bind9": "git-fix",
+        "kresd": "git-fix",
         "pdns-rec": "git-fix",
         "unbound": "git-fix"
       },
-      "keyword_only_also_listed": [
-        "kresd"
-      ],
+      "keyword_only_also_listed": [],
       "mechanism": "nsec3",
       "rfc": "RFC 5155",
       "cvss": 7.5,
       "projects": {
         "pdns-rec": "2024-02-06",
         "bind9": "2024-02-11",
+        "kresd": "2024-02-13",
         "unbound": "2024-02-13"
       },
       "first_release": "2024-02-06",
@@ -1512,8 +1516,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2021-01-07",
-          "release": "9.11.29",
-          "released": "2021-03-09",
+          "release": "9.16.12",
+          "released": "2021-02-04",
           "subject": "Fix off-by-one bug in ISC SPNEGO implementation"
         }
       },
@@ -3397,33 +3401,6 @@
       "mechanism": null,
       "rfc": null,
       "rule": "PRODUCT_CPE"
-    },
-    {
-      "cve": "CVE-2015-3193",
-      "published": null,
-      "description": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
-      "cvss": null,
-      "severity": null,
-      "cwe": [],
-      "sources": [
-        "git"
-      ],
-      "products": [
-        "bind9"
-      ],
-      "keywords": [],
-      "fixes": {
-        "bind9": {
-          "commit_date": "2015-12-04",
-          "release": null,
-          "released": null,
-          "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193."
-        }
-      },
-      "scope": "dependency",
-      "mechanism": null,
-      "rfc": null,
-      "rule": "DEPENDENCY"
     },
     {
       "cve": "CVE-2015-4620",
@@ -5442,8 +5419,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2019-11-19",
-          "release": "1.9.6",
-          "released": "2019-12-06",
+          "release": "1.9.5",
+          "released": "2019-11-19",
           "subject": "- Fix CVE-2019-18934, shell execution in ipsecmod."
         }
       },
@@ -6149,8 +6126,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2020-05-19",
-          "release": "1.11.0",
-          "released": "2020-07-20",
+          "release": "1.10.1",
+          "released": "2020-05-19",
           "subject": "- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf"
         }
       },
@@ -6179,8 +6156,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2020-05-19",
-          "release": "1.11.0",
-          "released": "2020-07-20",
+          "release": "1.10.1",
+          "released": "2020-05-19",
           "subject": "- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf"
         }
       },
@@ -7826,8 +7803,8 @@
       "fixes": {
         "kresd": {
           "commit_date": "2022-08-17",
-          "release": null,
-          "released": null,
+          "release": "5.5.3",
+          "released": "2022-09-21",
           "subject": "lib/zonecut + iterator: limit large NS sets"
         }
       },
@@ -8227,8 +8204,8 @@
         },
         "kresd": {
           "commit_date": "2024-01-01",
-          "release": null,
-          "released": null,
+          "release": "5.7.1",
+          "released": "2024-02-13",
           "subject": "mitigate KeyTrap DoS = CVE-2023-50387"
         },
         "pdns-rec": {
@@ -8281,8 +8258,8 @@
         },
         "kresd": {
           "commit_date": "2024-02-12",
-          "release": null,
-          "released": null,
+          "release": "5.7.1",
+          "released": "2024-02-13",
           "subject": "validator: refuse to validate answers with more than 8 NSEC3 records"
         },
         "pdns-rec": {
@@ -8451,7 +8428,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-06-10",
-          "release": "9.18.28",
+          "release": "9.20.0",
           "released": "2024-07-08",
           "subject": "Merge branch '4481-security-tcp-flood-9.18' into 'v9.18.28-release'"
         }
@@ -8478,7 +8455,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2025-01-15",
-          "release": "9.18.33",
+          "release": "9.20.5",
           "released": "2025-01-20",
           "subject": "[9.18] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets"
         }
@@ -8505,7 +8482,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2025-01-15",
-          "release": "9.18.33",
+          "release": "9.20.5",
           "released": "2025-01-20",
           "subject": "[9.18] [CVE-2024-12705] sec: usr: DNS-over-HTTP(s) flooding fixes"
         }
@@ -8532,7 +8509,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-07-02",
-          "release": "9.18.28",
+          "release": "9.20.0",
           "released": "2024-07-08",
           "subject": "Merge branch '3405-security-limit-the-number-of-resource-records-in-rrset-nxdomain-9.18' into 'v9.18.28-release'"
         }
@@ -8592,7 +8569,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-06-10",
-          "release": "9.18.28",
+          "release": "9.20.0",
           "released": "2024-07-08",
           "subject": "Merge branch 'security-4480-drop-sig0-support' into 'v9.18.28-release'"
         }
@@ -8700,7 +8677,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2024-06-10",
-          "release": "9.18.28",
+          "release": "9.20.0",
           "released": "2024-07-08",
           "subject": "Merge branch '4507-confidential-clear-zversion-v9_18' into 'v9.18.28-release'"
         }
@@ -8825,7 +8802,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-01-08",
-          "release": "9.18.44",
+          "release": "9.20.18",
           "released": "2026-01-09",
           "subject": "[9.18] [CVE-2025-13878] sec: usr: Fix incorrect length checks for BRID and HHIT records"
         }
@@ -8947,8 +8924,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2025-07-11",
-          "release": "9.18.44",
-          "released": "2026-01-09",
+          "release": "9.20.15",
+          "released": "2025-10-18",
           "subject": "Test that positive answer cannot overwrite sibling NS RRs"
         }
       },
@@ -8974,7 +8951,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2025-10-02",
-          "release": "9.18.41",
+          "release": "9.20.15",
           "released": "2025-10-18",
           "subject": "[9.18] [CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator"
         }
@@ -9092,8 +9069,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2025-07-16",
-          "release": "1.24.0",
-          "released": "2025-09-17",
+          "release": "1.23.1",
+          "released": "2025-07-16",
           "subject": "- Fix for RebirthDay Attack CVE-2025-5994, reported by Xiang Li   from AOSP Lab Nankai University. - Tag for 1.23.1 with the release of 1.23.0 and the"
         }
       },
@@ -9122,7 +9099,7 @@
       "fixes": {
         "bind9": {
           "commit_date": "2025-10-02",
-          "release": "9.18.41",
+          "release": "9.20.15",
           "released": "2025-10-18",
           "subject": "[9.18] [CVE-2025-8677] sec: usr: DNSSEC validation fails if matching but invalid DNSKEY is found"
         }
@@ -9174,8 +9151,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-07-02",
-          "release": null,
-          "released": null,
+          "release": "9.20.26",
+          "released": "2026-07-20",
           "subject": "[9.11] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name"
         }
       },
@@ -9204,8 +9181,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-06-15",
-          "release": null,
-          "released": null,
+          "release": "9.20.26",
+          "released": "2026-07-20",
           "subject": "[9.18] [CVE-2026-10822] sec: usr: Fix dns_name_fromwire to record boundaries"
         }
       },
@@ -9231,8 +9208,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-06-12",
-          "release": null,
-          "released": null,
+          "release": "9.20.26",
+          "released": "2026-07-20",
           "subject": "[9.16] [CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long"
         }
       },
@@ -9292,8 +9269,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-06-26",
-          "release": null,
-          "released": null,
+          "release": "9.20.26",
+          "released": "2026-07-20",
           "subject": "[9.11] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack"
         }
       },
@@ -9322,8 +9299,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-06-22",
-          "release": "9.21.24",
-          "released": "2026-07-13",
+          "release": "9.20.26",
+          "released": "2026-07-20",
           "subject": "[CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted"
         }
       },
@@ -9440,8 +9417,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-06-15",
-          "release": null,
-          "released": null,
+          "release": "9.20.26",
+          "released": "2026-07-20",
           "subject": "Reproducer for #5946 (assertion in some CNAME/DNAME queries)"
         }
       },
@@ -9539,8 +9516,8 @@
       "fixes": {
         "bind9": {
           "commit_date": "2026-07-03",
-          "release": "9.21.24",
-          "released": "2026-07-13",
+          "release": "9.20.26",
+          "released": "2026-07-20",
           "subject": "[CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field"
         }
       },
@@ -9631,8 +9608,8 @@
       "fixes": {
         "nsd": {
           "commit_date": "2026-08-26",
-          "release": "4.15.2",
-          "released": "2026-09-02",
+          "release": "4.15.1",
+          "released": "2026-08-26",
           "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2"
         }
       },
@@ -9661,8 +9638,8 @@
       "fixes": {
         "nsd": {
           "commit_date": "2026-08-26",
-          "release": "4.15.2",
-          "released": "2026-09-02",
+          "release": "4.15.1",
+          "released": "2026-08-26",
           "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2"
         }
       },
@@ -9692,8 +9669,8 @@
       "fixes": {
         "nsd": {
           "commit_date": "2026-08-26",
-          "release": "4.15.2",
-          "released": "2026-09-02",
+          "release": "4.15.1",
+          "released": "2026-08-26",
           "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2"
         }
       },
@@ -9723,8 +9700,8 @@
       "fixes": {
         "nsd": {
           "commit_date": "2026-08-26",
-          "release": "4.15.2",
-          "released": "2026-09-02",
+          "release": "4.15.1",
+          "released": "2026-08-26",
           "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2"
         }
       },
@@ -10160,8 +10137,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-05-20",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.1",
+          "released": "2026-05-20",
           "subject": "- Unit test for CVE-2026-33278."
         }
       },
@@ -10464,8 +10441,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-05-20",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.1",
+          "released": "2026-05-20",
           "subject": "- Unit test for CVE-2026-40622."
         }
       },
@@ -10674,8 +10651,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-05-20",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.1",
+          "released": "2026-05-20",
           "subject": "- Unit test for CVE-2026-42944."
         }
       },
@@ -10704,8 +10681,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-42955."
         }
       },
@@ -10737,8 +10714,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-05-20",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.1",
+          "released": "2026-05-20",
           "subject": "- Unit test for CVE-2026-42959."
         }
       },
@@ -10770,8 +10747,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-05-20",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.1",
+          "released": "2026-05-20",
           "subject": "- Unit test for CVE-2026-42960."
         }
       },
@@ -10801,8 +10778,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-05-20",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.1",
+          "released": "2026-05-20",
           "subject": "- Unit test for CVE-2026-44390."
         }
       },
@@ -10894,8 +10871,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-44687."
         }
       },
@@ -10928,8 +10905,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-44690."
         }
       },
@@ -11003,8 +10980,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-46582."
         }
       },
@@ -11096,8 +11073,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-50045."
         }
       },
@@ -11160,8 +11137,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-50243."
         }
       },
@@ -11193,8 +11170,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Fix error in log printout in fix for CVE-2026-50248, when the   primary name is bogus."
         }
       },
@@ -11437,8 +11414,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-55717."
         }
       },
@@ -11467,8 +11444,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-55973."
         }
       },
@@ -11561,8 +11538,8 @@
       "fixes": {
         "unbound": {
           "commit_date": "2026-07-22",
-          "release": "1.26.0",
-          "released": "2026-07-24",
+          "release": "1.25.2",
+          "released": "2026-07-22",
           "subject": "- Unit test for CVE-2026-56416."
         }
       },

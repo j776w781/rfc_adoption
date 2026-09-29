@@ -69,9 +69,11 @@ mechanism that carries a value to a zone:
   candidate, CVE-2021-40083, was published after the NSEC3 cap it might have
   prompted was already committed.
 - **The DNSSEC CVE surface is on validators**: BIND 40, Unbound 16, PowerDNS
-  Recursor 12, PowerDNS Auth 3, NSD 0, OpenDNSSEC 0. 69 of 97 sit in the
-  validation core every signed zone shares; KeyTrap among them, fixed across
-  three vendors over 148 days. No algorithm choice avoids any of it.
+  Recursor 12, PowerDNS Auth 0, NSD 0, OpenDNSSEC 0. 69 of 97 sit in the
+  validation core every signed zone shares; KeyTrap among them, fixed by four
+  validators within seven days, all before publication (corrected 2026-09-29; the
+  earlier "148 days" came from an inventory error, see `cve_crossref.md`). No
+  algorithm choice avoids any of it.
 
 ## What two verification rounds changed
 
