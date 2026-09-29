@@ -1,0 +1,971 @@
+{
+  "generated": "2026-09-29T20:36:16+00:00",
+  "inputs": {
+    "server": "out/server_run/timeline_monthly.parquet",
+    "panel": "out/panel_run/timeline_monthly.parquet"
+  },
+  "count_column": "numerator/denominator = domains_peak (largest single-day distinct count in the month; == snapshot count for reverse where measured_days == 1); pct = sum of daily numerator counts / sum of daily denominator counts (domain_days), the month's mean daily share",
+  "definitions": {
+    "reverse": {
+      "unit": "delegations in the RIR's in-addr.arpa zone file (one snapshot day per month)",
+      "ds_share": {
+        "numerator": "domains_peak of dimension=algorithm_ds value=_total: delegations with at least one DS record in the parent zone file",
+        "denominator": "domains_peak of dimension=all: every delegation in the zone file that month",
+        "missing_numerator_row": "counted as 0 signed (the month's snapshot had no DS at all)"
+      },
+      "dnskey_share": {
+        "status": "not observable",
+        "why": "an in-addr.arpa zone file holds only the parent-side delegation (NS, DS, glue); DNSKEY lives in the child zone and was not measured"
+      },
+      "rrsig_share": {
+        "status": "not observable",
+        "why": "same: RRSIGs are child-side data; the RIR zone files carry only the DS"
+      }
+    },
+    "reverse_panel": {
+      "unit": "delegations, strict two-RIR panel (afrinic + arin) built for share statements; same rules as reverse",
+      "ds_share": {
+        "numerator": "domains_peak of dimension=algorithm_ds value=_total",
+        "denominator": "domains_peak of dimension=all"
+      },
+      "dnskey_share": {
+        "status": "not observable"
+      },
+      "rrsig_share": {
+        "status": "not observable"
+      }
+    },
+    "forward": {
+      "unit": "delegated zones in the TLD (names with an NS RRset), peak single day in the month, from OpenINTEL daily measurements of the TLD zone file's names",
+      "ds_share": {
+        "numerator": "domains_peak of rr_type=DS: names with at least one DS. DS exists only at a delegation point, so these are delegated zones",
+        "denominator": "domains_peak of rr_type=NS: names with an NS RRset = delegated zones in the TLD"
+      },
+      "dnskey_share": {
+        "numerator": "domains_peak of algorithm_dnskey=_total: names answering with at least one DNSKEY (a zone apex serving keys). Equals rr_type=DNSKEY in every month",
+        "denominator": "domains_peak of rr_type=NS"
+      },
+      "rrsig_zone_share": {
+        "numerator": "domains_peak of rrsig_type_covered=DNSKEY: names carrying an RRSIG whose type-covered field is DNSKEY. Only a signed zone apex has one, so this is 'zones with an RRSIG' at zone level. Within 0.5% of the DNSKEY count in every TLD-month",
+        "denominator": "domains_peak of rr_type=NS",
+        "note": "the justified zone-level proxy for 'domains with at least one RRSIG'"
+      },
+      "rrsig_names_share": {
+        "numerator": "domains_peak of rr_type=RRSIG: NAMES (apex and subnames such as www.) with at least one RRSIG of any type. Every name inside a signed zone carries RRSIGs, so this exceeds the zone count (e.g. se 2023-12: 2,571,213 names vs 1,339,712 zones)",
+        "denominator": "domains_peak of rr_type=_total: every NAME OpenINTEL measured that month. This is a name count and is NOT a domain count; it is used only for this name-level metric",
+        "note": "name-level share, reported because the raw RRSIG column counts names; use rrsig_zone_share for a zone statement"
+      },
+      "excluded_from_headline": {
+        "fed.us": "1-2 delegated zones, no DS or DNSKEY ever observed; kept in the CSV, excluded from charts"
+      }
+    },
+    "secspider": {
+      "unit": "zones SecSpider tracks (crawled + user-submitted + NSEC-walked), as printed in its Monitoring Summary at capture time",
+      "dnssec_enabled_share": {
+        "numerator": "'DNSSEC enabled zones': zones whose online nameservers all pass SecSpider's checks (EDNS0, RRSIG with DO bit, RRSIG matches served DNSKEY, no apex CNAME, NSEC/NSEC3 for nonexistent names)",
+        "denominator": "'Zones': every zone in SecSpider's tracked set. That set is assembled by looking for DNSSEC (submissions, crawling, NSEC walking), so it over-represents signed zones; the share is NOT a prevalence over the DNS"
+      },
+      "dnssec_verified_share": {
+        "numerator": "'DNSSEC verified zones' (verifiable from SecSpider's trust anchors / parent DS)",
+        "denominator": "'Zones'"
+      },
+      "production_share": {
+        "numerator": "'Production DNSSEC-enabled zones' (SecSpider's stricter production criterion)",
+        "denominator": "'Zones'"
+      },
+      "sampling": "one Wayback capture per month where one exists; when two hosts were captured in the same month the newer host wins (secspider.net > verisignlabs > ucla). Dropped captures: no summary block, the 2007-08 outage page, frozen pages (counts identical to the host's previous capture), and internally inconsistent pages (a numerator above 'Zones'). Months without a usable capture are absent, not interpolated; 'month' is the capture month (the page's own 'as of' date can lag it by weeks on the UCLA host)"
+    }
+  },
+  "selectors": {
+    "reverse": {
+      "ds_share": {
+        "numerator": [
+          "algorithm_ds",
+          "_total"
+        ],
+        "denominator": [
+          "all",
+          "all"
+        ]
+      }
+    },
+    "reverse_panel": {
+      "ds_share": {
+        "numerator": [
+          "algorithm_ds",
+          "_total"
+        ],
+        "denominator": [
+          "all",
+          "all"
+        ]
+      }
+    },
+    "forward": {
+      "ds_share": {
+        "numerator": [
+          "rr_type",
+          "DS"
+        ],
+        "denominator": [
+          "rr_type",
+          "NS"
+        ]
+      },
+      "dnskey_share": {
+        "numerator": [
+          "algorithm_dnskey",
+          "_total"
+        ],
+        "denominator": [
+          "rr_type",
+          "NS"
+        ]
+      },
+      "rrsig_zone_share": {
+        "numerator": [
+          "rrsig_type_covered",
+          "DNSKEY"
+        ],
+        "denominator": [
+          "rr_type",
+          "NS"
+        ]
+      },
+      "rrsig_names_share": {
+        "numerator": [
+          "rr_type",
+          "RRSIG"
+        ],
+        "denominator": [
+          "rr_type",
+          "_total"
+        ]
+      }
+    }
+  },
+  "not_observable": [
+    {
+      "corpus": "reverse",
+      "metric": "dnskey_share",
+      "why": "an in-addr.arpa zone file holds only the parent-side delegation (NS, DS, glue); DNSKEY lives in the child zone and was not measured"
+    },
+    {
+      "corpus": "reverse",
+      "metric": "rrsig_share",
+      "why": "same: RRSIGs are child-side data; the RIR zone files carry only the DS"
+    },
+    {
+      "corpus": "reverse_panel",
+      "metric": "dnskey_share",
+      "why": "same as reverse"
+    },
+    {
+      "corpus": "reverse_panel",
+      "metric": "rrsig_share",
+      "why": "same as reverse"
+    }
+  ],
+  "coverage": {
+    "forward": {
+      "ch": {
+        "first": "2020-05",
+        "last": "2023-12",
+        "months": 44,
+        "gap_months": [],
+        "metrics": [
+          "dnskey_share",
+          "ds_share",
+          "rrsig_names_share",
+          "rrsig_zone_share"
+        ]
+      },
+      "ee": {
+        "first": "2019-07",
+        "last": "2023-12",
+        "months": 54,
+        "gap_months": [],
+        "metrics": [
+          "dnskey_share",
+          "ds_share",
+          "rrsig_names_share",
+          "rrsig_zone_share"
+        ]
+      },
+      "fed.us": {
+        "first": "2017-05",
+        "last": "2022-10",
+        "months": 66,
+        "gap_months": [],
+        "metrics": [
+          "dnskey_share",
+          "ds_share",
+          "rrsig_names_share",
+          "rrsig_zone_share"
+        ]
+      },
+      "gov": {
+        "first": "2017-05",
+        "last": "2023-12",
+        "months": 80,
+        "gap_months": [],
+        "metrics": [
+          "dnskey_share",
+          "ds_share",
+          "rrsig_names_share",
+          "rrsig_zone_share"
+        ]
+      },
+      "li": {
+        "first": "2020-05",
+        "last": "2023-12",
+        "months": 44,
+        "gap_months": [],
+        "metrics": [
+          "dnskey_share",
+          "ds_share",
+          "rrsig_names_share",
+          "rrsig_zone_share"
+        ]
+      },
+      "nu": {
+        "first": "2016-06",
+        "last": "2023-12",
+        "months": 91,
+        "gap_months": [],
+        "metrics": [
+          "dnskey_share",
+          "ds_share",
+          "rrsig_names_share",
+          "rrsig_zone_share"
+        ]
+      },
+      "se": {
+        "first": "2016-06",
+        "last": "2023-12",
+        "months": 91,
+        "gap_months": [],
+        "metrics": [
+          "dnskey_share",
+          "ds_share",
+          "rrsig_names_share",
+          "rrsig_zone_share"
+        ]
+      }
+    },
+    "reverse": {
+      "afrinic": {
+        "first": "2009-04",
+        "last": "2026-09",
+        "months": 200,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      },
+      "apnic": {
+        "first": "2009-04",
+        "last": "2024-12",
+        "months": 179,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      },
+      "arin": {
+        "first": "2009-04",
+        "last": "2026-09",
+        "months": 200,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      },
+      "lacnic": {
+        "first": "2009-04",
+        "last": "2026-09",
+        "months": 200,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      },
+      "ripe": {
+        "first": "2009-04",
+        "last": "2026-09",
+        "months": 200,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      }
+    },
+    "reverse_panel": {
+      "_pooled-afrinic-arin": {
+        "first": "2009-04",
+        "last": "2026-08",
+        "months": 199,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      },
+      "afrinic": {
+        "first": "2009-04",
+        "last": "2026-08",
+        "months": 199,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      },
+      "arin": {
+        "first": "2009-04",
+        "last": "2026-08",
+        "months": 199,
+        "gap_months": [
+          "2009-06",
+          "2009-07",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-03",
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
+        ],
+        "metrics": [
+          "ds_share"
+        ]
+      }
+    },
+    "secspider": {
+      "secspider.cs.ucla.edu": {
+        "first": "2006-09",
+        "last": "2015-04",
+        "months": 24,
+        "gap_months": [
+          "2006-10",
+          "2006-11",
+          "2006-12",
+          "2007-03",
+          "2007-04",
+          "2007-08",
+          "2007-09",
+          "2007-10",
+          "2007-11",
+          "2008-01",
+          "2008-03",
+          "2008-04",
+          "2008-06",
+          "2008-07",
+          "2008-08",
+          "2008-09",
+          "2008-10",
+          "2008-11",
+          "2009-01",
+          "2009-03",
+          "2009-05",
+          "2009-06",
+          "2009-07",
+          "2009-08",
+          "2009-09",
+          "2009-10",
+          "2009-11",
+          "2009-12",
+          "2010-01",
+          "2010-02",
+          "2010-04",
+          "2010-06",
+          "2010-08",
+          "2010-09",
+          "2010-10",
+          "2010-11",
+          "2010-12",
+          "2011-01",
+          "2011-02",
+          "2011-05",
+          "2011-08",
+          "2011-09",
+          "2011-11",
+          "2012-01",
+          "2012-02",
+          "2012-03",
+          "2012-04",
+          "2012-05",
+          "2012-06",
+          "2012-07",
+          "2012-09",
+          "2012-10",
+          "2012-11",
+          "2012-12",
+          "2013-01",
+          "2013-02",
+          "2013-03",
+          "2013-04",
+          "2013-05",
+          "2013-06",
+          "2013-07",
+          "2013-08",
+          "2013-09",
+          "2013-10",
+          "2013-11",
+          "2013-12",
+          "2014-01",
+          "2014-02",
+          "2014-03",
+          "2014-04",
+          "2014-05",
+          "2014-06",
+          "2014-07",
+          "2014-08",
+          "2014-09",
+          "2014-10",
+          "2014-11",
+          "2014-12",
+          "2015-02",
+          "2015-03"
+        ],
+        "metrics": [
+          "dnssec_enabled_share",
+          "dnssec_verified_share",
+          "production_share"
+        ]
+      },
+      "secspider.net": {
+        "first": "2019-09",
+        "last": "2026-09",
+        "months": 36,
+        "gap_months": [
+          "2019-10",
+          "2019-12",
+          "2020-01",
+          "2020-02",
+          "2020-03",
+          "2020-04",
+          "2020-06",
+          "2020-07",
+          "2020-08",
+          "2020-09",
+          "2020-10",
+          "2020-11",
+          "2020-12",
+          "2021-01",
+          "2021-02",
+          "2021-03",
+          "2021-04",
+          "2021-05",
+          "2021-06",
+          "2021-07",
+          "2021-08",
+          "2021-09",
+          "2021-10",
+          "2021-11",
+          "2021-12",
+          "2022-02",
+          "2022-03",
+          "2022-04",
+          "2022-07",
+          "2022-09",
+          "2022-10",
+          "2022-11",
+          "2023-01",
+          "2023-04",
+          "2023-06",
+          "2023-07",
+          "2023-08",
+          "2023-10",
+          "2024-01",
+          "2024-03",
+          "2024-04",
+          "2024-10",
+          "2024-12",
+          "2025-02",
+          "2025-12",
+          "2026-02",
+          "2026-06",
+          "2026-07",
+          "2026-08"
+        ],
+        "metrics": [
+          "dnssec_enabled_share",
+          "dnssec_verified_share",
+          "production_share"
+        ]
+      },
+      "secspider.verisignlabs.com": {
+        "first": "2012-01",
+        "last": "2018-09",
+        "months": 36,
+        "gap_months": [
+          "2012-02",
+          "2012-03",
+          "2012-04",
+          "2012-05",
+          "2012-06",
+          "2012-07",
+          "2012-08",
+          "2012-09",
+          "2012-10",
+          "2013-08",
+          "2014-02",
+          "2014-03",
+          "2014-04",
+          "2014-05",
+          "2014-06",
+          "2014-07",
+          "2014-08",
+          "2014-09",
+          "2014-10",
+          "2014-11",
+          "2014-12",
+          "2015-01",
+          "2015-02",
+          "2015-03",
+          "2015-04",
+          "2015-05",
+          "2015-06",
+          "2015-07",
+          "2015-08",
+          "2015-10",
+          "2015-11",
+          "2015-12",
+          "2016-08",
+          "2016-09",
+          "2016-11",
+          "2017-02",
+          "2017-03",
+          "2017-07",
+          "2017-08",
+          "2017-09",
+          "2017-10",
+          "2018-04",
+          "2018-05",
+          "2018-06",
+          "2018-08"
+        ],
+        "metrics": [
+          "dnssec_enabled_share",
+          "dnssec_verified_share",
+          "production_share"
+        ]
+      }
+    }
+  },
+  "headline": {
+    "forward": {
+      "ch": {
+        "dnskey_share": {
+          "month": "2023-12",
+          "numerator": 1244739,
+          "denominator": 2355587,
+          "pct": 52.7719
+        },
+        "ds_share": {
+          "month": "2023-12",
+          "numerator": 1231138,
+          "denominator": 2355587,
+          "pct": 52.1914
+        },
+        "rrsig_names_share": {
+          "month": "2023-12",
+          "numerator": 3715218,
+          "denominator": 6216637,
+          "pct": 59.6672
+        },
+        "rrsig_zone_share": {
+          "month": "2023-12",
+          "numerator": 1244584,
+          "denominator": 2355587,
+          "pct": 52.7653
+        }
+      },
+      "ee": {
+        "dnskey_share": {
+          "month": "2023-12",
+          "numerator": 36865,
+          "denominator": 156690,
+          "pct": 23.552
+        },
+        "ds_share": {
+          "month": "2023-12",
+          "numerator": 36055,
+          "denominator": 156690,
+          "pct": 23.048
+        },
+        "rrsig_names_share": {
+          "month": "2023-12",
+          "numerator": 116840,
+          "denominator": 367428,
+          "pct": 31.8099
+        },
+        "rrsig_zone_share": {
+          "month": "2023-12",
+          "numerator": 36865,
+          "denominator": 156690,
+          "pct": 23.552
+        }
+      },
+      "fed.us": {
+        "dnskey_share": {
+          "month": "2022-10",
+          "numerator": 0,
+          "denominator": 1,
+          "pct": 0.0
+        },
+        "ds_share": {
+          "month": "2022-10",
+          "numerator": 0,
+          "denominator": 1,
+          "pct": 0.0
+        },
+        "rrsig_names_share": {
+          "month": "2022-10",
+          "numerator": 0,
+          "denominator": 2,
+          "pct": 0.0
+        },
+        "rrsig_zone_share": {
+          "month": "2022-10",
+          "numerator": 0,
+          "denominator": 1,
+          "pct": 0.0
+        }
+      },
+      "gov": {
+        "dnskey_share": {
+          "month": "2023-12",
+          "numerator": 1766,
+          "denominator": 9636,
+          "pct": 18.1743
+        },
+        "ds_share": {
+          "month": "2023-12",
+          "numerator": 1552,
+          "denominator": 9636,
+          "pct": 16.0864
+        },
+        "rrsig_names_share": {
+          "month": "2023-12",
+          "numerator": 6858,
+          "denominator": 23755,
+          "pct": 28.6176
+        },
+        "rrsig_zone_share": {
+          "month": "2023-12",
+          "numerator": 1761,
+          "denominator": 9636,
+          "pct": 18.1207
+        }
+      },
+      "li": {
+        "dnskey_share": {
+          "month": "2023-12",
+          "numerator": 22041,
+          "denominator": 63300,
+          "pct": 34.79
+        },
+        "ds_share": {
+          "month": "2023-12",
+          "numerator": 21314,
+          "denominator": 63300,
+          "pct": 33.6381
+        },
+        "rrsig_names_share": {
+          "month": "2023-12",
+          "numerator": 66250,
+          "denominator": 157422,
+          "pct": 42.022
+        },
+        "rrsig_zone_share": {
+          "month": "2023-12",
+          "numerator": 22030,
+          "denominator": 63300,
+          "pct": 34.7731
+        }
+      },
+      "nu": {
+        "dnskey_share": {
+          "month": "2023-12",
+          "numerator": 126141,
+          "denominator": 208718,
+          "pct": 60.3389
+        },
+        "ds_share": {
+          "month": "2023-12",
+          "numerator": 118172,
+          "denominator": 208718,
+          "pct": 56.6215
+        },
+        "rrsig_names_share": {
+          "month": "2023-12",
+          "numerator": 402976,
+          "denominator": 588578,
+          "pct": 68.391
+        },
+        "rrsig_zone_share": {
+          "month": "2023-12",
+          "numerator": 126133,
+          "denominator": 208718,
+          "pct": 60.335
+        }
+      },
+      "se": {
+        "dnskey_share": {
+          "month": "2023-12",
+          "numerator": 840009,
+          "denominator": 1339712,
+          "pct": 62.7617
+        },
+        "ds_share": {
+          "month": "2023-12",
+          "numerator": 811627,
+          "denominator": 1339712,
+          "pct": 60.6306
+        },
+        "rrsig_names_share": {
+          "month": "2023-12",
+          "numerator": 2571213,
+          "denominator": 3663131,
+          "pct": 70.2378
+        },
+        "rrsig_zone_share": {
+          "month": "2023-12",
+          "numerator": 839978,
+          "denominator": 1339712,
+          "pct": 62.7594
+        }
+      }
+    },
+    "reverse": {
+      "afrinic": {
+        "ds_share": {
+          "month": "2026-09",
+          "numerator": 627,
+          "denominator": 40227,
+          "pct": 1.5587
+        }
+      },
+      "apnic": {
+        "ds_share": {
+          "month": "2024-12",
+          "numerator": 3711,
+          "denominator": 573053,
+          "pct": 0.6476
+        }
+      },
+      "arin": {
+        "ds_share": {
+          "month": "2026-09",
+          "numerator": 6080,
+          "denominator": 710116,
+          "pct": 0.8562
+        }
+      },
+      "lacnic": {
+        "ds_share": {
+          "month": "2026-09",
+          "numerator": 1265,
+          "denominator": 23854,
+          "pct": 5.3031
+        }
+      },
+      "ripe": {
+        "ds_share": {
+          "month": "2026-09",
+          "numerator": 659,
+          "denominator": 65616,
+          "pct": 1.0043
+        }
+      }
+    },
+    "reverse_panel": {
+      "_pooled-afrinic-arin": {
+        "ds_share": {
+          "month": "2026-08",
+          "numerator": 6444,
+          "denominator": 744825,
+          "pct": 0.8652
+        }
+      },
+      "afrinic": {
+        "ds_share": {
+          "month": "2026-08",
+          "numerator": 625,
+          "denominator": 40184,
+          "pct": 1.5553
+        }
+      },
+      "arin": {
+        "ds_share": {
+          "month": "2026-08",
+          "numerator": 5980,
+          "denominator": 710504,
+          "pct": 0.8417
+        }
+      }
+    },
+    "secspider": {
+      "secspider.cs.ucla.edu": {
+        "dnssec_enabled_share": {
+          "month": "2015-04",
+          "numerator": 263314,
+          "denominator": 529911,
+          "pct": 49.6902
+        },
+        "dnssec_verified_share": {
+          "month": "2015-04",
+          "numerator": 261077,
+          "denominator": 529911,
+          "pct": 49.2681
+        },
+        "production_share": {
+          "month": "2015-04",
+          "numerator": 254025,
+          "denominator": 529911,
+          "pct": 47.9373
+        }
+      },
+      "secspider.net": {
+        "dnssec_enabled_share": {
+          "month": "2026-09",
+          "numerator": 15449854,
+          "denominator": 21594218,
+          "pct": 71.5463
+        },
+        "dnssec_verified_share": {
+          "month": "2026-09",
+          "numerator": 8092472,
+          "denominator": 21594218,
+          "pct": 37.4752
+        },
+        "production_share": {
+          "month": "2026-09",
+          "numerator": 13662867,
+          "denominator": 21594218,
+          "pct": 63.271
+        }
+      },
+      "secspider.verisignlabs.com": {
+        "dnssec_enabled_share": {
+          "month": "2018-09",
+          "numerator": 2127227,
+          "denominator": 2666278,
+          "pct": 79.7826
+        },
+        "dnssec_verified_share": {
+          "month": "2018-09",
+          "numerator": 1877982,
+          "denominator": 2666278,
+          "pct": 70.4346
+        },
+        "production_share": {
+          "month": "2018-09",
+          "numerator": 2080430,
+          "denominator": 2666278,
+          "pct": 78.0275
+        }
+      }
+    }
+  },
+  "secspider": {
+    "status": "available",
+    "path": "data/external/secspider/secspider_wayback_snapshots.csv",
+    "captures": 134,
+    "captures_usable": 100,
+    "captures_dropped": {
+      "no_counts": 19,
+      "outage": 1,
+      "frozen": 13,
+      "inconsistent": 1
+    },
+    "months": 96,
+    "first_month": "2006-09",
+    "last_month": "2026-09",
+    "hosts": [
+      "secspider.cs.ucla.edu",
+      "secspider.net",
+      "secspider.verisignlabs.com"
+    ],
+    "readme": "data/external/secspider/README.md"
+  },
+  "rows": 3714
+}

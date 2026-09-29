@@ -24,6 +24,10 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 #: change name -> pattern that must appear in a CVE description for the CVE to be
 #: about *that* mechanism. Deliberately strict: "DNSSEC validation crashes" is not
@@ -59,10 +63,12 @@ def nsec3_mechanism(timeline: pd.DataFrame) -> dict | None:
     if not len(timeline):
         return None
     f = timeline[timeline.basis == "zonefile"]
+    # domain_days (summed daily counts), so numerator and denominator come from the
+    # same days; a ratio of peak days can mix days (Phase 7 verification, section B).
     par = f[(f.dimension == "rr_type") & (f.value.astype(str) == "NSEC3PARAM")] \
-        .groupby("month").domains_peak.sum()
+        .groupby("month").domain_days.sum()
     signed = f[(f.dimension == "algorithm_dnskey") & (f.value.astype(str) == "_total")] \
-        .groupby("month").domains_peak.sum()
+        .groupby("month").domain_days.sum()
     share = (par / signed * 100).dropna()
     if share.empty:
         return None
@@ -84,13 +90,18 @@ def stage_at(change: dict, when: str) -> str:
     return "seen, below 1%"
 
 
-def share_at(timeline: pd.DataFrame, dimension: str, value: str, month: str):
-    """Share of signed delegations carrying the value, reverse corpus.
+PANEL = "_pooled-afrinic-arin"
+
+
+def share_at(panel: pd.DataFrame, dimension: str, value: str, month: str):
+    """Share of signed delegations carrying the value, reverse strict panel.
 
     Reverse is the only basis spanning 2009-2026; the forward corpus starts
-    2016-06 and stops 2023-12, so it cannot date most of these CVEs.
+    2016-06 and stops 2023-12, so it cannot date most of these CVEs. The strict
+    panel, never the five RIRs summed: their name sets overlap, so a sum
+    double-counts (corrected 2026-09-29). Label M = state on the 1st of M.
     """
-    b = timeline[(timeline.basis == "reverse") & (timeline.dimension == dimension)]
+    b = panel[(panel.source == PANEL) & (panel.dimension == dimension)]
     num = b[b.value == value].groupby("month").domains_peak.sum()
     den = b[b.value == "_total"].groupby("month").domains_peak.sum()
     at = (num / den * 100).dropna()
@@ -103,7 +114,9 @@ def main() -> int:
     ap.add_argument("--adoption", type=Path, default=Path("out/analysis/adoption_measures.json"))
     ap.add_argument("--cves", type=Path, default=Path("out/analysis/cve_crossref.json"))
     ap.add_argument("--timeline", type=Path,
-                    default=Path("out/server_run/timeline_monthly.parquet"))
+                    default=_run_paths.server_timeline())
+    ap.add_argument("--panel", type=Path,
+                    default=_run_paths.panel_timeline())
     ap.add_argument("--out", type=Path,
                     default=Path("out/analysis/cve_adoption_crossref.json"))
     args = ap.parse_args()
@@ -111,6 +124,7 @@ def main() -> int:
     adopt = json.loads(args.adoption.read_text(encoding="utf-8"))
     cve = json.loads(args.cves.read_text(encoding="utf-8"))
     tl = pd.read_parquet(args.timeline) if args.timeline.exists() else pd.DataFrame()
+    pan = pd.read_parquet(args.panel) if args.panel.exists() else pd.DataFrame(columns=["source", "dimension"])
 
     changes = [(c, "algorithm_ds") for c in adopt["algorithms"]] + \
               [(c, "digest_type_ds") for c in adopt["digest_types"]]
@@ -141,7 +155,7 @@ def main() -> int:
             "cves": [{"cve": c["cve"], "published": c["published"], "cvss": c["cvss"],
                       "mechanism": c["mechanism"],
                       "stage_when_published": stage_at(change, c["published"][:7]),
-                      "share_pct_then": share_at(tl, dim, str(change["value"]),
+                      "share_pct_then": share_at(pan, dim, str(change["value"]),
                                                  c["published"][:7]) if len(tl) else None}
                      for c in sorted(hits, key=lambda x: x["published"])],
         })

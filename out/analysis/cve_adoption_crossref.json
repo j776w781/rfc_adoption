@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-09",
+  "generated": "2026-09-29",
   "method": {
     "join": "CVE description must name the algorithm or mechanism.",
     "why_narrow": "A bug in the shared validation path is not evidence against any one algorithm. Those are counted under shared_core.",
@@ -17,9 +17,9 @@
     "basis": "forward corpus, NSEC3PARAM zones / signed zones",
     "first_month": "2016-06",
     "last_month": "2023-12",
-    "peak_share_pct": 98.39,
+    "peak_share_pct": 98.43,
     "peak_month": "2016-06",
-    "last_share_pct": 61.94,
+    "last_share_pct": 61.79,
     "mechanism": "NSEC3",
     "rfc": "RFC 5155",
     "published": "2008-03",
@@ -147,7 +147,7 @@
           "cvss": 7.5,
           "mechanism": "nsec3",
           "stage_when_published": "seen, below 1%",
-          "share_pct_then": 11.602
+          "share_pct_then": null
         },
         {
           "cve": "CVE-2010-0097",
@@ -155,7 +155,7 @@
           "cvss": 4.3,
           "mechanism": "nsec3",
           "stage_when_published": "seen, below 1%",
-          "share_pct_then": 15.385
+          "share_pct_then": null
         },
         {
           "cve": "CVE-2011-4869",
@@ -163,7 +163,7 @@
           "cvss": 7.8,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 17.374
+          "share_pct_then": 16.505
         },
         {
           "cve": "CVE-2014-0591",
@@ -171,7 +171,7 @@
           "cvss": 2.6,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 9.042
+          "share_pct_then": 8.303
         },
         {
           "cve": "CVE-2021-40083",
@@ -179,7 +179,7 @@
           "cvss": 7.5,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 8.646
+          "share_pct_then": 19.003
         },
         {
           "cve": "CVE-2023-50868",
@@ -187,7 +187,7 @@
           "cvss": 7.5,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 5.085
+          "share_pct_then": 9.221
         },
         {
           "cve": "CVE-2026-33261",
@@ -195,7 +195,7 @@
           "cvss": 5.9,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 5.856
+          "share_pct_then": 6.999
         },
         {
           "cve": "CVE-2026-33278",
@@ -203,7 +203,7 @@
           "cvss": 9.8,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 5.696
+          "share_pct_then": 6.9
         },
         {
           "cve": "CVE-2026-42923",
@@ -211,7 +211,7 @@
           "cvss": 5.3,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 5.696
+          "share_pct_then": 6.9
         },
         {
           "cve": "CVE-2026-10723",
@@ -219,7 +219,7 @@
           "cvss": 6.8,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 5.382
+          "share_pct_then": 6.648
         },
         {
           "cve": "CVE-2026-13204",
@@ -227,7 +227,7 @@
           "cvss": 7.5,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 5.382
+          "share_pct_then": 6.648
         },
         {
           "cve": "CVE-2026-52686",
@@ -235,7 +235,7 @@
           "cvss": 3.7,
           "mechanism": "nsec3",
           "stage_when_published": "in common usage",
-          "share_pct_then": 5.382
+          "share_pct_then": 6.648
         }
       ]
     },
@@ -263,7 +263,7 @@
           "cvss": 7.5,
           "mechanism": "algorithm",
           "stage_when_published": "in common usage",
-          "share_pct_then": 21.371
+          "share_pct_then": 24.047
         }
       ]
     },
@@ -326,7 +326,7 @@
           "cvss": 5.9,
           "mechanism": "algorithm",
           "stage_when_published": "seen, below 1%",
-          "share_pct_then": 6.642
+          "share_pct_then": 0.805
         },
         {
           "cve": "CVE-2022-38177",
@@ -334,7 +334,7 @@
           "cvss": 7.5,
           "mechanism": "algorithm",
           "stage_when_published": "in common usage",
-          "share_pct_then": 35.218
+          "share_pct_then": 39.858
         }
       ]
     },
@@ -379,7 +379,7 @@
           "cvss": 7.5,
           "mechanism": "algorithm",
           "stage_when_published": "seen, below 1%",
-          "share_pct_then": 0.024
+          "share_pct_then": 0.027
         }
       ]
     },

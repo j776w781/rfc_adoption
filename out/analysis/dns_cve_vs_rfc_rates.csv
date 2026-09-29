@@ -1,0 +1,189 @@
+event,kind,month,rfc,mechanism,products,series,measure,rate_at_month_pp,rate_window_pp_per_month,title,verdict
+CVE-2013-4854,cve_patch,2013-09,RFC 5011,trust-anchor,['bind9'],reverse signed share (strict panel),raw,0.0014,0.0016,,
+CVE-2015-1349,cve_patch,2015-02,RFC 5011,trust-anchor,['bind9'],reverse signed share (strict panel),raw,-0.001,0.0018,,
+CVE-2015-4620,cve_patch,2015-06,RFC 4035,validation,['bind9'],reverse signed share (strict panel),raw,0.0016,0.0018,,
+CVE-2015-5722,cve_patch,2015-08,RFC 4033,dnssec-other,['bind9'],reverse signed share (strict panel),raw,0.0012,0.0009,,
+CVE-2016-9147,cve_patch,2016-11,RFC 4033,dnssec-other,['bind9'],reverse signed share (strict panel),raw,0.0028,0.0027,,
+CVE-2017-15105,cve_patch,2018-03,RFC 4034,nsec,['unbound'],reverse signed share (strict panel),raw,0.0004,0.001,,
+CVE-2018-1000002,cve_patch,2018-01,RFC 4035,validation,"['knot', 'kresd']",reverse signed share (strict panel),raw,-0.0004,-0.0012,,
+CVE-2018-5737,cve_patch,2018-05,RFC 4034,nsec,['bind9'],reverse signed share (strict panel),raw,0.002,0.0021,,
+CVE-2019-10190,cve_patch,2019-07,RFC 4035,validation,"['knot', 'kresd']",reverse signed share (strict panel),raw,0.0076,0.0047,,
+CVE-2019-10191,cve_patch,2019-07,RFC 4033,dnssec-other,"['knot', 'kresd']",reverse signed share (strict panel),raw,0.0076,0.0047,,
+CVE-2020-25829,cve_patch,2020-10,RFC 4035,validation,"['pdns-auth', 'pdns-rec']",reverse signed share (strict panel),raw,-0.0025,0.0073,,
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],reverse signed share (strict panel),raw,0.0051,0.0068,,
+CVE-2022-3204,cve_patch,2022-09,RFC 4034,dnskey,['unbound'],reverse signed share (strict panel),raw,0.0036,0.004,,
+CVE-2022-3736,cve_patch,2023-01,RFC 4035,rrsig,['bind9'],reverse signed share (strict panel),raw,0.0032,0.006,,
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],reverse signed share (strict panel),raw,0.0036,0.004,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],reverse signed share (strict panel),raw,0.0036,0.004,,
+CVE-2023-50387,cve_patch,2024-01,RFC 4034,dnskey,"['bind9', 'kresd', 'pdns-auth', 'pdns-rec', 'unbound']",reverse signed share (strict panel),raw,0.0056,0.0036,,
+CVE-2023-50868,cve_patch,2024-02,RFC 5155,nsec3,"['bind9', 'kresd', 'pdns-auth', 'pdns-rec', 'unbound']",reverse signed share (strict panel),raw,0.0031,0.0033,,
+CVE-2024-1975,cve_patch,2024-07,RFC 4035,validation,['bind9'],reverse signed share (strict panel),raw,0.0095,0.0071,,
+CVE-2025-8677,cve_patch,2025-10,RFC 4034,dnskey,['bind9'],reverse signed share (strict panel),raw,0.0289,0.0074,,
+CVE-2026-10723,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-10822,cve_patch,2026-06,RFC 4034,dnskey,['bind9'],reverse signed share (strict panel),raw,0.0091,0.0117,,
+CVE-2026-11605,cve_patch,2026-07,RFC 4035,rrsig,['bind9'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-11622,cve_patch,2026-06,RFC 4035,validation,['bind9'],reverse signed share (strict panel),raw,0.0091,0.0117,,
+CVE-2026-11721,cve_patch,2026-07,RFC 4035,rrsig,['bind9'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-13204,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-13321,cve_patch,2026-07,RFC 4034,nsec,['bind9'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-1519,cve_patch,2026-03,RFC 4035,validation,['bind9'],reverse signed share (strict panel),raw,0.0234,0.0112,,
+CVE-2026-3104,cve_patch,2026-03,RFC 4033,dnssec-other,['bind9'],reverse signed share (strict panel),raw,0.0234,0.0112,,
+CVE-2026-33278,cve_patch,2026-07,RFC 5155,nsec3,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-42923,cve_patch,2026-05,RFC 5155,nsec3,['unbound'],reverse signed share (strict panel),raw,0.0095,0.0112,,
+CVE-2026-42959,cve_patch,2026-07,RFC 4035,validation,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-44687,cve_patch,2026-07,RFC 4033,dnssec-other,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-44690,cve_patch,2026-07,RFC 4034,nsec,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-46582,cve_patch,2026-07,RFC 4034,nsec,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-50045,cve_patch,2026-07,RFC 4033,dnssec-other,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-50243,cve_patch,2026-07,RFC 4035,rrsig,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-50248,cve_patch,2026-07,RFC 4035,rrsig,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+CVE-2026-56416,cve_patch,2026-07,RFC 4035,rrsig,['unbound'],reverse signed share (strict panel),raw,0.0125,0.013,,
+RFC 6605,rfc_published,2012-04,,,,reverse signed share (strict panel),raw,0.0007,0.0017,Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC,measurable
+RFC 6781,rfc_published,2012-12,,,,reverse signed share (strict panel),raw,-0.0095,0.0005,"DNSSEC Operational Practices, Version 2",ambiguous only
+RFC 6840,rfc_published,2013-02,,,,reverse signed share (strict panel),raw,0.0003,0.0005,Clarifications and Implementation Notes for DNS Security (DNSSEC),not measurable here
+RFC 7344,rfc_published,2014-09,,,,reverse signed share (strict panel),raw,0.0127,0.0163,Automating DNSSEC Delegation Trust Maintenance,measurable
+RFC 7583,rfc_published,2015-10,,,,reverse signed share (strict panel),raw,-0.0001,0.0007,DNSSEC Key Rollover Timing Considerations,not measurable here
+RFC 7671,rfc_published,2015-10,,,,reverse signed share (strict panel),raw,-0.0001,0.0007,The DNS-Based Authentication of Named Entities (DANE) Protocol: Updates and Operational Guidance,measurable
+RFC 7672,rfc_published,2015-10,,,,reverse signed share (strict panel),raw,-0.0001,0.0007,SMTP Security via Opportunistic DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS),partly measurable
+RFC 8078,rfc_published,2017-03,,,,reverse signed share (strict panel),raw,-0.0001,0.0021,Managing DS Records from the Parent via CDS/CDNSKEY,measurable
+RFC 8080,rfc_published,2017-02,,,,reverse signed share (strict panel),raw,0.0057,0.0036,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable
+RFC 8198,rfc_published,2017-07,,,,reverse signed share (strict panel),raw,0.0141,0.0053,Aggressive Use of DNSSEC-Validated Cache,not measurable here
+RFC 8624,rfc_published,2019-06,,,,reverse signed share (strict panel),raw,0.0638,0.0194,Algorithm Implementation Requirements and Usage Guidance for DNSSEC,ambiguous only
+RFC 9077,rfc_published,2021-07,,,,reverse signed share (strict panel),raw,-0.0003,0.0048,NSEC and NSEC3: TTLs and Aggressive Use,partly measurable
+RFC 9276,rfc_published,2022-08,,,,reverse signed share (strict panel),raw,0.0009,0.0007,Guidance for NSEC3 Parameter Settings,measurable
+RFC 9364,rfc_published,2023-02,,,,reverse signed share (strict panel),raw,0.0117,0.0055,DNS Security Extensions (DNSSEC),not measurable here
+RFC 9558,rfc_published,2024-04,,,,reverse signed share (strict panel),raw,0.0054,0.0071,Use of GOST 2012 Signature Algorithms in DNSKEY and RRSIG Resource Records for DNSSEC,measurable
+RFC 9563,rfc_published,2024-12,,,,reverse signed share (strict panel),raw,0.0094,0.0095,SM2 Digital Signature Algorithm for DNSSEC,measurable
+RFC 9615,rfc_published,2024-07,,,,reverse signed share (strict panel),raw,0.0095,0.0071,Automatic DNSSEC Bootstrapping Using Authenticated Signals from the Zone's Operator,not measurable here
+RFC 9904,rfc_published,2025-11,,,,reverse signed share (strict panel),raw,-0.0089,0.0029,DNSSEC Cryptographic Algorithm Recommendation Update Process,not measurable here
+RFC 9905,rfc_published,2025-11,,,,reverse signed share (strict panel),raw,-0.0089,0.0029,Deprecating the Use of SHA-1 in DNSSEC Signature Algorithms,measurable
+RFC 9906,rfc_published,2025-11,,,,reverse signed share (strict panel),raw,-0.0089,0.0029,Deprecate Usage of ECC-GOST within DNSSEC,measurable
+CVE-2013-4854,cve_patch,2013-09,RFC 5011,trust-anchor,['bind9'],reverse signed share (strict panel),detrended,0.0007,0.0007,,
+CVE-2015-1349,cve_patch,2015-02,RFC 5011,trust-anchor,['bind9'],reverse signed share (strict panel),detrended,-0.0022,0.0006,,
+CVE-2015-4620,cve_patch,2015-06,RFC 4035,validation,['bind9'],reverse signed share (strict panel),detrended,0.0004,0.0006,,
+CVE-2015-5722,cve_patch,2015-08,RFC 4033,dnssec-other,['bind9'],reverse signed share (strict panel),detrended,0.0,-0.0002,,
+CVE-2016-9147,cve_patch,2016-11,RFC 4033,dnssec-other,['bind9'],reverse signed share (strict panel),detrended,0.0021,0.0023,,
+CVE-2017-15105,cve_patch,2018-03,RFC 4034,nsec,['unbound'],reverse signed share (strict panel),detrended,-0.0004,-0.0004,,
+CVE-2018-1000002,cve_patch,2018-01,RFC 4035,validation,"['knot', 'kresd']",reverse signed share (strict panel),detrended,-0.0018,-0.0022,,
+CVE-2018-5737,cve_patch,2018-05,RFC 4034,nsec,['bind9'],reverse signed share (strict panel),detrended,0.0003,0.0002,,
+CVE-2019-10190,cve_patch,2019-07,RFC 4035,validation,"['knot', 'kresd']",reverse signed share (strict panel),detrended,0.0039,0.0014,,
+CVE-2019-10191,cve_patch,2019-07,RFC 4033,dnssec-other,"['knot', 'kresd']",reverse signed share (strict panel),detrended,0.0039,0.0014,,
+CVE-2020-25829,cve_patch,2020-10,RFC 4035,validation,"['pdns-auth', 'pdns-rec']",reverse signed share (strict panel),detrended,-0.0071,0.0025,,
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],reverse signed share (strict panel),detrended,0.0,0.0011,,
+CVE-2022-3204,cve_patch,2022-09,RFC 4034,dnskey,['unbound'],reverse signed share (strict panel),detrended,-0.0015,-0.0015,,
+CVE-2022-3736,cve_patch,2023-01,RFC 4035,rrsig,['bind9'],reverse signed share (strict panel),detrended,-0.0024,0.0009,,
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],reverse signed share (strict panel),detrended,-0.0015,-0.0015,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],reverse signed share (strict panel),detrended,-0.0015,-0.0015,,
+CVE-2023-50387,cve_patch,2024-01,RFC 4034,dnskey,"['bind9', 'kresd', 'pdns-auth', 'pdns-rec', 'unbound']",reverse signed share (strict panel),detrended,-0.0001,-0.003,,
+CVE-2023-50868,cve_patch,2024-02,RFC 5155,nsec3,"['bind9', 'kresd', 'pdns-auth', 'pdns-rec', 'unbound']",reverse signed share (strict panel),detrended,-0.0038,-0.0036,,
+CVE-2024-1975,cve_patch,2024-07,RFC 4035,validation,['bind9'],reverse signed share (strict panel),detrended,0.0025,-0.0011,,
+CVE-2025-8677,cve_patch,2025-10,RFC 4034,dnskey,['bind9'],reverse signed share (strict panel),detrended,0.0193,-0.0021,,
+CVE-2026-10723,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-10822,cve_patch,2026-06,RFC 4034,dnskey,['bind9'],reverse signed share (strict panel),detrended,-0.0004,0.0019,,
+CVE-2026-11605,cve_patch,2026-07,RFC 4035,rrsig,['bind9'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-11622,cve_patch,2026-06,RFC 4035,validation,['bind9'],reverse signed share (strict panel),detrended,-0.0004,0.0019,,
+CVE-2026-11721,cve_patch,2026-07,RFC 4035,rrsig,['bind9'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-13204,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-13321,cve_patch,2026-07,RFC 4034,nsec,['bind9'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-1519,cve_patch,2026-03,RFC 4035,validation,['bind9'],reverse signed share (strict panel),detrended,0.0138,0.0017,,
+CVE-2026-3104,cve_patch,2026-03,RFC 4033,dnssec-other,['bind9'],reverse signed share (strict panel),detrended,0.0138,0.0017,,
+CVE-2026-33278,cve_patch,2026-07,RFC 5155,nsec3,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-42923,cve_patch,2026-05,RFC 5155,nsec3,['unbound'],reverse signed share (strict panel),detrended,-0.0001,0.0014,,
+CVE-2026-42959,cve_patch,2026-07,RFC 4035,validation,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-44687,cve_patch,2026-07,RFC 4033,dnssec-other,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-44690,cve_patch,2026-07,RFC 4034,nsec,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-46582,cve_patch,2026-07,RFC 4034,nsec,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-50045,cve_patch,2026-07,RFC 4033,dnssec-other,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-50243,cve_patch,2026-07,RFC 4035,rrsig,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-50248,cve_patch,2026-07,RFC 4035,rrsig,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+CVE-2026-56416,cve_patch,2026-07,RFC 4035,rrsig,['unbound'],reverse signed share (strict panel),detrended,0.0022,0.0031,,
+RFC 6605,rfc_published,2012-04,,,,reverse signed share (strict panel),detrended,0.0004,0.0012,Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC,measurable
+RFC 6781,rfc_published,2012-12,,,,reverse signed share (strict panel),detrended,-0.0099,-0.0001,"DNSSEC Operational Practices, Version 2",ambiguous only
+RFC 6840,rfc_published,2013-02,,,,reverse signed share (strict panel),detrended,-0.0004,-0.0001,Clarifications and Implementation Notes for DNS Security (DNSSEC),not measurable here
+RFC 7344,rfc_published,2014-09,,,,reverse signed share (strict panel),detrended,0.0111,0.0147,Automating DNSSEC Delegation Trust Maintenance,measurable
+RFC 7583,rfc_published,2015-10,,,,reverse signed share (strict panel),detrended,-0.0011,-0.0003,DNSSEC Key Rollover Timing Considerations,not measurable here
+RFC 7671,rfc_published,2015-10,,,,reverse signed share (strict panel),detrended,-0.0011,-0.0003,The DNS-Based Authentication of Named Entities (DANE) Protocol: Updates and Operational Guidance,measurable
+RFC 7672,rfc_published,2015-10,,,,reverse signed share (strict panel),detrended,-0.0011,-0.0003,SMTP Security via Opportunistic DNS-Based Authentication of Named Entities (DANE) Transport Layer Security (TLS),partly measurable
+RFC 8078,rfc_published,2017-03,,,,reverse signed share (strict panel),detrended,-0.0004,0.0019,Managing DS Records from the Parent via CDS/CDNSKEY,measurable
+RFC 8080,rfc_published,2017-02,,,,reverse signed share (strict panel),detrended,0.0055,0.0035,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable
+RFC 8198,rfc_published,2017-07,,,,reverse signed share (strict panel),detrended,0.0137,0.0047,Aggressive Use of DNSSEC-Validated Cache,not measurable here
+RFC 8624,rfc_published,2019-06,,,,reverse signed share (strict panel),detrended,0.0601,0.016,Algorithm Implementation Requirements and Usage Guidance for DNSSEC,ambiguous only
+RFC 9077,rfc_published,2021-07,,,,reverse signed share (strict panel),detrended,-0.0065,-0.0008,NSEC and NSEC3: TTLs and Aggressive Use,partly measurable
+RFC 9276,rfc_published,2022-08,,,,reverse signed share (strict panel),detrended,-0.0042,-0.0046,Guidance for NSEC3 Parameter Settings,measurable
+RFC 9364,rfc_published,2023-02,,,,reverse signed share (strict panel),detrended,0.0067,0.0007,DNS Security Extensions (DNSSEC),not measurable here
+RFC 9558,rfc_published,2024-04,,,,reverse signed share (strict panel),detrended,-0.0016,0.0001,Use of GOST 2012 Signature Algorithms in DNSKEY and RRSIG Resource Records for DNSSEC,measurable
+RFC 9563,rfc_published,2024-12,,,,reverse signed share (strict panel),detrended,0.0008,0.0007,SM2 Digital Signature Algorithm for DNSSEC,measurable
+RFC 9615,rfc_published,2024-07,,,,reverse signed share (strict panel),detrended,0.0025,-0.0011,Automatic DNSSEC Bootstrapping Using Authenticated Signals from the Zone's Operator,not measurable here
+RFC 9904,rfc_published,2025-11,,,,reverse signed share (strict panel),detrended,-0.0185,-0.0065,DNSSEC Cryptographic Algorithm Recommendation Update Process,not measurable here
+RFC 9905,rfc_published,2025-11,,,,reverse signed share (strict panel),detrended,-0.0185,-0.0065,Deprecating the Use of SHA-1 in DNSSEC Signature Algorithms,measurable
+RFC 9906,rfc_published,2025-11,,,,reverse signed share (strict panel),detrended,-0.0185,-0.0065,Deprecate Usage of ECC-GOST within DNSSEC,measurable
+CVE-2016-9147,cve_patch,2016-11,RFC 4033,dnssec-other,['bind9'],"forward signed share (7 TLDs, zone-weighted)",raw,-0.2277,-0.1321,,
+CVE-2017-15105,cve_patch,2018-03,RFC 4034,nsec,['unbound'],"forward signed share (7 TLDs, zone-weighted)",raw,-0.2876,-0.2753,,
+CVE-2018-1000002,cve_patch,2018-01,RFC 4035,validation,"['knot', 'kresd']","forward signed share (7 TLDs, zone-weighted)",raw,2.4684,0.7401,,
+CVE-2018-5737,cve_patch,2018-05,RFC 4034,nsec,['bind9'],"forward signed share (7 TLDs, zone-weighted)",raw,0.0966,-0.5705,,
+CVE-2019-10190,cve_patch,2019-07,RFC 4035,validation,"['knot', 'kresd']","forward signed share (7 TLDs, zone-weighted)",raw,-0.2693,0.0727,,
+CVE-2019-10191,cve_patch,2019-07,RFC 4033,dnssec-other,"['knot', 'kresd']","forward signed share (7 TLDs, zone-weighted)",raw,-0.2693,0.0727,,
+CVE-2020-25829,cve_patch,2020-10,RFC 4035,validation,"['pdns-auth', 'pdns-rec']","forward signed share (7 TLDs, zone-weighted)",raw,0.1855,0.0665,,
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],"forward signed share (7 TLDs, zone-weighted)",raw,1.7996,2.1533,,
+CVE-2022-3204,cve_patch,2022-09,RFC 4034,dnskey,['unbound'],"forward signed share (7 TLDs, zone-weighted)",raw,0.1123,0.561,,
+CVE-2022-3736,cve_patch,2023-01,RFC 4035,rrsig,['bind9'],"forward signed share (7 TLDs, zone-weighted)",raw,1.008,0.361,,
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],"forward signed share (7 TLDs, zone-weighted)",raw,0.1123,0.561,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],"forward signed share (7 TLDs, zone-weighted)",raw,0.1123,0.561,,
+RFC 8078,rfc_published,2017-03,,,,"forward signed share (7 TLDs, zone-weighted)",raw,-0.2979,-0.7947,Managing DS Records from the Parent via CDS/CDNSKEY,measurable
+RFC 8080,rfc_published,2017-02,,,,"forward signed share (7 TLDs, zone-weighted)",raw,-0.4888,-0.5768,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable
+RFC 8198,rfc_published,2017-07,,,,"forward signed share (7 TLDs, zone-weighted)",raw,-0.216,-1.1678,Aggressive Use of DNSSEC-Validated Cache,not measurable here
+RFC 8624,rfc_published,2019-06,,,,"forward signed share (7 TLDs, zone-weighted)",raw,0.0651,0.0907,Algorithm Implementation Requirements and Usage Guidance for DNSSEC,ambiguous only
+RFC 9077,rfc_published,2021-07,,,,"forward signed share (7 TLDs, zone-weighted)",raw,1.3518,2.9079,NSEC and NSEC3: TTLs and Aggressive Use,partly measurable
+RFC 9276,rfc_published,2022-08,,,,"forward signed share (7 TLDs, zone-weighted)",raw,-0.082,0.2988,Guidance for NSEC3 Parameter Settings,measurable
+RFC 9364,rfc_published,2023-02,,,,"forward signed share (7 TLDs, zone-weighted)",raw,0.3404,0.1268,DNS Security Extensions (DNSSEC),not measurable here
+CVE-2016-9147,cve_patch,2016-11,RFC 4033,dnssec-other,['bind9'],"forward signed share (7 TLDs, zone-weighted)",detrended,0.0,0.1103,,
+CVE-2017-15105,cve_patch,2018-03,RFC 4034,nsec,['unbound'],"forward signed share (7 TLDs, zone-weighted)",detrended,-0.0716,-0.1739,,
+CVE-2018-1000002,cve_patch,2018-01,RFC 4035,validation,"['knot', 'kresd']","forward signed share (7 TLDs, zone-weighted)",detrended,2.72,0.9166,,
+CVE-2018-5737,cve_patch,2018-05,RFC 4034,nsec,['bind9'],"forward signed share (7 TLDs, zone-weighted)",detrended,0.3127,-0.5395,,
+CVE-2019-10190,cve_patch,2019-07,RFC 4035,validation,"['knot', 'kresd']","forward signed share (7 TLDs, zone-weighted)",detrended,-0.4075,-0.051,,
+CVE-2019-10191,cve_patch,2019-07,RFC 4033,dnssec-other,"['knot', 'kresd']","forward signed share (7 TLDs, zone-weighted)",detrended,-0.4075,-0.051,,
+CVE-2020-25829,cve_patch,2020-10,RFC 4035,validation,"['pdns-auth', 'pdns-rec']","forward signed share (7 TLDs, zone-weighted)",detrended,0.0268,-0.1032,,
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],"forward signed share (7 TLDs, zone-weighted)",detrended,1.5489,1.8017,,
+CVE-2022-3204,cve_patch,2022-09,RFC 4034,dnskey,['unbound'],"forward signed share (7 TLDs, zone-weighted)",detrended,-0.2281,0.2798,,
+CVE-2022-3736,cve_patch,2023-01,RFC 4035,rrsig,['bind9'],"forward signed share (7 TLDs, zone-weighted)",detrended,0.7989,0.1803,,
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],"forward signed share (7 TLDs, zone-weighted)",detrended,-0.2281,0.2798,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],"forward signed share (7 TLDs, zone-weighted)",detrended,-0.2281,0.2798,,
+RFC 8078,rfc_published,2017-03,,,,"forward signed share (7 TLDs, zone-weighted)",detrended,-0.0117,-0.5377,Managing DS Records from the Parent via CDS/CDNSKEY,measurable
+RFC 8080,rfc_published,2017-02,,,,"forward signed share (7 TLDs, zone-weighted)",detrended,-0.2318,-0.3198,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable
+RFC 8198,rfc_published,2017-07,,,,"forward signed share (7 TLDs, zone-weighted)",detrended,0.0117,-0.9341,Aggressive Use of DNSSEC-Validated Cache,not measurable here
+RFC 8624,rfc_published,2019-06,,,,"forward signed share (7 TLDs, zone-weighted)",detrended,-0.0538,-0.033,Algorithm Implementation Requirements and Usage Guidance for DNSSEC,ambiguous only
+RFC 9077,rfc_published,2021-07,,,,"forward signed share (7 TLDs, zone-weighted)",detrended,1.0816,2.6523,NSEC and NSEC3: TTLs and Aggressive Use,partly measurable
+RFC 9276,rfc_published,2022-08,,,,"forward signed share (7 TLDs, zone-weighted)",detrended,-0.4241,-0.0107,Guidance for NSEC3 Parameter Settings,measurable
+RFC 9364,rfc_published,2023-02,,,,"forward signed share (7 TLDs, zone-weighted)",detrended,0.151,-0.0445,DNS Security Extensions (DNSSEC),not measurable here
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],NSEC3 forward,raw,1.7326,-0.6845,,
+RFC 9276,rfc_published,2022-08,,,,NSEC3 forward,raw,-0.0035,-0.1531,Guidance for NSEC3 Parameter Settings,measurable
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],NSEC3 forward,detrended,1.7118,-0.7223,,
+RFC 9276,rfc_published,2022-08,,,,NSEC3 forward,detrended,-0.2218,-0.3388,Guidance for NSEC3 Parameter Settings,measurable
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],NSEC3 reverse panel,raw,-0.219,-0.8745,,
+CVE-2023-50868,cve_patch,2024-02,RFC 5155,nsec3,"['bind9', 'kresd', 'pdns-auth', 'pdns-rec', 'unbound']",NSEC3 reverse panel,raw,-0.027,-0.0905,,
+CVE-2026-10723,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],NSEC3 reverse panel,raw,-0.087,-0.1395,,
+CVE-2026-13204,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],NSEC3 reverse panel,raw,-0.087,-0.1395,,
+CVE-2026-33278,cve_patch,2026-07,RFC 5155,nsec3,['unbound'],NSEC3 reverse panel,raw,-0.087,-0.1395,,
+CVE-2026-42923,cve_patch,2026-05,RFC 5155,nsec3,['unbound'],NSEC3 reverse panel,raw,-0.099,-0.1357,,
+RFC 9276,rfc_published,2022-08,,,,NSEC3 reverse panel,raw,0.065,-0.561,Guidance for NSEC3 Parameter Settings,measurable
+CVE-2021-40083,cve_patch,2021-10,RFC 5155,nsec3,['kresd'],NSEC3 reverse panel,detrended,0.041,-0.6035,,
+CVE-2023-50868,cve_patch,2024-02,RFC 5155,nsec3,"['bind9', 'kresd', 'pdns-auth', 'pdns-rec', 'unbound']",NSEC3 reverse panel,detrended,0.11,0.0465,,
+CVE-2026-10723,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],NSEC3 reverse panel,detrended,0.0185,-0.0308,,
+CVE-2026-13204,cve_patch,2026-07,RFC 5155,nsec3,['bind9'],NSEC3 reverse panel,detrended,0.0185,-0.0308,,
+CVE-2026-33278,cve_patch,2026-07,RFC 5155,nsec3,['unbound'],NSEC3 reverse panel,detrended,0.0185,-0.0308,,
+CVE-2026-42923,cve_patch,2026-05,RFC 5155,nsec3,['unbound'],NSEC3 reverse panel,detrended,-0.004,-0.0329,,
+RFC 9276,rfc_published,2022-08,,,,NSEC3 reverse panel,detrended,0.272,-0.3807,Guidance for NSEC3 Parameter Settings,measurable
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA forward,raw,0.0543,0.2881,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA forward,raw,0.0543,0.2881,,
+RFC 8080,rfc_published,2017-02,,,,ECDSA/EdDSA forward,raw,0.0351,0.5359,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA forward,detrended,-0.0343,0.2447,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA forward,detrended,-0.0343,0.2447,,
+RFC 8080,rfc_published,2017-02,,,,ECDSA/EdDSA forward,detrended,0.0328,0.5343,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA reverse panel,raw,0.774,1.6058,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA reverse panel,raw,0.774,1.6058,,
+RFC 6605,rfc_published,2012-04,,,,ECDSA/EdDSA reverse panel,raw,0.0,0.0,Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC,measurable
+RFC 8080,rfc_published,2017-02,,,,ECDSA/EdDSA reverse panel,raw,-0.036,0.0035,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable
+CVE-2022-38177,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA reverse panel,detrended,-0.081,0.771,,
+CVE-2022-38178,cve_patch,2022-09,RFC 6605/8080,algorithm,['bind9'],ECDSA/EdDSA reverse panel,detrended,-0.081,0.771,,
+RFC 6605,rfc_published,2012-04,,,,ECDSA/EdDSA reverse panel,detrended,0.0,0.0,Elliptic Curve Digital Signature Algorithm (DSA) for DNSSEC,measurable
+RFC 8080,rfc_published,2017-02,,,,ECDSA/EdDSA reverse panel,detrended,-0.034,0.0055,Edwards-Curve Digital Security Algorithm (EdDSA) for DNSSEC,measurable

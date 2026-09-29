@@ -1,5 +1,16 @@
 # Every release, every delegation: does adoption follow software updates?
 
+> **Superseded (2026-09-29) by `docs/handoff/07_software_vs_adoption.md`.** That analysis
+> redoes this one on the verified per-program timelines (1,325 stable releases, 46 default
+> changes with a zone-data observable instead of 7) with a test that can see a lasting level
+> shift and a calibrated chance control. Three problems in this page are known and not fixed
+> here: its release dates come from `data/software/release_dates.json`, which carries import
+> artefacts; its detrending (centred rolling median) absorbs level steps, so its null results
+> cannot be read as "no effect"; and its post-release windows count reverse labels from the
+> release month, but a reverse change labelled M happened during calendar month M-1, so one
+> "after" month is entirely before the release. See `docs/handoff/verify/phase7_software_vs_adoption.md`.
+> The conclusions largely survive the redo; the numbers below are not current.
+
 The monthly timeline counts how many delegations carried a value. It cannot say
 *which*, so it cannot tell one operator re-signing ten thousand zones from ten
 thousand operators each re-signing one. The raw reverse corpus can: a row per

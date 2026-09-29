@@ -1,0 +1,398 @@
+program,codebase,row_index,cve,group,include,exclusion_reason,applicable,status,fix_tag,fix_tag_is_stable,fix_date,stable_tag,stable_date,stable_instant,nvd_published,latency_days,latency_days_stable,latency_days_public,public_release_date,changelog_public_text,vendor_release,dnssec_related
+bind9,bind9,0,CVE-1999-0009,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,1998-04-08,,,,,,,not classified
+bind9,bind9,1,CVE-1999-0010,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,1998-04-08,,,,,,,not classified
+bind9,bind9,2,CVE-1999-0011,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,1998-04-08,,,,,,,not classified
+bind9,bind9,3,CVE-1999-0024,excluded,False,not-found,,not-found,,,,,,,1997-08-13,,,,,,,not classified
+bind9,bind9,4,CVE-1999-0184,excluded,False,not-found,,not-found,,,,,,,1997-07-01,,,,,,,not classified
+bind9,bind9,5,CVE-1999-0833,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,1999-11-10,,,,,,,not classified
+bind9,bind9,6,CVE-1999-0837,excluded,False,not-found,,not-found,,,,,,,1999-11-10,,,,,,,not classified
+bind9,bind9,7,CVE-1999-0848,excluded,False,not-found,,not-found,,,,,,,1999-11-10,,,,,,,not classified
+bind9,bind9,8,CVE-1999-0849,excluded,False,not-found,,not-found,,,,,,,1999-11-10,,,,,,,not classified
+bind9,bind9,9,CVE-1999-1499,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,1998-04-10,,,,,,,not classified
+bind9,bind9,10,CVE-2000-0335,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2000-05-03,,,,,,,not classified
+bind9,bind9,11,CVE-2000-0887,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2000-12-19,,,,,,,not classified
+bind9,bind9,12,CVE-2000-0888,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2000-12-19,,,,,,,not classified
+bind9,bind9,13,CVE-2000-1029,excluded,False,not-found,,not-found,,,,,,,2000-12-11,,,,,,,not classified
+bind9,bind9,14,CVE-2001-0010,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2001-02-12,,,,,,,not classified
+bind9,bind9,15,CVE-2001-0011,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2001-02-12,,,,,,,not classified
+bind9,bind9,16,CVE-2001-0012,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2001-02-12,,,,,,,not classified
+bind9,bind9,17,CVE-2001-0013,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2001-02-12,,,,,,,not classified
+bind9,bind9,18,CVE-2001-0497,excluded,False,not-found,,not-found,,,,,,,2001-07-21,,,,,,,not classified
+bind9,bind9,19,CVE-2002-0029,excluded,False,not-found,,not-found,,,,,,,2002-11-29,,,,,,,not classified
+bind9,bind9,20,CVE-2002-0400,included,True,,,,v9.2.1,True,2002-04-23,v9.2.1,2002-04-23,2002-04-23T06:28:36Z,2002-06-18,-56,-56,,,,,not classified
+bind9,bind9,21,CVE-2002-0651,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2002-07-03,,,,,,,not classified
+bind9,bind9,22,CVE-2002-0684,excluded,False,not-found,,not-found,,,,,,,2002-08-12,,,,,,,not classified
+bind9,bind9,23,CVE-2002-1219,excluded,False,not-found,,not-found,,,,,,,2002-11-29,,,,,,,not classified
+bind9,bind9,24,CVE-2002-1220,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2002-11-29,,,,,,,not classified
+bind9,bind9,25,CVE-2002-1221,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2002-11-29,,,,,,,not classified
+bind9,bind9,26,CVE-2002-2211,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2002-12-31,,,,,,,not classified
+bind9,bind9,27,CVE-2002-2212,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2002-12-31,,,,,,,not classified
+bind9,bind9,28,CVE-2002-2213,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2002-12-31,,,,,,,not classified
+bind9,bind9,29,CVE-2003-0914,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2003-12-15,,,,,,,not classified
+bind9,bind9,30,CVE-2005-0033,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2005-05-02,,,,,,,not classified
+bind9,bind9,31,CVE-2005-0034,excluded,False,not-found,,not-found,,,,,,,2005-05-02,,,,,,,not classified
+bind9,bind9,32,CVE-2006-0527,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2006-02-02,,,,,,,not classified
+bind9,bind9,33,CVE-2006-0987,included,True,,,,v9.4.1-P1,True,2007-07-09,v9.4.1-P1,2007-07-09,2007-07-09T02:29:51Z,2006-03-03,493,493,,,,,not classified
+bind9,bind9,34,CVE-2006-2073,excluded,False,not-found,,not-found,,,,,,,2006-04-27,,,,,,,not classified
+bind9,bind9,35,CVE-2006-4095,included,True,,,,v9.3.2-P1,True,2006-08-17,v9.3.2-P1,2006-08-17,2006-08-17T07:12:31Z,2006-09-06,-20,-20,,,,,not classified
+bind9,bind9,36,CVE-2006-4096,included,True,,,,v9.3.2-P1,True,2006-08-17,v9.3.2-P1,2006-08-17,2006-08-17T07:12:31Z,2006-09-06,-20,-20,,,,,not classified
+bind9,bind9,37,CVE-2007-0493,excluded,False,not-found,,not-found,,,,,,,2007-01-25,,,,,,,not classified
+bind9,bind9,38,CVE-2007-0494,excluded,False,not-found,,not-found,,,,,,,2007-01-25,,,,,,,not classified
+bind9,bind9,39,CVE-2007-2241,excluded,False,not-found,,not-found,,,,,,,2007-05-02,,,,,,,not classified
+bind9,bind9,40,CVE-2007-2925,excluded,False,not-found,,not-found,,,,,,,2007-07-24,,,,,,,not classified
+bind9,bind9,41,CVE-2007-2926,excluded,False,not-found,,not-found,,,,,,,2007-07-24,,,,,,,not classified
+bind9,bind9,42,CVE-2007-2930,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2007-09-12,,,,,,,not classified
+bind9,bind9,43,CVE-2008-0122,included,True,,,,v9.3.5,True,2008-04-03,v9.3.5,2008-04-03,2008-04-03T06:07:12Z,2008-01-16,78,78,,,,,not classified
+bind9,bind9,44,CVE-2008-1447,included,True,,,,v9.4.2-P1,True,2008-05-28,v9.4.2-P1,2008-05-28,2008-05-28T19:32:50Z,2008-07-08,-41,-41,,,,,not classified
+bind9,bind9,45,CVE-2008-4163,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2008-09-22,,,,,,,not classified
+bind9,bind9,46,CVE-2009-0025,excluded,False,not-found,,not-found,,,,,,,2009-01-07,,,,,,,not classified
+bind9,bind9,47,CVE-2009-0265,excluded,False,not-found,,not-found,,,,,,,2009-01-26,,,,,,,not classified
+bind9,bind9,48,CVE-2009-0696,included,True,,,,v9.4.3-P3,True,2009-07-28,v9.4.3-P3,2009-07-28,2009-07-28T13:57:27Z,2009-07-29,-1,-1,,,,,not classified
+bind9,bind9,49,CVE-2009-4022,included,True,,,,v9.5.2-P1,True,2009-11-18,v9.5.2-P1,2009-11-18,2009-11-18T23:41:18Z,2009-11-25,-7,-7,,,,,not classified
+bind9,bind9,50,CVE-2010-0097,included,True,,,,v9.6.1-P3,True,2010-01-07,v9.6.1-P3,2010-01-07,2010-01-07T17:18:02Z,2010-01-22,-15,-15,,,,,not classified
+bind9,bind9,51,CVE-2010-0213,excluded,False,not-found,,not-found,,,,,,,2010-07-28,,,,,,,not classified
+bind9,bind9,52,CVE-2010-0218,excluded,False,not-found,,not-found,,,,,,,2010-10-05,,,,,,,not classified
+bind9,bind9,53,CVE-2010-0290,included,True,,,,v9.6.1-P3,True,2010-01-07,v9.6.1-P3,2010-01-07,2010-01-07T17:18:02Z,2010-01-22,-15,-15,,,,,not classified
+bind9,bind9,54,CVE-2010-0382,included,True,,,,v9.6.1-P3,True,2010-01-07,v9.6.1-P3,2010-01-07,2010-01-07T17:18:02Z,2010-01-22,-15,-15,,,,,not classified
+bind9,bind9,55,CVE-2010-3613,included,True,,,,v9.4-ESV-R4,True,2010-11-29,v9.4-ESV-R4,2010-11-29,2010-11-29T02:15:07Z,2010-12-06,-7,-7,,,,,not classified
+bind9,bind9,56,CVE-2010-3614,included,True,,,,v9.4-ESV-R4,True,2010-11-29,v9.4-ESV-R4,2010-11-29,2010-11-29T02:15:07Z,2010-12-06,-7,-7,,,,,not classified
+bind9,bind9,57,CVE-2010-3615,included,True,,,,v9.6-ESV-R3,True,2010-11-29,v9.6-ESV-R3,2010-11-29,2010-11-29T02:15:46Z,2010-12-06,-7,-7,,,,,not classified
+bind9,bind9,58,CVE-2010-3762,included,True,,,,v9.7.2-P2,True,2010-09-24,v9.7.2-P2,2010-09-24,2010-09-24T08:36:56Z,2010-10-05,-11,-11,,,,,not classified
+bind9,bind9,59,CVE-2011-0414,excluded,False,not-found,,not-found,,,,,,,2011-02-23,,,,,,,not classified
+bind9,bind9,60,CVE-2011-1907,included,True,,,,v9.8.0-P1,True,2011-04-27,v9.8.0-P1,2011-04-27,2011-04-27T17:06:29Z,2011-05-09,-12,-12,,,,,not classified
+bind9,bind9,61,CVE-2011-1910,included,True,,,,v9.6-ESV-R4-P1,True,2011-05-27,v9.6-ESV-R4-P1,2011-05-27,2011-05-27T00:58:12Z,2011-05-31,-4,-4,,,,,not classified
+bind9,bind9,62,CVE-2011-2464,included,True,,,,v9.6-ESV-R4-P3,True,2011-06-21,v9.6-ESV-R4-P3,2011-06-21,2011-06-21T20:35:59Z,2011-07-08,-17,-17,,,,,not classified
+bind9,bind9,63,CVE-2011-2465,excluded,False,not-found,,not-found,,,,,,,2011-07-08,,,,,,,not classified
+bind9,bind9,64,CVE-2011-4313,included,True,,,,v9.4-ESV-R5-P1,True,2011-11-16,v9.4-ESV-R5-P1,2011-11-16,2011-11-16T09:33:41Z,2011-11-29,-13,-13,,,,,not classified
+bind9,bind9,65,CVE-2012-1033,excluded,False,not-found,,not-found,,,,,,,2012-02-08,,,,,,,not classified
+bind9,bind9,66,CVE-2012-1667,included,True,,,,v9.9.1-P1,True,2012-06-01,v9.9.1-P1,2012-06-01,2012-06-01T15:29:52Z,2012-06-05,-4,-4,,,,,not classified
+bind9,bind9,67,CVE-2012-3817,included,True,,,,v9.8.3-P2,True,2012-07-02,v9.8.3-P2,2012-07-02,2012-07-02T17:17:07Z,2012-07-25,-23,-23,,,,,not classified
+bind9,bind9,68,CVE-2012-3868,included,True,,,,v9.9.1-P2,True,2012-07-12,v9.9.1-P2,2012-07-12,2012-07-12T20:57:58Z,2012-07-25,-13,-13,,,,,not classified
+bind9,bind9,69,CVE-2012-4244,included,True,,,,v9.6-ESV-R7-P3,True,2012-08-24,v9.6-ESV-R7-P3,2012-08-24,2012-08-24T04:34:54Z,2012-09-14,-21,-21,,,,,not classified
+bind9,bind9,70,CVE-2012-5166,included,True,,,,v9.6-ESV-R7-P4,True,2012-09-26,v9.6-ESV-R7-P4,2012-09-26,2012-09-27T00:50:08Z,2012-10-10,-14,-14,,,,,not classified
+bind9,bind9,71,CVE-2012-5688,included,True,,,,v9.9.2-P1,True,2012-10-26,v9.9.2-P1,2012-10-26,2012-10-26T04:50:34Z,2012-12-06,-41,-41,,,,,not classified
+bind9,bind9,72,CVE-2012-5689,included,True,,,,v9.9.3,True,2013-05-17,v9.9.3,2013-05-17,2013-05-17T04:01:18Z,2013-01-25,112,112,,,,,not classified
+bind9,bind9,73,CVE-2013-2266,included,True,,,,v9.9.2-P2,True,2013-03-06,v9.9.2-P2,2013-03-06,2013-03-06T16:56:08Z,2013-03-28,-22,-22,,,,,not classified
+bind9,bind9,74,CVE-2013-3919,included,True,,,,v9.9.3-P1,True,2013-06-04,v9.9.3-P1,2013-06-04,2013-06-04T18:30:02Z,2013-06-06,-2,-2,,,,,not classified
+bind9,bind9,75,CVE-2013-4854,included,True,,,,v9.8.5-P2,True,2013-07-17,v9.8.5-P2,2013-07-17,2013-07-16T22:11:52Z,2013-07-29,-12,-12,,,,,not classified
+bind9,bind9,76,CVE-2013-5661,excluded,False,not-found,,not-found,,,,,,,2019-11-05,,,,,,,not classified
+bind9,bind9,77,CVE-2013-6230,included,True,,,,v9.6-ESV-R10-P1,True,2013-10-16,v9.6-ESV-R10-P1,2013-10-16,2013-10-15T22:43:17Z,2013-11-08,-23,-23,,,,,not classified
+bind9,bind9,78,CVE-2014-0591,included,True,,,,v9.9.4-P2,True,2013-12-20,v9.9.4-P2,2013-12-20,2013-12-20T00:28:28Z,2014-01-14,-25,-25,,,,,not classified
+bind9,bind9,79,CVE-2014-3214,included,True,,,,v9.10.0-P2,True,2014-05-27,v9.10.0-P2,2014-05-27,2014-05-27T04:45:53Z,2014-05-09,18,18,,,,,not classified
+bind9,bind9,80,CVE-2014-3859,included,True,,,,v9.10.0-P2,True,2014-05-27,v9.10.0-P2,2014-05-27,2014-05-27T04:45:53Z,2014-06-13,-17,-17,,,,,not classified
+bind9,bind9,81,CVE-2014-8500,included,True,,,,v9.10.1-P1,True,2014-11-20,v9.10.1-P1,2014-11-20,2014-11-20T23:56:37Z,2014-12-11,-21,-21,,,,,not classified
+bind9,bind9,82,CVE-2014-8680,included,True,,,,v9.10.1-P1,True,2014-11-20,v9.10.1-P1,2014-11-20,2014-11-20T23:56:37Z,2014-12-11,-21,-21,,,,,not classified
+bind9,bind9,83,CVE-2015-1349,included,True,,,,v9.9.6-P2,True,2015-02-11,v9.9.6-P2,2015-02-11,2015-02-11T05:43:01Z,2015-02-19,-8,-8,,,,,not classified
+bind9,bind9,84,CVE-2015-4620,included,True,,,,v9.9.7-P1,True,2015-06-17,v9.9.7-P1,2015-06-17,2015-06-17T22:48:03Z,2015-07-08,-21,-21,,,,,not classified
+bind9,bind9,85,CVE-2015-5477,included,True,,,,v9.9.7-P2,True,2015-07-14,v9.9.7-P2,2015-07-14,2015-07-14T23:50:22Z,2015-07-29,-15,-15,,,,,not classified
+bind9,bind9,86,CVE-2015-5722,included,True,,,,v9.10.2-P4,True,2015-08-15,v9.10.2-P4,2015-08-15,2015-08-15T00:28:49Z,2015-09-05,-21,-21,,,,,not classified
+bind9,bind9,87,CVE-2015-5986,included,True,,,,v9.10.2-P4,True,2015-08-15,v9.10.2-P4,2015-08-15,2015-08-15T00:28:49Z,2015-09-05,-21,-21,,,,,not classified
+bind9,bind9,88,CVE-2015-8000,included,True,,,,v9.9.8-P2,True,2015-12-06,v9.9.8-P2,2015-12-06,2015-12-06T12:12:21Z,2015-12-16,-10,-10,,,,,not classified
+bind9,bind9,89,CVE-2015-8461,included,True,,,,v9.9.8-P2,True,2015-12-06,v9.9.8-P2,2015-12-06,2015-12-06T12:12:21Z,2015-12-16,-10,-10,,,,,not classified
+bind9,bind9,90,CVE-2015-8704,included,True,,,,v9.9.8-P3,True,2016-01-06,v9.9.8-P3,2016-01-06,2016-01-06T03:48:07Z,2016-01-20,-14,-14,,,,,not classified
+bind9,bind9,91,CVE-2015-8705,included,True,,,,v9.10.3-P3,True,2016-01-06,v9.10.3-P3,2016-01-06,2016-01-06T03:48:13Z,2016-01-20,-14,-14,,,,,not classified
+bind9,bind9,92,CVE-2016-1284,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2016-02-04,,,,,,,not classified
+bind9,bind9,93,CVE-2016-1285,included,True,,,,v9.10.3-P4,True,2016-02-29,v9.10.3-P4,2016-02-29,2016-02-29T00:29:06Z,2016-03-09,-9,-9,,,,,not classified
+bind9,bind9,94,CVE-2016-1286,included,True,,,,v9.10.3-P4,True,2016-02-29,v9.10.3-P4,2016-02-29,2016-02-29T00:29:06Z,2016-03-09,-9,-9,,,,,not classified
+bind9,bind9,95,CVE-2016-2088,included,True,,,,v9.10.3-P4,True,2016-02-29,v9.10.3-P4,2016-02-29,2016-02-29T00:29:06Z,2016-03-09,-9,-9,,,,,not classified
+bind9,bind9,96,CVE-2016-2775,included,True,,,,v9.9.9-P2,True,2016-07-13,v9.9.9-P2,2016-07-13,2016-07-13T23:54:33Z,2016-07-19,-6,-6,,,,,not classified
+bind9,bind9,97,CVE-2016-2776,included,True,,,,v9.9.9-P3,True,2016-09-09,v9.9.9-P3,2016-09-09,2016-09-09T02:47:21Z,2016-09-28,-19,-19,,,,,not classified
+bind9,bind9,98,CVE-2016-2848,excluded,False,not-found,,not-found,,,,,,,2016-10-21,,,,,,,not classified
+bind9,bind9,99,CVE-2016-6170,included,True,,,,v9.9.10,True,2017-04-14,v9.9.10,2017-04-14,2017-04-14T03:50:56Z,2016-07-06,282,282,,,,,not classified
+bind9,bind9,100,CVE-2016-8864,included,True,,,,v9.10.4-P4,True,2016-10-21,v9.10.4-P4,2016-10-21,2016-10-21T05:10:54Z,2016-11-02,-12,-12,,,,,not classified
+bind9,bind9,101,CVE-2016-9131,included,True,,,,v9.9.9-P5,True,2016-12-11,v9.9.9-P5,2016-12-11,2016-12-11T22:02:39Z,2017-01-12,-32,-32,,,,,not classified
+bind9,bind9,102,CVE-2016-9147,included,True,,,,v9.9.9-P5,True,2016-12-11,v9.9.9-P5,2016-12-11,2016-12-11T22:02:39Z,2017-01-12,-32,-32,,,,,not classified
+bind9,bind9,103,CVE-2016-9444,included,True,,,,v9.9.9-P5,True,2016-12-11,v9.9.9-P5,2016-12-11,2016-12-11T22:02:39Z,2017-01-12,-32,-32,,,,,not classified
+bind9,bind9,104,CVE-2016-9778,included,True,,,,v9.9.9-P5,True,2016-12-11,v9.9.9-P5,2016-12-11,2016-12-11T22:02:39Z,2019-01-16,-766,-766,,,,,not classified
+bind9,bind9,105,CVE-2017-3135,included,True,,,,v9.11.0-P3,True,2017-01-31,v9.11.0-P3,2017-01-31,2017-01-31T06:17:11Z,2019-01-16,-715,-715,,,,,not classified
+bind9,bind9,106,CVE-2017-3136,included,True,,,,v9.9.9-P8,True,2017-03-29,v9.9.9-P8,2017-03-29,2017-03-29T21:45:01Z,2019-01-16,-658,-658,,,,,not classified
+bind9,bind9,107,CVE-2017-3137,included,True,,,,v9.9.9-P8,True,2017-03-29,v9.9.9-P8,2017-03-29,2017-03-29T21:45:01Z,2019-01-16,-658,-658,,,,,not classified
+bind9,bind9,108,CVE-2017-3138,included,True,,,,v9.9.9-P8,True,2017-03-29,v9.9.9-P8,2017-03-29,2017-03-29T21:45:01Z,2019-01-16,-658,-658,,,,,not classified
+bind9,bind9,109,CVE-2017-3140,included,True,,,,v9.9.10-P1,True,2017-05-31,v9.9.10-P1,2017-05-31,2017-05-31T01:55:14Z,2019-01-16,-595,-595,,,,,not classified
+bind9,bind9,110,CVE-2017-3141,included,True,,,,v9.9.10-P1,True,2017-05-31,v9.9.10-P1,2017-05-31,2017-05-31T01:55:14Z,2019-01-16,-595,-595,,,,,not classified
+bind9,bind9,111,CVE-2017-3142,included,True,,,,v9.11.1-P2,True,2017-06-28,v9.11.1-P2,2017-06-28,2017-06-28T16:06:27Z,2019-01-16,-567,-567,,,,,not classified
+bind9,bind9,112,CVE-2017-3143,included,True,,,,v9.11.1-P2,True,2017-06-28,v9.11.1-P2,2017-06-28,2017-06-28T16:06:27Z,2019-01-16,-567,-567,,,,,not classified
+bind9,bind9,113,CVE-2017-3145,included,True,,,,v9.11.2-P1,True,2018-01-04,v9.11.2-P1,2018-01-04,2018-01-04T05:28:11Z,2019-01-16,-377,-377,,,,,not classified
+bind9,bind9,114,CVE-2018-5734,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2019-01-16,,,,,,,not classified
+bind9,bind9,115,CVE-2018-5736,included,True,,,,v9.12.1-P2,True,2018-05-16,v9.12.1-P2,2018-05-16,2018-05-16T18:06:47Z,2019-01-16,-245,-245,,,,,not classified
+bind9,bind9,116,CVE-2018-5737,included,True,,,,v9.12.1-P2,True,2018-05-16,v9.12.1-P2,2018-05-16,2018-05-16T18:06:47Z,2019-01-16,-245,-245,,,,,not classified
+bind9,bind9,117,CVE-2018-5738,included,True,,,,v9.9.13,True,2018-07-03,v9.9.13,2018-07-03,2018-07-03T05:28:20Z,2019-01-16,-197,-197,,,,,not classified
+bind9,bind9,118,CVE-2018-5740,included,True,,,,v9.12.2-P1,True,2018-07-24,v9.12.2-P1,2018-07-24,2018-07-24T17:22:12Z,2019-01-16,-176,-176,,,,,not classified
+bind9,bind9,119,CVE-2018-5741,included,True,,,,v9.11.5,True,2018-10-06,v9.11.5,2018-10-06,2018-10-06T01:36:17Z,2019-01-16,-102,-102,,,,,not classified
+bind9,bind9,120,CVE-2018-5742,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2019-10-30,,,,,,,not classified
+bind9,bind9,121,CVE-2018-5743,included,True,,,,v9.12.4-P1,True,2019-04-06,v9.12.4-P1,2019-04-06,2019-04-06T01:27:27Z,2019-10-09,-186,-186,,,,,not classified
+bind9,bind9,122,CVE-2018-5744,included,True,,,,v9.12.3-P4,True,2019-02-04,v9.12.3-P4,2019-02-04,2019-02-05T00:00:59Z,2019-10-09,-247,-247,,,,,not classified
+bind9,bind9,123,CVE-2018-5745,included,True,,,,v9.12.3-P4,True,2019-02-04,v9.12.3-P4,2019-02-04,2019-02-05T00:00:59Z,2019-10-09,-247,-247,,,,,not classified
+bind9,bind9,124,CVE-2019-6465,included,True,,,,v9.12.3-P4,True,2019-02-04,v9.12.3-P4,2019-02-04,2019-02-05T00:00:59Z,2019-10-09,-247,-247,,,,,not classified
+bind9,bind9,125,CVE-2019-6467,included,True,,,,v9.12.4-P1,True,2019-04-06,v9.12.4-P1,2019-04-06,2019-04-06T01:27:27Z,2019-10-09,-186,-186,,,,,not classified
+bind9,bind9,126,CVE-2019-6468,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2019-10-09,,,,,,,not classified
+bind9,bind9,127,CVE-2019-6469,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2019-10-09,,,,,,,not classified
+bind9,bind9,128,CVE-2019-6471,included,True,,,,v9.14.3,True,2019-06-04,v9.14.3,2019-06-04,2019-06-04T15:20:04Z,2019-10-09,-127,-127,,,,,not classified
+bind9,bind9,129,CVE-2019-6475,included,True,,,,v9.14.7,True,2019-10-02,v9.14.7,2019-10-02,2019-10-02T06:24:10Z,2019-10-17,-15,-15,,,,,not classified
+bind9,bind9,130,CVE-2019-6476,included,True,,,,v9.14.7,True,2019-10-02,v9.14.7,2019-10-02,2019-10-02T06:24:10Z,2019-10-17,-15,-15,,,,,not classified
+bind9,bind9,131,CVE-2019-6477,included,True,,,,v9.14.8,True,2019-11-06,v9.14.8,2019-11-06,2019-11-06T21:29:49Z,2019-11-26,-20,-20,,,,,not classified
+bind9,bind9,132,CVE-2020-8616,included,True,,,,v9.16.3,True,2020-05-06,v9.16.3,2020-05-06,2020-05-06T09:59:35Z,2020-05-19,-13,-13,,,,,not classified
+bind9,bind9,133,CVE-2020-8617,included,True,,,,v9.16.3,True,2020-05-06,v9.16.3,2020-05-06,2020-05-06T09:59:35Z,2020-05-19,-13,-13,,,,,not classified
+bind9,bind9,134,CVE-2020-8618,included,True,,,,v9.16.4,True,2020-06-10,v9.16.4,2020-06-10,2020-06-10T21:01:43Z,2020-06-17,-7,-7,,,,,not classified
+bind9,bind9,135,CVE-2020-8619,included,True,,,,v9.11.20,True,2020-06-10,v9.11.20,2020-06-10,2020-06-10T18:00:37Z,2020-06-17,-7,-7,,,,,not classified
+bind9,bind9,136,CVE-2020-8620,included,True,,,,v9.16.6,True,2020-08-10,v9.16.6,2020-08-10,2020-08-10T09:31:13Z,2020-08-21,-11,-11,,,,,not classified
+bind9,bind9,137,CVE-2020-8621,included,True,,,,v9.16.6,True,2020-08-10,v9.16.6,2020-08-10,2020-08-10T09:31:13Z,2020-08-21,-11,-11,,,,,not classified
+bind9,bind9,138,CVE-2020-8622,included,True,,,,v9.11.22,True,2020-08-06,v9.11.22,2020-08-06,2020-08-06T10:05:20Z,2020-08-21,-15,-15,,,,,not classified
+bind9,bind9,139,CVE-2020-8623,included,True,,,,v9.11.22,True,2020-08-06,v9.11.22,2020-08-06,2020-08-06T10:05:20Z,2020-08-21,-15,-15,,,,,not classified
+bind9,bind9,140,CVE-2020-8624,included,True,,,,v9.11.22,True,2020-08-06,v9.11.22,2020-08-06,2020-08-06T10:05:20Z,2020-08-21,-15,-15,,,,,not classified
+bind9,bind9,141,CVE-2020-8625,included,True,,,,v9.16.12,True,2021-02-04,v9.16.12,2021-02-04,2021-02-04T11:35:16Z,2021-02-17,-13,-13,,,,,not classified
+bind9,bind9,142,CVE-2021-25214,included,True,,,,v9.16.15,True,2021-04-19,v9.16.15,2021-04-19,2021-04-19T13:45:50Z,2021-04-29,-10,-10,,,,,not classified
+bind9,bind9,143,CVE-2021-25215,included,True,,,,v9.16.15,True,2021-04-19,v9.16.15,2021-04-19,2021-04-19T13:45:50Z,2021-04-29,-10,-10,,,,,not classified
+bind9,bind9,144,CVE-2021-25216,included,True,,,,v9.16.15,True,2021-04-19,v9.16.15,2021-04-19,2021-04-19T13:45:50Z,2021-04-29,-10,-10,,,,,not classified
+bind9,bind9,145,CVE-2021-25218,included,True,,,,v9.16.20,True,2021-08-10,v9.16.20,2021-08-10,2021-08-10T13:23:56Z,2021-08-18,-8,-8,,,,,not classified
+bind9,bind9,146,CVE-2021-25219,included,True,,,,v9.11.36,True,2021-10-11,v9.11.36,2021-10-11,2021-10-11T19:35:49Z,2021-10-27,-16,-16,,,,,not classified
+bind9,bind9,147,CVE-2021-25220,included,True,,,,v9.18.1,True,2022-03-07,v9.18.1,2022-03-07,2022-03-07T08:03:50Z,2022-03-23,-16,-16,,,,,not classified
+bind9,bind9,148,CVE-2022-0396,included,True,,,,v9.18.1,True,2022-03-07,v9.18.1,2022-03-07,2022-03-07T08:03:50Z,2022-03-23,-16,-16,,,,,not classified
+bind9,bind9,149,CVE-2022-0635,included,True,,,,v9.18.1,True,2022-03-07,v9.18.1,2022-03-07,2022-03-07T08:03:50Z,2022-03-23,-16,-16,,,,,not classified
+bind9,bind9,150,CVE-2022-0667,included,True,,,,v9.18.1,True,2022-03-07,v9.18.1,2022-03-07,2022-03-07T08:03:50Z,2022-03-22,-15,-15,,,,,not classified
+bind9,bind9,151,CVE-2022-1183,included,True,,,,v9.18.3,True,2022-05-09,v9.18.3,2022-05-09,2022-05-09T16:07:17Z,2022-05-19,-10,-10,,,,,not classified
+bind9,bind9,152,CVE-2022-2795,included,True,,,,v9.18.7,True,2022-09-08,v9.18.7,2022-09-08,2022-09-08T12:39:47Z,2022-09-21,-13,-13,,,,,not classified
+bind9,bind9,153,CVE-2022-2881,included,True,,,,v9.18.7,True,2022-09-08,v9.18.7,2022-09-08,2022-09-08T12:39:47Z,2022-09-21,-13,-13,,,,,not classified
+bind9,bind9,154,CVE-2022-2906,included,True,,,,v9.18.7,True,2022-09-08,v9.18.7,2022-09-08,2022-09-08T12:39:47Z,2022-09-21,-13,-13,,,,,not classified
+bind9,bind9,155,CVE-2022-3080,included,True,,,,v9.18.7,True,2022-09-08,v9.18.7,2022-09-08,2022-09-08T12:39:47Z,2022-09-21,-13,-13,,,,,not classified
+bind9,bind9,156,CVE-2022-3094,included,True,,,,v9.18.11,True,2023-01-12,v9.18.11,2023-01-12,2023-01-12T22:20:04Z,2023-01-26,-14,-14,,,,,not classified
+bind9,bind9,157,CVE-2022-3488,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2023-01-26,,,,,,,not classified
+bind9,bind9,158,CVE-2022-3736,included,True,,,,v9.18.11,True,2023-01-12,v9.18.11,2023-01-12,2023-01-12T22:20:04Z,2023-01-26,-14,-14,,,,,not classified
+bind9,bind9,159,CVE-2022-38177,included,True,,,,v9.16.33,True,2022-09-08,v9.16.33,2022-09-08,2022-09-08T13:01:23Z,2022-09-21,-13,-13,,,,,not classified
+bind9,bind9,160,CVE-2022-38178,included,True,,,,v9.18.7,True,2022-09-08,v9.18.7,2022-09-08,2022-09-08T12:39:47Z,2022-09-21,-13,-13,,,,,not classified
+bind9,bind9,161,CVE-2022-3924,included,True,,,,v9.18.11,True,2023-01-12,v9.18.11,2023-01-12,2023-01-12T22:20:04Z,2023-01-26,-14,-14,,,,,not classified
+bind9,bind9,162,CVE-2023-2828,included,True,,,,v9.18.16,True,2023-06-09,v9.18.16,2023-06-09,2023-06-09T13:38:48Z,2023-06-21,-12,-12,,,,,not classified
+bind9,bind9,163,CVE-2023-2829,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2023-06-21,,,,,,,not classified
+bind9,bind9,164,CVE-2023-2911,included,True,,,,v9.18.16,True,2023-06-09,v9.18.16,2023-06-09,2023-06-09T13:38:48Z,2023-06-21,-12,-12,,,,,not classified
+bind9,bind9,165,CVE-2023-3341,included,True,,,,v9.16.44,True,2023-09-08,v9.16.44,2023-09-08,2023-09-08T12:40:48Z,2023-09-20,-12,-12,,,,,not classified
+bind9,bind9,166,CVE-2023-4236,included,True,,,,v9.18.19,True,2023-09-11,v9.18.19,2023-09-11,2023-09-11T08:20:17Z,2023-09-20,-9,-9,,,,,not classified
+bind9,bind9,167,CVE-2023-4408,included,True,,,,v9.18.24,True,2024-02-11,v9.18.24,2024-02-11,2024-02-11T10:39:40Z,2024-02-13,-2,-2,,,,,not classified
+bind9,bind9,168,CVE-2023-50387,included,True,,,,v9.18.24,True,2024-02-11,v9.18.24,2024-02-11,2024-02-11T10:39:40Z,2024-02-14,-3,-3,,,,,not classified
+bind9,bind9,169,CVE-2023-50868,included,True,,,,v9.18.24,True,2024-02-11,v9.18.24,2024-02-11,2024-02-11T10:39:40Z,2024-02-14,-3,-3,,,,,not classified
+bind9,bind9,170,CVE-2023-5517,included,True,,,,v9.18.24,True,2024-02-11,v9.18.24,2024-02-11,2024-02-11T10:39:40Z,2024-02-13,-2,-2,,,,,not classified
+bind9,bind9,171,CVE-2023-5679,included,True,,,,v9.18.24,True,2024-02-11,v9.18.24,2024-02-11,2024-02-11T10:39:40Z,2024-02-13,-2,-2,,,,,not classified
+bind9,bind9,172,CVE-2023-5680,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,2024-02-13,,,,,,,not classified
+bind9,bind9,173,CVE-2023-6516,included,True,,,,v9.16.48,True,2024-02-11,v9.16.48,2024-02-11,2024-02-11T11:31:39Z,2024-02-13,-2,-2,,,,,not classified
+bind9,bind9,174,CVE-2026-1519,included,True,,,,v9.20.21,True,2026-03-13,v9.20.21,2026-03-13,2026-03-13T21:37:53Z,2026-03-25,-12,-12,,,,,not classified
+bind9,bind9,175,CVE-2026-3039,included,True,,,,v9.20.23,True,2026-05-08,v9.20.23,2026-05-08,2026-05-08T14:39:34Z,2026-05-20,-12,-12,,,,,not classified
+bind9,bind9,176,CVE-2026-3104,included,True,,,,v9.20.21,True,2026-03-13,v9.20.21,2026-03-13,2026-03-13T21:37:53Z,2026-03-25,-12,-12,,,,,not classified
+bind9,bind9,177,CVE-2026-3119,included,True,,,,v9.20.21,True,2026-03-13,v9.20.21,2026-03-13,2026-03-13T21:37:53Z,2026-03-25,-12,-12,,,,,not classified
+bind9,bind9,178,CVE-2026-3591,included,True,,,,v9.20.21,True,2026-03-13,v9.20.21,2026-03-13,2026-03-13T21:37:53Z,2026-03-25,-12,-12,,,,,not classified
+bind9,bind9,179,CVE-2026-3592,included,True,,,,v9.20.23,True,2026-05-08,v9.20.23,2026-05-08,2026-05-08T14:39:34Z,2026-05-20,-12,-12,,,,,not classified
+bind9,bind9,180,CVE-2026-3593,included,True,,,,v9.20.23,True,2026-05-08,v9.20.23,2026-05-08,2026-05-08T14:39:34Z,2026-05-20,-12,-12,,,,,not classified
+bind9,bind9,181,CVE-2026-5946,included,True,,,,v9.20.23,True,2026-05-08,v9.20.23,2026-05-08,2026-05-08T14:39:34Z,2026-05-20,-12,-12,,,,,not classified
+bind9,bind9,182,CVE-2026-5947,included,True,,,,v9.20.23,True,2026-05-08,v9.20.23,2026-05-08,2026-05-08T14:39:34Z,2026-05-20,-12,-12,,,,,not classified
+bind9,bind9,183,CVE-2026-5950,included,True,,,,v9.20.23,True,2026-05-08,v9.20.23,2026-05-08,2026-05-08T14:39:34Z,2026-05-20,-12,-12,,,,,not classified
+bind9,bind9,184,CVE-2006-5989,included,True,,,,v9.16.12,True,2021-02-04,v9.16.12,2021-02-04,2021-02-04T11:35:16Z,,,,,,,,not classified
+bind9,bind9,185,CVE-2015-3193,excluded,False,not-applicable-or-not-bind9-release,,not-applicable-or-not-bind9-release,,,,,,,,,,,,,,not classified
+bind9,bind9,186,CVE-2024-0760,included,True,,,,v9.20.0,True,2024-07-08,v9.20.0,2024-07-08,2024-07-08T13:01:00Z,,,,,,,,not classified
+bind9,bind9,187,CVE-2024-11187,included,True,,,,v9.20.5,True,2025-01-20,v9.20.5,2025-01-20,2025-01-20T13:15:57Z,,,,,,,,not classified
+bind9,bind9,188,CVE-2024-12705,included,True,,,,v9.20.5,True,2025-01-20,v9.20.5,2025-01-20,2025-01-20T13:15:57Z,,,,,,,,not classified
+bind9,bind9,189,CVE-2024-1737,included,True,,,,v9.20.0,True,2024-07-08,v9.20.0,2024-07-08,2024-07-08T13:01:00Z,,,,,,,,not classified
+bind9,bind9,190,CVE-2024-1975,included,True,,,,v9.20.0,True,2024-07-08,v9.20.0,2024-07-08,2024-07-08T13:01:00Z,2024-07-23,-15,-15,,,,,not classified
+bind9,bind9,191,CVE-2024-4076,included,True,,,,v9.20.0,True,2024-07-08,v9.20.0,2024-07-08,2024-07-08T13:01:00Z,,,,,,,,not classified
+bind9,bind9,192,CVE-2025-13878,included,True,,,,v9.20.18,True,2026-01-09,v9.20.18,2026-01-09,2026-01-09T13:33:16Z,,,,,,,,not classified
+bind9,bind9,193,CVE-2025-40775,included,True,,,,v9.20.9,True,2025-05-08,v9.20.9,2025-05-08,2025-05-08T21:10:54Z,,,,,,,,not classified
+bind9,bind9,194,CVE-2025-40777,included,True,,,,v9.20.11,True,2025-07-04,v9.20.11,2025-07-04,2025-07-04T09:37:38Z,,,,,,,,not classified
+bind9,bind9,195,CVE-2025-40778,included,True,,,,v9.20.15,True,2025-10-18,v9.20.15,2025-10-18,2025-10-18T09:49:45Z,,,,,,,,not classified
+bind9,bind9,196,CVE-2025-40780,included,True,,,,v9.20.15,True,2025-10-18,v9.20.15,2025-10-18,2025-10-18T09:49:45Z,,,,,,,,not classified
+bind9,bind9,197,CVE-2025-8677,included,True,,,,v9.20.15,True,2025-10-18,v9.20.15,2025-10-18,2025-10-18T09:49:45Z,2025-10-22,-4,-4,,,,,not classified
+bind9,bind9,198,CVE-2026-10723,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,2026-07-22,-2,-2,,,,,not classified
+bind9,bind9,199,CVE-2026-10822,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,2026-07-22,-2,-2,,,,,not classified
+bind9,bind9,200,CVE-2026-11331,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,,,,,,,,not classified
+bind9,bind9,201,CVE-2026-11605,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,2026-07-22,-2,-2,,,,,not classified
+bind9,bind9,202,CVE-2026-11622,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,2026-07-22,-2,-2,,,,,not classified
+bind9,bind9,203,CVE-2026-11721,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,2026-07-22,-2,-2,,,,,not classified
+bind9,bind9,204,CVE-2026-12617,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,,,,,,,,not classified
+bind9,bind9,205,CVE-2026-13204,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,2026-07-22,-2,-2,,,,,not classified
+bind9,bind9,206,CVE-2026-13321,included,True,,,,v9.20.26,True,2026-07-20,v9.20.26,2026-07-20,2026-07-20T14:44:32Z,,,,,,,,not classified
+knot,knot,0,CVE-2014-0486,included,True,,True,,v1.5.2,True,2014-09-08,v1.5.2,2014-09-08,2014-09-08T09:14:08Z,2018-03-27,-1296,-1296,,,,,False
+knot,knot,1,CVE-2016-6171,included,True,,True,,v2.3.0,True,2016-08-09,v2.3.0,2016-08-09,2016-08-09T14:29:55Z,2017-02-09,-184,-184,,,,,False
+knot,knot,2,CVE-2017-11104,included,True,,True,,v2.5.2,True,2017-06-23,v2.5.2,2017-06-23,2017-06-23T08:32:22Z,2017-07-08,-15,-15,,,,,False
+knot,knot,3,CVE-2018-1000002,excluded,False,not-applicable,False,,,,,,,,2018-01-22,,,,,,,
+knot,knot,4,CVE-2018-10920,excluded,False,not-applicable,False,,,,,,,,2018-08-02,,,,,,,
+knot,knot,5,CVE-2018-1110,excluded,False,not-applicable,False,,,,,,,,2021-03-30,,,,,,,
+knot,knot,6,CVE-2019-10190,excluded,False,not-applicable,False,,,,,,,,2019-07-16,,,,,,,
+knot,knot,7,CVE-2019-10191,excluded,False,not-applicable,False,,,,,,,,2019-07-16,,,,,,,
+knot,knot,8,CVE-2019-19331,excluded,False,not-applicable,False,,,,,,,,2019-12-16,,,,,,,
+knot,knot,9,CVE-2020-12667,excluded,False,not-applicable,False,,,,,,,,2020-05-19,,,,,,,
+knot,knot,10,CVE-2022-32983,excluded,False,not-applicable,False,,,,,,,,2022-06-20,,,,,,,
+knot,knot,11,CVE-2023-26249,excluded,False,not-applicable,False,,,,,,,,2023-02-21,,,,,,,
+knot,knot,12,CVE-2026-39155,included,True,,True,,v3.5.4,True,2026-04-02,v3.5.4,2026-04-02,2026-04-02T05:07:28Z,2026-07-23,-112,-112,,,,,True
+kresd,kresd,0,CVE-2018-1000002,included,True,,True,,v1.5.2,True,2018-01-22,v1.5.2,2018-01-22,2018-01-22T10:45:44Z,2018-01-22,0,0,,,,,True
+kresd,kresd,1,CVE-2018-10920,included,True,,True,,v2.4.1,True,2018-08-02,v2.4.1,2018-08-02,2018-08-02T11:34:38Z,2018-08-02,0,0,,,,,True
+kresd,kresd,2,CVE-2018-1110,included,True,,True,,v2.3.0,True,2018-04-23,v2.3.0,2018-04-23,2018-04-23T11:08:03Z,2021-03-30,-1072,-1072,,,,,False
+kresd,kresd,3,CVE-2019-10190,included,True,,True,,v4.1.0,True,2019-07-10,v4.1.0,2019-07-10,2019-07-10T14:06:44Z,2019-07-16,-6,-6,,,,,True
+kresd,kresd,4,CVE-2019-10191,included,True,,True,,v4.1.0,True,2019-07-10,v4.1.0,2019-07-10,2019-07-10T14:06:44Z,2019-07-16,-6,-6,,,,,True
+kresd,kresd,5,CVE-2019-19331,included,True,,True,,v4.3.0,True,2019-12-04,v4.3.0,2019-12-04,2019-12-04T14:28:25Z,2019-12-16,-12,-12,,,,,False
+kresd,kresd,6,CVE-2020-12667,included,True,,True,,v5.1.1,True,2020-05-19,v5.1.1,2020-05-19,2020-05-19T08:56:35Z,2020-05-19,0,0,,,,,False
+kresd,kresd,7,CVE-2021-40083,included,True,,True,,v5.3.2,True,2021-05-05,v5.3.2,2021-05-05,2021-05-05T09:23:24Z,2021-08-25,-112,-112,,,,,True
+kresd,kresd,8,CVE-2022-32983,excluded,False,applicable-but-no-fix-tag,True,,,,,,,,2022-06-20,,,,,,,False
+kresd,kresd,9,CVE-2022-40188,included,True,,True,,v5.5.3,True,2022-09-21,v5.5.3,2022-09-21,2022-09-21T12:09:25Z,2022-09-23,-2,-2,,,,,False
+kresd,kresd,10,CVE-2023-26249,included,True,,True,,v5.6.0,True,2023-01-26,v5.6.0,2023-01-26,2023-01-26T17:01:18Z,2023-02-21,-26,-26,,,,,False
+kresd,kresd,11,CVE-2023-46317,included,True,,True,,v5.7.0,True,2023-08-22,v5.7.0,2023-08-22,2023-08-22T08:51:29Z,2023-10-22,-61,-61,,,,,False
+kresd,kresd,12,CVE-2023-50387,included,True,,True,,v5.7.1,True,2024-02-13,v5.7.1,2024-02-13,2024-02-13T12:03:08Z,2024-02-14,-1,-1,,,,,True
+kresd,kresd,13,CVE-2023-50868,included,True,,True,,v5.7.1,True,2024-02-13,v5.7.1,2024-02-13,2024-02-13T12:03:08Z,2024-02-14,-1,-1,,,,,True
+kresd,kresd,14,CVE-2026-39155,excluded,False,not-applicable,False,,,,,,,,2026-07-23,,,,,,,
+kresd,kresd,15,CVE-2026-66374,included,True,,True,,v6.4.1,True,2026-07-22,v6.4.1,2026-07-22,2026-07-22T09:34:49Z,2026-07-25,-3,-3,,,,,False
+nsd,nsd,0,CVE-2009-1755,included,True,,True,,NSD_3_2_2_REL,True,2009-05-13,NSD_3_2_2_REL,2009-05-13,2009-05-13T14:33:36Z,2009-05-22,-9,-9,,,,,False
+nsd,nsd,1,CVE-2012-2978,included,True,,True,,NSD_3_2_13_REL,True,2012-07-19,NSD_3_2_13_REL,2012-07-19,2012-07-19T14:01:23Z,2012-07-27,-8,-8,,,,,False
+nsd,nsd,2,CVE-2013-5661,excluded,False,applicable-but-no-fix-tag,True,,,,,,,,2019-11-05,,,,,,,False
+nsd,nsd,3,CVE-2016-6173,included,True,,True,,NSD_4_1_11_REL,True,2016-08-01,NSD_4_1_11_REL,2016-08-01,2016-08-01T12:11:06Z,2017-02-09,-192,-192,,,,,False
+nsd,nsd,4,CVE-2019-13207,included,True,,True,,NSD_4_2_2_REL,True,2019-08-13,NSD_4_2_2_REL,2019-08-13,2019-08-13T10:15:43Z,2019-07-03,41,41,,,,,False
+nsd,nsd,5,CVE-2020-28935,included,True,,True,,NSD_4_3_4_REL,True,2020-11-24,NSD_4_3_4_REL,2020-11-24,2020-11-24T14:32:34Z,2020-12-07,-13,-13,,,,,False
+nsd,nsd,6,CVE-2026-12244,included,True,,True,,NSD_4_14_3_REL,True,2026-06-24,NSD_4_14_3_REL,2026-06-24,2026-06-24T19:21:53Z,2026-06-25,-1,-1,,,,,False
+nsd,nsd,7,CVE-2026-12245,included,True,,True,,NSD_4_14_3_REL,True,2026-06-24,NSD_4_14_3_REL,2026-06-24,2026-06-24T19:21:53Z,2026-06-25,-1,-1,,,,,False
+nsd,nsd,8,CVE-2026-12246,included,True,,True,,NSD_4_14_3_REL,True,2026-06-24,NSD_4_14_3_REL,2026-06-24,2026-06-24T19:21:53Z,2026-06-25,-1,-1,,,,,False
+nsd,nsd,9,CVE-2026-12490,included,True,,True,,NSD_4_14_3_REL,True,2026-06-24,NSD_4_14_3_REL,2026-06-24,2026-06-24T19:21:53Z,2026-06-25,-1,-1,,,,,False
+nsd,nsd,10,CVE-2026-18664,included,True,,True,,NSD_4_15_1_REL,True,2026-08-26,NSD_4_15_1_REL,2026-08-26,2026-08-26T08:56:21Z,2026-08-26,0,0,,,,,False
+nsd,nsd,11,CVE-2026-18916,included,True,,True,,NSD_4_15_1_REL,True,2026-08-26,NSD_4_15_1_REL,2026-08-26,2026-08-26T08:56:21Z,2026-08-26,0,0,,,,,False
+nsd,nsd,12,CVE-2026-19401,included,True,,True,,NSD_4_15_1_REL,True,2026-08-26,NSD_4_15_1_REL,2026-08-26,2026-08-26T08:56:21Z,2026-08-26,0,0,,,,,False
+nsd,nsd,13,CVE-2026-19538,included,True,,True,,NSD_4_15_1_REL,True,2026-08-26,NSD_4_15_1_REL,2026-08-26,2026-08-26T08:56:21Z,2026-08-26,0,0,,,,,False
+opendnssec,opendnssec,0,CVE-2012-5582,excluded,False,applicable-but-no-fix-tag,True,,,,,,,,2019-11-25,,,,,,,False
+pdns-auth,pdns,0,CVE-2008-3337,included,True,,,,auth-2.9.22,True,2009-01-25,auth-2.9.22,2009-01-25,2009-01-25T20:12:50Z,2008-08-08,170,170,-2,2008-08-06,,,False
+pdns-auth,pdns,1,CVE-2012-0206,included,True,,,,auth-3.0.1,True,2012-01-10,auth-3.0.1,2012-01-10,2012-01-10T15:24:36Z,2012-02-17,-38,-38,,,,,False
+pdns-auth,pdns,2,CVE-2016-6172,included,True,,,,auth-4.0.1,True,2016-07-29,auth-4.0.1,2016-07-29,2016-07-29T14:28:18Z,2016-09-26,-59,-59,,,,,False
+pdns-auth,pdns,3,CVE-2019-3871,included,True,,,,auth-4.0.7,True,2019-03-18,auth-4.0.7,2019-03-18,2019-03-18T08:21:09Z,2019-03-21,-3,-3,,,,,False
+pdns-auth,pdns,4,CVE-2019-10203,included,True,,,,auth-4.1.11,True,2019-07-30,auth-4.1.11,2019-07-30,2019-07-30T14:42:03Z,2019-11-22,-115,-115,,,,,False
+pdns-auth,pdns,5,CVE-2021-36754,included,True,,,,auth-4.5.1,True,2021-07-22,auth-4.5.1,2021-07-22,2021-07-22T11:03:24Z,2021-07-30,-8,-8,-4,2021-07-26,,,False
+pdns-auth,pdns,6,CVE-2022-27227,included,True,,,,auth-4.6.1,True,2022-03-16,auth-4.6.1,2022-03-16,2022-03-16T10:38:15Z,2022-03-25,-9,-9,0,2022-03-25,,,False
+pdns-auth,pdns,7,CVE-2015-1868,included,True,,,,auth-3.4.4,True,2015-04-23,auth-3.4.4,2015-04-23,2015-04-23T08:06:53Z,2015-05-18,-25,-25,,,,,False
+pdns-auth,pdns,8,CVE-2018-1046,included,True,,,,auth-4.1.2,True,2018-05-07,auth-4.1.2,2018-05-07,2018-05-07T14:22:32Z,,,,,,,,False
+pdns-auth,pdns,9,CVE-2026-33257,included,True,,,,auth-4.9.14,True,2026-04-22,auth-4.9.14,2026-04-22,2026-04-22T10:56:01Z,2026-04-22,0,0,,,,,False
+pdns-auth,pdns,10,CVE-2026-33260,included,True,,,,auth-4.9.14,True,2026-04-22,auth-4.9.14,2026-04-22,2026-04-22T10:56:01Z,2026-04-22,0,0,,,,,False
+pdns-auth,pdns,11,CVE-2026-33608,included,True,,,,auth-4.9.14,True,2026-04-22,auth-4.9.14,2026-04-22,2026-04-22T10:56:01Z,,,,,,,,False
+pdns-auth,pdns,12,CVE-2026-33609,included,True,,,,auth-4.9.14,True,2026-04-22,auth-4.9.14,2026-04-22,2026-04-22T10:56:01Z,,,,,,,,False
+pdns-auth,pdns,13,CVE-2026-33610,included,True,,,,auth-4.9.14,True,2026-04-22,auth-4.9.14,2026-04-22,2026-04-22T10:56:01Z,,,,,,,,False
+pdns-auth,pdns,14,CVE-2026-33611,included,True,,,,auth-4.9.14,True,2026-04-22,auth-4.9.14,2026-04-22,2026-04-22T10:56:01Z,,,,,,,,False
+pdns-rec,pdns,0,CVE-2006-4251,included,True,,True,,rec-3.1.4,True,2006-11-16,rec-3.1.4,2006-11-16,2006-11-16T20:34:35Z,2006-11-14,2,2,,,the 13th of November 2006.,,False
+pdns-rec,pdns,1,CVE-2006-4252,included,True,,True,,rec-3.1.4,True,2006-11-16,rec-3.1.4,2006-11-16,2006-11-16T20:34:35Z,2006-11-14,2,2,,,the 13th of November 2006.,,False
+pdns-rec,pdns,2,CVE-2008-1637,included,True,,True,,rec-3.1.7.1,True,2009-08-02,rec-3.1.7.1,2009-08-02,2009-08-02T20:12:22Z,2008-04-02,,,-2,2008-03-31,on the 2nd of August 2009.,,False
+pdns-rec,pdns,3,CVE-2008-3217,included,True,,True,,rec-3.1.7.1,True,2009-08-02,rec-3.1.7.1,2009-08-02,2009-08-02T20:12:22Z,2008-07-18,,,-78,2008-05-01,on the 2nd of August 2009.,,False
+pdns-rec,pdns,4,CVE-2009-4009,included,True,,True,,rec-3.2,True,2010-03-06,rec-3.2,2010-03-06,2010-03-06T21:36:46Z,2010-01-08,,,-2,2010-01-06,on the 7th of March 2010.,,False
+pdns-rec,pdns,5,CVE-2009-4010,included,True,,True,,rec-3.2,True,2010-03-06,rec-3.2,2010-03-06,2010-03-06T21:36:46Z,2010-01-08,,,-2,2010-01-06,on the 7th of March 2010.,,True
+pdns-rec,pdns,6,CVE-2014-8601,included,True,,True,,rec-3.6.2,True,2014-10-30,rec-3.6.2,2014-10-30,2014-10-30T11:21:13Z,2014-12-10,-41,-41,,,,,False
+pdns-rec,pdns,7,CVE-2015-1868,included,True,,True,,rec-3.7.2,True,2015-04-21,rec-3.7.2,2015-04-21,2015-04-21T10:01:51Z,2015-05-18,-27,-27,,,"23rd of April, 2015",,False
+pdns-rec,pdns,8,CVE-2015-5470,included,True,,True,,rec-3.6.4,True,2015-06-08,rec-3.6.4,2015-06-08,2015-06-08T14:54:24Z,2015-11-02,-147,-147,,,9th of June 2015,,False
+pdns-rec,pdns,9,CVE-2016-7068,included,True,,True,,rec-3.7.4,True,2017-01-12,rec-3.7.4,2017-01-12,2017-01-12T13:15:19Z,2018-09-11,-607,-607,,,,,False
+pdns-rec,pdns,10,CVE-2016-7073,included,True,,True,,rec-4.0.4,True,2017-01-13,rec-4.0.4,2017-01-13,2017-01-13T08:10:34Z,2018-09-11,-606,-606,,,January 13th 2017,,False
+pdns-rec,pdns,11,CVE-2016-7074,included,True,,True,,rec-4.0.4,True,2017-01-13,rec-4.0.4,2017-01-13,2017-01-13T08:10:34Z,2018-09-11,-606,-606,,,January 13th 2017,,False
+pdns-rec,pdns,12,CVE-2017-15090,included,True,,True,,rec-4.0.7,True,2017-11-27,rec-4.0.7,2017-11-27,2017-11-27T08:38:53Z,2018-01-23,-57,-57,,,27th of November 2017,,True
+pdns-rec,pdns,13,CVE-2017-15092,included,True,,True,,rec-4.0.7,True,2017-11-27,rec-4.0.7,2017-11-27,2017-11-27T08:38:53Z,2018-01-23,-57,-57,,,27th of November 2017,,False
+pdns-rec,pdns,14,CVE-2017-15093,included,True,,True,,rec-4.0.7,True,2017-11-27,rec-4.0.7,2017-11-27,2017-11-27T08:38:53Z,2018-01-23,-57,-57,,,27th of November 2017,,False
+pdns-rec,pdns,15,CVE-2017-15094,included,True,,True,,rec-4.0.7,True,2017-11-27,rec-4.0.7,2017-11-27,2017-11-27T08:38:53Z,2018-01-23,-57,-57,,,27th of November 2017,,True
+pdns-rec,pdns,16,CVE-2017-15120,included,True,,True,,rec-4.0.8,True,2017-12-11,rec-4.0.8,2017-12-11,2017-12-11T10:13:50Z,2018-07-27,-228,-228,,,11th of December 2017,,False
+pdns-rec,pdns,17,CVE-2018-1000003,included,True,,True,,rec-4.1.1,True,2018-01-22,rec-4.1.1,2018-01-22,2018-01-22T13:06:43Z,2018-01-22,0,0,,,22nd of January 2018,,True
+pdns-rec,pdns,18,CVE-2018-10851,included,True,,True,,rec-4.1.5,True,2018-11-06,rec-4.1.5,2018-11-06,2018-11-06T14:15:01Z,2018-11-29,-23,-23,,,6th of November 2018,,False
+pdns-rec,pdns,19,CVE-2018-14626,included,True,,True,,rec-4.1.5,True,2018-11-06,rec-4.1.5,2018-11-06,2018-11-06T14:15:01Z,2018-11-29,-23,-23,,,6th of November 2018,,False
+pdns-rec,pdns,20,CVE-2018-14644,included,True,,True,,rec-4.1.5,True,2018-11-06,rec-4.1.5,2018-11-06,2018-11-06T14:15:01Z,2018-11-09,-3,-3,,,6th of November 2018,,True
+pdns-rec,pdns,21,CVE-2018-16855,included,True,,True,,rec-4.1.8,True,2018-11-26,rec-4.1.8,2018-11-26,2018-11-26T12:36:39Z,2018-12-03,-7,-7,,,26th of November 2018,,False
+pdns-rec,pdns,22,CVE-2019-3806,included,True,,True,,rec-4.1.9,True,2019-01-21,rec-4.1.9,2019-01-21,2019-01-21T08:50:24Z,2019-01-29,-8,-8,,,21st of January 2019,,False
+pdns-rec,pdns,23,CVE-2019-3807,included,True,,True,,rec-4.1.9,True,2019-01-21,rec-4.1.9,2019-01-21,2019-01-21T08:50:24Z,2019-01-29,-8,-8,,,21st of January 2019,,True
+pdns-rec,pdns,24,CVE-2020-10030,included,True,,True,,rec-4.1.16,True,2020-05-19,rec-4.1.16,2020-05-19,2020-05-19T08:49:42Z,2020-05-19,0,0,,,19th of May 2020,,False
+pdns-rec,pdns,25,CVE-2020-10995,included,True,,True,,rec-4.1.16,True,2020-05-19,rec-4.1.16,2020-05-19,2020-05-19T08:49:42Z,2020-05-19,0,0,,,19th of May 2020,,False
+pdns-rec,pdns,26,CVE-2020-12244,included,True,,True,,rec-4.1.16,True,2020-05-19,rec-4.1.16,2020-05-19,2020-05-19T08:49:42Z,2020-05-19,0,0,,,19th of May 2020,,True
+pdns-rec,pdns,27,CVE-2020-14196,included,True,,True,,rec-4.1.17,True,2020-06-30,rec-4.1.17,2020-06-30,2020-06-30T14:00:30Z,2020-07-01,-1,-1,,,1st of July 2020,,False
+pdns-rec,pdns,28,CVE-2020-25829,included,True,,True,,rec-4.1.18,True,2020-10-12,rec-4.1.18,2020-10-12,2020-10-12T08:08:08Z,2020-10-16,-4,-4,,,13th of October 2020,,True
+pdns-rec,pdns,29,CVE-2022-27227,included,True,,True,,rec-4.4.8,True,2022-03-16,rec-4.4.8,2022-03-16,2022-03-16T13:44:57Z,2022-03-25,-9,-9,,,25th of March 2022,,False
+pdns-rec,pdns,30,CVE-2022-37428,included,True,,True,,rec-4.5.10,True,2022-08-23,rec-4.5.10,2022-08-23,2022-08-23T10:17:14Z,2022-08-23,0,0,,,23rd of August 2022,,False
+pdns-rec,pdns,31,CVE-2023-22617,included,True,,True,,rec-4.8.1,True,2023-01-18,rec-4.8.1,2023-01-18,2023-01-18T08:39:37Z,2023-01-21,-3,-3,,,20th of January 2023,,True
+pdns-rec,pdns,32,CVE-2023-26437,included,True,,True,,rec-4.8.4,True,2023-03-29,rec-4.8.4,2023-03-29,2023-03-29T10:33:21Z,2023-04-04,-6,-6,,,29th of March 2023,,False
+pdns-rec,pdns,33,CVE-2023-50387,included,True,,True,,rec-5.0.2,True,2024-02-06,rec-5.0.2,2024-02-06,2024-02-06T08:36:36Z,2024-02-14,-8,-8,,,13th of February 2024,,True
+pdns-rec,pdns,34,CVE-2023-50868,included,True,,True,,rec-5.0.2,True,2024-02-06,rec-5.0.2,2024-02-06,2024-02-06T08:36:36Z,2024-02-14,-8,-8,,,13th of February 2024,,True
+pdns-rec,pdns,35,CVE-2024-25583,included,True,,True,,rec-5.0.4,True,2024-04-09,rec-5.0.4,2024-04-09,2024-04-09T08:25:56Z,,,,,,24th of April 2024,,False
+pdns-rec,pdns,36,CVE-2024-25590,included,True,,True,,rec-5.0.9,True,2024-08-26,rec-5.0.9,2024-08-26,2024-08-26T12:07:54Z,,,,,,3rd of October 2024,,False
+pdns-rec,pdns,37,CVE-2025-59023,included,True,,True,,rec-5.3.1,True,2025-10-22,rec-5.3.1,2025-10-22,2025-10-22T08:38:15Z,2026-02-09,-110,-110,,,22nd of October 2025,,False
+pdns-rec,pdns,38,CVE-2025-59024,included,True,,True,,rec-5.3.1,True,2025-10-22,rec-5.3.1,2025-10-22,2025-10-22T08:38:15Z,2026-02-09,-110,-110,,,22nd of October 2025,,False
+pdns-rec,pdns,39,CVE-2025-59029,included,True,,True,,rec-5.3.3,True,2025-11-25,rec-5.3.3,2025-11-25,2025-11-25T11:13:49Z,2025-12-09,-14,-14,,,8th of December 2025,,False
+pdns-rec,pdns,40,CVE-2025-59030,included,True,,True,,rec-5.3.3,True,2025-11-25,rec-5.3.3,2025-11-25,2025-11-25T11:13:49Z,2025-12-09,-14,-14,,,8th of December 2025,,False
+pdns-rec,pdns,41,CVE-2026-0398,included,True,,True,,rec-5.3.5,True,2026-02-09,rec-5.3.5,2026-02-09,2026-02-09T14:20:05Z,2026-02-09,0,0,,,9th of February 2026,,False
+pdns-rec,pdns,42,CVE-2026-24027,included,True,,True,,rec-5.3.5,True,2026-02-09,rec-5.3.5,2026-02-09,2026-02-09T14:20:05Z,2026-02-09,0,0,,,9th of February 2026,,False
+pdns-rec,pdns,43,CVE-2026-33256,included,True,,True,,rec-5.3.6,True,2026-04-02,rec-5.3.6,2026-04-02,2026-04-02T09:52:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,False
+pdns-rec,pdns,44,CVE-2026-33257,included,True,,True,,rec-5.2.9,True,2026-04-02,rec-5.2.9,2026-04-02,2026-04-02T09:02:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,False
+pdns-rec,pdns,45,CVE-2026-33258,included,True,,True,,rec-5.2.9,True,2026-04-02,rec-5.2.9,2026-04-02,2026-04-02T09:02:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,True
+pdns-rec,pdns,46,CVE-2026-33259,included,True,,True,,rec-5.2.9,True,2026-04-02,rec-5.2.9,2026-04-02,2026-04-02T09:02:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,False
+pdns-rec,pdns,47,CVE-2026-33260,included,True,,True,,rec-5.2.9,True,2026-04-02,rec-5.2.9,2026-04-02,2026-04-02T09:02:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,False
+pdns-rec,pdns,48,CVE-2026-33261,included,True,,True,,rec-5.2.9,True,2026-04-02,rec-5.2.9,2026-04-02,2026-04-02T09:02:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,True
+pdns-rec,pdns,49,CVE-2026-33262,included,True,,True,,rec-5.4.1,True,2026-04-02,rec-5.4.1,2026-04-02,2026-04-02T09:54:17Z,2026-04-22,-20,-20,,,22nd of April 2026,,False
+pdns-rec,pdns,50,CVE-2026-33600,included,True,,True,,rec-5.2.9,True,2026-04-02,rec-5.2.9,2026-04-02,2026-04-02T09:02:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,False
+pdns-rec,pdns,51,CVE-2026-33601,included,True,,True,,rec-5.2.9,True,2026-04-02,rec-5.2.9,2026-04-02,2026-04-02T09:02:43Z,2026-04-22,-20,-20,,,22nd of April 2026,,True
+unbound,unbound,0,CVE-2009-3602,included,True,,True,,release-1.4.0rc1,False,2009-11-13,release-1.4.0,2009-11-23,2009-11-23T12:12:59Z,2009-10-13,31,41,,,,,True
+unbound,unbound,1,CVE-2009-4008,excluded,False,applicable-but-no-fix-tag,True,,,,,,,,2011-06-02,,,,,,,True
+unbound,unbound,2,CVE-2010-0969,included,True,,True,,release-1.4.3,True,2010-03-11,release-1.4.3,2010-03-11,2010-03-11T13:28:53Z,2010-03-16,-5,-5,,,,,False
+unbound,unbound,3,CVE-2011-1922,included,True,,True,,release-1.4.10,True,2011-05-25,release-1.4.10,2011-05-25,2011-05-25T06:04:14Z,2011-05-31,-6,-6,,,,,False
+unbound,unbound,4,CVE-2011-4528,included,True,,True,,release-1.4.14,True,2011-12-19,release-1.4.14,2011-12-19,2011-12-19T10:55:32Z,,,,,,,,False
+unbound,unbound,5,CVE-2014-8602,included,True,,True,,release-1.5.1,True,2014-12-08,release-1.5.1,2014-12-08,2014-12-08T15:09:18Z,2014-12-11,-3,-3,,,,,False
+unbound,unbound,6,CVE-2017-15105,included,True,,True,,release-1.7.0rc1,False,2018-01-19,release-1.7.0,2018-03-12,2018-03-12T09:24:29Z,2018-01-23,-4,-4,,,,1.6.8,True
+unbound,unbound,7,CVE-2019-16866,included,True,,True,,release-1.9.4,True,2019-10-03,release-1.9.4,2019-10-03,2019-10-03T08:34:40Z,2019-10-03,0,0,,,,,False
+unbound,unbound,8,CVE-2019-18934,included,True,,True,,release-1.9.5,True,2019-11-19,release-1.9.5,2019-11-19,2019-11-19T06:49:59Z,2019-11-19,0,0,,,,,False
+unbound,unbound,9,CVE-2019-25031,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,10,CVE-2019-25032,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,11,CVE-2019-25033,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,12,CVE-2019-25034,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,13,CVE-2019-25035,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,14,CVE-2019-25036,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,15,CVE-2019-25037,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,16,CVE-2019-25038,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,17,CVE-2019-25039,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,18,CVE-2019-25040,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,19,CVE-2019-25041,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,20,CVE-2019-25042,disputed,False,disputed,disputed,,release-1.9.6rc1,False,2019-12-05,release-1.9.6,2019-12-06,2019-12-06T10:31:34Z,2021-04-27,-509,-508,,,,,False
+unbound,unbound,21,CVE-2020-10772,excluded,False,not-applicable,False,,,,,,,,2020-11-27,,,,,,,False
+unbound,unbound,22,CVE-2020-12662,included,True,,True,,release-1.10.1,True,2020-05-19,release-1.10.1,2020-05-19,2020-05-19T06:17:45Z,2020-05-19,0,0,,,,,False
+unbound,unbound,23,CVE-2020-12663,included,True,,True,,release-1.10.1,True,2020-05-19,release-1.10.1,2020-05-19,2020-05-19T06:17:45Z,2020-05-19,0,0,,,,,False
+unbound,unbound,24,CVE-2020-28935,included,True,,True,,release-1.13.0rc1,False,2020-11-24,release-1.13.0,2020-12-03,2020-12-03T08:25:06Z,2020-12-07,-13,-4,,,,,False
+unbound,unbound,25,CVE-2022-30698,included,True,,True,,release-1.16.2,True,2022-08-01,release-1.16.2,2022-08-01,2022-08-01T11:26:22Z,2022-08-01,0,0,,,,,False
+unbound,unbound,26,CVE-2022-30699,included,True,,True,,release-1.16.2,True,2022-08-01,release-1.16.2,2022-08-01,2022-08-01T11:26:22Z,2022-08-01,0,0,,,,,False
+unbound,unbound,27,CVE-2022-3204,included,True,,True,,release-1.16.3,True,2022-09-21,release-1.16.3,2022-09-21,2022-09-21T09:10:38Z,2022-09-26,-5,-5,,,,,False
+unbound,unbound,28,CVE-2023-50387,included,True,,True,,release-1.19.1,True,2024-02-13,release-1.19.1,2024-02-13,2024-02-13T12:04:07Z,2024-02-14,-1,-1,,,,,True
+unbound,unbound,29,CVE-2023-50868,included,True,,True,,release-1.19.1,True,2024-02-13,release-1.19.1,2024-02-13,2024-02-13T12:04:07Z,2024-02-14,-1,-1,,,,,True
+unbound,unbound,30,CVE-2024-1931,included,True,,True,,release-1.19.2,True,2024-03-07,release-1.19.2,2024-03-07,2024-03-07T08:10:46Z,2024-03-07,0,0,,,,,False
+unbound,unbound,31,CVE-2024-33655,included,True,,True,,release-1.20.0rc1,False,2024-05-01,release-1.20.0,2024-05-01,2024-05-01T08:15:12Z,,,,,,,,False
+unbound,unbound,32,CVE-2024-8508,included,True,,True,,release-1.21.1,True,2024-10-03,release-1.21.1,2024-10-03,2024-10-03T15:41:20Z,2024-10-03,0,0,,,,,False
+unbound,unbound,33,CVE-2025-11411,included,True,,True,,release-1.24.1,True,2025-10-22,release-1.24.1,2025-10-22,2025-10-22T08:54:57Z,,,,,,,,False
+unbound,unbound,34,CVE-2025-5994,included,True,,True,,release-1.23.1,True,2025-07-16,release-1.23.1,2025-07-16,2025-07-16T08:02:01Z,2025-07-16,0,0,,,,,False
+unbound,unbound,35,CVE-2026-14586,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,,,,,,,,False
+unbound,unbound,36,CVE-2026-32665,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,37,CVE-2026-32792,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,38,CVE-2026-33278,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,True
+unbound,unbound,39,CVE-2026-40622,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,40,CVE-2026-40691,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,41,CVE-2026-41292,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,42,CVE-2026-41637,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,43,CVE-2026-42534,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,44,CVE-2026-42923,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,True
+unbound,unbound,45,CVE-2026-42944,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,46,CVE-2026-42955,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,47,CVE-2026-42959,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,True
+unbound,unbound,48,CVE-2026-42960,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,49,CVE-2026-44390,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,50,CVE-2026-44608,included,True,,True,,release-1.25.1,True,2026-05-20,release-1.25.1,2026-05-20,2026-05-20T08:22:52Z,2026-05-20,0,0,,,,,False
+unbound,unbound,51,CVE-2026-44621,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,52,CVE-2026-44687,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,True
+unbound,unbound,53,CVE-2026-44690,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,True
+unbound,unbound,54,CVE-2026-46582,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,True
+unbound,unbound,55,CVE-2026-50045,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,True
+unbound,unbound,56,CVE-2026-50046,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,57,CVE-2026-50243,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,True
+unbound,unbound,58,CVE-2026-50248,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,True
+unbound,unbound,59,CVE-2026-50251,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,60,CVE-2026-50252,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,61,CVE-2026-52863,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,62,CVE-2026-54478,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,63,CVE-2026-55708,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,64,CVE-2026-55717,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,65,CVE-2026-55973,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,66,CVE-2026-55990,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,67,CVE-2026-55991,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,68,CVE-2026-56416,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,True
+unbound,unbound,69,CVE-2026-56444,included,True,,True,,release-1.25.2,True,2026-07-22,release-1.25.2,2026-07-22,2026-07-22T08:21:21Z,2026-07-22,0,0,,,,,False
+unbound,unbound,70,CVE-2026-77860,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,False
+unbound,unbound,71,CVE-2026-77955,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,True
+unbound,unbound,72,CVE-2026-78227,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,False
+unbound,unbound,73,CVE-2026-80225,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,False
+unbound,unbound,74,CVE-2026-81634,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,True
+unbound,unbound,75,CVE-2026-81642,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,False
+unbound,unbound,76,CVE-2026-82717,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,False
+unbound,unbound,77,CVE-2026-82720,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,False
+unbound,unbound,78,CVE-2026-85501,included,True,,True,,release-1.26.1,True,2026-09-16,release-1.26.1,2026-09-16,2026-09-16T07:30:25Z,,,,,,,,True

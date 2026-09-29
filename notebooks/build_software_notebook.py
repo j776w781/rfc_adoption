@@ -353,7 +353,14 @@ code(r"""
 alias = {"alg 15": "alg 15/16", "alg 16": "alg 15/16", "alg 13": "alg 13/14",
          "alg 14": "alg 13/14", "alg 8": "alg 8/10", "alg 10": "alg 8/10"}
 grid = {}
+# Non-standard codepoints are excluded here as they are everywhere else in this
+# project. PowerDNS Auth 3.3.1 (2013) signed EdDSA on private codepoint 250,
+# five years before RFC 8080 assigned 15/16; leaving it in put a 2013 cell in
+# the RFC 8080 column and made PowerDNS look like it shipped the standard four
+# years before the standard existed.
 for r in SUP["support"]:
+    if not r.get("standard_codepoint", True):
+        continue
     obs = alias.get(r["observable"], r["observable"])
     key = (NAME[r["implementation"]], f'{obs}\n{r["rfc"]}')
     yr = int(r["released"][:4])
@@ -386,8 +393,10 @@ ax.set_yticks(range(len(projects))); ax.set_yticklabels(projects, fontsize=10, c
 for side in ("top", "right", "left", "bottom"):
     ax.spines[side].set_visible(False)
 ax.tick_params(length=0)
-title(ax, "First stable release with each capability",
-      "Darker = later. Cell text is the year and what the release could do.")
+title(ax, "First release with a dated commit for each capability",
+      "Darker = later. Cell text is the year and what the release could do. An empty cell means this table has no "
+      "dated evidence for that pair -- NOT that the program lacks the capability: Knot and PowerDNS both do NSEC3 "
+      "and RSA/SHA-256, and OpenDNSSEC is a full signer. Non-standard codepoints are excluded.")
 save(fig, "05_support_matrix")
 """)
 
@@ -420,7 +429,9 @@ style(ax, axis="x")
 ax.scatter([], [], s=110, color=S1, label="applies on upgrade")
 ax.scatter([], [], s=110, color=S2, label="opt-in")
 ax.legend(frameon=False, loc="lower right", fontsize=10, labelcolor=INK_2)
-title(ax, "Every default change found across five projects in seventeen years")
+title(ax, "Seven default changes in seventeen years of release history, from four of the eight projects",
+      "BIND 9, Knot DNS, PowerDNS Auth and OpenDNSSEC. The other four never changed a DNSSEC default. "
+      "The changes themselves span 2010 to 2020.")
 save(fig, "06_default_changes")
 """)
 
@@ -635,8 +646,9 @@ ax.set_ylabel("NSEC3 owner names at >= 100 iterations", color=INK_2)
 ax.set_xlabel("year", color=INK_2)
 year_axis(ax)
 ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{int(v):,}"))
-title(ax, "Zones moved when resolvers stopped accepting them",
-      "Owner names, not zones: NSEC3 owners are hashed, so a zone contributes one per owner")
+title(ax, "Names moved when signers and validators both capped the iteration count",
+      "Owner names, not zones: NSEC3 owners are hashed, so a zone contributes one per owner. "
+      "PowerDNS Auth 4.5.0 is a signer limiting what it will sign; Unbound 1.13.2 is a validator refusing what it reads.")
 save(fig, "10_nsec3_collapse")
 """)
 
@@ -661,8 +673,9 @@ ax.set_ylim(0, 105)
 ax.set_ylabel("share of signed zones", color=INK_2)
 ax.set_xlabel("year", color=INK_2)
 year_axis(ax)
-title(ax, "NSEC3 is the most deployed optional mechanism in DNSSEC",
-      "NSEC3PARAM at the zone apex, forward corpus. Algorithm 7 peaks at 29% and is a bad proxy.")
+title(ax, "Most signed zones use NSEC3, and the share has been falling since 2017",
+      "NSEC3PARAM at the zone apex, forward corpus. Algorithm 7 peaks at 29% and is a bad proxy. "
+      "Not the most deployed mechanism: ECDSA is on 76.1% of signed forward zones against NSEC3's 61.9%.")
 save(fig, "11_nsec3_prevalence")
 """)
 
@@ -774,8 +787,9 @@ ax.set_xticklabels([f'{NAME[p]}\n{CV["project_roles"][p]}' for p in cpe], fontsi
 style(ax)
 ax.set_ylabel("CVEs", color=INK_2)
 ax.legend(frameon=False, loc="upper right", fontsize=10, labelcolor=INK_2)
-title(ax, "NSD has 14 CVEs and none is DNSSEC; OpenDNSSEC has one, a dependency",
-      "CPE-attributed products only; Knot and OpenDNSSEC have no usable CPE")
+title(ax, "NSD has 14 CVEs and none of them is DNSSEC",
+      "CPE-attributed products only. Knot, Knot Resolver and OpenDNSSEC have no usable CPE, so they are "
+      "keyword-matched and are not counted here; no CVE count is claimed for them.")
 save(fig, "14_cve_by_project")
 """)
 

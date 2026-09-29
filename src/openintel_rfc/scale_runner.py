@@ -1606,10 +1606,14 @@ def _open_connection(access: Any) -> Any:
         except ImportError:
             open_duckdb = None  # type: ignore[assignment]
         if open_duckdb is not None:
-            return open_duckdb(access)
+            con = open_duckdb(access)
+            con.execute("SET TimeZone='UTC'")  # year_month labels must not depend on the host
+            return con
     import duckdb
 
-    return duckdb.connect(database=":memory:")
+    con = duckdb.connect(database=":memory:")
+    con.execute("SET TimeZone='UTC'")  # year_month labels must not depend on the host
+    return con
 
 
 def _resolve_uris(partition: Any, access: Any, warnings: list[str]) -> list[str]:

@@ -34,23 +34,23 @@
     [
       "RFC 3110",
       "2001-05",
-      "2009-04",
-      "<=7.9y",
-      "corpus-start censored"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 4033",
       "2005-03",
-      "2009-04",
-      "<=4.1y",
-      "corpus-start censored"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 4034",
       "2005-03",
-      "2009-04",
-      "<=4.1y",
-      "corpus-start censored"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 4035",
@@ -62,9 +62,9 @@
     [
       "RFC 4509",
       "2006-05",
-      "2009-04",
-      "<=2.9y",
-      "corpus-start censored"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 5011",
@@ -83,23 +83,23 @@
     [
       "RFC 5702",
       "2009-10",
-      "2010-04",
-      "0.5y",
-      "observable"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 5933",
       "2010-07",
-      "2013-01",
-      "2.5y",
-      "observable"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 6605",
       "2012-04",
-      "2015-12",
-      "3.7y",
-      "observable"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 6698",
@@ -118,9 +118,9 @@
     [
       "RFC 6840",
       "2013-02",
-      "2013-02",
-      "0.0y",
-      "observable"
+      "not observed",
+      "",
+      "meta"
     ],
     [
       "RFC 7344",
@@ -160,9 +160,9 @@
     [
       "RFC 8080",
       "2017-02",
-      "2022-09",
-      "5.6y",
-      "observable"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 8198",
@@ -174,9 +174,9 @@
     [
       "RFC 8624",
       "2019-06",
-      "2019-06",
-      "0.0y",
-      "observable"
+      "not observed",
+      "",
+      "adoption"
     ],
     [
       "RFC 9077",
@@ -195,9 +195,9 @@
     [
       "RFC 9364",
       "2023-02",
-      "2023-02",
-      "0.0y",
-      "observable"
+      "not observed",
+      "",
+      "meta"
     ],
     [
       "RFC 9558",

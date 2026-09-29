@@ -165,9 +165,12 @@ def _timestamp_expression(candidates: Sequence[str]) -> str:
         return "NULL AS month"
     column = f'"{candidates[0]}"'
     return (
+        # Month labels are UTC. to_timestamp() returns TIMESTAMPTZ, which strftime renders
+        # in the session time zone; a run on a UTC-negative host once labelled every
+        # 00:00-UTC snapshot of day 1 with the previous month. timezone('UTC', ...) pins it.
         "strftime("
         f"CASE WHEN typeof({column}) IN ('BIGINT','INTEGER','HUGEINT','UBIGINT') "
-        f"THEN to_timestamp(CAST({column} AS BIGINT) / 1000) "
+        f"THEN timezone('UTC', to_timestamp(CAST({column} AS BIGINT) / 1000)) "
         f"ELSE CAST({column} AS TIMESTAMP) END, '%Y-%m') AS month"
     )
 
@@ -271,6 +274,7 @@ def extract_days(
     out_dir = ensure_dir(checkpoint_dir)
 
     con = duckdb.connect()
+    con.execute("SET TimeZone='UTC'")  # month labels must not depend on the host
     if threads:
         con.execute(f"SET threads={int(threads)}")
     if memory_limit:

@@ -23,6 +23,10 @@ from datetime import date
 from pathlib import Path
 
 import pandas as pd
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "scripts"))
+import _run_paths  # noqa: E402  (DNSSEC_SERVER_RUN / DNSSEC_PANEL_RUN select the runs)
 
 #: Ordered. First rule that matches wins, and the rule name is recorded on the
 #: row so a disputed classification can be argued with rather than guessed at.
@@ -122,6 +126,10 @@ def build_index(inv: dict) -> dict[str, dict]:
             note(rec, "nvd-keyword", keyword=term)
     for proj, recs in inv["fixes"].items():
         for rec in recs:
+            if rec.get("not_applicable"):
+                # Judged not a fix in this program (see not_applicable_reason); the CVE
+                # still counts through its other sources, but not as this program's fix.
+                continue
             note({"cve": rec["cve"], "description": rec.get("subject", "")}, "git", project=proj)
             rows[rec["cve"]]["fixes"][proj] = {
                 "commit_date": rec.get("commit_date"), "release": rec.get("fix_release"),
@@ -248,7 +256,7 @@ def deployment_context(rows: dict, timeline: Path) -> list[dict]:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--inventory", type=Path, default=Path("data/software/cve_inventory.json"))
-    ap.add_argument("--timeline", type=Path, default=Path("out/server_run/timeline_monthly.parquet"))
+    ap.add_argument("--timeline", type=Path, default=_run_paths.server_timeline())
     ap.add_argument("--out", type=Path, default=Path("out/analysis/cve_crossref.json"))
     args = ap.parse_args()
 

@@ -183,6 +183,8 @@ def delegation(out: Path) -> None:
         print("  (skipping delegation exports: run scripts/delegation_changes.py first)")
         return
     df = pd.read_parquet(led)
+    # Sort so reruns are byte-identical; the parquet's row order is not stable.
+    df = df.sort_values(list(df.columns), kind="mergesort", na_position="first").reset_index(drop=True)
     df.to_csv(out / "dns_delegation_changes.csv", index=False, lineterminator="\n")
     print(f"  {out / 'dns_delegation_changes.csv'}  ({len(df)} rows)")
     for name, fname in (("delegation_change_clusters", "dns_delegation_actions.csv"),

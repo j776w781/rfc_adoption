@@ -937,7 +937,7 @@
       {
         "cve": "CVE-2026-50252",
         "published": "2026-07-22",
-        "description": "In NLnet Labs Unbound 1.4.22 up to and including 1.25.1, UDP source port is randomized and intended to serve as a secret value that increases the entropy of DNS transactions. When resolver load balancing policies depend on the source port while their outcome is revealed this secrecy is undermined. The vulnerability arises when the load balancing policy is consistent with respect to the incoming source UDP port and IP address while heavily depending on the incoming source UDP port as a randomization source. When the SO_REUSEPORT configuration option is enabled ('so-reuseport: yes') in Unbound (by default), it meets these conditions, making it vulnerable for DNS cache poisoning attacks. Upon startup, Unbound randomly partitions the available UDP source port space into disjoint subsets of (almost) equal size, assigning each subset to a specific worker thread. When an incoming DNS query is received, the kernel\u2019s SO_REUSEPORT load balancing mechanism deterministically assigns the query to a socket associated with a particular thread. All outgoing DNS queries generated during the resolution of that request use source ports selected exclusively from the port subset assigned to the corresponding thread. Since these port subsets are disjoint across threads, the source port observed in a resolver\u2019s outgoing query to an authoritative name server serves as a reliable indicator of the worker thread that processed the original client query. A malicious actor can acquire the mapping between incoming UDP source ports (for a given fixed source IP address) and Unbound worker threads and leverage it to conduct DNS cache poisoning attacks by effectively lowering the random port population per thread.",
+        "description": "In NLnet Labs Unbound 1.4.22 up to and including 1.25.1, UDP source port is randomized and intended to serve as a secret value that increases the entropy of DNS transactions. When resolver load balancing policies depend on the source port while their outcome is revealed this secrecy is undermined. The vulnerability arises when the load balancing policy is consistent with respect to the incoming source UDP port and IP address while heavily depending on the incoming source UDP port as a randomization source. When the SO_REUSEPORT configuration option is enabled ('so-reuseport: yes') in Unbound (by default), it meets these conditions, making it vulnerable for DNS cache poisoning attacks. Upon startup, Unbound randomly partitions the available UDP source port space into disjoint subsets of (almost) equal size, assigning each subset to a specific worker thread. When an incoming DNS query is received, the kernel’s SO_REUSEPORT load balancing mechanism deterministically assigns the query to a socket associated with a particular thread. All outgoing DNS queries generated during the resolution of that request use source ports selected exclusively from the port subset assigned to the corresponding thread. Since these port subsets are disjoint across threads, the source port observed in a resolver’s outgoing query to an authoritative name server serves as a reliable indicator of the worker thread that processed the original client query. A malicious actor can acquire the mapping between incoming UDP source ports (for a given fixed source IP address) and Unbound worker threads and leverage it to conduct DNS cache poisoning attacks by effectively lowering the random port population per thread.",
         "cvss": 9.3,
         "severity": "CRITICAL",
         "cwe": [
@@ -1015,7 +1015,7 @@
       {
         "cve": "CVE-2026-55990",
         "published": "2026-07-22",
-        "description": "In NLnet Labs Unbound 1.7.0 up to and including 1.25.1, when the 'dnscrypt:' clause lists more 'dnscrypt-provider-cert:' files than there are matching 'dnscrypt-secret-key:' files, Unbound fills only the matched prefix and leaves the tail slots at the '0xdb' fill that libsodium's allocator writes into every allocation. Unbound would then iterate over the number of cert files, not the actual slots, so it walks into a slot with garbage data filled with '0xdb' bytes. Any unauthenticated client that sends one UDP datagram of \u2265 68 bytes whose first 8 bytes are '0xdb' to 'dnscrypt-port' will use that garbage entry which leads to a garbage dereference killing the server. This is a silent faulty configuration that goes unnoticed until triggered with the right client query. Unbound needs to be compiled with DNSCrypt support ('--enable-dnscrypt').",
+        "description": "In NLnet Labs Unbound 1.7.0 up to and including 1.25.1, when the 'dnscrypt:' clause lists more 'dnscrypt-provider-cert:' files than there are matching 'dnscrypt-secret-key:' files, Unbound fills only the matched prefix and leaves the tail slots at the '0xdb' fill that libsodium's allocator writes into every allocation. Unbound would then iterate over the number of cert files, not the actual slots, so it walks into a slot with garbage data filled with '0xdb' bytes. Any unauthenticated client that sends one UDP datagram of ≥ 68 bytes whose first 8 bytes are '0xdb' to 'dnscrypt-port' will use that garbage entry which leads to a garbage dereference killing the server. This is a silent faulty configuration that goes unnoticed until triggered with the right client query. Unbound needs to be compiled with DNSCrypt support ('--enable-dnscrypt').",
         "cvss": 5.9,
         "severity": "MEDIUM",
         "cwe": [
@@ -1137,6 +1137,16 @@
           "https://github.com/sischkg/xfer-limit/blob/master/README.md",
           "https://lists.dns-oarc.net/pipermail/dns-operations/2016-July/015058.html"
         ]
+      },
+      {
+        "cve": "CVE-2019-13207",
+        "published": "2019-07-03",
+        "description": "Stack-based buffer overflow in the dname_concatenate() function in NSD 4.2.0 (see fixes.nsd).",
+        "cvss": null,
+        "severity": null,
+        "cwe": [],
+        "refs": [],
+        "source": "Phase 3 verify/nsd.md: NVD API 2026-09-29 published 2019-07-03T20:15:11; the CPE query had not returned this CVE."
       },
       {
         "cve": "CVE-2026-12244",
@@ -4338,7 +4348,7 @@
       {
         "cve": "CVE-2026-5946",
         "published": "2026-05-20",
-        "description": "Multiple flaws have been identified in `named` related to the handling of DNS messages whose CLASS is not Internet (`IN`) \u2014 for example, `CHAOS` or `HESIOD`, or DNS messages that specify meta-classes (`ANY` or `NONE`) in the question section. Specially crafted requests reaching the affected code paths \u2014 recursion, dynamic updates (`UPDATE`), zone change notifications (`NOTIFY`), or processing of `IN`-specific record types in non-`IN` data \u2014 can cause assertion failures in `named`.\nThis issue affects BIND 9 versions 9.11.0 through 9.16.50, 9.18.0 through 9.18.48, 9.20.0 through 9.20.22, 9.21.0 through 9.21.21, 9.11.3-S1 through 9.16.50-S1, 9.18.11-S1 through 9.18.48-S1, and 9.20.9-S1 through 9.20.22-S1.",
+        "description": "Multiple flaws have been identified in `named` related to the handling of DNS messages whose CLASS is not Internet (`IN`) — for example, `CHAOS` or `HESIOD`, or DNS messages that specify meta-classes (`ANY` or `NONE`) in the question section. Specially crafted requests reaching the affected code paths — recursion, dynamic updates (`UPDATE`), zone change notifications (`NOTIFY`), or processing of `IN`-specific record types in non-`IN` data — can cause assertion failures in `named`.\nThis issue affects BIND 9 versions 9.11.0 through 9.16.50, 9.18.0 through 9.18.48, 9.20.0 through 9.20.22, 9.21.0 through 9.21.21, 9.11.3-S1 through 9.16.50-S1, 9.18.11-S1 through 9.18.48-S1, and 9.20.9-S1 through 9.20.22-S1.",
         "cvss": 7.5,
         "severity": "HIGH",
         "cwe": [
@@ -7807,7 +7817,7 @@
       {
         "cve": "CVE-2026-28810",
         "published": "2026-04-07",
-        "description": "Generation of Predictable Numbers or Identifiers vulnerability in Erlang/OTP kernel (inet_res, inet_db modules) allows DNS Cache Poisoning.\n\nThe built-in DNS resolver (inet_res) uses a sequential, process-global 16-bit transaction ID for UDP queries and does not implement source port randomization. Response validation relies almost entirely on this ID, making DNS cache poisoning practical for an attacker who can observe one query or predict the next ID. This conflicts with RFC 5452 recommendations for mitigating forged DNS answers.\n\ninet_res is intended for use in trusted network environments and with trusted recursive resolvers. Earlier documentation did not clearly state this deployment assumption, which could lead users to deploy the resolver in environments where spoofed DNS responses are possible.\n\nThis vulnerability is associated with program files lib/kernel/src/inet_db.erl and lib/kernel/src/inet_res.erl.\n\nThis issue affects OTP from OTP 17.0 before OTP\u00a028.4.2, OTP\u00a027.3.4.10 and OTP\u00a026.2.5.19, corresponding to kernel from 3.0 before 10.6.2, 10.2.7.4 and 9.2.4.11.",
+        "description": "Generation of Predictable Numbers or Identifiers vulnerability in Erlang/OTP kernel (inet_res, inet_db modules) allows DNS Cache Poisoning.\n\nThe built-in DNS resolver (inet_res) uses a sequential, process-global 16-bit transaction ID for UDP queries and does not implement source port randomization. Response validation relies almost entirely on this ID, making DNS cache poisoning practical for an attacker who can observe one query or predict the next ID. This conflicts with RFC 5452 recommendations for mitigating forged DNS answers.\n\ninet_res is intended for use in trusted network environments and with trusted recursive resolvers. Earlier documentation did not clearly state this deployment assumption, which could lead users to deploy the resolver in environments where spoofed DNS responses are possible.\n\nThis vulnerability is associated with program files lib/kernel/src/inet_db.erl and lib/kernel/src/inet_res.erl.\n\nThis issue affects OTP from OTP 17.0 before OTP 28.4.2, OTP 27.3.4.10 and OTP 26.2.5.19, corresponding to kernel from 3.0 before 10.6.2, 10.2.7.4 and 9.2.4.11.",
         "cvss": 3.7,
         "severity": "LOW",
         "refs": [
@@ -7879,7 +7889,7 @@
       {
         "cve": "CVE-2026-50252",
         "published": "2026-07-22",
-        "description": "In NLnet Labs Unbound 1.4.22 up to and including 1.25.1, UDP source port is randomized and intended to serve as a secret value that increases the entropy of DNS transactions. When resolver load balancing policies depend on the source port while their outcome is revealed this secrecy is undermined. The vulnerability arises when the load balancing policy is consistent with respect to the incoming source UDP port and IP address while heavily depending on the incoming source UDP port as a randomization source. When the SO_REUSEPORT configuration option is enabled ('so-reuseport: yes') in Unbound (by default), it meets these conditions, making it vulnerable for DNS cache poisoning attacks. Upon startup, Unbound randomly partitions the available UDP source port space into disjoint subsets of (almost) equal size, assigning each subset to a specific worker thread. When an incoming DNS query is received, the kernel\u2019s SO_REUSEPORT load balancing mechanism deterministically assigns the query to a socket associated with a particular thread. All outgoing DNS queries generated during the resolution of that request use source ports selected exclusively from the port subset assigned to the corresponding thread. Since these port subsets are disjoint across threads, the source port observed in a resolver\u2019s outgoing query to an authoritative name server serves as a reliable indicator of the worker thread that processed the original client query. A malicious actor can acquire the mapping between incoming UDP source ports (for a given fixed source IP address) and Unbound worker threads and leverage it to conduct DNS cache poisoning attacks by effectively lowering the random port population per thread.",
+        "description": "In NLnet Labs Unbound 1.4.22 up to and including 1.25.1, UDP source port is randomized and intended to serve as a secret value that increases the entropy of DNS transactions. When resolver load balancing policies depend on the source port while their outcome is revealed this secrecy is undermined. The vulnerability arises when the load balancing policy is consistent with respect to the incoming source UDP port and IP address while heavily depending on the incoming source UDP port as a randomization source. When the SO_REUSEPORT configuration option is enabled ('so-reuseport: yes') in Unbound (by default), it meets these conditions, making it vulnerable for DNS cache poisoning attacks. Upon startup, Unbound randomly partitions the available UDP source port space into disjoint subsets of (almost) equal size, assigning each subset to a specific worker thread. When an incoming DNS query is received, the kernel’s SO_REUSEPORT load balancing mechanism deterministically assigns the query to a socket associated with a particular thread. All outgoing DNS queries generated during the resolution of that request use source ports selected exclusively from the port subset assigned to the corresponding thread. Since these port subsets are disjoint across threads, the source port observed in a resolver’s outgoing query to an authoritative name server serves as a reliable indicator of the worker thread that processed the original client query. A malicious actor can acquire the mapping between incoming UDP source ports (for a given fixed source IP address) and Unbound worker threads and leverage it to conduct DNS cache poisoning attacks by effectively lowering the random port population per thread.",
         "cvss": 9.3,
         "severity": "CRITICAL",
         "refs": [
@@ -7895,64 +7905,88 @@
         "commit_date": "2021-01-07",
         "sha": "abed9404d11049a9e6db5fcf9c13b986f6bfe5f2",
         "subject": "Fix off-by-one bug in ISC SPNEGO implementation",
-        "fix_release": "9.11.29",
-        "fix_released": "2021-03-09"
+        "fix_release": "9.16.12",
+        "fix_released": "2021-02-04",
+        "fix_release_was": "9.11.29",
+        "fix_released_was": "2021-03-09",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.16.12 by UTC instant."
       },
       {
         "cve": "CVE-2008-0122",
         "commit_date": "2008-01-15",
         "sha": "696e426c27a11982e0093ddc9664b2cd7821a7db",
         "subject": "2305.   [security]      inet_network() buffer overflow. CVE-2008-0122.",
-        "fix_release": "9.4.3",
-        "fix_released": "2008-11-12"
+        "fix_release": "9.3.5",
+        "fix_released": "2008-04-03",
+        "fix_release_was": "9.4.3",
+        "fix_released_was": "2008-11-12",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.3.5. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2010-3613",
         "commit_date": "2010-11-25",
         "sha": "bbac4157e5382c563593a02c9b7ab82d3d5e2a6e",
         "subject": "CVE-2010-3613 Reduce complexity from M to L raising score from 7.1 to 7.8. Just have the base CVSS vectors.",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.4-ESV-R4",
+        "fix_released": "2010-11-29",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.4-ESV-R4. "
       },
       {
         "cve": "CVE-2013-4854",
         "commit_date": "2013-07-17",
         "sha": "c04e1ac111fb72a72c1a69856adeb51cbc7158f9",
         "subject": "3621.   [security]      Incorrect bounds checking on private type 'keydata'                         can lead to a remotely triggerable REQUIRE failure",
-        "fix_release": "9.8.6",
-        "fix_released": "2013-09-04"
+        "fix_release": "9.8.5-P2",
+        "fix_released": "2013-07-17",
+        "fix_release_was": "9.8.6",
+        "fix_released_was": "2013-09-04",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.8.5-P2. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2014-3214",
         "commit_date": "2014-05-09",
         "sha": "571312e8a59b256a765d6dd9788c8c579c451d7b",
         "subject": "Add CVE-2014-3214 to README",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.10.0-P2",
+        "fix_released": "2014-05-27",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.10.0-P2. "
       },
       {
         "cve": "CVE-2014-3859",
         "commit_date": "2014-05-26",
         "sha": "88f339e1615eba5168ed17d73d8ca6a33c0a47cd",
         "subject": "add CVE-2014-3859",
-        "fix_release": "9.8.8",
-        "fix_released": "2014-09-16"
+        "fix_release": "9.10.0-P2",
+        "fix_released": "2014-05-27",
+        "fix_release_was": "9.8.8",
+        "fix_released_was": "2014-09-16",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.10.0-P2. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2014-8500",
         "commit_date": "2014-11-17",
         "sha": "603a0e2637b35a2da820bc807f69bcf09c682dce",
         "subject": "[v9_9] limit recursion depth and iterative queries",
-        "fix_release": "9.9.7",
-        "fix_released": "2015-02-18"
+        "fix_release": "9.10.1-P1",
+        "fix_released": "2014-11-20",
+        "fix_release_was": "9.9.7",
+        "fix_released_was": "2015-02-18",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.10.1-P1. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2015-1349",
         "commit_date": "2015-02-03",
         "sha": "12df718c23e29b16fcb5c12eace4b4a924de104d",
         "subject": "[v9_10_1_patch] avoid crash due to managed-key rollover",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.6-P2",
+        "fix_released": "2015-02-11",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.6-P2. "
       },
       {
         "cve": "CVE-2015-3193",
@@ -7960,287 +7994,394 @@
         "sha": "559236b5e4444a6d6f99d99c9446c52dcbc6dd22",
         "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "BIND only widened the OpenSSL version gate in configure (CHANGES 4270, 559236b5e4); no BIND source changed. Not counted as a BIND fix."
       },
       {
         "cve": "CVE-2015-4620",
         "commit_date": "2015-06-17",
         "sha": "ea8ede0996eb676f87f6cd64d88234209d638427",
         "subject": "add release notes for CVE-2015-4620",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.7-P1",
+        "fix_released": "2015-06-17",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.7-P1. "
       },
       {
         "cve": "CVE-2015-5477",
         "commit_date": "2015-07-14",
         "sha": "2d38b2ea688911e400c296a6998194a8fa97e059",
         "subject": "4165.   [bug]           An failure to reset a value to NULL in tkey.c could                         result in an assertion failure. (CVE-2015-5477)   ",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.7-P2",
+        "fix_released": "2015-07-14",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.7-P2. "
       },
       {
         "cve": "CVE-2015-5722",
         "commit_date": "2015-08-07",
         "sha": "5121cfb853abcad33bac36399dfad0eb7ae09b1a",
         "subject": "[v9_9_7_patch] address buffer accounting error",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.10.2-P4",
+        "fix_released": "2015-08-15",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.10.2-P4. "
       },
       {
         "cve": "CVE-2015-8000",
         "commit_date": "2015-11-16",
         "sha": "490970d0614214b477085adf5aa021690194b0b8",
         "subject": "4260.   [security]      Insufficient testing when parsing a message allowed                         records with an incorrect class to be be accepted,",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.8-P2",
+        "fix_released": "2015-12-06",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.8-P2. "
       },
       {
         "cve": "CVE-2015-8461",
         "commit_date": "2015-12-03",
         "sha": "b3763abaebf96212af9c78cdf88a56f87eb1c32b",
         "subject": "Add CVE-2015-8461",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.8-P2",
+        "fix_released": "2015-12-06",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.8-P2. "
       },
       {
         "cve": "CVE-2015-8704",
         "commit_date": "2015-12-31",
         "sha": "fb17e1f9a2e34211af8d42f513bc63a26972674c",
         "subject": "4285.   [security]      Specific APL data could trigger a INSIST.                         (CVE-2015-8704) [RT #41396]",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.8-P3",
+        "fix_released": "2016-01-06",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.8-P3. "
       },
       {
         "cve": "CVE-2015-8705",
         "commit_date": "2015-12-31",
         "sha": "292eb9c4e4fc51aec911e72821735a123a8c252a",
         "subject": "4286.   [security]      render_ecs errors were mishandled when printing out                         a OPT record resulting in a assertion failure.    ",
-        "fix_release": "9.11.0",
-        "fix_released": "2016-09-29"
+        "fix_release": "9.10.3-P3",
+        "fix_released": "2016-01-06",
+        "fix_release_was": "9.11.0",
+        "fix_released_was": "2016-09-29",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.10.3-P3. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2016-1285",
         "commit_date": "2016-02-18",
         "sha": "70037e040e587329cec82123e12b9f4f7c945f67",
         "subject": "4318.   [security]      Malformed control messages can trigger assertions                         in named and rndc. (CVE-2016-1285) [RT #41666]",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.10.3-P4",
+        "fix_released": "2016-02-29",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.10.3-P4. "
       },
       {
         "cve": "CVE-2016-1286",
         "commit_date": "2016-02-22",
         "sha": "a0ac100c73de73c7733aff0a29f9ff0f206c1249",
         "subject": "add CVE-2016-1286 to -P4 summary. Fix misspelling",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.10.3-P4",
+        "fix_released": "2016-02-29",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.10.3-P4. "
       },
       {
         "cve": "CVE-2016-2088",
         "commit_date": "2016-02-27",
         "sha": "d9ec4ca4b6946ebba5d6f60f28f9725fa4232bf7",
         "subject": "add CVE-2016-2088",
-        "fix_release": "9.11.0",
-        "fix_released": "2016-09-29"
+        "fix_release": "9.10.3-P4",
+        "fix_released": "2016-02-29",
+        "fix_release_was": "9.11.0",
+        "fix_released_was": "2016-09-29",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.10.3-P4. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2016-2775",
         "commit_date": "2016-07-12",
         "sha": "d05f0b2479e0ec871cc0aade79ac47ac7f994de5",
         "subject": "add CVE-2016-2775",
-        "fix_release": "9.9.10",
-        "fix_released": "2017-04-14"
+        "fix_release": "9.9.9-P2",
+        "fix_released": "2016-07-13",
+        "fix_release_was": "9.9.10",
+        "fix_released_was": "2017-04-14",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.9.9-P2. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2016-2776",
         "commit_date": "2016-09-09",
         "sha": "19ddeca79b322bfd2a4a49ec2f438061d4487038",
         "subject": "add CVE-2016-2776",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.9-P3",
+        "fix_released": "2016-09-09",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.9-P3. "
       },
       {
         "cve": "CVE-2016-6170",
         "commit_date": "2016-11-02",
         "sha": "1bbcfe2fc84f57b1e4e075fb3bc2a1dd0a3a851f",
         "subject": "4504.   [security]      Allow the maximum number of records in a zone to                         be specified.  This provides a control for issues    ",
-        "fix_release": "9.10.5",
-        "fix_released": "2017-04-14"
+        "fix_release": "9.9.10",
+        "fix_released": "2017-04-14",
+        "fix_release_was": "9.10.5",
+        "fix_released_was": "2017-04-14",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.9.10. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2016-8864",
         "commit_date": "2016-10-21",
         "sha": "1e9bd53d5ef77ab02ac293af6962ec23e10d9598",
         "subject": "CVE-2016-8864",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.10.4-P4",
+        "fix_released": "2016-10-21",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.10.4-P4. "
       },
       {
         "cve": "CVE-2016-9131",
         "commit_date": "2016-11-03",
         "sha": "af3e823fbb2a0dd990477b03c297da54d409ba5b",
         "subject": "CVE-2016-9131",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.9-P5",
+        "fix_released": "2016-12-11",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.9-P5. "
       },
       {
         "cve": "CVE-2016-9147",
         "commit_date": "2016-11-04",
         "sha": "e1bbc2df2a4543164fc77078015a4f8c7558ff63",
         "subject": "CVE-2016-9147",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.9-P5",
+        "fix_released": "2016-12-11",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.9-P5. "
       },
       {
         "cve": "CVE-2016-9444",
         "commit_date": "2016-11-22",
         "sha": "69cb8ebf157183d9c36a9813f945348dd81b521f",
         "subject": "4517.   [security]      Named could mishandle authority sections that were                         missing RRSIGs triggering an assertion failure.    ",
-        "fix_release": "9.9.10",
-        "fix_released": "2017-04-14"
+        "fix_release": "9.9.9-P5",
+        "fix_released": "2016-12-11",
+        "fix_release_was": "9.9.10",
+        "fix_released_was": "2017-04-14",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.9.9-P5. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2016-9778",
         "commit_date": "2016-12-09",
         "sha": "28a798c5462658902cbc2c1a900450a607720041",
         "subject": "4531.   [security]      'is_zone' was not being properly updated by redirect2                         and subsequently preserved leading to an asserti",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.9-P5",
+        "fix_released": "2016-12-11",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.9-P5. "
       },
       {
         "cve": "CVE-2017-3135",
         "commit_date": "2017-01-24",
         "sha": "18133a3be825f948e59f6fbd306d81e34cd2941a",
         "subject": "4556.   [security]      Combining dns64 and rpz can result in dereferencing                         a NULL pointer (read).  (CVE-2017-3135) [RT#44434]",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.11.0-P3",
+        "fix_released": "2017-01-31",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.11.0-P3. "
       },
       {
         "cve": "CVE-2017-3136",
         "commit_date": "2017-02-15",
         "sha": "009c98a1be620ab8842ddc57f383705c3cc49b89",
         "subject": "add CVE-2017-3136 note",
-        "fix_release": "9.12.0",
-        "fix_released": "2018-01-17"
+        "fix_release": "9.9.9-P8",
+        "fix_released": "2017-03-29",
+        "fix_release_was": "9.12.0",
+        "fix_released_was": "2018-01-17",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.9.9-P8. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2017-3137",
         "commit_date": "2017-02-23",
         "sha": "667e214d9b53c17b2e2c372af3f1fdc0f0275d16",
         "subject": "[v9_11_0_patch] remove unnecessary INSIST and prep 9.11.1-P4",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.9-P8",
+        "fix_released": "2017-03-29",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.9-P8. "
       },
       {
         "cve": "CVE-2017-3138",
         "commit_date": "2017-03-25",
         "sha": "fc448082904ce2eae78603c4c6e4849582c26c29",
         "subject": "4582.   [security]      'rndc \"\"' could trigger a assertion failure in named.                         (CVE-2017-3138) [RT #44924]",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.9-P8",
+        "fix_released": "2017-03-29",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.9-P8. "
       },
       {
         "cve": "CVE-2017-3140",
         "commit_date": "2017-05-30",
         "sha": "ea4826f9b21ccb91cce6c2aabdbe0f807f9441b0",
         "subject": "[v9_9_10_patch] fix rpz formerr loop",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.10-P1",
+        "fix_released": "2017-05-31",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.10-P1. "
       },
       {
         "cve": "CVE-2017-3141",
         "commit_date": "2017-05-30",
         "sha": "8b34d90c163c302ed528c9c9d077c013059add17",
         "subject": "[v9_9_10_patch] quote service registry paths",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.9.10-P1",
+        "fix_released": "2017-05-31",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.9.10-P1. "
       },
       {
         "cve": "CVE-2017-3142",
         "commit_date": "2017-06-27",
         "sha": "e9eddde3ff6a7a1541835e8cc2f0c49af985ef73",
         "subject": "[v9_9_10_patch] address TSIG bypass/forgery vulnerabilities",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.11.1-P2",
+        "fix_released": "2017-06-28",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.11.1-P2. "
       },
       {
         "cve": "CVE-2017-3143",
         "commit_date": "2017-06-27",
         "sha": "e9eddde3ff6a7a1541835e8cc2f0c49af985ef73",
         "subject": "[v9_9_10_patch] address TSIG bypass/forgery vulnerabilities",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.11.1-P2",
+        "fix_released": "2017-06-28",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.11.1-P2. "
       },
       {
         "cve": "CVE-2017-3145",
         "commit_date": "2018-01-03",
         "sha": "3b530688c2b17743d595300030f5909586e1af6e",
         "subject": "[v9_9_11_patch] prevent use-after-free",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.11.2-P1",
+        "fix_released": "2018-01-04",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.11.2-P1. "
       },
       {
         "cve": "CVE-2018-5737",
         "commit_date": "2018-05-21",
         "sha": "5f5fac6b92d8ecad2955576c9d716a930d047a66",
         "subject": "Merge branch '185-fix-changes-entry' into 'master'",
-        "fix_release": "9.13.0",
-        "fix_released": "2018-05-22"
+        "fix_release": "9.12.1-P2",
+        "fix_released": "2018-05-16",
+        "fix_release_was": "9.13.0",
+        "fix_released_was": "2018-05-22",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.12.1-P2. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2018-5740",
         "commit_date": "2018-08-08",
         "sha": "791c6087af9d9331fcb15ddf6b4fc7be1347ccc0",
         "subject": "Merge branch 'security-v9_11' into 'v9_11'",
-        "fix_release": "9.11.5",
-        "fix_released": "2018-10-06"
+        "fix_release": "9.12.2-P1",
+        "fix_released": "2018-07-24",
+        "fix_release_was": "9.11.5",
+        "fix_released_was": "2018-10-06",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.12.2-P1. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2019-6467",
         "commit_date": "2019-04-25",
         "sha": "911a45896a5b85c4621cd1c3e58dea86510802ba",
         "subject": "Merge branch '880-secure-asdfasdfasdf-abacadabra-crash-v9_12_4_patch-v9_12' into 'v9_12'",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.12.4-P1",
+        "fix_released": "2019-04-06",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.12.4-P1. "
       },
       {
         "cve": "CVE-2019-6477",
         "commit_date": "2019-12-11",
         "sha": "88497a59cc0c383442d1af108dab6ac97e062243",
         "subject": "Fix release notes for BIND 9.15.6",
-        "fix_release": "9.15.7",
-        "fix_released": "2019-12-13"
+        "fix_release": "9.14.8",
+        "fix_released": "2019-11-06",
+        "fix_release_was": "9.15.7",
+        "fix_released_was": "2019-12-13",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.14.8. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2020-8616",
         "commit_date": "2020-05-19",
         "sha": "2b28dd5d40893fdf9d237df9fa7fabf2738262a0",
         "subject": "Merge branch 'v9_11_19-release' into 'v9_11'",
-        "fix_release": "9.11.20",
-        "fix_released": "2020-06-10"
+        "fix_release": "9.16.3",
+        "fix_released": "2020-05-06",
+        "fix_release_was": "9.11.20",
+        "fix_released_was": "2020-06-10",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.3. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2020-8617",
         "commit_date": "2020-05-19",
         "sha": "2b28dd5d40893fdf9d237df9fa7fabf2738262a0",
         "subject": "Merge branch 'v9_11_19-release' into 'v9_11'",
-        "fix_release": "9.11.20",
-        "fix_released": "2020-06-10"
+        "fix_release": "9.16.3",
+        "fix_released": "2020-05-06",
+        "fix_release_was": "9.11.20",
+        "fix_released_was": "2020-06-10",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.3. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2020-8618",
         "commit_date": "2020-06-18",
         "sha": "8aed0ff51a4cc04090419ba242d0d1d1a7dcb33b",
         "subject": "Merge branch 'v9_16_4-release' into 'v9_16'",
-        "fix_release": "9.16.5",
-        "fix_released": "2020-07-03"
+        "fix_release": "9.16.4",
+        "fix_released": "2020-06-10",
+        "fix_release_was": "9.16.5",
+        "fix_released_was": "2020-07-03",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.4. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2020-8619",
         "commit_date": "2020-06-18",
         "sha": "7dd9f979b5fa6b11738b96c6d0a3120cc0c73a0c",
         "subject": "Merge branch 'v9_11_20-release' into 'v9_11'",
-        "fix_release": "9.11.21",
-        "fix_released": "2020-07-03"
+        "fix_release": "9.11.20",
+        "fix_released": "2020-06-10",
+        "fix_release_was": "9.11.21",
+        "fix_released_was": "2020-07-03",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.11.20. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2020-8620",
@@ -8287,80 +8428,110 @@
         "commit_date": "2021-02-04",
         "sha": "dc5f0e77ecef88ebbefd368b62b1a3840b1a081d",
         "subject": "Merge branch '2354-security-off-by-one-error-in-spnego-v9_11' into 'security-v9_11'",
-        "fix_release": "9.11.29",
-        "fix_released": "2021-03-09"
+        "fix_release": "9.16.12",
+        "fix_released": "2021-02-04",
+        "fix_release_was": "9.11.29",
+        "fix_released_was": "2021-03-09",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.12. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2021-25214",
         "commit_date": "2021-04-12",
         "sha": "44a7cc73b5e0458ff9399e0a2351f3178befc7b6",
         "subject": "Merge branch '2467-confidential-issue-ixfr-checks-v9_11' into 'security-v9_11'",
-        "fix_release": "9.11.32",
-        "fix_released": "2021-05-12"
+        "fix_release": "9.16.15",
+        "fix_released": "2021-04-19",
+        "fix_release_was": "9.11.32",
+        "fix_released_was": "2021-05-12",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.15. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2021-25215",
         "commit_date": "2021-04-12",
         "sha": "3c5c4bc2b4270d72a76d52a7226845c90cced437",
         "subject": "Merge branch '2540-confidential-issue-existing-dname-v9_11' into 'security-v9_11'",
-        "fix_release": "9.11.32",
-        "fix_released": "2021-05-12"
+        "fix_release": "9.16.15",
+        "fix_released": "2021-04-19",
+        "fix_release_was": "9.11.32",
+        "fix_released_was": "2021-05-12",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.15. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2021-25216",
         "commit_date": "2021-04-12",
         "sha": "8736b29be84c4c13469343af4b235ad283042ff1",
         "subject": "Merge branch '2604-confidential-issue-spnego-v9_11' into 'security-v9_11'",
-        "fix_release": "9.11.32",
-        "fix_released": "2021-05-12"
+        "fix_release": "9.16.15",
+        "fix_released": "2021-04-19",
+        "fix_release_was": "9.11.32",
+        "fix_released_was": "2021-05-12",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.15. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2021-25218",
         "commit_date": "2021-08-06",
         "sha": "513e58d53aff2ade611e56c9ce8c2664ad2488ac",
         "subject": "Merge branch '2839-confidential-rrl-msgsize' into 'security-main'",
-        "fix_release": "9.17.18",
-        "fix_released": "2021-09-07"
+        "fix_release": "9.16.20",
+        "fix_released": "2021-08-10",
+        "fix_release_was": "9.17.18",
+        "fix_released_was": "2021-09-07",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.20. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2021-25219",
         "commit_date": "2021-10-11",
         "sha": "4866c50c445a680e9ad63bd61f248673cb97d462",
         "subject": "Merge branch '2899-security-disable-lame-cache-v9_11' into 'security-v9_11'",
-        "fix_release": "9.11.37",
-        "fix_released": "2022-03-07"
+        "fix_release": "9.11.36",
+        "fix_released": "2021-10-11",
+        "fix_release_was": "9.11.37",
+        "fix_released_was": "2022-03-07",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.11.36. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2021-25220",
         "commit_date": "2022-03-03",
         "sha": "f1bc36f19362f9f2173bf9511e85781058f19c64",
         "subject": "Merge branch '2950-confidential-cache-acceptance-rules-v9_16' into 'security-v9_16'",
-        "fix_release": "9.16.28",
-        "fix_released": "2022-04-11"
+        "fix_release": "9.18.1",
+        "fix_released": "2022-03-07",
+        "fix_release_was": "9.16.28",
+        "fix_released_was": "2022-04-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.1. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-0396",
         "commit_date": "2022-03-03",
         "sha": "6066c45496851af4a43dcdc559c01a88932029a6",
         "subject": "Merge branch '3112-ensure-correct-ordering-in-isc__nm_process_sock_buffer-v9_16' into 'security-v9_16'",
-        "fix_release": "9.16.28",
-        "fix_released": "2022-04-11"
+        "fix_release": "9.18.1",
+        "fix_released": "2022-03-07",
+        "fix_release_was": "9.16.28",
+        "fix_released_was": "2022-04-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.1. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-0635",
         "commit_date": "2022-02-17",
         "sha": "072e77dc9d0b1e8dd0a69e86b8c8ffc34e98434b",
         "subject": "Add regression test for CVE-2022-0635",
-        "fix_release": "9.18.2",
-        "fix_released": "2022-04-11"
+        "fix_release": "9.18.1",
+        "fix_released": "2022-03-07",
+        "fix_release_was": "9.18.2",
+        "fix_released_was": "2022-04-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.1. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-0667",
         "commit_date": "2022-03-03",
         "sha": "29eee12ccb056dff91f404228394b048078f22d0",
         "subject": "Merge branch '3129-check-fetch-shutting-down-in-resume_dslookup-v9_18' into 'security-v9_18'",
-        "fix_release": "9.18.2",
-        "fix_released": "2022-04-11"
+        "fix_release": "9.18.1",
+        "fix_released": "2022-03-07",
+        "fix_release_was": "9.18.2",
+        "fix_released_was": "2022-04-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.1. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-1183",
@@ -8375,8 +8546,11 @@
         "commit_date": "2022-09-06",
         "sha": "f7b9bb551850baaad952ac87c960647ba6e22e62",
         "subject": "Add tests for CVE-2022-2795",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.18.7",
+        "fix_released": "2022-09-08",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.18.7. "
       },
       {
         "cve": "CVE-2022-2881",
@@ -8399,24 +8573,33 @@
         "commit_date": "2022-09-08",
         "sha": "b3abc2a844669b5e3106d225d19c625aed21328f",
         "subject": "Merge branch '3517-serve-stale-client-timeout-0-cname-crash-v9_16' into 'security-v9_16'",
-        "fix_release": "9.16.33",
-        "fix_released": "2022-09-08"
+        "fix_release": "9.18.7",
+        "fix_released": "2022-09-08",
+        "fix_release_was": "9.16.33",
+        "fix_released_was": "2022-09-08",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.7. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-3094",
         "commit_date": "2023-01-12",
         "sha": "82185f4f80d2fa39a4569f6740cb360ffff8f5c4",
         "subject": "Merge branch '3523-confidential-update-quota-v9_16' into 'security-v9_16'",
-        "fix_release": "9.16.37",
-        "fix_released": "2023-01-12"
+        "fix_release": "9.18.11",
+        "fix_released": "2023-01-12",
+        "fix_release_was": "9.16.37",
+        "fix_released_was": "2023-01-12",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.11. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-3736",
         "commit_date": "2023-01-12",
         "sha": "ea79385990c564eb478c286c089ea7ed15520690",
         "subject": "Merge branch '3622-serve-stale-rrsig-fix-security-v9_16' into 'security-v9_16'",
-        "fix_release": "9.16.37",
-        "fix_released": "2023-01-12"
+        "fix_release": "9.18.11",
+        "fix_released": "2023-01-12",
+        "fix_release_was": "9.16.37",
+        "fix_released_was": "2023-01-12",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.11. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-38177",
@@ -8431,40 +8614,55 @@
         "commit_date": "2022-09-08",
         "sha": "0657c81d59e3674043ee46be726cd448428c98ca",
         "subject": "Merge branch '3487-eddsa-verify-leak-v9_16' into 'security-v9_16'",
-        "fix_release": "9.16.33",
-        "fix_released": "2022-09-08"
+        "fix_release": "9.18.7",
+        "fix_released": "2022-09-08",
+        "fix_release_was": "9.16.33",
+        "fix_released_was": "2022-09-08",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.7. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2022-3924",
         "commit_date": "2022-11-11",
         "sha": "d6568bea7ce1bcd8f2f0bbc404d93847feec35b9",
         "subject": "Add tests for CVE-2022-3924",
-        "fix_release": "9.16.39",
-        "fix_released": "2023-03-06"
+        "fix_release": "9.18.11",
+        "fix_released": "2023-01-12",
+        "fix_release_was": "9.16.39",
+        "fix_released_was": "2023-03-06",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.11. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-2828",
         "commit_date": "2023-07-26",
         "sha": "e7cae0d9e0002f7b310bcb0cdf0198f961b518ec",
         "subject": "Merge branch '4055-improve-the-overmem-cache-cleaning-9.11' into 'bind-9.11'",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.18.16",
+        "fix_released": "2023-06-09",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.18.16. "
       },
       {
         "cve": "CVE-2023-2911",
         "commit_date": "2023-06-09",
         "sha": "3c8b9d8576a0b250ecb9f914166babf78778f4f2",
         "subject": "Merge branch '4089-confidential-stale-query-loop-bind-9.16' into 'security-bind-9.16'",
-        "fix_release": "9.16.42",
-        "fix_released": "2023-06-09"
+        "fix_release": "9.18.16",
+        "fix_released": "2023-06-09",
+        "fix_release_was": "9.16.42",
+        "fix_released_was": "2023-06-09",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.16. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-3341",
         "commit_date": "2023-07-12",
         "sha": "114551659e9a7de7f9d3022f93a4c92370e8acbf",
         "subject": "Add test for CVE-2023-3341",
-        "fix_release": "9.18.20",
-        "fix_released": "2023-11-09"
+        "fix_release": "9.16.44",
+        "fix_released": "2023-09-08",
+        "fix_release_was": "9.18.20",
+        "fix_released_was": "2023-11-09",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.16.44. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-4236",
@@ -8479,40 +8677,55 @@
         "commit_date": "2024-01-05",
         "sha": "770bb71ce7d934d2461a719af76bee3803145811",
         "subject": "Merge branch '4234-confidential-use-hashmap-when-parsing-9.16' into 'v9.16.46-release'",
-        "fix_release": "9.16.48",
-        "fix_released": "2024-02-11"
+        "fix_release": "9.18.24",
+        "fix_released": "2024-02-11",
+        "fix_release_was": "9.16.48",
+        "fix_released_was": "2024-02-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.24. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-50387",
         "commit_date": "2024-02-01",
         "sha": "435787efa3189a4b3b0705d1a6d0339cc5b60162",
         "subject": "Merge branch 'ondrej/split-taskmgr-9.16' into 'v9.16.47-release'",
-        "fix_release": "9.16.48",
-        "fix_released": "2024-02-11"
+        "fix_release": "9.18.24",
+        "fix_released": "2024-02-11",
+        "fix_release_was": "9.16.48",
+        "fix_released_was": "2024-02-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.24. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-50868",
         "commit_date": "2024-02-14",
         "sha": "ec1afa639f68205d6f5be9a26277e052b327d672",
         "subject": "Mention CVE-2023-50868 in CHANGES entry 6322",
-        "fix_release": "9.16.50",
-        "fix_released": "2024-04-03"
+        "fix_release": "9.18.24",
+        "fix_released": "2024-02-11",
+        "fix_release_was": "9.16.50",
+        "fix_released_was": "2024-04-03",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.24. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-5517",
         "commit_date": "2024-01-05",
         "sha": "283efdde69382f3b72b929bb586c74babfe7f2e3",
         "subject": "Merge branch '4281-confidential-redirect-rfc1918-check-failure-bind-9.16' into 'v9.16.46-release'",
-        "fix_release": "9.16.48",
-        "fix_released": "2024-02-11"
+        "fix_release": "9.18.24",
+        "fix_released": "2024-02-11",
+        "fix_release_was": "9.16.48",
+        "fix_released_was": "2024-02-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.24. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-5679",
         "commit_date": "2024-01-05",
         "sha": "38a03e5ab9676006b0b07510d23635e19998c3a9",
         "subject": "Merge branch '4334-confidential-dns64-and-serve-stale-bind-9.16' into 'v9.16.46-release'",
-        "fix_release": "9.16.48",
-        "fix_released": "2024-02-11"
+        "fix_release": "9.18.24",
+        "fix_released": "2024-02-11",
+        "fix_release_was": "9.16.48",
+        "fix_released_was": "2024-02-11",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.18.24. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2023-6516",
@@ -8527,56 +8740,77 @@
         "commit_date": "2024-06-10",
         "sha": "3492c0deda5091a582ae46b60613ccfdb0e950b1",
         "subject": "Merge branch '4481-security-tcp-flood-9.18' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2024-11187",
         "commit_date": "2025-01-15",
         "sha": "c6e6a7af8ac6b575dd3657b0f5cf4248d734c2b0",
         "subject": "[9.18] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets",
-        "fix_release": "9.18.33",
-        "fix_released": "2025-01-20"
+        "fix_release": "9.20.5",
+        "fix_released": "2025-01-20",
+        "fix_release_was": "9.18.33",
+        "fix_released_was": "2025-01-20",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.5 by UTC instant."
       },
       {
         "cve": "CVE-2024-12705",
         "commit_date": "2025-01-15",
         "sha": "e733e624147155d6cbee7f0f150c79c7ac6b54bb",
         "subject": "[9.18] [CVE-2024-12705] sec: usr: DNS-over-HTTP(s) flooding fixes",
-        "fix_release": "9.18.33",
-        "fix_released": "2025-01-20"
+        "fix_release": "9.20.5",
+        "fix_released": "2025-01-20",
+        "fix_release_was": "9.18.33",
+        "fix_released_was": "2025-01-20",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.5 by UTC instant."
       },
       {
         "cve": "CVE-2024-1737",
         "commit_date": "2024-07-02",
         "sha": "050a88898a4d88267b85b39f9bdceeaa8f4855bc",
         "subject": "Merge branch '3405-security-limit-the-number-of-resource-records-in-rrset-nxdomain-9.18' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2024-1975",
         "commit_date": "2024-06-10",
         "sha": "1e6cf868dd01c1979bf83d2151e3dfe53fcf8e60",
         "subject": "Merge branch 'security-4480-drop-sig0-support' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2024-4076",
         "commit_date": "2024-06-10",
         "sha": "5b83419fa9789ca9723a5b50edbd8a9aa70629f5",
         "subject": "Merge branch '4507-confidential-clear-zversion-v9_18' into 'v9.18.28-release'",
-        "fix_release": "9.18.28",
-        "fix_released": "2024-07-08"
+        "fix_release": "9.20.0",
+        "fix_released": "2024-07-08",
+        "fix_release_was": "9.18.28",
+        "fix_released_was": "2024-07-08",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.0 by UTC instant."
       },
       {
         "cve": "CVE-2025-13878",
         "commit_date": "2026-01-08",
         "sha": "d556bde1231edf81427d577e35f48f764b6a37b8",
         "subject": "[9.18] [CVE-2025-13878] sec: usr: Fix incorrect length checks for BRID and HHIT records",
-        "fix_release": "9.18.44",
-        "fix_released": "2026-01-09"
+        "fix_release": "9.20.18",
+        "fix_released": "2026-01-09",
+        "fix_release_was": "9.18.44",
+        "fix_released_was": "2026-01-09",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.18 by UTC instant."
       },
       {
         "cve": "CVE-2025-40775",
@@ -8599,48 +8833,66 @@
         "commit_date": "2025-07-11",
         "sha": "92907ffa146c026b04bbf85d9c0cfe0f1e2344aa",
         "subject": "Test that positive answer cannot overwrite sibling NS RRs",
-        "fix_release": "9.18.44",
-        "fix_released": "2026-01-09"
+        "fix_release": "9.20.15",
+        "fix_released": "2025-10-18",
+        "fix_release_was": "9.18.44",
+        "fix_released_was": "2026-01-09",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.15 by UTC instant."
       },
       {
         "cve": "CVE-2025-40780",
         "commit_date": "2025-10-02",
         "sha": "f74fb05265be32a8c9de31ec7298deba4a07d893",
         "subject": "[9.18] [CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator",
-        "fix_release": "9.18.41",
-        "fix_released": "2025-10-18"
+        "fix_release": "9.20.15",
+        "fix_released": "2025-10-18",
+        "fix_release_was": "9.18.41",
+        "fix_released_was": "2025-10-18",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.15 by UTC instant."
       },
       {
         "cve": "CVE-2025-8677",
         "commit_date": "2025-10-02",
         "sha": "85d08e068316fc9530965b56b3d99833d501ea12",
         "subject": "[9.18] [CVE-2025-8677] sec: usr: DNSSEC validation fails if matching but invalid DNSKEY is found",
-        "fix_release": "9.18.41",
-        "fix_released": "2025-10-18"
+        "fix_release": "9.20.15",
+        "fix_released": "2025-10-18",
+        "fix_release_was": "9.18.41",
+        "fix_released_was": "2025-10-18",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.15 by UTC instant."
       },
       {
         "cve": "CVE-2026-10723",
         "commit_date": "2026-07-02",
         "sha": "441e64d00961532a3c03d015d46822024f23d546",
         "subject": "[9.11] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-10822",
         "commit_date": "2026-06-15",
         "sha": "c5d2fc706ca3635d9928c1cc68db73bffb35d772",
         "subject": "[9.18] [CVE-2026-10822] sec: usr: Fix dns_name_fromwire to record boundaries",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-11331",
         "commit_date": "2026-06-12",
         "sha": "bdc56d93f7efbfb0de9bbe01e9fdd9a9adfce823",
         "subject": "[9.16] [CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-11605",
@@ -8655,24 +8907,33 @@
         "commit_date": "2026-06-26",
         "sha": "6e3c70a733744f3b18874249794a6cf55e951510",
         "subject": "[9.11] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-11721",
         "commit_date": "2026-06-22",
         "sha": "2dbb7461ce35baa2663e169a5b8d93edd8457c54",
         "subject": "[CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted",
-        "fix_release": "9.21.24",
-        "fix_released": "2026-07-13"
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": "9.21.24",
+        "fix_released_was": "2026-07-13",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-12617",
         "commit_date": "2026-06-15",
         "sha": "bb92832fb6ae899bee7206c2d8966258461c2f71",
         "subject": "Reproducer for #5946 (assertion in some CNAME/DNAME queries)",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): filled from earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-13204",
@@ -8687,24 +8948,33 @@
         "commit_date": "2026-07-03",
         "sha": "07455c02d7dde705d06a0a74ac1a8d2644267949",
         "subject": "[CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field",
-        "fix_release": "9.21.24",
-        "fix_released": "2026-07-13"
+        "fix_release": "9.20.26",
+        "fix_released": "2026-07-20",
+        "fix_release_was": "9.21.24",
+        "fix_released_was": "2026-07-13",
+        "correction": "bind9 timeline rows for fixes-only CVEs (added and spot-checked 2026-09-29): replaced by earliest stable fix tag v9.20.26 by UTC instant."
       },
       {
         "cve": "CVE-2026-1519",
         "commit_date": "2026-02-03",
         "sha": "2c82f99a3c95f356861d5977f12ef9bbe2063cb6",
         "subject": "Reproducer for CVE-2026-1519",
-        "fix_release": "9.18.47",
-        "fix_released": "2026-03-13"
+        "fix_release": "9.20.21",
+        "fix_released": "2026-03-13",
+        "fix_release_was": "9.18.47",
+        "fix_released_was": "2026-03-13",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.20.21. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-3039",
         "commit_date": "2026-05-01",
         "sha": "94a96c69193587b2c6df30055fbb0c1d00622a7d",
         "subject": "[9.11] [CVE-2026-3039] sec: usr: Fix GSS-API resource leak",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.23",
+        "fix_released": "2026-05-08",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.20.23. "
       },
       {
         "cve": "CVE-2026-3104",
@@ -8735,40 +9005,55 @@
         "commit_date": "2026-04-30",
         "sha": "5c963e80badfcd25fe00a88610bed97c5e9b918d",
         "subject": "[v9_11] [CVE-2026-3592] sec: usr: Limit resolver server list size",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.23",
+        "fix_released": "2026-05-08",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.20.23. "
       },
       {
         "cve": "CVE-2026-3593",
         "commit_date": "2026-05-05",
         "sha": "e33ff6bb0ac7110ea2b64ba5adde0fb72200f37d",
         "subject": "[CVE-2026-3593] sec: usr: Fix use-after-free in DNS-over-HTTPS when processing HTTP/2 SETTINGS frames",
-        "fix_release": "9.21.22",
-        "fix_released": "2026-05-08"
+        "fix_release": "9.20.23",
+        "fix_released": "2026-05-08",
+        "fix_release_was": "9.21.22",
+        "fix_released_was": "2026-05-08",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.20.23. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-5946",
         "commit_date": "2026-03-11",
         "sha": "1af9f2830179e7e3c9b40f858eb06aab4f56c1bf",
         "subject": "Document that non-IN RR class issues are out of CVE scope",
-        "fix_release": "9.20.26",
-        "fix_released": "2026-07-20"
+        "fix_release": "9.20.23",
+        "fix_released": "2026-05-08",
+        "fix_release_was": "9.20.26",
+        "fix_released_was": "2026-07-20",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.20.23. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-5947",
         "commit_date": "2026-05-01",
         "sha": "9831f41894b328b3a5b25a0e3facd28f7b59d30d",
         "subject": "[CVE-2026-5947] sec: usr: Fix crash in resolver when SIG(0)-signed responses are received under load",
-        "fix_release": "9.21.22",
-        "fix_released": "2026-05-08"
+        "fix_release": "9.20.23",
+        "fix_released": "2026-05-08",
+        "fix_release_was": "9.21.22",
+        "fix_released_was": "2026-05-08",
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): replaced by the verified timeline's earliest stable fix tag v9.20.23. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-5950",
         "commit_date": "2026-04-30",
         "sha": "0f39ddb36acff344292124ac33b187392b9dd2ef",
         "subject": "[v9_11] [CVE-2026-5950] sec: usr: Avoid unbounded recursion loop",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "9.20.23",
+        "fix_released": "2026-05-08",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/bind9.md): filled from the verified timeline's earliest stable fix tag v9.20.23. "
       }
     ],
     "knot": [
@@ -8851,16 +9136,20 @@
         "commit_date": "2021-08-25",
         "sha": "c360ef30f2436fdb9c6b8847f6ed757b84011a9f",
         "subject": "NEWS 5.3.2: add CVE-2021-40083 reference",
-        "fix_release": "5.4.2",
-        "fix_released": "2021-10-13"
+        "fix_release": "5.3.2",
+        "fix_released": "2021-05-05",
+        "correction": "Phase 3 verify/kresd.md: fix commit 97ec93e1 is first contained by v5.3.2; the CVE id only reaches NEWS at 5.4.2, which is what the scrape picked up."
       },
       {
         "cve": "CVE-2022-40188",
         "commit_date": "2022-08-17",
         "sha": "817586f8ee2e7f1f879ef5f76b19c2d67bce2e77",
         "subject": "lib/zonecut + iterator: limit large NS sets",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.5.3",
+        "fix_released": "2022-09-21",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Verified kresd timeline (docs/handoff/verify/kresd.md): filled from fix tag v5.5.3; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2023-46317",
@@ -8875,16 +9164,22 @@
         "commit_date": "2024-01-01",
         "sha": "151c2645135ae1331334338eee610abfaa480547",
         "subject": "mitigate KeyTrap DoS = CVE-2023-50387",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.7.1",
+        "fix_released": "2024-02-13",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Verified kresd timeline (docs/handoff/verify/kresd.md): filled from fix tag v5.7.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2023-50868",
         "commit_date": "2024-02-12",
         "sha": "96525e9a676ce98cdd40b2825d6dec85243d7e3f",
         "subject": "validator: refuse to validate answers with more than 8 NSEC3 records",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.7.1",
+        "fix_released": "2024-02-13",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Verified kresd timeline (docs/handoff/verify/kresd.md): filled from fix tag v5.7.1; the scrape named the next release after the branch or point release that shipped the fix."
       }
     ],
     "nsd": [
@@ -8917,32 +9212,44 @@
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-18916",
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-19401",
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-19538",
         "commit_date": "2026-08-26",
         "sha": "19260ddacf04c5919a587b6c7497e09eeddb6961",
         "subject": "Merge tag 'NSD_4_15_1_REL' into release-4.15.2",
-        "fix_release": "4.15.2",
-        "fix_released": "2026-09-02"
+        "fix_release": "4.15.1",
+        "fix_released": "2026-08-26",
+        "fix_release_was": "4.15.2",
+        "fix_released_was": "2026-09-02",
+        "correction": "Verified nsd timeline (docs/handoff/verify/nsd.md): replaced by fix tag NSD_4_15_1_REL; the scrape named the next release after the branch or point release that shipped the fix."
       }
     ],
     "pdns-auth": [
@@ -8952,31 +9259,42 @@
         "sha": "fa3f820bbfd355ffcd0d8f498e672b7ee73561bd",
         "subject": "upgrade to webrick 1.4.2 (CVE-2009-4492)",
         "fix_release": "4.2.0",
-        "fix_released": "2019-08-27"
+        "fix_released": "2019-08-27",
+        "not_applicable": true,
+        "not_applicable_reason": "commit fa3f820bb changes only modules/remotebackend Gemfile.lock files (webrick test dependency); no shipped server code. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2012-0206",
         "commit_date": "2012-01-10",
         "sha": "6a90bacffe780bc25068b9a8774bc39c37ccf239",
         "subject": "fix CVE-2012-0206, and PowerDNS Authoritative Server Security Notification 2012-01",
-        "fix_release": "3.3.1",
-        "fix_released": "2013-12-17"
+        "fix_release": "3.0.1",
+        "fix_released": "2012-01-10",
+        "fix_release_was": "3.3.1",
+        "fix_released_was": "2013-12-17",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-3.0.1. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2015-1868",
         "commit_date": "2015-05-01",
         "sha": "9df4944d8d5d24ae722006509229314902090798",
         "subject": "import CVE-2015-1868 patch",
-        "fix_release": "3.3.2",
-        "fix_released": "2015-05-01"
+        "fix_release": "3.4.4",
+        "fix_released": "2015-04-23",
+        "fix_release_was": "3.3.2",
+        "fix_released_was": "2015-05-01",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-3.4.4. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2018-1046",
         "commit_date": "2018-05-08",
         "sha": "caaa00dea3113ed34476f1df459b6cfb57b993fb",
         "subject": "Merge pull request #6581 from rgacogne/docs-sec-2018-02",
-        "fix_release": "4.2.0",
-        "fix_released": "2019-08-27"
+        "fix_release": "4.1.2",
+        "fix_released": "2018-05-07",
+        "fix_release_was": "4.2.0",
+        "fix_released_was": "2019-08-27",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-4.1.2. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2019-9512",
@@ -8984,7 +9302,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-04-05"
+        "fix_released": "2020-04-05",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9514",
@@ -8992,7 +9312,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-04-05"
+        "fix_released": "2020-04-05",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9515",
@@ -9000,7 +9322,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-04-05"
+        "fix_released": "2020-04-05",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2020-25829",
@@ -9008,7 +9332,9 @@
         "sha": "e0386c2225c730191dab7f971eb3a46828ed8e7b",
         "subject": "Backport of CVE-2020-25829 (any-cache-update) to 4.2.x",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor code (pdns/syncres.cc, any-cache-update). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2022-37428",
@@ -9016,7 +9342,9 @@
         "sha": "21f3d92144bc6a65483a363f6be7237d714c1936",
         "subject": "Backport of protobuf PSA 2022-02 (CVE-2022-37428) to rec-4.5.x",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor protobuf logging (pdns/recursordist, remote_logger.cc). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-26437",
@@ -9024,7 +9352,9 @@
         "sha": "94fccab63457f8327add3a8e1e2b7876234e4989",
         "subject": "PowerDNS Security Advisory 2023-02: Deterred spoofing attempts can lead to authoritative servers being marked unavailable (CVE-2023-26437)",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor code (pdns_recursor.cc, syncres.cc). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-50387",
@@ -9032,7 +9362,9 @@
         "sha": "15e973d6d882ed51fbad70dd082b11c7ad299466",
         "subject": "rec: CVE-2023-50387 and CVE-2023-50868",
         "fix_release": "4.9.0",
-        "fix_released": "2024-03-14"
+        "fix_released": "2024-03-14",
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor validation commit 15e973d6d ('rec: ...'); the Authoritative Server does not validate. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-50868",
@@ -9040,7 +9372,9 @@
         "sha": "15e973d6d882ed51fbad70dd082b11c7ad299466",
         "subject": "rec: CVE-2023-50387 and CVE-2023-50868",
         "fix_release": "4.9.0",
-        "fix_released": "2024-03-14"
+        "fix_released": "2024-03-14",
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor validation commit 15e973d6d ('rec: ...'); the Authoritative Server does not validate. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2023-6193",
@@ -9048,7 +9382,9 @@
         "sha": "91a4477f798c31f598e8e49068c0cd973bc7d162",
         "subject": "dnsdist: Update Quiche to 0.20.0",
         "fix_release": "4.9.0",
-        "fix_released": "2024-03-14"
+        "fix_released": "2024-03-14",
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist Quiche update (builder-support, tasks.py). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2024-25583",
@@ -9056,7 +9392,9 @@
         "sha": "e1247da968077ee7c58fa41447057ee2a2b09fc9",
         "subject": "rec: backport CVE-2024-25583 to rel/rec-4.8.8-branch",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor backport (rel/rec-4.8.8 branch). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2024-25590",
@@ -9064,55 +9402,75 @@
         "sha": "6083aa60363ca247ed43908f55156a1752401725",
         "subject": "Merge pull request #14745 from omoerbeek/rec-4.9.9-branch",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Recursor branch merge (rec-4.9.9). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33257",
         "commit_date": "2026-04-22",
         "sha": "9d5d9a3d4df56bb7676813c8972fdd760d355ca7",
         "subject": "Fixes for CVE-2026-33257; part of PowerDNS Security Advisory 2026-05",
-        "fix_release": "5.0.4",
-        "fix_released": "2026-04-22"
+        "fix_release": "4.9.14",
+        "fix_released": "2026-04-22",
+        "fix_release_was": "5.0.4",
+        "fix_released_was": "2026-04-22",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-4.9.14. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-33260",
         "commit_date": "2026-04-22",
         "sha": "9e074364dbc64b202f9134487fb2eaf81c3a1464",
         "subject": "Fixes for CVE-2026-33260; part of PowerDNS Security Advisory 2026-05",
-        "fix_release": "5.0.4",
-        "fix_released": "2026-04-22"
+        "fix_release": "4.9.14",
+        "fix_released": "2026-04-22",
+        "fix_release_was": "5.0.4",
+        "fix_released_was": "2026-04-22",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-4.9.14. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-33608",
         "commit_date": "2026-04-22",
         "sha": "9244f6aea9501d217e36e48ed0296912e40389da",
         "subject": "Prevent creadeSecondaryDomain from creating an invalid bind configuration.",
-        "fix_release": "5.1.0",
-        "fix_released": "2026-06-02"
+        "fix_release": "4.9.14",
+        "fix_released": "2026-04-22",
+        "fix_release_was": "5.1.0",
+        "fix_released_was": "2026-06-02",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-4.9.14. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-33609",
         "commit_date": "2026-04-22",
         "sha": "2a2d1b620224cf0ef8eed3994e6af1dc626e5da7",
         "subject": "Rewrite the ldap escape function, and always escape network-controlled input.",
-        "fix_release": "5.1.0",
-        "fix_released": "2026-06-02"
+        "fix_release": "4.9.14",
+        "fix_released": "2026-04-22",
+        "fix_release_was": "5.1.0",
+        "fix_released_was": "2026-06-02",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-4.9.14. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-33610",
         "commit_date": "2026-04-22",
         "sha": "6d3dd870ee5bd12469e4eb226f8c623d4041c482",
         "subject": "Make sure to wrap the socket in a unique_ptr to close it in all cases.",
-        "fix_release": "5.1.0",
-        "fix_released": "2026-06-02"
+        "fix_release": "4.9.14",
+        "fix_released": "2026-04-22",
+        "fix_release_was": "5.1.0",
+        "fix_released_was": "2026-06-02",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-4.9.14. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-33611",
         "commit_date": "2026-04-22",
         "sha": "e34973ea6a0cf1120cf2423016b8df2c908da7c1",
         "subject": "Fix writer and text parser for too long alpn values.",
-        "fix_release": "5.1.0",
-        "fix_released": "2026-06-02"
+        "fix_release": "4.9.14",
+        "fix_released": "2026-04-22",
+        "fix_release_was": "5.1.0",
+        "fix_released_was": "2026-06-02",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-auth.md): replaced by the verified timeline's earliest stable fix tag auth-4.9.14. The scrape named a later release (usually the next master/branch release); the branch or patch release shipped the fix first, often under a different commit."
       },
       {
         "cve": "CVE-2026-49975",
@@ -9120,7 +9478,9 @@
         "sha": "4e368fb0480e0384cb1ca5f6fdf003f3944f4802",
         "subject": "Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist h2o update merge (PR #17669). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       }
     ],
     "pdns-rec": [
@@ -9130,7 +9490,9 @@
         "sha": "fa3f820bbfd355ffcd0d8f498e672b7ee73561bd",
         "subject": "upgrade to webrick 1.4.2 (CVE-2009-4492)",
         "fix_release": "4.2.0",
-        "fix_released": "2019-07-12"
+        "fix_released": "2019-07-12",
+        "not_applicable": true,
+        "not_applicable_reason": "commit fa3f820bb changes only modules/remotebackend Gemfile.lock files (webrick test dependency); no shipped server code. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2012-0206",
@@ -9138,15 +9500,20 @@
         "sha": "6a90bacffe780bc25068b9a8774bc39c37ccf239",
         "subject": "fix CVE-2012-0206, and PowerDNS Authoritative Server Security Notification 2012-01",
         "fix_release": "3.5.1",
-        "fix_released": "2013-05-03"
+        "fix_released": "2013-05-03",
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative code (pdns/common_startup.cc); verified auth fix auth-3.0.1. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2015-1868",
         "commit_date": "2015-05-01",
         "sha": "9df4944d8d5d24ae722006509229314902090798",
         "subject": "import CVE-2015-1868 patch",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "3.7.2",
+        "fix_released": "2015-04-21",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): filled from the verified timeline's earliest stable fix tag rec-3.7.2."
       },
       {
         "cve": "CVE-2018-1046",
@@ -9154,7 +9521,9 @@
         "sha": "caaa00dea3113ed34476f1df459b6cfb57b993fb",
         "subject": "Merge pull request #6581 from rgacogne/docs-sec-2018-02",
         "fix_release": "4.2.0",
-        "fix_released": "2019-07-12"
+        "fix_released": "2019-07-12",
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative dnsreplay fix (verified auth-4.1.2); cited commit is a docs merge. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9512",
@@ -9162,7 +9531,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-02-26"
+        "fix_released": "2020-02-26",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9514",
@@ -9170,7 +9541,9 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-02-26"
+        "fix_released": "2020-02-26",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2019-9515",
@@ -9178,15 +9551,20 @@
         "sha": "cff66f2dc18b9be8af1475f7fe957dc39fb2c2d7",
         "subject": "Merge pull request #8200 from rgacogne/update-h2o-2.2.6",
         "fix_release": "4.3.0",
-        "fix_released": "2020-02-26"
+        "fix_released": "2020-02-26",
+        "not_applicable": true,
+        "not_applicable_reason": "h2o update merge (PR #8200) for dnsdist DoH; not in this program. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2020-25829",
         "commit_date": "2020-10-12",
         "sha": "e0386c2225c730191dab7f971eb3a46828ed8e7b",
         "subject": "Backport of CVE-2020-25829 (any-cache-update) to 4.2.x",
-        "fix_release": "4.2.5",
-        "fix_released": "2020-10-13"
+        "fix_release": "4.1.18",
+        "fix_released": "2020-10-12",
+        "fix_release_was": "4.2.5",
+        "fix_released_was": "2020-10-13",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): replaced by the verified timeline's earliest stable fix tag rec-4.1.18."
       },
       {
         "cve": "CVE-2022-37428",
@@ -9201,24 +9579,33 @@
         "commit_date": "2023-03-16",
         "sha": "94fccab63457f8327add3a8e1e2b7876234e4989",
         "subject": "PowerDNS Security Advisory 2023-02: Deterred spoofing attempts can lead to authoritative servers being marked unavailable (CVE-2023-26437)",
-        "fix_release": "4.6.6",
-        "fix_released": "2023-03-29"
+        "fix_release": "4.8.4",
+        "fix_released": "2023-03-29",
+        "fix_release_was": "4.6.6",
+        "fix_released_was": "2023-03-29",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): replaced by the verified timeline's earliest stable fix tag rec-4.8.4."
       },
       {
         "cve": "CVE-2023-50387",
         "commit_date": "2024-02-09",
         "sha": "15e973d6d882ed51fbad70dd082b11c7ad299466",
         "subject": "rec: CVE-2023-50387 and CVE-2023-50868",
-        "fix_release": "5.1.0",
-        "fix_released": "2024-07-08"
+        "fix_release": "5.0.2",
+        "fix_released": "2024-02-06",
+        "fix_release_was": "5.1.0",
+        "fix_released_was": "2024-07-08",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): replaced by the verified timeline's earliest stable fix tag rec-5.0.2."
       },
       {
         "cve": "CVE-2023-50868",
         "commit_date": "2024-02-09",
         "sha": "15e973d6d882ed51fbad70dd082b11c7ad299466",
         "subject": "rec: CVE-2023-50387 and CVE-2023-50868",
-        "fix_release": "5.1.0",
-        "fix_released": "2024-07-08"
+        "fix_release": "5.0.2",
+        "fix_released": "2024-02-06",
+        "fix_release_was": "5.1.0",
+        "fix_released_was": "2024-07-08",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): replaced by the verified timeline's earliest stable fix tag rec-5.0.2."
       },
       {
         "cve": "CVE-2023-6193",
@@ -9226,39 +9613,53 @@
         "sha": "91a4477f798c31f598e8e49068c0cd973bc7d162",
         "subject": "dnsdist: Update Quiche to 0.20.0",
         "fix_release": "5.1.0",
-        "fix_released": "2024-07-08"
+        "fix_released": "2024-07-08",
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist Quiche update (builder-support, tasks.py). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2024-25583",
         "commit_date": "2024-04-09",
         "sha": "e1247da968077ee7c58fa41447057ee2a2b09fc9",
         "subject": "rec: backport CVE-2024-25583 to rel/rec-4.8.8-branch",
-        "fix_release": "4.8.8",
-        "fix_released": "2024-04-09"
+        "fix_release": "5.0.4",
+        "fix_released": "2024-04-09",
+        "fix_release_was": "4.8.8",
+        "fix_released_was": "2024-04-09",
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): replaced by the verified timeline's earliest stable fix tag rec-5.0.4."
       },
       {
         "cve": "CVE-2024-25590",
         "commit_date": "2024-10-03",
         "sha": "6083aa60363ca247ed43908f55156a1752401725",
         "subject": "Merge pull request #14745 from omoerbeek/rec-4.9.9-branch",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.0.9",
+        "fix_released": "2024-08-26",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): filled from the verified timeline's earliest stable fix tag rec-5.0.9."
       },
       {
         "cve": "CVE-2026-33257",
         "commit_date": "2026-04-22",
         "sha": "9d5d9a3d4df56bb7676813c8972fdd760d355ca7",
         "subject": "Fixes for CVE-2026-33257; part of PowerDNS Security Advisory 2026-05",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.2.9",
+        "fix_released": "2026-04-02",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): filled from the verified timeline's earliest stable fix tag rec-5.2.9."
       },
       {
         "cve": "CVE-2026-33260",
         "commit_date": "2026-04-22",
         "sha": "9e074364dbc64b202f9134487fb2eaf81c3a1464",
         "subject": "Fixes for CVE-2026-33260; part of PowerDNS Security Advisory 2026-05",
-        "fix_release": null,
-        "fix_released": null
+        "fix_release": "5.2.9",
+        "fix_released": "2026-04-02",
+        "fix_release_was": null,
+        "fix_released_was": null,
+        "correction": "Phase 3 (docs/handoff/verify/pdns-rec.md): filled from the verified timeline's earliest stable fix tag rec-5.2.9."
       },
       {
         "cve": "CVE-2026-33608",
@@ -9266,7 +9667,9 @@
         "sha": "9244f6aea9501d217e36e48ed0296912e40389da",
         "subject": "Prevent creadeSecondaryDomain from creating an invalid bind configuration.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative modules (createSecondaryDomain). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33609",
@@ -9274,7 +9677,9 @@
         "sha": "2a2d1b620224cf0ef8eed3994e6af1dc626e5da7",
         "subject": "Rewrite the ldap escape function, and always escape network-controlled input.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative LDAP backend module. Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33610",
@@ -9282,7 +9687,9 @@
         "sha": "6d3dd870ee5bd12469e4eb226f8c623d4041c482",
         "subject": "Make sure to wrap the socket in a unique_ptr to close it in all cases.",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "Authoritative dynamic update handler (pdns/rfc2136handler.cc). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       },
       {
         "cve": "CVE-2026-33611",
@@ -9298,7 +9705,9 @@
         "sha": "4e368fb0480e0384cb1ca5f6fdf003f3944f4802",
         "subject": "Merge pull request #17669 from rgacogne/ddist19-h2o-2.2.6-pdns4",
         "fix_release": null,
-        "fix_released": null
+        "fix_released": null,
+        "not_applicable": true,
+        "not_applicable_reason": "dnsdist h2o update merge (PR #17669). Checked against the commit's files (Phase 3 follow-up); the fix is not counted for this program."
       }
     ],
     "unbound": [
@@ -9331,40 +9740,51 @@
         "commit_date": "2018-01-19",
         "sha": "2a6250e3fb3ccd6e9a0a16b6908c5cfb76d8d6f3",
         "subject": "- patch for CVE-2017-15105: vulnerability in the processing of   wildcard synthesized NSEC records.",
-        "fix_release": "1.7.0",
-        "fix_released": "2018-03-12"
+        "fix_release": "1.6.8",
+        "fix_released": "2018-01-19",
+        "correction": "Phase 3 verify/unbound.md: vendor point release 1.6.8 (tagger 2018-01-19; release-1.7.0 Changelog l.127-131) shipped the fix four days before NVD publication. The clone's 1.6.8 tag is a bare re-tag of 1.6.7, so the fix commit is first CONTAINED by 1.7.0rc1 -- date from the vendor release, not the tag tree."
       },
       {
         "cve": "CVE-2019-16866",
         "commit_date": "2019-10-03",
         "sha": "facc6c6541448b9689361b196f2c92cd4779f8ee",
         "subject": "- Merge 1.9.4 release with fix for vulnerability CVE-2019-16866. - Continue with development of 1.9.5.",
-        "fix_release": "1.9.6",
-        "fix_released": "2019-12-06"
+        "fix_release": "1.9.4",
+        "fix_released": "2019-10-03",
+        "correction": "Phase 3 verify/unbound.md: the fix shipped on branch point release 1.9.4 under a different commit than master; the scrape cited the master sibling SHA, which is first contained by 1.9.6."
       },
       {
         "cve": "CVE-2019-18934",
         "commit_date": "2019-11-19",
         "sha": "09845779d5f2c96e3064ff398cad65c08357cfbf",
         "subject": "- Fix CVE-2019-18934, shell execution in ipsecmod.",
-        "fix_release": "1.9.6",
-        "fix_released": "2019-12-06"
+        "fix_release": "1.9.5",
+        "fix_released": "2019-11-19",
+        "fix_release_was": "1.9.6",
+        "fix_released_was": "2019-12-06",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.9.5; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2020-12662",
         "commit_date": "2020-05-19",
         "sha": "ba0f382eee814e56900a535778d13206b86b6d49",
         "subject": "- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf",
-        "fix_release": "1.11.0",
-        "fix_released": "2020-07-20"
+        "fix_release": "1.10.1",
+        "fix_released": "2020-05-19",
+        "fix_release_was": "1.11.0",
+        "fix_released_was": "2020-07-20",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.10.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2020-12663",
         "commit_date": "2020-05-19",
         "sha": "ba0f382eee814e56900a535778d13206b86b6d49",
         "subject": "- CVE-2020-12662 Unbound can be tricked into amplifying an incoming   query into a large number of queries directed to a target. - CVE-2020-12663 Malf",
-        "fix_release": "1.11.0",
-        "fix_released": "2020-07-20"
+        "fix_release": "1.10.1",
+        "fix_released": "2020-05-19",
+        "fix_release_was": "1.11.0",
+        "fix_released_was": "2020-07-20",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.10.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2020-28935",
@@ -9419,8 +9839,9 @@
         "commit_date": "2024-03-07",
         "sha": "326ba26522b13ab9a9d0d0d02c018bfd7af56e09",
         "subject": "- Version set to 1.19.3 for release. After 1.19.2 point release with   security fix for CVE-2024-1931, Denial of service when trimming   EDE text on p",
-        "fix_release": "1.19.3",
-        "fix_released": "2024-03-11"
+        "fix_release": "1.19.2",
+        "fix_released": "2024-03-07",
+        "correction": "Phase 3 verify/unbound.md: the fix shipped on branch point release 1.19.2 under a different commit than master; the scrape cited the master sibling SHA, which is first contained by 1.19.3."
       },
       {
         "cve": "CVE-2024-33655",
@@ -9435,8 +9856,9 @@
         "commit_date": "2024-10-03",
         "sha": "a1b25f0296416ed237358e7a8b925853cf5ec846",
         "subject": "- The fix for CVE-2024-8508 was part of 1.21.1, a security point release   on 1.21.0. The code repository continues with this fix and the version   nu",
-        "fix_release": "1.22.0",
-        "fix_released": "2024-10-16"
+        "fix_release": "1.21.1",
+        "fix_released": "2024-10-03",
+        "correction": "Phase 3 verify/unbound.md: the fix shipped on branch point release 1.21.1 under a different commit than master; the scrape cited the master sibling SHA, which is first contained by 1.22.0."
       },
       {
         "cve": "CVE-2025-11411",
@@ -9451,8 +9873,11 @@
         "commit_date": "2025-07-16",
         "sha": "f49e6ccecd0b14f6e4539583d989d52c4a20cc6f",
         "subject": "- Fix for RebirthDay Attack CVE-2025-5994, reported by Xiang Li   from AOSP Lab Nankai University. - Tag for 1.23.1 with the release of 1.23.0 and the",
-        "fix_release": "1.24.0",
-        "fix_released": "2025-09-17"
+        "fix_release": "1.23.1",
+        "fix_released": "2025-07-16",
+        "fix_release_was": "1.24.0",
+        "fix_released_was": "2025-09-17",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.23.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-14586",
@@ -9483,16 +9908,22 @@
         "commit_date": "2026-05-20",
         "sha": "b46ff5c18eafa055378b7105c9c5e77454291a47",
         "subject": "- Unit test for CVE-2026-33278.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-40622",
         "commit_date": "2026-05-20",
         "sha": "b5f21f41658f65d6143df6a3208e8ccf1a01604d",
         "subject": "- Unit test for CVE-2026-40622.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-40691",
@@ -9539,40 +9970,55 @@
         "commit_date": "2026-05-20",
         "sha": "9d2e0f1c02f842d355809ffea28a1bd62bfe83ba",
         "subject": "- Unit test for CVE-2026-42944.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-42955",
         "commit_date": "2026-07-22",
         "sha": "9f757aa9f3e869a944f24acd64cadfde55269575",
         "subject": "- Unit test for CVE-2026-42955.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-42959",
         "commit_date": "2026-05-20",
         "sha": "d357935f662d239616fee1403f6799a66b60d986",
         "subject": "- Unit test for CVE-2026-42959.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-42960",
         "commit_date": "2026-05-20",
         "sha": "0d2282d5513e73b526a44483d63fc5d0f9c41439",
         "subject": "- Unit test for CVE-2026-42960.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-44390",
         "commit_date": "2026-05-20",
         "sha": "25e112c6749cf23f9551ff35e40b3a7769785f73",
         "subject": "- Unit test for CVE-2026-44390.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.1",
+        "fix_released": "2026-05-20",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.1; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-44608",
@@ -9595,32 +10041,44 @@
         "commit_date": "2026-07-22",
         "sha": "23e19ca6fcffa68307dbb5cfc6a6251b3a8270ca",
         "subject": "- Unit test for CVE-2026-44687.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-44690",
         "commit_date": "2026-07-22",
         "sha": "3d5e6c06923eff9eac2f5e31a69c43a15ca9d3c2",
         "subject": "- Unit test for CVE-2026-44690.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-46582",
         "commit_date": "2026-07-22",
         "sha": "1ae2570bda9972aa0459e8650db2d6107f5f07d9",
         "subject": "- Unit test for CVE-2026-46582.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50045",
         "commit_date": "2026-07-22",
         "sha": "9ad825b267d5c3d5ccc804973fe6dc02b192cbfa",
         "subject": "- Unit test for CVE-2026-50045.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50046",
@@ -9635,16 +10093,22 @@
         "commit_date": "2026-07-22",
         "sha": "63501f51bb699cd47aca09c02fd8f6e24b6bf83c",
         "subject": "- Unit test for CVE-2026-50243.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50248",
         "commit_date": "2026-07-22",
         "sha": "cf5e6e89a582151d5875fbd5db7d29fb3d9dc0cf",
         "subject": "- Fix error in log printout in fix for CVE-2026-50248, when the   primary name is bogus.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-50251",
@@ -9691,16 +10155,22 @@
         "commit_date": "2026-07-22",
         "sha": "c163fbc505283b1900d4ff10708ae6e2665239af",
         "subject": "- Unit test for CVE-2026-55717.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-55973",
         "commit_date": "2026-07-22",
         "sha": "b08723ef9736cd1246ef285360865f00cfa7e2ad",
         "subject": "- Unit test for CVE-2026-55973.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-55990",
@@ -9723,8 +10193,11 @@
         "commit_date": "2026-07-22",
         "sha": "4941edf2757d535504f46974b711783d702068b3",
         "subject": "- Unit test for CVE-2026-56416.",
-        "fix_release": "1.26.0",
-        "fix_released": "2026-07-24"
+        "fix_release": "1.25.2",
+        "fix_released": "2026-07-22",
+        "fix_release_was": "1.26.0",
+        "fix_released_was": "2026-07-24",
+        "correction": "Verified unbound timeline (docs/handoff/verify/unbound.md): replaced by fix tag release-1.25.2; the scrape named the next release after the branch or point release that shipped the fix."
       },
       {
         "cve": "CVE-2026-56444",
@@ -9735,5 +10208,69 @@
         "fix_released": "2026-07-22"
       }
     ]
-  }
+  },
+  "corrections_log": [
+    {
+      "applied_on": "2026-09-29",
+      "n": 6,
+      "from": "Phase 3 verification reports in docs/handoff/verify/",
+      "pattern": "Five of six: the NVD-derived scrape names the next MASTER release because branch point releases never touch the changelog; the branch tag shipped the fix earlier."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 82,
+      "detail": {
+        "bind9 replaced": 43,
+        "bind9 filled": 30,
+        "pdns-auth replaced": 9
+      },
+      "from": "verified timelines data/software/timelines/{bind9,pdns-auth}.json (Phase 3 reports docs/handoff/verify/bind9.md, pdns-auth.md)",
+      "pattern": "Same as the first batch: the scrape names the next master or branch release; the earliest stable fix tag by UTC instant is earlier. bind9 also had 30 rows with a fix commit but no release, now filled. Previous values kept in fix_release_was / fix_released_was."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 9,
+      "detail": {
+        "pdns-rec replaced": 5,
+        "pdns-rec filled": 4
+      },
+      "from": "verified timeline data/software/timelines/pdns-rec.json (Phase 3 report docs/handoff/verify/pdns-rec.md)",
+      "pattern": "KeyTrap CVE-2023-50387/50868: 5.1.0 (2024-07-08, master line) -> 5.0.2 (tag commit 2024-02-06; public 2024-02-13 per changelog). Same cause as earlier batches.",
+      "not_adjudicated": "12 fixes.pdns-rec rows have no Recursor timeline row; the builder judged them Authoritative/dnsdist-only or not Recursor issues (CVE-2009-4492, CVE-2012-0206, CVE-2018-1046, CVE-2019-9512/9514/9515, CVE-2023-6193, CVE-2026-33608..33611, CVE-2026-49975). Left unchanged."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 24,
+      "detail": {
+        "pdns-auth": 13,
+        "pdns-rec": 11
+      },
+      "kind": "not_applicable",
+      "from": "pdns-auth timeline section 'Inventory fix rows judged not applicable' and pdns-rec builder gap 10, each checked against the cited commit's changed files",
+      "note": "Rows kept; not_applicable excludes them from per-program fix counts and fix dates in scripts/cve_crossref.py. CVE-2026-33611 for pdns-rec left unmarked: its commit changes shared record-parsing code (dnswriter.cc, rcpgenerator.cc) that the Recursor also builds."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 19,
+      "detail": {
+        "bind9 replaced": 13,
+        "bind9 filled": 5,
+        "bind9 not_applicable": 1
+      },
+      "from": "bind9 timeline cve_fixes rows for 23 fixes-only CVEs (no NVD product tag)",
+      "pattern": "Inventory named the later branch (9.18.x) or a development release (9.21.24); the 9.20 or 9.16 release carried the fix earlier, usually minutes earlier the same day. CVE-2025-40778 moves from 9.18.44 (2026-01-09) to 9.20.15 (2025-10-18)."
+    },
+    {
+      "applied_on": "2026-09-29",
+      "n": 27,
+      "detail": {
+        "unbound replaced": 20,
+        "nsd replaced": 4,
+        "kresd filled": 3
+      },
+      "from": "verified unbound, nsd, kresd timelines (all applicable rows with a stable fix tag compared, not only the rows verifiers flagged)",
+      "pattern": "Unbound 2026 CVEs: inventory 1.26.0 (2026-07-24) vs 1.25.1 / 1.25.2 point releases; NSD 4.15.2 vs 4.15.1; kresd rows with no release filled, incl. KeyTrap v5.7.1 (2024-02-13).",
+      "not_changed": "unbound CVE-2017-15105, CVE-2020-28935, CVE-2024-33655: the timeline's fix tag is a release candidate; the inventory keeps the stable release."
+    }
+  ]
 }

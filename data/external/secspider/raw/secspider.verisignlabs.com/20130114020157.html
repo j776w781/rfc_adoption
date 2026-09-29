@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8" />
+
+    <script type="text/javascript" src="js/secspider.js"></script>
+    <link rel="stylesheet" type="text/css" href="js/secspider.css">
+    <title>SecSpider</title>
+
+  </head>
+  <body>
+
+        <div id="header">
+      <table cellpadding="0" border="0" width="100%">
+        <tr>
+          <td width="80" align="left">
+            <img height="80" src="pix/secspider-logo.png"/>
+          </td>
+          <td align="left">
+            <h1>SecSpider</h1>
+            <h2>Global DNSSEC deployment tracking</h2>
+          </td>
+          <td align="right">
+            <img height="80" src="pix/labs-logo.gif"/>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+
+    
+    <div id="navigation">
+      &nbsp;<br/>
+      <font size="+2">
+        Useful Links<br/>
+      </font>
+      <font size="+1">
+        <a href="http://www.verisignlabs.com">VeriSign Labs</a><br/>
+        <a href="http://irl.cs.ucla.edu">IRL, UCLA</a><br/>
+        <a href="http://www.nlnetlabs.nl">NLnet Labs</a><br/>
+        <a href="http://www.ietf.org">IETF</a><br/>
+        <a href="http://www.nanog.org">NANOG</a><br/>
+        <a href="http://www.ripe.net">RIPE</a><br/>
+      </font>
+    </div>
+
+
+
+    <div id="content">
+
+            <div id="tabs-header">
+        <ul>
+          <li><a href="./">Status</a></li><!--
+          --><li id="selected"><a href="stats.html">Deployment&nbsp;Stats </a></li><!--
+          --><li><a href="growth.html">Deployment&nbsp;Growth </a></li><!--
+          --><li><a href="islands.html">TLDs </a></li><!--
+          --><li><a href="pollers.html">Pollers </a></li><!--
+          --><li><a href="docs.html">Docs </a></li><!--
+          --><li><a href="search.html">Search </a></li>
+        </ul>
+      </div>
+
+
+
+      <div id="tabs-content">
+        <p>
+
+
+        <table bgcolor="white" width="100%">
+          <tr>
+            <td>
+          <H2>Detailed Monitoring Summary:</H2>
+            </td>
+          </tr>
+          <tr>
+            <td>
+            <TABLE BORDER=0>
+              <TR>
+                <TD VALIGN=TOP>244230</TD>
+                <TD>Zones</TD>
+              </TR>
+              <!--
+              <TR>
+                <TD></TD>
+                <TD>
+                  <TABLE BORDER=0>
+                    <TR>
+                      <TD VALIGN=TOP></TD>
+                      <TD>Zones have NS sets that match their parents' delegation set</TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              -->
+              <TR>
+                <TD VALIGN=TOP>222670</TD>
+                <TD>DNSSEC enabled zones</TD>
+              </TR>
+              <TR>
+                <TD></TD>
+                <TD>
+                  <TABLE BORDER=0>
+                    <TR>
+                <TD VALIGN=TOP>222826</TD>
+                <TD>Zones use both KSKs and ZSKs</TD>
+                    </TR>
+                    <TR>
+                <TD VALIGN=TOP>2</TD>
+                <TD>Zones are serving revoked keys</TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              <TR>
+                <TD VALIGN=TOP>220272</TD>
+                <TD>DNSSEC verified zones</TD>
+              </TR>
+              <TR>
+                <TD VALIGN=TOP>212608</TD>
+                <TD>Production DNSSEC-enabled zones</TD>
+              </TR>
+              <TR BGCOLOR="BLUE">
+                <TD COLSPAN=2></TD>
+              </TR>
+              <TR>
+                <TD></TD>
+                <TD>
+                  <STRONG>Distribution of key algorithms in use:</STRONG>
+                  <TABLE BORDER=0>
+                    <TR>
+                      <TD>
+                        <STRONG>Algorithm</STRONG>
+                      </TD>
+                      <TD>
+                        <STRONG># Keys</STRONG>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">DSA/SHA-1 [DSA]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">519</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">ECC/GOST [ECC-GOST]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">11</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA-NSEC3-SHA1 [RSASHA1-NSEC3-SHA1]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">415239</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA/MD5 [RSAMD5]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">48</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA/SHA-1 [RSASHA1]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">115005</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA/SHA256 [RSASHA256]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">101612</FONT>
+                      </TD>
+                    </TR>
+                    
+                    <TR>
+                      <TD>
+                        <FONT SIZE="-1">RSA/SHA512 [RSASHA512]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">1107</FONT>
+                      </TD>
+                    </TR>
+                    
+                  </TABLE>
+                </TD>
+              </TR>
+            </TABLE>
+            </td>
+            <td>
+          <TABLE BORDER=0>
+            <TR>
+              <TD ALIGN="CENTER">
+          <A HREF="pix/key-sigs-lt.png"><IMG SRC="pix/key-sigs-lt.png" BORDER="0" WIDTH="100%">
+          <BR>
+          Distribution of RRSIG lifetimes on DNSKEY RRsets</A>
+              </TD>
+            </TR>
+          </TABLE>
+            </td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+

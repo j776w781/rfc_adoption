@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-09",
+  "generated": "2026-09-29",
   "corpus": {
     "first_seen_over": [
       "reverse",
@@ -7,8 +7,8 @@
     ],
     "jumps_over": "zonefile (forward)",
     "months": [
-      "2009-03",
-      "2026-08"
+      "2009-04",
+      "2026-09"
     ],
     "forward_months": [
       "2016-06",
@@ -43,49 +43,49 @@
       "observable": "alg 8/10",
       "rfc": "RFC 5702",
       "rfc_published": "2009-10",
-      "first_zone_seen": "2010-03",
+      "first_zone_seen": "2010-04",
       "zones_at_first_sight": 1,
       "first_seen_basis": "reverse",
       "corpus_left_censored": false,
       "first_signer": "bind9 9.7.0",
       "first_signer_released": "2010-02",
       "code_lag_years": 0.3,
-      "deployment_lag_years": 0.1,
+      "deployment_lag_years": 0.2,
       "first_validator": "unbound 1.1.0",
       "first_validator_released": "2008-11",
-      "onset_years": 0.4
+      "onset_years": 0.5
     },
     {
       "observable": "alg 12",
       "rfc": "RFC 5933",
       "rfc_published": "2010-07",
-      "first_zone_seen": "2012-12",
+      "first_zone_seen": "2013-01",
       "zones_at_first_sight": 3,
       "first_seen_basis": "reverse",
       "corpus_left_censored": false,
       "first_signer": "bind9 9.6.2",
       "first_signer_released": "2010-02",
       "code_lag_years": -0.4,
-      "deployment_lag_years": 2.8,
+      "deployment_lag_years": 2.9,
       "first_validator": "unbound 1.4.0",
       "first_validator_released": "2009-11",
-      "onset_years": 2.4
+      "onset_years": 2.5
     },
     {
       "observable": "alg 13/14",
       "rfc": "RFC 6605",
       "rfc_published": "2012-04",
-      "first_zone_seen": "2015-11",
+      "first_zone_seen": "2015-12",
       "zones_at_first_sight": 2,
       "first_seen_basis": "reverse",
       "corpus_left_censored": false,
       "first_signer": "pdns-auth 3.0.1",
       "first_signer_released": "2012-01",
       "code_lag_years": -0.2,
-      "deployment_lag_years": 3.8,
+      "deployment_lag_years": 3.9,
       "first_validator": "unbound 1.4.17",
       "first_validator_released": "2012-05",
-      "onset_years": 3.6
+      "onset_years": 3.7
     },
     {
       "observable": "alg 15/16",
@@ -125,9 +125,9 @@
       "predecessor": "RFC 5702",
       "predecessor_observable": "alg 8/10",
       "predecessor_basis": "reverse",
-      "predecessor_share_at_publication": 0.8,
+      "predecessor_share_at_publication": 0.74,
       "predecessor_peak_share": 87.79,
-      "predecessor_peak_month": "2017-01",
+      "predecessor_peak_month": "2017-02",
       "fraction_of_peak_reached": 0.01,
       "still_spreading": true
     },
@@ -137,9 +137,9 @@
       "predecessor": "RFC 5702",
       "predecessor_observable": "alg 8/10",
       "predecessor_basis": "reverse",
-      "predecessor_share_at_publication": 14.2,
+      "predecessor_share_at_publication": 14.06,
       "predecessor_peak_share": 87.79,
-      "predecessor_peak_month": "2017-01",
+      "predecessor_peak_month": "2017-02",
       "fraction_of_peak_reached": 0.16,
       "still_spreading": true
     },
@@ -149,10 +149,10 @@
       "predecessor": "RFC 5702",
       "predecessor_observable": "alg 8/10",
       "predecessor_basis": "reverse",
-      "predecessor_share_at_publication": 46.45,
+      "predecessor_share_at_publication": 43.88,
       "predecessor_peak_share": 87.79,
-      "predecessor_peak_month": "2017-01",
-      "fraction_of_peak_reached": 0.53,
+      "predecessor_peak_month": "2017-02",
+      "fraction_of_peak_reached": 0.5,
       "still_spreading": true
     },
     {
@@ -161,10 +161,10 @@
       "predecessor": "RFC 5933",
       "predecessor_observable": "alg 12",
       "predecessor_basis": "reverse",
-      "predecessor_share_at_publication": 0.15,
+      "predecessor_share_at_publication": 0.17,
       "predecessor_peak_share": 0.35,
-      "predecessor_peak_month": "2013-11",
-      "fraction_of_peak_reached": 0.43,
+      "predecessor_peak_month": "2013-12",
+      "fraction_of_peak_reached": 0.47,
       "still_spreading": true
     },
     {
@@ -173,9 +173,9 @@
       "predecessor": "RFC 5702",
       "predecessor_observable": "alg 8/10",
       "predecessor_basis": "reverse",
-      "predecessor_share_at_publication": 87.76,
+      "predecessor_share_at_publication": 87.79,
       "predecessor_peak_share": 87.79,
-      "predecessor_peak_month": "2017-01",
+      "predecessor_peak_month": "2017-02",
       "fraction_of_peak_reached": 1.0,
       "still_spreading": false
     },
@@ -187,7 +187,7 @@
       "predecessor_basis": "reverse",
       "predecessor_share_at_publication": 0.11,
       "predecessor_peak_share": 0.35,
-      "predecessor_peak_month": "2013-11",
+      "predecessor_peak_month": "2013-12",
       "fraction_of_peak_reached": 0.3,
       "still_spreading": true
     },
@@ -197,9 +197,9 @@
       "predecessor": "RFC 6605",
       "predecessor_observable": "alg 13/14",
       "predecessor_basis": "reverse",
-      "predecessor_share_at_publication": 0.51,
+      "predecessor_share_at_publication": 0.43,
       "predecessor_peak_share": 74.06,
-      "predecessor_peak_month": "2026-07",
+      "predecessor_peak_month": "2026-08",
       "fraction_of_peak_reached": 0.01,
       "still_spreading": true
     }

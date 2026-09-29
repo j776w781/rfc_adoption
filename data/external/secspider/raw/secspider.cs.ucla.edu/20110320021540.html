@@ -1,0 +1,477 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html><!-- InstanceBegin template="/Templates/IRLLayout.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>SecSpider</title>
+<!-- InstanceEndEditable --><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<div align="center">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<STYLE type="text/css">
+<!--
+.style3 {
+	font-family: "Lucida Grande";
+	font-size: 20px;
+	color: #990000;
+}
+.style5 {color: #000066}
+.style12 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+.style17 {font-family: "Times New Roman", Times, serif; font-size: 15px; }
+.style20 {font-family: Arial, Helvetica, sans-serif}
+.style22 {
+	color: #FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+}
+.style23 {font-family: Arial, Helvetica, sans-serif; font-size: 15px; }
+.style25 {color: #B95C00}
+.style26 {color: #003300}
+.style30 {
+	font-size: 14px;
+	color: #B95C00;
+}
+.style31 {font-size: 14px}
+.style32 {font-family: Arial, Helvetica, sans-serif; color: #B95C00; font-size: 14px; }
+ --> </STYLE>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+//-->
+</script>
+<!-- InstanceBeginEditable name="head" -->
+ <!-- <STYLE type="text/css">
+.style33 {color: #000000}
+.style8 {color: #0000FF}
+ --> </STYLE>
+<link REL="shortcut icon" HREF="./images/favicon.ico" TYPE="image/x-icon">
+
+  <table width="1000" height="160"  border="0" cellpadding="0" cellspacing="0" bordercolor="#666666" bgcolor="#CCCCCC">
+    <tr>
+      <td height="160" valign="top">        <table width="100%" height="112"  border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr bgcolor="WHITE">
+          <th valign="top" scope="col"><table width="100%" height="109"  border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td align="left"><img src="./images/secspider-logo.png" width="114"><font size="+2" color="BLUE">SecSpider the DNSSEC Monitoring Project</font></td>
+                  <td align="right" valign="bottom"><img src="http://images.secdns.com/owl.gif" height="80"></td>
+            </tr>
+            <tr>
+              <td colspan=2 bgcolor="WHITE"><img width="100%" height="30" src="./images/bar-blue-trans.png"></td>
+            </tr>
+            <tr>
+              <td colspan=2 bgcolor="WHITE"><img height="5" src="./images/a.gif"></td>
+            </tr>
+          </table></th>
+        </tr>
+      </table>
+        <table width="100%" height="27"  border="0" align="center" cellpadding="0" cellspacing="0">
+          <tr bgcolor="#CCCCCC">
+            <td align="LEFT"><img src="./images/lt-header.gif"></td>
+            <td colspan="3"></td>
+            <td align="RIGHT"><img src="./images/rt-header.gif"></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td colspan="3">
+            <table border=0>
+              <tr>
+            <td width="7%" align="center"><a href="./"><font size="+1">Home</font></a></td>
+            <td width="7%" align="center">|</td>
+            <td width="7%" align="center"><a href="//blog.secspider.cs.ucla.edu/"><font size="+1">Blog</font></a></td>
+            <td width="7%" align="center">|</td>
+            <td width="7%" align="center"><a href="./docs.html"><font size="+1">Documentation</font></a></td>
+            <td width="7%" align="center">|</td>
+            <td width="7%" align="center"><a href="./ta.html"><font size="+1">Trust-Anchors</font></a></td>
+            <td width="7%" align="center">|</td>
+            <td width="7%" align="center"><a href="./clients.html"><font size="+1">Pollers</font></a></td>
+            <td width="7%" align="center">|</td>
+            <td width="7%" align="center"><a href="./secspider.pub"><font size="+1">GPG&nbsp;Key</font></a></td>
+              </tr>
+            </table>
+            </td>
+            <td></td>
+          </tr>
+        </table>      
+      </td>
+    </tr>
+  </table>
+
+<!--   <table width="800" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC"> -->
+   <table width="1000" height="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#CCCCCC">
+    <tr>
+      <th height="675" valign="top" scope="col"><table width="100%" height="100%"  border="0" cellpadding="0" cellspacing="0">
+        <tr align="center" valign="top">
+
+          <th width="78%" scope="col"><table width="97%" height="703"  border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+            <tr>
+              <th height="703" valign="top" scope="col"><div align="justify">
+                <table width="98%"  border="0" align="center" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <th scope="col"><!-- InstanceBeginEditable name="EditRegion3" -->
+<TABLE BORDER=0>
+  <TR ALIGN="LEFT">
+    <TD ALIGN="LEFT">
+      <table border="0">
+        <tr>
+          <td valign="top">
+    <img src="./images/new-icon.gif"/>
+          </td>
+          <td>
+    Check out our new sister-project <a href="http://www.vantage-points.org/">Vantages</a> with libvdns, <tt>dnsfunnel</tt>, and <tt>vantaged</tt>!
+          </td>
+        </tr>
+        <tr>
+          <td valign="top">
+    <img src="./images/new-icon.gif"/>
+          </td>
+          <td>
+    We now have TA files for both modern resolvers and older instances of BIND that don't support all key types on our <a
+href="./ta.html">Trust Anchors Page</a><br/>
+        </tr>
+      </table>
+    <H3>To add a zone for monitoring, please submit below:</H3>
+    <FORM NAME="input" ACTION="/cgi-bin/add-zone" METHOD="get">
+      <LABEL FOR="zone">Zone to add:</LABEL>
+      <INPUT TYPE="text" NAME="zone">
+      <INPUT type="submit" value="Submit">
+    </FORM>
+    <P>
+    <a href="prod.html">Vouch for or against a zone's production status</a>
+    <P>
+    For more information, questions, or comments please contact:
+    <BR/>
+    Eric Osterweil (<i>eoster<tag>&#64;</i><i>cs.<tag>ucla.e<tag>du</i>)
+    <BR/>
+    Dan Massey (<i>massey<tag>&#64;</i><i>cs.<tag>colostate.e</tag>du</i>)
+    <BR/>
+    Lixia Zhang (<i>lixia<tag>&#64;</i><i>cs.<tag>ucla.e<tag>du</i>)
+    </TD>
+    <TD VALIGN="TOP" ALIGN="LEFT">
+    <H3>Search for zone:</H3>
+    <FORM NAME="search" ACTION="/cgi-bin/search.cgi" METHOD="get">
+      <LABEL FOR="zone">Zone:</LABEL>
+      <INPUT TYPE="text" NAME="zone">
+      <INPUT type="submit" VALUE="Submit">
+    </FORM>
+    </TD>
+  </TR>
+</TABLE>
+
+    <TABLE BORDER=0>
+      <TR>
+        <TD COLSPAN=2>DNSSEC Deployment status as of: <i>Wed Mar 16 18:50:17 2011 UTC</i></TD>
+      </TR>
+      <TR BGCOLOR="BLUE">
+      <TD COLSPAN="2"></TD>
+      </TR>
+      <TR>
+        <TD COLSPAN="2">
+          <H2>Deployment Metrics:</H2>
+          <font size="-1">[<a href="./faq.html#metrics">What are these?</a>]</font>
+          <br/>
+          <table border="0">
+            <tr>
+              <td>
+                <center>Availability&nbsp;Metric:&nbsp;0.775</center>
+                <br/>
+                <a href="./images/avail-disp.png"><img width="300" src="./images/avail-disp.png" border="0"/></a>
+              </td>
+              <td>
+                <center>Verifiability&nbsp;Metric:&nbsp;0.421</center>
+                <br/>
+                <a href="./images/verif.png"><img width="300" src="./images/verif.png" border="0"/></a>
+              </td>
+              <td>
+                <center>Validity&nbsp;Metric:&nbsp;&lt;&nbsp;0.910,&nbsp;0.949&nbsp;&gt;</center>
+                <br/>
+                <a href="images/vuln-rrsets.png"><img width="300" src="images/vuln-rrsets.png" border="0" width="100%">
+              </td>
+            </tr>
+          </table>
+        </TD>
+      </TR>
+      <TR BGCOLOR="BLUE">
+      <TD></TD>
+      <TD></TD>
+      </TR>
+      <TR>
+        <TD VALIGN="TOP">
+          <H2>Detailed Monitoring Summary:</H2>
+            <TABLE BORDER=0>
+              <TR>
+                <TD VALIGN=TOP>
+          57628                </TD>
+                <TD>
+          Zones
+                </TD>
+              </TR>
+              <TR>
+                <TD></TD>
+                <TD>
+                  <TABLE BORDER=0>
+                    <TR>
+                <TD VALIGN=TOP>
+          37703                </TD>
+                <TD>
+          Zones have NS sets that match their parents' delegation set
+                </TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              <TR>
+                <TD VALIGN=TOP>
+          32386                </TD>
+                <TD>
+          DNSSEC enabled zones
+                </TD>
+              </TR>
+              <TR>
+                <TD></TD>
+                <TD>
+                  <TABLE BORDER=0>
+                    <TR>
+                <TD VALIGN=TOP>
+          29934                </TD>
+                <TD>
+          Zones use both KSKs and ZSKs
+                </TD>
+                    </TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              <TR>
+                <TD VALIGN=TOP>
+          27922                </TD>
+                <TD>
+          Production DNSSEC-enabled zones
+                </TD>
+              </TR>
+              <TR BGCOLOR="BLUE">
+                <TD COLSPAN=2></TD>
+              </TR>
+              <TR>
+                <TD></TD>
+                <TD>
+                  <STRONG>Distribution of key algorithms in use:</STRONG>
+                  <TABLE BORDER=0>
+                    <TR>
+                      <TD>
+                        <STRONG>Algorithm</STRONG>
+                      </TD>
+                      <TD>
+                        <STRONG># Keys</STRONG>
+                      </TD>
+                    </TR>
+                    <TR><TD><FONT SIZE="-1">RSA/MD5 [RSAMD5]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">7</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">Diffie-Hellman [DH]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">DSA/SHA-1 [DSA]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">120</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">Elliptic Curve [ECC]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">RSA/SHA-1 [RSASHA1]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">67329</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">Indirect [INDIRECT]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">DSA-NSEC3-SHA1 [DSA-NSEC3-SHA1]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">RSA-NSEC3-SHA1 [RSASHA1-NSEC3-SHA1]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">4257</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">RSA/SHA256 [RSASHA256]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">1231</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">RSA/SHA512 [RSASHA512]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">709</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">ECC/GOST [ECC-GOST]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">4</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">Private [PRIVATEDNS]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">Private [PRIVATEOID]</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                    <TR><TD><FONT SIZE="-1">Reserved 0</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+		    <TR><TD><FONT SIZE="-1">Reserved 255</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                                        <TR><TD><FONT SIZE="-1">Unresolved Names</FONT></TD><TD ALIGN="CENTER"><FONT SIZE="-1">0</FONT></TD></TR>
+                  </TABLE>
+                </TD>
+              </TR>
+              <TR BGCOLOR="BLUE">
+                <TD COLSPAN=2></TD>
+              </TR>
+              <TR>
+                <TD COLSPAN=2>
+<B>Production DNSSEC-enabled Zones: (in DNS canonical order):</B><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod0.html"><i>&quot;.&quot;</i>&nbsp;through&nbsp;<i>&quot;digipro.be.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod1.html"><i>&quot;dns.be.&quot;</i>&nbsp;through&nbsp;<i>&quot;bodegaslyng.com.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod2.html"><i>&quot;bodegasmunoz.com.&quot;</i>&nbsp;through&nbsp;<i>&quot;kamuikobayashi.com.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod3.html"><i>&quot;kariu.com.&quot;</i>&nbsp;through&nbsp;<i>&quot;windows-ho...quote.com.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod4.html"><i>&quot;wingedsonar.com.&quot;</i>&nbsp;through&nbsp;<i>&quot;aeaonline.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod5.html"><i>&quot;aecsro.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;angelica.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod6.html"><i>&quot;angelight.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;autoalternativ.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod7.html"><i>&quot;autoandel.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;clga.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod8.html"><i>&quot;climatec.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;energydrinks.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod9.html"><i>&quot;energyonline.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;homy.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod10.html"><i>&quot;honda.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;koronamedia.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod11.html"><i>&quot;korsika.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;mojetipy.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod12.html"><i>&quot;mojetricka.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;penzionsabi.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod13.html"><i>&quot;penzionsevcik.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;rodiny.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod14.html"><i>&quot;roesler.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;svetkridel.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod15.html"><i>&quot;svetlazvuk.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;vsechnydomy.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod16.html"><i>&quot;vsechnyknihy.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;ltc.edu.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod17.html"><i>&quot;merit.edu.&quot;</i>&nbsp;through&nbsp;<i>&quot;aid-kobe.co.jp.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod18.html"><i>&quot;alpha-dev.co.jp.&quot;</i>&nbsp;through&nbsp;<i>&quot;jumpit.ru.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat-prod19.html"><i>&quot;kahai.ru.&quot;</i>&nbsp;through&nbsp;<i>&quot;vweb.co.za.&quot;</i></A></FONT><BR>
+                </TD>
+              </TR>
+              <TR BGCOLOR="BLUE">
+                <TD COLSPAN=2></TD>
+              </TR>
+              <TR>
+                <TD COLSPAN=2>
+<B>All Monitored Zones: (in DNS canonical order):</B><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat0.html"><i>&quot;.&quot;</i>&nbsp;through&nbsp;<i>&quot;briobrussel.be.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat1.html"><i>&quot;brosensint...rieurs.be.&quot;</i>&nbsp;through&nbsp;<i>&quot;bauru.unesp.br.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat2.html"><i>&quot;centrovirt....unesp.br.&quot;</i>&nbsp;through&nbsp;<i>&quot;dominioo.com.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat3.html"><i>&quot;dominiumbrokers.com.&quot;</i>&nbsp;through&nbsp;<i>&quot;musecurity.com.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat4.html"><i>&quot;museutgn.com.&quot;</i>&nbsp;through&nbsp;<i>&quot;zzscpa.com.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat5.html"><i>&quot;coop.&quot;</i>&nbsp;through&nbsp;<i>&quot;agrokomcz.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat6.html"><i>&quot;agrokov.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;arboristic...chodni.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat7.html"><i>&quot;arbosoft.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;bohemiagold.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat8.html"><i>&quot;bohemiamobil.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;dve-sestry.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat9.html"><i>&quot;dvecarodejnice.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;hitpoint.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat10.html"><i>&quot;hitradiomagic.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;kvelektro.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat11.html"><i>&quot;kvelektrocentrum.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;nh-roadtrans.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat12.html"><i>&quot;nhk.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;psp-konzole.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat13.html"><i>&quot;psp-sro.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;stanton.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat14.html"><i>&quot;stantondj.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;vsproducts.cz.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat15.html"><i>&quot;vspsv.cz.&quot;</i>&nbsp;through&nbsp;<i>&quot;mil.dk.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat16.html"><i>&quot;modestedamager.dk.&quot;</i>&nbsp;through&nbsp;<i>&quot;esdim.noaa.gov.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat17.html"><i>&quot;esrl.noaa.gov.&quot;</i>&nbsp;through&nbsp;<i>&quot;semperen.net.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat18.html"><i>&quot;sendas.net.&quot;</i>&nbsp;through&nbsp;<i>&quot;sigexpired...etlabs.nl.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat19.html"><i>&quot;signotince...etlabs.nl.&quot;</i>&nbsp;through&nbsp;<i>&quot;sigexpired...etlabs.nl.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat20.html"><i>&quot;signotince...etlabs.nl.&quot;</i>&nbsp;through&nbsp;<i>&quot;bogussig.n...etlabs.nl.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat21.html"><i>&quot;nods.nods....etlabs.nl.&quot;</i>&nbsp;through&nbsp;<i>&quot;bogussig.s...etlabs.nl.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat22.html"><i>&quot;nods.signo...etlabs.nl.&quot;</i>&nbsp;through&nbsp;<i>&quot;unknownalg...etlabs.nl.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat23.html"><i>&quot;nods.nods....etlabs.nl.&quot;</i>&nbsp;through&nbsp;<i>&quot;unknownalg...c.tjeb.nl.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat24.html"><i>&quot;nods.nods....c.tjeb.nl.&quot;</i>&nbsp;through&nbsp;<i>&quot;arseca.org.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat25.html"><i>&quot;articmist.org.&quot;</i>&nbsp;through&nbsp;<i>&quot;btour.ru.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat26.html"><i>&quot;btv.ru.&quot;</i>&nbsp;through&nbsp;<i>&quot;myref.ru.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat27.html"><i>&quot;myriads.ru.&quot;</i>&nbsp;through&nbsp;<i>&quot;vvsite.ru.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat28.html"><i>&quot;vw-bus-shop.ru.&quot;</i>&nbsp;through&nbsp;<i>&quot;kattwebb.se.&quot;</i></A></FONT><BR>
+          <FONT SIZE="-1"><A HREF="./zone-dat29.html"><i>&quot;kawasakiskane.se.&quot;</i>&nbsp;through&nbsp;<i>&quot;zw.&quot;</i></A></FONT><BR>
+                </TD>
+              </TR>
+            </TABLE>
+        </TD>
+        <TD VALIGN="TOP" WIDTH="50%">
+          <TABLE BORDER=0>
+            <TR>
+              <TD ALIGN="CENTER">
+          <A HREF="images/growth.png"><IMG SRC="images/growth.png" BORDER="0" WIDTH="100%">
+          <BR>
+          Growth of DNSSEC deployment</A>
+              </TD>
+            </TR>
+          </TABLE>
+          <TABLE BORDER=0>
+            <TR>
+              <TD ALIGN="CENTER">
+          <A HREF="images/key-lifetimes.png"><IMG SRC="images/key-lifetimes.png" BORDER="0" WIDTH="100%">
+          <BR>
+          Distribution of RRSIG lifetimes on DNSKEY RRsets</A>
+              </TD>
+            </TR>
+          </TABLE>
+        </TD>
+      </TR>
+      <TR BGCOLOR="BLUE">
+      <TD></TD>
+      <TD></TD>
+      </TR>
+    </TABLE>
+
+    <TABLE BORDER=0 width=100%>
+       <TR>
+          <TD ALIGN="CENTER">
+          <A HREF="islands.html"><IMG SRC="images/islands.png" BORDER="0">
+          <BR>
+          Production Islands of trust</A>
+          </TD>
+       </TR>
+    </TABLE>
+
+
+                  </tr>
+                </table>
+                <h2 class="style5">&nbsp;</h2>
+                <h2 class="style5">&nbsp;</h2>
+                </div></th>
+            </tr>
+          </table></th>
+          </tr>
+      </table></th>
+    </tr>
+  </table>
+  <table width="1000" height="30" border="0" cellpadding="0" cellspacing="0" bordercolor="WHITE" bgcolor="WHITE">
+    <tr>
+      <td valign="top">
+        <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bordercolor="#666666" bgcolor="WHITE">
+          <tr bgcolor="#CCCCCC">
+            <td align="LEFT"><img src="./images/lt-footer.gif"></td>
+            <td colspan=4></td>
+            <td align="RIGHT"><img src="./images/rt-footer.gif"></td>
+          </tr>
+        </table>      
+      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="WHITE">
+        <tr bgcolor="WHITE">
+          <th valign="bottom" height="47" scope="col"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr bgcolor="WHITE" height="2">
+              <td colspan="5"></td>
+            </tr>
+            <tr bgcolor="BLUE" height="2">
+              <td bgcolor="BLUE" height="2" colspan="5"></td>
+            </tr>
+            <tr bgcolor="WHITE" height="4">
+              <td colspan="5" height="4"><img src="./images/a.gif"></td>
+            </tr>
+            <tr bgcolor="WHITE" align="center">
+              <td>
+                <a href="http://www.nsf.gov/"><img border="0" src="./images/nsf-small.png" HEIGHT="37"></a>
+              </td>
+              <td>
+                <a href="http://www.dhs.gov/"><img border="0" src="./images/dhs-small.png" HEIGHT="37"></a>
+              </td>
+              <td>
+                <a href="http://www.netsec.colostate.edu/"><img border="0" src="http://www.netsec.colostate.edu/images/logos/NetSec.jpg" HEIGHT="37"></a>
+              </td>
+              <td>
+                <a href="http://irl.cs.ucla.edu/"><img border="0" src="http://irl.cs.ucla.edu/images/irl-logo.png" HEIGHT="37"></a>
+              </td>
+              <td>
+                <a href="http://www.freebsd.org/"><img border="0" src="./images/freebsd.png" HEIGHT="37"></a>
+              </td>
+            </tr>
+          </table></th>
+        </tr>
+      </table>
+      </td>
+    </tr>
+  </table>
+
+</div>
+</body>
+<!-- InstanceEnd --></html>
