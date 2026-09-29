@@ -1,0 +1,39 @@
+program,capability,observable,rfc,arc_a_first_release,arc_a_released,agrees,issues,arc_a_table,what,timeline_rows_at_that_release
+unbound,validate,nsec3,RFC 5155,0.7.1,2007-11-19,False,"timeline row unbound[1]@0.5 cites RFC 5155 with date 2007-09-25, before Arc A's first validate nsec3 release 0.7.1 (2007-11-19)",,,
+bind9,sign,nsec3,RFC 5155,9.6.0,2008-12-21,True,,,,
+unbound,validate,alg 8/10,RFC 5702,1.1.0,2008-11-14,True,,,,
+bind9,sign,alg 8/10,RFC 5702,9.7.0,2010-02-16,True,,,,
+unbound,validate,alg 12,RFC 5933,1.4.0,2009-11-23,True,,,,
+bind9,sign,alg 12,RFC 5933,9.6.2,2010-02-18,True,,,,
+pdns-auth,sign,alg 13/14,RFC 6605,3.0.1,2012-01-10,True,,,,
+unbound,validate,alg 13/14,RFC 6605,1.4.17,2012-05-18,True,,,,
+bind9,sign,alg 13/14,RFC 6605,9.8.4,2012-09-26,True,,,,
+knot,sign,alg 13/14,RFC 6605,1.4.0,2013-12-31,True,,,,
+pdns-auth,sign,digest 4,RFC 6605,3.0.1,2012-01-10,True,,,,
+bind9,rrtype,CDS/CDNSKEY,RFC 7344,9.8.8,2014-09-16,True,,,,
+knot,rrtype,CDS/CDNSKEY,RFC 7344,1.6.3,2015-04-08,True,,,,
+pdns-auth,publish,CDS/CDNSKEY,RFC 7344,4.0.0,2016-07-08,True,,,,
+knot,publish,CDS/CDNSKEY,RFC 7344,2.5.0,2017-06-05,True,,,,
+bind9,publish,CDS/CDNSKEY,RFC 7344,9.16.0,2020-02-12,True,,,,
+pdns-auth,sign,alg 15/16,RFC 8080,3.3.1,2013-12-17,True,,,,
+knot,algorithm-aware,alg 15/16,RFC 8080,2.4.0,2017-01-18,True,,,,
+unbound,validate,alg 15,RFC 8080,1.6.4,2017-06-22,True,,,,
+knot,sign,alg 15,RFC 8080,2.6.0,2017-09-29,True,,,,
+bind9,sign,alg 15,RFC 8080,9.12.0,2018-01-17,True,,,,
+unbound,validate,alg 16,RFC 8080,1.7.1,2018-04-26,True,,,,
+opendnssec,sign,alg 15/16,RFC 8080,2.1.7,2020-10-07,True,,,,
+unbound,validate,trust-anchor rollover,RFC 5011,1.4.0,2009-11-23,True,,,,
+knot,sign,revoked-KSK state,RFC 5011,3.0.0,2020-09-09,True,,,,
+bind9,validate,trust-anchor rollover,RFC 5011,9.7.0,2010-02-16,True,,,,
+bind9,sign,revoked-KSK state,RFC 5011,9.7.0,2010-02-16,True,,,,
+bind9,,,,9.7.0,2010-02-16,True,,default_changes,NSEC3 iterations default 100 -> 10,"[""d02-keygen-default-alg-rsasha1"", ""d03-signzone-nsec3-iterations-100-to-10""]"
+opendnssec,,,,1.2.0,2011-03-18,True,,default_changes,default signing algorithm -> 8 (RSASHA256),"[""opendnssec[5]@1.2.0b1""]"
+knot,,,,2.0.0,2015-06-26,True,,default_changes,default signing algorithm -> RSASHA256,"[""knot[1]@2.0.0""]"
+knot,,,,2.1.0,2016-01-14,True,,default_changes,default signing algorithm -> ECDSAP256SHA256,"[""knot[2]@2.1.0""]"
+pdns-auth,,,,4.0.0,2016-07-08,True,,default_changes,default ZSK algorithm -> ECDSA P-256,"[""pdns-auth[5]@4.0.0"", ""pdns-auth[6]@4.0.0"", ""pdns-auth[7]@4.0.0"", ""pdns-auth[8]@4.0.0"", ""pdns-auth[9]@4.0.0""]"
+pdns-auth,,,,4.0.0,2016-07-08,True,,default_changes,default KSK algorithm -> ECDSA P-256,"[""pdns-auth[5]@4.0.0"", ""pdns-auth[6]@4.0.0"", ""pdns-auth[7]@4.0.0"", ""pdns-auth[8]@4.0.0"", ""pdns-auth[9]@4.0.0""]"
+bind9,,,,9.16.0,2020-02-12,True,,default_changes,built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK,"[""d13-ds-cds-sha1-dropped"", ""d14-keygen-rsa-zsk-2048"", ""d15-dnssec-policy-default-ecdsap256"", ""d16-dnssec-policy-default-key-size-2048""]"
+pdns-rec,,,,4.1.0,2017-12-04,True,,validator_limits,reject zones with too many NSEC3 iterations,"[""nsec3-max-iterations-2500""]"
+unbound,,,,1.13.2,2021-08-05,True,,validator_limits,"NSEC3 max iterations lowered to 150, matching other vendors","[""unbound[19]@1.13.2""]"
+pdns-auth,,,,4.5.0,2021-07-12,True,,validator_limits,max-nsec3-iterations lowered to 100,"[""pdns-auth[10]@4.5.0""]"
+knot,,,,3.1.5,2021-12-20,False,no timeline default_changes row has stable tag v3.1.5,validator_limits,config check on the default NSEC3 iteration count,[]
