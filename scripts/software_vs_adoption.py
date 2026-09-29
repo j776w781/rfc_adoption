@@ -60,6 +60,18 @@ TREND_MIN = 13          # minimum months in the rolling window (half-window at s
 FORWARD_FLOOR, REVERSE_FLOOR = 300, 30
 BAND = (5.0, 95.0)      # 90% chance band
 MIN_PRESENT = 12        # q1: months in which the value must be present for a program test
+STEP_PRE, STEP_POST = 24, 12   # step test: months of pre-trend fit, months after
+REV_EVENT_LAG = 1       # reverse label M = state at 00:00 UTC on the 1st of M: a release in month r is
+                        # before label r+1, so the reverse event index is r+1
+Q1_TESTS = ("step12", "transient3")
+Q2_TESTS = ("step12", "transient12")
+TEST_ROLE = {"step12": "primary: departure from the pre-event trend",
+             "transient3": "secondary: transient deviation, blind to a lasting step",
+             "transient12": "secondary: transient deviation, blind to a lasting step"}
+PEAK_MIN_DEN = 300      # q5: a peak is taken only over months with at least this many in the denominator
+Q1_MIN_WINDOW = 24      # q1: the testable window must span at least this many months
+Q1_MAX_OCC = 0.75       # q1: and release months may fill at most this share of it
+CALIB_REPS = 1000       # synthetic replications for the null calibration
 SIZE_BINS = [(1, 1, "1"), (2, 4, "2-4"), (5, 9, "5-9"), (10, 49, "10-49"),
              (50, 99, "50-99"), (100, 10 ** 9, "100+")]
 LARGE_ACTION = 10       # delegations: an action this size or larger is "large"
@@ -395,7 +407,7 @@ def detrend(share: pd.Series) -> pd.Series:
 
 
 def window_stat(x: np.ndarray, w: int) -> np.ndarray:
-    """For every month index e: mean(x[e:e+w]) - mean(x[e-w:e]); NaN when the
+    """Transient statistic. For every index e: mean(x[e:e+w]) - mean(x[e-w:e]); NaN when the
     series does not cover e-w .. e+w-1 or fewer than 2/3 of either side is valid."""
     n = len(x)
     valid = ~np.isnan(x)
@@ -414,11 +426,48 @@ def window_stat(x: np.ndarray, w: int) -> np.ndarray:
     return out
 
 
+def step_stat(x: np.ndarray, pre: int = STEP_PRE, post: int = STEP_POST) -> np.ndarray:
+    """Step-sensitive statistic. For every index e: fit a least-squares line to x[e-pre:e],
+    extrapolate it over e..e+post-1, and return the mean of actual minus extrapolated. A lasting
+    level shift at e shows up in full, unlike the detrended transient statistic. NaN when the series
+    does not cover e-pre .. e+post-1 or fewer than 2/3 of either side is valid."""
+    x = np.asarray(x, dtype=float)
+    n = len(x)
+    valid = ~np.isnan(x)
+    out = np.full(n, np.nan)
+    if not valid.any():
+        return out
+    first, last = np.argmax(valid), n - 1 - np.argmax(valid[::-1])
+    need_b, need_a = math.ceil(2 * pre / 3), math.ceil(2 * post / 3)
+    tb = np.arange(-pre, 0, dtype=float)
+    ta = np.arange(0, post, dtype=float)
+    for e in range(n):
+        if e - pre < first or e + post - 1 > last:
+            continue
+        b, a = x[e - pre:e], x[e:e + post]
+        okb, oka = ~np.isnan(b), ~np.isnan(a)
+        if okb.sum() < need_b or oka.sum() < need_a:
+            continue
+        slope, icpt = np.polyfit(tb[okb], b[okb], 1)
+        out[e] = float(np.mean(a[oka] - (icpt + slope * ta[oka])))
+    return out
+
+
+#: statistic key -> (months before, months after) the event index
+STAT_SPAN = {"step12": (STEP_PRE, STEP_POST), "transient3": (Q1_W, Q1_W), "transient12": (Q2_W, Q2_W)}
+
+
 class Series:
-    """A share series with its detrended window statistics, month-indexed."""
+    """A share series with its event statistics.
+
+    Dating: a reverse label M is the state at 00:00 UTC on the 1st of M, so for a release in calendar
+    month r the reverse event index is label r+1 (states up to label r are before the release). A
+    forward label is the calendar month of measurement; the event index is r itself. `at()` and
+    `testable_months()` take and return calendar release months."""
 
     def __init__(self, data, obs, corpus, source):
         self.obs, self.corpus, self.source = obs, corpus, source
+        self.lag = REV_EVENT_LAG if corpus == "reverse_panel" else 0
         r = share_series(data, obs, corpus, source)
         self.ok = r is not None
         if not self.ok:
@@ -430,37 +479,44 @@ class Series:
         self.last_valid = valid.index[-1] if len(valid) else None
         self.ever_nonzero = bool((valid > 0).any()) if len(valid) else False
         self.present_months = int((valid > 0).sum())
+        sh = self.share.to_numpy(dtype=float)
         det = detrend(self.share).to_numpy(dtype=float)
         self.det = det
-        self.stat = {w: window_stat(det, w) for w in (Q1_W, Q2_W)}
+        self.stat = {"transient3": window_stat(det, Q1_W), "transient12": window_stat(det, Q2_W),
+                     "step12": step_stat(sh)}
 
-    def at(self, w: int, month_i: int) -> float:
-        k = month_i - self.start
+    def idx(self, month_i: int) -> int:
+        return month_i + self.lag - self.start
+
+    def at(self, key: str, month_i: int) -> float:
+        k = self.idx(month_i)
         if k < 0 or k >= len(self.det):
             return float("nan")
-        return float(self.stat[w][k])
+        return float(self.stat[key][k])
 
-    def at_arr(self, w: int, months: np.ndarray) -> np.ndarray:
-        k = np.asarray(months, dtype=int) - self.start
+    def at_arr(self, key: str, months: np.ndarray) -> np.ndarray:
+        k = np.asarray(months, dtype=int) + self.lag - self.start
         ok = (k >= 0) & (k < len(self.det))
         out = np.full(len(k), np.nan)
-        out[ok] = self.stat[w][k[ok]]
+        out[ok] = self.stat[key][k[ok]]
         return out
 
-    def testable_months(self, w: int) -> np.ndarray:
-        s = self.stat[w]
-        return np.flatnonzero(~np.isnan(s)) + self.start
+    def testable_months(self, key: str) -> np.ndarray:
+        """Calendar release months at which the statistic is defined."""
+        return np.flatnonzero(~np.isnan(self.stat[key])) + self.start - self.lag
 
-    def why_untestable(self, w: int, month_i: int) -> str:
+    def why_untestable(self, key: str, month_i: int) -> str:
         if self.first_valid is None:
             return f"no month with at least {MIN_DEN} in the denominator"
         if not self.ever_nonzero:
             return "the value never appears in this series"
+        before, after = STAT_SPAN[key]
+        e = month_i + self.lag
         fv, lv = m2i(self.first_valid), m2i(self.last_valid)
-        if month_i - w < fv:
-            return f"no before-period: series valid from {self.first_valid}, needs {i2m(month_i - w)}"
-        if month_i + w - 1 > lv:
-            return f"no after-period: series valid to {self.last_valid}, needs {i2m(month_i + w - 1)}"
+        if e - before < fv:
+            return f"no before-period: series valid from {self.first_valid}, needs {i2m(e - before)}"
+        if e + after - 1 > lv:
+            return f"no after-period: series valid to {self.last_valid}, needs {i2m(e + after - 1)}"
         return "too many gap months in the window"
 
 
@@ -480,6 +536,37 @@ def pct_rank(null: np.ndarray, obs: float) -> float:
 
 def two_sided(null: np.ndarray, obs: float) -> float:
     return float(min(1.0, 2 * min(np.mean(null <= obs), np.mean(null >= obs))))
+
+
+def shift_test(values_at, rel_months, a: int, b: int, rng, lo: float, hi: float) -> dict | None:
+    """Program-level test. Release months inside the coverage window [a, b] are circularly shifted
+    by one uniform offset within that window, N_DRAWS times. values_at(months) returns the event
+    statistic (NaN where untestable). Returns the observed mean, its null and the share of release
+    months outside the single-release band [lo, hi] with its null."""
+    rm = np.array([m for m in rel_months if a <= m <= b], dtype=int)
+    if len(rm) == 0:
+        return None
+    v = values_at(rm)
+    ok = ~np.isnan(v)
+    if ok.sum() == 0:
+        return None
+    obs_mean = float(v[ok].mean())
+    obs_out = float(np.mean((v[ok] < lo) | (v[ok] > hi)))
+    L = b - a + 1
+    ks = rng.integers(1, L, size=N_DRAWS) if L > 1 else np.zeros(N_DRAWS, dtype=int)
+    shifted = a + ((rm[None, :] - a + ks[:, None]) % L)
+    V = values_at(shifted.ravel()).reshape(shifted.shape)
+    null_mean, null_out = [], []
+    for row in V:
+        row = row[~np.isnan(row)]
+        if len(row) == 0:
+            continue
+        null_mean.append(row.mean())
+        null_out.append(np.mean((row < lo) | (row > hi)))
+    null_mean, null_out = np.array(null_mean), np.array(null_out)
+    return {"months_in_window": int(len(rm)), "months_tested": int(ok.sum()), "obs_mean": obs_mean,
+            "obs_out": obs_out, "null_mean": null_mean, "null_out": null_out,
+            "tested_months": rm[ok]}
 
 
 # ---------------------------------------------------------------- mapping --
@@ -564,99 +651,123 @@ def q1(rows, releases, data):
     for prog in sorted(releases):
         rel = releases[prog]
         rel_months = sorted({m2i(d[:7]) for _, d in rel})
-        span0, span1 = rel_months[0], rel_months[-1]
-        L = span1 - span0 + 1
         obs_map = by_prog.get(prog, {})
         prog_tab = {"program": prog, "stable_public_releases": len(rel), "release_months": len(rel_months),
-                    "span": [i2m(span0), i2m(span1)], "observables": {}, "tests": []}
+                    "span": [i2m(rel_months[0]), i2m(rel_months[-1])], "observables": {}, "tests": []}
         if not obs_map:
             prog_tab["note"] = "no default row of this program maps to a zone-data observable; nothing to test"
         for obs in sorted(obs_map):
             prog_tab["observables"][obs] = sorted(obs_map[obs])
             for corpus, src in corpora_for(obs):
                 s = Series(data, obs, corpus, src)
-                key = f"q1|{prog}|{obs}|{corpus}|{src}"
-                base = {"program": prog, "observable": obs, "corpus": corpus, "source": src,
-                        "rows_touching": ";".join(sorted(obs_map[obs])),
-                        "releases_total": len(rel), "release_months_total": len(rel_months)}
-                if not s.ok or s.first_valid is None or s.present_months < MIN_PRESENT:
-                    why = ("no series" if not s.ok else
-                           s.why_untestable(Q1_W, span0) if (s.first_valid is None or not s.ever_nonzero) else
-                           f"the value is present in only {s.present_months} months of this series "
-                           f"(fewer than {MIN_PRESENT})")
-                    summary.append({**base, "status": "no test", "reason": why})
-                    prog_tab["tests"].append(summary[-1])
-                    continue
-                stat = s.stat[Q1_W]
-                tm = s.testable_months(Q1_W)
-                vals_all = stat[~np.isnan(stat)]
-                lo, hi = np.percentile(vals_all, BAND)
-                d_rel = np.array([s.at(Q1_W, m) for m in rel_months])
-                ok = ~np.isnan(d_rel)
-                for tag, date in rel:
-                    v = s.at(Q1_W, m2i(date[:7]))
-                    per_release.append({"program": prog, "tag": tag, "released": date, "observable": obs,
-                                        "corpus": corpus, "source": src,
-                                        "d3": r6(v) if not math.isnan(v) else None,
-                                        "status": "tested" if not math.isnan(v) else "no test",
-                                        "outside_90_band": (bool(v < lo or v > hi) if not math.isnan(v) else None)})
-                if ok.sum() == 0:
-                    summary.append({**base, "status": "no test",
-                                    "reason": f"no release month has {Q1_W} months either side in this series "
-                                              f"(valid {s.first_valid}..{s.last_valid})"})
-                    prog_tab["tests"].append(summary[-1])
-                    continue
-                obs_mean = float(np.mean(d_rel[ok]))
-                obs_out = float(np.mean((d_rel[ok] < lo) | (d_rel[ok] > hi)))
-                rel_arr = np.array(rel_months)
-                rng = rng_for(key)
-                ks = rng.integers(1, L, size=N_DRAWS) if L > 1 else np.zeros(N_DRAWS, dtype=int)
-                null_mean, null_out = [], []
-                shifted = span0 + ((rel_arr[None, :] - span0 + ks[:, None]) % L)
-                V = s.at_arr(Q1_W, shifted.ravel()).reshape(shifted.shape)
-                for v in V:
-                    v = v[~np.isnan(v)]
-                    if len(v) == 0:
+                for test in Q1_TESTS:
+                    key = f"q1|{test}|{prog}|{obs}|{corpus}|{src}"
+                    base = {"program": prog, "test": test, "role": TEST_ROLE[test], "observable": obs,
+                            "corpus": corpus, "source": src, "rows_touching": ";".join(sorted(obs_map[obs])),
+                            "releases_total": len(rel), "release_months_total": len(rel_months)}
+                    if not s.ok or s.first_valid is None or s.present_months < MIN_PRESENT:
+                        why = ("no series" if not s.ok else
+                               s.why_untestable(test, rel_months[0]) if (s.first_valid is None or not s.ever_nonzero)
+                               else f"the value is present in only {s.present_months} months of this series "
+                                    f"(fewer than {MIN_PRESENT})")
+                        summary.append({**base, "status": "no test", "reason": why})
+                        prog_tab["tests"].append(summary[-1])
                         continue
-                    null_mean.append(v.mean())
-                    null_out.append(np.mean((v < lo) | (v > hi)))
-                null_mean, null_out = np.array(null_mean), np.array(null_out)
-                n_tested_rel = int(sum(1 for _, d in rel if not math.isnan(s.at(Q1_W, m2i(d[:7])))))
-                row = {**base, "status": "tested",
-                       "releases_tested": n_tested_rel, "release_months_tested": int(ok.sum()),
-                       "tested_from": i2m(int(rel_arr[ok].min())), "tested_to": i2m(int(rel_arr[ok].max())),
-                       "observed_mean_d3": r6(obs_mean),
-                       "null_draws_used": int(len(null_mean)),
-                       "null_mean": r6(null_mean.mean()) if len(null_mean) else None,
-                       "null_p5": r6(np.percentile(null_mean, 5)) if len(null_mean) else None,
-                       "null_p95": r6(np.percentile(null_mean, 95)) if len(null_mean) else None,
-                       "percentile": r6(pct_rank(null_mean, obs_mean)) if len(null_mean) else None,
-                       "p_two_sided": r6(two_sided(null_mean, obs_mean)) if len(null_mean) else None,
-                       "band_lo": r6(lo), "band_hi": r6(hi),
-                       "share_release_months_outside_band": r6(obs_out),
-                       "null_mean_share_outside": r6(null_out.mean()) if len(null_out) else None,
-                       "p_share_outside_ge_observed": r6(np.mean(null_out >= obs_out)) if len(null_out) else None,
-                       "beats_chance_mean": bool(len(null_mean) and two_sided(null_mean, obs_mean) < 0.10),
-                       "beats_chance_outside": bool(len(null_out) and np.mean(null_out >= obs_out) < 0.10)}
-                summary.append(row)
-                prog_tab["tests"].append(row)
+                    tm = s.testable_months(test)
+                    if len(tm) == 0:
+                        summary.append({**base, "status": "no test",
+                                        "reason": "the series is too short for this statistic"})
+                        prog_tab["tests"].append(summary[-1])
+                        continue
+                    a, b = int(tm.min()), int(tm.max())
+                    L = b - a + 1
+                    in_win = [mm for mm in rel_months if a <= mm <= b and not math.isnan(s.at(test, mm))]
+                    occ = len(in_win) / L
+                    if L < Q1_MIN_WINDOW or occ > Q1_MAX_OCC:
+                        why = (f"the testable window {i2m(a)}..{i2m(b)} is {L} months, fewer than {Q1_MIN_WINDOW}"
+                               if L < Q1_MIN_WINDOW else
+                               f"release months fill {len(in_win)} of the {L} months of the testable window "
+                               f"{i2m(a)}..{i2m(b)}, more than {Q1_MAX_OCC:.0%}; a shifted schedule then covers "
+                               f"almost the same months and the test has no contrast")
+                        summary.append({**base, "status": "no test", "reason": why,
+                                        "null_window": f"{i2m(a)}..{i2m(b)}", "release_months_in_window": len(in_win)})
+                        prog_tab["tests"].append(summary[-1])
+                        continue
+                    vals_all = s.at_arr(test, tm)
+                    lo, hi = np.percentile(vals_all, BAND)
+                    for tag, date in rel:
+                        v = s.at(test, m2i(date[:7]))
+                        if not math.isnan(v):
+                            per_release.append({"program": prog, "test": test, "tag": tag, "released": date,
+                                                "observable": obs, "corpus": corpus, "source": src,
+                                                "value": r6(v), "outside_90_band": bool(v < lo or v > hi)})
+                    res = shift_test(lambda ms: s.at_arr(test, ms), rel_months, a, b, rng_for(key), lo, hi)
+                    if res is None or len(res["null_mean"]) == 0:
+                        summary.append({**base, "status": "no test",
+                                        "reason": f"no release month falls in the series' testable window "
+                                                  f"{i2m(a)}..{i2m(b)}"})
+                        prog_tab["tests"].append(summary[-1])
+                        continue
+                    nm, no = res["null_mean"], res["null_out"]
+                    n_rel = int(sum(1 for _, d in rel if not math.isnan(s.at(test, m2i(d[:7])))))
+                    p2_ = two_sided(nm, res["obs_mean"])
+                    p_out = float(np.mean(no >= res["obs_out"]))
+                    row = {**base, "status": "tested", "null_window": f"{i2m(a)}..{i2m(b)}",
+                           "window_months": L, "release_share_of_window": r6(occ),
+                           "releases_tested": n_rel, "release_months_tested": res["months_tested"],
+                           "tested_from": i2m(int(res["tested_months"].min())),
+                           "tested_to": i2m(int(res["tested_months"].max())),
+                           "observed_mean": r6(res["obs_mean"]), "null_draws_used": int(len(nm)),
+                           "null_p5": r6(np.percentile(nm, 5)), "null_p95": r6(np.percentile(nm, 95)),
+                           "percentile": r6(pct_rank(nm, res["obs_mean"])), "p_two_sided": r6(p2_),
+                           "band_lo": r6(lo), "band_hi": r6(hi),
+                           "share_release_months_outside_band": r6(res["obs_out"]),
+                           "null_mean_share_outside": r6(no.mean()),
+                           "p_share_outside_ge_observed": r6(p_out),
+                           "beats_chance_mean": bool(p2_ < 0.10), "beats_chance_outside": bool(p_out < 0.10)}
+                    summary.append(row)
+                    prog_tab["tests"].append(row)
         tables[prog] = prog_tab
-    tested = [r for r in summary if r["status"] == "tested"]
-    agg = {"tests": len(summary), "tested": len(tested),
-           "mean_outside_90pct_null": sum(1 for r in tested if r["p_two_sided"] is not None and r["p_two_sided"] < 0.10),
-           "expected_by_chance_at_10pct": round(0.10 * len(tested), 2),
-           "outside_share_beats_null_p_lt_0.10": sum(1 for r in tested if r["beats_chance_outside"])}
+    agg = {}
+    for test in Q1_TESTS:
+        tested = [r for r in summary if r["status"] == "tested" and r["test"] == test]
+        agg[test] = {"role": TEST_ROLE[test], "tests": sum(1 for r in summary if r["test"] == test),
+                     "tested": len(tested),
+                     "mean_outside_90pct_null": sum(1 for r in tested if r["beats_chance_mean"]),
+                     "expected_by_chance_at_10pct": round(0.10 * len(tested), 2),
+                     "outside_share_beats_null_p_lt_0.10": sum(1 for r in tested if r["beats_chance_outside"]),
+                     "mean_p_two_sided": r6(np.mean([r["p_two_sided"] for r in tested])) if tested else None}
     return {"method": (f"Event = each stable, publicly shipped release, one per calendar month per program. "
-                       f"Statistic d3 = mean detrended share in months m..m+{Q1_W - 1} minus mean in "
-                       f"m-{Q1_W}..m-1, detrended by a centred {TREND_WIN}-month rolling median "
-                       f"(min {TREND_MIN} months). Program statistic = mean d3 over tested release months. "
-                       f"Null: the program's release months circularly shifted by one uniform offset within "
-                       f"its own span, {N_DRAWS} draws. Single-release band: 5th-95th percentile of d3 over "
-                       f"every testable month of the series."),
+                       f"Primary statistic step12: the mean over the {STEP_POST} after-months of the share minus "
+                       f"a linear trend fitted to the {STEP_PRE} before-months and extrapolated; it keeps a "
+                       f"lasting level shift. Secondary statistic transient3, the transient deviation: mean "
+                       f"detrended share over {Q1_W} after-months minus {Q1_W} before-months, detrended by a "
+                       f"centred {TREND_WIN}-month rolling median, which absorbs any lasting step. Reverse "
+                       f"dating: for a release in calendar month r, before = labels <= r and after = labels "
+                       f"r+1 on. Program statistic = mean over tested release months. Null: the release "
+                       f"months that fall inside the series' own testable window circularly shifted by one "
+                       f"uniform offset within that window, {N_DRAWS} draws. A test needs a window of at least "
+                       f"{Q1_MIN_WINDOW} months with release months filling at most {Q1_MAX_OCC:.0%} of it; "
+                       f"otherwise every shift covers nearly the same months. Single-release band: 5th-95th "
+                       f"percentile of the statistic over every testable month of the series."),
             "per_program": tables, "aggregate": agg}, summary, per_release
 
 
 # -------------------------------------------------------------------- q2 --
+
+
+def bh_q(ps: list) -> list:
+    """Benjamini-Hochberg adjusted p-values, same order as ps."""
+    p = np.asarray(ps, dtype=float)
+    n = len(p)
+    if n == 0:
+        return []
+    order = np.argsort(p, kind="mergesort")
+    ranked = p[order] * n / np.arange(1, n + 1)
+    q = np.minimum.accumulate(ranked[::-1])[::-1]
+    out = np.empty(n)
+    out[order] = np.minimum(q, 1.0)
+    return out.tolist()
 
 
 def q2(rows, data):
@@ -670,66 +781,145 @@ def q2(rows, data):
             if sk not in series_cache:
                 series_cache[sk] = Series(data, *sk)
             s = series_cache[sk]
-            base = {"program": m["program"], "row_id": m["row_id"], "timing_tag": m["timing_tag"],
-                    "timing_date": m["timing_date"], "opt_in": m["opt_in"],
-                    "applies_on_upgrade": m["applies_on_upgrade"], "observable": m["observable"],
-                    "expected_direction": m["expected_direction"], "relation": m["relation"],
-                    "corpus": corpus, "source": src}
-            if not s.ok:
-                out.append({**base, "status": "no test", "reason": "no series"})
-                continue
-            v = s.at(Q2_W, e)
-            if math.isnan(v):
-                out.append({**base, "status": "no test", "reason": s.why_untestable(Q2_W, e)})
-                continue
-            kk = e - s.start
-            win = s.share.to_numpy(dtype=float)[kk - Q2_W:kk + Q2_W]
-            if np.nansum(win) == 0:
-                out.append({**base, "status": "no test",
-                            "reason": f"the value is absent in every month of the window "
-                                      f"{i2m(e - Q2_W)}..{i2m(e + Q2_W - 1)}"})
-                continue
-            tm = s.testable_months(Q2_W)
-            rng = rng_for(f"q2|{m['row_id']}|{m['observable']}|{corpus}|{src}")
-            draws = rng.choice(tm, size=N_DRAWS, replace=True)
-            null = s.at_arr(Q2_W, draws)
-            lo, hi = np.percentile(null, BAND)
-            k = e - s.start
-            sh = s.share.to_numpy(dtype=float)
-            pre = sh[k - Q2_W:k]
-            post = sh[k:k + Q2_W]
-            out.append({**base, "status": "tested",
-                        "share_month_before": r6(sh[k - 1]) if k >= 1 else None,
-                        "raw_mean_before": r6(np.nanmean(pre)), "raw_mean_after": r6(np.nanmean(post)),
-                        "observed_d12": r6(v), "band_lo": r6(lo), "band_hi": r6(hi),
-                        "percentile": r6(pct_rank(null, v)), "p_two_sided": r6(two_sided(null, v)),
-                        "outside_90_band": bool(v < lo or v > hi),
-                        "in_expected_direction": bool(np.sign(v) == m["expected_direction"]),
-                        "testable_months_in_series": int(len(tm))})
-    tested = [r for r in out if r["status"] == "tested"]
-    groups = {}
-    for r in tested:
-        g = f"applies_on_upgrade={r['applies_on_upgrade']}, opt_in={r['opt_in']}"
-        gg = groups.setdefault(g, {"tested": 0, "outside_90_band": 0, "outside_and_expected_direction": 0})
-        gg["tested"] += 1
-        gg["outside_90_band"] += int(r["outside_90_band"])
-        gg["outside_and_expected_direction"] += int(r["outside_90_band"] and r["in_expected_direction"])
-    for g in groups.values():
-        g["expected_outside_by_chance"] = round(0.10 * g["tested"], 2)
-    rows_tested = sorted({r["row_id"] for r in tested})
-    rows_untested = sorted({r["row_id"] for r in out} - set(rows_tested))
-    return {"method": (f"For each mapped default row: d12 = mean detrended share in months m..m+{Q2_W - 1} "
-                       f"minus mean in m-{Q2_W}..m-1 (m = month of the row's timing_date, i.e. the first "
-                       f"public stable release). Null: {N_DRAWS} event months drawn with replacement from "
-                       f"every testable month of the same series; band = 5th-95th percentile. 'no test' "
-                       f"where the series lacks {Q2_W} months on either side."),
-            "forward_note": FORWARD_NOTE,
-            "by_upgrade_and_opt_in": groups, "rows_with_any_test": rows_tested,
-            "rows_with_no_test_in_any_corpus": rows_untested,
-            "n_tests": len(tested), "n_no_test": len(out) - len(tested),
-            "n_outside_band": sum(r["outside_90_band"] for r in tested),
-            "expected_outside_by_chance": round(0.10 * len(tested), 2),
+            for test in Q2_TESTS:
+                base = {"program": m["program"], "row_id": m["row_id"], "test": test, "role": TEST_ROLE[test],
+                        "timing_tag": m["timing_tag"], "timing_date": m["timing_date"], "opt_in": m["opt_in"],
+                        "applies_on_upgrade": m["applies_on_upgrade"], "observable": m["observable"],
+                        "expected_direction": m["expected_direction"], "relation": m["relation"],
+                        "corpus": corpus, "source": src}
+                if not s.ok:
+                    out.append({**base, "status": "no test", "reason": "no series"})
+                    continue
+                v = s.at(test, e)
+                if math.isnan(v):
+                    out.append({**base, "status": "no test", "reason": s.why_untestable(test, e)})
+                    continue
+                before, after = STAT_SPAN[test]
+                k = s.idx(e)
+                sh = s.share.to_numpy(dtype=float)
+                win = sh[k - before:k + after]
+                if np.nansum(win) == 0:
+                    out.append({**base, "status": "no test",
+                                "reason": f"the value is absent in every month of the window "
+                                          f"{i2m(e + s.lag - before)}..{i2m(e + s.lag + after - 1)}"})
+                    continue
+                tm = s.testable_months(test)
+                rng = rng_for(f"q2|{test}|{m['row_id']}|{m['observable']}|{corpus}|{src}")
+                draws = rng.choice(tm, size=N_DRAWS, replace=True)
+                null = s.at_arr(test, draws)
+                lo, hi = np.percentile(null, BAND)
+                out.append({**base, "status": "tested",
+                            "before_labels": f"{i2m(e + s.lag - before)}..{i2m(e + s.lag - 1)}",
+                            "after_labels": f"{i2m(e + s.lag)}..{i2m(e + s.lag + after - 1)}",
+                            "share_last_before": r6(sh[k - 1]) if k >= 1 else None,
+                            "raw_mean_before": r6(np.nanmean(sh[k - before:k])),
+                            "raw_mean_after": r6(np.nanmean(sh[k:k + after])),
+                            "observed": r6(v), "band_lo": r6(lo), "band_hi": r6(hi),
+                            "percentile": r6(pct_rank(null, v)), "p_two_sided": r6(two_sided(null, v)),
+                            "outside_90_band": bool(v < lo or v > hi),
+                            "in_expected_direction": bool(np.sign(v) == m["expected_direction"]),
+                            "testable_months_in_series": int(len(tm))})
+    summ = {}
+    for test in Q2_TESTS:
+        tested = [r for r in out if r["status"] == "tested" and r["test"] == test]
+        for r, q in zip(tested, bh_q([r["p_two_sided"] for r in tested])):
+            r["bh_q"] = r6(q)
+        groups = {}
+        for r in tested:
+            g = f"applies_on_upgrade={r['applies_on_upgrade']}, opt_in={r['opt_in']}"
+            gg = groups.setdefault(g, {"tested": 0, "outside_90_band": 0, "outside_and_expected_direction": 0})
+            gg["tested"] += 1
+            gg["outside_90_band"] += int(r["outside_90_band"])
+            gg["outside_and_expected_direction"] += int(r["outside_90_band"] and r["in_expected_direction"])
+        for g in groups.values():
+            g["expected_outside_by_chance"] = round(0.10 * g["tested"], 2)
+        rows_tested = sorted({r["row_id"] for r in tested})
+        allrows = sorted({r["row_id"] for r in out if r["test"] == test})
+        summ[test] = {"role": TEST_ROLE[test], "n_tests": len(tested),
+                      "n_no_test": sum(1 for r in out if r["test"] == test) - len(tested),
+                      "n_outside_band": sum(r["outside_90_band"] for r in tested),
+                      "n_outside_and_expected_direction": sum(r["outside_90_band"] and r["in_expected_direction"]
+                                                              for r in tested),
+                      "expected_outside_by_chance": round(0.10 * len(tested), 2),
+                      "n_bh_q_lt_0.10": sum(1 for r in tested if r["bh_q"] < 0.10),
+                      "by_upgrade_and_opt_in": groups, "rows_with_any_test": rows_tested,
+                      "rows_with_no_test_in_any_corpus": sorted(set(allrows) - set(rows_tested))}
+    # the two events the verifier singled out, under a multiple-testing view
+    step = [r for r in out if r["status"] == "tested" and r["test"] == "step12"]
+    focus = []
+    for rid in ("d21-signzone-nsec3-iterations-0", "knot[14]@3.2.0"):
+        r = next((x for x in step if x["row_id"] == rid and x["source"] == "se"), None)
+        if r is None:
+            continue
+        n_as_extreme = sum(1 for x in step if x["p_two_sided"] <= r["p_two_sided"])
+        focus.append({"row_id": rid, "source": "se", "observed": r["observed"], "percentile": r["percentile"],
+                      "p_two_sided": r["p_two_sided"], "bh_q": r["bh_q"], "tests_in_family": len(step),
+                      "tests_at_least_as_extreme": n_as_extreme,
+                      "expected_at_least_as_extreme_by_chance": r6(len(step) * r["p_two_sided"])})
+    return {"method": (f"For each mapped default row and corpus. Primary, step12: mean over the {STEP_POST} "
+                       f"after-months of the share minus a linear trend fitted to the {STEP_PRE} before-months "
+                       f"and extrapolated. Secondary, transient12, the transient deviation: detrended mean of "
+                       f"{Q2_W} after-months minus {Q2_W} before-months, blind to a lasting step. Event month m = "
+                       f"calendar month of the row's timing_date; forward after-months start at m, reverse "
+                       f"after-labels start at m+1 because a reverse label is the state on the 1st. Null: "
+                       f"{N_DRAWS} placebo event months drawn with replacement from every eligible month of "
+                       f"the same series; band = 5th-95th percentile. Benjamini-Hochberg q over each family. "
+                       f"'no test' where the series lacks the before- or after-period."),
+            "forward_note": FORWARD_NOTE, "summary": summ, "verifier_focus_events": focus,
             "events": out}, out
+
+
+# --------------------------------------------------------- calibration --
+
+
+def _synthetic_series(rng, n: int) -> np.ndarray:
+    """A share-like series with trend, random-walk drift and noise, and no event effect."""
+    walk = np.cumsum(rng.normal(0, 0.3, n))
+    return 20 + 0.05 * np.arange(n) + walk + rng.normal(0, 0.5, n)
+
+
+def calibration(n_rep: int = CALIB_REPS) -> dict:
+    """Rejection rates at the 90% band on synthetic series with no effect.
+
+    q2: one placebo event month per series, band from N_DRAWS placebo months of the same series.
+    q1: a 25-month release schedule whose frequency rises over a 240-month span, against a series
+    covering only the last 96 months, tested with the coverage-window shift used here and with the
+    whole-span shift used before the revision."""
+    rng = np.random.default_rng([SEED, zlib.crc32(b"calibration")])
+    rej2 = 0
+    rej1_win = rej1_span = 0
+    n1 = 0
+    for _ in range(n_rep):
+        x = _synthetic_series(rng, 96)
+        st = step_stat(x)
+        tm = np.flatnonzero(~np.isnan(st))
+        e = int(rng.choice(tm))
+        null = st[rng.choice(tm, size=N_DRAWS, replace=True)]
+        lo, hi = np.percentile(null, BAND)
+        rej2 += int(st[e] < lo or st[e] > hi)
+        # q1: releases on a 240-month span, rate rising linearly; series = months 144..239
+        w = np.arange(240, dtype=float) + 1
+        rel = np.sort(rng.choice(240, size=25, replace=False, p=w / w.sum()))
+        full = np.full(240, np.nan)
+        full[144:] = st
+
+        def at(ms):
+            ms = np.asarray(ms, dtype=int)
+            return full[ms]
+        valid = np.flatnonzero(~np.isnan(full))
+        blo, bhi = np.percentile(full[valid], BAND)
+        r_win = shift_test(at, rel, int(valid.min()), int(valid.max()), rng, blo, bhi)
+        r_span = shift_test(at, rel, int(rel.min()), int(rel.max()), rng, blo, bhi)
+        if r_win is None or r_span is None or len(r_win["null_mean"]) == 0 or len(r_span["null_mean"]) == 0:
+            continue
+        n1 += 1
+        rej1_win += int(two_sided(r_win["null_mean"], r_win["obs_mean"]) < 0.10)
+        rej1_span += int(two_sided(r_span["null_mean"], r_span["obs_mean"]) < 0.10)
+    return {"reps": n_rep, "q2_step12_rejection_rate": r6(rej2 / n_rep),
+            "q1_reps_with_a_test": n1,
+            "q1_coverage_window_shift_rejection_rate": r6(rej1_win / max(1, n1)),
+            "q1_whole_span_shift_rejection_rate": r6(rej1_span / max(1, n1)),
+            "nominal": 0.10}
 
 
 # -------------------------------------------------------------------- q3 --
@@ -766,7 +956,8 @@ def q3(rows):
         r = rmap.loc[rid]
         m = m2i(r.timing_date[:7])
         events.append({"program": r.program, "row_id": rid, "to_alg": alg, "timing_date": r.timing_date,
-                       "window": [i2m(m), i2m(m + WINDOW)], "months": list(range(m, m + WINDOW + 1))})
+                       "window": [i2m(m + 1), i2m(m + WINDOW + 1)],
+                       "months": list(range(m + 1, m + WINDOW + 2))})
     groups = [(e["row_id"], [e]) for e in events]
     for alg in sorted({e["to_alg"] for e in events}, key=int):
         ev = [e for e in events if e["to_alg"] == alg]
@@ -876,7 +1067,8 @@ def q3(rows):
     baseline = {lab: int(base_all[base_all.bin == lab].n_delegations.sum()) for *_, lab in SIZE_BINS}
     return {"method": (f"Actions from delegation_change_clusters (month x source x block x transition). "
                        f"Matching transitions: sign or rollover to the algorithm the default names. Window: "
-                       f"the release month and the {WINDOW} months after. Statistics: difference, window "
+                       f"ledger labels r+1..r+{WINDOW + 1} for a release in calendar month r, i.e. the changes "
+                       f"made in the release month and the {WINDOW} months after. Statistics: difference, window "
                        f"minus other months, in the share of matching delegations moved in actions of "
                        f">= {LARGE_ACTION} delegations, and in the share at level one block or concentrated "
                        f"(delegation_change_levels). Null: the same number of months drawn without "
@@ -887,8 +1079,9 @@ def q3(rows):
             "proxy_caveat": ("Action size is a proxy. One operator automating one delegation is "
                              "indistinguishable from a manual edit, and one operator hand-editing a block "
                              "is indistinguishable from an upgrade."),
-            "ledger_dating": ("The ledger and the strict panel are dated by the following month relative to "
-                              "the server run's reverse series (docs/handoff/03_prevalence_metrics.md)."),
+            "ledger_dating": ("Ledger label M = the change between the snapshots of 00:00 UTC on the 1st of M-1 "
+                              "and of M, so it happened in calendar month M-1. The window for a release in "
+                              "calendar month r is labels r+1..r+4, the changes of calendar months r..r+3."),
             "all_sign_or_rollover_delegations_by_size": baseline,
             "events": events and [{k: v for k, v in e.items() if k != "months"} for e in events],
             "tests": results}, results
@@ -906,12 +1099,12 @@ def _flat(d):
 
 
 def reverse_count_series(data: Data, rir: str, dim: str, values) -> pd.Series:
-    """Per-RIR count, re-dated +1 month to the ledger/panel dating."""
+    """Per-RIR count. Since the relabelling of the server run (scripts/fix_server_run_month_labels.py)
+    it shares the panel's and the ledger's convention: label M = state at 00:00 UTC on the 1st of M.
+    No shift is applied here."""
     pv = data.pivot("srv", rir, dim)
     months = data.months("srv", rir)
-    y = _num(pv, values).reindex(months, fill_value=0.0)
-    y.index = [i2m(m2i(m) + 1) for m in y.index]
-    return y
+    return _num(pv, values).reindex(months, fill_value=0.0)
 
 
 def check_reverse_dating(data: Data) -> dict:
@@ -922,11 +1115,11 @@ def check_reverse_dating(data: Data) -> dict:
         b = pv["_total"] if "_total" in pv.columns else pd.Series(dtype=float)
         common = sorted(set(a.index) & set(b.index))
         same = sum(1 for m in common if a[m] == b[m])
-        raw = data.pivot("srv", rir, "algorithm_ds")
-        rawc = sorted(set(raw.index) & set(b.index))
-        same_raw = sum(1 for m in rawc if raw["_total"].get(m, 0) == b[m])
-        out[rir] = {"months_compared": len(common), "equal_after_plus_one_month": same,
-                    "equal_without_shift": same_raw, "months_compared_without_shift": len(rawc)}
+        shifted = {i2m(m2i(m) + 1): v for m, v in a.items()}
+        common1 = sorted(set(shifted) & set(b.index))
+        same1 = sum(1 for m in common1 if shifted[m] == b[m])
+        out[rir] = {"months_compared": len(common), "equal_without_shift": same,
+                    "months_compared_with_plus_one_shift": len(common1), "equal_with_plus_one_shift": same1}
     return out
 
 
@@ -968,7 +1161,9 @@ def q4(rows, releases, data):
             if y.max() < floor:
                 continue
             months = list(y.index)
-            mi = [m2i(x) for x in months]
+            # calendar month in which the change into each label happened: reverse label M = M-1
+            cal_shift = 1 if corpus == "reverse" else 0
+            mi = [m2i(x) - cal_shift for x in months]
             for direction in (+1, -1):
                 rel_rows = [r for r in obs_rows[obs] if r["expected_direction"] == direction]
                 rel_months = [m2i(r["timing_date"][:7]) for r in rel_rows]
@@ -980,7 +1175,7 @@ def q4(rows, releases, data):
                                    "chance_relevant_default_within_3m": r6(chance)})
                 for ep in _spikes(y.astype(int), floor, direction):
                     n += 1
-                    s0 = m2i(ep["start"])
+                    s0 = m2i(ep["start"]) - cal_shift   # calendar month of the change
                     near = None
                     for r in rel_rows:
                         d = m2i(r["timing_date"][:7])
@@ -1000,7 +1195,8 @@ def q4(rows, releases, data):
                     comp = _composition(corpus, src, obs, direction, ep, ledger, den, y)
                     spikes_out.append({
                         "n": n, "observable": obs, "direction": direction, "corpus": corpus, "source": src,
-                        "start": ep["start"], "end": ep["end"], "delta": ep["delta"],
+                        "start": ep["start"], "end": ep["end"], "change_calendar_month_start": i2m(s0),
+                        "delta": ep["delta"],
                         "level_before": ep["level_before"], "level_after": ep["level_after"],
                         "nearest_relevant_default": (f"{near[0]['program']} {near[0]['row_id']} "
                                                      f"{near[0]['timing_date']}") if near else None,
@@ -1024,8 +1220,10 @@ def q4(rows, releases, data):
                         "p_at_least_observed": r6(poisson_binomial_tail(ps, k)),
                         "beats_chance": bool(poisson_binomial_tail(ps, k) < 0.05 and k > 0)})
     return {"method": ("Spikes by program_rfc_cases.spikes() (imported, not re-implemented) on numerator "
-                       "counts: forward per TLD (floor 300), reverse per RIR (floor 30, counts only, re-dated "
-                       "+1 month to match the ledger and panel). Both directions are scanned. A relevant "
+                       "counts: forward per TLD (floor 300), reverse per RIR (floor 30, counts only). A reverse "
+                       "spike labelled M is a change between the states of the 1st of M-1 and the 1st of M, so "
+                       "it happened in calendar month M-1; lags and chance rates use that calendar month. "
+                       "Both directions are scanned. A relevant "
                        "default change maps to the same observable with the same expected direction; "
                        "'aligned' = one at 0..3 months before the spike start. Chance = share of the "
                        "series' months that have a relevant default change 0..3 months before them. "
@@ -1114,13 +1312,24 @@ def q5(data):
             if not s.ever_nonzero:
                 out.append({**base, "status": "value never observed", "series": f"{s.first_valid}..{s.last_valid}"})
                 continue
-            peak_m = sh.idxmax()
-            peak = float(sh.max())
-            below = sh[(sh.index > peak_m) & (sh < 0.5 * peak)]
-            half_m = below.index[0] if len(below) else None
-            row = {**base, "series": f"{s.first_valid}..{s.last_valid}", "peak": r6(peak), "peak_month": peak_m,
+            # the peak is taken only over months with at least PEAK_MIN_DEN in the denominator: MIN_DEN
+            # alone admits the panel's first signed month, 32 delegations at 103% for RSASHA1
+            den = s.den.reindex(sh.index)
+            shp = sh[den >= PEAK_MIN_DEN]
+            peak_any_m, peak_any = sh.idxmax(), float(sh.max())
+            if len(shp):
+                peak_m, peak = shp.idxmax(), float(shp.max())
+                below = sh[(sh.index > peak_m) & (sh < 0.5 * peak) & (den >= PEAK_MIN_DEN)]
+                half_m = below.index[0] if len(below) else None
+            else:
+                peak_m = peak = half_m = None
+            row = {**base, "series": f"{s.first_valid}..{s.last_valid}",
+                   "peak_min_den": PEAK_MIN_DEN, "peak": r6(peak), "peak_month": peak_m,
+                   "peak_denominator": int(den[peak_m]) if peak_m else None,
                    "first_below_half_peak_after_peak": half_m,
-                   "months_from_successor_to_below_half": (m2i(half_m) - si) if half_m else None}
+                   "months_from_successor_to_below_half": (m2i(half_m) - si) if half_m else None,
+                   "peak_over_min_den_months": r6(peak_any), "peak_over_min_den_month": peak_any_m,
+                   "peak_over_min_den_denominator": int(den[peak_any_m])}
             if sm not in sh.index:
                 row.update({"status": "not covered at successor publication",
                             "first_covered_month": s.first_valid, "share_first_covered": r6(sh.iloc[0])
@@ -1148,8 +1357,9 @@ def q5(data):
             out.append(row)
     return {"method": ("Predecessor share in the successor's publication month (checklist publication_date), "
                        "then the share up to 12 months later (fewer where the corpus ends): 'kept rising' "
-                       "above +10% relative, 'fell' below -10%, else 'flat'. Peak = maximum over the whole "
-                       "covered series; months counted from the successor's publication to the first month "
+                       "above +10% relative, 'fell' below -10%, else 'flat'. A reverse share 'at' month M is "
+                       "the state on the 1st of M. Peak = maximum over covered months with at least "
+                       f"{PEAK_MIN_DEN} in the denominator; months counted from the successor's publication to the first month "
                        "after the peak below half of it. Descriptive only."),
             "forward_note": FORWARD_NOTE, "pairs": out}, out
 
@@ -1206,10 +1416,21 @@ def main(argv=None) -> int:
                           "algorithm values still count a zone or delegation carrying two of them twice "
                           "(rollovers), which can push a summed share slightly above 100."),
         "coverage": coverage_facts(data),
+        "step_test": (f"primary Q1/Q2 statistic: mean of actual minus a linear trend fitted to the {STEP_PRE} "
+                      f"months before the event and extrapolated over the {STEP_POST} months after. The "
+                      f"centred rolling-median detrend absorbs a lasting level step, so the old statistic is "
+                      f"kept only as a secondary transient-deviation test."),
+        "calibration": calibration(),
         "strict_panel": f"every reverse share uses {PANEL} from out/panel_run; per-RIR server-run series "
                         f"are used only for counts (q4 spikes)",
-        "reverse_dating": "the panel and the ledger are dated one month later than the server run's reverse "
-                          "series; q4 re-dates per-RIR counts +1 month to match (checked in q4.reverse_dating_check)",
+        "reverse_dating": ("Every reverse source, the server run, the panel run and the ledger, uses one "
+                           "convention since the server run was relabelled: label M is the state at 00:00 UTC "
+                           "on the 1st of M. A reverse state difference or ledger change labelled M therefore "
+                           "happened during calendar month M-1. For a release in calendar month r, states up "
+                           "to label r are before it, after-states start at label r+1, and ledger changes after "
+                           "it are labels r+1 on. Forward labels are calendar months of measurement. No shift "
+                           "is applied to any series; the event index is moved instead (checked in "
+                           "q4.reverse_dating_check)."),
         "forward_note": FORWARD_NOTE,
         "release_dates": "stable release row's `released` from data/software/timelines; default rows use "
                          "Phase 4 timing_* columns, which already apply first_public_tag",
@@ -1222,14 +1443,14 @@ def main(argv=None) -> int:
         doc["q1_per_program_releases"] = res
         save(doc)
         write_csv("q1", summ)
-        write_csv("q1_releases", [r for r in per if r["status"] == "tested"])
+        write_csv("q1_releases", per)
         print("q1 saved", res["aggregate"])
     if "q2" in todo:
         res, recs = q2(rows, data)
         doc["q2_default_change_events"] = res
         save(doc)
         write_csv("q2", recs)
-        print("q2 saved", res["n_tests"], "tested,", res["n_outside_band"], "outside band")
+        print("q2 saved", {k: (v["n_tests"], v["n_outside_band"]) for k, v in res["summary"].items()})
     if "q3" in todo:
         res, recs = q3(rows)
         doc["q3_manual_vs_automatic"] = res

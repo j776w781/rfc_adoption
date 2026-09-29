@@ -1,8 +1,10 @@
 """Pins for Phase 7: program timelines against the adoption data.
 
-Pins the observable mapping, the strict-panel rule, the seed, the "no test"
-rule, and three event results that were recomputed by hand from the parquet
-files (the recomputation is repeated here without importing the script).
+Pins the observable mapping, the strict-panel rule, the seed, the reverse dating
+convention, the "no test" rule, the calibration of the new null, and three event
+results recomputed by hand from the parquet files, for both the primary step
+test and the secondary transient test. The recomputation is repeated here
+without importing the script.
 """
 from __future__ import annotations
 
@@ -35,9 +37,10 @@ def doc():
     return json.loads(DOC.read_text("utf-8"))
 
 
-def q2_event(doc, row_id, observable, source):
+def q2_event(doc, row_id, observable, source, test="step12"):
     return next(e for e in doc["q2_default_change_events"]["events"]
-                if e["row_id"] == row_id and e["observable"] == observable and e["source"] == source)
+                if e["row_id"] == row_id and e["observable"] == observable and e["source"] == source
+                and e["test"] == test)
 
 
 # ---------------------------------------------------------------- seed --
@@ -125,10 +128,27 @@ def test_reverse_shares_use_only_the_strict_panel(mod, doc):
     assert "summed" not in json.dumps(doc["q2_default_change_events"]["method"])
 
 
-def test_reverse_dating_check(doc):
+def test_reverse_dating_convention(mod, doc):
+    """Server run, panel run and ledger share one label convention: no shift between them."""
     chk = doc["q4_spikes"]["reverse_dating_check"]
     for rir in ("afrinic", "arin"):
-        assert chk[rir]["equal_after_plus_one_month"] == chk[rir]["months_compared"]
+        assert chk[rir]["equal_without_shift"] == chk[rir]["months_compared"] > 150
+        assert chk[rir]["equal_with_plus_one_shift"] < chk[rir]["months_compared_with_plus_one_shift"]
+    # a release in calendar month r is before reverse label r+1; forward uses r itself
+    assert mod.REV_EVENT_LAG == 1
+    e = q2_event(doc, "knot[2]@2.1.0", "alg13", PANEL)
+    assert (e["before_labels"], e["after_labels"]) == ("2014-02..2016-01", "2016-02..2017-01")
+    e = q2_event(doc, "d21-signzone-nsec3-iterations-0", "iter0", "se")
+    assert (e["before_labels"], e["after_labels"]) == ("2020-07..2022-06", "2022-07..2023-06")
+    # q3: ledger window labels r+1..r+4
+    ev = {x["row_id"]: x["window"] for x in doc["q3_manual_vs_automatic"]["events"]}
+    assert ev["pdns-auth[0]@3.2"] == ["2013-02", "2013-05"]
+    # q4: the afrinic SHA-1 DS spike labelled 2022-01 happened in 2021-12, before bind9 d20
+    sp = next(x for x in doc["q4_spikes"]["spikes"]
+              if x["source"] == "afrinic" and x["observable"] == "digest1" and x["start"] == "2022-01")
+    assert sp["change_calendar_month_start"] == "2021-12"
+    assert not sp["relevant_default_within_3m"]
+    assert sum(x["relevant_default_within_3m"] for x in doc["q4_spikes"]["spikes"]) == 13
 
 
 # ------------------------------------------------------------- no test --
@@ -136,11 +156,11 @@ def test_reverse_dating_check(doc):
 def test_untestable_events_carry_no_number(doc):
     for e in doc["q2_default_change_events"]["events"]:
         if e["status"] != "tested":
-            assert "observed_d12" not in e and e["reason"]
+            assert "observed" not in e and e["reason"]
     for p in doc["q1_per_program_releases"]["per_program"].values():
         for t in p["tests"]:
             if t["status"] != "tested":
-                assert "observed_mean_d3" not in t and t["reason"]
+                assert "observed_mean" not in t and t["reason"]
 
 
 def test_coverage_facts(doc):
@@ -155,53 +175,109 @@ def test_coverage_facts(doc):
 
 # ------------------------------------------------ three hand-checked events --
 
-def _hand_d12(share: pd.Series, month: str) -> float:
-    det = share - share.rolling(25, center=True, min_periods=13).median()
-    m = pd.Period(month, "M")
-    before = det.loc[str(m - 12):str(m - 1)]
-    after = det.loc[str(m):str(m + 11)]
-    return float(after.mean() - before.mean())
-
-
-def test_hand_knot_ecdsa_default_on_panel(doc):
-    """knot[2]@2.1.0 (2016-01), algorithm 13 share of panel signed delegations."""
+def _panel_share(value: str) -> pd.Series:
     p = pd.read_parquet(ROOT / "out/panel_run/timeline_monthly.parquet")
     pp = p[(p.source == PANEL) & (p.dimension == "algorithm_ds")]
-    num = pp[pp.value == "13"].set_index("month").domain_days
+    num = pp[pp.value == value].set_index("month").domain_days
     den = pp[pp.value == "_total"].set_index("month").domain_days
     months = pd.period_range("2011-05", "2026-08", freq="M").strftime("%Y-%m")
-    share = (100 * num.reindex(den.index, fill_value=0) / den).reindex(months)
-    hand = _hand_d12(share, "2016-01")
-    e = q2_event(doc, "knot[2]@2.1.0", "alg13", PANEL)
-    assert e["status"] == "tested"
-    assert e["observed_d12"] == pytest.approx(hand, abs=1e-5)
-    assert hand == pytest.approx(-0.019119, abs=1e-5)
-    assert not e["outside_90_band"]
-    assert e["share_month_before"] == pytest.approx(0.253485, abs=1e-5)
+    return (100 * num.reindex(den.index, fill_value=0) / den).reindex(months)
 
 
-def test_hand_bind9_signzone_iterations_zero_on_se(doc):
-    """bind9 d21 (2022-07), NSEC3 owner names at 0 iterations in .se."""
+def _se_iter0_share() -> pd.Series:
     s = pd.read_parquet(ROOT / "out/server_run/timeline_monthly.parquet")
     z = s[(s.source == "se") & (s.dimension == "nsec3_iterations")]
     num = z[z.value == "0"].set_index("month").domain_days
     den = z[z.value == "_total"].set_index("month").domain_days
-    share = 100 * num.reindex(den.index, fill_value=0) / den
-    hand = _hand_d12(share, "2022-07")
-    e = q2_event(doc, "d21-signzone-nsec3-iterations-0", "iter0", "se")
-    assert e["observed_d12"] == pytest.approx(hand, abs=1e-5)
-    assert hand == pytest.approx(0.039922, abs=1e-5)
+    return 100 * num.reindex(den.index, fill_value=0) / den
+
+
+def _hand_transient(share: pd.Series, first_after: str, w: int = 12) -> float:
+    det = share - share.rolling(25, center=True, min_periods=13).median()
+    m = pd.Period(first_after, "M")
+    return float(det.loc[str(m):str(m + w - 1)].mean() - det.loc[str(m - w):str(m - 1)].mean())
+
+
+def _hand_step(share: pd.Series, first_after: str) -> float:
+    """Line fitted to the 24 months before, extrapolated over the 12 after; mean of actual minus line."""
+    m = pd.Period(first_after, "M")
+    pre = share.loc[str(m - 24):str(m - 1)].to_numpy(dtype=float)
+    post = share.loc[str(m):str(m + 11)].to_numpy(dtype=float)
+    tb, ta = np.arange(-24, 0), np.arange(0, 12)
+    ok, oka = ~np.isnan(pre), ~np.isnan(post)
+    slope, icpt = np.polyfit(tb[ok], pre[ok], 1)
+    return float(np.mean(post[oka] - (icpt + slope * ta[oka])))
+
+
+def test_hand_knot_ecdsa_default_on_panel(doc):
+    """knot[2]@2.1.0, released 2016-01-14: panel labels up to 2016-01 are before it, so the
+    after-period starts at label 2016-02."""
+    share = _panel_share("13")
+    step, trans = _hand_step(share, "2016-02"), _hand_transient(share, "2016-02")
+    e = q2_event(doc, "knot[2]@2.1.0", "alg13", PANEL)
+    assert e["status"] == "tested"
+    assert e["observed"] == pytest.approx(step, abs=1e-5)
+    assert step == pytest.approx(0.228598, abs=1e-5)
     assert not e["outside_90_band"]
+    t = q2_event(doc, "knot[2]@2.1.0", "alg13", PANEL, "transient12")
+    assert t["observed"] == pytest.approx(trans, abs=1e-5)
+    assert trans == pytest.approx(-0.021503, abs=1e-5)
+
+
+def test_hand_bind9_signzone_iterations_zero_on_se(doc):
+    """bind9 d21, 2022-07, NSEC3 owner names at 0 iterations in .se: the step test reaches the
+    97.5th percentile, the transient test does not leave its band."""
+    share = _se_iter0_share()
+    step, trans = _hand_step(share, "2022-07"), _hand_transient(share, "2022-07")
+    e = q2_event(doc, "d21-signzone-nsec3-iterations-0", "iter0", "se")
+    assert e["observed"] == pytest.approx(step, abs=1e-5)
+    assert step == pytest.approx(2.639849, abs=1e-5)
+    assert e["outside_90_band"] and e["percentile"] > 95
+    t = q2_event(doc, "d21-signzone-nsec3-iterations-0", "iter0", "se", "transient12")
+    assert t["observed"] == pytest.approx(trans, abs=1e-5)
+    assert trans == pytest.approx(0.039922, abs=1e-5)
+    assert not t["outside_90_band"]
 
 
 def test_hand_opendnssec_rsasha256_has_no_test_on_panel(doc):
     """opendnssec[5]@1.2.0b1 (2011-03) predates the panel's first signed month, 2011-05."""
-    e = q2_event(doc, "opendnssec[5]@1.2.0b1", "alg8", PANEL)
-    assert e["status"] == "no test"
-    assert e["reason"].startswith("no before-period")
-    assert "observed_d12" not in e
-    # and in no corpus at all
-    assert "opendnssec[5]@1.2.0b1" in doc["q2_default_change_events"]["rows_with_no_test_in_any_corpus"]
+    for test in ("step12", "transient12"):
+        e = q2_event(doc, "opendnssec[5]@1.2.0b1", "alg8", PANEL, test)
+        assert e["status"] == "no test"
+        assert e["reason"].startswith("no before-period")
+        assert "observed" not in e
+        assert "opendnssec[5]@1.2.0b1" in \
+            doc["q2_default_change_events"]["summary"][test]["rows_with_no_test_in_any_corpus"]
+
+
+def test_step_statistic_sees_a_step_the_transient_does_not(mod):
+    """A lasting +5 pp step on a trending series: the step statistic recovers it, the detrended
+    transient statistic does not."""
+    x = 10 + 0.1 * np.arange(80)
+    x[40:] += 5.0
+    assert mod.step_stat(x)[40] == pytest.approx(5.0, abs=1e-9)
+    det = (pd.Series(x) - pd.Series(x).rolling(25, center=True, min_periods=13).median()).to_numpy()
+    assert abs(mod.window_stat(det, 12)[40]) < 1.0
+
+
+# ---------------------------------------------------------- calibration --
+
+def test_null_calibration_on_synthetic_data(mod, doc):
+    """No effect: rejection at the 90% band is about 10%. The old whole-span shift was conservative."""
+    cal = doc["notes"]["calibration"]
+    assert cal["reps"] == 1000
+    assert 0.07 <= cal["q2_step12_rejection_rate"] <= 0.13
+    assert 0.07 <= cal["q1_coverage_window_shift_rejection_rate"] <= 0.14
+    assert cal["q1_whole_span_shift_rejection_rate"] < cal["q1_coverage_window_shift_rejection_rate"]
+    small = mod.calibration(200)
+    assert 0.04 <= small["q2_step12_rejection_rate"] <= 0.16
+    assert 0.04 <= small["q1_coverage_window_shift_rejection_rate"] <= 0.18
+
+
+def test_q1_null_is_calibrated_on_the_real_schedules(doc):
+    """With the coverage-window shift, mean p over the program tests is near 0.5, not 0.63."""
+    for test, agg in doc["q1_per_program_releases"]["aggregate"].items():
+        assert 0.44 <= agg["mean_p_two_sided"] <= 0.58, test
 
 
 def test_q4_spike_rule_is_the_program_rfc_cases_rule(mod):
