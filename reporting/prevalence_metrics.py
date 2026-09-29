@@ -107,7 +107,7 @@ def fig_ds(df):
     style(b); b.legend(frameon=False, fontsize=9, ncol=2)
     titled(fig, "Share of domains with at least one DS record",
            "Reverse: delegations with a DS / all delegations in the RIR zone file (one snapshot per month). "
-           "Forward: names with a DS / names with an NS RRset (delegated zones), peak day per month, OpenINTEL.")
+           "Forward: names with a DS / names with an NS RRset (delegated zones), mean daily share per month, OpenINTEL.")
     save(fig, "ds_share.png")
 
 
@@ -119,7 +119,7 @@ def fig_dnskey(df):
     ax.set_ylabel("% of delegated zones")
     style(ax); ax.legend(frameon=False, fontsize=9, ncol=2)
     titled(fig, "Share of zones serving at least one DNSKEY (forward TLDs)",
-           "Names answering with a DNSKEY / names with an NS RRset (delegated zones), peak day per month, OpenINTEL. "
+           "Names answering with a DNSKEY / names with an NS RRset (delegated zones), mean daily share per month, OpenINTEL. "
            "Not observable in the reverse corpus: RIR zone files carry only the parent-side DS.")
     save(fig, "dnskey_share.png")
 

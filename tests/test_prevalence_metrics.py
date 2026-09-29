@@ -157,12 +157,19 @@ def test_endpoint_values():
 
     r = get("reverse_panel", "_pooled-afrinic-arin", "2026-08", "ds_share")
     assert (r.numerator, r.denominator) == (6_444, 744_825) and abs(r.pct - 0.8652) < 1e-3
-    r = get("reverse", "arin", "2026-08", "ds_share")
+    # Server-run reverse months relabelled +1 (scripts/fix_server_run_month_labels.py):
+    # label M = snapshot at 00:00 UTC on the 1st of M, same as the panel run.
+    r = get("reverse", "arin", "2026-09", "ds_share")
     assert (r.numerator, r.denominator) == (6_080, 710_116)
-    r = get("reverse", "apnic", "2024-11", "ds_share")
+    r = get("reverse", "apnic", "2024-12", "ds_share")
     assert (r.numerator, r.denominator) == (3_711, 573_053)
     r = get("forward", "se", "2023-12", "ds_share")
-    assert (r.numerator, r.denominator) == (811_627, 1_339_712) and abs(r.pct - 60.582) < 1e-2
+    # pct is the mean daily share (domain_days), not the ratio of the two peaks
+    assert (r.numerator, r.denominator) == (811_627, 1_339_712) and abs(r.pct - 60.6306) < 1e-3
+    assert abs(r.pct - 100 * r.numerator_domain_days / r.denominator_domain_days) < 1e-3
+    # .gov 2018-02: the peak ratio (21.4%) mixes days; the mean daily share is 31.2%
+    r = get("forward", "gov", "2018-02", "ds_share")
+    assert abs(r.pct - 31.1955) < 1e-3 and abs(100 * r.numerator / r.denominator - 21.39) < 0.01
     r = get("forward", "se", "2023-12", "dnskey_share")
     assert (r.numerator, r.denominator) == (840_009, 1_339_712)
     r = get("forward", "se", "2023-12", "rrsig_zone_share")
@@ -237,7 +244,8 @@ def test_forward_share_never_exceeds_100_at_zone_level():
 def test_written_outputs_agree():
     long = pd.read_csv(CSV, dtype={"month": str})
     meta = json.loads(JSON.read_text())
-    assert list(long.columns) == ["corpus", "source", "month", "metric", "numerator", "denominator", "pct", "measured_days"]
+    assert list(long.columns) == ["corpus", "source", "month", "metric", "numerator", "denominator",
+                                  "numerator_domain_days", "denominator_domain_days", "pct", "measured_days"]
     assert meta["rows"] == len(long)
     h = meta["headline"]["forward"]["se"]["ds_share"]
     r = long[(long.corpus == "forward") & (long.source == "se") & (long.metric == "ds_share")].sort_values("month").iloc[-1]

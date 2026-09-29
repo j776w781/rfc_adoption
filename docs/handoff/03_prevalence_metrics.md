@@ -39,11 +39,26 @@ reverse basis `measured_days` is always 1, so `domains_peak` is simply the
 month's snapshot. For the forward basis it is a peak day (28-32 measured days
 in a full month), and numerator and denominator may peak on different days.
 
+**The `pct` column is not numerator / denominator for the forward corpus.** It is the
+month's mean daily share: the numerator's summed daily counts over the denominator's
+(`numerator_domain_days / denominator_domain_days`, both in the CSV), so both sides
+come from the same days. A ratio of two peaks can mix days, and was off by up to 12
+percentage points in months when an operator rolled algorithms or the measured
+population changed (median error 0.08 pp; `docs/handoff/verify/phase7_software_vs_adoption.md`
+section B). For the reverse corpus both definitions are identical (one snapshot per month).
+Corrected 2026-09-29; earlier versions of this file used the peak ratio.
+
+**Month labels.** Every reverse label M is the zone state at 00:00 UTC on the 1st of M;
+a change between labels M-1 and M happened during calendar month M-1. The server run was
+extracted on a UTC-negative host and had labelled each reverse snapshot one month early;
+`scripts/fix_server_run_month_labels.py` corrected it (d5121351 fixed the cause), and the
+per-RIR series now agree with the panel run on every shared month.
+
 ## Corpus 1: reverse (in-addr.arpa, five RIRs) and the strict panel
 
 Sources `afrinic, apnic, arin, lacnic, ripe` (server run) and
 `_pooled-afrinic-arin` + its `afrinic`/`arin` parts (panel run). One zone-file
-snapshot per month, 2009-03 to 2026-08 (apnic ends 2024-11; panel starts 2009-04).
+snapshot per month, 2009-04 to 2026-09 (apnic ends 2024-12; the panel run ends 2026-08).
 
 | metric | numerator | denominator |
 |---|---|---|
@@ -60,10 +75,8 @@ zone and were never measured. No rows are emitted; the JSON lists this under
 `not_observable`. Use the strict panel (`reverse_panel`, `_pooled-afrinic-arin`)
 for a headline share; the per-RIR series are for shape, not for pooling.
 
-Gap months (no snapshot, 10 per RIR): 2009-05, 2009-06, 2010-11 to 2011-03,
-2012-06, 2016-02, 2020-12. The panel's gap list is the same set shifted by one
-month (it is dated by the following month: 2009-06, 2009-07, 2010-12 to
-2011-04, 2012-07, 2016-03, 2021-01).
+Gap months (no snapshot, 10 per RIR, identical in the server run and the panel run
+since the relabel): 2009-06, 2009-07, 2010-12 to 2011-04, 2012-07, 2016-03, 2021-01.
 
 Structural steps a reader will see and should not read as adoption events:
 afrinic 2014-10 (20 -> 196 signed delegations, 0.07 % -> 0.71 %) and 2018-10
@@ -101,9 +114,11 @@ DS < DNSKEY in every TLD: zones serving keys without a DS at the parent
 (signed, not chained). Example se 2023-12: 811,627 DS vs 840,009 DNSKEY.
 
 Structural facts, not adoption events:
-* `.gov` 2018-02: denominator 1,234 -> 5,553 delegated zones while DS names
-  went 1,091 -> 1,188, so `ds_share` falls 88.4 % -> 21.4 %. The measured
-  corpus widened; signing did not collapse.
+* `.gov` 2018-01 to 2018-03: the measured corpus widened from 1,234 to about
+  5,560 delegated zones during February while DS names stayed near 1,190, so
+  `ds_share` (mean daily share) goes 88.7 % -> 31.2 % -> 21.3 %, a drop spread over
+  two months because the widening happened mid-February. Signing did not collapse.
+  The earlier peak-ratio version put the whole drop in February (88.4 % -> 21.4 %).
 * `fed.us` has 1-2 delegated zones and never a DS or DNSKEY; it is in the CSV
   (all shares 0) and off the charts.
 * `ch` 2020-05, `li` 2020-05 (14 measured days) and `ee` 2019-07 (4 days) are
@@ -166,23 +181,25 @@ Reverse `ds_share` (signed delegations / all delegations):
 | source | month | numerator | denominator | pct |
 |---|---|---|---|---|
 | `_pooled-afrinic-arin` (strict panel) | 2026-08 | 6,444 | 744,825 | 0.865 |
-| afrinic | 2026-08 | 627 | 40,227 | 1.559 |
-| apnic | 2024-11 | 3,711 | 573,053 | 0.648 |
-| arin | 2026-08 | 6,080 | 710,116 | 0.856 |
-| lacnic | 2026-08 | 1,265 | 23,854 | 5.303 |
-| ripe | 2026-08 | 659 | 65,616 | 1.004 |
+| afrinic | 2026-09 | 627 | 40,227 | 1.559 |
+| apnic | 2024-12 | 3,711 | 573,053 | 0.648 |
+| arin | 2026-09 | 6,080 | 710,116 | 0.856 |
+| lacnic | 2026-09 | 1,265 | 23,854 | 5.303 |
+| ripe | 2026-09 | 659 | 65,616 | 1.004 |
 
 Forward, 2023-12 (2022-10 for fed.us), denominator = delegated zones (`rr_type NS`):
 
-| TLD | zones (NS) | DS | DS % | DNSKEY | DNSKEY % | RRSIG over DNSKEY | RRSIG zone % | RRSIG names / all names | RRSIG name % |
+| TLD | zones (NS), peak | DS, peak | DS % | DNSKEY, peak | DNSKEY % | RRSIG over DNSKEY, peak | RRSIG zone % | RRSIG names / all names, peaks | RRSIG name % |
 |---|---|---|---|---|---|---|---|---|---|
-| se | 1,339,712 | 811,627 | 60.58 | 840,009 | 62.70 | 839,978 | 62.70 | 2,571,213 / 3,663,131 | 70.19 |
-| nu | 208,718 | 118,172 | 56.62 | 126,141 | 60.44 | 126,133 | 60.43 | 402,976 / 588,578 | 68.47 |
-| ch | 2,355,587 | 1,231,138 | 52.26 | 1,244,739 | 52.84 | 1,244,584 | 52.84 | 3,715,218 / 6,216,637 | 59.76 |
-| li | 63,300 | 21,314 | 33.67 | 22,041 | 34.82 | 22,030 | 34.80 | 66,250 / 157,422 | 42.08 |
-| ee | 156,690 | 36,055 | 23.01 | 36,865 | 23.53 | 36,865 | 23.53 | 116,840 / 367,428 | 31.80 |
-| gov | 9,636 | 1,552 | 16.11 | 1,766 | 18.33 | 1,761 | 18.28 | 6,858 / 23,755 | 28.87 |
-| fed.us | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 / 2 | 0 |
+| se | 1,339,712 | 811,627 | 60.63 | 840,009 | 62.76 | 839,978 | 62.76 | 2,571,213 / 3,663,131 | 70.24 |
+| nu | 208,718 | 118,172 | 56.62 | 126,141 | 60.34 | 126,133 | 60.34 | 402,976 / 588,578 | 68.39 |
+| ch | 2,355,587 | 1,231,138 | 52.19 | 1,244,739 | 52.77 | 1,244,584 | 52.77 | 3,715,218 / 6,216,637 | 59.67 |
+| li | 63,300 | 21,314 | 33.64 | 22,041 | 34.79 | 22,030 | 34.77 | 66,250 / 157,422 | 42.02 |
+| ee | 156,690 | 36,055 | 23.05 | 36,865 | 23.55 | 36,865 | 23.55 | 116,840 / 367,428 | 31.81 |
+| gov | 9,636 | 1,552 | 16.09 | 1,766 | 18.17 | 1,761 | 18.12 | 6,858 / 23,755 | 28.62 |
+| fed.us | 1 | 0 | 0.00 | 0 | 0.00 | 0 | 0.00 | 0 / 2 | 0.00 |
+
+Counts are peak-day counts; every % is the mean daily share (see "The count column").
 
 ## Facts a verifier can recompute
 
@@ -192,14 +209,14 @@ is in the JSON under `selectors`.
 1. `reverse_panel, _pooled-afrinic-arin, 2026-08, ds_share`: 6,444 / 744,825 = 0.8652 %.
 2. `reverse_panel, _pooled-afrinic-arin, 2015-01, ds_share`: 669 / 522,055 = 0.1281 %.
 3. `reverse_panel, _pooled-afrinic-arin, 2020-01, ds_share`: 2,240 / 641,368 = 0.3493 %.
-4. `reverse, ripe, 2010-01, ds_share`: 195 / 450,187 = 0.0433 %.
-5. `reverse, apnic, 2024-11, ds_share`: 3,711 / 573,053 = 0.6476 % (apnic's last month).
-6. `forward, se, 2016-06, ds_share`: 647,663 / 1,229,994 = 52.66 % (25 measured days).
-7. `forward, se, 2020-01, dnskey_share`: 765,890 / 1,382,035 = 55.42 %.
-8. `forward, gov, 2017-05, ds_share`: 1,128 / 1,280 = 88.13 %; `forward, gov, 2018-02, ds_share`: 1,188 / 5,553 = 21.39 %.
-9. `forward, nu, 2016-06, rrsig_zone_share`: 88,107 / 259,800 = 33.91 %.
-10. `forward, ch, 2020-06, ds_share`: 118,901 / 1,966,694 = 6.05 %; `forward, ee, 2019-08, dnskey_share`: 5,340 / 119,052 = 4.49 %.
-11. First month with any signed delegation per RIR: ripe 2009-03, arin 2011-04, apnic 2011-05, afrinic 2012-05, lacnic 2016-09.
+4. `reverse, ripe, 2010-02, ds_share`: 195 / 450,187 = 0.0433 % (labelled 2010-01 before the relabel).
+5. `reverse, apnic, 2024-12, ds_share`: 3,711 / 573,053 = 0.6476 % (apnic's last month).
+6. `forward, se, 2016-06, ds_share`: peaks 647,663 / 1,229,994; pct 52.6337 % from domain_days 16,159,751 / 30,702,315.
+7. `forward, se, 2020-01, dnskey_share`: peaks 765,890 / 1,382,035; pct 55.3030 %.
+8. `forward, gov, 2017-05, ds_share`: pct 88.0258 %; `forward, gov, 2018-02, ds_share`: peaks 1,188 / 5,553 (ratio 21.39 %), pct 31.1955 % from domain_days 32,366 / 103,752.
+9. `forward, nu, 2016-06, rrsig_zone_share`: peaks 88,107 / 259,800; pct 33.7488 %.
+10. `forward, ch, 2020-06, ds_share`: pct 5.9805 %; `forward, ee, 2019-08, dnskey_share`: pct 4.1821 %.
+11. First month with any signed delegation per RIR: ripe 2009-04, arin 2011-05, apnic 2011-06, afrinic 2012-06, lacnic 2016-10.
 12. `secspider, secspider.cs.ucla.edu, 2006-09, dnssec_enabled_share`: 87 / 130 = 66.92 % (first capture with the block, page as of 2006-09-02).
 13. `secspider, secspider.verisignlabs.com, 2018-09, dnssec_enabled_share`: 2,127,227 / 2,666,278 = 79.78 % (last Verisign Labs capture).
 14. `secspider, secspider.net, 2026-05, dnssec_enabled_share`: 15,733,833 / 20,064,857 = 78.41 % (last Wayback capture).

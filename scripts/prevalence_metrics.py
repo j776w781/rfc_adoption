@@ -148,10 +148,10 @@ DEFINITIONS = {
 }
 
 
-def _count(rows: pd.DataFrame, dim: str, val: str) -> pd.Series:
-    """domains_peak per (source, month) for one (dimension, value) selector."""
+def _count(rows: pd.DataFrame, dim: str, val: str, col: str = "domains_peak") -> pd.Series:
+    """domains_peak (or domain_days) per (source, month) for one (dimension, value) selector."""
     sel = rows[(rows.dimension == dim) & (rows.value == val)]
-    return sel.groupby(["source", "month"]).domains_peak.max()
+    return sel.groupby(["source", "month"])[col].max()
 
 
 def compute_corpus(rows: pd.DataFrame, corpus: str, metrics: dict) -> pd.DataFrame:
@@ -163,13 +163,28 @@ def compute_corpus(rows: pd.DataFrame, corpus: str, metrics: dict) -> pd.DataFra
         den = _count(rows, *den_sel)
         num = _count(rows, *num_sel).reindex(den.index).fillna(0)
         frame = pd.DataFrame({"numerator": num.astype(int), "denominator": den.astype(int)})
-        frame["pct"] = (frame.numerator / frame.denominator * 100).round(4)
+        # The share is the month's mean daily share: summed daily counts of the numerator
+        # over summed daily counts of the denominator, so both come from the same days.
+        # A ratio of the two peaks can mix different days and was off by up to 12 pp in
+        # months when an operator rolled algorithms (Phase 7 verification, section B).
+        # Reverse rows have measured_days == 1, where the two are identical.
+        if "domain_days" in rows.columns:
+            den_d = _count(rows, *den_sel, col="domain_days")
+            num_d = _count(rows, *num_sel, col="domain_days").reindex(den_d.index).fillna(0)
+            frame["numerator_domain_days"] = num_d.reindex(frame.index).astype("int64")
+            frame["denominator_domain_days"] = den_d.reindex(frame.index).astype("int64")
+            frame["pct"] = (frame.numerator_domain_days / frame.denominator_domain_days * 100).round(4)
+        else:
+            frame["numerator_domain_days"] = frame.numerator
+            frame["denominator_domain_days"] = frame.denominator
+            frame["pct"] = (frame.numerator / frame.denominator * 100).round(4)
         frame["measured_days"] = days.reindex(frame.index).astype(int)
         frame["metric"] = metric
         frame["corpus"] = corpus
         out.append(frame.reset_index())
     res = pd.concat(out, ignore_index=True)
-    return res[["corpus", "source", "month", "metric", "numerator", "denominator", "pct", "measured_days"]]
+    return res[["corpus", "source", "month", "metric", "numerator", "denominator",
+                "numerator_domain_days", "denominator_domain_days", "pct", "measured_days"]]
 
 
 def load_reverse(server: Path) -> pd.DataFrame:
@@ -316,7 +331,7 @@ def build(server: Path = SERVER, panel: Path = PANEL, secspider_dir: Path = SECS
         "generated": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "inputs": {"server": str(server.relative_to(ROOT)) if server.is_relative_to(ROOT) else str(server),
                    "panel": str(panel.relative_to(ROOT)) if panel.is_relative_to(ROOT) else str(panel)},
-        "count_column": "domains_peak (largest single-day distinct count in the month; == snapshot count for reverse where measured_days == 1)",
+        "count_column": "numerator/denominator = domains_peak (largest single-day distinct count in the month; == snapshot count for reverse where measured_days == 1); pct = sum of daily numerator counts / sum of daily denominator counts (domain_days), the month's mean daily share",
         "definitions": DEFINITIONS,
         "selectors": {
             "reverse": {m: {"numerator": list(n), "denominator": list(d)} for m, (n, d) in REVERSE_METRICS.items()},

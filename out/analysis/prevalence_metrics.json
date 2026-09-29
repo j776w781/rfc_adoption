@@ -1,10 +1,10 @@
 {
-  "generated": "2026-09-28T20:40:10+00:00",
+  "generated": "2026-09-29T16:27:39+00:00",
   "inputs": {
     "server": "out/server_run/timeline_monthly.parquet",
     "panel": "out/panel_run/timeline_monthly.parquet"
   },
-  "count_column": "domains_peak (largest single-day distinct count in the month; == snapshot count for reverse where measured_days == 1)",
+  "count_column": "numerator/denominator = domains_peak (largest single-day distinct count in the month; == snapshot count for reverse where measured_days == 1); pct = sum of daily numerator counts / sum of daily denominator counts (domain_days), the month's mean daily share",
   "definitions": {
     "reverse": {
       "unit": "delegations in the RIR's in-addr.arpa zone file (one snapshot day per month)",
@@ -255,100 +255,100 @@
     },
     "reverse": {
       "afrinic": {
-        "first": "2009-03",
-        "last": "2026-08",
+        "first": "2009-04",
+        "last": "2026-09",
         "months": 200,
         "gap_months": [
-          "2009-05",
           "2009-06",
-          "2010-11",
+          "2009-07",
           "2010-12",
           "2011-01",
           "2011-02",
           "2011-03",
-          "2012-06",
-          "2016-02",
-          "2020-12"
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
         ],
         "metrics": [
           "ds_share"
         ]
       },
       "apnic": {
-        "first": "2009-03",
-        "last": "2024-11",
+        "first": "2009-04",
+        "last": "2024-12",
         "months": 179,
         "gap_months": [
-          "2009-05",
           "2009-06",
-          "2010-11",
+          "2009-07",
           "2010-12",
           "2011-01",
           "2011-02",
           "2011-03",
-          "2012-06",
-          "2016-02",
-          "2020-12"
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
         ],
         "metrics": [
           "ds_share"
         ]
       },
       "arin": {
-        "first": "2009-03",
-        "last": "2026-08",
+        "first": "2009-04",
+        "last": "2026-09",
         "months": 200,
         "gap_months": [
-          "2009-05",
           "2009-06",
-          "2010-11",
+          "2009-07",
           "2010-12",
           "2011-01",
           "2011-02",
           "2011-03",
-          "2012-06",
-          "2016-02",
-          "2020-12"
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
         ],
         "metrics": [
           "ds_share"
         ]
       },
       "lacnic": {
-        "first": "2009-03",
-        "last": "2026-08",
+        "first": "2009-04",
+        "last": "2026-09",
         "months": 200,
         "gap_months": [
-          "2009-05",
           "2009-06",
-          "2010-11",
+          "2009-07",
           "2010-12",
           "2011-01",
           "2011-02",
           "2011-03",
-          "2012-06",
-          "2016-02",
-          "2020-12"
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
         ],
         "metrics": [
           "ds_share"
         ]
       },
       "ripe": {
-        "first": "2009-03",
-        "last": "2026-08",
+        "first": "2009-04",
+        "last": "2026-09",
         "months": 200,
         "gap_months": [
-          "2009-05",
           "2009-06",
-          "2010-11",
+          "2009-07",
           "2010-12",
           "2011-01",
           "2011-02",
           "2011-03",
-          "2012-06",
-          "2016-02",
-          "2020-12"
+          "2011-04",
+          "2012-07",
+          "2016-03",
+          "2021-01"
         ],
         "metrics": [
           "ds_share"
@@ -637,25 +637,25 @@
           "month": "2023-12",
           "numerator": 1244739,
           "denominator": 2355587,
-          "pct": 52.842
+          "pct": 52.7719
         },
         "ds_share": {
           "month": "2023-12",
           "numerator": 1231138,
           "denominator": 2355587,
-          "pct": 52.2646
+          "pct": 52.1914
         },
         "rrsig_names_share": {
           "month": "2023-12",
           "numerator": 3715218,
           "denominator": 6216637,
-          "pct": 59.7625
+          "pct": 59.6672
         },
         "rrsig_zone_share": {
           "month": "2023-12",
           "numerator": 1244584,
           "denominator": 2355587,
-          "pct": 52.8354
+          "pct": 52.7653
         }
       },
       "ee": {
@@ -663,25 +663,25 @@
           "month": "2023-12",
           "numerator": 36865,
           "denominator": 156690,
-          "pct": 23.5273
+          "pct": 23.552
         },
         "ds_share": {
           "month": "2023-12",
           "numerator": 36055,
           "denominator": 156690,
-          "pct": 23.0104
+          "pct": 23.048
         },
         "rrsig_names_share": {
           "month": "2023-12",
           "numerator": 116840,
           "denominator": 367428,
-          "pct": 31.7994
+          "pct": 31.8099
         },
         "rrsig_zone_share": {
           "month": "2023-12",
           "numerator": 36865,
           "denominator": 156690,
-          "pct": 23.5273
+          "pct": 23.552
         }
       },
       "fed.us": {
@@ -715,25 +715,25 @@
           "month": "2023-12",
           "numerator": 1766,
           "denominator": 9636,
-          "pct": 18.3271
+          "pct": 18.1743
         },
         "ds_share": {
           "month": "2023-12",
           "numerator": 1552,
           "denominator": 9636,
-          "pct": 16.1063
+          "pct": 16.0864
         },
         "rrsig_names_share": {
           "month": "2023-12",
           "numerator": 6858,
           "denominator": 23755,
-          "pct": 28.8697
+          "pct": 28.6176
         },
         "rrsig_zone_share": {
           "month": "2023-12",
           "numerator": 1761,
           "denominator": 9636,
-          "pct": 18.2752
+          "pct": 18.1207
         }
       },
       "li": {
@@ -741,25 +741,25 @@
           "month": "2023-12",
           "numerator": 22041,
           "denominator": 63300,
-          "pct": 34.8199
+          "pct": 34.79
         },
         "ds_share": {
           "month": "2023-12",
           "numerator": 21314,
           "denominator": 63300,
-          "pct": 33.6714
+          "pct": 33.6381
         },
         "rrsig_names_share": {
           "month": "2023-12",
           "numerator": 66250,
           "denominator": 157422,
-          "pct": 42.0843
+          "pct": 42.022
         },
         "rrsig_zone_share": {
           "month": "2023-12",
           "numerator": 22030,
           "denominator": 63300,
-          "pct": 34.8025
+          "pct": 34.7731
         }
       },
       "nu": {
@@ -767,25 +767,25 @@
           "month": "2023-12",
           "numerator": 126141,
           "denominator": 208718,
-          "pct": 60.4361
+          "pct": 60.3389
         },
         "ds_share": {
           "month": "2023-12",
           "numerator": 118172,
           "denominator": 208718,
-          "pct": 56.618
+          "pct": 56.6215
         },
         "rrsig_names_share": {
           "month": "2023-12",
           "numerator": 402976,
           "denominator": 588578,
-          "pct": 68.466
+          "pct": 68.391
         },
         "rrsig_zone_share": {
           "month": "2023-12",
           "numerator": 126133,
           "denominator": 208718,
-          "pct": 60.4323
+          "pct": 60.335
         }
       },
       "se": {
@@ -793,32 +793,32 @@
           "month": "2023-12",
           "numerator": 840009,
           "denominator": 1339712,
-          "pct": 62.7007
+          "pct": 62.7617
         },
         "ds_share": {
           "month": "2023-12",
           "numerator": 811627,
           "denominator": 1339712,
-          "pct": 60.5822
+          "pct": 60.6306
         },
         "rrsig_names_share": {
           "month": "2023-12",
           "numerator": 2571213,
           "denominator": 3663131,
-          "pct": 70.1917
+          "pct": 70.2378
         },
         "rrsig_zone_share": {
           "month": "2023-12",
           "numerator": 839978,
           "denominator": 1339712,
-          "pct": 62.6984
+          "pct": 62.7594
         }
       }
     },
     "reverse": {
       "afrinic": {
         "ds_share": {
-          "month": "2026-08",
+          "month": "2026-09",
           "numerator": 627,
           "denominator": 40227,
           "pct": 1.5587
@@ -826,7 +826,7 @@
       },
       "apnic": {
         "ds_share": {
-          "month": "2024-11",
+          "month": "2024-12",
           "numerator": 3711,
           "denominator": 573053,
           "pct": 0.6476
@@ -834,7 +834,7 @@
       },
       "arin": {
         "ds_share": {
-          "month": "2026-08",
+          "month": "2026-09",
           "numerator": 6080,
           "denominator": 710116,
           "pct": 0.8562
@@ -842,7 +842,7 @@
       },
       "lacnic": {
         "ds_share": {
-          "month": "2026-08",
+          "month": "2026-09",
           "numerator": 1265,
           "denominator": 23854,
           "pct": 5.3031
@@ -850,7 +850,7 @@
       },
       "ripe": {
         "ds_share": {
-          "month": "2026-08",
+          "month": "2026-09",
           "numerator": 659,
           "denominator": 65616,
           "pct": 1.0043
