@@ -6,7 +6,7 @@ Generated 2026-09-29 by `scripts/build_timeline_index.py` from `data/software/ti
 
 | program | key | role | releases | span | kept changelog entries | default changes | CVE rows | stage | verification |
 |---|---|---|---|---|---|---|---|---|---|
-| BIND 9 | `bind9` | authoritative + recursive resolver + signer (named, dnssec-* tools) | 852 (444 stable) | 1999-09-08 .. 2026-09-11 | 1383 | 28 | 184 | complete | verified + corrected (254 checks, 9 correction items, e0cb29de) |
+| BIND 9 | `bind9` | authoritative + recursive resolver + signer (named, dnssec-* tools) | 852 (444 stable) | 1999-09-08 .. 2026-09-11 | 1383 | 28 | 207 | complete | verified + corrected (254 checks, 9 correction items, e0cb29de) |
 | Unbound | `unbound` | validating resolver | 214 (120 stable) | 2007-02-19 .. 2026-09-16 | 754 | 30 | 79 | complete | verified + corrected (170 checks, 8 correction items) |
 | NSD | `nsd` | authoritative server (serves DNSSEC, does not sign) | 134 (130 stable) | 2002-09-26 .. 2026-09-02 | 252 | 7 | 14 | complete | verified + corrected (201 checks, 8 correction items) |
 | Knot DNS | `knot` | authoritative server and signer (validation of received zones since 3.0.0) | 216 (174 stable) | 2011-02-02 .. 2026-09-08 | 527 | 21 | 13 | complete | verified + corrected (397 checks, 7 correction items) |
@@ -62,7 +62,7 @@ Gaps:
   - cds/cdnskey: the commit that first made dnssec-policy publish CDS/CDNSKEY (9.16.0 keymgr code) was not located; only the later cds-digest-type / cdnskey options (d22, value_changed=false) are recorded. So no default_change row asserts a ...
   - The first key-size dependent NSEC3 iteration limit (150/500/2500) is already present in lib/dns/nsec3.c at v9.6.0a1 (v9.5.2 has no nsec3.c), so it shipped with NSEC3 support itself; no default_change row is recorded for it. l01 records t...
   - Stage-2 changelog_entries[].commits arrays are empty for all 1,383 kept entries (stage 2 attributed entries to tags, not commits); commit evidence exists only on default_changes rows and cve_fixes rows produced here.
-  - ... 10 more in the JSON
+  - ... 11 more in the JSON
 
 ### Unbound (`unbound`)
 
