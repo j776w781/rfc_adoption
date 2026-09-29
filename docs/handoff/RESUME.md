@@ -121,6 +121,18 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - Then regenerate `01_program_timelines.md` (stale for bind9/pdns-auth/pdns-rec) and
   `cve_crossref` once; Phase 4 onward.
 
+### Final regeneration (after pdns-rec inventory rows are corrected)
+
+1. `python scripts/cve_crossref.py`, then `scripts/cve_adoption_crossref.py`, then `scripts/export_csv.py`.
+   Dry run with batch 2 only (before pdns-rec): dated fixes 133 -> 164, median latency 0 -> -7 d,
+   p90 65 -> 17 d, DNSSEC median 0 -> -3 d.
+2. Rewrite `docs/cve_crossref.md` "Fixes, embargoes..." (line ~93: "141 dated fixes", "median 0 days",
+   "37% before publication") and the KeyTrap rows: the pdns-rec builder found rec-5.0.2 / 4.8.6 / 4.9.3
+   (2024-02-06 commit, 2024-02-13 public), not 5.1.0 (2024-07-08), so "Recursor nearly five months later"
+   and the 146/148-day spreads are likely wrong. Recompute; do not hand-edit numbers.
+3. `tests/test_cve_crossref.py` pins median <= 7 only; run the full suite.
+4. `python scripts/build_timeline_index.py` after adding pdns-rec to `VERIFIED`.
+
 ## To resume
 
 1. `git checkout software-timelines-v2`; list `data/software/timelines/` and `docs/handoff/`.
