@@ -60,6 +60,23 @@ when you resume is theirs -- a missing file means re-run with the brief):
 - Inventory edits still pending (blocked while Phase 1 agents read the file):
   `fixes.kresd` CVE-2021-40083 -> 5.3.2; `by_product.nsd` CVE-2019-13207 published 2019-07-03.
 
+## Update 2026-09-29, fourth cutoff (usage limit hit again)
+
+VERIFIED + CORRECTED, 5 of 8: kresd (86035c04), knot + nsd (be757115), opendnssec
+(136cce6d), unbound (83ac2787). Each verify report is in docs/handoff/verify/.
+
+Builders still running at cutoff (they write files, never commit; partial output is
+usable -- each writes the release list first): bind9, pdns-auth (pdns-auth.json already
+appearing), pdns-rec. Check `ls data/software/timelines/`; a missing .md means re-run
+with the Phase 1 brief. Keep concurrency at three.
+
+Inventory corrections queued (apply to data/software/cve_inventory.json only when no
+builder is running, since they read it): kresd CVE-2021-40083 fix -> 5.3.2; nsd
+CVE-2019-13207 published 2019-07-03; unbound CVE-2017-15105 fix release 1.6.8
+(2018-01-19), CVE-2024-1931 -> 1.19.2, CVE-2024-8508 -> 1.21.1, CVE-2019-16866 -> 1.9.4.
+Pattern behind five of the six: the NVD scrape names the next MASTER release because
+branch point releases never touch doc/Changelog; the branch tag shipped the fix earlier.
+
 ## Next steps, in order
 
 1. `git status`; commit any timeline / verify files the agents left, as wip.
