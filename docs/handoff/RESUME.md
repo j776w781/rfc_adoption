@@ -148,10 +148,9 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - 6e7f3ff6 strict panel instead of summed RIRs (cve_adoption_crossref, summary deck); downstream
   JSON, decks, rfc charts regenerated.
 - Phase 7 final after two verifications (998c35db); old docs marked superseded (ac547268).
-- Phase 8 notebook committed unverified (c44883cc; 117 cells, 52 figures, 0 errors; rebuild with
-  `python notebooks/build_software_vs_adoption_notebook.py`). Verifier was running ->
-  `verify/phase8_notebook.md`. Apply its corrections in the builder, rebuild, commit. Then ask the
-  owner before pushing `software-timelines-v2` (nothing pushed yet).
+- Phase 8 DONE: notebook verified and corrected (report `verify/phase8_notebook.md`); rebuild with
+  `python notebooks/build_software_vs_adoption_notebook.py`. All eight phases complete.
+- Only open item: push `software-timelines-v2` when the owner confirms (nothing pushed yet).
 
 ## To resume
 
