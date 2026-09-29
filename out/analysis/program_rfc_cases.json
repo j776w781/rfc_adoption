@@ -1341,8 +1341,7 @@
     "reverse": {
      "afrinic": {
       "months": [
-       "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -1385,7 +1384,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -1442,7 +1441,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -1509,7 +1508,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        13,
@@ -1856,7 +1856,6 @@
      },
      "apnic": {
       "months": [
-       "2011-05",
        "2011-06",
        "2011-07",
        "2011-08",
@@ -1869,7 +1868,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -1912,7 +1911,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -1969,7 +1968,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -2015,7 +2014,8 @@
        "2024-08",
        "2024-09",
        "2024-10",
-       "2024-11"
+       "2024-11",
+       "2024-12"
       ],
       "count": [
        0,
@@ -2344,7 +2344,6 @@
      },
      "arin": {
       "months": [
-       "2011-04",
        "2011-05",
        "2011-06",
        "2011-07",
@@ -2358,7 +2357,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -2401,7 +2400,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -2458,7 +2457,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -2525,7 +2524,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        1,
@@ -2898,15 +2898,14 @@
      },
      "lacnic": {
       "months": [
-       "2016-09",
        "2016-10",
        "2016-11",
-       "2017-01",
+       "2016-12",
        "2017-02",
        "2017-03",
        "2017-04",
        "2017-05",
-       "2017-09",
+       "2017-06",
        "2017-10",
        "2017-11",
        "2017-12",
@@ -2945,7 +2944,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -3012,7 +3011,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -3251,9 +3251,8 @@
      },
      "ripe": {
       "months": [
-       "2009-03",
        "2009-04",
-       "2009-07",
+       "2009-05",
        "2009-08",
        "2009-09",
        "2009-10",
@@ -3269,7 +3268,7 @@
        "2010-08",
        "2010-09",
        "2010-10",
-       "2011-04",
+       "2010-11",
        "2011-05",
        "2011-06",
        "2011-07",
@@ -3283,7 +3282,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -3326,7 +3325,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -3383,7 +3382,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -3450,7 +3449,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -4572,607 +4572,13 @@
      "rfc": "RFC 5702",
      "basis": "reverse",
      "source": "afrinic",
-     "start": "2014-09",
-     "end": "2014-10",
+     "start": "2014-10",
+     "end": "2014-11",
      "delta": 176,
      "level_before": 20,
      "level_after": 196,
      "share_before_pct": null,
      "share_after_pct": 100.0,
-     "months_after_rfc": 59,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 42,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 42,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "NSD 4.1.0",
-      "date": "2014-09-04",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 6,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2012-01",
-     "end": "2012-01",
-     "delta": 36,
-     "level_before": 0,
-     "level_after": 36,
-     "share_before_pct": 0.0,
-     "share_after_pct": 46.154,
-     "months_after_rfc": 27,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 10,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 10,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "PowerDNS Auth 3.0.1",
-      "date": "2012-01-10",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 7,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2014-03",
-     "end": "2014-03",
-     "delta": 54,
-     "level_before": 63,
-     "level_after": 117,
-     "share_before_pct": 56.25,
-     "share_after_pct": 70.482,
-     "months_after_rfc": 53,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 36,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 36,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "Unbound 1.4.22",
-      "date": "2014-03-12",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 8,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2015-03",
-     "end": "2015-03",
-     "delta": 39,
-     "level_before": 134,
-     "level_after": 173,
-     "share_before_pct": 69.792,
-     "share_after_pct": 75.217,
-     "months_after_rfc": 65,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 48,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 48,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "PowerDNS Auth 3.4.3",
-      "date": "2015-03-01",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 9,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2015-11",
-     "end": "2015-11",
-     "delta": 338,
-     "level_before": 182,
-     "level_after": 520,
-     "share_before_pct": 74.286,
-     "share_after_pct": 89.041,
-     "months_after_rfc": 73,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 5,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 5,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "PowerDNS Auth 3.4.7",
-      "date": "2015-11-03",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 10,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2016-11",
-     "end": "2016-12",
-     "delta": 943,
-     "level_before": 543,
-     "level_after": 1486,
-     "share_before_pct": 88.436,
-     "share_after_pct": 95.44,
-     "months_after_rfc": 85,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 17,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 17,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "Knot DNS 2.3.2",
-      "date": "2016-11-04",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 11,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2018-11",
-     "end": "2018-11",
-     "delta": 263,
-     "level_before": 1425,
-     "level_after": 1688,
-     "share_before_pct": 78.426,
-     "share_after_pct": 80.998,
-     "months_after_rfc": 109,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 41,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 41,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "Knot Resolver 3.1.0",
-      "date": "2018-11-02",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 12,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2019-01",
-     "end": "2019-01",
-     "delta": 300,
-     "level_before": 1688,
-     "level_after": 1988,
-     "share_before_pct": 77.289,
-     "share_after_pct": 80.032,
-     "months_after_rfc": 111,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 43,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 43,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "PowerDNS Auth 4.1.6",
-      "date": "2019-01-04",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 13,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2019-05",
-     "end": "2019-06",
-     "delta": 547,
-     "level_before": 1984,
-     "level_after": 2531,
-     "share_before_pct": 79.519,
-     "share_after_pct": 83.011,
-     "months_after_rfc": 115,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 47,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 47,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "BIND 9 9.11.7",
-      "date": "2019-05-10",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 14,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "apnic",
-     "start": "2019-12",
-     "end": "2019-12",
-     "delta": 353,
-     "level_before": 2531,
-     "level_after": 2884,
-     "share_before_pct": 83.093,
-     "share_after_pct": 84.774,
-     "months_after_rfc": 122,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 54,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 54,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "NSD 4.2.4",
-      "date": "2019-12-03",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 15,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "arin",
-     "start": "2013-12",
-     "end": "2013-12",
-     "delta": 39,
-     "level_before": 87,
-     "level_after": 126,
-     "share_before_pct": 38.496,
-     "share_after_pct": 47.547,
-     "months_after_rfc": 50,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 33,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 33,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "OpenDNSSEC 1.3.16",
-      "date": "2013-12-04",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 16,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "arin",
-     "start": "2014-08",
-     "end": "2014-09",
-     "delta": 116,
-     "level_before": 143,
-     "level_after": 259,
-     "share_before_pct": 48.805,
-     "share_after_pct": 56.061,
-     "months_after_rfc": 58,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 41,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 41,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "Knot DNS 1.5.1",
-      "date": "2014-08-19",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 17,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "arin",
-     "start": "2016-09",
-     "end": "2016-09",
-     "delta": 44,
-     "level_before": 361,
-     "level_after": 405,
-     "share_before_pct": 60.57,
-     "share_after_pct": 64.082,
-     "months_after_rfc": 83,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 15,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 15,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "PowerDNS Auth 3.4.10",
-      "date": "2016-09-01",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 18,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "arin",
-     "start": "2017-04",
-     "end": "2017-04",
-     "delta": 46,
-     "level_before": 367,
-     "level_after": 413,
-     "share_before_pct": 54.13,
-     "share_after_pct": 57.044,
-     "months_after_rfc": 90,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 22,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 22,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "Knot Resolver 1.2.5",
-      "date": "2017-04-05",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 19,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "arin",
-     "start": "2019-05",
-     "end": "2019-05",
-     "delta": 270,
-     "level_before": 497,
-     "level_after": 767,
-     "share_before_pct": 40.973,
-     "share_after_pct": 47.434,
-     "months_after_rfc": 115,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 47,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 47,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "BIND 9 9.11.7",
-      "date": "2019-05-10",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 20,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "arin",
-     "start": "2025-09",
-     "end": "2025-09",
-     "delta": 127,
-     "level_before": 1086,
-     "level_after": 1213,
-     "share_before_pct": 21.215,
-     "share_after_pct": 22.771,
-     "months_after_rfc": 191,
-     "nearest_signer_release": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 123,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_default_change": {
-      "what": "Knot DNS 2.0.0",
-      "date": "2015-06-26",
-      "lag_months": 123,
-      "detail": "default signing algorithm -> RSASHA256"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "NSD 4.13.0",
-      "date": "2025-09-03",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 21,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "ripe",
-     "start": "2012-11",
-     "end": "2013-01",
-     "delta": 149,
-     "level_before": 105,
-     "level_after": 254,
-     "share_before_pct": 15.625,
-     "share_after_pct": 30.13,
-     "months_after_rfc": 37,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 20,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 20,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "OpenDNSSEC 1.3.11",
-      "date": "2012-11-13",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 22,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "ripe",
-     "start": "2014-02",
-     "end": "2014-02",
-     "delta": 64,
-     "level_before": 323,
-     "level_after": 387,
-     "share_before_pct": 29.471,
-     "share_after_pct": 33.478,
-     "months_after_rfc": 52,
-     "nearest_signer_release": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 35,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_default_change": {
-      "what": "OpenDNSSEC 1.2.0",
-      "date": "2011-03-18",
-      "lag_months": 35,
-      "detail": "default signing algorithm -> 8 (RSASHA256)"
-     },
-     "nearest_validator_limit": null,
-     "nearest_cve": null,
-     "nearest_any_release": {
-      "what": "Knot DNS 1.4.3",
-      "date": "2014-02-12",
-      "lag_months": 0
-     }
-    },
-    {
-     "n": 23,
-     "rfc": "RFC 5702",
-     "basis": "reverse",
-     "source": "ripe",
-     "start": "2014-10",
-     "end": "2014-11",
-     "delta": 301,
-     "level_before": 470,
-     "level_after": 771,
-     "share_before_pct": 36.979,
-     "share_after_pct": 48.188,
      "months_after_rfc": 60,
      "nearest_signer_release": {
       "what": "OpenDNSSEC 1.2.0",
@@ -5195,36 +4601,630 @@
      }
     },
     {
-     "n": 24,
+     "n": 6,
      "rfc": "RFC 5702",
      "basis": "reverse",
-     "source": "ripe",
-     "start": "2015-07",
-     "end": "2015-07",
-     "delta": 86,
-     "level_before": 825,
-     "level_after": 911,
-     "share_before_pct": 49.313,
-     "share_after_pct": 50.471,
-     "months_after_rfc": 69,
+     "source": "apnic",
+     "start": "2012-02",
+     "end": "2012-02",
+     "delta": 36,
+     "level_before": 0,
+     "level_after": 36,
+     "share_before_pct": 0.0,
+     "share_after_pct": 46.154,
+     "months_after_rfc": 28,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 11,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 11,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Unbound 1.4.16",
+      "date": "2012-02-02",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 7,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2014-04",
+     "end": "2014-04",
+     "delta": 54,
+     "level_before": 63,
+     "level_after": 117,
+     "share_before_pct": 56.25,
+     "share_after_pct": 70.482,
+     "months_after_rfc": 54,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 37,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 37,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "OpenDNSSEC 1.4.5",
+      "date": "2014-04-11",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 8,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2015-04",
+     "end": "2015-04",
+     "delta": 39,
+     "level_before": 134,
+     "level_after": 173,
+     "share_before_pct": 69.792,
+     "share_after_pct": 75.217,
+     "months_after_rfc": 66,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 49,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 49,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "NSD 4.1.2",
+      "date": "2015-04-07",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 9,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2015-12",
+     "end": "2015-12",
+     "delta": 338,
+     "level_before": 182,
+     "level_after": 520,
+     "share_before_pct": 74.286,
+     "share_after_pct": 89.041,
+     "months_after_rfc": 74,
      "nearest_signer_release": {
       "what": "Knot DNS 2.0.0",
       "date": "2015-06-26",
-      "lag_months": 1,
+      "lag_months": 6,
       "detail": "default signing algorithm -> RSASHA256"
      },
      "nearest_default_change": {
       "what": "Knot DNS 2.0.0",
       "date": "2015-06-26",
-      "lag_months": 1,
+      "lag_months": 6,
       "detail": "default signing algorithm -> RSASHA256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": null,
      "nearest_any_release": {
-      "what": "NSD 4.1.3",
-      "date": "2015-06-04",
+      "what": "NSD 3.2.20",
+      "date": "2015-12-03",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 10,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2016-12",
+     "end": "2017-01",
+     "delta": 943,
+     "level_before": 543,
+     "level_after": 1486,
+     "share_before_pct": 88.436,
+     "share_after_pct": 95.44,
+     "months_after_rfc": 86,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 18,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 18,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "NSD 4.1.14",
+      "date": "2016-12-01",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 11,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2018-12",
+     "end": "2018-12",
+     "delta": 263,
+     "level_before": 1425,
+     "level_after": 1688,
+     "share_before_pct": 78.426,
+     "share_after_pct": 80.998,
+     "months_after_rfc": 110,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 42,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 42,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Unbound 1.8.3",
+      "date": "2018-12-04",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 12,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2019-02",
+     "end": "2019-02",
+     "delta": 300,
+     "level_before": 1688,
+     "level_after": 1988,
+     "share_before_pct": 77.289,
+     "share_after_pct": 80.032,
+     "months_after_rfc": 112,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 44,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 44,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "BIND 9 9.11.6",
+      "date": "2019-02-27",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 13,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2019-06",
+     "end": "2019-07",
+     "delta": 547,
+     "level_before": 1984,
+     "level_after": 2531,
+     "share_before_pct": 79.519,
+     "share_after_pct": 83.011,
+     "months_after_rfc": 116,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 48,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 48,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "BIND 9 9.11.8",
+      "date": "2019-06-04",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 14,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "apnic",
+     "start": "2020-01",
+     "end": "2020-01",
+     "delta": 353,
+     "level_before": 2531,
+     "level_after": 2884,
+     "share_before_pct": 83.093,
+     "share_after_pct": 84.774,
+     "months_after_rfc": 123,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 55,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 55,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Knot DNS 2.8.5",
+      "date": "2020-01-01",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 15,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "arin",
+     "start": "2014-01",
+     "end": "2014-01",
+     "delta": 39,
+     "level_before": 87,
+     "level_after": 126,
+     "share_before_pct": 38.496,
+     "share_after_pct": 47.547,
+     "months_after_rfc": 51,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 34,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 34,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Knot DNS 1.4.1",
+      "date": "2014-01-13",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 16,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "arin",
+     "start": "2014-09",
+     "end": "2014-10",
+     "delta": 116,
+     "level_before": 143,
+     "level_after": 259,
+     "share_before_pct": 48.805,
+     "share_after_pct": 56.061,
+     "months_after_rfc": 59,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 42,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 42,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "NSD 4.1.0",
+      "date": "2014-09-04",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 17,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "arin",
+     "start": "2016-10",
+     "end": "2016-10",
+     "delta": 44,
+     "level_before": 361,
+     "level_after": 405,
+     "share_before_pct": 60.57,
+     "share_after_pct": 64.082,
+     "months_after_rfc": 84,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 16,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 16,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Knot DNS 2.3.1",
+      "date": "2016-10-10",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 18,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "arin",
+     "start": "2017-05",
+     "end": "2017-05",
+     "delta": 46,
+     "level_before": 367,
+     "level_after": 413,
+     "share_before_pct": 54.13,
+     "share_after_pct": 57.044,
+     "months_after_rfc": 91,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 23,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 23,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Knot Resolver 1.2.5",
+      "date": "2017-04-05",
       "lag_months": 1
+     }
+    },
+    {
+     "n": 19,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "arin",
+     "start": "2019-06",
+     "end": "2019-06",
+     "delta": 270,
+     "level_before": 497,
+     "level_after": 767,
+     "share_before_pct": 40.973,
+     "share_after_pct": 47.434,
+     "months_after_rfc": 116,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 48,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 48,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "BIND 9 9.11.8",
+      "date": "2019-06-04",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 20,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "arin",
+     "start": "2025-10",
+     "end": "2025-10",
+     "delta": 127,
+     "level_before": 1086,
+     "level_after": 1213,
+     "share_before_pct": 21.215,
+     "share_after_pct": 22.771,
+     "months_after_rfc": 192,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 124,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 124,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "PowerDNS Auth 4.9.10",
+      "date": "2025-10-03",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 21,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "ripe",
+     "start": "2012-12",
+     "end": "2013-02",
+     "delta": 149,
+     "level_before": 105,
+     "level_after": 254,
+     "share_before_pct": 15.625,
+     "share_after_pct": 30.13,
+     "months_after_rfc": 38,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 21,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 21,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Unbound 1.4.19",
+      "date": "2012-12-06",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 22,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "ripe",
+     "start": "2014-03",
+     "end": "2014-03",
+     "delta": 64,
+     "level_before": 323,
+     "level_after": 387,
+     "share_before_pct": 29.471,
+     "share_after_pct": 33.478,
+     "months_after_rfc": 53,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 36,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 36,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Unbound 1.4.22",
+      "date": "2014-03-12",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 23,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "ripe",
+     "start": "2014-11",
+     "end": "2014-12",
+     "delta": 301,
+     "level_before": 470,
+     "level_after": 771,
+     "share_before_pct": 36.979,
+     "share_after_pct": 48.188,
+     "months_after_rfc": 61,
+     "nearest_signer_release": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 44,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_default_change": {
+      "what": "OpenDNSSEC 1.2.0",
+      "date": "2011-03-18",
+      "lag_months": 44,
+      "detail": "default signing algorithm -> 8 (RSASHA256)"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "Unbound 1.5.0",
+      "date": "2014-11-11",
+      "lag_months": 0
+     }
+    },
+    {
+     "n": 24,
+     "rfc": "RFC 5702",
+     "basis": "reverse",
+     "source": "ripe",
+     "start": "2015-08",
+     "end": "2015-08",
+     "delta": 86,
+     "level_before": 825,
+     "level_after": 911,
+     "share_before_pct": 49.313,
+     "share_after_pct": 50.471,
+     "months_after_rfc": 70,
+     "nearest_signer_release": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 2,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_default_change": {
+      "what": "Knot DNS 2.0.0",
+      "date": "2015-06-26",
+      "lag_months": 2,
+      "detail": "default signing algorithm -> RSASHA256"
+     },
+     "nearest_validator_limit": null,
+     "nearest_cve": null,
+     "nearest_any_release": {
+      "what": "PowerDNS Auth 3.4.6",
+      "date": "2015-08-26",
+      "lag_months": 0
      }
     }
    ],
@@ -5239,8 +5239,8 @@
     },
     "reverse": {
      "months": 200,
-     "within_3m_after_signer_release": 0.055,
-     "within_3m_after_default_change": 0.035,
+     "within_3m_after_signer_release": 0.05,
+     "within_3m_after_default_change": 0.03,
      "within_3m_after_validator_limit": null,
      "within_3m_after_cve": null,
      "within_3m_after_any_release": 1.0
@@ -5256,11 +5256,11 @@
      "se": "2016-06"
     },
     "reverse": {
-     "afrinic": "2012-05",
-     "apnic": "2012-01",
-     "arin": "2011-04",
-     "lacnic": "2017-01",
-     "ripe": "2010-03"
+     "afrinic": "2012-06",
+     "apnic": "2012-02",
+     "arin": "2011-05",
+     "lacnic": "2017-02",
+     "ripe": "2010-04"
     }
    },
    "new_signings": {
@@ -5844,7 +5844,7 @@
     "spikes_within_3m_of_any_release": 24,
     "forward_rollovers_at_least": 371,
     "forward_new_signings_at_most": 236399,
-    "median_lag_to_signer_release_months": 38.5,
+    "median_lag_to_signer_release_months": 39.5,
     "median_lag_to_cve_months": null
    }
   },
@@ -7246,8 +7246,7 @@
     "reverse": {
      "afrinic": {
       "months": [
-       "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -7290,7 +7289,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -7347,7 +7346,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -7414,7 +7413,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -7761,7 +7761,6 @@
      },
      "apnic": {
       "months": [
-       "2011-05",
        "2011-06",
        "2011-07",
        "2011-08",
@@ -7774,7 +7773,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -7817,7 +7816,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -7874,7 +7873,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -7920,7 +7919,8 @@
        "2024-08",
        "2024-09",
        "2024-10",
-       "2024-11"
+       "2024-11",
+       "2024-12"
       ],
       "count": [
        0,
@@ -8249,7 +8249,6 @@
      },
      "arin": {
       "months": [
-       "2011-04",
        "2011-05",
        "2011-06",
        "2011-07",
@@ -8263,7 +8262,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -8306,7 +8305,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -8363,7 +8362,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -8430,7 +8429,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -8803,15 +8803,14 @@
      },
      "lacnic": {
       "months": [
-       "2016-09",
        "2016-10",
        "2016-11",
-       "2017-01",
+       "2016-12",
        "2017-02",
        "2017-03",
        "2017-04",
        "2017-05",
-       "2017-09",
+       "2017-06",
        "2017-10",
        "2017-11",
        "2017-12",
@@ -8850,7 +8849,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -8917,7 +8916,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -9156,9 +9156,8 @@
      },
      "ripe": {
       "months": [
-       "2009-03",
        "2009-04",
-       "2009-07",
+       "2009-05",
        "2009-08",
        "2009-09",
        "2009-10",
@@ -9174,7 +9173,7 @@
        "2010-08",
        "2010-09",
        "2010-10",
-       "2011-04",
+       "2010-11",
        "2011-05",
        "2011-06",
        "2011-07",
@@ -9188,7 +9187,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -9231,7 +9230,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -9288,7 +9287,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -9355,7 +9354,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -11036,35 +11036,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "afrinic",
-     "start": "2018-12",
-     "end": "2018-12",
+     "start": "2019-01",
+     "end": "2019-01",
      "delta": 40,
      "level_before": 0,
      "level_after": 40,
      "share_before_pct": 0.0,
      "share_after_pct": 9.756,
-     "months_after_rfc": 80,
+     "months_after_rfc": 81,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 11
+      "lag_months": 12
      },
      "nearest_any_release": {
-      "what": "Unbound 1.8.3",
-      "date": "2018-12-04",
+      "what": "PowerDNS Auth 4.1.6",
+      "date": "2019-01-04",
       "lag_months": 0
      }
     },
@@ -11073,35 +11073,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "afrinic",
-     "start": "2021-01",
-     "end": "2021-01",
+     "start": "2021-02",
+     "end": "2021-02",
      "delta": 53,
      "level_before": 69,
      "level_after": 122,
      "share_before_pct": 16.235,
      "share_after_pct": 25.47,
-     "months_after_rfc": 105,
+     "months_after_rfc": 106,
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 11,
+      "lag_months": 12,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 11,
+      "lag_months": 12,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 36
+      "lag_months": 37
      },
      "nearest_any_release": {
-      "what": "BIND 9 9.11.27",
-      "date": "2021-01-11",
+      "what": "Unbound 1.13.1",
+      "date": "2021-02-02",
       "lag_months": 0
      }
     },
@@ -11110,35 +11110,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "afrinic",
-     "start": "2026-06",
-     "end": "2026-06",
+     "start": "2026-07",
+     "end": "2026-07",
      "delta": 52,
      "level_before": 250,
      "level_after": 302,
      "share_before_pct": 40.128,
      "share_after_pct": 48.32,
-     "months_after_rfc": 170,
+     "months_after_rfc": 171,
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 76,
+      "lag_months": 77,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 76,
+      "lag_months": 77,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2022-38177 (BIND 9)",
       "date": "2022-09-21",
-      "lag_months": 45
+      "lag_months": 46
      },
      "nearest_any_release": {
-      "what": "PowerDNS Rec 5.2.10",
-      "date": "2026-06-01",
+      "what": "NSD 4.15.0",
+      "date": "2026-07-07",
       "lag_months": 0
      }
     },
@@ -11147,31 +11147,31 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "apnic",
-     "start": "2017-08",
-     "end": "2017-08",
+     "start": "2017-09",
+     "end": "2017-09",
      "delta": 155,
      "level_before": 2,
      "level_after": 157,
      "share_before_pct": 0.128,
      "share_after_pct": 9.128,
-     "months_after_rfc": 64,
+     "months_after_rfc": 65,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 13,
+      "lag_months": 14,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 13,
+      "lag_months": 14,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": null,
      "nearest_any_release": {
-      "what": "OpenDNSSEC 2.1.2",
-      "date": "2017-08-03",
+      "what": "Unbound 1.6.6",
+      "date": "2017-09-13",
       "lag_months": 0
      }
     },
@@ -11180,35 +11180,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "apnic",
-     "start": "2018-05",
-     "end": "2018-05",
+     "start": "2018-06",
+     "end": "2018-06",
      "delta": 119,
      "level_before": 204,
      "level_after": 323,
      "share_before_pct": 12.0,
      "share_after_pct": 17.757,
-     "months_after_rfc": 73,
+     "months_after_rfc": 74,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 22,
+      "lag_months": 23,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 22,
+      "lag_months": 23,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 4
+      "lag_months": 5
      },
      "nearest_any_release": {
-      "what": "NSD 4.1.21",
-      "date": "2018-05-07",
+      "what": "Unbound 1.7.2",
+      "date": "2018-06-04",
       "lag_months": 0
      }
     },
@@ -11217,35 +11217,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "apnic",
-     "start": "2018-12",
-     "end": "2018-12",
+     "start": "2019-01",
+     "end": "2019-01",
      "delta": 100,
      "level_before": 336,
      "level_after": 436,
      "share_before_pct": 16.123,
      "share_after_pct": 19.963,
-     "months_after_rfc": 80,
+     "months_after_rfc": 81,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 11
+      "lag_months": 12
      },
      "nearest_any_release": {
-      "what": "Unbound 1.8.3",
-      "date": "2018-12-04",
+      "what": "PowerDNS Auth 4.1.6",
+      "date": "2019-01-04",
       "lag_months": 0
      }
     },
@@ -11254,35 +11254,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "arin",
-     "start": "2018-12",
-     "end": "2018-12",
+     "start": "2019-01",
+     "end": "2019-01",
      "delta": 55,
      "level_before": 82,
      "level_after": 137,
      "share_before_pct": 7.714,
      "share_after_pct": 12.243,
-     "months_after_rfc": 80,
+     "months_after_rfc": 81,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 11
+      "lag_months": 12
      },
      "nearest_any_release": {
-      "what": "Unbound 1.8.3",
-      "date": "2018-12-04",
+      "what": "PowerDNS Auth 4.1.6",
+      "date": "2019-01-04",
       "lag_months": 0
      }
     },
@@ -11291,35 +11291,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "arin",
-     "start": "2019-02",
-     "end": "2019-02",
+     "start": "2019-03",
+     "end": "2019-03",
      "delta": 45,
      "level_before": 137,
      "level_after": 182,
      "share_before_pct": 12.199,
      "share_after_pct": 15.333,
-     "months_after_rfc": 82,
+     "months_after_rfc": 83,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 31,
+      "lag_months": 32,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 31,
+      "lag_months": 32,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 13
+      "lag_months": 14
      },
      "nearest_any_release": {
-      "what": "BIND 9 9.11.6",
-      "date": "2019-02-27",
+      "what": "Unbound 1.9.1",
+      "date": "2019-03-05",
       "lag_months": 0
      }
     },
@@ -11328,35 +11328,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "arin",
-     "start": "2019-05",
-     "end": "2019-06",
+     "start": "2019-06",
+     "end": "2019-07",
      "delta": 172,
      "level_before": 187,
      "level_after": 359,
      "share_before_pct": 15.416,
      "share_after_pct": 21.51,
-     "months_after_rfc": 85,
+     "months_after_rfc": 86,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 34,
+      "lag_months": 35,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 34,
+      "lag_months": 35,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 16
+      "lag_months": 17
      },
      "nearest_any_release": {
-      "what": "BIND 9 9.11.7",
-      "date": "2019-05-10",
+      "what": "BIND 9 9.11.8",
+      "date": "2019-06-04",
       "lag_months": 0
      }
     },
@@ -11365,35 +11365,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "arin",
-     "start": "2019-09",
-     "end": "2019-09",
+     "start": "2019-10",
+     "end": "2019-10",
      "delta": 43,
      "level_before": 373,
      "level_after": 416,
      "share_before_pct": 21.724,
      "share_after_pct": 23.69,
-     "months_after_rfc": 89,
+     "months_after_rfc": 90,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 38,
+      "lag_months": 39,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 38,
+      "lag_months": 39,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 20
+      "lag_months": 21
      },
      "nearest_any_release": {
-      "what": "BIND 9 9.11.11",
-      "date": "2019-09-09",
+      "what": "BIND 9 9.11.12",
+      "date": "2019-10-02",
       "lag_months": 0
      }
     },
@@ -11402,35 +11402,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "arin",
-     "start": "2020-10",
-     "end": "2020-10",
+     "start": "2020-11",
+     "end": "2020-11",
      "delta": 84,
      "level_before": 643,
      "level_after": 727,
      "share_before_pct": 31.551,
      "share_after_pct": 34.18,
-     "months_after_rfc": 102,
+     "months_after_rfc": 103,
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 8,
+      "lag_months": 9,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 8,
+      "lag_months": 9,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 33
+      "lag_months": 34
      },
      "nearest_any_release": {
-      "what": "Unbound 1.12.0",
-      "date": "2020-10-01",
+      "what": "Knot DNS 3.0.2",
+      "date": "2020-11-11",
       "lag_months": 0
      }
     },
@@ -11439,35 +11439,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "arin",
-     "start": "2022-11",
-     "end": "2022-11",
+     "start": "2022-12",
+     "end": "2022-12",
      "delta": 176,
      "level_before": 1496,
      "level_after": 1672,
      "share_before_pct": 46.045,
      "share_after_pct": 49.896,
-     "months_after_rfc": 127,
+     "months_after_rfc": 128,
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 33,
+      "lag_months": 34,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 33,
+      "lag_months": 34,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2022-38177 (BIND 9)",
       "date": "2022-09-21",
-      "lag_months": 2
+      "lag_months": 3
      },
      "nearest_any_release": {
-      "what": "NSD 4.6.1",
-      "date": "2022-11-01",
+      "what": "PowerDNS Auth 4.5.5",
+      "date": "2022-12-06",
       "lag_months": 0
      }
     },
@@ -11476,35 +11476,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "lacnic",
-     "start": "2021-08",
-     "end": "2021-08",
+     "start": "2021-09",
+     "end": "2021-09",
      "delta": 36,
      "level_before": 78,
      "level_after": 114,
      "share_before_pct": 66.102,
      "share_after_pct": 68.675,
-     "months_after_rfc": 112,
+     "months_after_rfc": 113,
      "nearest_signer_release": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 18,
+      "lag_months": 19,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.16.0",
       "date": "2020-02-12",
-      "lag_months": 18,
+      "lag_months": 19,
       "detail": "built-in dnssec-policy 'default' signs with one ECDSAP256SHA256 CSK"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 43
+      "lag_months": 44
      },
      "nearest_any_release": {
-      "what": "Knot DNS 3.1.0",
-      "date": "2021-08-01",
+      "what": "BIND 9 9.16.21",
+      "date": "2021-09-07",
       "lag_months": 0
      }
     },
@@ -11513,35 +11513,35 @@
      "rfc": "RFC 6605",
      "basis": "reverse",
      "source": "ripe",
-     "start": "2018-12",
-     "end": "2018-12",
+     "start": "2019-01",
+     "end": "2019-01",
      "delta": 63,
      "level_before": 3,
      "level_after": 66,
      "share_before_pct": 5.455,
      "share_after_pct": 55.932,
-     "months_after_rfc": 80,
+     "months_after_rfc": 81,
      "nearest_signer_release": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_default_change": {
       "what": "PowerDNS Auth 4.0.0",
       "date": "2016-07-08",
-      "lag_months": 29,
+      "lag_months": 30,
       "detail": "default ZSK algorithm -> ECDSA P-256"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2017-15094 (PowerDNS Rec)",
       "date": "2018-01-23",
-      "lag_months": 11
+      "lag_months": 12
      },
      "nearest_any_release": {
-      "what": "Unbound 1.8.3",
-      "date": "2018-12-04",
+      "what": "PowerDNS Auth 4.1.6",
+      "date": "2019-01-04",
       "lag_months": 0
      }
     }
@@ -11574,11 +11574,11 @@
      "se": "2016-06"
     },
     "reverse": {
-     "afrinic": "2018-12",
-     "apnic": "2016-10",
-     "arin": "2015-11",
-     "lacnic": "2019-04",
-     "ripe": "2016-07"
+     "afrinic": "2019-01",
+     "apnic": "2016-11",
+     "arin": "2015-12",
+     "lacnic": "2019-05",
+     "ripe": "2016-08"
     }
    },
    "new_signings": {
@@ -12231,8 +12231,8 @@
     "spikes_within_3m_of_any_release": 31,
     "forward_rollovers_at_least": 389932,
     "forward_new_signings_at_most": 645952,
-    "median_lag_to_signer_release_months": 29.0,
-    "median_lag_to_cve_months": 16.5
+    "median_lag_to_signer_release_months": 30.0,
+    "median_lag_to_cve_months": 17.0
    }
   },
   "RFC 8080": {
@@ -15761,8 +15761,7 @@
     "reverse": {
      "afrinic": {
       "months": [
-       "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -15805,7 +15804,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -15862,7 +15861,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -15929,7 +15928,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -16276,7 +16276,6 @@
      },
      "arin": {
       "months": [
-       "2011-04",
        "2011-05",
        "2011-06",
        "2011-07",
@@ -16290,7 +16289,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -16333,7 +16332,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -16390,7 +16389,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -16457,7 +16456,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        1,
@@ -16830,9 +16830,8 @@
      },
      "ripe": {
       "months": [
-       "2009-03",
        "2009-04",
-       "2009-07",
+       "2009-05",
        "2009-08",
        "2009-09",
        "2009-10",
@@ -16848,7 +16847,7 @@
        "2010-08",
        "2010-09",
        "2010-10",
-       "2011-04",
+       "2010-11",
        "2011-05",
        "2011-06",
        "2011-07",
@@ -16862,7 +16861,7 @@
        "2012-03",
        "2012-04",
        "2012-05",
-       "2012-07",
+       "2012-06",
        "2012-08",
        "2012-09",
        "2012-10",
@@ -16905,7 +16904,7 @@
        "2015-11",
        "2015-12",
        "2016-01",
-       "2016-03",
+       "2016-02",
        "2016-04",
        "2016-05",
        "2016-06",
@@ -16962,7 +16961,7 @@
        "2020-09",
        "2020-10",
        "2020-11",
-       "2021-01",
+       "2020-12",
        "2021-02",
        "2021-03",
        "2021-04",
@@ -17029,7 +17028,8 @@
        "2026-05",
        "2026-06",
        "2026-07",
-       "2026-08"
+       "2026-08",
+       "2026-09"
       ],
       "count": [
        0,
@@ -18326,40 +18326,40 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "afrinic",
-     "start": "2018-10",
-     "end": "2018-10",
+     "start": "2018-11",
+     "end": "2018-11",
      "delta": 83,
      "level_before": 5,
      "level_after": 88,
      "share_before_pct": 1.938,
      "share_after_pct": 24.044,
-     "months_after_rfc": 127,
+     "months_after_rfc": 128,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 104,
+      "lag_months": 105,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 104,
+      "lag_months": 105,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": {
       "what": "PowerDNS Rec 4.1.0",
       "date": "2017-12-04",
-      "lag_months": 10,
+      "lag_months": 11,
       "detail": "reject zones with too many NSEC3 iterations"
      },
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 57
+      "lag_months": 58
      },
      "nearest_any_release": {
-      "what": "Unbound 1.8.1",
-      "date": "2018-10-01",
+      "what": "Knot Resolver 3.1.0",
+      "date": "2018-11-02",
       "lag_months": 0
      }
     },
@@ -18368,36 +18368,36 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "arin",
-     "start": "2017-05",
-     "end": "2017-06",
+     "start": "2017-06",
+     "end": "2017-07",
      "delta": 167,
      "level_before": 38,
      "level_after": 205,
      "share_before_pct": 5.249,
      "share_after_pct": 25.246,
-     "months_after_rfc": 110,
+     "months_after_rfc": 111,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 87,
+      "lag_months": 88,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 87,
+      "lag_months": 88,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 40
+      "lag_months": 41
      },
      "nearest_any_release": {
-      "what": "Knot Resolver 1.2.5",
-      "date": "2017-04-05",
-      "lag_months": 1
+      "what": "Knot DNS 2.4.4",
+      "date": "2017-06-05",
+      "lag_months": 0
      }
     },
     {
@@ -18405,40 +18405,40 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "arin",
-     "start": "2018-06",
-     "end": "2018-06",
+     "start": "2018-07",
+     "end": "2018-07",
      "delta": 44,
      "level_before": 224,
      "level_after": 268,
      "share_before_pct": 24.508,
      "share_after_pct": 28.541,
-     "months_after_rfc": 123,
+     "months_after_rfc": 124,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 100,
+      "lag_months": 101,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 100,
+      "lag_months": 101,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": {
       "what": "PowerDNS Rec 4.1.0",
       "date": "2017-12-04",
-      "lag_months": 6,
+      "lag_months": 7,
       "detail": "reject zones with too many NSEC3 iterations"
      },
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 53
+      "lag_months": 54
      },
      "nearest_any_release": {
-      "what": "Unbound 1.7.2",
-      "date": "2018-06-04",
+      "what": "BIND 9 9.10.8",
+      "date": "2018-07-03",
       "lag_months": 0
      }
     },
@@ -18447,40 +18447,40 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "arin",
-     "start": "2018-08",
-     "end": "2018-08",
+     "start": "2018-09",
+     "end": "2018-09",
      "delta": 39,
      "level_before": 268,
      "level_after": 307,
      "share_before_pct": 28.36,
      "share_after_pct": 30.792,
-     "months_after_rfc": 125,
+     "months_after_rfc": 126,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 102,
+      "lag_months": 103,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 102,
+      "lag_months": 103,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": {
       "what": "PowerDNS Rec 4.1.0",
       "date": "2017-12-04",
-      "lag_months": 8,
+      "lag_months": 9,
       "detail": "reject zones with too many NSEC3 iterations"
      },
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 55
+      "lag_months": 56
      },
      "nearest_any_release": {
-      "what": "Knot Resolver 2.4.1",
-      "date": "2018-08-02",
+      "what": "Unbound 1.8.0",
+      "date": "2018-09-04",
       "lag_months": 0
      }
     },
@@ -18489,40 +18489,40 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "arin",
-     "start": "2018-10",
-     "end": "2018-10",
+     "start": "2018-11",
+     "end": "2018-11",
      "delta": 32,
      "level_before": 308,
      "level_after": 340,
      "share_before_pct": 30.893,
      "share_after_pct": 32.819,
-     "months_after_rfc": 127,
+     "months_after_rfc": 128,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 104,
+      "lag_months": 105,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 104,
+      "lag_months": 105,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": {
       "what": "PowerDNS Rec 4.1.0",
       "date": "2017-12-04",
-      "lag_months": 10,
+      "lag_months": 11,
       "detail": "reject zones with too many NSEC3 iterations"
      },
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 57
+      "lag_months": 58
      },
      "nearest_any_release": {
-      "what": "Unbound 1.8.1",
-      "date": "2018-10-01",
+      "what": "Knot Resolver 3.1.0",
+      "date": "2018-11-02",
       "lag_months": 0
      }
     },
@@ -18531,40 +18531,40 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "arin",
-     "start": "2020-11",
-     "end": "2020-11",
+     "start": "2020-12",
+     "end": "2020-12",
      "delta": 60,
      "level_before": 382,
      "level_after": 442,
      "share_before_pct": 17.96,
      "share_after_pct": 19.973,
-     "months_after_rfc": 152,
+     "months_after_rfc": 153,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 129,
+      "lag_months": 130,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 129,
+      "lag_months": 130,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": {
       "what": "PowerDNS Rec 4.1.0",
       "date": "2017-12-04",
-      "lag_months": 35,
+      "lag_months": 36,
       "detail": "reject zones with too many NSEC3 iterations"
      },
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 82
+      "lag_months": 83
      },
      "nearest_any_release": {
-      "what": "Knot DNS 3.0.2",
-      "date": "2020-11-11",
+      "what": "Unbound 1.13.0",
+      "date": "2020-12-03",
       "lag_months": 0
      }
     },
@@ -18573,40 +18573,40 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "arin",
-     "start": "2021-01",
-     "end": "2021-01",
+     "start": "2021-02",
+     "end": "2021-02",
      "delta": 78,
      "level_before": 442,
      "level_after": 520,
      "share_before_pct": 19.973,
      "share_after_pct": 22.356,
-     "months_after_rfc": 154,
+     "months_after_rfc": 155,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 131,
+      "lag_months": 132,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 131,
+      "lag_months": 132,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": {
       "what": "PowerDNS Rec 4.1.0",
       "date": "2017-12-04",
-      "lag_months": 37,
+      "lag_months": 38,
       "detail": "reject zones with too many NSEC3 iterations"
      },
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 84
+      "lag_months": 85
      },
      "nearest_any_release": {
-      "what": "BIND 9 9.11.27",
-      "date": "2021-01-11",
+      "what": "Unbound 1.13.1",
+      "date": "2021-02-02",
       "lag_months": 0
      }
     },
@@ -18615,40 +18615,40 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "arin",
-     "start": "2026-08",
-     "end": "2026-08",
+     "start": "2026-09",
+     "end": "2026-09",
      "delta": 63,
      "level_before": 372,
      "level_after": 435,
      "share_before_pct": 6.221,
      "share_after_pct": 7.155,
-     "months_after_rfc": 221,
+     "months_after_rfc": 222,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 198,
+      "lag_months": 199,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 198,
+      "lag_months": 199,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": {
       "what": "Knot DNS 3.1.5",
       "date": "2021-12-20",
-      "lag_months": 56,
+      "lag_months": 57,
       "detail": "config check on the default NSEC3 iteration count"
      },
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 151
+      "lag_months": 152
      },
      "nearest_any_release": {
-      "what": "PowerDNS Auth 4.9.17",
-      "date": "2026-08-03",
+      "what": "NSD 4.15.2",
+      "date": "2026-09-02",
       "lag_months": 0
      }
     },
@@ -18657,36 +18657,36 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "ripe",
-     "start": "2011-10",
-     "end": "2011-10",
+     "start": "2011-11",
+     "end": "2011-11",
      "delta": 62,
      "level_before": 47,
      "level_after": 109,
      "share_before_pct": 10.151,
      "share_after_pct": 20.223,
-     "months_after_rfc": 43,
+     "months_after_rfc": 44,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 20,
+      "lag_months": 21,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 20,
+      "lag_months": 21,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2010-0097 (BIND 9)",
       "date": "2010-01-22",
-      "lag_months": 21
+      "lag_months": 22
      },
      "nearest_any_release": {
-      "what": "OpenDNSSEC 1.3.1",
-      "date": "2011-09-07",
-      "lag_months": 1
+      "what": "NSD 3.2.9",
+      "date": "2011-11-02",
+      "lag_months": 0
      }
     },
     {
@@ -18694,35 +18694,35 @@
      "rfc": "RFC 5155",
      "basis": "reverse",
      "source": "ripe",
-     "start": "2015-05",
-     "end": "2015-05",
+     "start": "2015-06",
+     "end": "2015-06",
      "delta": 41,
      "level_before": 139,
      "level_after": 180,
      "share_before_pct": 8.623,
      "share_after_pct": 10.423,
-     "months_after_rfc": 86,
+     "months_after_rfc": 87,
      "nearest_signer_release": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 63,
+      "lag_months": 64,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_default_change": {
       "what": "BIND 9 9.7.0",
       "date": "2010-02-16",
-      "lag_months": 63,
+      "lag_months": 64,
       "detail": "NSEC3 iterations default 100 -> 10"
      },
      "nearest_validator_limit": null,
      "nearest_cve": {
       "what": "CVE-2014-0591 (BIND 9)",
       "date": "2014-01-14",
-      "lag_months": 16
+      "lag_months": 17
      },
      "nearest_any_release": {
-      "what": "PowerDNS Auth 3.3.2",
-      "date": "2015-05-01",
+      "what": "NSD 4.1.3",
+      "date": "2015-06-04",
       "lag_months": 0
      }
     }
@@ -18738,7 +18738,7 @@
     },
     "reverse": {
      "months": 200,
-     "within_3m_after_signer_release": 0.025,
+     "within_3m_after_signer_release": 0.02,
      "within_3m_after_default_change": 0.02,
      "within_3m_after_validator_limit": 0.065,
      "within_3m_after_cve": 0.075,
@@ -18755,9 +18755,9 @@
      "se": "2016-06"
     },
     "reverse": {
-     "afrinic": "2017-02",
-     "arin": "2011-04",
-     "ripe": "2009-07"
+     "afrinic": "2017-03",
+     "arin": "2011-05",
+     "ripe": "2009-08"
     }
    },
    "new_signings": {
@@ -19343,8 +19343,8 @@
     "spikes_within_3m_of_any_release": 17,
     "forward_rollovers_at_least": 0,
     "forward_new_signings_at_most": 429995,
-    "median_lag_to_signer_release_months": 104.0,
-    "median_lag_to_cve_months": 57.0
+    "median_lag_to_signer_release_months": 105.0,
+    "median_lag_to_cve_months": 58.0
    }
   },
   "RFC 9276": {

@@ -243,7 +243,7 @@
     "adoption": [
       {
         "change": "RSASHA256",
-        "first_seen": "2010-03",
+        "first_seen": "2010-04",
         "t_1pct": "2011-05",
         "t_10pct": "2012-06",
         "peak_share_pct": 74.642,
@@ -253,7 +253,7 @@
       },
       {
         "change": "RSASHA512",
-        "first_seen": "2010-03",
+        "first_seen": "2010-04",
         "t_1pct": "2014-08",
         "t_10pct": null,
         "peak_share_pct": 3.723,
@@ -267,15 +267,15 @@
       "first_signer": "bind9 9.7.0",
       "first_validator_release": "2008-11",
       "first_validator": "unbound 1.1.0",
-      "first_zone_seen": "2010-03",
+      "first_zone_seen": "2010-04",
       "first_seen_basis": "reverse",
       "code_lag_years": 0.3,
-      "deployment_lag_years": 0.1,
-      "onset_years": 0.4,
+      "deployment_lag_years": 0.2,
+      "onset_years": 0.5,
       "source": "out/analysis/software_crossref.json onset_decomposition"
     },
     "verdict": "fast",
-    "verdict_basis": "first zone 0.4 y after the RFC and 10% of signed delegations 2.7 y after it",
+    "verdict_basis": "first zone 0.5 y after the RFC and 10% of signed delegations 2.7 y after it",
     "curve_summary": {
       "forward_peak_pct": 98.52,
       "forward_last_pct": 24.36,
@@ -324,7 +324,7 @@
     "adoption": [
       {
         "change": "ECC-GOST",
-        "first_seen": "2012-12",
+        "first_seen": "2013-01",
         "t_1pct": null,
         "t_10pct": null,
         "peak_share_pct": 0.0,
@@ -336,7 +336,7 @@
     "successor_overlap": [
       {
         "predecessor": "RFC 5702",
-        "predecessor_share_at_publication": 0.8,
+        "predecessor_share_at_publication": 0.74,
         "predecessor_peak_share": 87.79,
         "fraction_of_peak_reached": 0.01
       }
@@ -346,11 +346,11 @@
       "first_signer": "bind9 9.6.2",
       "first_validator_release": "2009-11",
       "first_validator": "unbound 1.4.0",
-      "first_zone_seen": "2012-12",
+      "first_zone_seen": "2013-01",
       "first_seen_basis": "reverse",
       "code_lag_years": -0.4,
-      "deployment_lag_years": 2.8,
-      "onset_years": 2.4,
+      "deployment_lag_years": 2.9,
+      "onset_years": 2.5,
       "source": "out/analysis/software_crossref.json onset_decomposition"
     },
     "verdict": "never",
@@ -545,7 +545,7 @@
     "adoption": [
       {
         "change": "ECDSAP256SHA256",
-        "first_seen": "2015-11",
+        "first_seen": "2015-12",
         "t_1pct": "2018-06",
         "t_10pct": "2019-03",
         "peak_share_pct": 67.955,
@@ -555,7 +555,7 @@
       },
       {
         "change": "ECDSAP384SHA384",
-        "first_seen": "2015-11",
+        "first_seen": "2015-12",
         "t_1pct": "2018-09",
         "t_10pct": null,
         "peak_share_pct": 3.452,
@@ -567,7 +567,7 @@
     "successor_overlap": [
       {
         "predecessor": "RFC 5702",
-        "predecessor_share_at_publication": 14.2,
+        "predecessor_share_at_publication": 14.06,
         "predecessor_peak_share": 87.79,
         "fraction_of_peak_reached": 0.16
       }
@@ -577,15 +577,15 @@
       "first_signer": "pdns-auth 3.0.1",
       "first_validator_release": "2012-05",
       "first_validator": "unbound 1.4.17",
-      "first_zone_seen": "2015-11",
+      "first_zone_seen": "2015-12",
       "first_seen_basis": "reverse",
       "code_lag_years": -0.2,
-      "deployment_lag_years": 3.8,
-      "onset_years": 3.6,
+      "deployment_lag_years": 3.9,
+      "onset_years": 3.7,
       "source": "out/analysis/software_crossref.json onset_decomposition"
     },
     "verdict": "slow",
-    "verdict_basis": "first zone 3.6 y after the RFC and 10% of signed delegations 6.9 y after it",
+    "verdict_basis": "first zone 3.7 y after the RFC and 10% of signed delegations 6.9 y after it",
     "curve_summary": {
       "forward_peak_pct": 76.29,
       "forward_last_pct": 76.14,
@@ -852,7 +852,7 @@
     "successor_overlap": [
       {
         "predecessor": "RFC 6605",
-        "predecessor_share_at_publication": 0.51,
+        "predecessor_share_at_publication": 0.43,
         "predecessor_peak_share": 74.06,
         "fraction_of_peak_reached": 0.01
       }

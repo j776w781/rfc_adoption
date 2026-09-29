@@ -81,17 +81,23 @@ def main() -> int:
     near = collections.Counter(j["nearest_cve"]["what"].split(" ")[0]
                                for c in C.values() for j in c["spikes"] if j.get("nearest_cve"))
     _tm = pd.read_parquet("out/server_run/timeline_monthly.parquet")
-    _r = _tm[(_tm.basis == "reverse") & (_tm.dimension == "algorithm_ds")]
+    # Reverse shares from the strict panel, never the five RIRs summed (their name sets
+    # overlap). Forward shares pool the TLDs (disjoint name sets) by domain_days, so
+    # numerator and denominator come from the same days. Corrected 2026-09-29.
+    _pan = pd.read_parquet("out/panel_run/timeline_monthly.parquet")
+    _r = _pan[(_pan.source == "_pooled-afrinic-arin") & (_pan.dimension == "algorithm_ds")]
     _den = _r[_r.value == "_total"].groupby("month").domains_peak.sum()
     _n3 = (_r[_r.value == "7"].groupby("month").domains_peak.sum() / _den * 100).dropna()
+    _n3 = _n3[_n3 > 0]
     NSEC3_FIRST_M, NSEC3_FIRST_PCT = _n3.index[0], float(_n3.iloc[0])
-    ED_REV = sum(float((_r[_r.value == v].groupby("month").domains_peak.sum() / _den * 100).dropna().iloc[-1])
-                 for v in ("15", "16"))
+    ED_REV = sum(float((_r[_r.value == v].groupby("month").domains_peak.sum() / _den * 100)
+                       .reindex(_den.index).fillna(0).iloc[-1]) for v in ("15", "16"))
     _f = _tm[(_tm.basis == "zonefile") & (_tm.dimension == "algorithm_dnskey")]
-    _fden = _f[_f.value == "_total"].groupby("month").domains_peak.sum()
-    ED_FWD = sum(float((_f[_f.value == v].groupby("month").domains_peak.sum() / _fden * 100).dropna().iloc[-1])
+    _fden = _f[_f.value == "_total"].groupby("month").domain_days.sum()
+    ED_FWD = sum(float((_f[_f.value == v].groupby("month").domain_days.sum() / _fden * 100).dropna().iloc[-1])
                  for v in ("15", "16") if not _f[_f.value == v].empty)
-    _g = _r[_r.value == "12"].groupby("month").domains_peak.sum()
+    _rr = _tm[(_tm.basis == "reverse") & (_tm.dimension == "algorithm_ds")]
+    _g = _rr[_rr.value == "12"].groupby("month").domains_peak.sum()  # a count, not a share: summing RIRs is fine
     GOST_PEAK, GOST_PEAK_M = (int(_g.max()), _g.idxmax()) if len(_g) else (0, "-")
 
     prs = Presentation(); prs.slide_width, prs.slide_height = W, H

@@ -36,7 +36,7 @@
    "FAST  \u00b7  RFC 5702",
    "RSA/SHA-256 and RSA/SHA-512",
    "Same key type and sizes as RSA/SHA-1, so a zone changes one number, not its key management. Unbound 1.1.0 validated it 11 months before the RFC and BIND 9 9.7.0 signed it 4 months after; the first zone followed the signer within two months. It is the only signing algorithm in the set that changed nothing about a zone's keys. Whether a default carried it cannot be tested -- OpenDNSSEC made it the default in 2011-03, but both corpora open with it already in use, so no before-period exists.",
-   "published 2009-10  \u00b7  first signer BIND 9 9.7.0 2010-02  \u00b7  first validator Unbound 1.1.0 2008-11  \u00b7  first zone 2010-03 (reverse)  \u00b7  onset 0.4 y = code +0.3 + operators 0.1  \u00b7  RSASHA256 10% at 2012-06  \u00b7  forward now 24.4%  \u00b7  reverse now 22.7%  \u00b7  largest spike +60,903 .ch 2021-12 (SWITCH)"
+   "published 2009-10  \u00b7  first signer BIND 9 9.7.0 2010-02  \u00b7  first validator Unbound 1.1.0 2008-11  \u00b7  first zone 2010-04 (reverse)  \u00b7  onset 0.5 y = code +0.3 + operators 0.2  \u00b7  RSASHA256 10% at 2012-06  \u00b7  forward now 24.4%  \u00b7  reverse now 22.7%  \u00b7  largest spike +60,903 .ch 2021-12 (SWITCH)"
   ]
  },
  {
@@ -62,8 +62,8 @@
   "text": [
    "SLOW  \u00b7  RFC 6605",
    "ECDSA P-256 / P-384",
-   "The code was never the wait: PowerDNS signed ECDSA three months before the RFC, Unbound validated it one month after, and the first zone came 3.8 years later. Knot (2016-01, at 0.25% share) and PowerDNS (2016-07, at 0.72%) then made it their default, and .se and .nu show their first ECDSA jump in 2016-10 (+10,788 and +857), three months after PowerDNS 4.0.0 -- an alignment, not an attribution: on the reverse panel, the only corpus with a before-period, event studies around both defaults detect nothing (+0.034 and -0.043 pp/month). The forward rise is two registries: .se migrating 119,500 zones in 2019-01, SWITCH mass-signing .ch (+174,356) in 2021-08. The reverse curve's owners are network blocks: the largest single ECDSA action is 116 delegations under 45.130.in-addr.arpa in 2026-03.",
-   "published 2012-04  \u00b7  first signer PowerDNS Auth 3.0.1 2012-01  \u00b7  first validator Unbound 1.4.17 2012-05  \u00b7  first zone 2015-11 (reverse)  \u00b7  onset 3.6 y = code -0.2 + operators 3.8  \u00b7  ECDSAP256SHA256 10% at 2019-03  \u00b7  forward now 76.1%  \u00b7  reverse now 70.7%  \u00b7  published when RFC 5702 was at 16% of its eventual share  \u00b7  2 CVEs naming it, first 2018-01  \u00b7  largest spike +174,356 .ch 2021-08 (SWITCH)"
+   "The code was never the wait: PowerDNS signed ECDSA three months before the RFC, Unbound validated it one month after, and the first zone came 3.9 years later. Knot (2016-01, at 0.25% share) and PowerDNS (2016-07, at 0.72%) then made it their default, and .se and .nu show their first ECDSA jump in 2016-10 (+10,788 and +857), three months after PowerDNS 4.0.0 -- an alignment, not an attribution: on the reverse panel, the only corpus with a before-period, event studies around both defaults detect nothing (+0.034 and -0.043 pp/month). The forward rise is two registries: .se migrating 119,500 zones in 2019-01, SWITCH mass-signing .ch (+174,356) in 2021-08. The reverse curve's owners are network blocks: the largest single ECDSA action is 116 delegations under 45.130.in-addr.arpa in 2026-03.",
+   "published 2012-04  \u00b7  first signer PowerDNS Auth 3.0.1 2012-01  \u00b7  first validator Unbound 1.4.17 2012-05  \u00b7  first zone 2015-12 (reverse)  \u00b7  onset 3.7 y = code -0.2 + operators 3.9  \u00b7  ECDSAP256SHA256 10% at 2019-03  \u00b7  forward now 76.1%  \u00b7  reverse now 70.7%  \u00b7  published when RFC 5702 was at 16% of its eventual share  \u00b7  2 CVEs naming it, first 2018-01  \u00b7  largest spike +174,356 .ch 2021-08 (SWITCH)"
   ]
  },
  {
@@ -80,7 +80,7 @@
   "text": [
    "NEVER  \u00b7  RFC 8080",
    "EdDSA (Ed25519 / Ed448)",
-   "Knot, Unbound and BIND shipped EdDSA within a year of the RFC; OpenDNSSEC took 3.6. No vendor ever made it a default. It was published when ECDSA stood at 1% of the share it would reach. Nine years on: 0.37% of panel delegations, 0.01% of forward zones; the only spikes were one operator's .se and .nu moves, withdrawn twice. One CVE names EdDSA (CVE-2022-38178), published at 0.02% deployment.",
+   "Knot, Unbound and BIND shipped EdDSA within a year of the RFC; OpenDNSSEC took 3.6. No vendor ever made it a default. It was published when ECDSA stood at 1% of the share it would reach. Nine years on: 0.37% of panel delegations, 0.01% of forward zones; the only spikes were one operator's .se and .nu moves, withdrawn twice. One CVE names EdDSA (CVE-2022-38178), published at 0.03% deployment (strict panel).",
    "published 2017-02  \u00b7  first signer Knot DNS 2.6.0 2017-09  \u00b7  first validator Unbound 1.6.4 2017-06  \u00b7  first zone 2019-01 (zonefile)  \u00b7  onset 1.9 y = code +0.6 + operators 1.3  \u00b7  forward now 0.0%  \u00b7  reverse now 0.4%  \u00b7  published when RFC 6605 was at 1% of its eventual share  \u00b7  1 CVEs naming it, first 2022-09  \u00b7  largest spike +10,623 .se 2023-01 (Swedish Internet Foundation)"
   ]
  },
@@ -90,7 +90,7 @@
    "NEVER  \u00b7  RFC 5933",
    "GOST signing and digest",
    "BIND and Unbound both implemented GOST from the draft, before the RFC. In these corpora it never exceeded five RIPE delegations (2012-12 to 2015-08) or four forward zones: 0.00% of the strict AFRINIC+ARIN panel and of the seven TLDs, none of which is Russian; the RIPE region, where every reverse GOST record sits, is outside the panel. Published when RSA/SHA-2 was at 1% of its eventual share. RFC 9906 deprecated it in 2025-11, a decade after its last record here -- like RFC 9276 at the front, it documented what had already happened.",
-   "published 2010-07  \u00b7  first signer BIND 9 9.6.2 2010-02  \u00b7  first validator Unbound 1.4.0 2009-11  \u00b7  first zone 2012-12 (reverse)  \u00b7  onset 2.4 y = code -0.4 + operators 2.8  \u00b7  forward now 0.0%  \u00b7  reverse now 0.0%  \u00b7  published when RFC 5702 was at 1% of its eventual share"
+   "published 2010-07  \u00b7  first signer BIND 9 9.6.2 2010-02  \u00b7  first validator Unbound 1.4.0 2009-11  \u00b7  first zone 2013-01 (reverse)  \u00b7  onset 2.5 y = code -0.4 + operators 2.9  \u00b7  forward now 0.0%  \u00b7  reverse now 0.0%  \u00b7  published when RFC 5702 was at 1% of its eventual share"
   ]
  },
  {
@@ -107,7 +107,7 @@
   "text": [
    "WHAT SEPARATES THEM",
    "How a change reaches a zone decides its speed",
-   "Across the five mechanisms with a release history, RFC-to-signer runs -0.4 to +1.8 years and signer-to-first-zone 0.1 to 3.8. For the two slowest, ECDSA and GOST, the whole onset is the second number; CDS is the exception, where the code itself took 1.8 years. Speed is mostly decided after the code ships, by the mechanism that carries the value to a zone:",
+   "Across the five mechanisms with a release history, RFC-to-signer runs -0.4 to +1.8 years and signer-to-first-zone 0.2 to 3.9. For the two slowest, ECDSA and GOST, the whole onset is the second number; CDS is the exception, where the code itself took 1.8 years. Speed is mostly decided after the code ships, by the mechanism that carries the value to a zone:",
    "Vendor-triggered",
    "measured",
    "2 months",

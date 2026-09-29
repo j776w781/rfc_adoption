@@ -255,8 +255,8 @@ which is algorithm 7 — a bad proxy, because NSEC3 is used with algorithms 8, 1
 and 13 as well. Measured properly, by NSEC3PARAM at the zone apex:
 
     NSEC3PARAM zones / signed zones, forward corpus
-      2016-06   98.39%
-      2023-12   61.94%
+      2016-06   98.43%
+      2023-12   61.79%
 
 So the mechanism carrying twelve of sixteen named CVEs is also the most widely
 deployed optional mechanism in DNSSEC — on nearly every signed zone at the start
@@ -279,7 +279,7 @@ are found once there is something to find them in.
 
 The four early ones are instructive in the other direction. `CVE-2022-38178`
 (CVSS 7.5, a memory leak in EdDSA verification) was published when Ed25519 sat
-at **0.02%** of signed delegations — a serious rating against a mechanism almost
+at **0.03%** of signed delegations (strict panel) — a serious rating against a mechanism almost
 nobody had deployed. CVSS scores the flaw, not the exposure, and the adoption
 data is what converts one into the other.
 

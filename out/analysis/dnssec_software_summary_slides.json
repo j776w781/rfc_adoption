@@ -30,7 +30,7 @@
   "text": [
    "FINDING 1",
    "Code is never the wait; operators are",
-   "Across the algorithm and record-type RFCs the code lag runs -0.4 to +1.8 years (negative: a signer shipped it from the draft), while the lag from that release to the first zone runs 0.1 to 3.8 years. The RFC is never waiting for an implementation; it is waiting for an operator.\nDefaults sit closer to take-off than RFCs do, but no event study or release scan finds a release month that moves the curve: after detrending, the smallest circular-shift p across the eight projects is 0.11. 95% of the 210 months from 2009-03 to 2026-08 contain a stable release of one of the eight, so 'a release came just before' is always true and never evidence. Where a default could show at all is in what newly signed zones choose, and there the picture is sudden batches, not diffusion (slide 5).\nVerdict rule: FAST = first zone within a year of the RFC and 10% of signed delegations within four; SLOW = reached 10%, later; NEVER = under 1% of signed zones today.",
+   "Across the algorithm and record-type RFCs the code lag runs -0.4 to +1.8 years (negative: a signer shipped it from the draft), while the lag from that release to the first zone runs 0.2 to 3.9 years. The RFC is never waiting for an implementation; it is waiting for an operator.\nDefaults sit closer to take-off than RFCs do, but no event study or release scan finds a release month that moves the curve: after detrending, the smallest circular-shift p across the eight projects is 0.11. 95% of the 210 months from 2009-03 to 2026-08 contain a stable release of one of the eight, so 'a release came just before' is always true and never evidence. Where a default could show at all is in what newly signed zones choose, and there the picture is sudden batches, not diffusion (slide 5).\nVerdict rule: FAST = first zone within a year of the RFC and 10% of signed delegations within four; SLOW = reached 10%, later; NEVER = under 1% of signed zones today.",
    "RFC",
    "published",
    "first signer release",
@@ -111,7 +111,7 @@
   "text": [
    "FINDING 5  \u00b7  CVEs",
    "CVEs follow deployment; none led a push",
-   "97 of the 434 CVEs are DNSSEC mechanisms; 69 of those sit in the RFC 4033/4034/4035 core (validation, RRSIG, DNSKEY, NSEC) and belong to no single later RFC. The per-RFC sets are small: NSEC3 12, trust anchors 8, ECDSA 2, EdDSA 1, RSA/SHA-256 and CDS none; DS digests (RFC 4509) 3 and RFC 2535 one, which the per-RFC slides do not cover.\nA CVE is attached to an RFC by the mechanism its description names, not by citing the RFC: 6 of the 97 DNSSEC CVEs cite any RFC in their text, and only 2 cite one of the RFCs studied here (CVE-2013-4854 -> RFC 5011; CVE-2023-50868 -> RFC 5155, 9276).\nMost CVEs nearest to an adoption spike are resolver bugs (memory leak, assertion failure), but not all: CVE-2014-0591, nearest to 16 of the NSEC3 spikes, is an assertion failure in BIND's AUTHORITATIVE NSEC3 code. Median lag from a spike to the nearest CVE: 16.5 months for ECDSA, 57 for NSEC3. CVE-2022-38178 came 4 months before the second EdDSA episode; it is a BIND memory leak and not a reason to sign with EdDSA.\nThe one CVE inside a causal chain is CVE-2021-40083: a symptom of the iteration problem the 2021 caps fixed, published the month the caps shipped. The DNSSEC CVE surface sits on the resolvers: Unbound 16, PowerDNS Recursor 12, Knot Resolver 7. The pure signers publish almost none (Knot 4, PowerDNS Auth 0, OpenDNSSEC 0) -- but BIND, which both signs and validates, carries 40, more than any other product, of which 31 are matched by CPE and the rest by the fix landing in BIND's own repository. Knot and Knot Resolver have no usable CPE, so their counts are keyword-derived.\nNSEC3 order of events: BIND 9.6.0 signs it 2008-12, the first NSEC3-signed reverse delegations appear 2009-07, the first CVE 2009-10. Code, then deployment, then CVEs, each within a year."
+   "97 of the 434 CVEs are DNSSEC mechanisms; 69 of those sit in the RFC 4033/4034/4035 core (validation, RRSIG, DNSKEY, NSEC) and belong to no single later RFC. The per-RFC sets are small: NSEC3 12, trust anchors 8, ECDSA 2, EdDSA 1, RSA/SHA-256 and CDS none; DS digests (RFC 4509) 3 and RFC 2535 one, which the per-RFC slides do not cover.\nA CVE is attached to an RFC by the mechanism its description names, not by citing the RFC: 6 of the 97 DNSSEC CVEs cite any RFC in their text, and only 2 cite one of the RFCs studied here (CVE-2013-4854 -> RFC 5011; CVE-2023-50868 -> RFC 5155, 9276).\nMost CVEs nearest to an adoption spike are resolver bugs (memory leak, assertion failure), but not all: CVE-2014-0591, nearest to 16 of the NSEC3 spikes, is an assertion failure in BIND's AUTHORITATIVE NSEC3 code. Median lag from a spike to the nearest CVE: 17.0 months for ECDSA, 58 for NSEC3. CVE-2022-38178 came 4 months before the second EdDSA episode; it is a BIND memory leak and not a reason to sign with EdDSA.\nThe one CVE inside a causal chain is CVE-2021-40083: a symptom of the iteration problem the 2021 caps fixed, published the month the caps shipped. The DNSSEC CVE surface sits on the resolvers: Unbound 16, PowerDNS Recursor 12, Knot Resolver 7. The pure signers publish almost none (Knot 4, PowerDNS Auth 0, OpenDNSSEC 0) -- but BIND, which both signs and validates, carries 40, more than any other product, of which 31 are matched by CPE and the rest by the fix landing in BIND's own repository. Knot and Knot Resolver have no usable CPE, so their counts are keyword-derived.\nNSEC3 order of events: BIND 9.6.0 signs it 2008-12, the first NSEC3-signed reverse delegations appear 2009-07, the first CVE 2009-10. Code, then deployment, then CVEs, each within a year."
   ]
  },
  {
@@ -127,15 +127,15 @@
    "RFC 5702 RSA/SHA-256",
    "fast",
    "signer default from 2011, acting on new zones only",
-   "first zone 2010-03; new signings 0% (2010Q4) -> 20% (2011Q2) -> 81% (2012Q2)",
+   "first zone 2010-04; new signings 0% (2010Q4) -> 20% (2011Q2) -> 81% (2012Q2)",
    "RFC 6605 ECDSA",
    "slow",
    "signer default from 2016, acting on new zones only; majority by operator rollovers",
-   "first zone 2015-11; majority only via 2019 rollovers and the 2021 .ch wave",
+   "first zone 2015-12; majority only via 2019 rollovers and the 2021 .ch wave",
    "RFC 5155 NSEC3",
    "already in use",
    "a signer option; no signer ever made it the default",
-   "already 11.6% of signed reverse delegations in 2009-07, the first month it is visible -- onset not measurable",
+   "already 3.1% of signed reverse delegations in 2011-05, the first month it is visible -- onset not measurable",
    "RFC 9276 iterations",
    "vendor-triggered",
    "validator caps force re-signing",
@@ -147,11 +147,11 @@
    "RFC 8080 EdDSA",
    "never",
    "never a default anywhere",
-   "0.41% reverse, 0.01% forward today (Ed25519 and Ed448 together)",
+   "0.37% reverse, 0.01% forward today (Ed25519 and Ed448 together)",
    "RFC 5933 GOST",
    "never",
    "never a default; Russian namespace not in corpora",
-   "0.00% on the panel today; peaked at 5 delegations at RIPE in 2013-11"
+   "0.00% on the panel today; peaked at 5 delegations at RIPE in 2013-12"
   ]
  },
  {
@@ -167,7 +167,7 @@
   "text": [
    "SUMMARY AND TAKEAWAYS",
    "What decides whether a DNSSEC RFC gets adopted",
-   "1.  Code is never the bottleneck. For the five RFCs whose onset is measurable, implementation came within -0.4 to +1.8 years of publication and the first zone took a further 0.1 to 3.8 years. The slowest code lag anywhere is RFC 5011 at +2.4 years, still well inside its adoption gap. The wait is operators, not vendors.\n2.  A default can only ever change what a newly signed zone gets. It never re-signs an existing zone, so it cannot produce a spike; the only place it could show is in what new zones choose, months to years later.\n3.  Operators switch in sudden batches, and the trigger is not identifiable. New reverse signings jumped to ECDSA in 4 steps, each over one to three months and 13 to 24 parent blocks. An OS release precedes every step, but no single one explains them: Debian 9, Ubuntu 18.04, RHEL 8 with Debian 10, then Debian 10 with Ubuntu 20.04. 31% of months follow some OS release anyway, and two RSA/SHA-256 steps have none at all.\n4.  Spikes in the adoption curve are operator decisions: six-figure rollovers by a registry or hoster, years after any default. No release month moves the curve; 95% of months contain a release, so a nearby release is never evidence.\n5.  Validators can force an RFC before it exists. The NSEC3 iteration collapse of 2021-10 followed the resolver caps and CVE-2021-40083 by two months and preceded RFC 9276 by ten. It is the only vendor-timed adoption event in the data.\n6.  CVEs do not lead adoption. CVE-patch months and RFC-publication months have the same adoption rate as any other month; the one CVE inside a causal chain is a symptom of the problem the caps fixed.\n7.  Never-adopted RFCs (EdDSA, GOST) share one trait: no signer ever made them a default. Niche ones (CDS) only matter where the parent acts on them.\nTakeaway: to predict an RFC's adoption, look at whether a signer makes it the default, not at the RFC date, the first implementation, or the CVEs. Which delivery path carries a default to a given operator is not visible in published DNS records."
+   "1.  Code is never the bottleneck. For the five RFCs whose onset is measurable, implementation came within -0.4 to +1.8 years of publication and the first zone took a further 0.2 to 3.9 years. The slowest code lag anywhere is RFC 5011 at +2.4 years, still well inside its adoption gap. The wait is operators, not vendors.\n2.  A default can only ever change what a newly signed zone gets. It never re-signs an existing zone, so it cannot produce a spike; the only place it could show is in what new zones choose, months to years later.\n3.  Operators switch in sudden batches, and the trigger is not identifiable. New reverse signings jumped to ECDSA in 4 steps, each over one to three months and 13 to 24 parent blocks. An OS release precedes every step, but no single one explains them: Debian 9, Ubuntu 18.04, RHEL 8 with Debian 10, then Debian 10 with Ubuntu 20.04. 31% of months follow some OS release anyway, and two RSA/SHA-256 steps have none at all.\n4.  Spikes in the adoption curve are operator decisions: six-figure rollovers by a registry or hoster, years after any default. No release month moves the curve; 95% of months contain a release, so a nearby release is never evidence.\n5.  Validators can force an RFC before it exists. The NSEC3 iteration collapse of 2021-10 followed the resolver caps and CVE-2021-40083 by two months and preceded RFC 9276 by ten. It is the only vendor-timed adoption event in the data.\n6.  CVEs do not lead adoption. CVE-patch months and RFC-publication months have the same adoption rate as any other month; the one CVE inside a causal chain is a symptom of the problem the caps fixed.\n7.  Never-adopted RFCs (EdDSA, GOST) share one trait: no signer ever made them a default. Niche ones (CDS) only matter where the parent acts on them.\nTakeaway: to predict an RFC's adoption, look at whether a signer makes it the default, not at the RFC date, the first implementation, or the CVEs. Which delivery path carries a default to a given operator is not visible in published DNS records."
   ]
  },
  {

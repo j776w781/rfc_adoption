@@ -139,7 +139,9 @@ def test_nsec3_code_and_cves_preceded_deployment(cases):
     assert sup["version"] == "9.6.0" and sup["lag_months_after_rfc"] == 9
     cves = sorted(e["date"] for p in c["programs"] for e in p["events"] if e["kind"] == "cve")
     first_rev = min(m for m in c["first_seen"]["reverse"].values() if m)
-    assert first_rev == "2009-07"                 # RIPE, before the first NSEC3 CVE
+    # RIPE, before the first NSEC3 CVE. 2009-08 since the server-run reverse labels moved
+    # to the UTC convention (label = snapshot on the 1st; it was labelled 2009-07 before).
+    assert first_rev == "2009-08"
     assert sup["date"] < first_rev < cves[0] < "2010-01"
 
 

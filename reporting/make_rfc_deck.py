@@ -152,7 +152,7 @@ def why(e, X):
                 f"reach. Nine years on: {C['reverse_last_pct']:.2f}% of panel delegations, "
                 f"{C['forward_last_pct']:.2f}% of forward zones; the only spikes were one "
                 f"operator's .se and .nu moves, withdrawn twice. One CVE names EdDSA "
-                f"(CVE-2022-38178), published at 0.02% deployment.")
+                f"(CVE-2022-38178), published at 0.03% deployment (strict panel).")
     if rfc == "RFC 5933":
         o = e["successor_overlap"][0]
         return (f"BIND and Unbound both implemented GOST from the draft, before the RFC. In "
