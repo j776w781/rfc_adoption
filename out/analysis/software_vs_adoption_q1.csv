@@ -1,0 +1,290 @@
+program,observable,corpus,source,rows_touching,releases_total,release_months_total,status,releases_tested,release_months_tested,tested_from,tested_to,observed_mean_d3,null_draws_used,null_mean,null_p5,null_p95,percentile,p_two_sided,band_lo,band_hi,share_release_months_outside_band,null_mean_share_outside,p_share_outside_ge_observed,beats_chance_mean,beats_chance_outside,reason
+bind9,alg1,forward,se,d08-rsamd5-removed,444,190,tested,164,72,2016-09,2023-09,-4e-06,1000,-4e-06,-1e-05,1e-06,41.2,0.824,-3.9e-05,2.2e-05,0.083333,0.119155,0.826,False,False,
+bind9,alg1,forward,nu,d08-rsamd5-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value is present in only 3 months of this series (fewer than 12)
+bind9,alg1,forward,gov,d08-rsamd5-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg1,forward,fed.us,d08-rsamd5-removed,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,alg1,forward,ee,d08-rsamd5-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value is present in only 2 months of this series (fewer than 12)
+bind9,alg1,forward,ch,d08-rsamd5-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg1,forward,li,d08-rsamd5-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg1,reverse_panel,_pooled-afrinic-arin,d08-rsamd5-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg12,forward,se,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg12,forward,nu,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg12,forward,gov,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg12,forward,fed.us,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,alg12,forward,ee,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg12,forward,ch,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg12,forward,li,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg12,reverse_panel,_pooled-afrinic-arin,d09-gost-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg13,forward,se,d15-dnssec-policy-default-ecdsap256,444,190,tested,164,72,2016-09,2023-09,0.12028,1000,0.100392,-0.000646,0.237052,68.8,0.624,-0.954088,1.39876,0.125,0.11254,0.333,False,False,
+bind9,alg13,forward,nu,d15-dnssec-policy-default-ecdsap256,444,190,tested,164,72,2016-09,2023-09,0.068294,1000,0.067671,0.013419,0.129654,56.8,0.864,-0.415373,0.617334,0.111111,0.117541,0.616,False,False,
+bind9,alg13,forward,gov,d15-dnssec-policy-default-ecdsap256,444,190,tested,134,63,2018-01,2023-09,0.392093,1000,0.337693,0.05052,0.671225,62,0.76,-0.872321,2.51057,0.095238,0.113752,0.68,False,False,
+bind9,alg13,forward,fed.us,d15-dnssec-policy-default-ecdsap256,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,alg13,forward,ee,d15-dnssec-policy-default-ecdsap256,444,190,tested,95,48,2019-10,2023-09,0.59629,1000,0.617301,0.144713,1.2413,47,0.94,-0.175752,3.54768,0.125,0.126218,0.495,False,False,
+bind9,alg13,forward,ch,d15-dnssec-policy-default-ecdsap256,444,190,tested,73,38,2020-08,2023-09,0.111319,1000,0.086662,-0.527745,0.669733,59.1,0.818,-4.18628,3.4531,0.105263,0.10087,0.506,False,False,
+bind9,alg13,forward,li,d15-dnssec-policy-default-ecdsap256,444,190,tested,73,38,2020-08,2023-09,0.166652,1000,0.137138,-0.502359,0.706913,59.1,0.818,-3.58601,3.49412,0.105263,0.102123,0.499,False,False,
+bind9,alg13,reverse_panel,_pooled-afrinic-arin,d15-dnssec-policy-default-ecdsap256,444,190,tested,318,135,2011-08,2026-06,0.043353,1000,0.037179,-0.001305,0.07636,59.5,0.81,-0.198068,0.674946,0.125926,0.101621,0.187,False,False,
+bind9,alg3_6,forward,se,d10-dsa-removed,444,190,tested,164,72,2016-09,2023-09,-7e-06,1000,-8e-06,-1.7e-05,-1e-06,49.4,0.988,-7.9e-05,8e-06,0.097222,0.118566,0.604,False,False,
+bind9,alg3_6,forward,nu,d10-dsa-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg3_6,forward,gov,d10-dsa-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg3_6,forward,fed.us,d10-dsa-removed,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,alg3_6,forward,ee,d10-dsa-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg3_6,forward,ch,d10-dsa-removed,444,190,tested,73,38,2020-08,2023-09,1.2e-05,1000,1.5e-05,-7e-05,0.0001,45.2,0.904,-0.00048,0.000575,0.105263,0.102701,0.485,False,False,
+bind9,alg3_6,forward,li,d10-dsa-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg3_6,reverse_panel,_pooled-afrinic-arin,d10-dsa-removed,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,alg5,forward,se,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,tested,164,72,2016-09,2023-09,-0.003798,1000,-0.003416,-0.006272,-0.001478,29.9,0.598,-0.024086,0.019325,0.111111,0.115199,0.636,False,False,
+bind9,alg5,forward,nu,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,tested,164,72,2016-09,2023-09,-0.001169,1000,-0.001104,-0.002536,-4.9e-05,40.3,0.806,-0.013521,0.011706,0.097222,0.11636,0.766,False,False,
+bind9,alg5,forward,gov,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,tested,134,63,2018-01,2023-09,-0.031269,1000,-0.00997,-0.061914,0.047043,21.6,0.432,-0.566271,0.485542,0.079365,0.110267,0.809,False,False,
+bind9,alg5,forward,fed.us,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,alg5,forward,ee,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,tested,95,48,2019-10,2023-09,-0.011629,1000,-0.011675,-0.023695,-0.003332,49.1,0.982,-0.075831,0,0.104167,0.102884,0.507,False,False,
+bind9,alg5,forward,ch,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,tested,73,38,2020-08,2023-09,-0.001921,1000,-0.001887,-0.003182,-0.000789,44.2,0.884,-0.00942,0.001609,0.105263,0.103291,0.47,False,False,
+bind9,alg5,forward,li,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,tested,73,38,2020-08,2023-09,-0.007617,1000,-0.007323,-0.014575,-0.001072,44.6,0.892,-0.064389,0.014133,0.105263,0.104357,0.505,False,False,
+bind9,alg5,reverse_panel,_pooled-afrinic-arin,d02-keygen-default-alg-rsasha1;d06-keygen-no-default-alg,444,190,tested,318,135,2011-08,2026-06,-0.148959,1000,-0.195493,-0.430189,0.057366,64.3,0.714,-3.55052,2.24652,0.103704,0.100403,0.44,False,False,
+bind9,digest1,forward,se,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,tested,164,72,2016-09,2023-09,0.066619,1000,-0.045507,-0.217494,0.117804,89.6,0.208,-1.23345,1.63777,0.083333,0.11505,0.779,False,False,
+bind9,digest1,forward,nu,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,tested,164,72,2016-09,2023-09,0.082,1000,-0.010783,-0.44185,0.407183,65.4,0.692,-3.2746,2.50697,0.069444,0.115648,0.865,False,False,
+bind9,digest1,forward,gov,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,tested,134,63,2018-01,2023-09,-0.833316,1000,-0.749905,-1.32668,-0.160018,42.2,0.844,-4.71793,1.90048,0.111111,0.108258,0.438,False,False,
+bind9,digest1,forward,fed.us,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,digest1,forward,ee,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+bind9,digest1,forward,ch,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,tested,73,38,2020-08,2023-09,-0.140283,1000,-0.047,-0.595633,0.650254,33.5,0.67,-3.32608,2.77332,0.105263,0.103688,0.482,False,False,
+bind9,digest1,forward,li,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,tested,73,38,2020-08,2023-09,-0.13761,1000,-0.025057,-1.02692,1.23048,36.4,0.728,-4.91657,5.80782,0.105263,0.101648,0.495,False,False,
+bind9,digest1,reverse_panel,_pooled-afrinic-arin,d13-ds-cds-sha1-dropped;d20-dnssec-cds-sha2-only,444,190,tested,318,135,2011-08,2026-06,-0.103173,1000,-0.049911,-0.140455,0.043821,20.7,0.414,-1.86922,1.95302,0.088889,0.09983,0.675,False,False,
+bind9,iter0,forward,se,d18-nsec3param-default-0-0;d21-signzone-nsec3-iterations-0,444,190,tested,164,72,2016-09,2023-09,0.048764,1000,0.041767,-0.001271,0.085945,64.2,0.716,-0.052763,0.214635,0.125,0.123316,0.484,False,False,
+bind9,iter0,forward,nu,d18-nsec3param-default-0-0;d21-signzone-nsec3-iterations-0,444,190,tested,164,72,2016-09,2023-09,0.034066,1000,0.032788,0.006507,0.058597,56.4,0.872,-0.001678,0.205516,0.138889,0.11674,0.213,False,False,
+bind9,iter0,forward,gov,d18-nsec3param-default-0-0;d21-signzone-nsec3-iterations-0,444,190,tested,134,63,2018-01,2023-09,0.016026,1000,0.012079,-0.004623,0.029172,72.8,0.544,-0.099622,0.129817,0.111111,0.113839,0.517,False,False,
+bind9,iter0,forward,fed.us,d18-nsec3param-default-0-0;d21-signzone-nsec3-iterations-0,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,iter0,forward,ee,d18-nsec3param-default-0-0;d21-signzone-nsec3-iterations-0,444,190,tested,95,48,2019-10,2023-09,0.000601,1000,0.000986,-0.000671,0.00258,26.8,0.536,-0.007711,0.017162,0.104167,0.124742,0.685,False,False,
+bind9,iter0,forward,ch,d18-nsec3param-default-0-0;d21-signzone-nsec3-iterations-0,444,190,tested,73,38,2020-08,2023-09,0.00678,1000,-0.018202,-0.238811,0.164911,62.9,0.742,-1.02137,1.58486,0.105263,0.100393,0.455,False,False,
+bind9,iter0,forward,li,d18-nsec3param-default-0-0;d21-signzone-nsec3-iterations-0,444,190,tested,73,38,2020-08,2023-09,0.000738,1000,0.001622,-0.214511,0.236878,40.8,0.816,-1.67477,1.69017,0.105263,0.102604,0.508,False,False,
+bind9,iter10,forward,se,d03-signzone-nsec3-iterations-100-to-10,444,190,tested,164,72,2016-09,2023-09,0.075381,1000,0.067368,0.015046,0.118866,60.4,0.792,-0.000844,0.581697,0.125,0.118167,0.424,False,False,
+bind9,iter10,forward,nu,d03-signzone-nsec3-iterations-100-to-10,444,190,tested,164,72,2016-09,2023-09,0.066054,1000,0.067249,0.018387,0.113778,47.9,0.958,-0.013276,0.535777,0.125,0.117592,0.417,False,False,
+bind9,iter10,forward,gov,d03-signzone-nsec3-iterations-100-to-10,444,190,tested,134,63,2018-01,2023-09,-0.015475,1000,0.128252,-0.174692,0.474117,18.1,0.362,-3.22863,3.46314,0.111111,0.104674,0.446,False,False,
+bind9,iter10,forward,fed.us,d03-signzone-nsec3-iterations-100-to-10,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,iter10,forward,ee,d03-signzone-nsec3-iterations-100-to-10,444,190,tested,95,48,2019-10,2023-09,-0.070532,1000,-0.072408,-0.142825,-0.021362,50.9,0.982,-0.362825,0.063591,0.125,0.123602,0.513,False,False,
+bind9,iter10,forward,ch,d03-signzone-nsec3-iterations-100-to-10,444,190,tested,73,38,2020-08,2023-09,-0.030421,1000,-0.02389,-0.139792,0.077027,47.1,0.942,-0.699653,0.611806,0.105263,0.104732,0.526,False,False,
+bind9,iter10,forward,li,d03-signzone-nsec3-iterations-100-to-10,444,190,tested,73,38,2020-08,2023-09,0.010918,1000,0.019155,-0.127897,0.199398,52.5,0.95,-0.998435,1.24868,0.105263,0.10394,0.495,False,False,
+bind9,iter5,forward,se,d17-nsec3param-default-in-policy,444,190,tested,164,72,2016-09,2023-09,-0.043312,1000,-0.042229,-0.096198,0.010433,47.4,0.948,-0.535909,0.447159,0.138889,0.110325,0.184,False,False,
+bind9,iter5,forward,nu,d17-nsec3param-default-in-policy,444,190,tested,164,72,2016-09,2023-09,0.008675,1000,0.005434,-0.001656,0.012953,82.1,0.358,-0.010809,0.033991,0.097222,0.123743,0.709,False,False,
+bind9,iter5,forward,gov,d17-nsec3param-default-in-policy,444,190,tested,134,63,2018-01,2023-09,-0.001393,1000,0.001158,-0.005301,0.008206,18.9,0.378,-0.073389,0.068002,0.079365,0.105975,0.781,False,False,
+bind9,iter5,forward,fed.us,d17-nsec3param-default-in-policy,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,iter5,forward,ee,d17-nsec3param-default-in-policy,444,190,tested,95,48,2019-10,2023-09,0.087681,1000,0.08328,-0.024911,0.224781,54.1,0.918,-0.599369,0.930897,0.125,0.12029,0.486,False,False,
+bind9,iter5,forward,ch,d17-nsec3param-default-in-policy,444,190,tested,73,38,2020-08,2023-09,0.145406,1000,0.13191,0.028752,0.238518,65.1,0.698,-0.185926,0.925106,0.078947,0.105731,0.774,False,False,
+bind9,iter5,forward,li,d17-nsec3param-default-in-policy,444,190,tested,73,38,2020-08,2023-09,0.307654,1000,0.264705,0.00246,0.536672,65.8,0.684,-0.063014,2.12109,0.078947,0.107019,0.767,False,False,
+bind9,iter_gt150,forward,se,l01-nsec3-max-iterations-150,444,190,tested,164,72,2016-09,2023-09,3e-06,1000,1e-06,-3e-06,6e-06,82.6,0.348,-2.3e-05,3.5e-05,0.069444,0.122581,0.807,False,False,
+bind9,iter_gt150,forward,nu,l01-nsec3-max-iterations-150,444,190,tested,164,72,2016-09,2023-09,-0,1000,-2e-06,-1e-05,7e-06,63.9,0.722,-8.3e-05,0.000122,0.069444,0.113643,0.876,False,False,
+bind9,iter_gt150,forward,gov,l01-nsec3-max-iterations-150,444,190,no test,,,,,,,,,,,,,,,,,,,the value is present in only 5 months of this series (fewer than 12)
+bind9,iter_gt150,forward,fed.us,l01-nsec3-max-iterations-150,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,iter_gt150,forward,ee,l01-nsec3-max-iterations-150,444,190,tested,95,48,2019-10,2023-09,-0.000501,1000,-0.000497,-0.001011,-0.00011,49.55,0.998,-0.002963,0,0.0625,0.061332,0.523,False,False,
+bind9,iter_gt150,forward,ch,l01-nsec3-max-iterations-150,444,190,tested,73,38,2020-08,2023-09,-0.000272,1000,-0.000271,-0.000506,-1e-05,45.4,0.918,-0.002085,0.000131,0.105263,0.102861,0.489,False,False,
+bind9,iter_gt150,forward,li,l01-nsec3-max-iterations-150,444,190,tested,73,38,2020-08,2023-09,-0.000475,1000,-0.000468,-0.001372,0.000497,51.05,0.982,-0.009796,0.00485,0.105263,0.102298,0.497,False,False,
+bind9,iter_gt50,forward,se,l02-nsec3-max-iterations-50,444,190,tested,164,72,2016-09,2023-09,0.000261,1000,0.000315,-0.000133,0.000768,44.8,0.896,-0.00263,0.004822,0.125,0.115462,0.385,False,False,
+bind9,iter_gt50,forward,nu,l02-nsec3-max-iterations-50,444,190,tested,164,72,2016-09,2023-09,0.004082,1000,-0.0013,-0.031541,0.026312,66.7,0.666,-0.250025,0.277414,0.069444,0.113781,0.865,False,False,
+bind9,iter_gt50,forward,gov,l02-nsec3-max-iterations-50,444,190,tested,134,63,2018-01,2023-09,0.004578,1000,-0.009851,-0.044599,0.020212,80.1,0.398,-0.252599,0.269922,0.095238,0.109546,0.701,False,False,
+bind9,iter_gt50,forward,fed.us,l02-nsec3-max-iterations-50,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,iter_gt50,forward,ee,l02-nsec3-max-iterations-50,444,190,tested,95,48,2019-10,2023-09,-0.00094,1000,-0.001062,-0.002064,-0.000198,60.8,0.784,-0.007655,0.004072,0.125,0.125016,0.531,False,False,
+bind9,iter_gt50,forward,ch,l02-nsec3-max-iterations-50,444,190,tested,73,38,2020-08,2023-09,0.001238,1000,0.00155,-0.013988,0.018688,57.1,0.858,-0.112897,0.097417,0.105263,0.104895,0.499,False,False,
+bind9,iter_gt50,forward,li,l02-nsec3-max-iterations-50,444,190,tested,73,38,2020-08,2023-09,0.016811,1000,0.018539,-0.035329,0.07776,57.3,0.854,-0.304822,0.312896,0.105263,0.1027,0.477,False,False,
+bind9,rsa1024,forward,se,d14-keygen-rsa-zsk-2048;d16-dnssec-policy-default-key-size-2048,444,190,tested,164,72,2016-09,2023-09,-0.079966,1000,-0.042292,-0.156988,0.107767,28.4,0.568,-1.72524,1.72626,0.083333,0.119015,0.923,False,False,
+bind9,rsa1024,forward,nu,d14-keygen-rsa-zsk-2048;d16-dnssec-policy-default-key-size-2048,444,190,tested,164,72,2016-09,2023-09,-0.001967,1000,0.027872,-0.334196,0.378068,40.5,0.81,-3.20748,3.23791,0.097222,0.113753,0.739,False,False,
+bind9,rsa1024,forward,gov,d14-keygen-rsa-zsk-2048;d16-dnssec-policy-default-key-size-2048,444,190,tested,134,63,2018-01,2023-09,-0.029914,1000,-0.039584,-0.143727,0.033819,49.7,0.994,-0.708619,1.08548,0.079365,0.107906,0.839,False,False,
+bind9,rsa1024,forward,fed.us,d14-keygen-rsa-zsk-2048;d16-dnssec-policy-default-key-size-2048,444,190,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+bind9,rsa1024,forward,ee,d14-keygen-rsa-zsk-2048;d16-dnssec-policy-default-key-size-2048,444,190,tested,95,48,2019-10,2023-09,-0.029731,1000,-0.012879,-0.216607,0.197884,39.4,0.788,-0.814618,1.38581,0.125,0.126276,0.475,False,False,
+bind9,rsa1024,forward,ch,d14-keygen-rsa-zsk-2048;d16-dnssec-policy-default-key-size-2048,444,190,tested,73,38,2020-08,2023-09,-0.018749,1000,-0.013099,-0.151828,0.104554,41.9,0.838,-0.786496,1.21246,0.105263,0.099718,0.487,False,False,
+bind9,rsa1024,forward,li,d14-keygen-rsa-zsk-2048;d16-dnssec-policy-default-key-size-2048,444,190,tested,73,38,2020-08,2023-09,0.014953,1000,0.006002,-0.222905,0.205403,55.7,0.886,-1.10661,1.54899,0.105263,0.101132,0.506,False,False,
+knot,alg13,forward,se,knot[2]@2.1.0,174,126,tested,89,62,2016-10,2023-10,0.109711,1000,0.091955,-0.005525,0.173461,61.7,0.766,-0.954088,1.39876,0.096774,0.116802,0.81,False,False,
+knot,alg13,forward,nu,knot[2]@2.1.0,174,126,tested,89,62,2016-10,2023-10,0.105513,1000,0.062821,0.020528,0.107334,94.3,0.114,-0.415373,0.617334,0.112903,0.116987,0.611,False,False,
+knot,alg13,forward,gov,knot[2]@2.1.0,174,126,tested,76,53,2017-08,2023-10,0.311185,1000,0.313468,0.139441,0.483482,50.3,0.994,-0.872321,2.51057,0.113208,0.105632,0.389,False,False,
+knot,alg13,forward,fed.us,knot[2]@2.1.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,alg13,forward,ee,knot[2]@2.1.0,174,126,tested,48,36,2019-10,2023-10,0.621716,1000,0.585368,0.347498,0.808525,61.5,0.77,-0.175752,3.54768,0.166667,0.121924,0.057,False,True,
+knot,alg13,forward,ch,knot[2]@2.1.0,174,126,tested,41,30,2020-08,2023-10,0.270822,1000,0.099064,-0.29486,0.472716,75.3,0.494,-4.18628,3.4531,0.1,0.103699,0.625,False,False,
+knot,alg13,forward,li,knot[2]@2.1.0,174,126,tested,41,30,2020-08,2023-10,0.271169,1000,0.143676,-0.168575,0.428754,76.5,0.47,-3.58601,3.49412,0.1,0.104259,0.569,False,False,
+knot,alg13,reverse_panel,_pooled-afrinic-arin,knot[2]@2.1.0,174,126,tested,167,121,2011-09,2026-06,0.060153,1000,0.035715,0.012948,0.059534,95,0.1,-0.198068,0.674946,0.107438,0.099994,0.339,False,False,
+knot,alg3_6,forward,se,knot[7]@2.6.0,174,126,tested,89,62,2016-10,2023-10,-8e-06,1000,-7e-06,-1e-05,-4e-06,43.4,0.868,-7.9e-05,8e-06,0.129032,0.116137,0.309,False,False,
+knot,alg3_6,forward,nu,knot[7]@2.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,alg3_6,forward,gov,knot[7]@2.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,alg3_6,forward,fed.us,knot[7]@2.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,alg3_6,forward,ee,knot[7]@2.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,alg3_6,forward,ch,knot[7]@2.6.0,174,126,tested,41,30,2020-08,2023-10,1.6e-05,1000,1.2e-05,-4.6e-05,6.7e-05,51.4,0.972,-0.00048,0.000575,0.133333,0.102556,0.186,False,False,
+knot,alg3_6,forward,li,knot[7]@2.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,alg3_6,reverse_panel,_pooled-afrinic-arin,knot[7]@2.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,alg5_7,forward,se,knot[12]@3.0.2,174,126,tested,89,62,2016-10,2023-10,-0.001187,1000,-0.001037,-0.004893,0.00283,45.3,0.906,-0.047863,0.066878,0.112903,0.116094,0.599,False,False,
+knot,alg5_7,forward,nu,knot[12]@3.0.2,174,126,tested,89,62,2016-10,2023-10,-0.005329,1000,-0.005063,-0.027569,0.023015,54.6,0.908,-0.304875,0.315017,0.112903,0.116419,0.571,False,False,
+knot,alg5_7,forward,gov,knot[12]@3.0.2,174,126,tested,76,53,2017-08,2023-10,-0.185128,1000,-0.17609,-0.268348,-0.097466,45.2,0.904,-1.41236,0.189956,0.113208,0.10631,0.394,False,False,
+knot,alg5_7,forward,fed.us,knot[12]@3.0.2,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,alg5_7,forward,ee,knot[12]@3.0.2,174,126,tested,48,36,2019-10,2023-10,-0.037187,1000,-0.036493,-0.048658,-0.024145,43.3,0.866,-0.214815,0.000238,0.111111,0.123388,0.747,False,False,
+knot,alg5_7,forward,ch,knot[12]@3.0.2,174,126,tested,41,30,2020-08,2023-10,-0.111286,1000,-0.097769,-0.128565,-0.066765,23.9,0.478,-0.442703,0.001195,0.1,0.104207,0.611,False,False,
+knot,alg5_7,forward,li,knot[12]@3.0.2,174,126,tested,41,30,2020-08,2023-10,-0.31037,1000,-0.28384,-0.39961,-0.178543,32.5,0.65,-1.7566,0.011727,0.1,0.101986,0.563,False,False,
+knot,alg5_7,reverse_panel,_pooled-afrinic-arin,knot[12]@3.0.2,174,126,tested,167,121,2011-09,2026-06,-0.144249,1000,-0.047822,-0.236101,0.098838,17.2,0.344,-3.50599,3.63235,0.090909,0.100742,0.744,False,False,
+knot,alg8,forward,se,knot[1]@2.0.0,174,126,tested,89,62,2016-10,2023-10,-0.09599,1000,-0.086743,-0.136028,-0.038983,39.9,0.798,-0.964456,0.40284,0.129032,0.11718,0.291,False,False,
+knot,alg8,forward,nu,knot[1]@2.0.0,174,126,tested,89,62,2016-10,2023-10,-0.101004,1000,-0.049903,-0.123928,0.024363,11.2,0.224,-0.730424,0.595547,0.112903,0.115994,0.594,False,False,
+knot,alg8,forward,gov,knot[1]@2.0.0,174,126,tested,76,53,2017-08,2023-10,-0.162663,1000,-0.151136,-0.28062,-0.019451,46.2,0.924,-1.92997,1.49293,0.09434,0.105999,0.748,False,False,
+knot,alg8,forward,fed.us,knot[1]@2.0.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,alg8,forward,ee,knot[1]@2.0.0,174,126,tested,48,36,2019-10,2023-10,-0.587633,1000,-0.548543,-0.762333,-0.340851,37.1,0.742,-3.30002,0.184953,0.166667,0.122257,0.067,False,True,
+knot,alg8,forward,ch,knot[1]@2.0.0,174,126,tested,41,30,2020-08,2023-10,-0.151627,1000,0.012605,-0.327356,0.437662,24.2,0.484,-4.0841,3.64523,0.1,0.103742,0.625,False,False,
+knot,alg8,forward,li,knot[1]@2.0.0,174,126,tested,41,30,2020-08,2023-10,-0.128941,1000,0.061835,-0.359219,0.546722,23.1,0.462,-5.73032,3.50728,0.1,0.10216,0.604,False,False,
+knot,alg8,reverse_panel,_pooled-afrinic-arin,knot[1]@2.0.0,174,126,tested,167,121,2011-09,2026-06,0.085367,1000,0.012996,-0.138208,0.209994,79.3,0.414,-2.35897,3.21365,0.090909,0.099602,0.745,False,False,
+knot,cds,forward,se,knot[10]@2.8.0,174,126,tested,89,62,2016-10,2023-10,0.016101,1000,0.015209,0.007654,0.022375,60.9,0.782,-0.008314,0.138248,0.112903,0.116341,0.561,False,False,
+knot,cds,forward,nu,knot[10]@2.8.0,174,126,tested,89,62,2016-10,2023-10,0.017302,1000,0.015476,0.008732,0.022391,65.6,0.688,-0.009087,0.118051,0.129032,0.116324,0.28,False,False,
+knot,cds,forward,gov,knot[10]@2.8.0,174,126,tested,76,53,2017-08,2023-10,0.310936,1000,0.283203,0.118924,0.442906,60.1,0.798,-0.440381,2.32364,0.113208,0.106382,0.364,False,False,
+knot,cds,forward,fed.us,knot[10]@2.8.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,cds,forward,ee,knot[10]@2.8.0,174,126,tested,48,36,2019-10,2023-10,0.00088,1000,0.002383,-0.016384,0.021455,45.2,0.904,-0.186229,0.257627,0.111111,0.122264,0.705,False,False,
+knot,cds,forward,ch,knot[10]@2.8.0,174,126,tested,41,30,2020-08,2023-10,-0.230513,1000,-0.032995,-0.567516,0.3945,23.1,0.462,-3.36305,4.95272,0.133333,0.102847,0.233,False,False,
+knot,cds,forward,li,knot[10]@2.8.0,174,126,tested,41,30,2020-08,2023-10,-0.19616,1000,0.045359,-0.665704,0.683793,22.6,0.452,-5.00289,6.10972,0.133333,0.101621,0.22,False,False,
+knot,digest1,forward,se,knot[11]@2.8.0,174,126,tested,89,62,2016-10,2023-10,0.008196,1000,-0.050701,-0.208238,0.126721,78.3,0.434,-1.23345,1.63777,0.096774,0.116502,0.829,False,False,
+knot,digest1,forward,nu,knot[11]@2.8.0,174,126,tested,89,62,2016-10,2023-10,0.006211,1000,-0.01213,-0.481167,0.463268,50.2,0.996,-3.2746,2.50697,0.112903,0.116756,0.625,False,False,
+knot,digest1,forward,gov,knot[11]@2.8.0,174,126,tested,76,53,2017-08,2023-10,-0.762238,1000,-0.736651,-1.10969,-0.458333,40.1,0.802,-4.71793,1.90048,0.132075,0.105861,0.178,False,False,
+knot,digest1,forward,fed.us,knot[11]@2.8.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,digest1,forward,ee,knot[11]@2.8.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,digest1,forward,ch,knot[11]@2.8.0,174,126,tested,41,30,2020-08,2023-10,0.226558,1000,-0.069766,-0.387836,0.295226,92.7,0.146,-3.32608,2.77332,0.1,0.103283,0.63,False,False,
+knot,digest1,forward,li,knot[11]@2.8.0,174,126,tested,41,30,2020-08,2023-10,0.352736,1000,-0.050695,-0.668907,0.484729,88.9,0.222,-4.91657,5.80782,0.066667,0.103958,0.931,False,False,
+knot,digest1,reverse_panel,_pooled-afrinic-arin,knot[11]@2.8.0,174,126,tested,167,121,2011-09,2026-06,-0.043164,1000,-0.044748,-0.121298,0.028678,52.6,0.948,-1.86922,1.95302,0.107438,0.099692,0.362,False,False,
+knot,iter0,forward,se,knot[14]@3.2.0,174,126,tested,89,62,2016-10,2023-10,0.047763,1000,0.039358,0.016385,0.059827,73.1,0.538,-0.052763,0.214635,0.112903,0.115715,0.578,False,False,
+knot,iter0,forward,nu,knot[14]@3.2.0,174,126,tested,89,62,2016-10,2023-10,0.033234,1000,0.030869,0.018613,0.042192,66.5,0.67,-0.001678,0.205516,0.129032,0.116545,0.355,False,False,
+knot,iter0,forward,gov,knot[14]@3.2.0,174,126,tested,76,53,2017-08,2023-10,0.005472,1000,0.010951,-0.000924,0.02178,20.7,0.414,-0.099622,0.129817,0.113208,0.107444,0.451,False,False,
+knot,iter0,forward,fed.us,knot[14]@3.2.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,iter0,forward,ee,knot[14]@3.2.0,174,126,tested,48,36,2019-10,2023-10,0.000856,1000,0.00095,-4e-05,0.00187,43.1,0.862,-0.007711,0.017162,0.111111,0.122875,0.713,False,False,
+knot,iter0,forward,ch,knot[14]@3.2.0,174,126,tested,41,30,2020-08,2023-10,-0.043249,1000,-0.010079,-0.182414,0.137144,30.5,0.61,-1.02137,1.58486,0.066667,0.101867,0.919,False,False,
+knot,iter0,forward,li,knot[14]@3.2.0,174,126,tested,41,30,2020-08,2023-10,-0.023495,1000,0.003207,-0.159986,0.147482,34.4,0.688,-1.67477,1.69017,0.066667,0.102865,0.922,False,False,
+knot,iter_gt256,forward,se,knot[19]@3.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value is present in only 10 months of this series (fewer than 12)
+knot,iter_gt256,forward,nu,knot[19]@3.6.0,174,126,tested,89,62,2016-10,2023-10,-3e-06,1000,-2e-06,-7e-06,5e-06,29,0.58,-4.8e-05,5.6e-05,0.112903,0.116135,0.527,False,False,
+knot,iter_gt256,forward,gov,knot[19]@3.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,iter_gt256,forward,fed.us,knot[19]@3.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,iter_gt256,forward,ee,knot[19]@3.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,iter_gt256,forward,ch,knot[19]@3.6.0,174,126,tested,41,30,2020-08,2023-10,-0.000323,1000,-0.000247,-0.00034,-0.00014,7.8,0.156,-0.001498,4.6e-05,0.1,0.102211,0.576,False,False,
+knot,iter_gt256,forward,li,knot[19]@3.6.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,rsa1024,forward,se,knot[3]@2.2.0,174,126,tested,89,62,2016-10,2023-10,-0.011693,1000,-0.041026,-0.160814,0.06928,61,0.78,-1.72524,1.72626,0.112903,0.116096,0.576,False,False,
+knot,rsa1024,forward,nu,knot[3]@2.2.0,174,126,tested,89,62,2016-10,2023-10,-0.008186,1000,0.006332,-0.200936,0.217717,46.3,0.926,-3.20748,3.23791,0.129032,0.115185,0.285,False,False,
+knot,rsa1024,forward,gov,knot[3]@2.2.0,174,126,tested,76,53,2017-08,2023-10,-0.025365,1000,-0.031957,-0.090489,0.020813,55.8,0.884,-0.708619,1.08548,0.113208,0.106602,0.438,False,False,
+knot,rsa1024,forward,fed.us,knot[3]@2.2.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,rsa1024,forward,ee,knot[3]@2.2.0,174,126,tested,48,36,2019-10,2023-10,0.004611,1000,-0.014538,-0.131446,0.100717,60,0.8,-0.814618,1.38581,0.166667,0.122463,0.063,False,True,
+knot,rsa1024,forward,ch,knot[3]@2.2.0,174,126,tested,41,30,2020-08,2023-10,-0.000982,1000,-0.011761,-0.121255,0.091243,61.3,0.774,-0.786496,1.21246,0.066667,0.102944,0.913,False,False,
+knot,rsa1024,forward,li,knot[3]@2.2.0,174,126,tested,41,30,2020-08,2023-10,-0.043131,1000,0.006453,-0.108885,0.152685,30.2,0.604,-1.10661,1.54899,0.1,0.103316,0.62,False,False,
+knot,rsa_lt1024,forward,se,knot[8]@2.7.0,174,126,tested,89,62,2016-10,2023-10,-0.003775,1000,-0.00345,-0.005581,-0.0016,38.4,0.768,-0.021091,0.024238,0.145161,0.11564,0.11,False,False,
+knot,rsa_lt1024,forward,nu,knot[8]@2.7.0,174,126,tested,89,62,2016-10,2023-10,-0.006827,1000,-0.001272,-0.076575,0.060067,42.1,0.842,-0.788883,0.509951,0.129032,0.116959,0.32,False,False,
+knot,rsa_lt1024,forward,gov,knot[8]@2.7.0,174,126,tested,76,53,2017-08,2023-10,-0.003406,1000,-0.001494,-0.011603,0.010188,41,0.82,-0.126213,0.108334,0.075472,0.107656,0.946,False,False,
+knot,rsa_lt1024,forward,fed.us,knot[8]@2.7.0,174,126,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+knot,rsa_lt1024,forward,ee,knot[8]@2.7.0,174,126,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+knot,rsa_lt1024,forward,ch,knot[8]@2.7.0,174,126,tested,41,30,2020-08,2023-10,-0.000253,1000,-0.000325,-0.000704,4.1e-05,56.3,0.874,-0.004392,0.00463,0.133333,0.102303,0.234,False,False,
+knot,rsa_lt1024,forward,li,knot[8]@2.7.0,174,126,tested,41,30,2020-08,2023-10,-0.000563,1000,-0.000422,-0.00195,0.001019,44.2,0.884,-0.016582,0.014589,0.1,0.102177,0.56,False,False,
+kresd,iter_gt150,forward,se,kresd[9]@5.3.1,89,72,tested,59,50,2017-01,2023-10,0,1000,1e-06,-4e-06,5e-06,35.7,0.714,-2.3e-05,3.5e-05,0.14,0.115674,0.212,False,False,
+kresd,iter_gt150,forward,nu,kresd[9]@5.3.1,89,72,tested,59,50,2017-01,2023-10,-5e-06,1000,-1e-06,-9e-06,6e-06,21.1,0.422,-8.3e-05,0.000122,0.14,0.117363,0.203,False,False,
+kresd,iter_gt150,forward,gov,kresd[9]@5.3.1,89,72,no test,,,,,,,,,,,,,,,,,,,the value is present in only 5 months of this series (fewer than 12)
+kresd,iter_gt150,forward,fed.us,kresd[9]@5.3.1,89,72,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+kresd,iter_gt150,forward,ee,kresd[9]@5.3.1,89,72,tested,28,27,2019-10,2023-10,-0.00062,1000,-0.000488,-0.000673,-0.000273,16.1,0.322,-0.002963,0,0.074074,0.060655,0.366,False,False,
+kresd,iter_gt150,forward,ch,kresd[9]@5.3.1,89,72,tested,21,20,2020-09,2023-10,-0.000264,1000,-0.00026,-0.000395,-0.000101,50,1,-0.002085,0.000131,0.1,0.100302,0.513,False,False,
+kresd,iter_gt150,forward,li,kresd[9]@5.3.1,89,72,tested,21,20,2020-09,2023-10,-0.000666,1000,-0.000475,-0.001165,0.000294,33.6,0.672,-0.009796,0.00485,0.1,0.102486,0.582,False,False,
+kresd,iter_gt50,forward,se,kresd[12]@5.7.1;kresd[15]@6.0.6,89,72,tested,59,50,2017-01,2023-10,0.000471,1000,0.00029,-0.0001,0.000614,76.9,0.462,-0.00263,0.004822,0.14,0.116825,0.221,False,False,
+kresd,iter_gt50,forward,nu,kresd[12]@5.7.1;kresd[15]@6.0.6,89,72,tested,59,50,2017-01,2023-10,0.001224,1000,0.000368,-0.027542,0.025193,48.3,0.966,-0.250025,0.277414,0.14,0.11566,0.223,False,False,
+kresd,iter_gt50,forward,gov,kresd[12]@5.7.1;kresd[15]@6.0.6,89,72,tested,49,44,2017-08,2023-10,-0.015211,1000,-0.009248,-0.029649,0.009378,31.5,0.63,-0.252599,0.269922,0.068182,0.106724,0.914,False,False,
+kresd,iter_gt50,forward,fed.us,kresd[12]@5.7.1;kresd[15]@6.0.6,89,72,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+kresd,iter_gt50,forward,ee,kresd[12]@5.7.1;kresd[15]@6.0.6,89,72,tested,28,27,2019-10,2023-10,-0.001589,1000,-0.001015,-0.001678,-0.000289,9.5,0.19,-0.007655,0.004072,0.111111,0.12385,0.679,False,False,
+kresd,iter_gt50,forward,ch,kresd[12]@5.7.1;kresd[15]@6.0.6,89,72,tested,21,20,2020-09,2023-10,-0.003487,1000,0.001141,-0.011616,0.011291,26.4,0.528,-0.112897,0.097417,0.15,0.100674,0.132,False,False,
+kresd,iter_gt50,forward,li,kresd[12]@5.7.1;kresd[15]@6.0.6,89,72,tested,21,20,2020-09,2023-10,-0.017308,1000,0.016697,-0.033225,0.059819,12.1,0.242,-0.304822,0.312896,0.1,0.104095,0.572,False,False,
+opendnssec,alg7,forward,se,opendnssec[5]@1.2.0b1,65,52,tested,21,16,2016-09,2023-06,0.017005,1000,0.005146,-0.004577,0.016377,95.5,0.09,-0.039809,0.068681,0.125,0.120174,0.452,True,False,
+opendnssec,alg7,forward,nu,opendnssec[5]@1.2.0b1,65,52,tested,21,16,2016-09,2023-06,0.012487,1000,-0.003081,-0.056754,0.053309,70.2,0.596,-0.291732,0.301629,0,0.112789,1,False,False,
+opendnssec,alg7,forward,gov,opendnssec[5]@1.2.0b1,65,52,tested,12,11,2017-08,2023-06,-0.138437,1000,-0.167505,-0.384383,-0.008363,53.2,0.936,-1.4494,0.087296,0.090909,0.107618,0.631,False,False,
+opendnssec,alg7,forward,fed.us,opendnssec[5]@1.2.0b1,65,52,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+opendnssec,alg7,forward,ee,opendnssec[5]@1.2.0b1,65,52,tested,9,9,2019-11,2023-06,-0.031877,1000,-0.026132,-0.048861,-0.002656,36.4,0.728,-0.150198,0.009818,0.222222,0.125007,0.13,False,False,
+opendnssec,alg7,forward,ch,opendnssec[5]@1.2.0b1,65,52,tested,7,7,2020-10,2023-06,-0.150328,1000,-0.094853,-0.199063,-0.00079,14,0.28,-0.43796,0.000426,0.142857,0.09573,0.314,False,False,
+opendnssec,alg7,forward,li,opendnssec[5]@1.2.0b1,65,52,tested,7,7,2020-10,2023-06,-0.474393,1000,-0.270566,-0.583432,-0.000367,10.1,0.202,-1.68213,0.018653,0.142857,0.10676,0.399,False,False,
+opendnssec,alg7,reverse_panel,_pooled-afrinic-arin,opendnssec[5]@1.2.0b1,65,52,tested,57,45,2011-08,2024-08,0.314481,1000,0.144469,-0.236026,0.556331,78.8,0.424,-1.38845,2.6214,0.111111,0.115162,0.55,False,False,
+opendnssec,alg8,forward,se,opendnssec[5]@1.2.0b1,65,52,tested,21,16,2016-09,2023-06,-0.161498,1000,-0.08796,-0.235046,0.030371,16.4,0.328,-0.964456,0.40284,0.125,0.115068,0.388,False,False,
+opendnssec,alg8,forward,nu,opendnssec[5]@1.2.0b1,65,52,tested,21,16,2016-09,2023-06,-0.22463,1000,-0.048439,-0.160478,0.087974,2,0.04,-0.730424,0.595547,0.125,0.119704,0.454,True,False,
+opendnssec,alg8,forward,gov,opendnssec[5]@1.2.0b1,65,52,tested,12,11,2017-08,2023-06,-0.455452,1000,-0.145028,-0.565025,0.194097,8.7,0.174,-1.92997,1.49293,0.090909,0.107537,0.64,False,False,
+opendnssec,alg8,forward,fed.us,opendnssec[5]@1.2.0b1,65,52,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+opendnssec,alg8,forward,ee,opendnssec[5]@1.2.0b1,65,52,tested,9,9,2019-11,2023-06,-0.808019,1000,-0.565503,-1.4217,-0.01231,27.2,0.544,-3.30002,0.184953,0.222222,0.122868,0.177,False,False,
+opendnssec,alg8,forward,ch,opendnssec[5]@1.2.0b1,65,52,tested,7,7,2020-10,2023-06,-0.793356,1000,0.023899,-0.771158,0.842391,3.7,0.074,-4.0841,3.64523,0,0.094839,1,True,False,
+opendnssec,alg8,forward,li,opendnssec[5]@1.2.0b1,65,52,tested,7,7,2020-10,2023-06,-0.52836,1000,0.100964,-1.1267,1.10275,13.2,0.264,-5.73032,3.50728,0,0.098901,1,False,False,
+opendnssec,alg8,reverse_panel,_pooled-afrinic-arin,opendnssec[5]@1.2.0b1,65,52,tested,57,45,2011-08,2024-08,0.27651,1000,0.030858,-0.281076,0.335049,87.3,0.254,-2.35897,3.21365,0.155556,0.113882,0.201,False,False,
+opendnssec,digest1,forward,se,opendnssec[13]@2.1.0,65,52,tested,21,16,2016-09,2023-06,0.114018,1000,-0.042726,-0.370527,0.25867,73.4,0.532,-1.23345,1.63777,0,0.113263,1,False,False,
+opendnssec,digest1,forward,nu,opendnssec[13]@2.1.0,65,52,tested,21,16,2016-09,2023-06,0.237347,1000,-0.009121,-0.862307,0.874902,66.9,0.662,-3.2746,2.50697,0,0.11531,1,False,False,
+opendnssec,digest1,forward,gov,opendnssec[13]@2.1.0,65,52,tested,12,11,2017-08,2023-06,-0.605131,1000,-0.748461,-1.83152,-0.015527,56.9,0.862,-4.71793,1.90048,0.181818,0.109207,0.152,False,False,
+opendnssec,digest1,forward,fed.us,opendnssec[13]@2.1.0,65,52,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+opendnssec,digest1,forward,ee,opendnssec[13]@2.1.0,65,52,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+opendnssec,digest1,forward,ch,opendnssec[13]@2.1.0,65,52,tested,7,7,2020-10,2023-06,-0.658025,1000,-0.056827,-0.783837,0.855046,9.7,0.194,-3.32608,2.77332,0,0.109662,1,False,False,
+opendnssec,digest1,forward,li,opendnssec[13]@2.1.0,65,52,tested,7,7,2020-10,2023-06,-1.27723,1000,-0.014135,-1.42821,1.47751,5.4,0.108,-4.91657,5.80782,0.142857,0.098302,0.359,False,False,
+opendnssec,digest1,reverse_panel,_pooled-afrinic-arin,opendnssec[13]@2.1.0,65,52,tested,57,45,2011-08,2024-08,-0.06076,1000,-0.008992,-0.233226,0.171531,35.7,0.714,-1.86922,1.95302,0.133333,0.113083,0.339,False,False,
+opendnssec,optout,forward,se,opendnssec[3]@1.1.0rc1,65,52,tested,21,16,2016-09,2023-06,-0.034929,1000,-0.035936,-0.11506,0.015051,46.1,0.922,-0.30681,0.11117,0.125,0.11847,0.403,False,False,
+opendnssec,optout,forward,nu,opendnssec[3]@1.1.0rc1,65,52,tested,21,16,2016-09,2023-06,-0.193502,1000,-0.026376,-0.30132,0.212673,19.6,0.392,-1.11606,1.04076,0.0625,0.115834,0.749,False,False,
+opendnssec,optout,forward,gov,opendnssec[3]@1.1.0rc1,65,52,tested,12,11,2017-08,2023-06,-0.066792,1000,-0.007084,-0.099923,0.071919,12.7,0.254,-0.407878,0.397926,0.181818,0.112556,0.162,False,False,
+opendnssec,optout,forward,fed.us,opendnssec[3]@1.1.0rc1,65,52,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+opendnssec,optout,forward,ee,opendnssec[3]@1.1.0rc1,65,52,tested,9,9,2019-11,2023-06,-0.037829,1000,-0.026284,-0.063579,-0.002247,24.1,0.482,-0.167418,0.004793,0.111111,0.12183,0.607,False,False,
+opendnssec,optout,forward,ch,opendnssec[3]@1.1.0rc1,65,52,tested,7,7,2020-10,2023-06,-0.014983,1000,0.000725,-0.024863,0.025077,14,0.28,-0.079139,0.123627,0.142857,0.100495,0.383,False,False,
+opendnssec,optout,forward,li,opendnssec[3]@1.1.0rc1,65,52,tested,7,7,2020-10,2023-06,0.010878,1000,-0.010846,-0.036858,0.014015,90.8,0.184,-0.121645,0.102041,0.142857,0.099063,0.31,False,False,
+pdns-auth,alg13,forward,se,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,tested,56,32,2016-09,2023-10,0.20398,1000,0.106498,-0.091346,0.361616,84.1,0.318,-0.954088,1.39876,0.09375,0.109851,0.662,False,False,
+pdns-auth,alg13,forward,nu,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,tested,56,32,2016-09,2023-10,0.0642,1000,0.069662,-0.014367,0.204265,56.6,0.868,-0.415373,0.617334,0.09375,0.113247,0.619,False,False,
+pdns-auth,alg13,forward,gov,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,tested,51,29,2017-11,2023-10,0.429904,1000,0.356766,-0.106071,1.00366,65.4,0.692,-0.872321,2.51057,0.137931,0.113599,0.323,False,False,
+pdns-auth,alg13,forward,fed.us,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-auth,alg13,forward,ee,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,tested,31,19,2019-11,2023-10,0.376063,1000,0.600077,-0.019439,1.62844,35.4,0.708,-0.175752,3.54768,0.105263,0.134052,0.599,False,False,
+pdns-auth,alg13,forward,ch,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,tested,28,17,2020-09,2023-10,-0.227885,1000,0.095706,-0.908046,1.04133,17,0.34,-4.18628,3.4531,0.058824,0.103065,0.661,False,False,
+pdns-auth,alg13,forward,li,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,tested,28,17,2020-09,2023-10,-0.084224,1000,0.127272,-0.719118,0.998695,24.3,0.486,-3.58601,3.49412,0.058824,0.101873,0.666,False,False,
+pdns-auth,alg13,reverse_panel,_pooled-afrinic-arin,pdns-auth[7]@4.0.0;pdns-auth[8]@4.0.0,132,85,tested,106,65,2012-01,2026-06,0.03809,1000,0.038383,-0.035355,0.107845,51.1,0.978,-0.198068,0.674946,0.138462,0.099422,0.215,False,False,
+pdns-auth,alg8,forward,se,pdns-auth[0]@3.2,132,85,tested,56,32,2016-09,2023-10,-0.028216,1000,-0.096062,-0.343279,0.042563,75.4,0.492,-0.964456,0.40284,0.09375,0.117492,0.619,False,False,
+pdns-auth,alg8,forward,nu,pdns-auth[0]@3.2,132,85,tested,56,32,2016-09,2023-10,-0.040332,1000,-0.056717,-0.229361,0.091316,59,0.82,-0.730424,0.595547,0.09375,0.116796,0.591,False,False,
+pdns-auth,alg8,forward,gov,pdns-auth[0]@3.2,132,85,tested,51,29,2017-11,2023-10,-0.274605,1000,-0.166489,-0.678557,0.185586,25.3,0.506,-1.92997,1.49293,0.103448,0.105831,0.526,False,False,
+pdns-auth,alg8,forward,fed.us,pdns-auth[0]@3.2,132,85,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-auth,alg8,forward,ee,pdns-auth[0]@3.2,132,85,tested,31,19,2019-11,2023-10,-0.354655,1000,-0.591818,-1.59975,0.013851,66.6,0.668,-3.30002,0.184953,0.105263,0.128993,0.591,False,False,
+pdns-auth,alg8,forward,ch,pdns-auth[0]@3.2,132,85,tested,28,17,2020-09,2023-10,0.329053,1000,0.003919,-0.950761,0.873723,81.3,0.374,-4.0841,3.64523,0.117647,0.103458,0.439,False,False,
+pdns-auth,alg8,forward,li,pdns-auth[0]@3.2,132,85,tested,28,17,2020-09,2023-10,0.40149,1000,0.010141,-1.22603,1.35816,74.4,0.512,-5.73032,3.50728,0.117647,0.109809,0.416,False,False,
+pdns-auth,alg8,reverse_panel,_pooled-afrinic-arin,pdns-auth[0]@3.2,132,85,tested,106,65,2012-01,2026-06,0.171359,1000,0.015514,-0.264646,0.233831,85.2,0.296,-2.35897,3.21365,0.092308,0.096941,0.511,False,False,
+pdns-auth,iter0,forward,se,pdns-auth[11]@4.6.0,132,85,tested,56,32,2016-09,2023-10,0.054219,1000,0.043222,-0.001808,0.139535,70.1,0.598,-0.052763,0.214635,0.1875,0.125028,0.194,False,False,
+pdns-auth,iter0,forward,nu,pdns-auth[11]@4.6.0,132,85,tested,56,32,2016-09,2023-10,0.04436,1000,0.035718,0.000115,0.086674,69.2,0.616,-0.001678,0.205516,0.125,0.117123,0.495,False,False,
+pdns-auth,iter0,forward,gov,pdns-auth[11]@4.6.0,132,85,tested,51,29,2017-11,2023-10,0.019383,1000,0.012359,-0.020696,0.057082,72.6,0.548,-0.099622,0.129817,0.137931,0.121188,0.346,False,False,
+pdns-auth,iter0,forward,fed.us,pdns-auth[11]@4.6.0,132,85,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-auth,iter0,forward,ee,pdns-auth[11]@4.6.0,132,85,tested,31,19,2019-11,2023-10,0.000313,1000,0.000835,-0.001866,0.004048,35.1,0.702,-0.007711,0.017162,0.157895,0.122859,0.333,False,False,
+pdns-auth,iter0,forward,ch,pdns-auth[11]@4.6.0,132,85,tested,28,17,2020-09,2023-10,-0.090892,1000,-0.012653,-0.382643,0.335839,29.7,0.594,-1.02137,1.58486,0.176471,0.101421,0.151,False,False,
+pdns-auth,iter0,forward,li,pdns-auth[11]@4.6.0,132,85,tested,28,17,2020-09,2023-10,-0.131313,1000,-0.004132,-0.398072,0.346411,14.8,0.296,-1.67477,1.69017,0.176471,0.098722,0.158,False,False,
+pdns-auth,iter_gt100,forward,se,pdns-auth[10]@4.5.0,132,85,tested,56,32,2016-09,2023-10,1.2e-05,1000,4e-06,-2.6e-05,4e-05,72.1,0.558,-0.000203,0.000215,0.03125,0.111287,0.888,False,False,
+pdns-auth,iter_gt100,forward,nu,pdns-auth[10]@4.5.0,132,85,tested,56,32,2016-09,2023-10,4.6e-05,1000,-2e-06,-5.2e-05,4.2e-05,95.3,0.094,-0.000211,0.000224,0.15625,0.112764,0.266,True,False,
+pdns-auth,iter_gt100,forward,gov,pdns-auth[10]@4.5.0,132,85,no test,,,,,,,,,,,,,,,,,,,the value is present in only 5 months of this series (fewer than 12)
+pdns-auth,iter_gt100,forward,fed.us,pdns-auth[10]@4.5.0,132,85,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-auth,iter_gt100,forward,ee,pdns-auth[10]@4.5.0,132,85,tested,31,19,2019-11,2023-10,-0.000742,1000,-0.000595,-0.002103,0.000399,32.8,0.656,-0.004933,0.003664,0.157895,0.124971,0.337,False,False,
+pdns-auth,iter_gt100,forward,ch,pdns-auth[10]@4.5.0,132,85,tested,28,17,2020-09,2023-10,0.00526,1000,0.000211,-0.012065,0.019873,78.9,0.422,-0.061574,0.04878,0.058824,0.114002,0.638,False,False,
+pdns-auth,iter_gt100,forward,li,pdns-auth[10]@4.5.0,132,85,tested,28,17,2020-09,2023-10,0.014607,1000,0.003255,-0.032313,0.058775,75.8,0.484,-0.165746,0.141828,0.058824,0.108303,0.641,False,False,
+pdns-auth,iter_gt500,forward,se,pdns-auth[3]@3.4.0;pdns-auth[4]@3.4.7,132,85,no test,,,,,,,,,,,,,,,,,,,the value is present in only 2 months of this series (fewer than 12)
+pdns-auth,iter_gt500,forward,nu,pdns-auth[3]@3.4.0;pdns-auth[4]@3.4.7,132,85,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-auth,iter_gt500,forward,gov,pdns-auth[3]@3.4.0;pdns-auth[4]@3.4.7,132,85,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-auth,iter_gt500,forward,fed.us,pdns-auth[3]@3.4.0;pdns-auth[4]@3.4.7,132,85,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-auth,iter_gt500,forward,ee,pdns-auth[3]@3.4.0;pdns-auth[4]@3.4.7,132,85,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-auth,iter_gt500,forward,ch,pdns-auth[3]@3.4.0;pdns-auth[4]@3.4.7,132,85,no test,,,,,,,,,,,,,,,,,,,the value is present in only 3 months of this series (fewer than 12)
+pdns-auth,iter_gt500,forward,li,pdns-auth[3]@3.4.0;pdns-auth[4]@3.4.7,132,85,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-auth,optout,forward,se,pdns-auth[1]@3.3,132,85,tested,56,32,2016-09,2023-10,-0.044996,1000,-0.034867,-0.106347,0.024734,36.7,0.734,-0.30681,0.11117,0.15625,0.12161,0.225,False,False,
+pdns-auth,optout,forward,nu,pdns-auth[1]@3.3,132,85,tested,56,32,2016-09,2023-10,-0.141871,1000,-0.040089,-0.313082,0.274704,23.8,0.476,-1.11606,1.04076,0.15625,0.105835,0.215,False,False,
+pdns-auth,optout,forward,gov,pdns-auth[1]@3.3,132,85,tested,51,29,2017-11,2023-10,-0.007852,1000,-0.00694,-0.102793,0.075478,45.2,0.904,-0.407878,0.397926,0.206897,0.110189,0.082,False,True,
+pdns-auth,optout,forward,fed.us,pdns-auth[1]@3.3,132,85,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-auth,optout,forward,ee,pdns-auth[1]@3.3,132,85,tested,31,19,2019-11,2023-10,-0.016399,1000,-0.025884,-0.068623,-0.002686,66.7,0.666,-0.167418,0.004793,0.157895,0.121788,0.276,False,False,
+pdns-auth,optout,forward,ch,pdns-auth[1]@3.3,132,85,tested,28,17,2020-09,2023-10,0.007314,1000,0.000929,-0.02642,0.0347,71.6,0.568,-0.079139,0.123627,0,0.107972,1,False,False,
+pdns-auth,optout,forward,li,pdns-auth[1]@3.3,132,85,tested,28,17,2020-09,2023-10,-0.012248,1000,-0.010772,-0.046749,0.02087,43.4,0.868,-0.121645,0.102041,0.058824,0.102627,0.636,False,False,
+pdns-auth,rsa1024,forward,se,pdns-auth[9]@4.0.0,132,85,tested,56,32,2016-09,2023-10,-0.029513,1000,-0.034024,-0.353585,0.3183,56.9,0.862,-1.72524,1.72626,0.15625,0.123546,0.218,False,False,
+pdns-auth,rsa1024,forward,nu,pdns-auth[9]@4.0.0,132,85,tested,56,32,2016-09,2023-10,0.101813,1000,0.005612,-0.530643,0.48419,65.4,0.692,-3.20748,3.23791,0.125,0.109796,0.441,False,False,
+pdns-auth,rsa1024,forward,gov,pdns-auth[9]@4.0.0,132,85,tested,51,29,2017-11,2023-10,-0.102111,1000,-0.041386,-0.227285,0.103994,22.9,0.458,-0.708619,1.08548,0.068966,0.109038,0.733,False,False,
+pdns-auth,rsa1024,forward,fed.us,pdns-auth[9]@4.0.0,132,85,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-auth,rsa1024,forward,ee,pdns-auth[9]@4.0.0,132,85,tested,31,19,2019-11,2023-10,0.102305,1000,-0.008396,-0.421069,0.400091,73.8,0.524,-0.814618,1.38581,0.105263,0.129175,0.577,False,False,
+pdns-auth,rsa1024,forward,ch,pdns-auth[9]@4.0.0,132,85,tested,28,17,2020-09,2023-10,-0.022888,1000,-0.005395,-0.269488,0.221157,45.8,0.916,-0.786496,1.21246,0.176471,0.096791,0.117,False,False,
+pdns-auth,rsa1024,forward,li,pdns-auth[9]@4.0.0,132,85,tested,28,17,2020-09,2023-10,0.040474,1000,-0.023432,-0.470524,0.345002,59.7,0.806,-1.10661,1.54899,0.117647,0.099266,0.394,False,False,
+pdns-rec,iter_gt150,forward,se,nsec3-max-iterations-150,171,86,tested,83,42,2016-09,2023-08,0,1000,1e-06,-7e-06,1.1e-05,48.1,0.962,-2.3e-05,3.5e-05,0.071429,0.121639,0.702,False,False,
+pdns-rec,iter_gt150,forward,nu,nsec3-max-iterations-150,171,86,tested,83,42,2016-09,2023-08,-2e-06,1000,-2e-06,-1.7e-05,1.2e-05,45.6,0.912,-8.3e-05,0.000122,0.119048,0.112003,0.456,False,False,
+pdns-rec,iter_gt150,forward,gov,nsec3-max-iterations-150,171,86,no test,,,,,,,,,,,,,,,,,,,the value is present in only 5 months of this series (fewer than 12)
+pdns-rec,iter_gt150,forward,fed.us,nsec3-max-iterations-150,171,86,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-rec,iter_gt150,forward,ee,nsec3-max-iterations-150,171,86,tested,59,26,2019-11,2023-08,-0.000348,1000,-0.000476,-0.001179,0,62.2,0.756,-0.002963,0,0.038462,0.060037,0.535,False,False,
+pdns-rec,iter_gt150,forward,ch,nsec3-max-iterations-150,171,86,tested,48,21,2020-09,2023-08,-0.000364,1000,-0.000263,-0.000826,1.2e-05,25.1,0.502,-0.002085,0.000131,0.047619,0.099143,0.668,False,False,
+pdns-rec,iter_gt150,forward,li,nsec3-max-iterations-150,171,86,tested,48,21,2020-09,2023-08,-0.001326,1000,-0.000479,-0.002036,0.000706,11.1,0.222,-0.009796,0.00485,0.142857,0.101857,0.308,False,False,
+pdns-rec,iter_gt2500,forward,se,nsec3-max-iterations-2500,171,86,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-rec,iter_gt2500,forward,nu,nsec3-max-iterations-2500,171,86,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-rec,iter_gt2500,forward,gov,nsec3-max-iterations-2500,171,86,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-rec,iter_gt2500,forward,fed.us,nsec3-max-iterations-2500,171,86,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-rec,iter_gt2500,forward,ee,nsec3-max-iterations-2500,171,86,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-rec,iter_gt2500,forward,ch,nsec3-max-iterations-2500,171,86,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-rec,iter_gt2500,forward,li,nsec3-max-iterations-2500,171,86,no test,,,,,,,,,,,,,,,,,,,the value never appears in this series
+pdns-rec,iter_gt50,forward,se,nsec3-max-iterations-50,171,86,tested,83,42,2016-09,2023-08,0.000319,1000,0.00034,-0.00044,0.001245,46.8,0.936,-0.00263,0.004822,0.095238,0.113084,0.659,False,False,
+pdns-rec,iter_gt50,forward,nu,nsec3-max-iterations-50,171,86,tested,83,42,2016-09,2023-08,-0.004181,1000,0.001022,-0.049241,0.058427,44.7,0.894,-0.250025,0.277414,0.142857,0.111341,0.288,False,False,
+pdns-rec,iter_gt50,forward,gov,nsec3-max-iterations-50,171,86,tested,78,38,2017-11,2023-08,-0.028751,1000,-0.009853,-0.072253,0.058351,25.2,0.504,-0.252599,0.269922,0.105263,0.109769,0.54,False,False,
+pdns-rec,iter_gt50,forward,fed.us,nsec3-max-iterations-50,171,86,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+pdns-rec,iter_gt50,forward,ee,nsec3-max-iterations-50,171,86,tested,59,26,2019-11,2023-08,-0.000432,1000,-0.00109,-0.002962,0.000508,70.9,0.582,-0.007655,0.004072,0.115385,0.126744,0.558,False,False,
+pdns-rec,iter_gt50,forward,ch,nsec3-max-iterations-50,171,86,tested,48,21,2020-09,2023-08,-0.000806,1000,0.003316,-0.024474,0.046155,40.5,0.81,-0.112897,0.097417,0.142857,0.107145,0.244,False,False,
+pdns-rec,iter_gt50,forward,li,nsec3-max-iterations-50,171,86,tested,48,21,2020-09,2023-08,-0.003629,1000,0.024419,-0.076774,0.169258,33.1,0.662,-0.304822,0.312896,0.095238,0.104543,0.506,False,False,
+unbound,iter_gt150,forward,se,unbound[1]@0.5;unbound[20]@1.13.2,120,102,tested,41,37,2016-09,2023-08,2e-06,1000,1e-06,-4e-06,6e-06,52.8,0.944,-2.3e-05,3.5e-05,0.135135,0.116813,0.369,False,False,
+unbound,iter_gt150,forward,nu,unbound[1]@0.5;unbound[20]@1.13.2,120,102,tested,41,37,2016-09,2023-08,6e-06,1000,-2e-06,-1e-05,8e-06,90.7,0.186,-8.3e-05,0.000122,0.135135,0.114908,0.31,False,False,
+unbound,iter_gt150,forward,gov,unbound[1]@0.5;unbound[20]@1.13.2,120,102,no test,,,,,,,,,,,,,,,,,,,the value is present in only 5 months of this series (fewer than 12)
+unbound,iter_gt150,forward,fed.us,unbound[1]@0.5;unbound[20]@1.13.2,120,102,no test,,,,,,,,,,,,,,,,,,,no month with at least 30 in the denominator
+unbound,iter_gt150,forward,ee,unbound[1]@0.5;unbound[20]@1.13.2,120,102,tested,19,19,2019-10,2023-08,-0.000877,1000,-0.000497,-0.000822,-0.000169,2.1,0.042,-0.002963,0,0.157895,0.062077,0.013,True,True,
+unbound,iter_gt150,forward,ch,unbound[1]@0.5;unbound[20]@1.13.2,120,102,tested,13,13,2020-10,2023-08,3.5e-05,1000,-0.000269,-0.000452,-6.5e-05,99.3,0.014,-0.002085,0.000131,0.076923,0.102495,0.649,True,False,
+unbound,iter_gt150,forward,li,unbound[1]@0.5;unbound[20]@1.13.2,120,102,tested,13,13,2020-10,2023-08,0.00016,1000,-0.000477,-0.001503,0.000559,84.9,0.302,-0.009796,0.00485,0,0.099476,1,False,False,
