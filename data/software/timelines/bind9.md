@@ -6,7 +6,6 @@ Generated 2026-09-29 from `out/software_repos/bind9.git` (bare, blob-less partia
 
 Multiple long-lived maintenance branches (v9_0 .. v9_20 in the clone as refs/heads/v9_<minor>); every stable line gets its own point releases (v9.x.y), security patch rebuilds (v9.x.y-Pn), and, 2020-2021, Windows-only rebuilds (v9.x.y-Wn). Extended-support lines are tagged v9.4-ESV[-Rn][-Pn], v9.6-ESV-Rn[-Pn] and v9.9-ESV-R10-P2 (no z component). From 9.13 on, odd minors (9.13, 9.15, 9.17, 9.19, 9.21) are development branches whose x.y.z tags are marked stable:false (kind "dev"); the next even minor (9.14/9.16/9.18/9.20) is the stable line derived from it. Pre-releases (aN/bN/rcN) are stable:false. Tags v9.0.0 .. v9.9.0rc2 era (174 tags, through 2012-02) are cvs2git-manufactured commits whose commit date is the CVS tag time; all dates here are the commit date of <tag>^{commit}, never the 2023-03-16 tagger date the git tags carry. Changelog: top-level CHANGES (numbered entries, "--- x.y.z released ---" markers) for every tag up to v9.18.3x/v9.20.3/v9.21.2; afterwards per-release doc/changelog/changelog-<ver>.rst. CHANGES is per-branch: an entry backported to 9.11 appears under a 9.11.x marker in the 9.11 branch copy with its master-allocated number, so each entry is attributed to the earliest-dated final (non-a/b/rc) tag whose changelog contains it, and first_stable_tag is recorded separately when that tag is a development release.
 
-> **STAGE 1 ONLY: default_changes, cve_fixes, news_edits, changelog entries pending**
 
 ## How to verify a row
 
@@ -412,19 +411,301 @@ git -C $C show <commit> -- <path>                                   # default va
 
 384 rows. `(!)` marks a commit not contained in the tag; `n/a` = no commit found by message grep (entry is still at the tag). "dev" prefix = development-branch release (stable:false); the first stable release carrying the entry is in the JSON `first_stable_tag`.
 
-## Default changes (before / after)
+## Default changes (before / after) and limit changes
 
-| version | date | change | before | after | on upgrade | opt-in | commits | attribution |
-|---|---|---|---|---|---|---|---|---|
+Every row is backed by the commit(s) listed; `first tag` = earliest tag of any kind containing the commit, `first stable` = earliest stable tag. Verify a row with:
 
-0 default changes.
+```
+C=out/software_repos/bind9.git
+git -C $C show --stat <commit>                       # file list: the product file must not be under bin/tests/
+git -C $C tag --contains <commit> | grep -x <first stable>
+git -C $C show <first stable>:<file> | grep -n <value>   # value after (and <previous tag>:<file> for before)
+```
+
+Items d01-d04 predate 2012-03 (cvs2git-manufactured tags): `git tag --contains` lists tags that do not carry the change, so the first tag was established by tree content instead (see the note column). A commit that only edits `bin/tests/system/*` would be a test fixture, not a product default; none of the rows below is fixture-only (file lists in the JSON `commits[].files`, `touches_test_fixture_only` = false).
+
+| id | kind | change | before | after | on upgrade | opt-in | commit(s) | first tag | first stable |
+|---|---|---|---|---|---|---|---|---|---|
+| d01-validation-default-yes | default-changed | Built-in default of the dnssec-validation option flipped from "no" (9.4.x / 9.5.0) to "yes". "yes" only validates when trusted-keys/managed-keys are configured; no built-in root key existed yet, so most unconfigured servers still did not validate. | dnssec-validation no; | dnssec-validation yes; | yes | no | 1bff2d56a0 | v9.5.0-P1 (2008-05-28) | v9.5.0-P1 (2008-05-28) |
+| d02-keygen-default-alg-rsasha1 | default-changed | dnssec-keygen gained default arguments: without -a it generates a 1024-bit RSASHA1 ZSK, or a 2048-bit RSASHA1 KSK with -f KSK. | no default algorithm; -a required | RSASHA1, 1024-bit ZSK / 2048-bit KSK | yes | no | b272d38cc5 | v9.7.0a1 (2009-06-18) | v9.7.0 (2010-02-16) |
+| d03-signzone-nsec3-iterations-100-to-10 | default-changed | Default number of additional NSEC3 iterations used by dnssec-signzone (-H) reduced from 100 to 10. | nsec3iter = 100U | nsec3iter = 10U | yes | no | a93a66f618 | v9.7.0b1 (2009-10-19) | v9.7.0 (2010-02-16) |
+| d04-root-trust-anchor-builtin | default-changed | A built-in root-zone trust anchor (bind.keys, managed via RFC 5011) was added; it is used only when "dnssec-validation auto;" is configured. | no built-in trust anchor; validation needs trusted-keys/managed-keys | built-in root key available via "dnssec-validation auto;" | no | yes | 79bf7c874b | v9.8.0b1 (2011-01-23) | v9.8.0 (2011-02-21) |
+| d05-builtin-root-ksk-2017 | default-changed | CHANGES 4564: built-in managed keys updated to include the upcoming root KSK-2017 (CHANGES 4564 says only "the upcoming root KSK", RT #44579) ahead of the later rollover. Backported to every maintained branch as separate commits. | bind.keys without the upcoming root KSK | bind.keys with the upcoming root KSK | no | yes | 00a83c64d7, b5ad091624, 3984c8da30, 9543825c15, 3d63f9d813, 4e47688455, 95f9b9a078 | v9.11.1rc1 (2017-02-06) | v9.9.9-P8 (2017-03-29) |
+| d06-keygen-no-default-alg | removal | dnssec-keygen and dnssec-keyfromlabel no longer default to RSASHA1 (NSEC3RSASHA1 with -3); -a is mandatory. Scripts relying on the default fail. | RSASHA1 (1024/2048) when -a omitted | error: algorithm must be given with -a | yes | no | 45afdb2672 | v9.12.0a1 (2017-09-11) | v9.12.0 (2018-01-17) |
+| d07-validation-auto-default | default-changed | Built-in default of dnssec-validation changed from "yes" to "auto": validation is on by default using the built-in IANA root trust anchor, with RFC 5011 managed-keys maintenance. | dnssec-validation yes; (validates only with explicitly configured keys) | dnssec-validation auto; (built-in root key) | yes | no | bef18ecac6 | v9.13.1 (2018-06-09) | v9.14.0 (2019-03-20) |
+| d08-rsamd5-removed | removal | RSAMD5 (algorithm 1) support removed entirely (a later commit 9b78f78c69, 2025-10-16, "Restore RSAMD5 tag computation", is not a re-enablement). | RSAMD5 supported (explicit -a RSAMD5 to generate; validation accepted it) | RSAMD5 unsupported | yes | no | e69dc0dbc7 | v9.13.6 (2019-02-06) | v9.14.0 (2019-03-20) |
+| d09-gost-removed | removal | ECC-GOST (algorithm 12, GOST R 34.11-94) support removed. | GOST supported (optional build) | GOST unsupported | yes | no | 27593e65dc | v9.13.1 (2018-06-09) | v9.14.0 (2019-03-20) |
+| d10-dsa-removed | removal | DSA (algorithm 3) and DSA-NSEC3-SHA1 (algorithm 6) support removed; algorithm numbers kept only as name mapping. | DSA algorithms supported | DSA algorithms unsupported | yes | no | d6c50674bb | v9.13.4 (2018-11-22) | v9.14.0 (2019-03-20) |
+| d11-synth-from-dnssec-off-9.14 | default-changed | NSEC aggressive cache (synth-from-dnssec) disabled by default in the 9.14 stable branch after a performance problem. | synth-from-dnssec yes; | synth-from-dnssec no; | yes | no | b97004be30 | v9.14.8 (2019-11-06) | v9.14.8 (2019-11-06) |
+| d12-synth-from-dnssec-restored-9.18 | default-changed | synth-from-dnssec restored to yes as the default (9.18 line); 9.16 stayed at no. | synth-from-dnssec no; | synth-from-dnssec yes; | yes | no | 90dbdb2cb5 | v9.17.21 (2021-12-06) | v9.18.0 (2022-01-24) |
+| d13-ds-cds-sha1-dropped | default-changed | SHA-1 DS/CDS digests are no longer generated by default: dnssec-dsfromkey emits SHA-256 only (was SHA-1 and SHA-256 both), dnssec-signzone dsset files and named-generated CDS records carry SHA-256 only. | DS/CDS: SHA-1 + SHA-256 | DS/CDS: SHA-256 only | yes | no | 796a6c4e4e, 8785f6fa34, d8f2eb249a | v9.15.0 (2019-05-10) | v9.16.0 (2020-02-12) |
+| d14-keygen-rsa-zsk-2048 | default-changed | Default RSA ZSK size in dnssec-keygen raised from 1024 to 2048 bits (KSK was already 2048). | RSA ZSK 1024-bit / KSK 2048-bit | RSA 2048-bit for both | yes | no | 24f23e7fad | v9.15.2 (2019-07-10) | v9.16.0 (2020-02-12) |
+| d15-dnssec-policy-default-ecdsap256 | support-added | Built-in dnssec-policy "default": a single CSK (KSK+ZSK roles, unlimited lifetime) with algorithm 13 ECDSAP256SHA256, no explicit key size. The built-in policy "none" is the default for zones (dnssec-policy is opt-in per zone). | no built-in policy (external dnssec-keymgr) | dnssec-policy "default": csk lifetime unlimited algorithm ECDSAP256SHA256 | no | yes | 7bfac50336, a339a6df48 | v9.15.6 (2019-11-17) | v9.16.0 (2020-02-12) |
+| d16-dnssec-policy-default-key-size-2048 | default-changed | kasp default RSA key size: ZSK 1024 -> 2048 (KSK stayed 2048). Only relevant when a policy names an RSA algorithm without a size; the built-in policy uses ECDSAP256SHA256. | RSA ZSK 1024-bit / KSK 2048-bit | RSA 2048-bit for both roles | no | yes | 0f9d45a5b8 | v9.15.7 (2019-12-13) | v9.16.0 (2020-02-12) |
+| d17-nsec3param-default-in-policy | support-added | dnssec-policy gained "nsec3param"; when given without parameters it defaulted to 5 iterations and an 8-byte salt. | no NSEC3 in dnssec-policy | nsec3param iterations 5 salt-length 8 | no | yes | 008e84e965 | v9.16.10 (2020-12-07) | v9.16.10 (2020-12-07) |
+| d18-nsec3param-default-0-0 | default-changed | Default nsec3param parameters in dnssec-policy changed to zero additional iterations and no salt (RFC 9276 / draft-ietf-dnsop-nsec3-guidance). | iterations 5, salt-length 8 (DEFAULT_NSEC3PARAM_ITER 5, SALTLEN 8) | iterations 0, salt-length 0 | yes | yes | 8f324b4717 | v9.17.20 (2021-11-05) | v9.18.0 (2022-01-24) |
+| d19-dnskey-kskonly-yes | default-changed | dnssec-dnskey-kskonly default changed from no to yes: with auto-dnssec the DNSKEY RRset is signed only by KSKs. | dnssec-dnskey-kskonly no; | dnssec-dnskey-kskonly yes; | yes | no | 2abad4d969 | v9.17.20 (2021-11-05) | v9.18.0 (2022-01-24) |
+| d20-dnssec-cds-sha2-only | default-changed | dnssec-cds generates SHA-2 DS records by default, avoids copying deprecated SHA-1 records from the child, and derives SHA-2 DS from CDNSKEY when the child publishes no SHA-2 CDS. | copies SHA-1 and SHA-2 CDS digests | SHA-2 only | yes | no | eabf898b36 | v9.17.18 (2021-09-07) | v9.18.0 (2022-01-24) |
+| d21-signzone-nsec3-iterations-0 | default-changed | Default additional NSEC3 iterations of dnssec-signzone reduced from 10 to 0. | nsec3iter = 10U | nsec3iter = 0U | yes | no | 47c214644b, d029d6374d | v9.19.3 (2022-07-07) | v9.18.5 (2022-07-07) |
+| d22-cdns-cdnskey-options | support-added | dnssec-policy gained "cds-digest-type" (default 2 = SHA-256) and "cdnskey" (default yes). Defaults equal the prior hard-coded behaviour, so publication defaults are unchanged; only configurability is new. | CDS SHA-256 and CDNSKEY published without options (per reference.rst text added by 8be61d1845: default yes) | cds-digest-type 2; cdnskey yes; (configurable) | no | yes | 2742fe656f, 8be61d1845 | v9.19.11 (2023-03-03) | v9.20.0 (2024-07-08) |
+| d23-bindkeys-revoked-key-removed | other | Revoked root DNSKEY removed from bind.keys. No behavioural change for validation (key is revoked). | bind.keys carries revoked root key | revoked key removed | no | no | 3954d4ec30, d5c57db1ae, 0e805b58e8 | v9.14.1 (2019-04-06) | v9.14.1 (2019-04-06) |
+| d24-bindkeys-root-2025-ds | default-changed | New IANA root key (key tag 38696; CHANGES subject: "Update bind.keys with the new 2025 IANA root key") added to bind.keys. | bind.keys without key 38696 | bind.keys with key 38696 | no | yes | 089d0eb30a, 7045da6d6a, 609bf35075, a2f8b76c5e | v9.21.3 (2024-12-03) | v9.20.4 (2024-12-03) |
+| l01-nsec3-max-iterations-150 | limit-changed | Maximum NSEC3 iterations reduced to a fixed 150 (was key-size dependent: 150 for keys <=1024 bits, 500 for <=2048, 2500 for <=4096). Zone configuration above 150 is rejected and validating resolvers treat NSEC3 answers with more than 150 iterations as insecure | max iterations 150/500/2500 depending on smallest DNSKEY size | max iterations 150 fixed | yes | no | 9324d2d295, 9170275738, 91a7f94a66 | v9.16.16 (2021-05-12) | v9.16.16 (2021-05-12) |
+| l02-nsec3-max-iterations-50 | limit-changed | Validator and dnssec-signzone limit on NSEC3 iterations lowered from 150 to 50 on the main line only (answers above the limit are treated as insecure); dnssec-policy additionally refuses to load any non-zero iteration count (RFC 9276). | DNS_NSEC3_MAXITERATIONS 150 | DNS_NSEC3_MAXITERATIONS 50 | yes | no | ff4201e388, 75e0d394dd | v9.19.19 (2023-12-08) | v9.20.0 (2024-07-08) |
+| l03-keytrap-validation-limits-9.16-9.18 | limit-changed | CVE-2023-50387 (KeyTrap) mitigation in the maintenance branches: DNS message validation stops at the first validation failure; validation work is moved to a separate slow task queue. | validator retried all key/signature combinations | fail on first validation failure | yes | no | 0add293477, 6a65a42528, c12608ca93 | v9.18.24 (2024-02-11) | v9.18.24 (2024-02-11) |
+| l04-max-validations-per-fetch | limit-changed | New options capping DNSSEC validations (default 16) and validation failures (default 1) per resolver fetch; validation made asynchronous. | unbounded (per-fetch) | max-validations-per-fetch 16; max-validation-failures-per-fetch 1 | yes | no | 15096aefdf | v9.19.21 (2024-02-02) | v9.20.0 (2024-07-08) |
+
+16 default-changed, 4 limit-changed, 4 removal, 3 support-added, 1 other (28 rows). Rows with `value_changed=false` (d22, d23) record new options / no-op edits whose default equals prior behaviour.
+
+### Notes per row
+
+* **d01-validation-default-yes** basis: tree content: git show v9.5.0-P1:bin/named/config.c has "dnssec-validation yes;" and v9.5.0:bin/named/config.c has "dnssec-validation no;" (git tag --contains lists cvs2git tags that do not contain the change). Changelog: "The default value for dnssec-validation was changed to "yes" in 9.5.0-P1 and all subsequent releases; this was inadvertently omitted from CHANGES at the time." Note: sibling commit 3634531310 is the same change on the development trunk (first appears in 9.5.1b1 / later 9.6). The 2006 CHANGES 2007 entry announced the switch ("default dnssec-validation no; to be changed to yes in 9.5.0") but the code change landed only in 9.5.0-P1 and the CHANGES line was omitted until 9.5.0-P2.
+* **d02-keygen-default-alg-rsasha1** basis: tree content: v9.7.0a1:CHANGES contains entry 2612 and v9.6.1/v9.5.2/v9.4.3-P3 do not; git tag --contains wrongly lists v9.4.3-P3 and v9.6.1-P1 (cvs2git ancestry). first stable tag with DEFAULT_ALGORITHM in dnssec-keygen.c is v9.7.0.
+* **d03-signzone-nsec3-iterations-100-to-10** basis: tree content: git show v9.7.0b1:bin/dnssec/dnssec-signzone.c has "nsec3iter = 10U"; v9.4.3-P4, v9.5.2-P1, v9.6.1-P2 (listed by git tag --contains) do not; no stable tag between b1 and v9.7.0 has it. Changelog: "Reduce default NSEC3 iterations from 100 to 10. [RT #19970]"
+* **d04-root-trust-anchor-builtin** basis: tree content: v9.8.0b1:CHANGES and v9.8.0:CHANGES contain the entry, v9.7.3 and v9.7.2-P3 do not (git tag --contains wrongly lists v9.7.3). Changelog: "Added a default trust anchor for the root zone, which can be switched on by setting "dnssec-validation auto;" in the named.conf options. [RT #21727]" Note: opt-in: default dnssec-validation stayed "yes" until 9.13.1 (d08).
+* **d05-builtin-root-ksk-2017** basis: git tag --contains. Note: takes effect only under "dnssec-validation auto;" (built-in keys); earliest stable tag is the minimum over the seven per-branch commits.
+* **d06-keygen-no-default-alg** basis: git tag --contains; tree content confirmed: v9.11.0:dnssec-keygen.c has DEFAULT_ALGORITHM, v9.12.0 does not. Changelog: "dnssec-keygen no longer uses RSASHA1 by default; the signing algorithm must be specified on the command line with the "-a" option.  Signing scripts that rely on the existing default behavior will brea"
+* **d07-validation-auto-default** basis: git tag --contains. Changelog: "The default setting for "dnssec-validation" is now "auto", which activates DNSSEC validation using the IANA root key. (The default can be changed back to "yes", which activates DNSSEC validation only " Note: first appears in development release 9.13.1; stable users first see it in 9.14.0 (v9.14.0:bin/named/config.c uses VALIDATION_DEFAULT; v9.13.0 does not). Applies on upgrade to any named.conf that does not set dnssec-validation.
+* **d08-rsamd5-removed** basis: git tag --contains. Note: no CHANGES line kept; release-note commit abe39991be "Add release notes for RSAMD5 removal". Earlier: RSAMD5 stopped being the RSA default for dnssec-keygen in 9.4.0 (commit 431e2ab380, CHANGES 1945).
+* **d09-gost-removed** basis: git tag --contains. Changelog: "Remove support for ECC-GOST (GOST R 34.11-94). [GL #295]"
+* **d10-dsa-removed** basis: git tag --contains. Changelog: "Remove support for DNSSEC algorithms 3 (DSA) and 6 (DSA-NSEC3-SHA1). [GL #22]"
+* **d11-synth-from-dnssec-off-9.14** basis: git tag --contains. Changelog: "NSEC Aggressive Cache ("synth-from-dnssec") has been disabled by default because it was found to have a significant performance impact on the recursive service. [GL #1265]" Note: 9.14.8 is the first tag; the same change on master (a20c42dca6) reaches the 9.16 stable line at v9.16.0. v9.16.50:bin/named/config.c still has "synth-from-dnssec no;".
+* **d12-synth-from-dnssec-restored-9.18** basis: git tag --contains. Note: CHANGES/release note commit 12c64d55f2 (GL #1265).
+* **d13-ds-cds-sha1-dropped** basis: git tag --contains. Note: first tag is development 9.15.0; first stable is 9.16.0.
+* **d14-keygen-rsa-zsk-2048** basis: git tag --contains. Changelog: "The default size for RSA keys is now 2048 bits, for both ZSKs and KSKs. [GL #1097]" Note: first tag is development 9.15.2; first stable is 9.16.0.
+* **d15-dnssec-policy-default-ecdsap256** basis: git tag --contains. Changelog: "dnssec-policy created new KSK keys for zones in the initial stage of signing (with the DS not yet in the rumoured or omnipresent states).  Fix by checking the key goals rather than the active state wh" Note: 7bfac50336 sets key->algorithm = DNS_KEYALG_ECDSA256 for the default kasp; a339a6df48 adds dnssec-policy.default.conf documenting "csk key-directory lifetime 0 algorithm 13" and states "none" is the default. Earlier work-in-progress copies (b54aba9f10, 2019-10-18) are in no release tag. Later commit 5ff414e986 (2022-06-28) moves the built-ins into named -C output (defaultconf).
+* **d16-dnssec-policy-default-key-size-2048** basis: git tag --contains. Note: touches lib/dns/kasp.c plus bin/tests/system/kasp/tests.sh; product file is kasp.c.
+* **d17-nsec3param-default-in-policy** basis: git tag --contains. Note: first stable is v9.16.10 (v9.16 branch commit); main-branch twin 114af58ee2 reaches 9.18.0.
+* **d18-nsec3param-default-0-0** basis: git tag --contains. Note: applies to zones whose dnssec-policy sets "nsec3param;" without values (opt-in to NSEC3 itself). Not backported to 9.16: v9.16.50:lib/isccfg/kaspconf.c still has DEFAULT_NSEC3PARAM_ITER 5. First stable 9.18.0.
+* **d19-dnskey-kskonly-yes** basis: git tag --contains. Changelog: "Change default of 'dnssec-dnskey-kskonly' to 'yes'. [GL #1316]" Note: commit also edits bin/tests/system/*/named.conf.in fixtures (adapting tests); the product change is bin/named/config.c.
+* **d20-dnssec-cds-sha2-only** basis: git tag --contains. Changelog: "dnssec-cds now only generates SHA-2 DS records by default and avoids copying deprecated SHA-1 records from a child zone to its delegation in the parent. If the child zone does not publish SHA-2 CDS re"
+* **d21-signzone-nsec3-iterations-0** basis: git tag --contains. Changelog: "Changed dnssec-signzone -H default to 0 additional NSEC3 iterations. [GL #3395]" Note: 47c214644b is the 9.18 backport (first stable v9.18.5); d029d6374d is main (9.19.3, first stable 9.20.0).
+* **d22-cdns-cdnskey-options** basis: git tag --contains. Note: Not a default change (value_changed=false). The commit that first made dnssec-policy publish CDS/CDNSKEY (9.16.0 keymgr) was not located; see gaps.
+* **d23-bindkeys-revoked-key-removed** basis: git tag --contains. Changelog: "Remove revoked root DNSKEY from bind.keys. [GL #945]"
+* **d24-bindkeys-root-2025-ds** basis: git tag --contains. Note: per-branch commits; a2f8b76c5e (9.16 line) is in no release tag.
+* **l01-nsec3-max-iterations-150** basis: git tag --contains. Changelog: "Reduce the maximum supported number of NSEC3 iterations that can be configured for a zone to 150. [GL #2642]" Note: 9324d2d295 (9.16 code), 9170275738 (9.16 validator) and 91a7f94a66 (9.11 ESV line, first tag 9.11.32) are the branch commits; main twin 29126500d2 reaches 9.18.0. The v9.16.16:lib/dns/include/dns/nsec3.h has MAXITERATIONS 150; v9.16.15 has no such macro.
+* **l02-nsec3-max-iterations-50** basis: git tag --contains. Note: Not backported: v9.18.31 and v9.16.50 keep 150 (checked in lib/dns/include/dns/nsec3.h). ff4201e388 message: "the next major BIND release should lower the maximum allowed NSEC3 iterations to 50" (RFC 9276 guidance); it reaches stable users at 9.20.0.
+* **l03-keytrap-validation-limits-9.16-9.18** basis: git tag --contains. Changelog: "Separate DNSSEC validation from the long-running tasks. ``c0022f68025`` As part of the KeyTrap \[CVE-2023-50387\] mitigation, the DNSSEC CPU- intensive operations were offloaded to a separate threadpo" Note: 0add293477 (9.18.24) and its cherry-pick 6a65a42528 (9.16.48). 9.16/9.18 have no max-validations-per-fetch option (v9.16.48 and v9.18.24 bin/named/server.c do not contain it).
+* **l04-max-validations-per-fetch** basis: git tag --contains. Note: reference.rst in the commit: "The default is 16" / "The default is 1", labelled experimental. Later changes (9.20.x) not tracked here. Present in v9.19.21 and v9.20.0 (bin/named/server.c), absent from v9.16.48 / v9.18.24.
+
+## Limit changes (subset, for quick reference)
+
+| id | before | after | first stable | commits |
+|---|---|---|---|---|
+| l01-nsec3-max-iterations-150 | max iterations 150/500/2500 depending on smallest DNSKEY size | max iterations 150 fixed | v9.16.16 (2021-05-12) | 9324d2d295, 9170275738, 91a7f94a66 |
+| l02-nsec3-max-iterations-50 | DNS_NSEC3_MAXITERATIONS 150 | DNS_NSEC3_MAXITERATIONS 50 | v9.20.0 (2024-07-08) | ff4201e388, 75e0d394dd |
+| l03-keytrap-validation-limits-9.16-9.18 | validator retried all key/signature combinations | fail on first validation failure | v9.18.24 (2024-02-11) | 0add293477, 6a65a42528, c12608ca93 |
+| l04-max-validations-per-fetch | unbounded (per-fetch) | max-validations-per-fetch 16; max-validation-failures-per-fetch 1 | v9.20.0 (2024-07-08) | 15096aefdf |
+
+## News / changelog edits after release
+
+| id | what | commits | first tag with edit |
+|---|---|---|---|
+| n01 | CHANGES entry 2405 added retroactively: dnssec-validation default was changed to "yes" in 9.5.0-P1 but the CHANGES line was omitted at the time | cf5ea2dff6, e43b095921, d406c6833f | v9.5.0-P2 |
+| n02 | CHANGES entry 6322 (KeyTrap, CVE-2023-50387) edited on 2024-02-14 to also name CVE-2023-50868; commit message: "CVE-2023-50868 does not have a dedicated fix in BIND 9" | ec1afa639f, 6a40a5eada, 2fd20bbaf5 | v9.16.50 |
+| n03 | Release note for CVE-2023-50868 retroactively added to the already released 9.19.21 notes | 01ac86f90b | v9.19.22 |
 
 ## CVE fixes
 
-| CVE | NVD published | fix tag (first tag containing fix) | fix date | first stable tag | latency days | fix commits | note |
-|---|---|---|---|---|---|---|---|
+184 CVEs are attributed to BIND by the inventory. 126 have a first stable tag; 31 are not BIND 9 stable-release issues; 27 are not found. `first stable tag` = earliest stable non-Windows tag (by tag commit timestamp) that (a) contains a commit naming the CVE or a cherry-pick sibling of one, (b) has the CVE id in CHANGES / release notes, or (c) carries a kept stage-2 changelog entry naming it; same-day tags on other branches are in the `same day` column. `approx` = version taken from the NVD text (tag exists, fix commit not located). Latency = tag date minus NVD published date (negative = fixed first). `inv` = the inventory `fix_release` when it differs.
 
-0 CVE rows; 0 with a fix tag.
+```
+C=out/software_repos/bind9.git
+git -C $C show <tag>:CHANGES | grep -n -F <CVE-id>       # changelog basis (or the path in the JSON `verify` field)
+git -C $C tag --contains <commit> | grep -x <tag>          # commit basis
+```
+
+| CVE | NVD published | first stable tag | fix date | latency d | basis | same day | inv |
+|---|---|---|---|---|---|---|---|
+| CVE-2002-0400 | 2002-06-18 | v9.2.1 | 2002-04-23 | -56 | approx (NVD) |  |  |
+| CVE-2006-0987 | 2006-03-03 | v9.4.1-P1 | 2007-07-09 | 493 | approx (NVD) |  |  |
+| CVE-2006-4095 | 2006-09-06 | v9.3.2-P1 | 2006-08-17 | -20 | approx (NVD) |  |  |
+| CVE-2006-4096 | 2006-09-06 | v9.3.2-P1 | 2006-08-17 | -20 | approx (NVD) |  |  |
+| CVE-2008-0122 | 2008-01-16 | v9.3.5 | 2008-04-03 | 78 | changelog |  | 9.4.3 |
+| CVE-2008-1447 | 2008-07-08 | v9.4.2-P1 | 2008-05-28 | -41 | approx (NVD) |  |  |
+| CVE-2009-0696 | 2009-07-29 | v9.4.3-P3 | 2009-07-28 | -1 | approx (NVD) |  |  |
+| CVE-2009-4022 | 2009-11-25 | v9.5.2-P1 | 2009-11-18 | -7 | approx (NVD) |  |  |
+| CVE-2010-0097 | 2010-01-22 | v9.6.1-P3 | 2010-01-07 | -15 | approx (NVD) |  |  |
+| CVE-2010-0290 | 2010-01-22 | v9.6.1-P3 | 2010-01-07 | -15 | approx (NVD) |  |  |
+| CVE-2010-0382 | 2010-01-22 | v9.4.3-P5 | 2010-01-07 | -15 | approx (NVD) |  |  |
+| CVE-2010-3613 | 2010-12-06 | v9.4-ESV-R4 | 2010-11-29 | -7 | changelog | v9.6-ESV-R3, v9.6.2-P3, v9.7.2-P3 |  |
+| CVE-2010-3614 | 2010-12-06 | v9.4-ESV-R4 | 2010-11-29 | -7 | changelog | v9.6-ESV-R3, v9.6.2-P3, v9.7.2-P3 |  |
+| CVE-2010-3615 | 2010-12-06 | v9.6-ESV-R3 | 2010-11-29 | -7 | changelog | v9.7.2-P3 |  |
+| CVE-2010-3762 | 2010-10-05 | v9.7.2-P2 | 2010-09-24 | -11 | approx (NVD) |  |  |
+| CVE-2011-1907 | 2011-05-09 | v9.8.0-P1 | 2011-04-27 | -12 | approx (NVD) |  |  |
+| CVE-2011-1910 | 2011-05-31 | v9.6-ESV-R4-P1 | 2011-05-27 | -4 | approx (NVD) |  |  |
+| CVE-2011-2464 | 2011-07-08 | v9.6-ESV-R4-P3 | 2011-06-21 | -17 | approx (NVD) |  |  |
+| CVE-2012-1667 | 2012-06-05 | v9.9.1-P1 | 2012-06-01 | -4 | approx (NVD) |  |  |
+| CVE-2012-3817 | 2012-07-25 | v9.8.3-P2 | 2012-07-02 | -23 | approx (NVD) |  |  |
+| CVE-2012-3868 | 2012-07-25 | v9.9.1-P2 | 2012-07-12 | -13 | approx (NVD) |  |  |
+| CVE-2012-4244 | 2012-09-14 | v9.6-ESV-R7-P3 | 2012-08-24 | -21 | approx (NVD) |  |  |
+| CVE-2012-5166 | 2012-10-10 | v9.6-ESV-R7-P4 | 2012-09-26 | -14 | approx (NVD) |  |  |
+| CVE-2012-5688 | 2012-12-06 | v9.9.2-P1 | 2012-10-26 | -41 | approx (NVD) |  |  |
+| CVE-2012-5689 | 2013-01-25 | v9.9.3 | 2013-05-17 | 112 | changelog | v9.8.5 |  |
+| CVE-2013-2266 | 2013-03-28 | v9.9.2-P2 | 2013-03-06 | -22 | approx (NVD) |  |  |
+| CVE-2013-3919 | 2013-06-06 | v9.9.3-P1 | 2013-06-04 | -2 | approx (NVD) |  |  |
+| CVE-2013-4854 | 2013-07-29 | v9.8.5-P2 | 2013-07-17 | -12 | changelog | v9.9.3-P2 | 9.8.6 |
+| CVE-2013-6230 | 2013-11-08 | v9.6-ESV-R10-P1 | 2013-10-16 | -23 | approx (NVD) |  |  |
+| CVE-2014-0591 | 2014-01-14 | v9.9.4-P2 | 2013-12-20 | -25 | approx (NVD) |  |  |
+| CVE-2014-3214 | 2014-05-09 | v9.10.0-P2 | 2014-05-27 | 18 | changelog |  |  |
+| CVE-2014-3859 | 2014-06-13 | v9.10.0-P2 | 2014-05-27 | -17 | changelog |  | 9.8.8 |
+| CVE-2014-8500 | 2014-12-11 | v9.10.1-P1 | 2014-11-20 | -21 | changelog | v9.9.6-P1 | 9.9.7 |
+| CVE-2014-8680 | 2014-12-11 | v9.10.1-P1 | 2014-11-20 | -21 | changelog |  |  |
+| CVE-2015-1349 | 2015-02-19 | v9.10.1-P2 | 2015-02-10 | -9 | changelog |  |  |
+| CVE-2015-4620 | 2015-07-08 | v9.9.7-P1 | 2015-06-17 | -21 | changelog | v9.10.2-P2 |  |
+| CVE-2015-5477 | 2015-07-29 | v9.9.7-P2 | 2015-07-14 | -15 | changelog | v9.10.2-P3 |  |
+| CVE-2015-5722 | 2015-09-05 | v9.10.2-P4 | 2015-08-15 | -21 | changelog | v9.9.7-P3 |  |
+| CVE-2015-5986 | 2015-09-05 | v9.10.2-P4 | 2015-08-15 | -21 | changelog | v9.9.7-P3 |  |
+| CVE-2015-8000 | 2015-12-16 | v9.10.3-P2 | 2015-12-06 | -10 | changelog | v9.9.8-P2 |  |
+| CVE-2015-8461 | 2015-12-16 | v9.10.3-P2 | 2015-12-06 | -10 | changelog | v9.9.8-P2 |  |
+| CVE-2015-8704 | 2016-01-20 | v9.9.8-P3 | 2016-01-06 | -14 | changelog | v9.10.3-P3 |  |
+| CVE-2015-8705 | 2016-01-20 | v9.10.3-P3 | 2016-01-06 | -14 | changelog |  | 9.11.0 |
+| CVE-2016-1285 | 2016-03-09 | v9.10.3-P4 | 2016-02-29 | -9 | changelog | v9.9.8-P4 |  |
+| CVE-2016-1286 | 2016-03-09 | v9.10.3-P4 | 2016-02-29 | -9 | changelog | v9.9.8-P4 |  |
+| CVE-2016-2088 | 2016-03-09 | v9.10.3-P4 | 2016-02-29 | -9 | changelog |  | 9.11.0 |
+| CVE-2016-2775 | 2016-07-19 | v9.9.9-P2 | 2016-07-13 | -6 | changelog | v9.10.4-P2 | 9.9.10 |
+| CVE-2016-2776 | 2016-09-28 | v9.9.9-P3 | 2016-09-09 | -19 | changelog |  |  |
+| CVE-2016-6170 | 2016-07-06 | v9.9.10 | 2017-04-14 | 282 | changelog | v9.10.5, v9.11.1 | 9.10.5 |
+| CVE-2016-8864 | 2016-11-02 | v9.10.4-P4 | 2016-10-21 | -12 | changelog | v9.11.0-P1, v9.9.9-P4 |  |
+| CVE-2016-9131 | 2017-01-12 | v9.9.9-P5 | 2016-12-11 | -32 | changelog | v9.10.4-P5, v9.11.0-P2 |  |
+| CVE-2016-9147 | 2017-01-12 | v9.9.9-P5 | 2016-12-11 | -32 | changelog | v9.10.4-P5, v9.11.0-P2 |  |
+| CVE-2016-9444 | 2017-01-12 | v9.9.9-P5 | 2016-12-11 | -32 | changelog | v9.10.4-P5, v9.11.0-P2 | 9.9.10 |
+| CVE-2016-9778 | 2019-01-16 | v9.9.9-P5 | 2016-12-11 | -766 | changelog | v9.10.4-P5, v9.11.0-P2 |  |
+| CVE-2017-3135 | 2019-01-16 | v9.11.0-P3 | 2017-01-31 | -715 | changelog | v9.10.4-P6, v9.9.9-P6 |  |
+| CVE-2017-3136 | 2019-01-16 | v9.9.9-P8 | 2017-03-29 | -658 | changelog | v9.10.4-P8, v9.11.0-P5 | 9.12.0 |
+| CVE-2017-3137 | 2019-01-16 | v9.9.9-P8 | 2017-03-29 | -658 | changelog | v9.10.4-P8, v9.11.0-P5 |  |
+| CVE-2017-3138 | 2019-01-16 | v9.9.9-P8 | 2017-03-29 | -658 | changelog | v9.10.4-P8, v9.11.0-P5 |  |
+| CVE-2017-3140 | 2019-01-16 | v9.9.10-P1 | 2017-05-31 | -595 | changelog | v9.10.5-P1, v9.11.1-P1 |  |
+| CVE-2017-3141 | 2019-01-16 | v9.9.10-P1 | 2017-05-31 | -595 | changelog | v9.10.5-P1, v9.11.1-P1 |  |
+| CVE-2017-3142 | 2019-01-16 | v9.11.1-P2 | 2017-06-28 | -567 | changelog | v9.10.5-P2, v9.9.10-P2 |  |
+| CVE-2017-3143 | 2019-01-16 | v9.11.1-P2 | 2017-06-28 | -567 | changelog | v9.10.5-P2, v9.9.10-P2 |  |
+| CVE-2017-3145 | 2019-01-16 | v9.11.2-P1 | 2018-01-04 | -377 | changelog | v9.10.6-P1, v9.9.11-P1 |  |
+| CVE-2018-5736 | 2019-01-16 | v9.12.1-P2 | 2018-05-16 | -245 | changelog |  |  |
+| CVE-2018-5737 | 2019-01-16 | v9.12.1-P2 | 2018-05-16 | -245 | changelog |  | 9.13.0 |
+| CVE-2018-5738 | 2019-01-16 | v9.9.13 | 2018-07-03 | -197 | changelog | v9.10.8, v9.11.4, v9.12.2 |  |
+| CVE-2018-5740 | 2019-01-16 | v9.12.2-P1 | 2018-07-24 | -176 | changelog | v9.11.4-P1 | 9.11.5 |
+| CVE-2018-5741 | 2019-01-16 | v9.11.5 | 2018-10-06 | -102 | approx (NVD) |  |  |
+| CVE-2018-5743 | 2019-10-09 | v9.12.4-P1 | 2019-04-06 | -186 | changelog | v9.11.6-P1, v9.14.1 |  |
+| CVE-2018-5744 | 2019-10-09 | v9.12.3-P4 | 2019-02-04 | -247 | changelog |  |  |
+| CVE-2018-5745 | 2019-10-09 | v9.12.3-P4 | 2019-02-04 | -247 | changelog |  |  |
+| CVE-2019-6465 | 2019-10-09 | v9.12.3-P4 | 2019-02-04 | -247 | changelog |  |  |
+| CVE-2019-6467 | 2019-10-09 | v9.12.4-P1 | 2019-04-06 | -186 | changelog | v9.14.1 |  |
+| CVE-2019-6471 | 2019-10-09 | v9.14.3 | 2019-06-04 | -127 | changelog | v9.11.8 |  |
+| CVE-2019-6475 | 2019-10-17 | v9.14.7 | 2019-10-02 | -15 | changelog |  |  |
+| CVE-2019-6476 | 2019-10-17 | v9.14.7 | 2019-10-02 | -15 | changelog |  |  |
+| CVE-2019-6477 | 2019-11-26 | v9.14.8 | 2019-11-06 | -20 | changelog | v9.11.13 | 9.15.7 |
+| CVE-2020-8616 | 2020-05-19 | v9.16.3 | 2020-05-06 | -13 | changelog | v9.11.19, v9.14.12 | 9.11.20 |
+| CVE-2020-8617 | 2020-05-19 | v9.16.3 | 2020-05-06 | -13 | changelog | v9.11.19, v9.14.12 | 9.11.20 |
+| CVE-2020-8618 | 2020-06-17 | v9.16.4 | 2020-06-10 | -7 | changelog |  | 9.16.5 |
+| CVE-2020-8619 | 2020-06-17 | v9.11.20 | 2020-06-10 | -7 | changelog | v9.16.4 | 9.11.21 |
+| CVE-2020-8620 | 2020-08-21 | v9.16.6 | 2020-08-10 | -11 | changelog |  |  |
+| CVE-2020-8621 | 2020-08-21 | v9.16.6 | 2020-08-10 | -11 | changelog |  |  |
+| CVE-2020-8622 | 2020-08-21 | v9.11.22 | 2020-08-06 | -15 | changelog |  |  |
+| CVE-2020-8623 | 2020-08-21 | v9.11.22 | 2020-08-06 | -15 | changelog |  |  |
+| CVE-2020-8624 | 2020-08-21 | v9.11.22 | 2020-08-06 | -15 | changelog |  |  |
+| CVE-2020-8625 | 2021-02-17 | v9.16.12 | 2021-02-04 | -13 | changelog | v9.11.28 | 9.11.29 |
+| CVE-2021-25214 | 2021-04-29 | v9.16.15 | 2021-04-19 | -10 | changelog | v9.11.31 | 9.11.32 |
+| CVE-2021-25215 | 2021-04-29 | v9.16.15 | 2021-04-19 | -10 | changelog | v9.11.31 | 9.11.32 |
+| CVE-2021-25216 | 2021-04-29 | v9.16.15 | 2021-04-19 | -10 | changelog | v9.11.31 | 9.11.32 |
+| CVE-2021-25218 | 2021-08-18 | v9.16.20 | 2021-08-10 | -8 | changelog |  | 9.17.18 |
+| CVE-2021-25219 | 2021-10-27 | v9.11.36 | 2021-10-11 | -16 | changelog |  | 9.11.37 |
+| CVE-2021-25220 | 2022-03-23 | v9.16.27 | 2022-03-07 | -16 | changelog | v9.11.37, v9.18.1 | 9.16.28 |
+| CVE-2022-0396 | 2022-03-23 | v9.16.27 | 2022-03-07 | -16 | changelog | v9.18.1 | 9.16.28 |
+| CVE-2022-0635 | 2022-03-23 | v9.18.1 | 2022-03-07 | -16 | changelog |  | 9.18.2 |
+| CVE-2022-0667 | 2022-03-22 | v9.18.1 | 2022-03-07 | -15 | changelog |  | 9.18.2 |
+| CVE-2022-1183 | 2022-05-19 | v9.18.3 | 2022-05-09 | -10 | changelog |  |  |
+| CVE-2022-2795 | 2022-09-21 | v9.18.7 | 2022-09-08 | -13 | changelog | v9.16.33 |  |
+| CVE-2022-2881 | 2022-09-21 | v9.18.7 | 2022-09-08 | -13 | changelog |  |  |
+| CVE-2022-2906 | 2022-09-21 | v9.18.7 | 2022-09-08 | -13 | changelog |  |  |
+| CVE-2022-3080 | 2022-09-21 | v9.18.7 | 2022-09-08 | -13 | changelog | v9.16.33 | 9.16.33 |
+| CVE-2022-3094 | 2023-01-26 | v9.18.11 | 2023-01-12 | -14 | changelog | v9.16.37 | 9.16.37 |
+| CVE-2022-3736 | 2023-01-26 | v9.18.11 | 2023-01-12 | -14 | changelog | v9.16.37 | 9.16.37 |
+| CVE-2022-38177 | 2022-09-21 | v9.16.33 | 2022-09-08 | -13 | changelog |  |  |
+| CVE-2022-38178 | 2022-09-21 | v9.18.7 | 2022-09-08 | -13 | changelog | v9.16.33 | 9.16.33 |
+| CVE-2022-3924 | 2023-01-26 | v9.18.11 | 2023-01-12 | -14 | changelog | v9.16.37 | 9.16.39 |
+| CVE-2023-2828 | 2023-06-21 | v9.18.16 | 2023-06-09 | -12 | changelog | v9.16.42 |  |
+| CVE-2023-2911 | 2023-06-21 | v9.18.16 | 2023-06-09 | -12 | changelog | v9.16.42 | 9.16.42 |
+| CVE-2023-3341 | 2023-09-20 | v9.16.44 | 2023-09-08 | -12 | changelog |  | 9.18.20 |
+| CVE-2023-4236 | 2023-09-20 | v9.18.19 | 2023-09-11 | -9 | changelog |  |  |
+| CVE-2023-4408 | 2024-02-13 | v9.18.24 | 2024-02-11 | -2 | changelog | v9.16.48 | 9.16.48 |
+| CVE-2023-50387 | 2024-02-14 | v9.18.24 | 2024-02-11 | -3 | changelog | v9.16.48 | 9.16.48 |
+| CVE-2023-50868 | 2024-02-14 | v9.18.24 | 2024-02-11 | -3 | shared fix | v9.16.48 | 9.16.50 |
+| CVE-2023-5517 | 2024-02-13 | v9.18.24 | 2024-02-11 | -2 | changelog | v9.16.48 | 9.16.48 |
+| CVE-2023-5679 | 2024-02-13 | v9.18.24 | 2024-02-11 | -2 | changelog | v9.16.48 | 9.16.48 |
+| CVE-2023-6516 | 2024-02-13 | v9.16.48 | 2024-02-11 | -2 | changelog |  |  |
+| CVE-2026-1519 | 2026-03-25 | v9.20.21 | 2026-03-13 | -12 | changelog | v9.18.47 | 9.18.47 |
+| CVE-2026-3039 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog | v9.18.49 |  |
+| CVE-2026-3104 | 2026-03-25 | v9.20.21 | 2026-03-13 | -12 | changelog |  |  |
+| CVE-2026-3119 | 2026-03-25 | v9.20.21 | 2026-03-13 | -12 | changelog |  |  |
+| CVE-2026-3591 | 2026-03-25 | v9.20.21 | 2026-03-13 | -12 | changelog |  |  |
+| CVE-2026-3592 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog | v9.18.49 |  |
+| CVE-2026-3593 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog |  | 9.21.22 |
+| CVE-2026-5946 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog | v9.18.49 | 9.20.26 |
+| CVE-2026-5947 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog |  | 9.21.22 |
+| CVE-2026-5950 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog | v9.18.49 |  |
+
+### CVEs without a tag
+
+| CVE | status | reason |
+|---|---|---|
+| CVE-1999-0009 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-1999-0010 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-1999-0011 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-1999-0024 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-1999-0184 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-1999-0833 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-1999-0837 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-1999-0848 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-1999-0849 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-1999-1499 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2000-0335 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2000-0887 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2000-0888 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2000-1029 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2001-0010 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2001-0011 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2001-0012 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2001-0013 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2001-0497 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2002-0029 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2002-0651 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2002-0684 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2002-1219 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2002-1220 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2002-1221 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2002-2211 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2002-2212 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2002-2213 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2003-0914 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2005-0033 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2005-0034 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2006-0527 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2006-2073 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2007-0493 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2007-0494 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2007-2241 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2007-2925 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2007-2926 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2007-2930 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2008-4163 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2009-0025 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2009-0265 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2010-0213 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2010-0218 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2011-0414 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2011-2465 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2011-4313 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2012-1033 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2013-5661 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2016-1284 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2016-2848 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2018-5734 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2018-5742 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2019-6468 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2019-6469 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2022-3488 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2023-2829 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
+| CVE-2023-5680 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
 
 ## Release list
 
@@ -1285,4 +1566,15 @@ git -C $C show <commit> -- <path>                                   # default va
 
 ## Gaps
 
-* STAGE 1 ONLY: default_changes, cve_fixes, news_edits, changelog entries pending
+* CVE fix tag NOT FOUND for 27 inventory CVEs (no fix commit in inventory, no CVE id in CHANGES/notes at any tag, no fixed version in NVD text): CVE-1999-0024, CVE-1999-0184, CVE-1999-0837, CVE-1999-0848, CVE-1999-0849, CVE-2000-1029, CVE-2001-0497, CVE-2002-0029, CVE-2002-0684, CVE-2002-1219, CVE-2005-0034, CVE-2006-2073, CVE-2007-0493, CVE-2007-0494, CVE-2007-2241, CVE-2007-2925, CVE-2007-2926, CVE-2009-0025, CVE-2009-0265, CVE-2010-0213, CVE-2010-0218, CVE-2011-0414, CVE-2011-2465, CVE-2011-4313, CVE-2012-1033, CVE-2013-5661, CVE-2016-2848
+* 31 inventory CVEs are not BIND 9 stable-release issues (BIND 4/8, glibc/libbind or other vendors, Windows -W rebuilds, Supported Preview -S only, Red Hat builds): CVE-1999-0009, CVE-1999-0010, CVE-1999-0011, CVE-1999-0833, CVE-1999-1499, CVE-2000-0335, CVE-2000-0887, CVE-2000-0888, CVE-2001-0010, CVE-2001-0011, CVE-2001-0012, CVE-2001-0013, CVE-2002-0651, CVE-2002-1220, CVE-2002-1221, CVE-2002-2211, CVE-2002-2212, CVE-2002-2213, CVE-2003-0914, CVE-2005-0033, CVE-2006-0527, CVE-2007-2930, CVE-2008-4163, CVE-2016-1284, CVE-2018-5734, CVE-2018-5742, CVE-2019-6468, CVE-2019-6469, CVE-2022-3488, CVE-2023-2829, CVE-2023-5680 - status not-applicable-or-not-bind9-release, no tag emitted.
+* 25 CVE fix tags are attribution:approximate (taken from the NVD description 'before X' / 'prior to X'; the tag exists in the clone and the top [security] entries of that tag's CHANGES are stored, but the fixing commit was not located): CVE-2002-0400, CVE-2006-0987, CVE-2006-4095, CVE-2006-4096, CVE-2008-1447, CVE-2009-0696, CVE-2009-4022, CVE-2010-0097, CVE-2010-0290, CVE-2010-0382, CVE-2010-3762, CVE-2011-1907, CVE-2011-1910, CVE-2011-2464, CVE-2012-1667, CVE-2012-3817, CVE-2012-3868, CVE-2012-4244, CVE-2012-5166, CVE-2012-5688, CVE-2013-2266, CVE-2013-3919, CVE-2013-6230, CVE-2014-0591, CVE-2018-5741
+* cds/cdnskey: the commit that first made dnssec-policy publish CDS/CDNSKEY (9.16.0 keymgr code) was not located; only the later cds-digest-type / cdnskey options (d22, value_changed=false) are recorded. So no default_change row asserts a CDS/CDNSKEY default change.
+* Introduction of the first (key-size dependent, 150/500/2500) NSEC3 iteration limit in 2009 (CHANGES around 9.6.1/9.7.0) was not located; l01 records the change from that scheme to a fixed 150 (2021).
+* Stage-2 changelog_entries[].commits arrays are empty for all 1,383 kept entries (stage 2 attributed entries to tags, not commits); commit evidence exists only on default_changes rows and cve_fixes rows produced here.
+* cvs2git-era tags (<= 2012-02) make git tag --contains unreliable (e.g. v9.0.1, v9.4.3-P3, v9.6.1-P1 'contain' 2009-2011 commits). Defaults d01-d04 were therefore verified by tree content at the tag; pre-2012-03 commit containment is not used for cve_fixes.
+* Defaults changed after v9.20.0 (9.20.x, 9.21 development) were only sampled through the kept changelog entries (e.g. dnssec-policy key tag range handling, dnssec-keygen option removals, RSASHA1/DS-SHA1 deprecation warnings 2025); no additional default_changes rows were verified for them. 9.21 development releases are stable:false.
+* max-* limit options not tied to DNSSEC validation (max-records-per-type, max-rrtypes-per-name, max-recursion-queries) are not recorded as limit_changed rows; CVE-2026-xxxx validation-limit fixes (e.g. 9.20.29 key-tag limit) appear only as cve-fix entries.
+* Effect of 'dnssec-validation yes' requiring an explicit trust-anchors statement (GL #4373, 9.19.22 -> 9.20.0) and of removal of managed-keys/trusted-keys (9.21.4) is only in the kept changelog entries, not as default_changes rows.
+* 43 cve_fixes rows name an earlier tag than the inventory fix_release (see differs_from_inventory); the inventory generally names the next master release, the branch/point release shipped first. CVE-2023-50868 inventory value v9.16.50 is the CVE-id mention commit, not the fix (see news_edits n02).
+* Embargo effect: for several security releases the tag commit date precedes NVD/ISC public disclosure by days to weeks (negative latency); the tag commit date is used as instructed and is not the public announcement date.
