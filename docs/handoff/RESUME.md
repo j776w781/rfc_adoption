@@ -111,6 +111,16 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
    apply their corrections.
 6. Phase 2 `01_program_timelines.md` index, then Phase 4 onward per the task list.
 
+## State at e0cb29de (2026-09-29)
+
+- Verified and corrected (6/8): kresd, knot, nsd, opendnssec, unbound, bind9 (`verify/bind9.md`).
+- pdns-auth: stages 3-4 committed 30d4582f; Phase 3 verifier (Sonnet) was running.
+- pdns-rec: stages 3-4 builder (Sonnet) was running; spawn its verifier after it lands.
+- Held until no builder reads `cve_inventory.json`: bind9 43 inventory disagreements
+  (timeline tags now UTC-ordered, see bind9.json `differs_from_inventory`) and pdns-auth five.
+- Then regenerate `01_program_timelines.md` (stale for bind9/pdns-auth/pdns-rec) and
+  `cve_crossref` once; Phase 4 onward.
+
 ## To resume
 
 1. `git checkout software-timelines-v2`; list `data/software/timelines/` and `docs/handoff/`.
