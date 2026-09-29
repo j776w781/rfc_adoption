@@ -147,12 +147,11 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - 9855efd0 prevalence metrics: mean daily share (domain_days), 03 doc regenerated.
 - 6e7f3ff6 strict panel instead of summed RIRs (cve_adoption_crossref, summary deck); downstream
   JSON, decks, rfc charts regenerated.
-- Phase 7 revision committed (4a584dc8); old docs marked superseded (ac547268).
-- RUNNING in parallel: re-verification of the Phase 7 revision -> `verify/phase7_revision.md`;
-  Phase 8 notebook agent (`08_phase8_brief.md`) -> `notebooks/build_software_vs_adoption_notebook.py`,
-  `notebooks/dnssec_software_vs_adoption.ipynb`, `reporting/charts/software_vs_adoption/`.
-  Apply revision corrections, rebuild the notebook if any quoted number moved, verify the notebook
-  (fresh agent), commit, then push (the owner asked for pushes earlier in Arc A; confirm first).
+- Phase 7 final after two verifications (998c35db); old docs marked superseded (ac547268).
+- Phase 8 notebook committed unverified (c44883cc; 117 cells, 52 figures, 0 errors; rebuild with
+  `python notebooks/build_software_vs_adoption_notebook.py`). Verifier was running ->
+  `verify/phase8_notebook.md`. Apply its corrections in the builder, rebuild, commit. Then ask the
+  owner before pushing `software-timelines-v2` (nothing pushed yet).
 
 ## To resume
 
