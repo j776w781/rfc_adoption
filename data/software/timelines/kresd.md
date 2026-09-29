@@ -2,7 +2,7 @@
 
 Generated 2026-09-28 from `out/software_repos/kresd.git` (bare clone), `data/software/cve_inventory.json` and `out/analysis/cve_crossref.json`. Machine-readable twin: `data/software/timelines/kresd.json`.
 
-**Releases:** 98 tags (84 stable, 14 pre-release/early-access), 2015-10-08 .. 2026-08-05. Changelog: `ChangeLog` (v1.0.0-beta1..v1.1.0), `NEWS` (v1.1.1..v6.4.2, 1.3.0-rc1). Release date = commit date of `<tag>^{commit}`.
+**Releases:** 98 tags (89 stable, 9 pre-release/early-access), 2015-10-08 .. 2026-08-05. Changelog: `ChangeLog` (v1.0.0-beta1..v1.1.0), `NEWS` (v1.1.1..v6.4.2, 1.3.0-rc1). Release date = commit date of `<tag>^{commit}`.
 
 5.7.x (2023-08 .. 2026-08) and 6.0.x+ (2023-05 ..) are parallel lines. v5.7.1 is an ancestor of v6.0.6 (KeyTrap/NSEC3 commits shared); v5.7.4+ are not ancestors of any 6.x tag, so 6.x entries after 6.0.6 carry their own commits. 6.x NEWS files also embed the 5.x sections; entries are attributed by section header, not by file.
 
@@ -64,10 +64,10 @@ git -C $C show <commit> --stat                        # what it changed
 | 5.3.1 | 2021-03-31 | NSEC3 iteration cap: zones above 150 iterations treated as insecure | no cap; any iteration count validated | KR_NSEC3_MAX_ITERATIONS 150 (lib/dnssec/nsec3.h@v5.3.1:19); NSEC3 above the cap not cached, zone downgraded to insecure | yes | no | 7107faebc7, 5922eecd46, 21e50fca15 | exact |
 | 5.5.0 | 2022-03-15 | SHA-1 DS digests ignored when a stronger digest is present | every DS digest in the set tried | SHA-1 DS skipped if the DS RRset also has a supported non-SHA-1 digest (lib/dnssec/signature.c) | yes | no | d4e95821ae | exact |
 | 5.6.0 | 2023-01-26 | policy.STUB: no aggressive denial proofs, no +dnssec copied upstream | STUB answers could be synthesised from cached NSEC/NSEC3 and forwarded the client DO flag | STUB skips RFC 8198 synthesis and does not copy +dnssec from client | yes | no | 24e912e0b0, fab10d1ea0 | exact |
-| 5.7.1 | 2024-02-13 | NSEC3 limits tightened (CVE-2023-50868): iterations 150 -> 50, salt priced in, >8 NSEC3 RRs refused | KR_NSEC3_MAX_ITERATIONS 150; no salt-length limit; unlimited NSEC3 RRs per answer | KR_NSEC3_MAX_ITERATIONS 50 with kr_nsec3_price(iterations, salt_len) (lib/dnssec/nsec3.h@v5.7.1); answers with >8 NSEC3 in AUTHORITY are bogus; SHA-1 work in cache/proofs bounded | yes | no | e966b7fdb1, eccb8e278c, b5051ac26f, 24699e9f20, a05cf1d379 | exact |
+| 5.7.1 | 2024-02-13 | NSEC3 limits tightened (CVE-2023-50868): iterations 150 -> 50, salt priced in, >8 NSEC3 RRs refused | KR_NSEC3_MAX_ITERATIONS 150; no salt-length limit; unlimited NSEC3 RRs per answer | kr_nsec3_limited() MAX_ITERATIONS 50 vs kr_nsec3_price (macro removed at v5.7.1) with kr_nsec3_price(iterations, salt_len) (lib/dnssec/nsec3.h@v5.7.1); answers with >8 NSEC3 in AUTHORITY are bogus; SHA-1 work in cache/proofs bounded | yes | no | e966b7fdb1, eccb8e278c, b5051ac26f, 24699e9f20, a05cf1d379 | exact |
 | 5.7.1 | 2024-02-13 | per-request crypto-validation budget (CVE-2023-50387 KeyTrap) | unbounded signature/key checks per answer | vld_limit_crypto_remains budget per request; exceeding it fails validation (E2BIG) without retry | yes | no | cc5051b444, feb65eb97b | exact |
 | 5.7.4 | 2024-07-23 | built-in root trust anchors gain KSK-2024 (key id 38696) | etc/root.keys: KSK-2017 (20326) only | etc/root.keys: KSK-2017 + KSK-2024 (38696) | no | no | 62b3b1e931 | exact |
-| 6.0.6 | 2024-02-13 | NSEC3 limits tightened (CVE-2023-50868): iterations 150 -> 50, salt priced in, >8 NSEC3 RRs refused | KR_NSEC3_MAX_ITERATIONS 150; no salt-length limit; unlimited NSEC3 RRs per answer | KR_NSEC3_MAX_ITERATIONS 50 with kr_nsec3_price(iterations, salt_len) (lib/dnssec/nsec3.h@v5.7.1); answers with >8 NSEC3 in AUTHORITY are bogus; SHA-1 work in cache/proofs bounded | yes | no | e966b7fdb1, eccb8e278c, b5051ac26f, 24699e9f20, a05cf1d379 | exact |
+| 6.0.6 | 2024-02-13 | NSEC3 limits tightened (CVE-2023-50868): iterations 150 -> 50, salt priced in, >8 NSEC3 RRs refused | KR_NSEC3_MAX_ITERATIONS 150; no salt-length limit; unlimited NSEC3 RRs per answer | kr_nsec3_limited() MAX_ITERATIONS 50 vs kr_nsec3_price (macro removed at v5.7.1) with kr_nsec3_price(iterations, salt_len) (lib/dnssec/nsec3.h@v5.7.1); answers with >8 NSEC3 in AUTHORITY are bogus; SHA-1 work in cache/proofs bounded | yes | no | e966b7fdb1, eccb8e278c, b5051ac26f, 24699e9f20, a05cf1d379 | exact |
 | 6.0.6 | 2024-02-13 | per-request crypto-validation budget (CVE-2023-50387 KeyTrap) | unbounded signature/key checks per answer | vld_limit_crypto_remains budget per request; exceeding it fails validation (E2BIG) without retry | yes | no | cc5051b444, feb65eb97b | exact |
 | 6.0.8 | 2024-07-23 | built-in root trust anchors gain KSK-2024 (key id 38696) | etc/root.keys: KSK-2017 (20326) only | etc/root.keys: KSK-2017 + KSK-2024 (38696) | no | no | 62b3b1e931 | exact |
 
@@ -85,7 +85,7 @@ git -C $C show <commit> --stat                        # what it changed
 | CVE-2019-19331 | 2019-12-16 | v4.3.0 | 2019-12-04 | -12 | no | edb8ffef7f, 204960369b, 4fbd5baf3c |  |
 | CVE-2020-12667 | 2020-05-19 | v5.1.1 | 2020-05-19 | 0 | no | ba7b89db78, 54f05e4d7b |  |
 | CVE-2021-40083 | 2021-08-25 | v5.3.2 | 2021-05-05 | -112 | yes | 97ec93e178 | inventory says fix_release 5.4.2 because the NEWS commit c360ef30 that added the CVE id landed in v5.4.2; the code fix 97ec93e1 is in v5.3.2 (NEWS 5.3.2: "validator: fix 5.3.1 regression on over-limit NSEC3 edge case (!1169)") |
-| CVE-2022-32983 | 2022-06-20 | - | - | - | no | 097339c188 | no code fix in the clone; the only related commit is the docs warning 097339c1 "policy docs: warn about filters and forwarding" (2022-01-11, first in v5.5.0), which predates NVD publication. NVD refs a GitHub hash (ccb9d9794db5) absent from this clone. |
+| CVE-2022-32983 | 2022-06-20 | - | - | - | no | 097339c188 | no code fix in the clone; the only related commit is the docs warning 097339c1 "policy docs: warn about filters and forwarding" (2022-01-11, first in v5.5.0), which predates NVD publication. NVD refs a GitHub hash ccb9d9794db5 present in clone, untagged, patch-identical to 097339c1. |
 | CVE-2022-40188 | 2022-09-23 | v5.5.3 | 2022-09-21 | -2 | no | f6577a20e4 | inventory sha 817586f8 is a later duplicate of f6577a20 not contained in any tag |
 | CVE-2023-26249 | 2023-02-21 | v5.6.0 | 2023-01-26 | -26 | no | 3e28a8a644, a9528e334b | CVE id never appears in NEWS; mapped via NVD description ("hundred TCP connection attempts") to NEWS 5.6.0 Security entry (!1380) |
 | CVE-2023-46317 | 2023-10-22 | v5.7.0 | 2023-08-22 | -61 | no | 49876a99ba |  |
@@ -231,6 +231,10 @@ Negative latency = fix released before NVD publication (coordinated disclosure o
 | 6.4.0 | v6.4.0 | 2026-06-17 | yes | 4 | 0 |
 | 6.4.1 | v6.4.1 | 2026-07-22 | yes | 6 | 3 |
 | 6.4.2 | v6.4.2 | 2026-08-05 | yes | 4 | 0 |
+
+## Verification
+
+Phase 3 adversarial check: **PASS WITH CORRECTIONS** (220 checks, 8 failed, 5 corrections applied 2026-09-29). Report: `docs/handoff/verify/kresd.md`.
 
 ## Gaps
 
