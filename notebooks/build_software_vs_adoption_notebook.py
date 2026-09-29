@@ -548,6 +548,71 @@ def power_facts():
 PW_ONE, PW_ALL = power_facts()
 
 
+def power_facts_tab(tab):
+    rows_ = pd.DataFrame((tab or {}).get("rows", []))
+    one = {}
+    if len(rows_) and {"series", "step_pp", "above_band"} <= set(rows_.columns):
+        for ser, g_ in rows_.groupby("series", sort=False):
+            hit = g_[g_.above_band.astype(bool) & (g_.step_pp > 0)].step_pp
+            one[ser] = None if hit.empty else float(hit.min())
+    return rows_, one, dict((tab or {}).get("smallest_detectable_step_pp", {}) or {})
+
+
+PPOWER = jget(J7, "q2_default_change_events", "prevalence", "detection_power", default=None)
+PPW_ROWS, PPW_ONE, PPW_ALL = power_facts_tab(PPOWER)
+
+
+def _ppw(d):
+    return "; ".join(f"{pnice(k).replace('ds_prev', 'DS adoption')}: "
+                     f"{'not even ' + format(PPW_ROWS[PPW_ROWS.series == k].step_pp.max(), 'g') + ' pp' if v is None else f'{v:g} pp'}"
+                     for k, v in d.items())
+
+
+PPW_TEXT = (f"at one chosen event month the smallest step detected is {_ppw(PPW_ONE)}; across all possible event months "
+            f"{_ppw(PPW_ALL)}") if PPW_ONE or PPW_ALL else None
+
+# measurement breaks: months in which the measured population changed, not the signing (Phase 7 notes)
+BREAKS = jget(J7, "notes", "measurement_breaks", default=[]) or []
+BREAK_SRC = {b["source"] for b in BREAKS}
+
+
+def q4_txt():
+    sm = jget(J7, "q4_spikes", "prevalence", "summary", default={}) or {}
+    for k_ in ("spikes", "aligned_within_3m", "expected_aligned", "spikes_excluding_dip_reversals",
+               "aligned_excluding_dip_reversals"):
+        if sm.get(k_) is not None:
+            val("J7", "q4_spikes", "prevalence", "summary", k_)
+    t_ = (f"{fmtv(sm.get('aligned_within_3m'))} of {fmtv(sm.get('spikes'))} sudden jumps or drops in the number of "
+          f"signed domains follow a default change that could cause them within 3 months, against "
+          f"{fmtv(sm.get('expected_aligned'), '.1f')} expected")
+    if sm.get("spikes_excluding_dip_reversals") is not None:
+        t_ += (f"; leaving out the {fmtv(sm.get('dip_reversals'))} jumps that only undo a one-month dip, "
+               f"{fmtv(sm.get('aligned_excluding_dip_reversals'))} of {fmtv(sm.get('spikes_excluding_dip_reversals'))} "
+               f"against {fmtv(sm.get('expected_excluding_dip_reversals'), '.1f')}")
+    return t_ + (". No kind of jump lines up more often than chance." if not sm.get("cells_beating_chance") else ".")
+
+
+def breaks_text():
+    return "; ".join(f"{SRC.get(b['source'], b['source'])} {b['first']} to {b['last']}" for b in BREAKS)
+
+
+# unit-corrected headline counts (one test per program x corpus, or per row x corpus, on DS where possible)
+UQ1 = ("q1_per_program_releases", "prevalence", "aggregate", "unit_program_x_corpus")
+UQ2 = ("q2_default_change_events", "prevalence", "unit_row_x_corpus")
+
+
+def unit(path, key):
+    return jget(J7, *path, key, default=None)
+
+
+def unit_txt(u, outside_key):
+    if not u:
+        return NA
+    exp_ = u.get("expected", u.get("expected_discrete"))
+    return (f"{u[outside_key]} of {u['units']} against {exp_:.1f} expected (a chance of about "
+            f"{u['p_at_least_observed']:.2f})")
+
+
 def _pw(d):
     return "; ".join(f"{pnice(k)}: {'not even 10 pp' if v is None else f'{v:g} pp'}" for k, v in d.items())
 
@@ -656,32 +721,56 @@ _up = [f"{NAME[p_]} in {SRC[s_]}" for (p_, s_), v in _pairs.items() if v > 50]
 _dn = [f"{NAME[p_]} in {SRC[s_]}" for (p_, s_), v in _pairs.items() if v <= 50]
 _rate = (pe1c or pe1 or 0) / pn1 if pn1 else None
 _tail1 = binom_tail(po1, pn1, _rate) if (pn1 and po1 is not None and _rate) else None
+u1, u1g, u1m = unit(UQ1, "step12"), unit(UQ1, "step12_without_gov"), unit(UQ1, "step12_breaks_masked")
+u2, u2g, u2m = unit(UQ2, "step12"), unit(UQ2, "step12_without_gov"), unit(UQ2, "step12_breaks_masked")
+for k_ in ("units", "outside_90pct_null", "expected", "p_at_least_observed"):
+    val("J7", *UQ1, "step12", k_)
+for k_ in ("units", "outside_90pct_null"):
+    val("J7", *UQ1, "step12_breaks_masked", k_)
+for k_ in ("units", "outside_90_band", "expected_discrete", "p_at_least_observed", "in_expected_direction"):
+    val("J7", *UQ2, "step12", k_)
+for k_ in ("units", "outside_90_band"):
+    val("J7", *UQ2, "step12_breaks_masked", k_)
 adopt_txt = (
     f"**Two separate claims.** *Adoption* means what the team means by it: {ADOPT_DEF}. *Feature use* means which "
     "algorithms, DS digests and NSEC3 settings the zones that are already signed use. Software could move either one.\n\n"
     "**A. Adoption: does software change how many domains are signed?** (section 2b)\n\n"
-    f"1. **Releases.** {fmtv(po1)} of {fmtv(pn1)} tests are *unusual*, meaning the share of signed domains departs "
-    f"from its own trend after the program's releases by more than in 9 of 10 shifted release schedules, against "
-    f"{fmtv(pe1c if pe1c is not None else pe1, '.1f')} expected. "
-    + (f"Treated as independent tests, that many or more has a chance of about {_tail1:.2f}, which is borderline. "
-       if _tail1 is not None else "")
-    + (f"But they come from only {len(_pairs)} program-and-corpus pairs, because DS, DNSKEY and RRSIG move together, and "
-       f"the directions conflict: " + (f"after the releases of {_join(_up)}, more domains were signed than the trend "
-       "predicted" if _up else "") + ("; " if _up and _dn else "") + (f"after those of {_join(_dn)}, fewer" if _dn else "")
-       + ". " if len(_pairs) else "")
-    + (lambda u_: f"Counted once per program and corpus (DS only, a new count from Phase 7's rows), it is {u_[0]} of "
-       f"{u_[1]} against {u_[2]:.1f} expected, a chance of about {u_[3]:.2f}. " if u_ else "")(ds_unit(Q1P, _rate))
+    "Each result below is counted once per program and corpus (or per default change and corpus), on the DS series, "
+    "because DS, DNSKEY and RRSIG adoption move almost as one line.\n\n"
+    f"1. **Releases.** {unit_txt(u1, 'outside_90pct_null')} are *unusual*: the share of signed domains left its own "
+    "trend after the program's releases by more than after 9 of 10 shifted copies of the release schedule"
+    + (f" ({', '.join(u1['units_outside'])})" if u1 and u1.get("units_outside") else "") + ". "
+    + (f"Without .gov: {unit_txt(u1g, 'outside_90pct_null')}. " if u1g else "")
+    + (f"With the measurement-break months left out: {unit_txt(u1m, 'outside_90pct_null')}, and a different set "
+       f"({', '.join(u1m.get('units_outside', []))}). " if u1m else "")
+    + f"Counted per test instead, as a secondary view, it is {fmtv(po1)} of {fmtv(pn1)} against "
+    f"{fmtv(pe1c if pe1c is not None else pe1, '.1f')}, which looks borderline only because the three series repeat "
+    "one another. "
     + (f"BIND 9 is tested on its x.y.0 feature releases: {fmtv(pbo)} of {fmtv(pbn)} unusual." if pbn else "") + "\n"
-    f"2. **Default changes that could change whether zones get signed.** {fmtv(po2)} of {fmtv(pn2)} are unusual, "
-    f"against {fmtv(pe2d, '.1f')} expected, and only {fmtv(pod)} of them in the direction the change should push.\n"
-    f"3. **Sudden jumps.** {fmtv(p4a)} of {fmtv(p4n)} jumps in the number of signed domains follow such a default "
-    f"change within 3 months, against {fmtv(p4e, '.1f')} expected.\n\n"
-    + ("So neither releases nor default changes are shown to move how many domains are signed, within the power "
-       "limits of chart 1.\n\n" if not (_tail1 is not None and _tail1 < 0.01) else
-       "Releases are followed by unusual adoption moves more often than chance; see section 2b before reading "
-       "anything into it.\n\n")
+    f"2. **Default changes that could change whether zones get signed.** {unit_txt(u2, 'outside_90_band')}"
+    + (f", {u2['in_expected_direction']} of them in the direction the change should push" if u2 else "")
+    + (f" ({', '.join(u2['units_outside'])})" if u2 and u2.get("units_outside") else "") + ". "
+    + (f"Without .gov: {unit_txt(u2g, 'outside_90_band')}. " if u2g else "")
+    + (f"With the break months left out: {unit_txt(u2m, 'outside_90_band')}. " if u2m else "")
+    + f"Per test: {fmtv(po2)} of {fmtv(pn2)}.\n"
+    + f"3. **Sudden jumps.** {q4_txt()}\n\n"
+    + "So neither releases nor default changes are shown to move how many domains are signed, within the power "
+    "limits of chart 2. The largest month-to-month moves in these shares come from the measured list of zones "
+    f"changing ({breaks_text()}), not from domains being signed.\n\n"
     + "**B. Feature use: does software change which DNSSEC features signed zones use?**")
 say(adopt_txt)
+bs1 = ("q1_per_program_releases", "break_sensitivity_feature", "per_test", "step12")
+bs2 = ("q2_default_change_events", "break_sensitivity_feature", "per_test", "step12")
+fm1t, fm1o = val("J7", *bs1, "tested_masked"), val("J7", *bs1, "outside_masked")
+fm2t, fm2o = val("J7", *bs2, "tested_masked"), val("J7", *bs2, "outside_masked")
+_r1 = (e1c / n1) if (e1c and n1) else 0.1
+_r2 = (e2d / n2) if (e2d and n2) else 0.1
+_fc1 = len(jget(J7, "q1_per_program_releases", "break_sensitivity_feature", "outside_flag_changes", default=[]) or [])
+FEAT_BREAK_TXT = ((f"With the measurement-break months left out, the release result becomes {fmtv(fm1o)} of {fmtv(fm1t)} "
+                   f"against about {_r1 * fm1t:.1f} and {_fc1} tests change side, and the default-change result "
+                   f"{fmtv(fm2o)} of {fmtv(fm2t)} against about {_r2 * fm2t:.1f}: the headline stays at chance, but "
+                   "which results are unusual depends on how the breaks are handled, so no single feature-use "
+                   "result is robust.") if fm1t else "")
 say(f'''
 1. **Releases (section 3).** After a program's releases, feature use {'departs from its own trend more often than chance' if more1 else 'does not depart from its own trend more often than chance'}:
    {fmtv(o1)} of {fmtv(n1)} program-level step tests fall outside the 90% chance band, against {fmtv(e1, 'g')} expected if
@@ -691,7 +780,7 @@ say(f'''
    The two most extreme: {tops}. This is judged by counts against chance, not by q-values: with at most {fmtv(MAXPLAC)}
    placebo months per series no single test can reach a Benjamini-Hochberg q below 0.10. The step test also detects
    only steps above a certain size (chart 1, in the box below{': ' + PW_TEXT if PW_TEXT else ''}), so "inside the band"
-   means "no large lasting shift".
+   means "no large lasting shift". {FEAT_BREAK_TXT}
 3. **Manual against automatic (section 5).** In the reverse data, large batches of changes are {'not ' if lower > len(q3t) / 2 else ''}more common after
    a signer default change: the share moved in actions of 10 or more delegations is lower in the window than in
    other months in {lower} of {len(q3t)} tested cells.{(' The closest case, ' + c3.group + ', has p = ' + format(c3.p_block_ge_observed, '.3f') + ' at the block level; ' + (block_caveat(c3.group) or 'see section 5') + '.') if c3 is not None else ''}
@@ -735,7 +824,7 @@ say(f'''
 > **The step test ("departure from trend").** It asks "did the share jump after the event and stay there?" A
 > straight line is fitted to the {PRE} months *before* the event and extended over the {POST} months *after*; the
 > statistic is the average gap, in percentage points (pp), between what happened and what the line predicted.
-> **It only detects steps above a certain size**, and a larger one in noisy series; {'chart 1 below gives the sizes for this run' if POWER else 'this run of Phase 7 exports no detection-power table, and the second Phase 7 verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series'}.
+> **It only detects steps above a certain size**, and a larger one in noisy series; {('chart 1 below gives the sizes for feature use and chart 2 for adoption' + (': for adoption, ' + PPW_TEXT if PPW_TEXT else '')) if POWER else 'this run of Phase 7 exports no detection-power table, and the second Phase 7 verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series'}.
 >
 > **Chance band.** To judge a gap, the same statistic is computed at {DRAWS:,} placebo dates: for a default change,
 > random months of the same series; for a program's release schedule, the whole schedule shifted in time. The
@@ -801,6 +890,37 @@ if POWER:
     else:
         say(f"**Detection power**, from `{'/'.join(map(str, path))}` in the Phase 7 JSON:")
         display(rows)
+if len(PPW_ROWS) and {"series", "step_pp", "share_of_event_months_above_band"} <= set(PPW_ROWS.columns):
+    sers = list(PPW_ROWS.series.unique())
+    fig, axes = plt.subplots(1, len(sers), figsize=(12.5, 4.2), squeeze=False)
+    frame(fig, "Adoption: the step test catches " + "; ".join(
+              f"{'no step up to ' + format(PPW_ROWS[PPW_ROWS.series == k].step_pp.max(), 'g') + ' pp' if v is None else f'a {v:g} pp step'}"
+              f" in {pnice(k).replace('ds_prev ', 'DS ')}" for k, v in PPW_ALL.items()),
+          "Same method as chart 1, on the DS adoption series: an artificial lasting step is added and the test rerun. "
+          "Height: share of all possible event months at which it lands above the usual range; 'detected' = half "
+          "(dashed line). Each panel has its own steps: the reverse panel's share is under 1%, so its steps are tiny.",
+          bottom=1.0, wspace=0.25)
+    for ax, ser in zip(axes[0], sers):
+        g_ = PPW_ROWS[PPW_ROWS.series == ser].sort_values("step_pp")
+        ax.plot(g_.step_pp, g_.share_of_event_months_above_band * 100, color=S1, lw=1.1, alpha=0.8)
+        ax.scatter(g_.step_pp, g_.share_of_event_months_above_band * 100, color=S1, s=40, zorder=3)
+        ax.axhline(50, color=INK_2, ls="--", lw=1); ax.axhline(5, color=MUTED, ls=":", lw=1)
+        ax.set_xticks(list(g_.step_pp)); ax.set_xticklabels([f"{v:g}" for v in g_.step_pp])
+        ax.set_ylim(0, 100); ax.set_title(pnice(ser).replace("ds_prev ", "DS adoption, "), loc="left", fontweight="bold")
+        ax.set_xlabel("added step, pp"); pct_axis(ax); style(ax)
+    axes[0][0].set_ylabel("event months detected")
+    legend_below(fig, [Line2D([], [], marker="o", color=S1, label="measured point"),
+                       Line2D([], [], color=INK_2, ls="--", label="detected: half the event months"),
+                       Line2D([], [], color=MUTED, ls=":", label="chance level, 5%")], ncol=3)
+    save(fig, "adoption_detection_power")
+    k0 = next(iter(PPW_ALL), None)
+    if k0 is not None:
+        val("J7", "q2_default_change_events", "prevalence", "detection_power", "smallest_detectable_step_pp", k0)
+    say("**How to read it.** The same test as chart 1, run on the share of domains with a DS record. "
+        + (PPW_TEXT[0].upper() + PPW_TEXT[1:] + ". " if PPW_TEXT else "")
+        + "On the reverse panel, where under 1% of delegations are signed, a step of a tenth of a point is already "
+        "large, and the test sees it; in the forward TLDs, where about half the domains are signed and the lines jump "
+        "when the measured zone list changes, only steps of several points are caught, and in .nu not even 10.")
 """)
 
 # ====================================================================== 2. adoption series ==
@@ -824,6 +944,10 @@ frame(fig, "Latest share of delegated zones with a DS: " + ", ".join(
 metric_style = [("ds_share", S1, "-", "DS at the parent"), ("dnskey_share", S2, "-", "serves a DNSKEY"),
                 ("rrsig_zone_share", S3, ":", "RRSIG over the DNSKEY")]
 for ax, tld in zip(axes.flat, TLDS):
+    for b_ in BREAKS:
+        if b_["source"] == tld:
+            ax.axvspan(m2y(b_["first"], True), m2y(b_["last"], True) + 1 / 12, color=GRID, zorder=0)
+            ax.text(m2y(b_["first"], True), 2, "measurement\nbreak", fontsize=7.5, color=INK_2, va="bottom", ha="left")
     for met, col, ls, _ in metric_style:
         s = fwd[(fwd.source == tld) & (fwd.metric == met)].sort_values("month")
         ax.plot([m2y(m) for m in s.month], s.pct, color=col, ls=ls, lw=1.9 if ls == "-" else 2.2)
@@ -831,7 +955,9 @@ for ax, tld in zip(axes.flat, TLDS):
     ax.set_xlim(*FWD_XLIM)
     ax.set_ylim(0, 100)
     pct_axis(ax); year_axis(ax, 5); style(ax)
-legend_below(fig, [Line2D([], [], color=c, ls=ls, lw=2, label=l) for _, c, ls, l in metric_style])
+legend_below(fig, [Line2D([], [], color=c, ls=ls, lw=2, label=l) for _, c, ls, l in metric_style]
+             + ([Patch(color=GRID, label="measurement break (the measured zone list changed)")] if BREAKS else []),
+             ncol=4 if BREAKS else 3)
 save(fig, "forward_ds_dnskey_rrsig")
 say("**How to read it.** Each panel is one TLD; each line is the percentage of that TLD's delegated zones "
     "that have the thing in the legend. Orange above blue means some zones serve keys without a DS at the parent "
@@ -839,8 +965,13 @@ say("**How to read it.** Each panel is one TLD; each line is the percentage of t
     "own DNSKEY set; it is drawn to show that RRSIG adds no new information at zone level. "
     "In each TLD's last month the DS share is " + _join([f"{_lastds[t_]:.1f}% in {SRC[t_]} ({FWD_SPAN[t_][1]})"
                                                          for t_ in TLDS]) + ". "
-    "The .gov drop in early 2018 is the scanned zone list growing from about 1,200 to 5,600 zones, not signing "
-    "collapsing. " + (("First months measured on only part of the month: " + _join(
+    + (" **Measurement breaks** (shaded grey): " + "; ".join(
+        f"{SRC.get(b_['source'], b_['source'])} {b_['first']} to {b_['last']}: {b_['description']}" for b_ in BREAKS)
+       + ". In these months the list of zones being measured changed, so the shares moved without any domain being "
+       "signed or unsigned; the largest month-to-month moves in these lines come from such denominator changes, not "
+       "from adoption. " if BREAKS else
+       "The .gov drop in early 2018 is the scanned zone list growing from about 1,200 to 5,600 zones, not signing "
+       "collapsing. ") + (("First months measured on only part of the month: " + _join(
         [f"{SRC[t_]} {FWD_SPAN[t_][0]} ({int(_md)} days)" for t_ in TLDS
          for _md in [_fw[(_fw.source == t_) & (_fw.month == FWD_SPAN[t_][0])].measured_days.max()]
          if _md < pd.Period(FWD_SPAN[t_][0], freq="M").days_in_month - 1]) + ".")
@@ -936,7 +1067,17 @@ first chart in section 2 (and, for the reverse panel, DS only, because a reverse
 The tests are the same as for feature use: does the line leave its own trend after a program's releases, or after a
 default change that could change whether zones get signed? A result is **unusual** when the move is bigger than after
 9 of 10 random months or shifted release schedules. DS, DNSKEY and RRSIG move almost together, so one real movement
-usually shows up as two or three unusual tests.
+usually shows up as two or three unusual tests; the headline counts therefore count each program and corpus once, on
+DS.
+""")
+
+code(r"""
+say("**Measurement breaks.** " + ("; ".join(f"{SRC.get(b_['source'], b_['source'])} {b_['first']} to {b_['last']}"
+                                           for b_ in BREAKS) if BREAKS else NA)
+    + ". In these months the list of zones being measured changed (the .gov list grew several-fold; .se and .nu lost "
+    "many unsigned zones), so the adoption share jumped or dipped without any domain being signed. A test whose "
+    "window crosses such a break can look unusual for that reason alone. Phase 7 therefore reruns every test with the "
+    "break months left out; both versions are given below.")
 """)
 
 code(r"""
@@ -959,9 +1100,10 @@ else:
            f"{len(tb)} unusual." if len(tb) else "")
     exp_ = jget(J7, "q1_per_program_releases", "prevalence", "aggregate", "step12", "expected_by_calibrated_rate")
     fig, ax = plt.subplots(figsize=(12.5, max(4.0, 2.6 + 0.30 * len(pairs))))
-    frame(fig, f"Adoption after releases: {o_} of {n_} tests are unusual, against about "
-               f"{exp_ if exp_ is not None else 0.1 * n_:.1f} expected, and they come from only "
-               f"{u_.groupby(['program', 'source']).ngroups} program-and-corpus pairs that point both ways",
+    uq = unit(UQ1, "step12")
+    frame(fig, (f"Adoption after releases: {uq['outside_90pct_null']} of {uq['units']} programs-and-corpora are "
+                f"unusual, against {uq['expected']:.1f} expected (chance of about {uq['p_at_least_observed']:.2f})"
+                if uq else f"Adoption after releases: {o_} of {n_} tests are unusual"),
           "Counts in the title: every stable release as the event. Each marker: one adoption series (share of domains "
           "with a DS, DNSKEY or RRSIG record) for one program's release "
           "schedule in one corpus. Position = how the average departure from trend after its release months ranks among "
@@ -998,11 +1140,15 @@ else:
     tail_ = binom_tail(o_, n_, (exp_ or 0.1 * n_) / n_)
     say("**How to read it.** Each row is one program in one corpus; the three markers are its DS, DNSKEY and RRSIG "
         "adoption lines, which move almost together. A red ring marks an unusual result. "
-        f"{o_} of {n_} are unusual. Treated as independent tests, that many or more would happen by chance about "
-        f"{tail_:.2f} of the time, which is borderline. But the unusual results are only {grp.ngroups} movements: "
+        f"Per test (secondary): {o_} of {n_} are unusual; treated as independent tests that would look borderline "
+        f"(chance about {tail_:.2f}), but the unusual results are only {grp.ngroups} movements: "
         + "; ".join(lines) + ". Their directions disagree, so they do not add up to 'releases raise adoption'."
-        + (lambda u2: f" Counted once per program and corpus (DS only; new count from Phase 7's rows): {u2[0]} of {u2[1]} "
-           f"unusual against {u2[2]:.1f} expected, a chance of about {u2[3]:.2f}." if u2 else "")(ds_unit(Q1P, (exp_ or 0.1 * n_) / n_))
+        + (f" Counted once per program and corpus, on DS (Phase 7's headline): {unit_txt(unit(UQ1, 'step12'), 'outside_90pct_null')}; "
+           f"without .gov {unit_txt(unit(UQ1, 'step12_without_gov'), 'outside_90pct_null')}; with the break months left "
+           f"out {unit_txt(unit(UQ1, 'step12_breaks_masked'), 'outside_90pct_null')}, with a different set of unusual "
+           f"pairs ({', '.join((unit(UQ1, 'step12_breaks_masked') or {}).get('units_outside', []))}).")
+        + (f" Pairs in a corpus with a measurement break: {', '.join(x for x in (uq or {}).get('units_outside', []) if x.split(' ')[-1].lstrip('.') in BREAK_SRC)}."
+           if uq else "")
         + bxt + " "
         + (f"Not tested ({len(un)} cells, besides .fed.us): " + "; ".join(
             f"{v} because {k}" for k, v in sorted(c_.items(), key=lambda kv: -kv[1])) + "." if len(un) else ""))
@@ -1020,9 +1166,10 @@ else:
     u_ = st[st.outside_90_band.astype(bool)]
     e_ = jget(J7, "q2_default_change_events", "prevalence", "summary", "step12", "expected_outside_discrete")
     fig, ax = plt.subplots(figsize=(12.5, max(4.0, 2.6 + 0.30 * n_)))
-    frame(fig, f"Default changes that could change signing: {len(u_)} of {n_} tests unusual, against about "
-               f"{e_ if e_ is not None else 0.1 * n_:.1f} expected, and {int(u_.in_expected_direction.astype(bool).sum())} "
-               "of them in the expected direction",
+    uq2 = unit(UQ2, "step12")
+    frame(fig, (f"Default changes that could change signing: {uq2['outside_90_band']} of {uq2['units']} changes-and-corpora "
+                f"unusual, against {uq2['expected_discrete']:.1f} expected, {uq2['in_expected_direction']} in the expected "
+                "direction" if uq2 else f"Default changes that could change signing: {len(u_)} of {n_} tests unusual"),
           "Each marker: one default change, one corpus, one adoption series (DS, DNSKEY or RRSIG prevalence). Position = "
           f"how the departure from the {PRE}-month pre-trend over the {POST} months after the change ranks among the "
           "same series' other months (50 = typical; right = more domains signed than predicted). Shaded: the usual "
@@ -1046,7 +1193,13 @@ else:
     save(fig, "adoption_default_changes")
     by_row = u_.groupby("row_id")
     say("**How to read it.** A marker far right means more domains were signed after the change than the trend "
-        "predicted; far left, fewer. Unusual results by default change: "
+        "predicted; far left, fewer. "
+        + f"Counted once per change and corpus (Phase 7's headline): {unit_txt(uq2, 'outside_90_band')}"
+        + (f" ({', '.join(uq2['units_outside'])})" if uq2 and uq2.get('units_outside') else "")
+        + f"; without .gov {unit_txt(unit(UQ2, 'step12_without_gov'), 'outside_90_band')}; with the break months left "
+        f"out only {(unit(UQ2, 'step12_breaks_masked') or {}).get('units', NA)} can still be tested, "
+        f"{unit_txt(unit(UQ2, 'step12_breaks_masked'), 'outside_90_band')}. "
+        + f"Per test (secondary): {len(u_)} of {n_}. Unusual results by default change: "
         + ("; ".join(f"{rid}: {len(g_)} test(s), {int((~g_.in_expected_direction.astype(bool)).sum())} against the "
                      f"expected direction ({', '.join(sorted({SRC[x] for x in g_.source}))})" for rid, g_ in by_row)
            if len(u_) else "none")
@@ -1069,7 +1222,9 @@ exc = PEXC.reason.astype(str)
 cats = {"validator-only rows (validation defaults, trust anchors, validator limits: they do not change what zones "
         "publish)": exc.str.startswith("validator-only").sum(),
         "rows that change a parameter of zones that are signed anyway (algorithm, digest, key size, NSEC3, timing)":
-        exc.str.startswith("changes a parameter").sum()}
+        exc.str.startswith("changes a parameter").sum(),
+        "rows where a default makes some configurations fail to sign (one rule excludes the whole class)":
+        exc.str.startswith("configuration-now-fails").sum()}
 other = len(PEXC) - sum(cats.values())
 say("**Which default changes count here, and why.** Phase 7 read every default change and kept only those that could "
     "change whether a zone gets signed, gets a DS at its parent, or is served with its DNSSEC records:\n\n"
@@ -1078,12 +1233,8 @@ say("**Which default changes count here, and why.** Phase 7 read every default c
     + f"; and {other} rows read one by one (for example a change of the default algorithm of a key the operator "
     "still has to ask for). The full list is in `software_vs_adoption_prevalence_excluded.csv`.")
 
-sm = jget(J7, "q4_spikes", "prevalence", "summary", default={}) or {}
 say(f"**Sudden jumps.** Phase 7 also looked for months in which the number of signed domains jumps or drops sharply: "
-    f"{fmtv(sm.get('spikes'))} such jumps, of which {fmtv(sm.get('aligned_within_3m'))} follow one of the default "
-    f"changes above within 3 months, against {fmtv(sm.get('expected_aligned'), '.1f')} expected by chance"
-    + (", and no kind of jump beats chance." if not sm.get("cells_beating_chance") else
-       f"; beating chance: {sm.get('cells_beating_chance')}."))
+    + q4_txt())
 """)
 
 # ====================================================================== 3. per program ==
@@ -2329,8 +2480,13 @@ say(f"* **Multiple testing by q-value.** With at most {fmtv(MAXPLAC)} placebo mo
     "schedule cannot differ from the real one. "
     + (f"Its x.y.0 feature releases are tested instead (section 3.1: {bo_} of {bn_} outside the band, against "
        f"{0.1 * bn_:.1f} by chance)." if bn_ else "No other BIND 9 schedule is tested in this run."))
+say("* **Measurement breaks.** The measured zone lists changed in " + (breaks_text() or NA) + ". For adoption, "
+    f"leaving those months out changes which programs look unusual (releases: "
+    f"{unit_txt(unit(UQ1, 'step12_breaks_masked'), 'outside_90pct_null')}). For feature use it matters too: "
+    + (FEAT_BREAK_TXT or NA))
 say("* **Small or noisy effects.** The step test detects only steps above a certain size, and a larger one in noisy "
-    "series. " + (f"Chart 1 gives the sizes: {PW_TEXT}. " if PW_TEXT else "") + ("" if POWER else "This run of Phase 7 exports no detection-power table; the second Phase 7 "
+    "series. " + (f"Chart 1 gives the sizes for feature use: {PW_TEXT}. " if PW_TEXT else "")
+    + (f"Chart 2 gives them for adoption: {PPW_TEXT}. " if PPW_TEXT else "") + ("" if POWER else "This run of Phase 7 exports no detection-power table; the second Phase 7 "
                   "verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series. ")
     + "'Inside the band' therefore means 'no large lasting shift', not 'no effect'.")
 """)
@@ -2358,6 +2514,17 @@ for path in [("q1_per_program_releases", "prevalence", "aggregate", "step12", "t
              ("q2_default_change_events", "prevalence", "summary", "step12", "n_outside_band"),
              ("q2_default_change_events", "prevalence", "summary", "step12", "n_outside_and_expected_direction"),
              ("q4_spikes", "prevalence", "summary", "aligned_within_3m")]:
+    val("J7", *path)
+_mine = ds_unit(Q1P, 0.1)
+_json = jget(fresh["J7"], *UQ1, "step12", default={}) or {}
+if _mine and _json:
+    assert (_mine[0], _mine[1]) == (_json["outside_90pct_null"], _json["units"]), \
+        f"own DS-per-pair count {_mine[:2]} differs from Phase 7's unit count {_json}"
+    print(f"own count of the DS program x corpus unit ({_mine[0]} of {_mine[1]}) equals Phase 7's")
+for path in [("q1_per_program_releases", "prevalence", "break_sensitivity", "per_test", "step12", "outside_masked"),
+             ("q1_per_program_releases", "break_sensitivity_feature", "per_test", "step12", "outside_masked"),
+             ("q1_per_program_releases", "break_sensitivity_feature", "per_test", "step12", "tested_masked"),
+             ("q2_default_change_events", "break_sensitivity_feature", "per_test", "step12", "outside_masked")]:
     val("J7", *path)
 _pv = [q for q in QUOTED if "prevalence" in q[3]]
 assert len(_pv) >= 4, f"only {len(_pv)} adoption (prevalence) numbers were registered"
