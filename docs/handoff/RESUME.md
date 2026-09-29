@@ -113,8 +113,8 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 
 ## State at e0cb29de (2026-09-29)
 
-- Verified and corrected (6/8): kresd, knot, nsd, opendnssec, unbound, bind9 (`verify/bind9.md`).
-- pdns-auth: stages 3-4 committed 30d4582f; Phase 3 verifier (Sonnet) was running.
+- Verified and corrected (7/8): kresd, knot, nsd, opendnssec, unbound, bind9 (`verify/bind9.md`).
+- pdns-auth verified and corrected (26dbf70b); verifier confirmed all five inventory disagreements.
 - pdns-rec: stages 3-4 builder (Sonnet) was running; spawn its verifier after it lands.
 - Held until no builder reads `cve_inventory.json`: bind9 43 inventory disagreements
   (timeline tags now UTC-ordered, see bind9.json `differs_from_inventory`) and pdns-auth five.
