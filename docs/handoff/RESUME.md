@@ -131,7 +131,10 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - CVE results rebuilt (d63a7ca8): 434 CVEs, 178 dated fixes, median -8 d; KeyTrap four
   codebases within 7 days (was 148); PowerDNS Auth 0 DNSSEC CVEs (was 3). `docs/cve_crossref.md`,
   `docs/rfc_why.md` and both affected decks regenerated. Suite: 943 passed.
-- NEXT: Phase 4 agent with `04_phase4_brief.md`; then Phase 5 verifier; Phase 7; Phase 8.
+- Phase 4 committed unverified (02650d6b): `scripts/cross_program.py`, `out/analysis/cross_program*`,
+  `docs/handoff/04_cross_program.md`. Phase 5 verifier was running -> `verify/phase4_cross_program.md`.
+- Phase 7 brief ready (`07_phase7_brief.md`, 58011261); start it after Phase 5 corrections land,
+  because it reads Phase 4's normalised CSVs. Then Phase 8 notebook.
 
 ## To resume
 
