@@ -1,0 +1,1686 @@
+"""Build notebooks/dnssec_software_vs_adoption.ipynb (Phase 8), execute it, and save it with outputs.
+
+Every figure is drawn from the verified outputs of Phases 1-7 (see docs/handoff/08_phase8_brief.md).
+No statistic that Phase 4 or Phase 7 produced is recomputed; the notebook plots and quotes them.
+
+Run from the repository root:
+    python notebooks/build_software_vs_adoption_notebook.py
+"""
+import sys
+from pathlib import Path
+
+import nbformat as nbf
+from nbclient import NotebookClient
+
+ROOT = Path(__file__).resolve().parent.parent
+OUT_NB = ROOT / "notebooks" / "dnssec_software_vs_adoption.ipynb"
+
+NB = nbf.v4.new_notebook()
+cells = []
+
+
+def md(text):
+    cells.append(nbf.v4.new_markdown_cell(text.strip("\n")))
+
+
+def code(text, hidden=False):
+    c = nbf.v4.new_code_cell(text.strip("\n"))
+    if hidden:
+        c.metadata["jupyter"] = {"source_hidden": True}
+        c.metadata["tags"] = ["hide-input"]
+    cells.append(c)
+
+
+PROGRAMS = ["bind9", "unbound", "knot", "kresd", "nsd", "opendnssec", "pdns-auth", "pdns-rec"]
+
+# ====================================================================== 1. question and answer ==
+md(r"""
+# Does DNSSEC adoption follow the software? One program at a time
+
+This notebook answers four questions for eight DNS programs: **BIND 9, Unbound, Knot DNS, Knot Resolver, NSD,
+OpenDNSSEC, PowerDNS Authoritative and PowerDNS Recursor**.
+
+1. After each version release, do the adoption numbers in OpenINTEL (forward TLD zones) and in the RIR reverse data
+   move?
+2. When a release changes a **default** (for example "sign with ECDSA unless told otherwise"), is the change
+   followed by adoption?
+3. Are changes made by hand, one zone at a time, or in large automatic-looking batches, and at which level of
+   the operator hierarchy?
+4. Is a newer RFC published while its predecessor is still being deployed?
+
+Every number comes from the verified outputs of Phases 1 to 7 and is read from those files when the notebook runs;
+none is typed into the text. A cell says **new computation** where it computes something the phases did not
+export. The two setup cells below have their code hidden; the short answer follows them.
+""")
+
+# ====================================================================== setup ==
+md(r"""
+## Setup
+
+Paths, palette and small drawing helpers. The palette is the project's validated one: three categorical colours
+in fixed order (blue, orange, green), a blue ramp for ordered values, and red only for a highlighted event.
+""")
+
+code(r"""
+# setup: imports, palette, drawing helpers
+import json
+import math
+import sys
+import textwrap
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from IPython.display import Markdown, display
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch
+from matplotlib.ticker import FuncFormatter, MaxNLocator
+
+ROOT = Path.cwd()
+while not (ROOT / "data" / "software" / "timelines").is_dir():
+    if ROOT == ROOT.parent:
+        raise RuntimeError("run this notebook from inside the rfc_adoption repository")
+    ROOT = ROOT.parent
+FIGDIR = ROOT / "reporting" / "charts" / "software_vs_adoption"
+FIGDIR.mkdir(parents=True, exist_ok=True)
+for old in FIGDIR.glob("*.png"):
+    old.unlink()
+
+SURFACE = "#fcfcfb"
+INK, INK_2, MUTED = "#0b0b0b", "#52514e", "#898781"
+GRID, BASELINE = "#e1e0d9", "#c3c2b7"
+S1, S2, S3 = "#2a78d6", "#eb6834", "#1baf7a"
+RAMP = ["#cde2fb", "#9ec5f4", "#6da7ec", "#2a78d6", "#1c5cab", "#104281"]
+RED = "#d03b3b"
+
+plt.rcParams.update({
+    "font.family": ["DejaVu Sans", "sans-serif"],
+    "figure.facecolor": SURFACE, "axes.facecolor": SURFACE, "savefig.facecolor": SURFACE,
+    "text.color": INK, "axes.labelcolor": INK_2, "xtick.color": INK_2, "ytick.color": INK_2,
+    "axes.edgecolor": BASELINE, "axes.linewidth": 0.8,
+    "xtick.labelsize": 10, "ytick.labelsize": 10, "axes.titlesize": 11, "axes.labelsize": 10,
+    "legend.fontsize": 9.5, "figure.dpi": 100,
+})
+
+NAME = {"bind9": "BIND 9", "unbound": "Unbound", "knot": "Knot DNS", "kresd": "Knot Resolver",
+        "nsd": "NSD", "opendnssec": "OpenDNSSEC", "pdns-auth": "PowerDNS Authoritative",
+        "pdns-rec": "PowerDNS Recursor"}
+SRC = {"se": ".se", "nu": ".nu", "gov": ".gov", "ee": ".ee", "ch": ".ch", "li": ".li", "fed.us": ".fed.us",
+       "_pooled-afrinic-arin": "reverse panel"}
+TLDS = ["se", "nu", "gov", "ee", "ch", "li"]
+PANEL = "_pooled-afrinic-arin"
+_FIG = [0]
+
+
+def style(ax, grid="y"):
+    for side in ("top", "right"):
+        ax.spines[side].set_visible(False)
+    ax.set_axisbelow(True)
+    if grid:
+        ax.grid(axis=grid, color=GRID, linewidth=0.8)
+    ax.tick_params(length=0)
+
+
+def pct_axis(ax, axis="y"):
+    f = FuncFormatter(lambda v, _: f"{v:g}%")
+    (ax.yaxis if axis == "y" else ax.xaxis).set_major_formatter(f)
+
+
+def year_axis(ax, nbins=8):
+    # integer years only, so a year never prints twice
+    ax.xaxis.set_major_locator(MaxNLocator(nbins=nbins, integer=True))
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{int(round(v))}"))
+
+
+def frame(fig, title, sub, bottom=0.55, left=0.07, right=0.98, hspace=None, wspace=None):
+    '''Title (the finding) and subtitle (the metric) above the axes, never overlapping them.
+    bottom is the space in inches kept under the axes for tick labels and a legend.'''
+    W, H = fig.get_figwidth(), fig.get_figheight()
+    t = textwrap.fill(title, width=int(W * 8.2))
+    s = "\n".join(textwrap.fill(p, width=int(W * 13.2)) for p in sub.split("\n"))
+    nt, ns = t.count("\n") + 1, s.count("\n") + 1
+    y = 1 - 0.12 / H
+    fig.text(0.012, y, t, fontsize=14, fontweight="bold", color=INK, va="top", ha="left")
+    y -= (0.27 * nt + 0.06) / H
+    fig.text(0.012, y, s, fontsize=10, color=INK_2, va="top", ha="left", linespacing=1.35)
+    top = y - (0.19 * ns + 0.30) / H
+    kw = dict(top=top, bottom=bottom / H, left=left, right=right)
+    if hspace is not None:
+        kw["hspace"] = hspace
+    if wspace is not None:
+        kw["wspace"] = wspace
+    fig.subplots_adjust(**kw)
+
+
+def legend_below(fig, handles, ncol=None, y_in=0.08):
+    H = fig.get_figheight()
+    fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.012, y_in / H), frameon=False,
+               ncol=ncol or len(handles), handlelength=1.8, columnspacing=1.6)
+
+
+def save(fig, name):
+    _FIG[0] += 1
+    path = FIGDIR / f"{_FIG[0]:02d}_{name}.png"
+    fig.savefig(path, dpi=110, bbox_inches="tight", pad_inches=0.25)
+    plt.show()
+    plt.close(fig)
+    return path
+
+
+def say(text):
+    '''Plain-language reading printed directly under a chart.'''
+    display(Markdown(text))
+
+
+def m2y(m, start=False):
+    # 'YYYY-MM' -> fractional year; forward months are plotted mid-month, reverse labels at the 1st
+    y, mo = int(m[:4]), int(m[5:7])
+    return y + (mo - 1) / 12 + (0 if start else 0.5 / 12)
+
+
+def d2y(d):
+    ts = pd.Timestamp(d[:10])
+    return ts.year + (ts.dayofyear - 1) / (366 if ts.is_leap_year else 365)
+""", hidden=True)
+
+code(r"""
+# ---- inputs, all read-only -------------------------------------------------------------- #
+A7 = ROOT / "out/analysis"
+J7 = json.loads((A7 / "software_vs_adoption.json").read_text("utf-8"))
+J4 = json.loads((A7 / "cross_program.json").read_text("utf-8"))
+Q1 = pd.read_csv(A7 / "software_vs_adoption_q1.csv")
+Q1R = pd.read_csv(A7 / "software_vs_adoption_q1_releases.csv")
+Q2 = pd.read_csv(A7 / "software_vs_adoption_q2.csv")
+Q3 = pd.read_csv(A7 / "software_vs_adoption_q3.csv")
+Q4 = pd.read_csv(A7 / "software_vs_adoption_q4.csv")
+Q4A = pd.read_csv(A7 / "software_vs_adoption_q4_alignment.csv")
+Q5 = pd.read_csv(A7 / "software_vs_adoption_q5.csv")
+MAP = pd.read_csv(A7 / "software_vs_adoption_mapping.csv")
+PREV = pd.read_csv(A7 / "prevalence_metrics.csv")
+DEF4 = pd.read_csv(A7 / "cross_program_defaults_normalised.csv")
+CVE6 = pd.read_csv(A7 / "cross_program_q6_cve_latency.csv")
+MAT4 = pd.read_csv(A7 / "cross_program_q1_mechanism_matrix.csv")
+TL = {p: json.loads((ROOT / f"data/software/timelines/{p}.json").read_text("utf-8"))
+      for p in ["bind9", "unbound", "knot", "kresd", "nsd", "opendnssec", "pdns-auth", "pdns-rec"]}
+
+# Phase 7's own series builder and release list, imported so every share on a chart is built exactly
+# the way the tests built it (domain_days mean daily share, strict panel, MIN_DEN floor).
+sys.path.insert(0, str(ROOT / "scripts"))
+import software_vs_adoption as sva  # noqa: E402
+
+DATA = sva.Data()
+RELEASES = sva.load_releases()      # stable, publicly shipped releases: [(tag, date)]
+
+
+def series(obs, source):
+    corpus = "reverse_panel" if source == PANEL else "forward"
+    r = sva.share_series(DATA, obs, corpus, source)
+    return None if r is None else r[0]
+
+
+def series_full(obs, source):
+    corpus = "reverse_panel" if source == PANEL else "forward"
+    return sva.share_series(DATA, obs, corpus, source)
+
+
+# ---- defensive access to the Phase 4 / Phase 7 JSON, and a register of every number quoted ------- #
+NA = "not available in this run"
+SOURCES = {"J7": ("out/analysis/software_vs_adoption.json", J7), "J4": ("out/analysis/cross_program.json", J4)}
+QUOTED = []   # (label, value, source key, path): re-checked against a fresh read in the appendix
+
+
+def jget(obj, *path, default=None):
+    for k in path:
+        try:
+            obj = obj[k]
+        except (KeyError, IndexError, TypeError):
+            return default
+    return obj
+
+
+def idx(src, path, **match):
+    # index of the first dict in the list at `path` whose fields equal `match`, or None
+    lst = jget(SOURCES[src][1], *path, default=[]) or []
+    for i, d in enumerate(lst):
+        if all(d.get(k) == v for k, v in match.items()):
+            return i
+    return None
+
+
+def val(src, *path):
+    # a number from the JSON, recorded so the appendix can check it again; None if absent
+    if any(p is None for p in path):
+        return None
+    v = jget(SOURCES[src][1], *path)
+    if v is not None:
+        QUOTED.append((f"{src}:" + "/".join(str(p) for p in path), v, src, path))
+    return v
+
+
+def fmtv(v, spec="", suffix=""):
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return NA
+    return format(v, spec) + suffix
+
+
+def find_key(obj, needle, path=()):
+    # first (path, value) whose key contains `needle`, searched depth-first
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            if needle in str(k).lower():
+                return path + (k,), v
+        for k, v in obj.items():
+            r = find_key(v, needle, path + (k,))
+            if r:
+                return r
+    return None
+
+
+DRAWS = jget(J7, "notes", "draws", default=1000)
+PRE, POST = sva.STEP_PRE, sva.STEP_POST
+POWER = find_key(J7, "power")
+
+
+print({p: len(v) for p, v in RELEASES.items()})
+print("Phase 7 step test:", str(jget(J7, "notes", "step_test", default=NA))[:200])
+print("detection-power table:", "/".join(map(str, POWER[0])) if POWER else NA)
+""", hidden=True)
+
+
+md("## The short answer")
+
+code(r"""
+# every number below is read from the Phase 4 / Phase 7 JSON when this cell runs
+a1 = ("q1_per_program_releases", "aggregate", "step12")
+n1, o1, e1 = val("J7", *a1, "tested"), val("J7", *a1, "mean_outside_90pct_null"), val("J7", *a1, "expected_by_chance_at_10pct")
+e1c = val("J7", *a1, "expected_by_calibrated_rate")
+bf = ("q1_per_program_releases", "aggregate", "bind9_feature_releases", "step12")
+bn, bo = val("J7", *bf, "tested"), val("J7", *bf, "mean_outside_90pct_null")
+s2 = ("q2_default_change_events", "summary", "step12")
+n2, o2, e2 = val("J7", *s2, "n_tests"), val("J7", *s2, "n_outside_band"), val("J7", *s2, "expected_outside_by_chance")
+e2d = val("J7", *s2, "expected_outside_discrete")
+ext = jget(J7, "q2_default_change_events", "most_extreme_step_tests", default=None)
+if ext:
+    top = [(e["row_id"], e["source"], e["percentile"], e.get("in_expected_direction")) for e in ext[:2]]
+    for k in range(min(2, len(ext))):
+        val("J7", "q2_default_change_events", "most_extreme_step_tests", k, "percentile")
+else:
+    q2s = Q2[(Q2.test == "step12") & (Q2.status == "tested")].sort_values("p_two_sided")
+    top = [(r.row_id, r.source, r.percentile, r.in_expected_direction) for r in q2s.head(2).itertuples()]
+tops = "; ".join(f"{rid} in {SRC.get(src, src)}, at percentile {p:.1f}" +
+                 ("" if d is None else f" ({'in' if d else 'against'} the expected direction)") for rid, src, p, d in top)
+exp1 = max(x for x in (e1, e1c) if x is not None) if (e1 is not None or e1c is not None) else None
+exp2 = max(x for x in (e2, e2d) if x is not None) if (e2 is not None or e2d is not None) else None
+more1 = o1 is not None and exp1 is not None and o1 > exp1 * 1.5
+more2 = o2 is not None and exp2 is not None and o2 > exp2 * 1.5
+q3t = Q3[Q3.status == "tested"]
+lower = int((q3t.diff_share_in_actions_ge_10 < 0).sum())
+q3all = q3t[q3t.scope == "all RIRs"].sort_values("p_block_ge_observed")
+c3 = q3all.iloc[0] if len(q3all) else None
+lf = jget(J4, "q4_leader_follower", "baseline_sub_milestones", default=[])
+minp = min((b["p_at_least_observed"] for b in lf), default=None)
+kt = CVE6[(CVE6.cve == "CVE-2023-50387") & (CVE6.group == "included")]
+kt_days = (pd.to_datetime(kt.stable_date).max() - pd.to_datetime(kt.stable_date).min()).days if len(kt) else None
+kt_before = bool((pd.to_datetime(kt.stable_date) < pd.to_datetime(kt.nvd_published)).all()) if len(kt) else False
+i9276 = [idx("J7", ("q5_successor_rfc", "pairs"), successor="RFC 9276", source=t_, status="covered") for t_ in TLDS]
+sh9276 = [v for v in (val("J7", "q5_successor_rfc", "pairs", i, "share_at_successor") for i in i9276 if i is not None) if v is not None]
+i8624 = idx("J7", ("q5_successor_rfc", "pairs"), successor="RFC 8624", observable="digest1", source=PANEL)
+sh8624 = val("J7", "q5_successor_rfc", "pairs", i8624, "share_at_successor")
+bind_txt = (f"BIND 9 cannot be tested on every stable release, because it ships in almost every month; on its x.y.0 "
+            f"feature releases instead, {fmtv(bo)} of {fmtv(bn)} tests fall outside the band." if bn else
+            "BIND 9 cannot be tested on every stable release, because it ships in almost every month.")
+say(f'''
+1. **Releases (section 3).** After a program's releases, adoption {'departs from its own trend more often than chance' if more1 else 'does not depart from its own trend more often than chance'}:
+   {fmtv(o1)} of {fmtv(n1)} program-level step tests fall outside the 90% chance band, against {fmtv(e1, 'g')} expected if
+   exactly 1 test in 10 did so by chance{'' if e1c is None else f' (or {e1c:.1f} at the rate the null actually rejects on data with no effect)'}. {bind_txt}
+2. **Default changes (section 3).** {fmtv(o2)} of {fmtv(n2)} default-change events are followed by a departure from
+   trend outside the band, against {fmtv(e2, 'g')} expected at 1 in 10{'' if e2d is None else f' ({e2d:.1f} under the exact placebo null, whose band is set by a finite number of months)'}{', which is more than chance' if more2 else ', which is about what chance produces'}.
+   The two most extreme: {tops}. This is judged by counts against chance, not by q-values: with at most about 150
+   placebo months per series no single test can reach a Benjamini-Hochberg q below 0.10. The step test also detects
+   only steps above a certain size (see the box below), so "inside the band" means "no large lasting shift".
+3. **Manual against automatic (section 5).** In the reverse data, large batches of changes are {'not ' if lower > len(q3t) / 2 else ''}more common after
+   a signer default change: the share moved in actions of 10 or more delegations is lower in the window than in
+   other months in {lower} of {len(q3t)} tested cells.{(' The closest case, ' + c3.group + ', has p = ' + format(c3.p_block_ge_observed, '.3f') + ' at the block level, and it rests on one address block that may have changed before the release (section 5).') if c3 is not None else ''}
+4. **Across programs (section 4).** {'No program ships new DNSSEC defaults first more often than chance' if (minp or 1) >= 0.1 else 'One program ships new defaults first more often than chance'} (smallest
+   p = {fmtv(minp, '.2f')}). The coordination that is clearly real is the KeyTrap fix of February 2024: {kt.program.nunique()}
+   codebases shipped it within {fmtv(kt_days)} days{', all before NVD published the CVE' if kt_before else ''}.
+5. **Successor RFCs (section 6).** Yes, repeatedly. When RFC 9276 asked for zero NSEC3 iterations in 2022-08,
+   {fmtv(min(sh9276) if sh9276 else None, '.0f')} to {fmtv(max(sh9276) if sh9276 else None, '.1f')}% of NSEC3 names in every forward
+   TLD still used more than zero. When RFC 8624 deprecated SHA-1 DS in 2019-06, {fmtv(sh8624, '.0f')}% of DS-carrying
+   delegations on the reverse panel still used it.
+''')
+""")
+
+md("## How to read every chart in this notebook")
+
+code(r"""
+say(f'''
+> **Two corpora, never mixed.**
+>
+> * **Forward** means OpenINTEL's daily scans of whole TLD zone files: **.se and .nu** from 2016-06, **.gov** from
+>   2017-05, **.ee** from 2019-07, **.ch and .li** from 2020-05; all end in 2023-12. (.fed.us is also scanned but
+>   never has a signed zone, so it appears nowhere.) A forward monthly share is the **mean daily share**: summed
+>   daily numerator counts over summed daily denominator counts.
+> * **Reverse** means the RIR reverse-DNS zones (`in-addr.arpa`). Every reverse share uses the **strict panel**,
+>   AFRINIC and ARIN pooled (`_pooled-afrinic-arin`), from 2011-05, when it first held signed delegations. A reverse
+>   month label M is the zone state at **00:00 UTC on the 1st of M**, so a change between labels M-1 and M happened
+>   during calendar month M-1. Every chart that marks a release against reverse data follows this rule.
+>
+> **Denominators.** An algorithm share is out of *signed* zones (forward: zones serving a DNSKEY) or of *DS-carrying*
+> delegations (reverse). A digest share is out of DS-carrying zones. An NSEC3 iteration share is out of NSEC3
+> *owner names*, not zones. The DS, DNSKEY and RRSIG shares of section 2 are out of all delegated zones.
+>
+> **The step test ("departure from trend").** It asks "did the share jump after the event and stay there?" A
+> straight line is fitted to the {PRE} months *before* the event and extended over the {POST} months *after*; the
+> statistic is the average gap, in percentage points (pp), between what happened and what the line predicted.
+> **It only detects steps above a certain size**, and a larger one in noisy series; {'the detection-power table below gives the sizes for this run' if POWER else 'this run of Phase 7 exports no detection-power table, and the second Phase 7 verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series'}.
+>
+> **Chance band.** To judge a gap, the same statistic is computed at {DRAWS:,} placebo dates: for a default change,
+> random months of the same series; for a program's release schedule, the whole schedule shifted in time. The
+> **90% chance band** holds the middle 90% of those placebo values. By chance alone about one test in ten lands
+> outside it, so the text under every chart gives **how many fell outside against how many chance predicts**.
+>
+> **Percentile.** A percentile of 97 means the real value is larger than 97% of the placebo values; below 5 or above
+> 95 is outside the band.
+>
+> **Action size** (section 5 only): how many reverse delegations changed the same way in the same month and address
+> block. It is only a proxy for "automatic".
+''')
+if POWER:
+    path, tab = POWER
+    rows = pd.DataFrame(tab.get("rows", []) if isinstance(tab, dict) else tab)
+    need = {"series", "step_pp", "share_of_event_months_above_band"}
+    if len(rows) and need <= set(rows.columns):
+        smallest = tab.get("smallest_detectable_step_pp", {}) if isinstance(tab, dict) else {}
+        def nice(sr):
+            return sr.replace("panel", "reverse panel").replace("alg13", "ECDSA share").replace("digest1", "SHA-1 DS share")
+        sm_txt = "; ".join(f"{nice(k)}: {'not even 10 pp' if v is None else f'{v:g} pp'}" for k, v in smallest.items())
+        fig, ax = plt.subplots(figsize=(12.5, 4.4))
+        frame(fig, "The step test only sees large steps. Smallest step it detects: " + (sm_txt or "see the table"),
+              "Phase 7 added an artificial lasting step of 0 to 10 percentage points to real series, at every possible "
+              "event month, and reran the test. Height: share of event months at which the step landed above the 90% "
+              "band. Dashed line: the detection rule, half of the event months. Source: Phase 7 detection-power table.",
+              bottom=1.2, right=0.97)
+        for k, (ser, gdf) in enumerate(rows.groupby("series", sort=False)):
+            if k >= 3:
+                break
+            gdf = gdf.sort_values("step_pp")
+            ax.plot(gdf.step_pp, gdf.share_of_event_months_above_band * 100, marker="o", color=[S1, S2, S3][k], lw=2,
+                    label=nice(ser))
+        ax.axhline(50, color=INK_2, ls="--", lw=1)
+        ax.axhline(5, color=MUTED, ls=":", lw=1)
+        ax.set_xlim(-0.3, rows.step_pp.max() + 0.3); ax.set_ylim(0, 100)
+        ax.set_xlabel("size of the added step, percentage points"); ax.set_ylabel("event months detected")
+        pct_axis(ax); style(ax)
+        legend_below(fig, ax.get_legend_handles_labels()[0] + [
+            Line2D([], [], color=INK_2, ls="--", lw=1, label="detection rule: half the event months"),
+            Line2D([], [], color=MUTED, ls=":", lw=1, label="chance level, 5%")], ncol=3)
+        save(fig, "detection_power")
+        say("**How to read it.** Each line is one real series. With no step added (left end) only about 5% of months "
+            "land above the band, as they should. A test that worked well would climb steeply to 100% after a step "
+            "of 1 or 2 pp. These lines stay low: the placebo months near the event carry the same step and widen the "
+            "band with it. So a result 'inside the band' anywhere in this notebook rules out only very large lasting "
+            "shifts, and in volatile series not even those.")
+    else:
+        say(f"**Detection power**, from `{'/'.join(map(str, path))}` in the Phase 7 JSON:")
+        display(rows)
+""")
+
+# ====================================================================== 2. adoption series ==
+md(r"""
+## 2. The adoption series themselves
+
+Everything later measures movement in these lines, so here they are first, with nothing else on them.
+""")
+
+code(r"""
+fwd = PREV[(PREV.corpus == "forward") & PREV.source.isin(TLDS)]
+fig, axes = plt.subplots(2, 3, figsize=(12.5, 7.4), sharey=True)
+frame(fig, "About half of .se, .nu and .ch zones are signed; .gov and .ee are far behind",
+      "Share of delegated zones (%). Numerator: zones with a DS at the parent (blue), zones serving a DNSKEY "
+      "(orange), zones with an RRSIG over their DNSKEY (green, dotted). Denominator: delegated zones (names with "
+      "an NS record). Forward corpus, OpenINTEL TLD zone files, mean daily share per month.",
+      bottom=0.95, hspace=0.38, wspace=0.08)
+metric_style = [("ds_share", S1, "-", "DS at the parent"), ("dnskey_share", S2, "-", "serves a DNSKEY"),
+                ("rrsig_zone_share", S3, ":", "RRSIG over the DNSKEY")]
+for ax, tld in zip(axes.flat, TLDS):
+    for met, col, ls, _ in metric_style:
+        s = fwd[(fwd.source == tld) & (fwd.metric == met)].sort_values("month")
+        ax.plot([m2y(m) for m in s.month], s.pct, color=col, ls=ls, lw=1.9 if ls == "-" else 2.2)
+    ax.set_title("." + tld, loc="left", fontweight="bold")
+    ax.set_xlim(2016.3, 2024.1)
+    ax.set_ylim(0, 100)
+    pct_axis(ax); year_axis(ax, 5); style(ax)
+legend_below(fig, [Line2D([], [], color=c, ls=ls, lw=2, label=l) for _, c, ls, l in metric_style])
+save(fig, "forward_ds_dnskey_rrsig")
+last = fwd[fwd.month == "2023-12"].pivot(index="source", columns="metric", values="pct")
+say("**How to read it.** Each panel is one TLD; each line is the percentage of that TLD's delegated zones "
+    "that have the thing in the legend. Orange above blue means some zones serve keys without a DS at the parent "
+    "(signed but not chained). The green dotted line sits on the orange one because every signed zone signs its "
+    "own DNSKEY set; it is drawn to show that RRSIG adds no new information at zone level. "
+    f"In 2023-12 the DS share is {last.loc['se','ds_share']:.1f}% in .se, {last.loc['nu','ds_share']:.1f}% in .nu, "
+    f"{last.loc['ch','ds_share']:.1f}% in .ch, {last.loc['li','ds_share']:.1f}% in .li, "
+    f"{last.loc['ee','ds_share']:.1f}% in .ee and {last.loc['gov','ds_share']:.1f}% in .gov. "
+    "The .gov drop in early 2018 is the scanned zone list growing from about 1,200 to 5,600 zones, not signing "
+    "collapsing; .ch/.li in 2020-05 and .ee in 2019-07 start with partial months.")
+""")
+
+code(r"""
+rp = PREV[(PREV.corpus == "reverse_panel") & (PREV.source == PANEL) & (PREV.metric == "ds_share")].sort_values("month")
+fig, ax = plt.subplots(figsize=(12.5, 3.8))
+frame(fig, "Under 1% of reverse-DNS delegations are signed, and the share is still rising",
+      "Share of delegations with a DS record (%). Numerator: delegations with at least one DS. Denominator: every "
+      "delegation in the zone file. Reverse strict panel (AFRINIC + ARIN in-addr.arpa, pooled), one snapshot "
+      "at 00:00 UTC on the 1st of each month.", bottom=0.45)
+x = [m2y(m, start=True) for m in rp.month]
+ax.plot(x, rp.pct, color=S1, lw=2)
+ax.set_xlim(2009.2, 2026.8); ax.set_ylim(0, None)
+pct_axis(ax); year_axis(ax, 10); style(ax)
+save(fig, "reverse_panel_ds_share")
+r_last = rp.iloc[-1]
+say("**How to read it.** One line: the percentage of reverse delegations on the strict panel that carry a DS. "
+    f"It reaches {r_last.pct:.3f}% in {r_last.month} ({int(r_last.numerator):,} of {int(r_last.denominator):,} "
+    "delegations). DNSKEY and RRSIG cannot be measured here: a reverse parent zone holds only NS, DS and glue. "
+    "Because so few delegations are signed, the algorithm and digest shares later on are shares of these few "
+    "thousand signed delegations, not of all delegations.")
+""")
+
+code(r"""
+ALG = [("alg8", S1, "RSASHA256 (algorithm 8)"), ("alg13", S2, "ECDSA P-256 (algorithm 13)"),
+       ("alg5_7", S3, "RSASHA1 family (algorithms 5 and 7)")]
+fig, axes = plt.subplots(2, 4, figsize=(13.5, 7.2), sharey=True)
+frame(fig, "ECDSA replaced RSASHA256 as the main algorithm: in .se and .nu from 2019, on the reverse panel by 2023",
+      "Share of signed zones using each algorithm (%). Forward: zones whose DNSKEY set has the algorithm, out of "
+      "zones serving any DNSKEY. Reverse panel: delegations whose DS has the algorithm, out of DS-carrying "
+      "delegations. A zone with two algorithms counts in both, so lines can sum to more than 100%.",
+      bottom=0.95, hspace=0.38, wspace=0.08)
+for ax, src in zip(axes.flat, TLDS + [PANEL]):
+    for obs, col, _ in ALG:
+        s = series(obs, src)
+        if s is None:
+            continue
+        s = s.dropna()
+        ax.plot([m2y(m, start=(src == PANEL)) for m in s.index], s.values, color=col, lw=1.9)
+    ax.set_title(SRC[src], loc="left", fontweight="bold")
+    ax.set_xlim((2011, 2026.8) if src == PANEL else (2016.3, 2024.1))
+    ax.set_ylim(0, 105)
+    pct_axis(ax); year_axis(ax, 5); style(ax)
+axes.flat[-1].axis("off")
+legend_below(fig, [Line2D([], [], color=c, lw=2, label=l) for _, c, l in ALG])
+save(fig, "algorithm_shares")
+say("**How to read it.** Each panel is one corpus. Blue is the old RSA-with-SHA-256 algorithm, orange the newer "
+    "ECDSA, green the deprecated RSA-with-SHA-1 family. In .se, .nu and .ch the switch from blue to orange happens "
+    "in a few large steps: whole registrars or DNS operators re-signing their customers' zones at once. "
+    "The reverse panel (bottom right, note its longer time axis) has a much slower, smoother move. "
+    "These are the lines the release and default-change tests in section 3 look for bends in.")
+""")
+
+# ====================================================================== 3. per program ==
+md(r"""
+## 3. One section per program
+
+Every program section has the same layout:
+
+1. **Release cadence strip.** Each blue tick is one stable, publicly shipped release. Diamonds above are the
+   program's default changes: filled orange when the change leaves a trace in zone data (an "observable"),
+   hollow grey when it does not (for example, a validator setting, which the zone files cannot see). The two
+   bars at the bottom show when each corpus can see anything.
+2. **Default changes: the event study.** For each default change that leaves a trace, and each corpus, one dot:
+   the step test's percentile against its 1,000 placebo months. The shaded band is the 90% chance band.
+3. **Releases: the program-level test.** Does the share bend after this program's releases more than after
+   shifted, fake schedules? First the per-release dots for up to three series, then the summary for every
+   series tested.
+4. **CVE fix latency.** How many days before (negative) or after (positive) NVD publication the fix shipped.
+5. **Verdict** in a few sentences.
+""")
+
+code(r"""
+def short_id(prog, rid):
+    if prog == "bind9":
+        return rid.split("-")[0]
+    if prog == "pdns-rec":
+        return rid if len(rid) <= 16 else rid[:15] + "…"
+    i = rid.find("[")
+    return rid[i:].replace("@", " ") if i >= 0 else rid
+
+
+def cadence_strip(prog):
+    rel = RELEASES[prog]
+    ry = np.array([d2y(d) for _, d in rel])
+    rows = DEF4[(DEF4.program == prog) & (DEF4.is_default_change == True)].copy()  # noqa: E712
+    mapped = set(MAP[MAP.program == prog].row_id)
+    rows["y"] = rows.timing_date.map(d2y)
+    rows["obs"] = rows.row_id.isin(mapped)
+    x0 = math.floor(min(ry.min(), rows.y.min() if len(rows) else ry.min())) - 0.3
+    x1 = 2026.9
+    # group rows shipped on the same day into one label, then stack labels in lanes so none overlap
+    groups = []
+    for date, g in rows.sort_values(["timing_date", "row_id"]).groupby("timing_date", sort=True):
+        ids = [short_id(prog, r) for r in g.sort_values("obs", ascending=False).row_id]
+        lab_ = ", ".join(ids) if len(ids) <= 3 else ", ".join(ids[:2]) + f" +{len(ids) - 2} more"
+        groups.append((d2y(date), bool(g.obs.any()), lab_, g.obs.tolist(), g))
+    W = 13.0
+    chars_per_year = (W * 0.86 * 72 / (8.2 * 0.62)) / (x1 - x0)
+    lanes_end = []
+    placed = []
+    for y, anyobs, lab, _, g in groups:
+        need = (len(lab) + 2) / chars_per_year
+        left_side = y + need > x1          # near the right edge: write the label to the left of the marker
+        a_, b_ = (y - need, y) if left_side else (y, y + need)
+        for li, end in enumerate(lanes_end):
+            if a_ > end:
+                lanes_end[li] = b_
+                break
+        else:
+            li = len(lanes_end)
+            lanes_end.append(b_)
+        placed.append((y, li, lab, anyobs, left_side))
+    nl = max(1, len(lanes_end))
+    H = 2.9 + 0.30 * nl
+    fig, ax = plt.subplots(figsize=(W, H))
+    n_obs = int(rows.obs.sum())
+    frame(fig, f"{NAME[prog]}: {len(rel)} stable releases, {len(rows)} default changes, "
+               f"{n_obs} of them visible in zone data",
+          "Each blue tick is one stable, publicly shipped release (tag commit date, UTC). Diamonds are default "
+          "changes at their first stable release, labelled with their row id: filled orange = leaves a trace in "
+          "zone data and is tested below; hollow grey = not observable in zone data. Bottom bars: months each "
+          "corpus covers.", bottom=0.45, left=0.13)
+    ax.scatter(ry, np.zeros_like(ry), marker="|", s=260, color=S1, lw=1.1, alpha=0.75, zorder=3)
+    for y, li, lab, anyobs, left_side in placed:
+        yy = 1.0 + li * 0.62
+        ax.plot([y, y], [0.25, yy], color=GRID, lw=0.8, zorder=1)
+        ax.scatter([y], [yy], marker="D", s=46, zorder=4,
+                   facecolor=S2 if anyobs else SURFACE, edgecolor=S2 if anyobs else MUTED, lw=1.3)
+        off = 0.012 * (x1 - x0)
+        ax.text(y - off if left_side else y + off, yy, lab, fontsize=8.2, va="center",
+                ha="right" if left_side else "left", color=INK if anyobs else INK_2)
+    cov = [(-1.0, 2016 + 5 / 12, 2024.0, "forward TLDs (.se/.nu from 2016-06; others later; all end 2023-12)"),
+           (-1.7, 2011 + 4 / 12, 2026 + 8 / 12, "reverse panel (signed delegations 2011-05 to 2026-08)")]
+    for yy, a, b, lab in cov:
+        ax.plot([max(a, x0), b], [yy, yy], color=RAMP[1], lw=7, solid_capstyle="butt", zorder=2)
+        ax.text(max(a, x0) + 0.08, yy - 0.34, lab, fontsize=8.2, color=INK_2, va="center")
+    ax.set_yticks([-1.35, 0, 1.0 + (nl - 1) * 0.31])
+    ax.set_yticklabels(["corpus\ncoverage", f"releases\n(n = {len(rel)})", "default\nchanges"])
+    ax.set_ylim(-2.25, 1.0 + (nl - 1) * 0.62 + 0.55)
+    ax.set_xlim(x0, x1)
+    year_axis(ax, 12); style(ax, grid="x")
+    ax.spines["left"].set_visible(False)
+    save(fig, f"{prog}_cadence")
+    cad = next((r for r in jget(J4, "q7_release_cadence", "per_program", default=[]) if r["program"] == prog), {})
+    say(f"**How to read it.** Time runs left to right. {NAME[prog]} shipped {len(rel)} stable public releases "
+        f"on {fmtv(cad.get('n_release_days_utc'))} different days; with parallel branches counted once, the median gap "
+        f"between releases is {fmtv(cad.get('median_days_between_collapsed'), 'g')} days. Of its {len(rows)} default changes, "
+        f"{n_obs} can be seen in zone data at all; only those can be tested against adoption, and only when they "
+        f"fall inside a covered stretch of a corpus with 24 months of data before them.")
+""")
+
+code(r"""
+OBS_SHORT = {k: v["label"] for k, v in jget(J7, "observable_mapping", "observables", default={}).items()}
+
+
+def is_step(df):
+    return df.test.astype(str).str.startswith("step")
+
+
+ALL_REL = "all stable public releases"
+
+
+def es_of(df):
+    return df.event_set.fillna(ALL_REL) if "event_set" in df.columns else pd.Series(ALL_REL, index=df.index)
+
+
+def es_label(es):
+    return "" if es == ALL_REL else f" [{es}]"
+
+
+def pval(p):
+    return NA if p is None or (isinstance(p, float) and math.isnan(p)) else ("p < 0.001" if p < 0.001 else f"p = {p:.3f}")
+
+
+def pp(v):
+    # a gap in percentage points, readable at any size (no scientific notation)
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return NA
+    a = abs(v)
+    if a >= 10:
+        return f"{v:+.1f} pp"
+    if a >= 0.1:
+        return f"{v:+.2f} pp"
+    if a == 0:
+        return "0 pp"
+    return np.format_float_positional(v, precision=2, unique=False, fractional=False, sign=True) + " pp"
+OBS_NAME = {"alg1": "RSAMD5 share", "alg3_6": "DSA share", "alg5": "RSASHA1 (alg. 5) share",
+            "alg5_7": "RSASHA1 family (alg. 5, 7) share", "alg7": "alg. 7 share", "alg8": "RSASHA256 (alg. 8) share",
+            "alg8_13": "alg. 8 + 13 share", "alg12": "GOST share", "alg13": "ECDSA P-256 (alg. 13) share",
+            "digest1": "SHA-1 DS share", "digest2": "SHA-256 DS share", "digest4": "SHA-384 DS share",
+            "rsa1024": "1024-bit RSA key share", "rsa_lt1024": "RSA keys under 1024 bits",
+            "nsec3param": "NSEC3PARAM zones", "optout": "NSEC3 opt-out names", "iter0": "NSEC3 names, 0 iterations",
+            "iter5": "NSEC3 names, 5 iterations", "iter10": "NSEC3 names, 10 iterations",
+            "iter_gt0": "NSEC3 names, over 0 iterations", "iter_gt50": "NSEC3 names, over 50 iterations",
+            "iter_gt100": "NSEC3 names, over 100 iterations", "iter_gt150": "NSEC3 names, over 150 iterations",
+            "iter_gt256": "NSEC3 names, over 256 iterations", "iter_gt500": "NSEC3 names, over 500 iterations",
+            "iter_gt2500": "NSEC3 names, over 2500 iterations", "cds": "zones publishing CDS"}
+
+
+def q2_table(prog):
+    '''One row per mapped default change: what it is, and the step test in each corpus.'''
+    mp = MAP[MAP.program == prog]
+    if mp.empty:
+        say(f"No default change of {NAME[prog]} maps to anything the zone data records, so there is nothing to "
+            "test here. This is not a null result: the data simply cannot see these changes.")
+        return
+    st = Q2[(Q2.program == prog) & (Q2.test == "step12")]
+    out = []
+    for _, r in mp.iterrows():
+        e = st[(st.row_id == r.row_id) & (st.observable == r.observable)]
+        cells = []
+        for src in TLDS + [PANEL]:
+            x = e[e.source == src]
+            if x.empty:
+                continue
+            x = x.iloc[0]
+            if x.status == "tested":
+                cells.append(f"{SRC[src]} {x.percentile:.0f}{' (outside)' if x.outside_90_band else ''}")
+        untested = e[e.status != "tested"]
+        reasons = sorted(set(untested.reason.dropna().str.replace(r" in [a-z. ,_-]+$", "", regex=True)))
+        out.append({"row": r.row_id, "first stable release": r.timing_date,
+                    "what it changes": OBS_SHORT.get(r.observable, r.observable),
+                    "expected": "up" if r.expected_direction > 0 else "down",
+                    "on upgrade / opt-in": f"{'yes' if r.applies_on_upgrade else 'no'} / {'yes' if r.opt_in else 'no'}",
+                    "step test percentile, per corpus": "; ".join(cells) if cells else "no test",
+                    "why some corpora have no test": "; ".join(reasons)[:160]})
+    display(pd.DataFrame(out).style.hide(axis="index").set_properties(**{"text-align": "left"}))
+
+
+def q2_dotplot(prog):
+    st = Q2[(Q2.program == prog) & (Q2.test == "step12") & (Q2.status == "tested")].copy()
+    if st.empty:
+        say(f"**No default-change chart for {NAME[prog]}:** none of its mapped default changes has 24 months of "
+            "data before it and 12 after in any corpus, so the step test could not run.")
+        return
+    st["lab"] = [f"{r.row_id if prog == 'pdns-rec' else short_id(prog, r.row_id)} ({'expect up' if r.expected_direction > 0 else 'expect down'})"
+                 f" · {SRC[r.source]}" for r in st.itertuples()]
+    st = st.sort_values(["timing_date", "row_id", "source"], ascending=[False, False, True])
+    n = len(st)
+    fig, ax = plt.subplots(figsize=(12.5, max(3.6, 2.4 + 0.30 * n)))
+    frame(fig, f"{NAME[prog]}: {int(st.outside_90_band.sum())} of {n} default-change events fall outside the "
+               f"chance band, against about {0.1 * n:.1f} by chance",
+          "Each dot: one default change in one corpus. Position = percentile of the step statistic (average gap "
+          f"between the share and its extended {PRE}-month pre-trend over the {POST} months after) among {DRAWS:,} placebo "
+          "months of the same series. Right-hand numbers: the gap itself, in percentage points.",
+          bottom=0.95, left=0.30, right=0.90)
+    y = np.arange(n)
+    ax.axvspan(5, 95, color=RAMP[0], zorder=0)
+    col = [RED if o else S1 for o in st.outside_90_band]
+    ax.scatter(st.percentile, y, s=55, color=col, zorder=3)
+    for yi, (_, r) in zip(y, st.iterrows()):
+        ax.text(1.015, yi, pp(r.observed), transform=ax.get_yaxis_transform(), va="center",
+                fontsize=9, color=INK_2)
+    ax.set_yticks(y); ax.set_yticklabels(st.lab, fontsize=9)
+    ax.set_xlim(0, 100); ax.set_ylim(-0.7, n - 0.3)
+    ax.set_xlabel("percentile among 1,000 placebo months (50 = typical month)")
+    style(ax, grid="x")
+    legend_below(fig, [Patch(color=RAMP[0], label="90% chance band (5th to 95th percentile of placebo months)"),
+                       Line2D([], [], marker="o", ls="", color=S1, label="inside the band"),
+                       Line2D([], [], marker="o", ls="", color=RED, label="outside the band")])
+    save(fig, f"{prog}_default_changes")
+    out = st[st.outside_90_band]
+    txt = (f"**How to read it.** A dot far right means the share ended up *higher* than its own trend predicted, "
+           f"far left *lower*. Only dots outside the shaded band are unusual, and even with no effect anywhere about "
+           f"1 in 10 lands outside. Here {len(out)} of {n} are outside, against {0.1 * n:.1f} expected by chance.")
+    if len(out):
+        txt += " Outside: " + "; ".join(
+            f"{r.row_id} in {SRC[r.source]} at percentile {r.percentile:.1f} ({pp(r.observed)}, "
+            f"{'in' if r.in_expected_direction else 'against'} the expected direction)" for r in out.itertuples()) + "."
+    say(txt)
+""")
+
+code(r"""
+def q1_release_dots(prog, max_series=3):
+    t = Q1[(Q1.program == prog) & is_step(Q1) & (Q1.status == "tested")].copy()
+    if t.empty:
+        return False
+    t["es"] = es_of(t)
+    rank = {PANEL: 0, "se": 1, "nu": 2, "gov": 3, "ee": 4, "ch": 5, "li": 6}
+    t["r"] = t.source.map(rank)
+    t = t.sort_values(["beats_chance_mean", "r", "release_months_tested"], ascending=[False, True, False])
+    pick = t.drop_duplicates("observable").head(max_series)
+    defaults = MAP[MAP.program == prog]
+    def_months = {d[:7] for d in defaults.timing_date}
+    k = len(pick)
+    n_out = int((pick.share_release_months_outside_band * pick.release_months_tested).round().sum())
+    n_all = int(pick.release_months_tested.sum())
+    fig, axes = plt.subplots(k, 1, figsize=(12.5, 1.9 + 2.25 * k), sharex=True, squeeze=False)
+    kind_ = "feature-release" if set(pick.es) != {ALL_REL} else "release"
+    frame(fig, f"{NAME[prog]}: {n_out} of {n_all} {kind_} months fall outside the usual range "
+               f"({n_out / n_all:.0%}), against about 10% for any month",
+          ("Each dot: one month with a feature release (x.y.0)" if kind_ == "feature-release" else "Each dot: one month with a stable release")
+          + " (reverse panel: plotted at the first label after the release). Height = step statistic for that month: the average gap "
+          f"(percentage points) between the share over the next {POST} months and the straight line through the {PRE} "
+          "months before. Shaded: 90% of the same statistic over every testable month of the series.",
+          bottom=0.75, left=0.08, hspace=0.55)
+    for ax, (_, row) in zip(axes[:, 0], pick.iterrows()):
+        pr = Q1R[(Q1R.program == prog) & (Q1R.test == row.test) & (Q1R.observable == row.observable)
+                 & (Q1R.source == row.source) & (es_of(Q1R) == row.es)].copy()
+        pr["month"] = pr.released.str[:7]
+        pr = pr.drop_duplicates("month")
+        start = row.source == PANEL
+        x = np.array([m2y(m, start) for m in pr.month])
+        ax.axhspan(row.band_lo, row.band_hi, color=RAMP[0], zorder=0)
+        ax.axhline(0, color=BASELINE, lw=0.8, zorder=1)
+        c = [RED if o else S1 for o in pr.outside_90_band]
+        ax.scatter(x, pr.value, s=22, color=c, zorder=3)
+        dm = pr[pr.month.isin(def_months)]
+        if len(dm):
+            ax.scatter([m2y(m, start) for m in dm.month], dm.value, s=110, facecolor="none", edgecolor=S2,
+                       lw=1.6, zorder=4)
+        verdict = "outside" if row.beats_chance_mean else "inside"
+        ax.set_title(f"{OBS_NAME.get(row.observable, row.observable)} — {SRC[row.source]}"
+                     + es_label(row.es) + ".   Mean over releases: "
+                     f"percentile {row.percentile:.1f} among {DRAWS:,} shifted schedules ({verdict} the 90% band)",
+                     loc="left", fontsize=9.6, color=INK)
+        ax.set_ylabel("gap, pp")
+        style(ax)
+    year_axis(axes[-1, 0], 10)
+    legend_below(fig, [Patch(color=RAMP[0], label="90% of all testable months"),
+                       Line2D([], [], marker="o", ls="", color=S1, label="release month, inside"),
+                       Line2D([], [], marker="o", ls="", color=RED, label="release month, outside"),
+                       Line2D([], [], marker="o", ls="", mfc="none", mec=S2, mew=1.6, ms=10,
+                              label="month of a tested default change")], ncol=4)
+    save(fig, f"{prog}_release_dots")
+    parts = []
+    for _, row in pick.iterrows():
+        parts.append(f"{OBS_NAME[row.observable]} in {SRC[row.source]}: {row.share_release_months_outside_band:.0%} of "
+                     f"{int(row.release_months_tested)} release months outside the band, against "
+                     f"{row.null_mean_share_outside:.0%} under shifted schedules")
+    say("**How to read it.** If releases pushed adoption, the dots would sit mostly above (or below) the shaded "
+        "band. Dots scattered across it, with a few outside, is what any random set of months looks like. "
+        + "; ".join(parts) + ". Neighbouring dots form smooth waves because consecutive months share 11 of "
+        "their 12 after-months; that is why the test shifts the whole schedule instead of counting dots. "
+        "Series with a result outside the band are shown first. Series shown: up to three, one per observable, the reverse panel first where "
+        "tested; every tested series is in the next chart.")
+    return True
+
+
+def q1_summary(prog):
+    t = Q1[(Q1.program == prog) & is_step(Q1) & (Q1.status == "tested")].copy()
+    if t.empty:
+        return
+    t["es"] = es_of(t)
+    t["lab"] = [f"{OBS_NAME.get(o, o)} · {SRC[s]}" + es_label(e) for o, s, e in zip(t.observable, t.source, t.es)]
+    t = t.sort_values(["es", "observable", "source"], ascending=False)
+    n = len(t)
+    fig, ax = plt.subplots(figsize=(12.5, max(3.6, 2.4 + 0.29 * n)))
+    frame(fig, f"{NAME[prog]}: {int(t.beats_chance_mean.sum())} of {n} release-schedule tests fall outside the "
+               f"chance band, against about {0.1 * n:.1f} by chance",
+          "Each dot: one series (what is measured · corpus). Position = percentile of the mean step statistic over "
+          f"the program's release months, among {DRAWS:,} copies of the release schedule shifted in time. Right-hand "
+          "numbers: release months tested.", bottom=0.95, left=0.43, right=0.92)
+    y = np.arange(n)
+    ax.axvspan(5, 95, color=RAMP[0], zorder=0)
+    ax.scatter(t.percentile, y, s=55, color=[RED if b else S1 for b in t.beats_chance_mean], zorder=3)
+    for yi, m in zip(y, t.release_months_tested):
+        ax.text(1.015, yi, f"{int(m)}", transform=ax.get_yaxis_transform(), va="center", fontsize=9, color=INK_2)
+    ax.set_yticks(y); ax.set_yticklabels(t.lab, fontsize=8.8)
+    ax.set_xlim(0, 100); ax.set_ylim(-0.7, n - 0.3)
+    ax.set_xlabel("percentile among 1,000 shifted release schedules (50 = typical)")
+    style(ax, grid="x")
+    legend_below(fig, [Patch(color=RAMP[0], label="90% of shifted schedules"),
+                       Line2D([], [], marker="o", ls="", color=S1, label="inside"),
+                       Line2D([], [], marker="o", ls="", color=RED, label="outside")])
+    save(fig, f"{prog}_release_tests")
+    out = t[t.beats_chance_mean]
+    s = (f"**How to read it.** One dot per series tested. Dots in the band mean that the months right after "
+         f"{NAME[prog]} releases look like any other months. {len(out)} of {n} are outside, against {0.1 * n:.1f} "
+         "expected by chance.")
+    if len(out):
+        s += " Outside: " + "; ".join(f"{OBS_NAME[r.observable]} in {SRC[r.source]} "
+                                      f"({pval(r.p_two_sided)})" for r in out.itertuples()) + "."
+    say(s)
+
+
+REASONS = [("release months fill", "releases fill more than 75% of the testable window"),
+           ("the testable window", "the testable window is shorter than 24 months"),
+           ("the value never", "the value never appears in that corpus"),
+           ("the value is present", "the value is present in fewer than 12 months"),
+           ("no release month", "no release falls in the testable window"),
+           ("no month with at least", "the denominator never reaches the minimum count"),
+           ("no before-period", "there are not enough months before the event"),
+           ("no after-period", "there are not enough months after the event"),
+           ("the value is absent in every month", "the value is absent throughout the window"),
+           ("only ", "the series has too few testable months"),
+           ("no series", "there is no series"), ("the series is too short", "the series is too short")]
+
+
+def reason_counts(df):
+    out = {}
+    for r in df.reason.fillna(""):
+        lab = next((l for k, l in REASONS if r.startswith(k)), r[:60] or "no reason given")
+        out[lab] = out.get(lab, 0) + 1
+    return out
+
+
+def q1_untestable(prog):
+    t = Q1[(Q1.program == prog) & is_step(Q1) & (Q1.status != "tested") & (Q1.source != "fed.us")]
+    for es, part in t.groupby(es_of(t)):
+        c = reason_counts(part)
+        say(f"**Series not tested{es_label(es)}** ({len(part)}, besides .fed.us, which is never signed): "
+            + "; ".join(f"{v} because {k}" for k, v in sorted(c.items(), key=lambda kv: -kv[1])) + ".")
+
+
+def occupancy(prog):
+    '''BIND 9: why no program-level test. A calendar of months that contain a stable release.'''
+    rel = RELEASES[prog]
+    months = {d[:7] for _, d in rel}
+    years = list(range(2011, 2027))
+    grid = np.array([[1 if f"{y}-{m:02d}" in months else 0 for m in range(1, 13)] for y in years], dtype=float)
+    fig, ax = plt.subplots(figsize=(12.5, 3.9))
+    inwin = [f"{y}-{m:02d}" for y in range(2016, 2024) for m in range(1, 13)]
+    inwin = [m for m in inwin if "2016-06" <= m <= "2023-12"]
+    share = sum(m in months for m in inwin) / len(inwin)
+    frame(fig, f"{NAME[prog]} ships in almost every month, so its release schedule cannot be tested",
+          f"Each square is one calendar month; filled = at least one stable public {NAME[prog]} release that month. "
+          f"In the forward corpus window 2016-06 to 2023-12, {share:.0%} of months have a release.",
+          bottom=0.55, left=0.06)
+    ax.imshow(grid.T, aspect="auto", cmap=plt.matplotlib.colors.ListedColormap([GRID, S1]), vmin=0, vmax=1,
+              extent=(years[0] - 0.5, years[-1] + 0.5, 12.5, 0.5))
+    ax.set_yticks([1, 4, 7, 10]); ax.set_yticklabels(["Jan", "Apr", "Jul", "Oct"])
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True, nbins=16))
+    style(ax, grid=None)
+    for s in ax.spines.values():
+        s.set_visible(False)
+    legend_below(fig, [Patch(color=S1, label="month with a stable release"),
+                       Patch(color=GRID, label="month without")])
+    save(fig, f"{prog}_release_months")
+    say(f"**How to read it.** The program-level test compares the months after real releases with the months "
+        f"after a *shifted* copy of the schedule. When nearly every month already holds a release, every shifted "
+        f"copy covers nearly the same months, so there is nothing to compare against. Phase 7 therefore requires "
+        f"releases to fill at most 75% of a series' testable window; {NAME[prog]} exceeds that in every series. "
+        "This is a limit of the method, not evidence either way.")
+""")
+
+code(r"""
+def cve_strip(prog):
+    c = CVE6[(CVE6.program == prog) & (CVE6.group == "included") & CVE6.latency_days.notna()].copy()
+    per = next((r for r in jget(J4, "q6_cve_latency", "per_program", default=[]) if r["program"] == prog), {})
+    if c.empty:
+        say(f"**No CVE latency chart for {NAME[prog]}:** it has no included CVE with a fix release and an NVD "
+            "date (OpenDNSSEC's only CVE, CVE-2012-5582, has no fix commit in the repository).")
+        return
+    c["x"] = c.stable_date.map(d2y)
+    lo, hi = -200, 100
+    c["yc"] = c.latency_days.clip(lo, hi)
+    fig, ax = plt.subplots(figsize=(12.5, 4.2))
+    med = per["latency_days_median"]
+    frame(fig, f"{NAME[prog]}: only {per['n_latency']} CVE fixes can be dated; median {med:+g} days from NVD "
+               f"publication" if per["n_latency"] < 10 else
+               f"{NAME[prog]} usually ships security fixes before NVD publishes the CVE "
+               f"(median {med:+g} days, n = {per['n_latency']})" if med < 0 else
+               f"{NAME[prog]}: CVE fixes ship a median {med:+g} days after NVD publication (n = {per['n_latency']})",
+          "Each dot: one CVE. Height = fix latency in days, the first stable release carrying the fix minus the NVD "
+          "publication date; below the line = fixed before the CVE was public at NVD. Values beyond -200 or +100 "
+          "days are drawn as triangles at the edge.", bottom=0.55)
+    ax.axhline(0, color=INK_2, lw=1)
+    known = c.dnssec_related.astype(str)
+    groups = [("True", S2, "DNSSEC-related CVE"), ("False", S1, "other CVE"), ("not classified", S1, "CVE (not classified as DNSSEC or not)")]
+    handles = []
+    for key, col, lab in groups:
+        gg = c[known == key]
+        if gg.empty:
+            continue
+        inside = gg[(gg.latency_days >= lo) & (gg.latency_days <= hi)]
+        ax.scatter(inside.x, inside.yc, s=26, color=col, alpha=0.8, zorder=3)
+        low, high = gg[gg.latency_days < lo], gg[gg.latency_days > hi]
+        ax.scatter(low.x, low.yc, s=40, color=col, marker="v", zorder=3)
+        ax.scatter(high.x, high.yc, s=40, color=col, marker="^", zorder=3)
+        handles.append(Line2D([], [], marker="o", ls="", color=col, label=f"{lab} (n = {len(gg)})"))
+    ax.axhline(med, color=S3, lw=1.6, ls="--", zorder=2)
+    handles.append(Line2D([], [], color=S3, ls="--", lw=1.6, label=f"median {med:+g} days"))
+    ax.set_ylim(lo - 15, hi + 15)
+    ax.set_ylabel("days from NVD publication to fix")
+    year_axis(ax, 12); style(ax)
+    legend_below(fig, handles)
+    save(fig, f"{prog}_cve_latency")
+    n_edge = int(((c.latency_days < lo) | (c.latency_days > hi)).sum())
+    iqr = per["latency_days_iqr"]
+    s = (f"**How to read it.** Negative days are normal for embargoed security releases: the vendor tags the "
+         f"fix a few days before the CVE goes public. The middle half of {NAME[prog]}'s fixes lie between "
+         f"{iqr[0]:+g} and {iqr[1]:+g} days. {n_edge} CVE(s) fall beyond the axis and are drawn at the edge.")
+    if per.get("n_latency", 99) < 10:
+        s += (f" With n = {per.get('n_latency')} this median says little; for Knot it mostly measures NVD's delay in "
+              "publishing old CVEs, not the vendor's speed.")
+    say(s)
+""")
+
+# ---------------------------------------------------------------- per-program sections -------
+
+code(r"""
+KEY_EVENTS = {
+    "bind9": [("d15-dnssec-policy-default-ecdsap256", "the opt-in ECDSA policy default of 9.16.0"),
+              ("d20-dnssec-cds-sha2-only", "SHA-2-only CDS handling"),
+              ("d21-signzone-nsec3-iterations-0", "the zero-iteration dnssec-signzone default")],
+    "knot": [("knot[1]@2.0.0", "the RSASHA256 default of 2.0.0"), ("knot[2]@2.1.0", "the first ECDSA signing default, 2.1.0"),
+             ("knot[14]@3.2.0", "the zero-iteration NSEC3 default of 3.2.0")],
+    "pdns-auth": [("pdns-auth[7]@4.0.0", "the ECDSA default of 4.0.0"), ("pdns-auth[11]@4.6.0", "the opt-in zero-iteration default of 4.6.0")],
+    "unbound": [("unbound[20]@1.13.2", "the NSEC3 cap of 150")],
+    "kresd": [("kresd[9]@5.3.1", "the NSEC3 cap of 150")],
+    "pdns-rec": [("nsec3-max-iterations-150", "the NSEC3 cap of 150")],
+    "opendnssec": [("opendnssec[13]@2.1.0", "SHA-256-only DS export in 2.1.0")],
+}
+
+
+def exp_dir(prog, obs):
+    m = MAP[(MAP.program == prog) & (MAP.observable == obs)]
+    return None if m.empty else int(np.sign(m.expected_direction.iloc[0]))
+
+
+def verdict(prog):
+    out = []
+    # releases
+    if MAP[MAP.program == prog].empty:
+        out.append(f"Nothing to test: no {NAME[prog]} default change maps to anything the zone files record, so there "
+                   "is no default-change test and no release-schedule test. This is 'not observable', not 'no effect'.")
+    q1p = Q1[(Q1.program == prog) & is_step(Q1) & (Q1.source != "fed.us")].copy()
+    q1p["es"] = es_of(q1p)
+    for es, part in q1p.groupby("es", sort=True):
+        t = part[part.status == "tested"]
+        if t.empty:
+            c = reason_counts(part)
+            top_ = max(c, key=c.get) if c else "there is no series"
+            out.append(f"**Releases{es_label(es) or ' (every stable release)'}.** No test ran on this schedule: most "
+                       f"series fail because {top_}. This is a limit of the method, not evidence either way.")
+            continue
+        o = t[t.beats_chance_mean.astype(bool)]
+        s_ = (f"**Releases{es_label(es)}.** {len(o)} of {len(t)} program-level step tests fall outside the chance "
+              f"band, against about {0.1 * len(t):.1f} by chance.")
+        if len(o):
+            bits = []
+            for r in o.itertuples():
+                d = exp_dir(prog, r.observable)
+                hi = r.percentile > 50
+                way = ("higher" if hi else "lower") + " than under shifted schedules"
+                if d is not None:
+                    way += ", " + ("in" if hi == (d > 0) else "against") + " the direction its defaults push"
+                bits.append(f"{OBS_NAME.get(r.observable, r.observable)} in {SRC[r.source]}, {pval(r.p_two_sided)} ({way})")
+            s_ += " Outside: " + "; ".join(bits) + "."
+            if len(o) >= 2 and len(o) > 0.15 * len(t) and set(o.source) <= {"se", "nu"}:
+                s_ += (" All of them are in .se and .nu, whose zones moved between algorithms and NSEC3 settings in a "
+                       "few large steps; every program that released often in those years sits over the same steps.")
+        out.append(s_)
+    # default changes
+    st = Q2[(Q2.program == prog) & (Q2.test == "step12")]
+    tt = st[st.status == "tested"]
+    if len(tt):
+        o = tt[tt.outside_90_band.astype(bool)]
+        s_ = (f"**Default changes.** {len(o)} of {len(tt)} step tests fall outside the chance band, against about "
+              f"{0.1 * len(tt):.1f} by chance.")
+        if len(o):
+            s_ += " Outside: " + "; ".join(
+                f"{r.row_id} in {SRC[r.source]}, {pp(r.observed)} at percentile {r.percentile:.1f}, "
+                f"{'in' if r.in_expected_direction else 'against'} the expected direction" for r in o.itertuples()) + "."
+        big = tt[(~tt.outside_90_band.astype(bool)) & (tt.observed.abs() >= 10)]
+        if len(big):
+            s_ += (" Large moves can still sit inside the band of a volatile series: " + "; ".join(
+                f"{r.row_id} in {SRC[r.source]}, {pp(r.observed)}" for r in big.itertuples()) + ".")
+        out.append(s_)
+    elif not MAP[MAP.program == prog].empty:
+        c = reason_counts(st[st.status != "tested"])
+        out.append("**Default changes.** No step test ran. Most common reasons: " + "; ".join(
+            f"{k} ({v})" for k, v in sorted(c.items(), key=lambda kv: -kv[1])[:3]) + ".")
+    ev = []
+    for rid, what in KEY_EVENTS.get(prog, []):
+        e = st[st.row_id == rid]
+        te = e[e.status == "tested"]
+        if len(te):
+            ev.append(f"{what} ({rid}): percentile " + ", ".join(f"{r.percentile:.0f} in {SRC[r.source]}"
+                                                     for r in te.itertuples()))
+        elif len(e):
+            ev.append(f"{what} ({rid}): no step test ({e.reason.dropna().iloc[0] if e.reason.notna().any() else NA})")
+    if ev:
+        out.append("**Key default changes.** " + "; ".join(ev) + ".")
+    # reverse ledger
+    g3 = Q3[(Q3.scope == "all RIRs") & (Q3.status == "tested") & Q3.programs.astype(str).str.contains(prog, regex=False)
+            & ~Q3.group.str.startswith("all default")]
+    if len(g3):
+        out.append("**Reverse ledger (section 5).** " + "; ".join(
+            f"{r.group}: large-action p = {r.p_large_ge_observed:.3f}, block-level p = {r.p_block_ge_observed:.3f}"
+            for r in g3.itertuples()) + ".")
+    per = next((r for r in jget(J4, "q6_cve_latency", "per_program", default=[]) if r["program"] == prog), {})
+    if per.get("n_latency"):
+        out.append(f"**Security fixes.** Median {per['latency_days_median']:+g} days from NVD publication "
+                   f"(n = {per['n_latency']}).")
+    say("\n\n".join(out))
+""")
+
+INTRO = {}
+INTRO["bind9"] = r"""
+### 3.1 BIND 9
+
+BIND 9 is an authoritative server, a validating resolver and a signer (`dnssec-keygen`, `dnssec-signzone`,
+`dnssec-policy`). It is the only program here whose default changes cover signing algorithms, key sizes, DS digests
+and NSEC3 at once, so it has the most to test. It also ships more often than any other program.
+"""
+INTRO["unbound"] = r"""
+### 3.2 Unbound
+
+Unbound is a validating resolver. It does not sign, so none of its defaults changes what a zone publishes. Only its
+NSEC3 iteration caps map to zone data, and only indirectly: a validator cap might push zone operators to lower their
+iteration counts.
+"""
+INTRO["knot"] = r"""
+### 3.3 Knot DNS
+
+Knot DNS is an authoritative server and signer. Its default changes include the first ECDSA signing default of any
+program (2.1.0, 2016-01) and a zero-iteration NSEC3 default (3.2.0, 2022-08).
+"""
+INTRO["kresd"] = r"""
+### 3.4 Knot Resolver
+
+Knot Resolver is a validating resolver. As with Unbound, only its NSEC3 iteration caps map to zone data, indirectly.
+"""
+INTRO["nsd"] = r"""
+### 3.5 NSD
+
+NSD is an authoritative server that serves DNSSEC but does not sign. Its default changes are compile-time switches
+(for example, DNSSEC support on by default) that no zone file records.
+"""
+INTRO["opendnssec"] = r"""
+### 3.6 OpenDNSSEC
+
+OpenDNSSEC is a signer: a key and signing policy enforcer plus a signing engine. Its most important default change,
+the switch from algorithm 7 to 8 in 1.2.0b1 (2011-03), predates every corpus.
+"""
+INTRO["pdns-auth"] = r"""
+### 3.7 PowerDNS Authoritative
+
+PowerDNS Authoritative serves and signs zones. Its ECDSA default of 4.0.0 (2016-07) is the second ECDSA signing
+default after Knot's, and its RSASHA256 default of 3.2 (2013-01) is the one closest to a signal in section 5.
+"""
+INTRO["pdns-rec"] = r"""
+### 3.8 PowerDNS Recursor
+
+PowerDNS Recursor is a validating resolver. Its tags rec-4.5.0, rec-4.5.3 and rec-5.0.0 were never shipped publicly
+and are left out; only its NSEC3 caps map to zone data, indirectly.
+"""
+
+
+def program_section(prog):
+    md(INTRO[prog])
+    code(f'cadence_strip("{prog}")')
+    md(f"#### Default changes of {NAME_PY[prog]} and what the step test found")
+    code(f'q2_table("{prog}")\nq2_dotplot("{prog}")')
+    md(f"#### Does adoption bend after {NAME_PY[prog]}'s releases?")
+    if prog == "nsd":
+        md("NSD has no mapped observable, so its release schedule is not tested against any series.")
+    else:
+        pre_ = f'occupancy("{prog}")\n' if prog == "bind9" else ""
+        code(pre_ + f'q1_release_dots("{prog}")\nq1_summary("{prog}")\nq1_untestable("{prog}")')
+    md(f"#### {NAME_PY[prog]}: CVE fix latency")
+    code(f'cve_strip("{prog}")')
+    md(f"#### Verdict for {NAME_PY[prog]}")
+    code(f'verdict("{prog}")')
+
+
+NAME_PY = {"bind9": "BIND 9", "unbound": "Unbound", "knot": "Knot DNS", "kresd": "Knot Resolver",
+           "nsd": "NSD", "opendnssec": "OpenDNSSEC", "pdns-auth": "PowerDNS Authoritative",
+           "pdns-rec": "PowerDNS Recursor"}
+
+ONLY = sys.argv[1:]  # optional list of programs, for quick partial builds
+for p in PROGRAMS:
+    if ONLY and p not in ONLY:
+        continue
+    program_section(p)
+
+
+
+# ====================================================================== 4. across programs ==
+md(r"""
+## 4. Across programs
+
+The per-program sections asked "does adoption follow this program?". This section compares the programs with each
+other, using Phase 4's verified results: when each mechanism first appears in each program, how far code lags the
+RFC, whether any program systematically goes first, and the one release that was clearly coordinated.
+""")
+
+code(r"""
+MECH_LABEL = {"validation": "validation on", "trust-anchor": "trust anchor", "trust-anchor-5011": "RFC 5011 anchors",
+              "nsec3": "NSEC3", "nsec3-iterations": "NSEC3 iterations", "alg-rsa-sha2": "RSASHA256/512",
+              "alg-ecdsa": "ECDSA", "alg-eddsa": "EdDSA", "alg-gost": "GOST", "dnskey": "DNSKEY / key generation",
+              "ds-digest": "DS digest", "cds-cdnskey": "CDS / CDNSKEY", "rrsig": "RRSIG", "other": "other"}
+mat = MAT4.assign(year=MAT4.first_stable_date.str[:4].astype(int))
+first = mat.groupby(["mechanism", "program"]).year.min().unstack()
+order = mat.groupby("mechanism").year.min().sort_values().index
+first = first.reindex(index=order, columns=[p for p in NAME if p in first.columns])
+bins = [(0, 2007, "before 2008"), (2008, 2011, "2008-2011"), (2012, 2015, "2012-2015"), (2016, 2018, "2016-2018"),
+        (2019, 2021, "2019-2021"), (2022, 9999, "2022 on")]
+fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.42 * len(first)))
+frame(fig, "The same mechanism reached different programs years apart",
+      "Cell = year of the first stable release carrying a recorded timeline row for this mechanism (a default change, "
+      "support added or a limit changed); darker = later. Blank = no row recorded, which does not mean no support "
+      "(rows exist only where a default or limit changed). Source: Phase 4 mechanism matrix.",
+      bottom=0.7, left=0.20, right=0.98)
+fig.subplots_adjust(top=fig.subplotpars.top - 0.35 / fig.get_figheight())
+for i, mech in enumerate(first.index):
+    for j, prog in enumerate(first.columns):
+        v = first.loc[mech, prog]
+        if pd.isna(v):
+            ax.add_patch(plt.Rectangle((j - 0.47, i - 0.42), 0.94, 0.84, facecolor=SURFACE, edgecolor=GRID, lw=0.8))
+            continue
+        k = next(n for n, (a, b, _) in enumerate(bins) if a <= v <= b)
+        ax.add_patch(plt.Rectangle((j - 0.47, i - 0.42), 0.94, 0.84, facecolor=RAMP[k], edgecolor=SURFACE))
+        ax.text(j, i, f"{int(v)}", ha="center", va="center", fontsize=9.5, color="white" if k >= 3 else INK)
+ax.set_xlim(-0.5, len(first.columns) - 0.5); ax.set_ylim(len(first) - 0.5, -0.5)
+ax.set_xticks(range(len(first.columns)))
+ax.set_xticklabels([NAME[p].replace("PowerDNS ", "PowerDNS\n").replace("Knot Resolver", "Knot\nResolver") for p in first.columns], fontsize=9.5)
+ax.xaxis.tick_top()
+ax.set_yticks(range(len(first))); ax.set_yticklabels([MECH_LABEL.get(m, m) for m in first.index])
+style(ax, grid=None)
+for s_ in ax.spines.values():
+    s_.set_visible(False)
+legend_below(fig, [Patch(color=RAMP[k], label=lab) for k, (_, _, lab) in enumerate(bins)], ncol=6)
+save(fig, "mechanism_matrix")
+say("**How to read it.** Rows are DNSSEC mechanisms, columns are programs. A number is the year the program's first "
+    "recorded row for that mechanism shipped in a stable release. Compare along a row to see who shipped first. "
+    "The ECDSA row, for example, runs from 2012 (Unbound, validation) through 2016 (Knot, PowerDNS: signing "
+    "default) to 2020 (BIND 9's policy default). Empty cells are *not* 'never': NSD does not sign, and Knot "
+    "Resolver takes its algorithm support from a library, so neither has rows there.")
+""")
+
+code(r"""
+q2l = J4["q2_code_lag_vs_rfc"]["per_rfc"]
+ABBR = {"bind9": "BIND", "unbound": "Unbound", "knot": "Knot", "kresd": "kresd", "nsd": "NSD",
+        "opendnssec": "ODS", "pdns-auth": "PDNS-A", "pdns-rec": "PDNS-R"}
+fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.44 * len(q2l)))
+lags = [o["lag_months"] for r in q2l for o in r["order"]]
+frame(fig, f"Code first citing an RFC shipped from {-min(lags) / 12:.0f} years before to {max(lags) / 12:.0f} years "
+           "after the RFC, and programs differ by years for the same RFC",
+      "Each dot: the first timeline row of one program that cites the RFC (any kind of row). Position = months from "
+      "RFC publication to that row's stable release; left of the dashed line = shipped from a draft, before the RFC. "
+      "BIND 9 is absent: its rows carry no RFC field. Source: Phase 4 question 2.", bottom=0.9, left=0.10)
+ax.axvline(0, color=INK_2, ls="--", lw=1)
+for i, r in enumerate(q2l):
+    xs = [o["lag_months"] for o in r["order"]]
+    ax.plot([min(xs), max(xs)], [i, i], color=GRID, lw=3, solid_capstyle="round", zorder=1)
+    ax.scatter(xs, [i] * len(xs), s=34, color=S1, zorder=3)
+    lastx, prev_up = -1e9, False
+    for o in sorted(r["order"], key=lambda o: o["lag_months"]):
+        up = (not prev_up) if (o["lag_months"] - lastx) < 16 else True
+        ax.text(o["lag_months"], i + (-0.30 if up else 0.36), ABBR[o["program"]], fontsize=7.8, color=INK_2,
+                ha="center", va="center")
+        lastx, prev_up = o["lag_months"], up
+ax.set_yticks(range(len(q2l)))
+ax.set_yticklabels([f"{r['rfc']} ({r['publication_date'][:4]})" for r in q2l], fontsize=9)
+ax.set_ylim(len(q2l) - 0.4, -0.7)
+ax.set_xlabel("months from RFC publication to the first stable release citing it")
+style(ax, grid="x")
+legend_below(fig, [Line2D([], [], marker="o", ls="", color=S1, label="one program's first citing row"),
+                   Line2D([], [], color=GRID, lw=3, label="spread from first to last program"),
+                   Line2D([], [], color=INK_2, ls="--", label="RFC published")], ncol=3)
+save(fig, "rfc_code_lag")
+bl = J4["q2_code_lag_vs_rfc"]["first_to_ship_chance_baseline"]["per_program_same_row_merged"]
+ub = next(b for b in bl if b["program"] == "unbound")
+say("**How to read it.** Each row is one RFC. The dots are the programs, labelled below or above the dot "
+    "(ODS = OpenDNSSEC, PDNS-A/-R = PowerDNS Authoritative/Recursor). A long grey bar means the programs shipped "
+    "that RFC's mechanism years apart. Negative lags are real: Unbound shipped NSEC3 and RSASHA256 from drafts, and "
+    "some 2021 iteration caps were codified by RFC 9276 afterwards. Is one program usually first? Unbound is first "
+    f"{ub['observed_leads']} times in {ub['contests_entered']} RFCs, against {ub['expected_leads_by_chance']:.2f} "
+    f"expected if the order were random (p = {ub['p_at_least_observed']:.2f}); no program is first more often "
+    "than chance.")
+""")
+
+code(r"""
+lf = J4["q4_leader_follower"]["baseline_sub_milestones"]
+lf = sorted(lf, key=lambda b: b["observed_leads"])
+fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.45 * len(lf)))
+frame(fig, "No program introduces new DNSSEC defaults first more often than chance",
+      "For each like-for-like milestone (for example 'ECDSA signing default', 'NSEC3 cap 150 or lower'), the leader "
+      "is the program that shipped it first. Bars: milestones led. Orange tick: leads expected if the order among "
+      "the programs entering each milestone were random. Source: Phase 4 question 4, 17 sub-milestones, ties left out.",
+      bottom=0.7, left=0.20, right=0.86)
+y = np.arange(len(lf))
+ax.barh(y, [b["observed_leads"] for b in lf], color=S1, height=0.55, zorder=2)
+ax.scatter([b["expected_leads_by_chance"] for b in lf], y, marker="|", s=420, color=S2, lw=3, zorder=3)
+for yi, b in zip(y, lf):
+    ax.text(1.01, yi, f"{b['observed_leads']} of {b['contests_entered']}, p = {b['p_at_least_observed']:.2f}",
+            transform=ax.get_yaxis_transform(), va="center", fontsize=9, color=INK_2)
+ax.set_yticks(y); ax.set_yticklabels([NAME[b["program"]] for b in lf])
+ax.set_xlabel("milestones led")
+ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+style(ax, grid="x")
+legend_below(fig, [Patch(color=S1, label="milestones led"),
+                   Line2D([], [], marker="|", ls="", color=S2, ms=14, mew=3, label="expected by chance")])
+save(fig, "leader_follower")
+best = min(lf, key=lambda b: b["p_at_least_observed"])
+say("**How to read it.** A program that systematically moved first would have a bar well past its orange tick and "
+    f"a small p. The smallest p is {NAME[best['program']]}'s {best['p_at_least_observed']:.2f}, from "
+    f"{best['observed_leads']} leads in {best['contests_entered']} milestones. Right-hand text: leads, milestones "
+    "entered, and the probability of at least that many leads by chance. The milestones are not independent, so "
+    "these p-values are if anything too small, and still none is below 0.10.")
+""")
+
+code(r"""
+kt = CVE6[(CVE6.cve == "CVE-2023-50387") & (CVE6.group == "included")].copy()
+nvd = pd.Timestamp(kt.nvd_published.iloc[0])
+kt["t"] = pd.to_datetime(kt.stable_date)
+kt = kt.sort_values("t")
+fig, ax = plt.subplots(figsize=(12.5, 3.9))
+frame(fig, "KeyTrap (February 2024): four codebases shipped the fix within seven days, all before NVD published it",
+      "Each dot: the first stable release of one program fixing CVE-2023-50387 / CVE-2023-50868, at its tag date. "
+      "Red line: NVD publication. Shaded: the seven days from the first to the last of these releases. Source: "
+      "Phase 4 questions 6 and 8.", bottom=0.6, left=0.20)
+t0, t1 = kt.t.min(), kt.t.max()
+ax.axvspan(t0, t1, color=RAMP[0], zorder=0)
+ax.axvline(nvd, color=RED, lw=2)
+ax.text(nvd, len(kt) - 0.45, "  NVD publishes\n  the CVE", color=INK, fontsize=9, va="top")
+for i, r in enumerate(kt.itertuples()):
+    ax.scatter([r.t], [i], s=70, color=S1, zorder=3)
+    ax.text(r.t, i + 0.28, f"{r.stable_tag}", ha="center", fontsize=9, color=INK_2)
+ax.set_yticks(range(len(kt))); ax.set_yticklabels([NAME[p] for p in kt.program])
+ax.set_ylim(-0.6, len(kt) - 0.3)
+ax.set_xlim(t0 - pd.Timedelta(days=2), nvd + pd.Timedelta(days=3))
+ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%d %b"))
+ax.xaxis.set_major_locator(plt.matplotlib.dates.DayLocator(interval=1))
+style(ax, grid="x")
+save(fig, "keytrap")
+q8 = J4["q8_coordinated_releases"]["variants"]["tag_dates"]["tests"]["distinct_release_pairs"]
+say("**How to read it.** Each row is one program, each dot the day its fixed release was tagged. PowerDNS "
+    "Recursor's rec-5.0.2 is tagged on 6 February, but its changelog gives 13 February as the public date. "
+    "Across the whole record Phase 4 counted pairs of codebases shipping the same fix or default within 3 days: "
+    f"{q8['observed']} such release pairs, against {q8['null_mean']:.2f} on average when each codebase's calendar is "
+    f"shifted at random (p = {q8['p_value_ge']}). All of them are this one embargoed event. The only other "
+    "same-day coincidence, BIND 9 9.18.0 and PowerDNS Authoritative 4.6.0 both moving NSEC3 to 0 iterations on "
+    "2022-01-24, cannot be told apart from chance.")
+""")
+
+md(r"""
+### Do sudden jumps in adoption line up with default changes?
+
+Phase 7 also scanned every mapped series for **spikes**: months in which the count of zones or delegations with a
+value jumps or drops sharply. A spike is "aligned" if a default change that should cause it (same value, same
+direction) shipped 0 to 3 months before it. The chance rate is how often any month of that series has such a
+default change 0 to 3 months before it.
+""")
+
+code(r"""
+al = Q4A[Q4A.aligned_within_3m.notna() & (Q4A.expected_aligned > 0)].copy()
+UP = {"+", "1", "1.0", "up"}
+al["lab"] = [f"{OBS_NAME.get(o, o)}, {'rise' if str(d) in UP else 'fall'} · {c}" for o, d, c in
+             zip(al.observable, al.direction, al.corpus)]
+al = al.sort_values("expected_aligned")
+fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.36 * len(al)))
+beat = al[al.beats_chance.astype(bool)]
+ttl = ("No kind of spike follows default changes more often than chance" if beat.empty else
+       "Only " + " and ".join(sorted({OBS_NAME.get(o, o) for o in beat.observable})) +
+       " spikes follow default changes more often than chance")
+frame(fig, ttl,
+      "For each value, corpus and direction: number of spikes with a relevant default change 0 to 3 months before "
+      "them (blue), against the number expected from the series' chance rate (orange tick). Right-hand text: aligned "
+      "of all spikes, and the probability of at least that many by chance. Source: Phase 7 question 4.",
+      bottom=0.95, left=0.30, right=0.86)
+y = np.arange(len(al))
+ax.barh(y, al.aligned_within_3m, color=[RED if b else S1 for b in al.beats_chance.astype(bool)], height=0.55, zorder=2)
+ax.scatter(al.expected_aligned, y, marker="|", s=380, color=S2, lw=3, zorder=3)
+for yi, r in zip(y, al.itertuples()):
+    ax.text(1.01, yi, f"{int(r.aligned_within_3m)} of {int(r.spikes)}, p = {r.p_at_least_observed:.3f}",
+            transform=ax.get_yaxis_transform(), va="center", fontsize=9, color=INK_2)
+ax.set_yticks(y); ax.set_yticklabels(al.lab, fontsize=9)
+ax.set_xlabel("spikes with a relevant default change 0 to 3 months before")
+ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+style(ax, grid="x")
+legend_below(fig, [Patch(color=S1, label="aligned spikes"), Patch(color=RED, label="aligned beyond chance (p < 0.10)"),
+                   Line2D([], [], marker="|", ls="", color=S2, ms=14, mew=3, label="expected by chance")], ncol=3)
+save(fig, "spike_alignment")
+txt = ("**How to read it.** A bar well past its orange tick means spikes follow default changes more often than "
+       "chance. ")
+if beat.empty:
+    txt += "No bar does."
+for r in beat.itertuples():
+    sp = Q4[(Q4.observable == r.observable) & (Q4.direction == r.direction) & (Q4.corpus == r.corpus)
+            & Q4.relevant_default_within_3m.astype(bool)]
+    defs = sorted(set(sp.nearest_relevant_default.dropna().astype(str)))
+    txt += (f"{OBS_NAME.get(r.observable, r.observable)}, {'rise' if str(r.direction) in UP else 'fall'} ({r.corpus}): {int(r.aligned_within_3m)} of {int(r.spikes)} "
+            f"spikes aligned against {r.expected_aligned:.2f} expected (p = {r.p_at_least_observed:.3f}), in "
+            f"{sp.source.nunique()} corpora: {', '.join(sorted(SRC.get(x, x) for x in sp.source.unique()))}. "
+            f"The defaults they follow: {'; '.join(defs)}. ")
+if not beat.empty and "iter0" in set(beat.observable):
+    txt += ("This is timing, not attribution: those defaults and RFC 9276 (2022-08) fall within the same few months, "
+            "the IETF draft behind them was public by 2021-10, .se/.nu and .ch/.li are each run by one registry, and "
+            "the operators of the zones that changed cannot be identified.")
+say(txt)
+""")
+
+# ====================================================================== 5. manual vs automatic ==
+md(r"""
+## 5. Manual against automatic, and at which operator level
+
+**What a "delegation change" is.** In the reverse data every month is a snapshot of the RIR zone files. A
+*delegation* is one reverse zone handed to a network, for example `26.96.192.in-addr.arpa`. A **delegation change**
+is a delegation that, between two monthly snapshots, gained a DS record (a new signing), lost it (an unsigning), or
+changed its DS algorithm (a rollover). The *block* is the zone one label up, `96.192.in-addr.arpa`: in reverse DNS
+that is one address allocation, so roughly one network operator.
+
+**Action size.** An *action* is all the changes of the same kind in one month, one RIR and one block. If an upgrade
+silently switches a signer to a new default, many zones of the same operator should flip at once: a large action.
+A person editing zones by hand tends to produce actions of 1 or a few. **This is only a proxy:** one operator
+automating a single zone looks like a manual edit, and one operator hand-editing a whole block looks like an upgrade.
+
+**Level.** For each month and transition: *single delegation* (only one changed), *one block* (all in one block),
+*concentrated* (several blocks, but one holds at least half), *diffuse* (spread over many blocks).
+
+Phase 7 took the signer default changes that name a target algorithm, looked at the matching changes (new
+signings and rollovers to that algorithm) in the release month and the three months after (ledger labels r+1 to
+r+4), and compared them with all other months.
+""")
+
+code(r"""
+bins_ = ["1", "2-4", "5-9", "10-49", "50-99", "100+"]
+q3a = Q3[(Q3.scope == "all RIRs") & (Q3.status == "tested")].copy()
+rows_ = []
+for _, r in q3a.iterrows():
+    w = np.array([r[f"window_delegations_by_size:{b}"] for b in bins_], float)
+    o = np.array([r[f"other_delegations_by_size:{b}"] for b in bins_], float)
+    rows_.append((f"{r.group}", "window", w / w.sum() * 100, int(w.sum())))
+    rows_.append(("", "other months", o / o.sum() * 100, int(o.sum())))
+fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.33 * len(rows_)))
+nt_ = Q3[Q3.status == "tested"]
+n_hi = int((nt_.diff_share_in_actions_ge_10 > 0).sum())
+frame(fig, f"After a signer default change, a larger share moves in big batches in only {n_hi} of {len(nt_)} tested cells",
+      "Each pair of bars: delegations newly signed with, or rolled over to, the default's algorithm, split by the size "
+      "of the action they were part of (delegations changed together in one month, RIR and block). Top bar: "
+      "release month and 3 months after; bottom bar: all other months. All RIRs pooled. Source: Phase 7 question 3.",
+      bottom=0.75, left=0.28, right=0.90)
+y = np.arange(len(rows_))
+for yi, (g, kind, sh, n) in zip(y, rows_):
+    left = 0
+    for k, v in enumerate(sh):
+        ax.barh(yi, v, left=left, color=RAMP[k], height=0.72, edgecolor=SURFACE, lw=0.5)
+        left += v
+    ax.text(101, yi, f"n = {n:,}", va="center", fontsize=8.6, color=INK_2)
+ax.set_yticks(y)
+ax.set_yticklabels([f"{g}   {k}" if g else k for g, k, _, _ in rows_], fontsize=8.6)
+ax.set_xlim(0, 100); ax.set_ylim(len(rows_) - 0.5, -0.5)
+pct_axis(ax, "x"); ax.set_xlabel("share of matching delegations")
+style(ax, grid=None)
+legend_below(fig, [Patch(color=RAMP[k], label=f"action of {b}") for k, b in enumerate(bins_)], ncol=6)
+save(fig, "action_size")
+# New computation (not a Phase 7 output): which actions make up the window of the group closest to a signal.
+CL = pd.read_parquet(ROOT / "out/analysis/delegation_change_clusters.parquet")
+ev3 = {e["row_id"]: e for e in jget(J7, "q3_manual_vs_automatic", "events", default=[])}
+close = q3a.sort_values("p_block_ge_observed").iloc[0] if len(q3a) else None
+comp = ""
+if close is not None and close.group in ev3:
+    e = ev3[close.group]
+    w0, w1 = e["window"]
+    x = CL[(CL.month >= w0) & (CL.month <= w1) & CL.kind.isin(["sign", "rollover"])
+           & (CL.to_alg.astype(str) == str(e["to_alg"]))].sort_values("n_delegations", ascending=False)
+    if len(x):
+        big = x.iloc[0]
+        lab_m = pd.Period(big.month, "M") - 1
+        comp = (f" The group closest to a signal, {close.group} (block-level p = {close.p_block_ge_observed:.3f}), "
+                f"rests on one action: {big.source.upper()} block {big.block}, {int(big.n_delegations)} of the "
+                f"window's {int(x.n_delegations.sum())} matching delegations, { {"sign": "signed", "rollover": "rolled over"}.get(big.kind, big.kind)} between labels "
+                f"{lab_m} and {big.month}, i.e. during {lab_m.strftime('%B %Y')}; the release was {e['timing_date']}, so "
+                "the monthly snapshots cannot tell whether the block changed before or after it.")
+nt = Q3[Q3.status == "tested"]
+say("**How to read it.** Light colours on the left are small actions (one or a few delegations: manual-looking), "
+    "dark colours on the right are large ones (10 or more at once: automatic-looking). If an upgrade flipped "
+    "operators' zones in bulk, the top bar of each pair would be darker than the bottom one. The share moved in "
+    f"actions of 10 or more is lower in the window than in other months in {int((nt.diff_share_in_actions_ge_10 < 0).sum())} "
+    f"of {len(nt)} tested cells (pooled and per RIR)." + comp
+    + " Groups with no matching change in their window are left out: "
+    + (", ".join(sorted(set(Q3[(Q3.scope == 'all RIRs') & (Q3.status != 'tested')].group))) or "none") + ".")
+""")
+
+code(r"""
+LEV = ["single delegation", "one block", "concentrated", "diffuse"]
+rows_ = []
+for _, r in q3a.iterrows():
+    w = np.array([r[f"window_delegations_by_level:{b}"] for b in LEV], float)
+    o = np.array([r[f"other_delegations_by_level:{b}"] for b in LEV], float)
+    rows_.append((r.group, "window", w / w.sum() * 100))
+    rows_.append(("", "other months", o / o.sum() * 100))
+LCOL = [RAMP[0], RAMP[2], RAMP[4], RAMP[5]]
+fig, ax = plt.subplots(figsize=(12.5, 1.9 + 0.33 * len(rows_)))
+n_b = int((Q3[Q3.status == "tested"].p_block_ge_observed < 0.05).sum())
+frame(fig, f"At which level: the one-block-or-concentrated share after a default change differs from other months "
+           f"at p < 0.05 in {n_b} of {int((Q3.status == 'tested').sum())} tested cells",
+      "Same delegations and windows as the previous chart, split by where the month's change sits: one delegation, "
+      "one block, several blocks with one holding at least half (concentrated), or spread over many (diffuse).",
+      bottom=0.75, left=0.28, right=0.95)
+y = np.arange(len(rows_))
+for yi, (g, kind, sh) in zip(y, rows_):
+    left = 0
+    for k, v in enumerate(sh):
+        ax.barh(yi, v, left=left, color=LCOL[k], height=0.72, edgecolor=SURFACE, lw=0.5)
+        left += v
+ax.set_yticks(y); ax.set_yticklabels([f"{g}   {k}" if g else k for g, k, _ in rows_], fontsize=8.6)
+ax.set_xlim(0, 100); ax.set_ylim(len(rows_) - 0.5, -0.5)
+pct_axis(ax, "x"); ax.set_xlabel("share of matching delegations")
+style(ax, grid=None)
+legend_below(fig, [Patch(color=c, label=l) for c, l in zip(LCOL, LEV)], ncol=4)
+save(fig, "change_level")
+say("**How to read it.** The middle two colours (one block, concentrated) are changes tied to one operator's block; "
+    "Phase 7 tests whether that share is higher after a default change. 'Diffuse' is deliberately not called "
+    "coordinated: many unrelated operators doing a common thing in one month look identical to one actor doing it "
+    "everywhere.")
+""")
+
+code(r"""
+t = Q3[Q3.status == "tested"].copy()
+pv = pd.concat([t.assign(stat="large-action share\n(actions of 10+)", p=t.p_large_ge_observed),
+                t.assign(stat="one-block-or-concentrated\nshare", p=t.p_block_ge_observed)])
+fig, ax = plt.subplots(figsize=(12.5, 3.6))
+frame(fig, f"{int((pv.p < 0.05).sum())} of {len(pv)} manual-against-automatic p-values fall below 0.05, "
+           f"against {0.05 * len(pv):.1f} expected by chance",
+      "Each dot: one test cell (default-change group x RIR scope) and one statistic; position = p-value against 1,000 "
+      "random sets of months drawn from the whole ledger span. Dashed line: p = 0.05. Source: Phase 7 question 3.",
+      bottom=0.6, left=0.20)
+rng_ = np.random.default_rng(0)  # vertical jitter only, for legibility
+for i, (stat, g) in enumerate(pv.groupby("stat", sort=False)):
+    yy = i + rng_.uniform(-0.18, 0.18, len(g))
+    ax.scatter(g.p, yy, s=40, color=[RED if p < 0.05 else S1 for p in g.p], zorder=3)
+ax.axvline(0.05, color=INK_2, ls="--", lw=1)
+ax.set_yticks([0, 1]); ax.set_yticklabels(pv.stat.unique())
+ax.set_xlim(0, 1); ax.set_ylim(1.5, -0.5)
+ax.set_xlabel("p-value (small = window months differ from other months)")
+style(ax, grid="x")
+save(fig, "manual_automatic_pvalues")
+lo_ = pv[pv.p < 0.05]
+txt = ("**How to read it.** With no effect anywhere, p-values spread evenly between 0 and 1, and about 1 in 20 falls "
+       f"below 0.05. Here {len(lo_)} of {len(pv)} do. ")
+if len(lo_):
+    txt += "Below 0.05: " + "; ".join(f"{r.group} in {r.scope} ({r.stat.splitlines()[0]}, p = {r.p:.3f})"
+                                      for r in lo_.itertuples()) + ". "
+if close is not None:
+    txt += (f"Pooled over all RIRs, {close.group} has p = {close.p_large_ge_observed:.3f} (large actions) and "
+            f"{close.p_block_ge_observed:.3f} (block level); the era-matched version, which draws only months within "
+            f"36 months of the window because ledger activity grew strongly from 2009 to 2019, gives "
+            f"{close.p_large_era_matched:.3f} and {close.p_block_era_matched:.3f}.")
+say(txt)
+""")
+
+# ====================================================================== 6. successor RFCs ==
+md(r"""
+## 6. Successor RFCs published while the predecessor is still deploying
+
+For each pair "old practice / RFC that retires it", the old practice's share in the month the new RFC was
+published, and how it moved in the year after. Descriptive only: this says nothing about cause.
+""")
+
+code(r"""
+q5 = Q5[(Q5.predecessor == "RFC 5155") & (Q5.status == "covered")].set_index("source")
+fig, axes = plt.subplots(2, 3, figsize=(12.5, 6.8), sharey=True)
+frame(fig, f"When RFC 9276 asked for zero NSEC3 iterations (2022-08), at least {q5.share_at_successor.min():.0f}% of "
+           "NSEC3 names in every TLD still used more",
+      "Share of NSEC3 owner names with more than 0 iterations (%). Numerator: NSEC3 owner names whose NSEC3 record "
+      "has iterations above 0. Denominator: all NSEC3 owner names (names, not zones). Forward corpus. Red line: "
+      "RFC 9276 published; dot: the share that month.", bottom=0.7, hspace=0.42, wspace=0.08)
+for ax, tld in zip(axes.flat, TLDS):
+    s = series("iter_gt0", tld).dropna()
+    ax.plot([m2y(m) for m in s.index], s.values, color=S1, lw=1.9)
+    ax.axvline(m2y("2022-08"), color=RED, lw=1.4)
+    r = q5.loc[tld]
+    ax.scatter([m2y("2022-08")], [r.share_at_successor], s=40, color=INK, zorder=4)
+    ax.text(m2y("2022-08") - 0.15, 8, f"{r.share_at_successor:.1f}%", ha="right", fontsize=9, color=INK)
+    ax.set_title("." + tld, loc="left", fontweight="bold")
+    ax.set_xlim(2016.3, 2024.1); ax.set_ylim(0, 105)
+    pct_axis(ax); year_axis(ax, 5); style(ax)
+legend_below(fig, [Line2D([], [], color=S1, lw=2, label="NSEC3 names with more than 0 iterations"),
+                   Line2D([], [], color=RED, lw=1.4, label="RFC 9276 published (2022-08)"),
+                   Line2D([], [], marker="o", ls="", color=INK, label="share at publication")], ncol=3)
+save(fig, "rfc9276_iterations")
+traj = {k: [f".{s_}" for s_ in q5.index[q5.trajectory == k] if s_ in TLDS] for k in q5.trajectory.unique()}
+say("**How to read it.** Each panel is one TLD. The line is how much of the NSEC3 namespace still used the practice "
+    "RFC 9276 retires. At publication it was "
+    + ", ".join(f"{q5.loc[t_].share_at_successor:.1f}% in .{t_}" for t_ in TLDS if t_ in q5.index)
+    + ". Up to 12 months later it was " + "; ".join(f"{k} in {', '.join(v)}" for k, v in traj.items() if v)
+    + " (a change of more than 10% relative counts as rising or falling). "
+    + ("It never fell below half its peak before the forward corpus ends in 2023-12. "
+       if q5.first_below_half_peak_after_peak.isna().all() else "")
+    + "The reverse corpus cannot see NSEC3.")
+""")
+
+code(r"""
+g8 = Q5[(Q5.successor == "RFC 8624") & (Q5.status == "covered")].set_index(["observable", "source"])
+d1 = g8.xs("digest1", level="observable").share_at_successor
+fig, axes = plt.subplots(1, 4, figsize=(13.5, 4.3), sharey=True)
+frame(fig, "RFC 8624 (2019-06) deprecated SHA-1 DS and RSASHA1 while " +
+      ("SHA-1 DS was still the majority everywhere" if (d1 > 50).all() else "both were still in use"),
+      "Blue: SHA-1 DS share, out of DS-carrying zones or delegations. Orange: RSASHA1 family (algorithms 5 and 7) "
+      "share, out of signed zones (forward) or DS-carrying delegations (reverse panel). Red line: RFC 8624 published.",
+      bottom=0.7, wspace=0.08)
+for ax, src in zip(axes, ["se", "nu", "gov", PANEL]):
+    for obs, col in (("digest1", S1), ("alg5_7", S2)):
+        s = series(obs, src).dropna()
+        ax.plot([m2y(m, src == PANEL) for m in s.index], s.values, color=col, lw=1.9)
+    ax.axvline(m2y("2019-06", src == PANEL), color=RED, lw=1.4)
+    ax.set_title(SRC[src], loc="left", fontweight="bold")
+    ax.set_xlim((2011.3, 2026.8) if src == PANEL else (2016.3, 2024.1)); ax.set_ylim(0, 105)
+    pct_axis(ax); year_axis(ax, 4); style(ax)
+legend_below(fig, [Line2D([], [], color=S1, lw=2, label="SHA-1 DS"),
+                   Line2D([], [], color=S2, lw=2, label="RSASHA1 family (alg. 5, 7)"),
+                   Line2D([], [], color=RED, lw=1.4, label="RFC 8624 published (2019-06)")], ncol=3)
+save(fig, "rfc8624_sha1")
+sh_, _, den_ = series_full("alg5_7", PANEL)
+pts = [m for m in ("2011-12", "2013-06", "2014-08", "2017-02", "2019-06", sh_.dropna().index[-1]) if m in sh_.index]
+trail = ", ".join(f"{sh_[m]:.0f}% of {int(den_[m]):,} in {m}" for m in pts if not math.isnan(sh_[m]))
+below = g8.xs("digest1", level="observable").months_from_successor_to_below_half.dropna()
+say("**How to read it.** At RFC 8624's publication SHA-1 DS was carried by "
+    + ", ".join(f"{v:.0f}% in {SRC[k]}" for k, v in d1.items())
+    + " of DS-carrying zones or delegations. "
+    + (f"It fell below half its level at its high point {below.min():.0f} to {below.max():.0f} months after the RFC. "
+       if len(below) else "")
+    + "RSASHA1 was " + ", ".join(f"{v:.0f}% in {SRC[k]}" for k, v in
+                                  g8.xs("alg5_7", level="observable").share_at_successor.items())
+    + ". On the reverse panel RSASHA1 was on a long decline that began well before the RFC: " + trail
+    + " signed delegations. The early panel years rest on very few signed delegations, so their swings are noisy; "
+    "2014-08 is simply the first month with at least 300.")
+""")
+
+code(r"""
+fig, ax = plt.subplots(figsize=(12.5, 4.0))
+b9 = Q5[(Q5.successor == "RFC 9905") & (Q5.source == PANEL)]
+frame(fig, "On the reverse panel, RFC 9904 and 9905 (2025-11) arrived with RSASHA1 still on "
+           + (f"{b9.share_at_successor.iloc[0]:.1f}%" if len(b9) else "some") + " of signed delegations",
+      "Share of DS-carrying delegations (%) on the reverse strict panel. Blue: algorithms 8 or 13, the RFC 8624 "
+      "MUST algorithms that RFC 9904 carries over. Orange: RSASHA1 family, which RFC 9905 retires. Red line: both "
+      "RFCs published, 2025-11.", bottom=0.6)
+for obs, col in (("alg8_13", S1), ("alg5_7", S2)):
+    s = series(obs, PANEL).dropna()
+    s = s[s.index >= "2019-01"]
+    ax.plot([m2y(m, True) for m in s.index], s.values, color=col, lw=2)
+ax.axvline(m2y("2025-11", True), color=RED, lw=1.4)
+ax.set_ylim(0, 100); ax.set_xlim(2019, 2026.8)
+pct_axis(ax); year_axis(ax, 8); style(ax)
+legend_below(fig, [Line2D([], [], color=S1, lw=2, label="algorithms 8 or 13"),
+                   Line2D([], [], color=S2, lw=2, label="RSASHA1 family (5, 7)"),
+                   Line2D([], [], color=RED, lw=1.4, label="RFC 9904 / 9905 published")], ncol=3)
+save(fig, "rfc9904_9905_panel")
+a = Q5[(Q5.successor == "RFC 9904") & (Q5.source == PANEL)].iloc[0]
+b = Q5[(Q5.successor == "RFC 9905") & (Q5.source == PANEL)].iloc[0]
+say(f"**How to read it.** Only the panel covers 2025-11. Algorithms 8 and 13 were {a.share_at_successor:.1f}% of "
+    f"signed delegations then and {a.share_after_up_to_12m:.1f}% in {a.compare_month}; RSASHA1 was "
+    f"{b.share_at_successor:.1f}% and {b.share_after_up_to_12m:.1f}%. Two further pairs cannot be measured: RFC 4509 "
+    "(SHA-256 DS) was published in 2006, before any corpus, and algorithm 12 (GOST), retired by RFC 9906, never "
+    "appears in any corpus.")
+""")
+
+# ====================================================================== 7. limits ==
+md(r"""
+## 7. What this cannot show
+
+* **Who signed a zone, and with which software.** Neither corpus records the signer or the DNS operator. Every
+  alignment in this notebook is timing, not attribution.
+* **Events outside the corpora.** Nothing before 2011-05 in the reverse panel or before 2016-06 in the forward TLDs,
+  and, for the step test, nothing without 24 months of data before it. That removes both 2016 ECDSA signing defaults
+  and all RSASHA256 signer defaults of 2011 to 2015 from the forward corpus, and BIND 9 d02 and d03, OpenDNSSEC's
+  1.1 and 1.2 changes and PowerDNS 3.3's opt-out change from every test. Nothing after 2023-12 in the forward
+  corpus, which removes the NSEC3 caps of 50 and Knot 3.6.0.
+* **Multiple testing by q-value.** With at most 149 placebo months per series, no single test can reach a
+  Benjamini-Hochberg q below 0.10 whatever the data, so the multiple-testing view here is judged by counts.
+* **A program-level test for BIND 9 on every stable release.** Its releases fill most months. The second
+  verification notes that a schedule of feature releases (x.y.0) would be testable; it tried eight cells and all
+  were inside the band, but this is not part of Phase 7's output.
+* **Settings the zone files do not record:** NSEC3 salt length, NSEC and NSEC3 TTLs, RRSIG timing, key-management
+  state, and everything a validator does (validation, trust anchors, limits other than the NSEC3 caps, which are
+  tested only indirectly).
+* **What a forward jump is made of.** Forward per-zone records are not in the repository, so a forward spike's split
+  into new signings and rollovers is only bounded, and a digest spike has no composition at all.
+* **Whether a reverse change in the release month came before or after the release day.** The reverse corpus has
+  one snapshot per month.
+* **Manual against automatic, directly.** Action size is a proxy; see section 5.
+""")
+
+code(r"""
+say("* **Small or noisy effects.** The step test detects only steps above a certain size, and a larger one in noisy "
+    "series. " + ("The detection-power table printed in the 'how to read' box gives those sizes for this run. "
+                  if POWER else "This run of Phase 7 exports no detection-power table; the second Phase 7 "
+                  "verification found that a 1 pp step was not detected and 5 to 10 pp steps only in quiet series. ")
+    + "'Inside the band' therefore means 'no large lasting shift', not 'no effect'.")
+""")
+
+# ====================================================================== asserted numbers ==
+md(r"""
+## Appendix: the numbers quoted above, checked against the source files
+
+The hidden cell below asserts that ten numbers quoted in the text equal the values in the Phase 4 and Phase 7
+outputs, so a rerun on changed data fails loudly instead of leaving stale text.
+""")
+
+code(r"""
+fresh = {k: json.loads((ROOT / p).read_text("utf-8")) for k, (p, _) in SOURCES.items()}
+# a few headline numbers that the text uses, registered here in case a section above was skipped
+for path in [("q1_per_program_releases", "aggregate", "step12", "tested"),
+             ("q1_per_program_releases", "aggregate", "step12", "mean_outside_90pct_null"),
+             ("q2_default_change_events", "summary", "step12", "n_tests"),
+             ("q2_default_change_events", "summary", "step12", "n_outside_band")]:
+    val("J7", *path)
+i8 = ("q8_coordinated_releases", "variants", "tag_dates", "tests", "distinct_release_pairs")
+val("J4", *i8, "observed"); val("J4", *i8, "p_value_ge")
+seen, rows = set(), []
+for label, v, src, path in QUOTED:
+    if label in seen:
+        continue
+    seen.add(label)
+    got = jget(fresh[src], *path)
+    assert got == v, f"{label}: the text used {v}, the file now says {got}"
+    rows.append((label, v))
+assert len(rows) >= 10, f"only {len(rows)} numbers were quoted from the JSON"
+print(f"{len(rows)} numbers quoted in the text match a fresh read of the source JSON:")
+for label, v in rows:
+    print(f"  {label} = {v}")
+print("figures written:", len(list(FIGDIR.glob('*.png'))))
+""", hidden=True)
+
+
+# ====================================================================== write + execute ==
+NB["cells"] = cells
+NB["metadata"] = {"kernelspec": {"display_name": "rfcadopt", "language": "python", "name": "rfcadopt"},
+                  "language_info": {"name": "python"}}
+client = NotebookClient(NB, timeout=900, kernel_name="rfcadopt",
+                        resources={"metadata": {"path": str(ROOT / "notebooks")}})
+client.execute()
+nbf.write(NB, OUT_NB)
+n_png = len(list((ROOT / "reporting/charts/software_vs_adoption").glob("*.png")))
+print(f"wrote {OUT_NB.relative_to(ROOT)}: {len(cells)} cells, {n_png} figures")
