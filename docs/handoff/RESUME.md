@@ -147,11 +147,12 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
 - 9855efd0 prevalence metrics: mean daily share (domain_days), 03 doc regenerated.
 - 6e7f3ff6 strict panel instead of summed RIRs (cve_adoption_crossref, summary deck); downstream
   JSON, decks, rfc charts regenerated.
-- RUNNING: Phase 7 agent revising with a step-sensitive test (departure from pre-trend), calibrated
-  null, reverse dating convention (a change labelled M happened in M-1), wording fixes. When it lands:
-  commit, verify the revision (fresh agent), then add "superseded by Phase 7" notices to
-  docs/releases_vs_adoption.md and docs/release_scan.md (their windows include a pre-release month),
-  then Phase 8.
+- Phase 7 revision committed (4a584dc8); old docs marked superseded (ac547268).
+- RUNNING in parallel: re-verification of the Phase 7 revision -> `verify/phase7_revision.md`;
+  Phase 8 notebook agent (`08_phase8_brief.md`) -> `notebooks/build_software_vs_adoption_notebook.py`,
+  `notebooks/dnssec_software_vs_adoption.ipynb`, `reporting/charts/software_vs_adoption/`.
+  Apply revision corrections, rebuild the notebook if any quoted number moved, verify the notebook
+  (fresh agent), commit, then push (the owner asked for pushes earlier in Arc A; confirm first).
 
 ## To resume
 
