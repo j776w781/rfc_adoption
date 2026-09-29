@@ -1139,6 +1139,16 @@
         ]
       },
       {
+        "cve": "CVE-2019-13207",
+        "published": "2019-07-03",
+        "description": "Stack-based buffer overflow in the dname_concatenate() function in NSD 4.2.0 (see fixes.nsd).",
+        "cvss": null,
+        "severity": null,
+        "cwe": [],
+        "refs": [],
+        "source": "Phase 3 verify/nsd.md: NVD API 2026-09-29 published 2019-07-03T20:15:11; the CPE query had not returned this CVE."
+      },
+      {
         "cve": "CVE-2026-12244",
         "published": "2026-06-25",
         "description": "If NSD is configured as secondary for a zone, the primary of that zone can crash NSD with an AXFR containing a DNS message with a special crafted SVCB RR with an rdata size of 65512, that let's an (uint16_t) variable that is used to allocate space needed for the RR wrap (because total size > 65535), causing a heap overflow. The attacker can perform a controlled (RCE class) head write of up to 65509 bytes",
@@ -8851,8 +8861,9 @@
         "commit_date": "2021-08-25",
         "sha": "c360ef30f2436fdb9c6b8847f6ed757b84011a9f",
         "subject": "NEWS 5.3.2: add CVE-2021-40083 reference",
-        "fix_release": "5.4.2",
-        "fix_released": "2021-10-13"
+        "fix_release": "5.3.2",
+        "fix_released": "2021-05-05",
+        "correction": "Phase 3 verify/kresd.md: fix commit 97ec93e1 is first contained by v5.3.2; the CVE id only reaches NEWS at 5.4.2, which is what the scrape picked up."
       },
       {
         "cve": "CVE-2022-40188",
@@ -9331,16 +9342,18 @@
         "commit_date": "2018-01-19",
         "sha": "2a6250e3fb3ccd6e9a0a16b6908c5cfb76d8d6f3",
         "subject": "- patch for CVE-2017-15105: vulnerability in the processing of   wildcard synthesized NSEC records.",
-        "fix_release": "1.7.0",
-        "fix_released": "2018-03-12"
+        "fix_release": "1.6.8",
+        "fix_released": "2018-01-19",
+        "correction": "Phase 3 verify/unbound.md: vendor point release 1.6.8 (tagger 2018-01-19; release-1.7.0 Changelog l.127-131) shipped the fix four days before NVD publication. The clone's 1.6.8 tag is a bare re-tag of 1.6.7, so the fix commit is first CONTAINED by 1.7.0rc1 -- date from the vendor release, not the tag tree."
       },
       {
         "cve": "CVE-2019-16866",
         "commit_date": "2019-10-03",
         "sha": "facc6c6541448b9689361b196f2c92cd4779f8ee",
         "subject": "- Merge 1.9.4 release with fix for vulnerability CVE-2019-16866. - Continue with development of 1.9.5.",
-        "fix_release": "1.9.6",
-        "fix_released": "2019-12-06"
+        "fix_release": "1.9.4",
+        "fix_released": "2019-10-03",
+        "correction": "Phase 3 verify/unbound.md: the fix shipped on branch point release 1.9.4 under a different commit than master; the scrape cited the master sibling SHA, which is first contained by 1.9.6."
       },
       {
         "cve": "CVE-2019-18934",
@@ -9419,8 +9432,9 @@
         "commit_date": "2024-03-07",
         "sha": "326ba26522b13ab9a9d0d0d02c018bfd7af56e09",
         "subject": "- Version set to 1.19.3 for release. After 1.19.2 point release with   security fix for CVE-2024-1931, Denial of service when trimming   EDE text on p",
-        "fix_release": "1.19.3",
-        "fix_released": "2024-03-11"
+        "fix_release": "1.19.2",
+        "fix_released": "2024-03-07",
+        "correction": "Phase 3 verify/unbound.md: the fix shipped on branch point release 1.19.2 under a different commit than master; the scrape cited the master sibling SHA, which is first contained by 1.19.3."
       },
       {
         "cve": "CVE-2024-33655",
@@ -9435,8 +9449,9 @@
         "commit_date": "2024-10-03",
         "sha": "a1b25f0296416ed237358e7a8b925853cf5ec846",
         "subject": "- The fix for CVE-2024-8508 was part of 1.21.1, a security point release   on 1.21.0. The code repository continues with this fix and the version   nu",
-        "fix_release": "1.22.0",
-        "fix_released": "2024-10-16"
+        "fix_release": "1.21.1",
+        "fix_released": "2024-10-03",
+        "correction": "Phase 3 verify/unbound.md: the fix shipped on branch point release 1.21.1 under a different commit than master; the scrape cited the master sibling SHA, which is first contained by 1.22.0."
       },
       {
         "cve": "CVE-2025-11411",
@@ -9735,5 +9750,13 @@
         "fix_released": "2026-07-22"
       }
     ]
-  }
+  },
+  "corrections_log": [
+    {
+      "applied_on": "2026-09-29",
+      "n": 6,
+      "from": "Phase 3 verification reports in docs/handoff/verify/",
+      "pattern": "Five of six: the NVD-derived scrape names the next MASTER release because branch point releases never touch the changelog; the branch tag shipped the fix earlier."
+    }
+  ]
 }
