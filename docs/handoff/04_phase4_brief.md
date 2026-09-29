@@ -47,7 +47,7 @@ BIND odd minors >= 9.13 are development (`stable: false` already).
 | opendnssec | index + `version` | `first_stable_tag` | `first_stable_released` |
 | pdns-auth | index + `version` | `stable_tag` | releases[stable_tag].released. **Not** row `released`: that is the first pre-release date |
 | unbound | index + `version` | `tag` | releases[tag].released (= row `released`) |
-| pdns-rec | inspect when you start; it was the last built. Write its mapping into your output before using it | | |
+| pdns-rec | `key` | `tag` | releases[tag].released (= row `released`; all 21 rows checked stable). `first_tags_any` holds the first pre-release tag |
 
 Assert for every row that the tag exists in `releases[]` with `stable: true`; list any
 row that fails instead of guessing.
@@ -66,6 +66,7 @@ gaps).
 |---|---|---|---|
 | bind9 | `first_stable_tag` | `fix_release_date` | tag not null (rows with `status` not-found / not-applicable are excluded; count them) |
 | pdns-auth | `fix_tag` | `fix_released` | always (no `applicable` key by design) |
+| pdns-rec | `fix_tag` | `fix_released` | `applicable is True` (all 52). Rows also carry `fix_changelog_released_text` with the public date where the changelog gives one; report it beside the tag date |
 | others | `fix_tag` | `fix_released` | `applicable is True`; report `"disputed"` (unbound CVE-2019-25031..25042) separately |
 
 Use the row's date and `latency_days` as recorded: they were verified and some carry
