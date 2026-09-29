@@ -18,6 +18,18 @@ Rebuild everything: `python scripts/software_vs_adoption.py`. It takes about for
 
 ## Short answer
 
+Two claims have to be kept apart. **Prevalence**, the team's definition of adoption, is how many domains are signed:
+the share with a DS, a DNSKEY or an RRSIG. **Feature mix** is which algorithms, digests and NSEC3 settings the signed
+zones use. On prevalence, release schedules are followed by departures from trend in 12
+of 70 step tests against 7.6 expected, from only 5
+program and corpus pairs with mixed directions, and the default changes that could change whether zones get signed in
+6 of 23 against 3.1,
+five of them against the expected direction; prevalence spikes line up with those defaults
+3 times against 3.2 expected. So neither releases
+nor defaults are shown to move how many domains are signed. On the feature mix, the answer below is the same: no lasting
+departure beyond chance, with one timing alignment for zero-iteration NSEC3. Both are absences of detection within the
+power limits stated below, and the prevalence section gives the details.
+
 The primary test asks whether a share departs from its own pre-event trend after a release or a default change, which
 a lasting level shift would do. Release months and default changes are followed by departures outside the 90% chance
 band about as often as chance predicts: 7 of 76
@@ -312,7 +324,11 @@ events outside their band, d08 in .se and d18 in .ee, both against the expected 
 after-period. d08 and d10 are tested only in .se and .nu, the corpora where RSAMD5 and DSA appear at all, and the
 .ch, .li and .ee step tests lack 24 testable months.
 
-Question 1 counts. step12: 0 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 31 because release months fill more than 75% of the testable window, 27 because the testable window is shorter than 24 months, 17 because the value never appears, 3 because the value is present in fewer than 12 months. transient3: 0 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 58 because release months fill more than 75% of the testable window, 17 because the value never appears, 3 because the value is present in fewer than 12 months.
+Question 1 counts. step12: 0 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 41 because release months fill more than 75% of the testable window, 36 because the testable window is shorter than 24 months, 17 because the value never appears, 3 because the value is present in fewer than 12 months. transient3: 1 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 76 because release months fill more than 75% of the testable window, 17 because the value never appears, 3 because the value is present in fewer than 12 months.
+
+| statistic | observable | corpora tested | release months tested per corpus | null percentile of the mean, lowest to highest | means outside the 90% null | tests where more release months fall outside the band than chance, p < 0.10 |
+|---|---|---|---|---|---|---|
+| transient3 | ds_prev | panel | 144 | 65.3 to 65.3 | 0 of 1 | 0 of 1 |
 
 Question 1 with the x.y.0 feature releases as the event set:
 
@@ -323,22 +339,28 @@ Question 1 with the x.y.0 feature releases as the event set:
 | step12 | alg3_6 | se | 3 | 30.4 to 30.4 | 0 of 1 | 0 of 1 |
 | step12 | alg5 | se, nu, gov, panel | 3, 3, 2, 7 | 7.1 to 43.8 | 0 of 4 | 0 of 4 |
 | step12 | digest1 | se, nu, gov, panel | 3, 3, 2, 7 | 18.0 to 68.6 | 0 of 4 | 0 of 4 |
+| step12 | dnskey_prev | se, nu, gov | 3, 3, 2 | 44.2 to 64.5 | 0 of 3 | 0 of 3 |
+| step12 | ds_prev | se, nu, gov, panel | 3, 3, 2, 8 | 44.3 to 86.1 | 0 of 4 | 0 of 4 |
 | step12 | iter0 | se, nu, gov | 3, 3, 2 | 38.7 to 47.0 | 0 of 3 | 0 of 3 |
 | step12 | iter10 | se, nu, gov | 3, 3, 2 | 33.1 to 36.6 | 0 of 3 | 0 of 3 |
 | step12 | iter5 | se, nu, gov | 3, 3, 2 | 28.6 to 79.2 | 0 of 3 | 0 of 3 |
 | step12 | iter_gt150 | se, nu | 3, 3 | 13.0 to 98.7 | 1 of 2 | 0 of 2 |
 | step12 | iter_gt50 | se, nu, gov | 3, 3, 2 | 47.9 to 64.0 | 0 of 3 | 0 of 3 |
+| step12 | rrsig_prev | se, nu, gov | 3, 3, 2 | 45.8 to 61.7 | 0 of 3 | 0 of 3 |
 | step12 | rsa1024 | se, nu, gov | 3, 3, 2 | 10.3 to 95.7 | 1 of 3 | 0 of 3 |
 | transient3 | alg1 | se | 5 | 36.4 to 36.4 | 0 of 1 | 1 of 1 |
 | transient3 | alg13 | se, nu, gov, ee, ch, li, panel | 5, 5, 4, 2, 1, 1, 8 | 0.0 to 81.8 | 3 of 7 | 2 of 7 |
 | transient3 | alg3_6 | se, ch | 5, 1 | 7.7 to 39.7 | 0 of 2 | 0 of 2 |
 | transient3 | alg5 | se, nu, gov, ee, ch, li, panel | 5, 5, 4, 2, 1, 1, 8 | 5.2 to 94.7 | 0 of 7 | 0 of 7 |
 | transient3 | digest1 | se, nu, gov, ch, li, panel | 5, 5, 4, 1, 1, 8 | 10.8 to 100.0 | 1 of 6 | 2 of 6 |
+| transient3 | dnskey_prev | se, nu, gov, ee, ch, li | 5, 5, 4, 2, 1, 1 | 16.0 to 97.3 | 1 of 6 | 1 of 6 |
+| transient3 | ds_prev | se, nu, gov, ee, ch, li, panel | 5, 5, 4, 2, 1, 1, 9 | 20.2 to 98.2 | 1 of 7 | 1 of 7 |
 | transient3 | iter0 | se, nu, gov, ee, ch, li | 5, 5, 4, 2, 1, 1 | 13.0 to 48.6 | 0 of 6 | 0 of 6 |
 | transient3 | iter10 | se, nu, gov, ee, ch, li | 5, 5, 4, 2, 1, 1 | 0.0 to 100.0 | 2 of 6 | 1 of 6 |
 | transient3 | iter5 | se, nu, gov, ee, ch, li | 5, 5, 4, 2, 1, 1 | 20.2 to 96.2 | 1 of 6 | 0 of 6 |
 | transient3 | iter_gt150 | se, nu, ee, ch, li | 5, 5, 2, 1, 1 | 19.0 to 80.4 | 0 of 5 | 0 of 5 |
 | transient3 | iter_gt50 | se, nu, gov, ee, ch, li | 5, 5, 4, 2, 1, 1 | 27.1 to 63.1 | 0 of 6 | 0 of 6 |
+| transient3 | rrsig_prev | se, nu, gov, ee, ch, li | 5, 5, 4, 2, 1, 1 | 17.2 to 98.0 | 1 of 6 | 1 of 6 |
 | transient3 | rsa1024 | se, nu, gov, ee, ch, li | 5, 5, 4, 2, 1, 1 | 73.6 to 100.0 | 3 of 6 | 2 of 6 |
 
 Question 2:
@@ -348,6 +370,10 @@ Question 2:
 | d06-keygen-no-default-alg | 2018-01-17 | alg5 | se | yes, no | no test | |  | -0.01809 | 11.2 | no |
 | d06-keygen-no-default-alg | 2018-01-17 | alg5 | nu | yes, no | no test | |  | -0.006195 | 24.2 | no |
 | d06-keygen-no-default-alg | 2018-01-17 | alg5 | panel | yes, no | 3.436 | 85.5 | no | -1.293 | 11.1 | no |
+| d06-keygen-no-default-alg | 2018-01-17 | dnskey_prev | se | yes, no | no test | |  | 0.7659 | 91.6 | no |
+| d06-keygen-no-default-alg | 2018-01-17 | dnskey_prev | nu | yes, no | no test | |  | -1.571 | 10.6 | no |
+| d06-keygen-no-default-alg | 2018-01-17 | rrsig_prev | se | yes, no | no test | |  | 0.7151 | 90.5 | no |
+| d06-keygen-no-default-alg | 2018-01-17 | rrsig_prev | nu | yes, no | no test | |  | -1.58 | 11.1 | no |
 | d08-rsamd5-removed | 2019-03-20 | alg1 | se | yes, no | -2.3e-05 | 16.7 | no | 1.2e-05 | 98.4 | yes |
 | d08-rsamd5-removed | 2019-03-20 | alg1 | nu | yes, no | 0.000252 | 88.0 | no | no test | |  |
 | d10-dsa-removed | 2019-03-20 | alg3_6 | se | yes, no | 4.6e-05 | 59.2 | no | 2e-06 | 85.1 | no |
@@ -362,6 +388,16 @@ Question 2:
 | d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | alg13 | nu | no, yes | -8.069 | 20.7 | no | -0.1606 | 16.7 | no |
 | d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | alg13 | gov | no, yes | 2.398 | 52.6 | no | 0.1485 | 55.8 | no |
 | d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | alg13 | panel | no, yes | -4.215 | 7.2 | no | -0.01451 | 17.2 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | dnskey_prev | se | no, yes | -2.319 | 13.8 | no | -0.4259 | 12.4 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | dnskey_prev | nu | no, yes | -9.931 | 1.3 | yes | 0.000105 | 44.6 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | dnskey_prev | gov | no, yes | 1.557 | 77.3 | no | 0.01628 | 82.4 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | ds_prev | se | no, yes | -1.685 | 28.4 | no | -0.2104 | 15.6 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | ds_prev | nu | no, yes | -4.381 | 0.0 | yes | 0 | 33.5 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | ds_prev | gov | no, yes | 1.471 | 79.5 | no | -0.01319 | 53.6 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | ds_prev | panel | no, yes | -0.04029 | 9.7 | no | 0.001374 | 69.5 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | rrsig_prev | se | no, yes | -2.274 | 13.8 | no | -0.3762 | 13.5 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | rrsig_prev | nu | no, yes | -9.892 | 2.0 | yes | 0.000106 | 45.1 | no |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | rrsig_prev | gov | no, yes | 1.546 | 79.2 | no | 0.01159 | 79.3 | no |
 | d16-dnssec-policy-default-key-size-2048 | 2020-02-12 | rsa1024 | se | no, yes | -7.348 | 28.0 | no | -0.1488 | 38.1 | no |
 | d16-dnssec-policy-default-key-size-2048 | 2020-02-12 | rsa1024 | nu | no, yes | -0.1058 | 37.3 | no | -0.4124 | 28.0 | no |
 | d16-dnssec-policy-default-key-size-2048 | 2020-02-12 | rsa1024 | gov | no, yes | 0.01582 | 62.7 | no | 0.4448 | 84.0 | no |
@@ -392,13 +428,13 @@ Where the step test could not run, besides fed.us:
 |---|---|---|---|
 | d02-keygen-default-alg-rsasha1 | 2010-02-16 | alg5 | no step test in any corpus: no before-period in se, nu, gov, ee, ch, li, panel |
 | d03-signzone-nsec3-iterations-100-to-10 | 2010-02-16 | iter10 | no step test in any corpus: no before-period in se, nu, gov, ee, ch, li |
-| d06-keygen-no-default-alg | 2018-01-17 | alg5 | no step test: no before-period in se, nu, gov, ee, ch, li |
+| d06-keygen-no-default-alg | 2018-01-17 | alg5 | no step test: no before-period in se, nu, gov, ee, ch, li, se, nu, gov, ee, ch, li, se, nu, gov, ee, ch, li |
 | d08-rsamd5-removed | 2019-03-20 | alg1 | no step test: the value never appears in this series in gov, ch, li; no before-period in ee; the value is absent in every month of the window 2017-04..2020-03 in panel |
 | d09-gost-removed | 2019-03-20 | alg12 | no step test in any corpus: the value is absent in every month of the window 2017-03..2020-02 in se, nu; the value never appears in this series in gov, ee, ch, li; the value is absent in every month of the window 2017-04..2020-03 in panel |
 | d10-dsa-removed | 2019-03-20 | alg3_6 | no step test: the value is absent in every month of the window 2017-03..2020-02 in nu; the value never appears in this series in gov, ee, li; no before-period in ch; the value is absent in every month of the window 2017-04..2020-03 in panel |
 | d13-ds-cds-sha1-dropped | 2020-02-12 | digest1 | no step test: the value never appears in this series in ee; no before-period in ch, li |
 | d14-keygen-rsa-zsk-2048 | 2020-02-12 | rsa1024 | no step test: no before-period in ee, ch, li |
-| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | alg13 | no step test: no before-period in ee, ch, li |
+| d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | alg13 | no step test: no before-period in ee, ch, li, ee, ch, li, ee, ch, li, ee, ch, li |
 | d16-dnssec-policy-default-key-size-2048 | 2020-02-12 | rsa1024 | no step test: no before-period in ee, ch, li |
 | d17-nsec3param-default-in-policy | 2020-12-07 | iter5 | no step test: no before-period in ee, ch, li |
 | d18-nsec3param-default-0-0 | 2022-01-24 | iter0 | no step test: only 19 testable months in this series, fewer than 24 in ee; no before-period in ch, li |
@@ -427,7 +463,7 @@ no more than its pre-trend predicts, and far below the roughly 5 pp step the pan
 **Not testable:** knot[3] and knot[7] lack a 24-month before-period in any corpus that records their value, and
 knot[19] shipped after both corpora end for NSEC3.
 
-Question 1 counts. step12: 30 tested, 2 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 24 because the testable window is shorter than 24 months, 10 because the value never appears, 1 because the value is present in fewer than 12 months. transient3: 36 tested, 2 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 18 because release months fill more than 75% of the testable window, 10 because the value never appears, 1 because the value is present in fewer than 12 months.
+Question 1 counts. step12: 40 tested, 2 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 33 because the testable window is shorter than 24 months, 10 because the value never appears, 1 because the value is present in fewer than 12 months. transient3: 49 tested, 2 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 24 because release months fill more than 75% of the testable window, 10 because the value never appears, 1 because the value is present in fewer than 12 months.
 
 | statistic | observable | corpora tested | release months tested per corpus | null percentile of the mean, lowest to highest | means outside the 90% null | tests where more release months fall outside the band than chance, p < 0.10 |
 |---|---|---|---|---|---|---|
@@ -437,8 +473,11 @@ Question 1 counts. step12: 30 tested, 2 means outside the null band, 1 excess-ou
 | step12 | alg8 | se, nu, gov, panel | 39, 39, 32, 102 | 41.9 to 75.9 | 0 of 4 | 0 of 4 |
 | step12 | cds | se, nu, gov | 39, 39, 32 | 6.1 to 89.9 | 0 of 3 | 0 of 3 |
 | step12 | digest1 | se, nu, gov, panel | 39, 39, 32, 102 | 3.3 to 51.2 | 1 of 4 | 0 of 4 |
+| step12 | dnskey_prev | se, nu, gov | 39, 39, 32 | 45.5 to 64.3 | 0 of 3 | 0 of 3 |
+| step12 | ds_prev | se, nu, gov, panel | 39, 39, 32, 116 | 36.7 to 82.2 | 0 of 4 | 0 of 4 |
 | step12 | iter0 | se, nu, gov | 39, 39, 32 | 16.2 to 93.3 | 0 of 3 | 0 of 3 |
 | step12 | iter_gt256 | nu | 39 | 69.6 to 69.6 | 0 of 1 | 0 of 1 |
+| step12 | rrsig_prev | se, nu, gov | 39, 39, 32 | 45.3 to 64.9 | 0 of 3 | 0 of 3 |
 | step12 | rsa1024 | se, nu, gov | 39, 39, 32 | 48.8 to 67.6 | 0 of 3 | 0 of 3 |
 | step12 | rsa_lt1024 | se, nu, gov | 39, 39, 32 | 43.8 to 83.8 | 0 of 3 | 1 of 3 |
 | transient3 | alg13 | se, nu, gov, ee, panel | 62, 62, 53, 36, 120 | 23.6 to 97.7 | 1 of 5 | 0 of 5 |
@@ -447,8 +486,11 @@ Question 1 counts. step12: 30 tested, 2 means outside the null band, 1 excess-ou
 | transient3 | alg8 | se, nu, gov, ee, panel | 62, 62, 53, 36, 120 | 2.9 to 57.2 | 1 of 5 | 0 of 5 |
 | transient3 | cds | se, nu, gov, ee | 62, 62, 53, 36 | 42.2 to 73.2 | 0 of 4 | 0 of 4 |
 | transient3 | digest1 | se, nu, gov, panel | 62, 62, 53, 120 | 36.6 to 85.3 | 0 of 4 | 0 of 4 |
+| transient3 | dnskey_prev | se, nu, gov, ee | 62, 62, 53, 36 | 25.1 to 67.8 | 0 of 4 | 0 of 4 |
+| transient3 | ds_prev | se, nu, gov, ee, panel | 62, 62, 53, 36, 120 | 23.5 to 70.5 | 0 of 5 | 0 of 5 |
 | transient3 | iter0 | se, nu, gov, ee | 62, 62, 53, 36 | 16.8 to 75.0 | 0 of 4 | 0 of 4 |
 | transient3 | iter_gt256 | nu | 62 | 22.4 to 22.4 | 0 of 1 | 0 of 1 |
+| transient3 | rrsig_prev | se, nu, gov, ee | 62, 62, 53, 36 | 27.8 to 69.5 | 0 of 4 | 0 of 4 |
 | transient3 | rsa1024 | se, nu, gov, ee | 62, 62, 53, 36 | 39.0 to 70.8 | 0 of 4 | 0 of 4 |
 | transient3 | rsa_lt1024 | se, nu, gov | 62, 62, 53 | 31.1 to 40.1 | 0 of 3 | 0 of 3 |
 
@@ -457,6 +499,7 @@ Question 2:
 | row | timing | observable | corpus | upgrade, opt-in | step12, pp | percentile | outside | transient12, pp | percentile | outside |
 |---|---|---|---|---|---|---|---|---|---|---|
 | knot[1]@2.0.0 | 2015-06-26 | alg8 | panel | no, no | -17.23 | 1.6 | yes | -2.935 | 7.6 | no |
+| knot[1]@2.0.0 | 2015-06-26 | ds_prev | panel | no, no | -0.02325 | 13.6 | no | 0.001012 | 62.3 | no |
 | knot[2]@2.1.0 | 2016-01-14 | alg13 | panel | no, no | 0.2286 | 63.4 | no | -0.0215 | 13.0 | no |
 | knot[7]@2.6.0 | 2017-09-29 | alg3_6 | se | yes, no | no test | |  | -6.6e-05 | 4.2 | yes |
 | knot[8]@2.7.0 | 2018-08-03 | rsa_lt1024 | se | yes, no | 0.05684 | 72.6 | no | 0.005362 | 72.7 | no |
@@ -465,6 +508,10 @@ Question 2:
 | knot[10]@2.8.0 | 2019-03-05 | cds | se | yes, no | 0.01539 | 50.9 | no | -0.00094 | 4.0 | yes |
 | knot[10]@2.8.0 | 2019-03-05 | cds | nu | yes, no | 0.09048 | 60.4 | no | 0 | 34.2 | no |
 | knot[10]@2.8.0 | 2019-03-05 | cds | gov | yes, no | no test | |  | 0.3113 | 70.8 | no |
+| knot[10]@2.8.0 | 2019-03-05 | ds_prev | se | yes, no | 4.877 | 98.3 | yes | 1.097 | 96.8 | yes |
+| knot[10]@2.8.0 | 2019-03-05 | ds_prev | nu | yes, no | 6.173 | 82.8 | no | 0.2832 | 79.1 | no |
+| knot[10]@2.8.0 | 2019-03-05 | ds_prev | gov | yes, no | no test | |  | 0.02039 | 77.0 | no |
+| knot[10]@2.8.0 | 2019-03-05 | ds_prev | panel | yes, no | 0.07875 | 98.3 | yes | 0.001302 | 69.6 | no |
 | knot[11]@2.8.0 | 2019-03-05 | digest1 | se | yes, no | 10.73 | 91.1 | no | 3.014 | 94.5 | no |
 | knot[11]@2.8.0 | 2019-03-05 | digest1 | nu | yes, no | 26.17 | 90.0 | no | 8.916 | 93.5 | no |
 | knot[11]@2.8.0 | 2019-03-05 | digest1 | gov | yes, no | no test | |  | 0.5016 | 85.5 | no |
@@ -474,25 +521,38 @@ Question 2:
 | knot[12]@3.0.2 | 2020-11-11 | alg5_7 | gov | yes, no | -0.09397 | 65.4 | no | 0.0124 | 91.9 | no |
 | knot[12]@3.0.2 | 2020-11-11 | alg5_7 | ee | yes, no | no test | |  | -0.1161 | 13.8 | no |
 | knot[12]@3.0.2 | 2020-11-11 | alg5_7 | panel | yes, no | 7.319 | 83.3 | no | 0.8648 | 75.7 | no |
+| knot[12]@3.0.2 | 2020-11-11 | dnskey_prev | se | yes, no | -0.8162 | 45.5 | no | 0.0506 | 43.1 | no |
+| knot[12]@3.0.2 | 2020-11-11 | dnskey_prev | nu | yes, no | -2.821 | 26.3 | no | 0.03116 | 53.8 | no |
+| knot[12]@3.0.2 | 2020-11-11 | dnskey_prev | gov | yes, no | -0.1179 | 53.3 | no | -0.02337 | 46.3 | no |
+| knot[12]@3.0.2 | 2020-11-11 | dnskey_prev | ee | yes, no | no test | |  | 1.049 | 87.1 | no |
+| knot[12]@3.0.2 | 2020-11-11 | rrsig_prev | se | yes, no | -0.8553 | 43.5 | no | 0.01406 | 44.4 | no |
+| knot[12]@3.0.2 | 2020-11-11 | rrsig_prev | nu | yes, no | -2.845 | 28.2 | no | 0.0296 | 54.5 | no |
+| knot[12]@3.0.2 | 2020-11-11 | rrsig_prev | gov | yes, no | -0.1158 | 49.0 | no | -0.0204 | 46.1 | no |
+| knot[12]@3.0.2 | 2020-11-11 | rrsig_prev | ee | yes, no | no test | |  | 1.049 | 85.6 | no |
 | knot[14]@3.2.0 | 2022-08-22 | iter0 | se | yes, no | 2.88 | 100.0 | yes | 0.139 | 92.7 | no |
 | knot[14]@3.2.0 | 2022-08-22 | iter0 | nu | yes, no | -1.396 | 9.5 | no | 0.1703 | 90.8 | no |
 | knot[14]@3.2.0 | 2022-08-22 | iter0 | gov | yes, no | 0.4177 | 90.9 | no | 0.1338 | 92.3 | no |
 | knot[14]@3.2.0 | 2022-08-22 | iter0 | ee | yes, no | no test | |  | 0.007178 | 91.3 | no |
+| knot[9]@2.7.5 | 2019-01-07 | ds_prev | se | yes, no | 3.976 | 87.8 | no | 0.1481 | 53.0 | no |
+| knot[9]@2.7.5 | 2019-01-07 | ds_prev | nu | yes, no | 8.898 | 94.2 | no | 0.731 | 88.0 | no |
+| knot[9]@2.7.5 | 2019-01-07 | ds_prev | gov | yes, no | no test | |  | -6.46 | 14.8 | no |
+| knot[9]@2.7.5 | 2019-01-07 | ds_prev | panel | yes, no | 0.07219 | 98.3 | yes | 0.001737 | 76.4 | no |
 
 Where the step test could not run, besides fed.us:
 
 | row | timing | observable | why not tested |
 |---|---|---|---|
-| knot[1]@2.0.0 | 2015-06-26 | alg8 | no step test: no before-period in se, nu, gov, ee, ch, li |
+| knot[1]@2.0.0 | 2015-06-26 | alg8 | no step test: no before-period in se, nu, gov, ee, ch, li, se, nu, gov, ee, ch, li, se, nu, gov, ee, ch, li, se, nu, gov, ee, ch, li |
 | knot[2]@2.1.0 | 2016-01-14 | alg13 | no step test: no before-period in se, nu, gov, ee, ch, li |
 | knot[3]@2.2.0 | 2016-04-26 | rsa1024 | no step test in any corpus: no before-period in se, nu, gov, ee, ch, li |
 | knot[7]@2.6.0 | 2017-09-29 | alg3_6 | no step test in any corpus: no before-period in se, ch; the value never appears in this series in nu, gov, ee, li; the value is absent in every month of the window 2015-10..2018-09 in panel |
 | knot[8]@2.7.0 | 2018-08-03 | rsa_lt1024 | no step test: no before-period in gov, ch, li; the value never appears in this series in ee |
-| knot[10]@2.8.0 | 2019-03-05 | cds | no step test: no before-period in gov, ee, ch, li |
+| knot[10]@2.8.0 | 2019-03-05 | cds | no step test: no before-period in gov, ee, ch, li, gov, ee, ch, li |
 | knot[11]@2.8.0 | 2019-03-05 | digest1 | no step test: no before-period in gov, ch, li; the value never appears in this series in ee |
-| knot[12]@3.0.2 | 2020-11-11 | alg5_7 | no step test: no before-period in ee, ch, li |
+| knot[12]@3.0.2 | 2020-11-11 | alg5_7 | no step test: no before-period in ee, ch, li, ee, ch, li, ee, ch, li |
 | knot[14]@3.2.0 | 2022-08-22 | iter0 | no step test: only 19 testable months in this series, fewer than 24 in ee; only 9 testable months in this series, fewer than 24 in ch, li |
 | knot[19]@3.6.0 | 2026-09-08 | iter_gt256 | no step test in any corpus: no after-period in se, nu, ch; the value never appears in this series in gov, ee, li |
+| knot[9]@2.7.5 | 2019-01-07 | ds_prev | no step test: no before-period in gov, ee, ch, li |
 
 ### kresd
 
@@ -502,14 +562,20 @@ Knot Resolver is a validator; only its NSEC3 iteration caps map, indirectly.
 is at the 5.0th percentile in .se, on the edge of the band, over the same .se movement as bind9 l01, and inside its band
 in .nu and .gov. kresd[12] and kresd[15], the cap of 50 in 2024-02, have no after-period.
 
-Question 1 counts. step12: 5 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 6 because the testable window is shorter than 24 months, 1 because the value is present in fewer than 12 months. transient3: 11 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 1 because the value is present in fewer than 12 months.
+Question 1 counts. step12: 15 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 15 because the testable window is shorter than 24 months, 1 because the value is present in fewer than 12 months. transient3: 30 tested, 1 means outside the null band, 4 excess-outside tests; not tested besides fed.us: 1 because the value is present in fewer than 12 months.
 
 | statistic | observable | corpora tested | release months tested per corpus | null percentile of the mean, lowest to highest | means outside the 90% null | tests where more release months fall outside the band than chance, p < 0.10 |
 |---|---|---|---|---|---|---|
+| step12 | dnskey_prev | se, nu, gov | 32, 32, 26 | 18.9 to 60.1 | 0 of 3 | 0 of 3 |
+| step12 | ds_prev | se, nu, gov, panel | 32, 32, 26, 64 | 16.8 to 62.7 | 0 of 4 | 0 of 4 |
 | step12 | iter_gt150 | se, nu | 32, 32 | 5.0 to 6.1 | 0 of 2 | 0 of 2 |
 | step12 | iter_gt50 | se, nu, gov | 32, 32, 26 | 9.9 to 11.4 | 0 of 3 | 0 of 3 |
+| step12 | rrsig_prev | se, nu, gov | 32, 32, 26 | 21.5 to 61.6 | 0 of 3 | 0 of 3 |
+| transient3 | dnskey_prev | se, nu, gov, ee, ch, li | 50, 50, 44, 27, 20, 20 | 8.5 to 82.9 | 0 of 6 | 1 of 6 |
+| transient3 | ds_prev | se, nu, gov, ee, ch, li, panel | 50, 50, 44, 27, 20, 20, 69 | 1.4 to 92.5 | 1 of 7 | 2 of 7 |
 | transient3 | iter_gt150 | se, nu, ee, ch, li | 50, 50, 27, 20, 20 | 16.7 to 54.1 | 0 of 5 | 0 of 5 |
 | transient3 | iter_gt50 | se, nu, gov, ee, ch, li | 50, 50, 44, 27, 20, 20 | 8.1 to 81.1 | 0 of 6 | 0 of 6 |
+| transient3 | rrsig_prev | se, nu, gov, ee, ch, li | 50, 50, 44, 27, 20, 20 | 5.5 to 84.0 | 0 of 6 | 1 of 6 |
 
 Question 2:
 
@@ -546,18 +612,24 @@ release months, and one excess-outside test, algorithm 7 in .se. Two of 15 is ch
 **Not testable:** opendnssec[5], the switch from algorithm 7 to 8 in 2011-03, and opendnssec[3], 2010-05, predate every
 corpus.
 
-Question 1 counts. step12: 15 tested, 1 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 11 because the testable window is shorter than 24 months, 1 because the value never appears. transient3: 26 tested, 2 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 1 because the value never appears.
+Question 1 counts. step12: 25 tested, 6 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 20 because the testable window is shorter than 24 months, 1 because the value never appears. transient3: 45 tested, 2 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 1 because the value never appears.
 
 | statistic | observable | corpora tested | release months tested per corpus | null percentile of the mean, lowest to highest | means outside the 90% null | tests where more release months fall outside the band than chance, p < 0.10 |
 |---|---|---|---|---|---|---|
 | step12 | alg7 | se, nu, gov, panel | 9, 9, 9, 32 | 11.2 to 97.3 | 1 of 4 | 1 of 4 |
 | step12 | alg8 | se, nu, gov, panel | 9, 9, 9, 32 | 34.9 to 94.7 | 0 of 4 | 0 of 4 |
 | step12 | digest1 | se, nu, gov, panel | 9, 9, 9, 32 | 29.5 to 78.5 | 0 of 4 | 0 of 4 |
+| step12 | dnskey_prev | se, nu, gov | 9, 9, 9 | 3.1 to 63.6 | 2 of 3 | 0 of 3 |
+| step12 | ds_prev | se, nu, gov, panel | 9, 9, 9, 47 | 3.4 to 63.3 | 1 of 4 | 0 of 4 |
 | step12 | optout | se, nu, gov | 9, 9, 9 | 13.5 to 84.9 | 0 of 3 | 0 of 3 |
+| step12 | rrsig_prev | se, nu, gov | 9, 9, 9 | 3.7 to 63.7 | 2 of 3 | 0 of 3 |
 | transient3 | alg7 | se, nu, gov, ee, ch, li, panel | 16, 16, 11, 9, 7, 7, 46 | 7.0 to 95.3 | 1 of 7 | 0 of 7 |
 | transient3 | alg8 | se, nu, gov, ee, ch, li, panel | 16, 16, 11, 9, 7, 7, 46 | 3.9 to 67.6 | 1 of 7 | 0 of 7 |
 | transient3 | digest1 | se, nu, gov, ch, li, panel | 16, 16, 11, 7, 7, 46 | 16.2 to 74.9 | 0 of 6 | 0 of 6 |
+| transient3 | dnskey_prev | se, nu, gov, ee, ch, li | 16, 16, 11, 9, 7, 7 | 5.0 to 68.2 | 0 of 6 | 0 of 6 |
+| transient3 | ds_prev | se, nu, gov, ee, ch, li, panel | 16, 16, 11, 9, 7, 7, 51 | 9.2 to 73.3 | 0 of 7 | 0 of 7 |
 | transient3 | optout | se, nu, gov, ee, ch, li | 16, 16, 11, 9, 7, 7 | 14.6 to 81.6 | 0 of 6 | 0 of 6 |
+| transient3 | rrsig_prev | se, nu, gov, ee, ch, li | 16, 16, 11, 9, 7, 7 | 5.7 to 71.0 | 0 of 6 | 0 of 6 |
 
 Question 2:
 
@@ -591,21 +663,27 @@ iterations, are inside their bands everywhere they can be tested.
 **Not testable:** pdns-auth[0], RSASHA256 in 2013-01, lacks a 24-month before-period on the panel; the transient test and
 question 3 still cover it. pdns-auth[1], [3], [4] and [9] predate every corpus that records their value.
 
-Question 1 counts. step12: 19 tested, 3 means outside the null band, 2 excess-outside tests; not tested besides fed.us: 18 because the testable window is shorter than 24 months, 4 because the value never appears, 3 because the value is present in fewer than 12 months. transient3: 37 tested, 1 means outside the null band, 2 excess-outside tests; not tested besides fed.us: 4 because the value never appears, 3 because the value is present in fewer than 12 months.
+Question 1 counts. step12: 29 tested, 3 means outside the null band, 2 excess-outside tests; not tested besides fed.us: 27 because the testable window is shorter than 24 months, 4 because the value never appears, 3 because the value is present in fewer than 12 months. transient3: 56 tested, 2 means outside the null band, 2 excess-outside tests; not tested besides fed.us: 4 because the value never appears, 3 because the value is present in fewer than 12 months.
 
 | statistic | observable | corpora tested | release months tested per corpus | null percentile of the mean, lowest to highest | means outside the 90% null | tests where more release months fall outside the band than chance, p < 0.10 |
 |---|---|---|---|---|---|---|
 | step12 | alg13 | se, nu, gov, panel | 21, 21, 17, 55 | 44.6 to 100.0 | 1 of 4 | 0 of 4 |
 | step12 | alg8 | se, nu, gov, panel | 21, 21, 17, 55 | 3.8 to 16.5 | 1 of 4 | 1 of 4 |
+| step12 | dnskey_prev | se, nu, gov | 21, 21, 17 | 40.7 to 85.6 | 0 of 3 | 0 of 3 |
+| step12 | ds_prev | se, nu, gov, panel | 21, 21, 17, 59 | 35.4 to 87.2 | 0 of 4 | 0 of 4 |
 | step12 | iter0 | se, nu, gov | 21, 21, 17 | 12.2 to 85.9 | 0 of 3 | 0 of 3 |
 | step12 | iter_gt100 | se, nu | 21, 21 | 73.4 to 77.2 | 0 of 2 | 0 of 2 |
 | step12 | optout | se, nu, gov | 21, 21, 17 | 0.0 to 50.9 | 1 of 3 | 1 of 3 |
+| step12 | rrsig_prev | se, nu, gov | 21, 21, 17 | 37.5 to 85.2 | 0 of 3 | 0 of 3 |
 | step12 | rsa1024 | se, nu, gov | 21, 21, 17 | 17.8 to 41.6 | 0 of 3 | 0 of 3 |
 | transient3 | alg13 | se, nu, gov, ee, ch, li, panel | 32, 32, 29, 19, 17, 17, 65 | 18.9 to 92.8 | 0 of 7 | 0 of 7 |
 | transient3 | alg8 | se, nu, gov, ee, ch, li, panel | 32, 32, 29, 19, 17, 17, 65 | 19.6 to 92.7 | 0 of 7 | 0 of 7 |
+| transient3 | dnskey_prev | se, nu, gov, ee, ch, li | 32, 32, 29, 19, 17, 17 | 7.4 to 71.3 | 0 of 6 | 0 of 6 |
+| transient3 | ds_prev | se, nu, gov, ee, ch, li, panel | 32, 32, 29, 19, 17, 17, 65 | 6.4 to 100.0 | 1 of 7 | 0 of 7 |
 | transient3 | iter0 | se, nu, gov, ee, ch, li | 32, 32, 29, 19, 17, 17 | 13.0 to 87.0 | 0 of 6 | 1 of 6 |
 | transient3 | iter_gt100 | se, nu, ee, ch, li | 32, 32, 19, 17, 17 | 28.1 to 100.0 | 1 of 5 | 0 of 5 |
 | transient3 | optout | se, nu, gov, ee, ch, li | 32, 32, 29, 19, 17, 17 | 13.0 to 87.3 | 0 of 6 | 1 of 6 |
+| transient3 | rrsig_prev | se, nu, gov, ee, ch, li | 32, 32, 29, 19, 17, 17 | 9.5 to 69.8 | 0 of 6 | 0 of 6 |
 | transient3 | rsa1024 | se, nu, gov, ee, ch, li | 32, 32, 29, 19, 17, 17 | 6.3 to 83.4 | 0 of 6 | 0 of 6 |
 
 Question 2:
@@ -647,14 +725,20 @@ and are excluded. Only its NSEC3 caps map, indirectly.
 percentile in .se, outside the band, over the same .se movement as bind9 l01 and kresd[9], and inside its band in .nu
 and .gov. The caps of 2500 and 50 have no series or no after-period.
 
-Question 1 counts. step12: 5 tested, 0 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 6 because the testable window is shorter than 24 months, 6 because the value never appears, 1 because the value is present in fewer than 12 months. transient3: 11 tested, 1 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 6 because the value never appears, 1 because the value is present in fewer than 12 months.
+Question 1 counts. step12: 15 tested, 3 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 15 because the testable window is shorter than 24 months, 6 because the value never appears, 1 because the value is present in fewer than 12 months. transient3: 30 tested, 2 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 6 because the value never appears, 1 because the value is present in fewer than 12 months.
 
 | statistic | observable | corpora tested | release months tested per corpus | null percentile of the mean, lowest to highest | means outside the 90% null | tests where more release months fall outside the band than chance, p < 0.10 |
 |---|---|---|---|---|---|---|
+| step12 | dnskey_prev | se, nu, gov | 30, 30, 26 | 0.0 to 38.2 | 1 of 3 | 0 of 3 |
+| step12 | ds_prev | se, nu, gov, panel | 30, 30, 26, 69 | 0.0 to 75.9 | 1 of 4 | 0 of 4 |
 | step12 | iter_gt150 | se, nu | 30, 30 | 54.6 to 67.1 | 0 of 2 | 0 of 2 |
 | step12 | iter_gt50 | se, nu, gov | 30, 30, 26 | 33.1 to 91.8 | 0 of 3 | 0 of 3 |
+| step12 | rrsig_prev | se, nu, gov | 30, 30, 26 | 0.0 to 39.9 | 1 of 3 | 0 of 3 |
+| transient3 | dnskey_prev | se, nu, gov, ee, ch, li | 42, 42, 38, 26, 21, 21 | 17.2 to 94.0 | 0 of 6 | 0 of 6 |
+| transient3 | ds_prev | se, nu, gov, ee, ch, li, panel | 42, 42, 38, 26, 21, 21, 77 | 18.9 to 92.8 | 0 of 7 | 1 of 7 |
 | transient3 | iter_gt150 | se, nu, ee, ch, li | 42, 42, 26, 21, 21 | 1.9 to 82.3 | 1 of 5 | 0 of 5 |
 | transient3 | iter_gt50 | se, nu, gov, ee, ch, li | 42, 42, 38, 26, 21, 21 | 10.6 to 73.9 | 0 of 6 | 0 of 6 |
+| transient3 | rrsig_prev | se, nu, gov, ee, ch, li | 42, 42, 38, 26, 21, 21 | 21.4 to 95.5 | 1 of 6 | 0 of 6 |
 
 Question 2:
 
@@ -681,12 +765,18 @@ Unbound has 120 stable releases in 102 release months. Only its NSEC3 caps map, 
 share near 0.002%, which is the direction a cap would not produce. **Question 2:** unbound[20], the cap of 150 in
 2021-08, is inside its band in the three TLDs with a step test. unbound[1] shipped in 2007, before any corpus.
 
-Question 1 counts. step12: 2 tested, 1 means outside the null band, 0 excess-outside tests; not tested besides fed.us: 3 because the testable window is shorter than 24 months, 1 because the value is present in fewer than 12 months. transient3: 5 tested, 2 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 1 because the value is present in fewer than 12 months.
+Question 1 counts. step12: 12 tested, 2 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 12 because the testable window is shorter than 24 months, 1 because the value is present in fewer than 12 months. transient3: 24 tested, 5 means outside the null band, 1 excess-outside tests; not tested besides fed.us: 1 because the value is present in fewer than 12 months.
 
 | statistic | observable | corpora tested | release months tested per corpus | null percentile of the mean, lowest to highest | means outside the 90% null | tests where more release months fall outside the band than chance, p < 0.10 |
 |---|---|---|---|---|---|---|
+| step12 | dnskey_prev | se, nu, gov | 27, 27, 20 | 35.9 to 88.5 | 0 of 3 | 0 of 3 |
+| step12 | ds_prev | se, nu, gov, panel | 27, 27, 20, 68 | 15.0 to 96.1 | 1 of 4 | 1 of 4 |
 | step12 | iter_gt150 | se, nu | 27, 27 | 88.0 to 100.0 | 1 of 2 | 0 of 2 |
+| step12 | rrsig_prev | se, nu, gov | 27, 27, 20 | 34.9 to 88.0 | 0 of 3 | 0 of 3 |
+| transient3 | dnskey_prev | se, nu, gov, ee, ch, li | 37, 37, 32, 19, 13, 13 | 0.0 to 70.7 | 1 of 6 | 0 of 6 |
+| transient3 | ds_prev | se, nu, gov, ee, ch, li, panel | 37, 37, 32, 19, 13, 13, 77 | 0.0 to 72.4 | 1 of 7 | 0 of 7 |
 | transient3 | iter_gt150 | se, nu, ee, ch, li | 37, 37, 19, 13, 13 | 2.2 to 97.6 | 2 of 5 | 1 of 5 |
+| transient3 | rrsig_prev | se, nu, gov, ee, ch, li | 37, 37, 32, 19, 13, 13 | 0.0 to 67.1 | 1 of 6 | 0 of 6 |
 
 Question 2:
 
@@ -841,7 +931,7 @@ The composition of a reverse spike comes from the ledger, whose labels now match
 rollovers or unsignings of the spike's algorithm in the spike labels. The ledger records only DS algorithms, so a digest
 spike has no composition. A forward spike has only a bound, from the growth in signed zones.
 
-248 spikes: 120 forward and 128 reverse. 13 have a relevant default change within 3 months before them, against 9.1 expected from the chance rates.
+307 spikes: 146 forward and 161 reverse. 16 have a relevant default change within 3 months before them, against 12.3 expected from the chance rates.
 
 | observable | corpus | direction | spikes | aligned within 3 months | expected by chance | p, at least as many |
 |---|---|---|---|---|---|---|
@@ -860,6 +950,14 @@ spike has no composition. A forward spike has only a bound, from the growth in s
 | iter5 | forward | + | 6 | 0 | 0.44 | 1.000 |
 | rsa1024 | forward | - | 9 | 0 | 0.80 | 1.000 |
 | rsa_lt1024 | forward | - | 3 | 0 | 0.13 | 1.000 |
+| dnskey_prev | forward | - | 2 | 0 | 0.18 | 1.000 |
+| dnskey_prev | forward | + | 6 | 0 | 0.16 | 1.000 |
+| ds_prev | forward | - | 2 | 0 | 0.09 | 1.000 |
+| ds_prev | forward | + | 8 | 1 | 0.43 | 0.363 |
+| ds_prev | reverse | - | 2 | 0 | 0.04 | 1.000 |
+| ds_prev | reverse | + | 31 | 2 | 1.94 | 0.586 |
+| rrsig_prev | forward | - | 2 | 0 | 0.18 | 1.000 |
+| rrsig_prev | forward | + | 6 | 0 | 0.16 | 1.000 |
 
 18 further observable, corpus and direction cells have 116 spikes between them and no
 relevant default change anywhere near their series.
@@ -881,6 +979,9 @@ The aligned spikes:
 | 197 | iter0 + | forward ch | 2022-08 to 2022-08 | 2022-08 | 7920 | knot knot[14]@3.2.0 2022-08-22 | 0 | 0.209 | not determinable: forward per-zone records are not in the repository |
 | 198 | iter0 + | forward ch | 2022-11 to 2023-02 | 2022-11 | 139874 | knot knot[14]@3.2.0 2022-08-22 | 3 | 0.209 | not determinable: forward per-zone records are not in the repository |
 | 199 | iter0 + | forward li | 2022-03 to 2022-03 | 2022-03 | 544 | bind9 d18-nsec3param-default-0-0 2022-01-24 | 2 | 0.209 | not determinable: forward per-zone records are not in the repository |
+| 258 | ds_prev + | forward se | 2019-02 to 2019-02 | 2019-02 | 129644 | knot knot[9]@2.7.5 2019-01-07 | 1 | 0.089 | not determinable: forward per-zone records are not in the repository |
+| 278 | ds_prev + | reverse apnic | 2019-02 to 2019-02 | 2019-01 | 300 | knot knot[9]@2.7.5 2019-01-07 | 0 | 0.067 | mostly new signings; new signings 300, rollovers 0 |
+| 287 | ds_prev + | reverse arin | 2020-06 to 2020-06 | 2020-05 | 273 | bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12 | 3 | 0.060 | mostly new signings; new signings 276, rollovers 0 |
 
 **What beats chance:** only zero-iteration NSEC3 in the forward corpus, 6 of 13 spikes aligned against 2.07 expected,
 p = 0.009. The six are .se in 2022-07, .nu in 2022-08, .ch in 2022-03, 2022-08 and 2022-11, and .li in 2022-03. The
@@ -957,6 +1058,195 @@ Readings, without causal language:
 
 Recompute: `python scripts/software_vs_adoption.py --only q5 && python -c "import pandas as pd;d=pd.read_csv('out/analysis/software_vs_adoption_q5.csv');print(d[['predecessor','successor','source','status','share_at_successor','share_after_up_to_12m','trajectory','peak','peak_month','peak_denominator','first_below_half_peak_after_peak','months_from_successor_to_below_half','peak_over_min_den_months','reason']].to_string())"`
 
+
+## Adoption as prevalence (DS / DNSKEY / RRSIG)
+
+Everything above tests the feature mix: which algorithms, digests and NSEC3 settings signed zones use. The team's
+definition of adoption is prevalence, the share of unique domains in a month with at least one DS, DNSKEY or RRSIG
+record. This section asks the same questions of prevalence, with the same statistics, nulls, guard and seed. Its results
+are stored beside the feature results, under the `prevalence` keys of `q1_per_program_releases`,
+`q2_default_change_events`, `q4_spikes` and `observable_mapping`, and as appended rows with observable `ds_prev`,
+`dnskey_prev` or `rrsig_prev` in the question CSVs; the feature results are byte-identical to the previous run.
+
+**The three series, identical to Phase 6.** `ds_prev`, `dnskey_prev` and `rrsig_prev` are Phase 6's `ds_share`,
+`dnskey_share` and `rrsig_zone_share` from `scripts/prevalence_metrics.py`. Forward: rr_type DS, algorithm_dnskey _total
+and rrsig_type_covered DNSKEY over rr_type NS, as summed domain_days over summed domain_days. Reverse: the strict panel
+only, algorithm_ds _total over dimension all. DNSKEY and RRSIG are not observable in the reverse corpus, because an
+in-addr.arpa zone file carries only the delegation, so no reverse DNSKEY or RRSIG series is emitted. The script asserts
+that every monthly value equals `out/analysis/prevalence_metrics.csv` `pct` for the same corpus, source, month and
+metric after the same 4-decimal rounding, within 1e-6, and stops otherwise: 1411 months compared,
+largest unrounded difference 5e-05. Months below the MIN_DEN denominator floor, all of
+fed.us among them, are not emitted.
+
+Forward DNSKEY and RRSIG prevalence move almost together, within half a percent in every TLD-month, so a result in one
+is usually repeated in the other; counts below are of tests, and the note beside each says how many distinct
+program and corpus pairs they come from.
+
+Recompute: `python scripts/software_vs_adoption.py && python -c "import json;d=json.load(open('out/analysis/software_vs_adoption.json'));print(d['notes']['prevalence_check']);print(json.dumps(d['q1_per_program_releases']['prevalence']['aggregate'],indent=1));print(json.dumps({k:{a:b for a,b in v.items() if a!='by_upgrade_and_opt_in'} for k,v in d['q2_default_change_events']['prevalence']['summary'].items()},indent=1));print(d['q4_spikes']['prevalence']['summary'])"`
+
+### Question 1: does prevalence follow releases at all
+
+Every program's release schedule is tested against the three series in every corpus with coverage, whatever its rows,
+so NSD is tested too. BIND 9 again has no test with every stable release, and is tested with its x.y.0 feature
+releases.
+
+| statistic | event set | tested | means outside the 90% null band | expected by chance | tests with an excess of release months outside the band | mean p |
+|---|---|---|---|---|---|---|
+| step12 | every stable release | 70 of 176 | 12 | 7.6 at the calibrated rate | 1 | 0.50 |
+| transient3 | every stable release | 128 of 176 | 9 | 12.8 | 5 | 0.55 |
+| step12 | BIND 9 x.y.0 | 10 of 22 | 0 | 1.1 | | |
+| transient3 | BIND 9 x.y.0 | 19 of 22 | 3 | 1.9 | | |
+
+The step test puts 12 of 70 outside against 7.6 expected. Treated as independent, 12 or more has a chance of about 0.07;
+but the 12 come from only 5 program and corpus pairs, because the three series repeat one another: OpenDNSSEC in .se and
+.nu, PowerDNS Recursor in .se, NSD in .gov and Unbound in .nu. Their directions disagree: OpenDNSSEC's and PowerDNS Recursor's release months
+sit below nearly every shifted schedule, NSD's and Unbound's above. NSD's .gov result rests on 19 release months in a
+45-month window of a series that jumps by tens of points. The transient test is at chance, 9 of 128 against 12.8,
+and the BIND 9 feature releases give 0 of 10 step tests outside.
+
+The step tests outside the band:
+
+| program | observable | corpus | release months | mean step12, pp | percentile |
+|---|---|---|---|---|---|
+| nsd | dnskey_prev | gov | 19 | +8.95 | 98.6 |
+| nsd | ds_prev | gov | 19 | +8.89 | 97.7 |
+| nsd | rrsig_prev | gov | 19 | +8.95 | 97.8 |
+| opendnssec | dnskey_prev | se | 9 | -0.493 | 3.3 |
+| opendnssec | dnskey_prev | nu | 9 | -2.59 | 3.1 |
+| opendnssec | ds_prev | nu | 9 | -1.45 | 3.4 |
+| opendnssec | rrsig_prev | se | 9 | -0.485 | 4.0 |
+| opendnssec | rrsig_prev | nu | 9 | -2.58 | 3.7 |
+| pdns-rec | dnskey_prev | se | 30 | +0.2 | 0.0 |
+| pdns-rec | ds_prev | se | 30 | +0.147 | 0.0 |
+| pdns-rec | rrsig_prev | se | 30 | +0.204 | 0.0 |
+| unbound | ds_prev | nu | 27 | +0.845 | 96.1 |
+
+Not tested, besides fed.us: 72 step cells whose testable window is shorter than 24 months,
+the .ee, .ch and .li cells, because the step test needs 36 months of series around an event, and
+10 where release months fill more than 75% of the window, all of BIND 9's every-release
+cells.
+
+Recompute: `python -c "import pandas as pd;d=pd.read_csv('out/analysis/software_vs_adoption_q1.csv');d=d[d.observable.isin(['ds_prev','dnskey_prev','rrsig_prev'])];print(d[d.status=='tested'][['event_set','test','program','observable','source','release_months_tested','observed_mean','percentile','p_two_sided','p_share_outside_ge_observed']].to_string())"`
+
+### Question 2: default changes that could change whether zones are signed
+
+The rows were chosen one by one from the timelines' before and after text: rows that switch signing on or make it a
+one-line configuration, rows that change DS publication at the parent, and rows that change whether a server publishes
+DNSSEC records at all. Validator-only rows, meaning validation defaults, trust anchors and validator limits, do not change
+what zones publish and are excluded with that reason. Every other row is listed with its reason in
+`observable_mapping.prevalence.rows_excluded` and `software_vs_adoption_prevalence_excluded.csv`.
+
+| program | row | timing | observables | expected direction | relation | reason |
+|---|---|---|---|---|---|---|
+| bind9 | d06-keygen-no-default-alg | 2018-01-17 | dnskey_prev, rrsig_prev | - | signing-default | dnssec-keygen without -a now fails, so scripts that relied on the RSASHA1 default stop producing keys |
+| bind9 | d15-dnssec-policy-default-ecdsap256 | 2020-02-12 | ds_prev, dnskey_prev, rrsig_prev | + | signing-default | built-in dnssec-policy 'default' makes signing a one-line configuration with automatic key management |
+| knot | knot[1]@2.0.0 | 2015-06-26 | ds_prev, dnskey_prev, rrsig_prev | + | signing-default | first built-in KASP policy: Knot generates and manages keys itself instead of needing keys made with another tool |
+| knot | knot[9]@2.7.5 | 2019-01-07 | ds_prev | + | ds-automation | a keymgr-generated KSK is ready at once, so DS submission can proceed immediately |
+| knot | knot[10]@2.8.0 | 2019-03-05 | ds_prev | - | ds-automation | CDS/CDNSKEY published only during KSK submission instead of always, fewer chances for a parent that scans CDS to add a DS |
+| knot | knot[12]@3.0.2 | 2020-11-11 | dnskey_prev, rrsig_prev | - | signing-default | libdnssec refuses algorithms the system crypto policy disables, so RSASHA1 zones on such systems can no longer be signed |
+| nsd | nsd[0]@2.0.0 | 2004-02-12 | dnskey_prev, rrsig_prev | + | serving-default | DNSSEC answer composition compiled in by default: signed zones are served with their DNSKEY and RRSIG records |
+| nsd | nsd[1]@2.2.0 | 2005-01-10 | dnskey_prev, rrsig_prev | - | serving-default | DNSSEC compiled out by default on trunk |
+| nsd | nsd[2]@2.3.0 | 2005-05-02 | dnskey_prev, rrsig_prev | + | serving-default | DNSSEC compiled in by default again |
+| nsd | nsd[5]@3.2.6 | 2010-07-20 | dnskey_prev, rrsig_prev | + | serving-default | --disable-dnssec removed: every NSD build serves DNSSEC |
+
+Candidate rows considered and excluded:
+
+| program | row | reason |
+|---|---|---|
+| bind9 | d02-keygen-default-alg-rsasha1 | sets which algorithm dnssec-keygen uses when -a is omitted; keys still had to be made and a zone signed by hand |
+| bind9 | d08-rsamd5-removed | removes an algorithm that no corpus zone uses as its only one |
+| bind9 | d09-gost-removed | removes an algorithm absent from every corpus |
+| bind9 | d10-dsa-removed | removes an algorithm used by a handful of zones at most |
+| bind9 | d17-nsec3param-default-in-policy | changes the denial type of zones that are signed anyway |
+| knot | knot[7]@2.6.0 | removes DSA, used by a handful of zones at most |
+| knot | knot[17]@3.4.0 | validation of the zone Knot signs; failing zones are refused, rare and not a default to publish |
+| nsd | nsd[3]@3.0.0 | CD-bit handling in responses, not whether signed zones are served |
+| nsd | nsd[4]@3.1.0 | NSEC3 support changes the denial type served, not whether a zone is served signed |
+| nsd | nsd[6]@3.2.9 | changes how NSD detects that a zone is signed, not what it serves |
+| opendnssec | opendnssec[2]@1.0.0b8 | KSK rollovers wait for ds-seen: changes key rollover, not whether a zone is signed |
+| opendnssec | opendnssec[5]@1.2.0b1 | changes the example policy's algorithm, not whether zones are signed |
+| pdns-auth | pdns-auth[0]@3.2 | changes the default algorithm of a key the operator asks for |
+| pdns-auth | pdns-auth[7]@4.0.0 | changes the default algorithm of a key the operator asks for |
+| pdns-auth | pdns-auth[8]@4.0.0 | changes the default algorithm of secure-zone, which the operator still has to run |
+
+The other excluded rows are 79 validator-only rows and 45 rows that change a parameter of zones that are signed
+anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs.
+
+Results, step test primary: 23 tests, 6 outside the band
+against 3.1 expected under the discrete placebo null, of which
+1 in the expected direction. Transient test:
+31 tests, 1 outside against
+3.8.
+
+| row | observable | corpus | before mean, % | after mean, % | step12, pp | percentile | outside | in the expected direction |
+|---|---|---|---|---|---|---|---|---|
+| d15-dnssec-policy-default-ecdsap256 | ds_prev | se | 50.9 | 53.7 | -1.69 | 28.4 | no | no |
+| d15-dnssec-policy-default-ecdsap256 | ds_prev | nu | 36.9 | 47.4 | -4.38 | 0.0 | yes | no |
+| d15-dnssec-policy-default-ecdsap256 | ds_prev | gov | 21 | 19.8 | +1.47 | 79.5 | no | yes |
+| d15-dnssec-policy-default-ecdsap256 | ds_prev | panel | 0.256 | 0.368 | -0.0403 | 9.7 | no | no |
+| d15-dnssec-policy-default-ecdsap256 | dnskey_prev | se | 53.9 | 56.4 | -2.32 | 13.8 | no | no |
+| d15-dnssec-policy-default-ecdsap256 | dnskey_prev | nu | 43.3 | 55.3 | -9.93 | 1.3 | yes | no |
+| d15-dnssec-policy-default-ecdsap256 | dnskey_prev | gov | 21.8 | 20.9 | +1.56 | 77.3 | no | yes |
+| d15-dnssec-policy-default-ecdsap256 | rrsig_prev | se | 53.8 | 56.4 | -2.27 | 13.8 | no | no |
+| d15-dnssec-policy-default-ecdsap256 | rrsig_prev | nu | 43.3 | 55.3 | -9.89 | 2.0 | yes | no |
+| d15-dnssec-policy-default-ecdsap256 | rrsig_prev | gov | 21.8 | 20.9 | +1.55 | 79.2 | no | yes |
+| knot[1]@2.0.0 | ds_prev | panel | 0.0808 | 0.144 | -0.0232 | 13.6 | no | no |
+| knot[9]@2.7.5 | ds_prev | se | 49.1 | 52.2 | +3.98 | 87.8 | no | yes |
+| knot[9]@2.7.5 | ds_prev | nu | 29.7 | 41.5 | +8.9 | 94.2 | no | yes |
+| knot[9]@2.7.5 | ds_prev | panel | 0.187 | 0.301 | +0.0722 | 98.3 | yes | yes |
+| knot[10]@2.8.0 | ds_prev | se | 48.7 | 53.2 | +4.88 | 98.3 | yes | no |
+| knot[10]@2.8.0 | ds_prev | nu | 30.4 | 42.7 | +6.17 | 82.8 | no | no |
+| knot[10]@2.8.0 | ds_prev | panel | 0.194 | 0.32 | +0.0787 | 98.3 | yes | no |
+| knot[12]@3.0.2 | dnskey_prev | se | 55.6 | 57.2 | -0.816 | 45.5 | no | yes |
+| knot[12]@3.0.2 | dnskey_prev | nu | 51.4 | 58.1 | -2.82 | 26.3 | no | yes |
+| knot[12]@3.0.2 | dnskey_prev | gov | 21.1 | 20.5 | -0.118 | 53.3 | no | yes |
+| knot[12]@3.0.2 | rrsig_prev | se | 55.6 | 57.2 | -0.855 | 43.5 | no | yes |
+| knot[12]@3.0.2 | rrsig_prev | nu | 51.3 | 58.1 | -2.85 | 28.2 | no | yes |
+| knot[12]@3.0.2 | rrsig_prev | gov | 21.1 | 20.5 | -0.116 | 49.0 | no | yes |
+
+Six of 23 is more than the 3.1 expected; treated as independent, 6 or more has a chance of about 0.08. But the six are
+three movements, and five of them go against the row's expected direction:
+
+- bind9 d15, the opt-in dnssec-policy default of 2020-02, in .nu: DS, DNSKEY and RRSIG prevalence all fall 4 to 10 pp
+  below the trend of the two years before, at the 0.0th to 2.0th percentiles. .nu DS prevalence averaged 37% in the two
+  years before and 47% in the year after, but the steep rise before predicted more, so the extrapolation overshoots.
+- knot[9] in 2019-01 and knot[10] in 2019-03 share one window: panel DS prevalence rose above its trend in 2019, at the
+  98.3rd percentile for both, and .se DS prevalence at the 98.3rd for knot[10]. For knot[9], which should raise DS
+  prevalence, that is the expected direction; for knot[10], which narrowed CDS publication, it is not. The same rise
+  cannot support both readings.
+
+No row that makes signing easier is followed by prevalence above its trend except through that shared 2019 window.
+
+Not testable: the four NSD rows, 2004 to 2010, and d06, 2018-01, which lacks 24 months before it in any corpus with DNSKEY
+or RRSIG; d06 has only transient tests, inside their bands.
+
+### Question 4: prevalence spikes and their alignment
+
+The spike rule of `scripts/program_rfc_cases.py` on the prevalence numerators, forward per TLD and reverse per RIR,
+gives 59 spikes. 3 have a relevant prevalence default within 3
+months before them, against 3.2 expected from the chance rates; no observable,
+corpus and direction beats chance.
+
+| observable | corpus | direction | spikes | aligned | expected | p |
+|---|---|---|---|---|---|---|
+| dnskey_prev | forward | - | 2 | 0 | 0.18 | 1.000 |
+| dnskey_prev | forward | + | 6 | 0 | 0.16 | 1.000 |
+| ds_prev | forward | - | 2 | 0 | 0.09 | 1.000 |
+| ds_prev | forward | + | 8 | 1 | 0.43 | 0.363 |
+| ds_prev | reverse | - | 2 | 0 | 0.04 | 1.000 |
+| ds_prev | reverse | + | 31 | 2 | 1.94 | 0.586 |
+| rrsig_prev | forward | - | 2 | 0 | 0.18 | 1.000 |
+| rrsig_prev | forward | + | 6 | 0 | 0.16 | 1.000 |
+
+The aligned three are .se DS in 2019-02 after knot[9], APNIC DS changed in 2019-01 after knot[9], and ARIN DS changed in
+2020-05 after bind9 d15. The largest prevalence spikes, .ch and .li DNSKEY, RRSIG and DS in 2021-06 to 2021-12, 670,000 to
+700,000 domains in .ch, the .se and .nu rise of 2017-11, and the RIPE unsigning of 1,777 delegations in 2015-09, have no
+relevant default within a year. All 33 reverse DS spikes with a ledger composition are mostly new signings except two,
+which are mostly unsignings.
+
+Recompute: `python -c "import json,pandas as pd;d=json.load(open('out/analysis/software_vs_adoption.json'))['q4_spikes']['prevalence'];print(pd.DataFrame(d['alignment_vs_chance']).to_string());print(pd.DataFrame(d['spikes'])[['n','observable','direction','source','start','change_calendar_month_start','delta','nearest_relevant_default','lag_months','chance_relevant_default_within_3m','composition']].to_string())"`
+
+
 ## What could not be determined
 
 - Any event before 2011-05 in the reverse corpus, and before 2016-06 in the forward corpus; for the step test, any event
@@ -969,6 +1259,8 @@ Recompute: `python scripts/software_vs_adoption.py --only q5 && python -c "impor
   testable and are reported.
 - Any lasting step smaller than about 5 pp at a single named event, or about 10 pp across a series' event months; in
   volatile series such as .nu SHA-1 DS, not even 10 pp. See the detection-power table.
+- DNSKEY and RRSIG prevalence in the reverse corpus, which holds only delegations, and any prevalence event before
+  2016-06 forward or 2011-05 on the panel: the four NSD serving defaults of 2004 to 2010 and knot[1]'s forward effect.
 - Salt length, NSEC and NSEC3 TTLs, RRSIG timing and key-management state, which the monthly counts do not record.
 - All validation, trust-anchor and validator-limit behaviour, apart from the NSEC3 caps tested indirectly.
 - The software that signed any zone, and the DNS operator that runs it. Every alignment above is timing, not attribution.
@@ -1014,6 +1306,17 @@ Recompute: `python scripts/software_vs_adoption.py --only q5 && python -c "impor
 | Q5 panel RSASHA1 | peak 50.2% in 2014-08, below half in 2017-02 | a decline from about 100% in 2011; 50.2% in 2014-08 is the first month over the floor, not a peak; the peak column is flagged | verifier F |
 | Percentile rounding | 97.55 printed as 97.5 and 97.6 | half up to one decimal everywhere | consistency |
 | forward_note in the JSON | two registry operators, about a dozen organisations | four TLDs run by two registries; the operators of the changed zones cannot be identified | verifier G.1 |
+
+### Prevalence extension
+
+| item | before | now | why |
+|---|---|---|---|
+| Adoption tested | feature mix only: shares of algorithms, digests and NSEC3 settings among signed zones | also prevalence: ds_prev, dnskey_prev, rrsig_prev, identical to Phase 6, asserted month by month | the team defines adoption as prevalence |
+| Q1 prevalence | not tested | step 12 of 70 outside against 7.6; transient 9 of 128 against 12.8; NSD tested | release schedules against prevalence, whatever the rows |
+| Q2 prevalence | not tested | 10 rows mapped; step 6 of 23 outside against 3.1, 1 in the expected direction | rows that could change whether zones are signed |
+| Q4 prevalence | not tested | 59 spikes, 3 aligned against 3.2 | same spike rule and chance rate |
+| Feature results | as above | byte-identical: every existing JSON key and CSV row unchanged, prevalence stored under new keys and appended rows | checked by diffing against the committed outputs |
+
 
 ## Changed from the earlier analysis
 

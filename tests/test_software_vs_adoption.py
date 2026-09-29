@@ -339,3 +339,106 @@ def test_q4_spike_rule_is_the_program_rfc_cases_rule(mod):
     import program_rfc_cases
     assert mod._spikes is program_rfc_cases.spikes
     assert (mod.FORWARD_FLOOR, mod.REVERSE_FLOOR) == (300, 30)
+
+
+# ------------------------------------------------ prevalence family --
+
+PREV = ("ds_prev", "dnskey_prev", "rrsig_prev")
+
+
+def _prev_share(frame: pd.DataFrame, num_dim, num_val, den_dim, den_val) -> pd.Series:
+    num = frame[(frame.dimension == num_dim) & (frame.value == num_val)].set_index("month").domain_days
+    den = frame[(frame.dimension == den_dim) & (frame.value == den_val)].set_index("month").domain_days
+    return 100 * num.reindex(den.index, fill_value=0) / den
+
+
+def test_prevalence_equals_phase6(doc):
+    """Every prevalence value equals prevalence_metrics.csv pct, recomputed here without the script."""
+    chk = doc["notes"]["prevalence_check"]
+    assert chk["months_compared"] == 1411 and chk["max_abs_difference_unrounded"] <= 5e-5
+    pm = pd.read_csv(ROOT / "out/analysis/prevalence_metrics.csv", dtype={"month": str})
+    s = pd.read_parquet(ROOT / "out/server_run/timeline_monthly.parquet")
+    p = pd.read_parquet(ROOT / "out/panel_run/timeline_monthly.parquet")
+    cases = [("forward", "se", s[s.source == "se"], "dnskey_share", ("algorithm_dnskey", "_total", "rr_type", "NS")),
+             ("forward", "nu", s[s.source == "nu"], "rrsig_zone_share",
+              ("rrsig_type_covered", "DNSKEY", "rr_type", "NS")),
+             ("forward", "ch", s[s.source == "ch"], "ds_share", ("rr_type", "DS", "rr_type", "NS")),
+             ("reverse_panel", PANEL, p[p.source == PANEL], "ds_share", ("algorithm_ds", "_total", "all", "all"))]
+    for corpus, src, frame, metric, sel in cases:
+        mine = _prev_share(frame, *sel)
+        ref = pm[(pm.corpus == corpus) & (pm.source == src) & (pm.metric == metric)].set_index("month").pct
+        common = mine.index.intersection(ref.index)
+        assert len(common) > 40
+        assert (mine[common].round(4) - ref[common]).abs().max() <= 1e-6, (corpus, src, metric)
+
+
+def test_reverse_has_no_dnskey_or_rrsig(mod, doc):
+    assert mod.PREV_OBSERVABLES["dnskey_prev"]["rev"] is None and mod.PREV_OBSERVABLES["rrsig_prev"]["rev"] is None
+    assert mod.corpora_for("dnskey_prev")[-1][0] == "forward"
+    assert set(doc["observable_mapping"]["prevalence"]["not_observable"]) == {"dnskey_prev", "rrsig_prev"}
+    q1p = doc["q1_per_program_releases"]["prevalence"]["per_program"]
+    rows = [t for pt in q1p.values() for t in pt["tests"]]
+    rows += doc["q2_default_change_events"]["prevalence"]["events"]
+    for r in rows:
+        if r["corpus"] != "forward":
+            assert r["observable"] == "ds_prev" and r["source"] == PANEL
+    for sp in doc["q4_spikes"]["prevalence"]["spikes"]:
+        if sp["corpus"] == "reverse":
+            assert sp["observable"] == "ds_prev"
+
+
+PINNED_PREV_MAP = {
+    ("d15-dnssec-policy-default-ecdsap256", "ds_prev", 1), ("d15-dnssec-policy-default-ecdsap256", "dnskey_prev", 1),
+    ("d15-dnssec-policy-default-ecdsap256", "rrsig_prev", 1),
+    ("d06-keygen-no-default-alg", "dnskey_prev", -1), ("d06-keygen-no-default-alg", "rrsig_prev", -1),
+    ("knot[1]@2.0.0", "ds_prev", 1), ("knot[1]@2.0.0", "dnskey_prev", 1), ("knot[1]@2.0.0", "rrsig_prev", 1),
+    ("knot[9]@2.7.5", "ds_prev", 1), ("knot[10]@2.8.0", "ds_prev", -1),
+    ("knot[12]@3.0.2", "dnskey_prev", -1), ("knot[12]@3.0.2", "rrsig_prev", -1),
+    ("nsd[0]@2.0.0", "dnskey_prev", 1), ("nsd[0]@2.0.0", "rrsig_prev", 1),
+    ("nsd[1]@2.2.0", "dnskey_prev", -1), ("nsd[1]@2.2.0", "rrsig_prev", -1),
+    ("nsd[2]@2.3.0", "dnskey_prev", 1), ("nsd[2]@2.3.0", "rrsig_prev", 1),
+    ("nsd[5]@3.2.6", "dnskey_prev", 1), ("nsd[5]@3.2.6", "rrsig_prev", 1),
+}
+
+
+def test_prevalence_mapping_table(doc):
+    m = doc["observable_mapping"]["prevalence"]
+    inc = {(r["row_id"], r["observable"], r["expected_direction"]) for r in m["rows_included"]}
+    assert inc == PINNED_PREV_MAP
+    assert all(r["reason"] for r in m["rows_included"] + m["rows_excluded"])
+    rows = pd.read_csv(ROOT / "out/analysis/cross_program_defaults_normalised.csv", dtype=str)
+    assert {r["row_id"] for r in m["rows_included"]} | {r["row_id"] for r in m["rows_excluded"]} == set(rows.row_id)
+    exc = {r["row_id"]: r["reason"] for r in m["rows_excluded"]}
+    for rid in ("d01-validation-default-yes", "unbound[0]@0.5", "kresd[6]@4.0.0", "root-ds-38696"):
+        assert exc[rid].startswith("validator-only")
+
+
+def test_hand_knot9_ds_prevalence_on_panel(doc):
+    """knot[9]@2.7.5, released 2019-01-07: panel labels up to 2019-01 are before it; the DS share of all
+    panel delegations departs from its pre-trend by +0.072 pp, at the 98.3rd percentile."""
+    p = pd.read_parquet(ROOT / "out/panel_run/timeline_monthly.parquet")
+    months = pd.period_range("2009-04", "2026-08", freq="M").strftime("%Y-%m")
+    share = _prev_share(p[p.source == PANEL], "algorithm_ds", "_total", "all", "all").reindex(months)
+    hand = _hand_step(share, "2019-02")
+    e = next(x for x in doc["q2_default_change_events"]["prevalence"]["events"]
+             if x["row_id"] == "knot[9]@2.7.5" and x["observable"] == "ds_prev" and x["source"] == PANEL
+             and x["test"] == "step12")
+    assert (e["before_labels"], e["after_labels"]) == ("2017-02..2019-01", "2019-02..2020-01")
+    assert e["observed"] == pytest.approx(hand, abs=1e-5)
+    assert hand == pytest.approx(0.072187, abs=1e-5)
+    assert e["outside_90_band"] and e["in_expected_direction"]
+
+
+def test_prevalence_family_is_separate(doc):
+    """Prevalence results sit under their own keys; the feature aggregates are unchanged."""
+    agg = doc["q1_per_program_releases"]["aggregate"]["step12"]
+    assert (agg["tested"], agg["mean_outside_90pct_null"]) == (76, 7)
+    s2 = doc["q2_default_change_events"]["summary"]["step12"]
+    assert (s2["n_tests"], s2["n_outside_band"]) == (68, 7)
+    assert len(doc["q4_spikes"]["spikes"]) == 248
+    pa = doc["q1_per_program_releases"]["prevalence"]["aggregate"]["step12"]
+    assert (pa["tested"], pa["mean_outside_90pct_null"]) == (70, 12)
+    ps = doc["q2_default_change_events"]["prevalence"]["summary"]["step12"]
+    assert (ps["n_tests"], ps["n_outside_band"]) == (23, 6)
+    assert doc["q4_spikes"]["prevalence"]["summary"]["spikes"] == 59
+    assert "nsd" in doc["q1_per_program_releases"]["prevalence"]["per_program"]

@@ -384,7 +384,7 @@ def share_series(data: Data, obs: str, corpus: str, source: str):
     corpus 'forward' reads the server run's zonefile basis per TLD; corpus
     'reverse_panel' reads only the strict panel `_pooled-afrinic-arin`. Shares
     are never built from summed RIRs."""
-    spec = OBSERVABLES[obs]["fwd" if corpus == "forward" else "rev"]
+    spec = OBS_ALL[obs]["fwd" if corpus == "forward" else "rev"]
     if spec is None:
         return None
     (ndim, nval), (ddim, dval) = spec
@@ -531,9 +531,9 @@ class Series:
 
 def corpora_for(obs: str):
     out = []
-    if OBSERVABLES[obs]["fwd"] is not None:
+    if OBS_ALL[obs]["fwd"] is not None:
         out += [("forward", t) for t in FORWARD_TLDS]
-    if OBSERVABLES[obs]["rev"] is not None:
+    if OBS_ALL[obs]["rev"] is not None:
         out.append(("reverse_panel", PANEL))
     return out
 
@@ -664,14 +664,164 @@ MECH_TABLE = [
 ]
 
 
+# ------------------------------------------------------ prevalence family --
+#: Adoption as prevalence, identical to Phase 6 (scripts/prevalence_metrics.py): the share of unique
+#: domains in a month with at least one DS, DNSKEY or RRSIG record. Forward: over rr_type NS, the
+#: zone-level RRSIG proxy is rrsig_type_covered DNSKEY. Reverse: the strict panel carries DS only,
+#: over dimension all; DNSKEY and RRSIG live in the child zone and are not observable there.
+PREV_OBSERVABLES = {
+    "ds_prev": dict(label="unique domains with at least one DS, % (Phase 6 ds_share)",
+                    fwd=(("rr_type", ["DS"]), ("rr_type", "NS")),
+                    rev=(("algorithm_ds", ["_total"]), ("all", "all")), prevalence_metric="ds_share"),
+    "dnskey_prev": dict(label="unique domains with at least one DNSKEY, % (Phase 6 dnskey_share)",
+                        fwd=(("algorithm_dnskey", ["_total"]), ("rr_type", "NS")), rev=None,
+                        prevalence_metric="dnskey_share"),
+    "rrsig_prev": dict(label="unique domains with an RRSIG over their DNSKEY, % (Phase 6 rrsig_zone_share)",
+                       fwd=(("rrsig_type_covered", ["DNSKEY"]), ("rr_type", "NS")), rev=None,
+                       prevalence_metric="rrsig_zone_share"),
+}
+PREV_OBS = tuple(PREV_OBSERVABLES)
+OBS_ALL = {**OBSERVABLES, **PREV_OBSERVABLES}
+PREV_NOT_OBSERVABLE = {
+    "dnskey_prev": "reverse: an in-addr.arpa zone file holds only the delegation (NS, DS, glue); DNSKEY lives in "
+                   "the child zone and was not measured, so no reverse DNSKEY series is emitted",
+    "rrsig_prev": "reverse: RRSIGs are child-side data; the RIR zone files carry only the DS, so no reverse RRSIG "
+                  "series is emitted",
+}
+
+_SIGN = "could change whether zones are signed"
+#: Row -> [(observable, expected direction, relation, reason)]: rows that could plausibly change whether
+#: zones get signed, published signed, or get a DS at the parent. Decided row by row from before/after.
+PREV_ROW_MAP = {
+    "d15-dnssec-policy-default-ecdsap256": [
+        (o, +1, "signing-default", "built-in dnssec-policy 'default' makes signing a one-line configuration "
+                                   "with automatic key management") for o in PREV_OBS],
+    "d06-keygen-no-default-alg": [
+        (o, -1, "signing-default", "dnssec-keygen without -a now fails, so scripts that relied on the RSASHA1 "
+                                   "default stop producing keys") for o in ("dnskey_prev", "rrsig_prev")],
+    "knot[1]@2.0.0": [
+        (o, +1, "signing-default", "first built-in KASP policy: Knot generates and manages keys itself instead "
+                                   "of needing keys made with another tool") for o in PREV_OBS],
+    "knot[9]@2.7.5": [
+        ("ds_prev", +1, "ds-automation", "a keymgr-generated KSK is ready at once, so DS submission can proceed "
+                                         "immediately")],
+    "knot[10]@2.8.0": [
+        ("ds_prev", -1, "ds-automation", "CDS/CDNSKEY published only during KSK submission instead of always, "
+                                         "fewer chances for a parent that scans CDS to add a DS")],
+    "knot[12]@3.0.2": [
+        (o, -1, "signing-default", "libdnssec refuses algorithms the system crypto policy disables, so RSASHA1 "
+                                   "zones on such systems can no longer be signed") for o in ("dnskey_prev", "rrsig_prev")],
+    "nsd[0]@2.0.0": [
+        (o, +1, "serving-default", "DNSSEC answer composition compiled in by default: signed zones are served "
+                                   "with their DNSKEY and RRSIG records") for o in ("dnskey_prev", "rrsig_prev")],
+    "nsd[1]@2.2.0": [
+        (o, -1, "serving-default", "DNSSEC compiled out by default on trunk") for o in ("dnskey_prev", "rrsig_prev")],
+    "nsd[2]@2.3.0": [
+        (o, +1, "serving-default", "DNSSEC compiled in by default again") for o in ("dnskey_prev", "rrsig_prev")],
+    "nsd[5]@3.2.6": [
+        (o, +1, "serving-default", "--disable-dnssec removed: every NSD build serves DNSSEC") for o in
+        ("dnskey_prev", "rrsig_prev")],
+}
+#: Candidate rows considered and left out, with the reason.
+PREV_EXCLUDED_ROW = {
+    "d02-keygen-default-alg-rsasha1": "sets which algorithm dnssec-keygen uses when -a is omitted; keys still had "
+                                      "to be made and a zone signed by hand",
+    "d17-nsec3param-default-in-policy": "changes the denial type of zones that are signed anyway",
+    "d22-cdns-cdnskey-options": "not a default change: CDS and CDNSKEY publication was already on",
+    "d08-rsamd5-removed": "removes an algorithm that no corpus zone uses as its only one",
+    "d09-gost-removed": "removes an algorithm absent from every corpus",
+    "d10-dsa-removed": "removes an algorithm used by a handful of zones at most",
+    "knot[7]@2.6.0": "removes DSA, used by a handful of zones at most",
+    "nsd[3]@3.0.0": "CD-bit handling in responses, not whether signed zones are served",
+    "nsd[4]@3.1.0": "NSEC3 support changes the denial type served, not whether a zone is served signed",
+    "nsd[6]@3.2.9": "changes how NSD detects that a zone is signed, not what it serves",
+    "opendnssec[2]@1.0.0b8": "KSK rollovers wait for ds-seen: changes key rollover, not whether a zone is signed",
+    "opendnssec[5]@1.2.0b1": "changes the example policy's algorithm, not whether zones are signed",
+    "pdns-auth[0]@3.2": "changes the default algorithm of a key the operator asks for",
+    "pdns-auth[7]@4.0.0": "changes the default algorithm of a key the operator asks for",
+    "pdns-auth[8]@4.0.0": "changes the default algorithm of secure-zone, which the operator still has to run",
+    "knot[17]@3.4.0": "validation of the zone Knot signs; failing zones are refused, rare and not a default "
+                      "to publish",
+}
+PREV_VALIDATOR_MECH = {"validation", "trust-anchor", "trust-anchor-5011"}
+
+
+def prevalence_mapping(rows: pd.DataFrame):
+    """Included rows in the same shape as mapping_table's, and every other row with its reason."""
+    inc, exc = [], []
+    ids = set(rows.row_id)
+    for rid in PREV_ROW_MAP:
+        assert rid in ids, f"PREV_ROW_MAP names unknown row {rid}"
+    for _, r in rows.iterrows():
+        if r.row_id in PREV_ROW_MAP and r.is_default_change:
+            for obs, direction, rel, why in PREV_ROW_MAP[r.row_id]:
+                o = PREV_OBSERVABLES[obs]
+                inc.append({"program": r.program, "row_id": r.row_id, "mechanism": r.mechanism,
+                            "timing_tag": r.timing_tag, "timing_date": r.timing_date,
+                            "opt_in": r.opt_in, "applies_on_upgrade": r.applies_on_upgrade,
+                            "observable": obs, "observable_label": o["label"],
+                            "expected_direction": direction, "relation": rel, "reason": why,
+                            "forward": _spec_text(o["fwd"]), "reverse": _spec_text(o["rev"], panel=True)})
+            continue
+        if r.row_id in PREV_EXCLUDED_ROW:
+            why = PREV_EXCLUDED_ROW[r.row_id]
+        elif not r.is_default_change:
+            why = "not a default change (is_default_change false)"
+        elif r.mechanism in PREV_VALIDATOR_MECH or r.program in ("unbound", "kresd", "pdns-rec"):
+            why = "validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
+        else:
+            why = ("changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, "
+                   "NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS")
+        exc.append({"program": r.program, "row_id": r.row_id, "mechanism": r.mechanism,
+                    "timing_date": r.timing_date, "reason": why})
+    return inc, exc
+
+
+def check_prevalence(data) -> dict:
+    """Every monthly prevalence value must equal out/analysis/prevalence_metrics.csv `pct` for the same
+    corpus, source, month and metric. That file rounds pct to 4 decimals, so the value is rounded the
+    same way and must then agree within 1e-6; unrounded it agrees within 5e-5. Months below the MIN_DEN
+    denominator floor are not emitted here and are not compared."""
+    pm = pd.read_csv(OUT / "prevalence_metrics.csv", dtype={"month": str})
+    compared = skipped = 0
+    worst = 0.0
+    for obs, o in PREV_OBSERVABLES.items():
+        for corpus, src in corpora_for(obs):
+            s = Series(data, obs, corpus, src)
+            if not s.ok:
+                continue
+            pcorp = "forward" if corpus == "forward" else "reverse_panel"
+            ref = pm[(pm.corpus == pcorp) & (pm.source == src) & (pm.metric == o["prevalence_metric"])]
+            ref = ref.set_index("month").pct
+            for month, v in s.share.items():
+                if pd.isna(v):
+                    skipped += 1
+                    continue
+                if month not in ref.index:
+                    raise AssertionError(f"prevalence: {obs} {src} {month} missing from prevalence_metrics.csv")
+                d = abs(round(float(v), 4) - float(ref[month]))
+                worst = max(worst, abs(float(v) - float(ref[month])))
+                if d > 1e-6:
+                    raise AssertionError(f"prevalence mismatch {obs} {src} {month}: {v} vs {ref[month]}")
+                compared += 1
+    return {"months_compared": compared, "months_below_floor_not_compared": skipped,
+            "max_abs_difference_unrounded": r6(worst),
+            "rule": "rounded to 4 decimals like prevalence_metrics.csv, then equal within 1e-6"}
+
+
 # -------------------------------------------------------------------- q1 --
 
 
-def q1(rows, releases, data):
-    mapped, _ = mapping_table(rows)
+def q1(rows, releases, data, family: str = "feature"):
+    """family "feature": the observables each program's mapped rows touch. family "prevalence": the
+    three prevalence observables for every program, whatever its rows."""
     by_prog = {}
-    for m in mapped:
-        by_prog.setdefault(m["program"], {}).setdefault(m["observable"], []).append(m["row_id"])
+    if family == "feature":
+        mapped, _ = mapping_table(rows)
+        for m in mapped:
+            by_prog.setdefault(m["program"], {}).setdefault(m["observable"], []).append(m["row_id"])
+    else:
+        by_prog = {p: {o: [] for o in PREV_OBS} for p in releases}
     summary, per_release, tables = [], [], {}
     event_sets = [(prog, prog, releases[prog], ALL_STABLE) for prog in sorted(releases)]
     # BIND ships in nearly every month, so every-stable-release schedules have no contrast. Its
@@ -844,8 +994,8 @@ def bh_q(ps: list) -> list:
     return out.tolist()
 
 
-def q2(rows, data):
-    mapped, _ = mapping_table(rows)
+def q2(rows, data, family: str = "feature"):
+    mapped = mapping_table(rows)[0] if family == "feature" else prevalence_mapping(rows)[0]
     out = []
     series_cache = {}
     for m in mapped:
@@ -954,7 +1104,7 @@ def q2(rows, data):
                                          x["row_id"], x["source"]))
     rank_of = {(x["row_id"], x["source"]): i + 1 for i, x in enumerate(ranked)}
     focus = []
-    for rid in ("d21-signzone-nsec3-iterations-0", "knot[14]@3.2.0"):
+    for rid in (("d21-signzone-nsec3-iterations-0", "knot[14]@3.2.0") if family == "feature" else ()):
         r = next((x for x in step if x["row_id"] == rid and x["source"] == "se"), None)
         if r is None:
             continue
@@ -1355,17 +1505,21 @@ def poisson_binomial_tail(ps, k):
     return float(dist[k:].sum())
 
 
-def q4(rows, releases, data):
-    mapped, _ = mapping_table(rows)
+def q4(rows, releases, data, family: str = "feature", n0: int = 0):
     ledger = pd.read_parquet(OUT / "delegation_changes.parquet")
     obs_rows = {}
+    if family == "feature":
+        mapped, _ = mapping_table(rows)
+    else:
+        mapped, _ = prevalence_mapping(rows)
+        obs_rows = {o: [] for o in PREV_OBS}   # every prevalence series is scanned, rows or not
     for m in mapped:
         obs_rows.setdefault(m["observable"], []).append(m)
     rel_idx = {p: [(t, d, m2i(d[:7])) for t, d in r] for p, r in releases.items()}
     spikes_out, chance_out = [], []
-    n = 0
+    n = n0
     for obs in sorted(obs_rows):
-        o = OBSERVABLES[obs]
+        o = OBS_ALL[obs]
         sets = []
         if o["fwd"] is not None:
             (nd, nv), _ = o["fwd"]
@@ -1458,8 +1612,19 @@ def q4(rows, releases, data):
 
 
 def _composition(corpus, src, obs, direction, ep, ledger, den, y):
-    algs = OBSERVABLES[obs].get("algs")
+    algs = OBS_ALL[obs].get("algs")
     months = [i2m(i) for i in range(m2i(ep["start"]), m2i(ep["end"]) + 1)]
+    if corpus == "reverse" and obs == "ds_prev":
+        L = ledger[(ledger.source == src) & (ledger.month.isin(months))]
+        ns, un = int((L.kind == "sign").sum()), int((L.kind == "unsign").sum())
+        ro = int((L.kind == "rollover").sum())
+        if ns + un == 0:
+            lab = "no signing or unsigning in the ledger"
+        elif direction > 0:
+            lab = "mostly new signings" if ns >= un else "mostly unsignings"
+        else:
+            lab = "mostly unsignings" if un >= ns else "mostly new signings"
+        return {"composition": lab, "new_signings": ns, "rollovers": ro, "unsignings": un}
     if corpus == "reverse":
         if not algs:
             return {"composition": "not determinable: the ledger records DS algorithms only",
@@ -1616,6 +1781,18 @@ def write_csv(name: str, recs: list):
     df.to_csv(OUT / f"software_vs_adoption_{name}.csv", index=False, float_format="%.6g")
 
 
+def append_csv(name: str, recs: list):
+    """Append prevalence rows under the existing header, so the feature rows above stay byte-identical.
+    Every field of a new row must already be a column."""
+    path = OUT / f"software_vs_adoption_{name}.csv"
+    header = pd.read_csv(path, nrows=0).columns.tolist()
+    extra = {k for r in recs for k in r} - set(header)
+    assert not extra, f"{name}: prevalence rows carry fields the feature CSV lacks: {sorted(extra)}"
+    if recs:
+        pd.DataFrame(recs).reindex(columns=header).to_csv(path, mode="a", header=False, index=False,
+                                                         float_format="%.6g")
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--only", choices=["q1", "q2", "q3", "q4", "q5"], action="append")
@@ -1667,16 +1844,31 @@ def main(argv=None) -> int:
         "release_dates": "stable release row's `released` from data/software/timelines; default rows use "
                          "Phase 4 timing_* columns, which already apply first_public_tag",
     }
+    doc["notes"]["prevalence_check"] = check_prevalence(data)   # raises on any mismatch
+    p_inc, p_exc = prevalence_mapping(rows)
+    doc["observable_mapping"]["prevalence"] = {
+        "observables": {k: {"label": v["label"], "forward": _spec_text(v["fwd"]),
+                            "reverse": _spec_text(v["rev"], panel=True),
+                            "phase6_metric": v["prevalence_metric"]} for k, v in PREV_OBSERVABLES.items()},
+        "not_observable": PREV_NOT_OBSERVABLE, "rows_included": p_inc, "rows_excluded": p_exc}
     save(doc)
     write_csv("mapping", mapped)
     write_csv("excluded", unmapped)
+    write_csv("prevalence_mapping", p_inc)
+    write_csv("prevalence_excluded", p_exc)
     if "q1" in todo:
         res, summ, per = q1(rows, releases, data)
         doc["q1_per_program_releases"] = res
         save(doc)
         write_csv("q1", summ)
         write_csv("q1_releases", per)
-        print("q1 saved", res["aggregate"])
+        pres, psumm, pper = q1(rows, releases, data, "prevalence")
+        res["prevalence"] = {"observables": list(PREV_OBS), "per_program": pres["per_program"],
+                             "aggregate": pres["aggregate"]}
+        save(doc)
+        append_csv("q1", psumm)
+        append_csv("q1_releases", pper)
+        print("q1 saved", res["aggregate"], "prevalence", pres["aggregate"])
     if "q2" in todo:
         res, recs = q2(rows, data)
         res["detection_power"] = detection_power(data)
@@ -1684,6 +1876,11 @@ def main(argv=None) -> int:
         save(doc)
         write_csv("q2", recs)
         write_csv("power", res["detection_power"]["rows"])
+        pres, precs = q2(rows, data, "prevalence")
+        res["prevalence"] = {k: v for k, v in pres.items() if k not in ("forward_note", "verifier_focus_events")}
+        save(doc)
+        append_csv("q2", precs)
+        print("q2 prevalence", {k: (v["n_tests"], v["n_outside_band"]) for k, v in pres["summary"].items()})
         print("q2 saved", {k: (v["n_tests"], v["n_outside_band"]) for k, v in res["summary"].items()})
     if "q3" in todo:
         res, recs = q3(rows)
@@ -1697,6 +1894,18 @@ def main(argv=None) -> int:
         save(doc)
         write_csv("q4", recs)
         write_csv("q4_alignment", res["alignment_vs_chance"])
+        pres, precs = q4(rows, releases, data, "prevalence", n0=len(recs))
+        al = pres["alignment_vs_chance"]
+        res["prevalence"] = {"spikes": pres["spikes"], "chance": pres["chance"], "alignment_vs_chance": al,
+                             "summary": {"spikes": len(precs),
+                                         "aligned_within_3m": int(sum(x["relevant_default_within_3m"] for x in precs)),
+                                         "expected_aligned": r6(sum(float(x["chance_relevant_default_within_3m"])
+                                                                    for x in precs)),
+                                         "cells_beating_chance": [f"{x['observable']} {x['corpus']} {x['direction']}"
+                                                                  for x in al if x["beats_chance"]]}}
+        save(doc)
+        append_csv("q4", precs)
+        append_csv("q4_alignment", al)
         print("q4 saved", len(recs), "spikes")
     if "q5" in todo:
         res, recs = q5(data)
