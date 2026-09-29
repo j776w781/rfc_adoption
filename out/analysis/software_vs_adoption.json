@@ -953,38 +953,6 @@
    "rows_included": [
     {
      "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "mechanism": "dnskey",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "observable_label": "unique domains with at least one DNSKEY, % (Phase 6 dnskey_share)",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "reason": "dnssec-keygen without -a now fails, so scripts that relied on the RSASHA1 default stop producing keys",
-     "forward": "algorithm_dnskey _total over rr_type NS",
-     "reverse": "not observable"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "mechanism": "dnskey",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "observable_label": "unique domains with an RRSIG over their DNSKEY, % (Phase 6 rrsig_zone_share)",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "reason": "dnssec-keygen without -a now fails, so scripts that relied on the RSASHA1 default stop producing keys",
-     "forward": "rrsig_type_covered DNSKEY over rr_type NS",
-     "reverse": "not observable"
-    },
-    {
-     "program": "bind9",
      "row_id": "d15-dnssec-policy-default-ecdsap256",
      "mechanism": "alg-ecdsa",
      "timing_tag": "v9.16.0",
@@ -1091,73 +1059,9 @@
      "observable_label": "unique domains with at least one DS, % (Phase 6 ds_share)",
      "expected_direction": 1,
      "relation": "ds-automation",
-     "reason": "a keymgr-generated KSK is ready at once, so DS submission can proceed immediately",
+     "reason": "a keymgr-generated KSK is ready at once, so DS submission can proceed immediately; a weak effect, only for KSKs made by hand with keymgr",
      "forward": "rr_type DS over rr_type NS",
      "reverse": "algorithm_ds _total over all all (_pooled-afrinic-arin)"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "mechanism": "cds-cdnskey",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "observable_label": "unique domains with at least one DS, % (Phase 6 ds_share)",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "reason": "CDS/CDNSKEY published only during KSK submission instead of always, fewer chances for a parent that scans CDS to add a DS",
-     "forward": "rr_type DS over rr_type NS",
-     "reverse": "algorithm_ds _total over all all (_pooled-afrinic-arin)"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "mechanism": "other",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "observable_label": "unique domains with at least one DNSKEY, % (Phase 6 dnskey_share)",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "reason": "libdnssec refuses algorithms the system crypto policy disables, so RSASHA1 zones on such systems can no longer be signed",
-     "forward": "algorithm_dnskey _total over rr_type NS",
-     "reverse": "not observable"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "mechanism": "other",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "observable_label": "unique domains with an RRSIG over their DNSKEY, % (Phase 6 rrsig_zone_share)",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "reason": "libdnssec refuses algorithms the system crypto policy disables, so RSASHA1 zones on such systems can no longer be signed",
-     "forward": "rrsig_type_covered DNSKEY over rr_type NS",
-     "reverse": "not observable"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "mechanism": "rrsig",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "observable_label": "unique domains with at least one DNSKEY, % (Phase 6 dnskey_share)",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "reason": "DNSSEC answer composition compiled in by default: signed zones are served with their DNSKEY and RRSIG records",
-     "forward": "algorithm_dnskey _total over rr_type NS",
-     "reverse": "not observable"
     },
     {
      "program": "nsd",
@@ -1171,24 +1075,8 @@
      "observable_label": "unique domains with an RRSIG over their DNSKEY, % (Phase 6 rrsig_zone_share)",
      "expected_direction": 1,
      "relation": "serving-default",
-     "reason": "DNSSEC answer composition compiled in by default: signed zones are served with their DNSKEY and RRSIG records",
+     "reason": "DNSSEC answer composition compiled in by default: RRSIGs are added to answers for DO queries",
      "forward": "rrsig_type_covered DNSKEY over rr_type NS",
-     "reverse": "not observable"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "mechanism": "rrsig",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "observable_label": "unique domains with at least one DNSKEY, % (Phase 6 dnskey_share)",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "reason": "DNSSEC compiled out by default on trunk",
-     "forward": "algorithm_dnskey _total over rr_type NS",
      "reverse": "not observable"
     },
     {
@@ -1215,44 +1103,12 @@
      "timing_date": "2005-05-02",
      "opt_in": false,
      "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "observable_label": "unique domains with at least one DNSKEY, % (Phase 6 dnskey_share)",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "reason": "DNSSEC compiled in by default again",
-     "forward": "algorithm_dnskey _total over rr_type NS",
-     "reverse": "not observable"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "mechanism": "rrsig",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
      "observable": "rrsig_prev",
      "observable_label": "unique domains with an RRSIG over their DNSKEY, % (Phase 6 rrsig_zone_share)",
      "expected_direction": 1,
      "relation": "serving-default",
      "reason": "DNSSEC compiled in by default again",
      "forward": "rrsig_type_covered DNSKEY over rr_type NS",
-     "reverse": "not observable"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "mechanism": "rrsig",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "observable_label": "unique domains with at least one DNSKEY, % (Phase 6 dnskey_share)",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "reason": "--disable-dnssec removed: every NSD build serves DNSSEC",
-     "forward": "algorithm_dnskey _total over rr_type NS",
      "reverse": "not observable"
     },
     {
@@ -1307,6 +1163,13 @@
      "mechanism": "trust-anchor-5011",
      "timing_date": "2017-03-29",
      "reason": "validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
+    },
+    {
+     "program": "bind9",
+     "row_id": "d06-keygen-no-default-alg",
+     "mechanism": "dnskey",
+     "timing_date": "2018-01-17",
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-keygen without -a fails)"
     },
     {
      "program": "bind9",
@@ -1439,7 +1302,7 @@
      "row_id": "l02-nsec3-max-iterations-50",
      "mechanism": "nsec3-iterations",
      "timing_date": "2024-07-08",
-     "reason": "changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-policy and signzone refuse iterations above 50)"
     },
     {
      "program": "bind9",
@@ -1523,7 +1386,14 @@
      "row_id": "knot[8]@2.7.0",
      "mechanism": "alg-rsa-sha2",
      "timing_date": "2018-08-03",
-     "reason": "changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (RSA keys under 1024 bits rejected)"
+    },
+    {
+     "program": "knot",
+     "row_id": "knot[10]@2.8.0",
+     "mechanism": "cds-cdnskey",
+     "timing_date": "2019-03-05",
+     "reason": "CDS/CDNSKEY narrowed from always to rollover: they are still published during KSK submission, when a parent adds the first DS, so the share of domains with a DS is not affected. Its mirror, Knot 2.5.0's default-always CDS publication, is recorded as support-added and is not in the normalised table; both are left out"
     },
     {
      "program": "knot",
@@ -1531,6 +1401,13 @@
      "mechanism": "ds-digest",
      "timing_date": "2019-03-05",
      "reason": "changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+    },
+    {
+     "program": "knot",
+     "row_id": "knot[12]@3.0.2",
+     "mechanism": "other",
+     "timing_date": "2020-11-11",
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (RSASHA1 refused under a SHA-1-disabling crypto policy; its effect could not begin before RHEL 9, 2022-05)"
     },
     {
      "program": "knot",
@@ -1551,7 +1428,7 @@
      "row_id": "knot[15]@3.2.0",
      "mechanism": "rrsig",
      "timing_date": "2022-08-22",
-     "reason": "changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (too-low rrsig-refresh makes zone signing fail)"
     },
     {
      "program": "knot",
@@ -1894,7 +1771,7 @@
      "row_id": "pdns-auth[9]@4.0.0",
      "mechanism": "dnskey",
      "timing_date": "2016-07-08",
-     "reason": "changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+     "reason": "configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (addKey without a size throws for RSA)"
     },
     {
      "program": "pdns-auth",
@@ -3118,7 +2995,27 @@
    "months_below_floor_not_compared": 208,
    "max_abs_difference_unrounded": 5e-05,
    "rule": "rounded to 4 decimals like prevalence_metrics.csv, then equal within 1e-6"
-  }
+  },
+  "measurement_breaks": [
+   {
+    "source": "gov",
+    "first": "2018-02",
+    "last": "2018-03",
+    "description": ".gov NS denominator from 1,234 in 2018-01 to 5,553 in 2018-02; DS share 88.7% to 31.2%, then 21.3% as the mean daily share catches up. The measured population widened; signing did not collapse"
+   },
+   {
+    "source": "nu",
+    "first": "2018-10",
+    "last": "2019-02",
+    "description": ".nu NS denominator from 413,121 in 2018-09 to 363,900 in 2018-10 and 232,995 in 2019-02, -44%, while the DS count also fell, 127,794 to 92,722; DS share rose 33% to 39% as unsigned names left the measured set"
+   },
+   {
+    "source": "se",
+    "first": "2018-10",
+    "last": "2019-02",
+    "description": ".se NS denominator from 1,621,745 in 2018-09 to 1,338,823 in 2019-01; DS count and share dip, 44.98% in 2018-12 and 43.68% in 2019-01, back to 50.74% in 2019-02; signed zones dip too, 821,692 to 745,073"
+   }
+  ]
  },
  "q1_per_program_releases": {
   "method": "Event = each stable, publicly shipped release, one per calendar month per program. Primary statistic step12: the mean over the 12 after-months of the share minus a linear trend fitted to the 24 before-months and extrapolated; it keeps a lasting level shift. Secondary statistic transient3, the transient deviation: mean detrended share over 3 after-months minus 3 before-months, detrended by a centred 25-month rolling median, which absorbs any lasting step. Reverse dating: for a release in calendar month r, before = labels <= r and after = labels r+1 on. Program statistic = mean over tested release months. Null: the release months that fall inside the series' own testable window circularly shifted by one uniform offset within that window, 1000 draws; the zero offset, which would return the events themselves, is excluded. Sensitivity, nonoverlap_p_two_sided: offsets restricted so every shifted month lies outside its own event's window; it rejects far above 10% on no-effect series and is not used for conclusions. BIND 9 is also tested with its feature releases, tags vX.Y.0, as the event set. A test needs a window of at least 24 months with release months filling at most 75% of it; otherwise every shift covers nearly the same months. Single-release band: 5th-95th percentile of the statistic over every testable month of the series.",
@@ -31367,8 +31264,526 @@
       "tested": 19,
       "mean_outside_90pct_null": 3
      }
+    },
+    "unit_program_x_corpus": {
+     "note": "headline unit: DS, DNSKEY and RRSIG prevalence are nearly one series, so each program x corpus pair is counted once, on ds_prev; the per-test counts above are secondary",
+     "step12": {
+      "unit": "program x corpus, ds_prev",
+      "units": 28,
+      "outside_90pct_null": 4,
+      "rate": 0.108,
+      "expected": 3.024,
+      "p_at_least_observed": 0.358219,
+      "units_outside": [
+       "nsd .gov",
+       "opendnssec .nu",
+       "pdns-rec .se",
+       "unbound .nu"
+      ],
+      "dropped_sources": []
+     },
+     "step12_without_gov": {
+      "unit": "program x corpus, ds_prev",
+      "units": 21,
+      "outside_90pct_null": 3,
+      "rate": 0.108,
+      "expected": 2.268,
+      "p_at_least_observed": 0.399392,
+      "units_outside": [
+       "opendnssec .nu",
+       "pdns-rec .se",
+       "unbound .nu"
+      ],
+      "dropped_sources": [
+       "gov"
+      ]
+     },
+     "step12_breaks_masked": {
+      "unit": "program x corpus, ds_prev",
+      "units": 35,
+      "outside_90pct_null": 4,
+      "rate": 0.108,
+      "expected": 3.78,
+      "p_at_least_observed": 0.5316,
+      "units_outside": [
+       "knot .ee",
+       "knot .nu",
+       "nsd .ee",
+       "opendnssec .gov"
+      ],
+      "dropped_sources": []
+     },
+     "transient3": {
+      "unit": "program x corpus, ds_prev",
+      "units": 48,
+      "outside_90pct_null": 4,
+      "rate": 0.1,
+      "expected": 4.8,
+      "p_at_least_observed": 0.720138,
+      "units_outside": [
+       "kresd .nu",
+       "nsd .li",
+       "pdns-auth panel",
+       "unbound .se"
+      ],
+      "dropped_sources": []
+     },
+     "transient3_breaks_masked": {
+      "unit": "program x corpus, ds_prev",
+      "units": 50,
+      "outside_90pct_null": 6,
+      "rate": 0.1,
+      "expected": 5.0,
+      "p_at_least_observed": 0.383877,
+      "units_outside": [
+       "nsd .li",
+       "opendnssec .se",
+       "pdns-auth .gov",
+       "pdns-auth panel",
+       "pdns-rec .gov",
+       "pdns-rec .se"
+      ],
+      "dropped_sources": []
+     }
     }
+   },
+   "break_sensitivity": {
+    "per_test": {
+     "step12": {
+      "tested": 70,
+      "outside": 12,
+      "tested_masked": 91,
+      "outside_masked": 11
+     },
+     "transient3": {
+      "tested": 128,
+      "outside": 9,
+      "tested_masked": 134,
+      "outside_masked": 13
+     }
+    },
+    "untestable_when_masked": [],
+    "outside_flag_changes": [
+     {
+      "test": "knot step12 dnskey_prev forward se",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 64.3,
+      "percentile_masked": 96.0
+     },
+     {
+      "test": "knot step12 dnskey_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 45.5,
+      "percentile_masked": 95.9
+     },
+     {
+      "test": "knot step12 ds_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 36.7,
+      "percentile_masked": 0.0
+     },
+     {
+      "test": "kresd transient3 ds_prev forward nu",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 1.4,
+      "percentile_masked": 10.5
+     },
+     {
+      "test": "nsd transient3 dnskey_prev forward nu",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 98.9,
+      "percentile_masked": 92.1
+     },
+     {
+      "test": "nsd step12 dnskey_prev forward gov",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 98.6,
+      "percentile_masked": 22.3
+     },
+     {
+      "test": "nsd step12 ds_prev forward gov",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 97.7,
+      "percentile_masked": 31.6
+     },
+     {
+      "test": "nsd transient3 rrsig_prev forward nu",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 98.8,
+      "percentile_masked": 92.9
+     },
+     {
+      "test": "nsd step12 rrsig_prev forward gov",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 97.8,
+      "percentile_masked": 20.5
+     },
+     {
+      "test": "opendnssec step12 dnskey_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 3.3,
+      "percentile_masked": 33.2
+     },
+     {
+      "test": "opendnssec step12 dnskey_prev forward nu",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 3.1,
+      "percentile_masked": 36.3
+     },
+     {
+      "test": "opendnssec transient3 ds_prev forward se",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 9.2,
+      "percentile_masked": 2.1
+     },
+     {
+      "test": "opendnssec step12 ds_prev forward nu",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 3.4,
+      "percentile_masked": 69.1
+     },
+     {
+      "test": "opendnssec step12 ds_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 63.3,
+      "percentile_masked": 97.4
+     },
+     {
+      "test": "opendnssec step12 rrsig_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 4.0,
+      "percentile_masked": 30.7
+     },
+     {
+      "test": "opendnssec step12 rrsig_prev forward nu",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 3.7,
+      "percentile_masked": 35.4
+     },
+     {
+      "test": "opendnssec step12 rrsig_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 63.7,
+      "percentile_masked": 96.9
+     },
+     {
+      "test": "pdns-auth transient3 dnskey_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 39.4,
+      "percentile_masked": 2.2
+     },
+     {
+      "test": "pdns-auth transient3 ds_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 38.6,
+      "percentile_masked": 2.1
+     },
+     {
+      "test": "pdns-auth transient3 rrsig_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 39.9,
+      "percentile_masked": 2.5
+     },
+     {
+      "test": "pdns-rec step12 dnskey_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 0.0,
+      "percentile_masked": 18.2
+     },
+     {
+      "test": "pdns-rec transient3 dnskey_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 47.1,
+      "percentile_masked": 0.0
+     },
+     {
+      "test": "pdns-rec step12 ds_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 0.0,
+      "percentile_masked": 18.5
+     },
+     {
+      "test": "pdns-rec transient3 ds_prev forward se",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 72.0,
+      "percentile_masked": 96.7
+     },
+     {
+      "test": "pdns-rec transient3 ds_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 52.1,
+      "percentile_masked": 2.9
+     },
+     {
+      "test": "pdns-rec step12 rrsig_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 0.0,
+      "percentile_masked": 20.3
+     },
+     {
+      "test": "pdns-rec transient3 rrsig_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 48.6,
+      "percentile_masked": 0.0
+     },
+     {
+      "test": "unbound transient3 ds_prev forward se",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 0.0,
+      "percentile_masked": 7.3
+     },
+     {
+      "test": "unbound step12 ds_prev forward nu",
+      "was_outside": true,
+      "now_outside": false,
+      "percentile_before": 96.1,
+      "percentile_masked": 90.3
+     },
+     {
+      "test": "x.y.0 feature releases bind9 step12 dnskey_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 44.2,
+      "percentile_masked": 96.3
+     },
+     {
+      "test": "x.y.0 feature releases bind9 step12 dnskey_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 57.4,
+      "percentile_masked": 0.0
+     },
+     {
+      "test": "x.y.0 feature releases bind9 step12 ds_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 57.4,
+      "percentile_masked": 3.3
+     },
+     {
+      "test": "x.y.0 feature releases bind9 step12 rrsig_prev forward nu",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 45.8,
+      "percentile_masked": 95.8
+     },
+     {
+      "test": "x.y.0 feature releases bind9 step12 rrsig_prev forward gov",
+      "was_outside": false,
+      "now_outside": true,
+      "percentile_before": 55.2,
+      "percentile_masked": 0.0
+     }
+    ]
    }
+  },
+  "break_sensitivity_feature": {
+   "per_test": {
+    "step12": {
+     "tested": 76,
+     "outside": 7,
+     "tested_masked": 96,
+     "outside_masked": 14
+    },
+    "transient3": {
+     "tested": 126,
+     "outside": 8,
+     "tested_masked": 146,
+     "outside_masked": 15
+    }
+   },
+   "untestable_when_masked": [],
+   "outside_flag_changes": [
+    {
+     "test": "knot step12 alg3_6 forward se",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 66.3,
+     "percentile_masked": 100.0
+    },
+    {
+     "test": "knot step12 alg5_7 forward se",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 10.5,
+     "percentile_masked": 4.7
+    },
+    {
+     "test": "knot transient3 alg8 forward nu",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 2.9,
+     "percentile_masked": 5.0
+    },
+    {
+     "test": "knot step12 cds forward gov",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 6.1,
+     "percentile_masked": 2.6
+    },
+    {
+     "test": "knot step12 iter0 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 93.3,
+     "percentile_masked": 100.0
+    },
+    {
+     "test": "knot step12 iter_gt256 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 69.6,
+     "percentile_masked": 95.5
+    },
+    {
+     "test": "knot step12 rsa1024 forward se",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 56.5,
+     "percentile_masked": 100.0
+    },
+    {
+     "test": "knot step12 rsa_lt1024 forward gov",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 83.8,
+     "percentile_masked": 97.0
+    },
+    {
+     "test": "opendnssec step12 alg7 forward gov",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 97.3,
+     "percentile_masked": 93.4
+    },
+    {
+     "test": "opendnssec transient3 alg8 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 5.6,
+     "percentile_masked": 2.5
+    },
+    {
+     "test": "opendnssec transient3 digest1 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 56.6,
+     "percentile_masked": 100.0
+    },
+    {
+     "test": "pdns-auth step12 alg13 forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 100.0,
+     "percentile_masked": 25.0
+    },
+    {
+     "test": "pdns-auth step12 alg8 forward nu",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 3.8,
+     "percentile_masked": 29.6
+    },
+    {
+     "test": "pdns-auth step12 optout forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 0.0,
+     "percentile_masked": 48.1
+    },
+    {
+     "test": "pdns-auth transient3 optout forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 13.0,
+     "percentile_masked": 1.3
+    },
+    {
+     "test": "pdns-auth transient3 rsa1024 forward gov",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 6.3,
+     "percentile_masked": 0.0
+    },
+    {
+     "test": "unbound step12 iter_gt150 forward se",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 88.0,
+     "percentile_masked": 100.0
+    },
+    {
+     "test": "x.y.0 feature releases bind9 step12 alg13 forward gov",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 90.2,
+     "percentile_masked": 96.9
+    },
+    {
+     "test": "x.y.0 feature releases bind9 transient3 alg13 forward gov",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 1.2,
+     "percentile_masked": 13.2
+    },
+    {
+     "test": "x.y.0 feature releases bind9 step12 alg5 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 19.2,
+     "percentile_masked": 4.6
+    },
+    {
+     "test": "x.y.0 feature releases bind9 step12 alg5 forward gov",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 7.1,
+     "percentile_masked": 0.0
+    },
+    {
+     "test": "x.y.0 feature releases bind9 step12 iter_gt150 forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 98.7,
+     "percentile_masked": 47.6
+    },
+    {
+     "test": "x.y.0 feature releases bind9 transient3 rsa1024 forward nu",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 100.0,
+     "percentile_masked": 92.9
+    }
+   ]
   }
  },
  "q2_default_change_events": {
@@ -46584,18 +46999,18 @@
    "summary": {
     "step12": {
      "role": "primary: departure from the pre-event trend",
-     "n_tests": 23,
-     "n_no_test": 121,
-     "n_outside_band": 6,
+     "n_tests": 14,
+     "n_no_test": 66,
+     "n_outside_band": 4,
      "n_outside_and_expected_direction": 1,
-     "expected_outside_by_chance": 2.3,
-     "expected_outside_discrete": 3.126437,
-     "n_outside_band_nonoverlap_null": 14,
+     "expected_outside_by_chance": 1.4,
+     "expected_outside_discrete": 1.887685,
+     "n_outside_band_nonoverlap_null": 9,
      "n_bh_q_lt_0.10": 0,
      "smallest_p": 0.0,
-     "smallest_p_rank": 0.034483,
-     "bh_rank1_threshold_q_0.10": 0.004348,
-     "distinct_observable_corpus_month_tests": 23,
+     "smallest_p_rank": 0.035714,
+     "bh_rank1_threshold_q_0.10": 0.007143,
+     "distinct_observable_corpus_month_tests": 14,
      "by_upgrade_and_opt_in": {
       "applies_on_upgrade=False, opt_in=True": {
        "tested": 10,
@@ -46610,21 +47025,18 @@
        "expected_outside_by_chance": 0.1
       },
       "applies_on_upgrade=True, opt_in=False": {
-       "tested": 12,
-       "outside_90_band": 3,
+       "tested": 3,
+       "outside_90_band": 1,
        "outside_and_expected_direction": 1,
-       "expected_outside_by_chance": 1.2
+       "expected_outside_by_chance": 0.3
       }
      },
      "rows_with_any_test": [
       "d15-dnssec-policy-default-ecdsap256",
-      "knot[10]@2.8.0",
-      "knot[12]@3.0.2",
       "knot[1]@2.0.0",
       "knot[9]@2.7.5"
      ],
      "rows_with_no_test_in_any_corpus": [
-      "d06-keygen-no-default-alg",
       "nsd[0]@2.0.0",
       "nsd[1]@2.2.0",
       "nsd[2]@2.3.0",
@@ -46633,25 +47045,19 @@
     },
     "transient12": {
      "role": "secondary: transient deviation, blind to a lasting step",
-     "n_tests": 31,
-     "n_no_test": 113,
-     "n_outside_band": 1,
+     "n_tests": 15,
+     "n_no_test": 65,
+     "n_outside_band": 0,
      "n_outside_and_expected_direction": 0,
-     "expected_outside_by_chance": 3.1,
-     "expected_outside_discrete": 3.784203,
-     "n_outside_band_nonoverlap_null": 9,
+     "expected_outside_by_chance": 1.5,
+     "expected_outside_discrete": 1.822107,
+     "n_outside_band_nonoverlap_null": 2,
      "n_bh_q_lt_0.10": 0,
-     "smallest_p": 0.064,
-     "smallest_p_rank": 0.088235,
-     "bh_rank1_threshold_q_0.10": 0.003226,
-     "distinct_observable_corpus_month_tests": 31,
+     "smallest_p": 0.24,
+     "smallest_p_rank": 0.264706,
+     "bh_rank1_threshold_q_0.10": 0.006667,
+     "distinct_observable_corpus_month_tests": 15,
      "by_upgrade_and_opt_in": {
-      "applies_on_upgrade=True, opt_in=False": {
-       "tested": 20,
-       "outside_90_band": 1,
-       "outside_and_expected_direction": 0,
-       "expected_outside_by_chance": 2.0
-      },
       "applies_on_upgrade=False, opt_in=True": {
        "tested": 10,
        "outside_90_band": 0,
@@ -46663,13 +47069,16 @@
        "outside_90_band": 0,
        "outside_and_expected_direction": 0,
        "expected_outside_by_chance": 0.1
+      },
+      "applies_on_upgrade=True, opt_in=False": {
+       "tested": 4,
+       "outside_90_band": 0,
+       "outside_and_expected_direction": 0,
+       "expected_outside_by_chance": 0.4
       }
      },
      "rows_with_any_test": [
-      "d06-keygen-no-default-alg",
       "d15-dnssec-policy-default-ecdsap256",
-      "knot[10]@2.8.0",
-      "knot[12]@3.0.2",
       "knot[1]@2.0.0",
       "knot[9]@2.7.5"
      ],
@@ -46684,16 +47093,6 @@
    "most_extreme_step_tests": [
     {
      "rank": 1,
-     "row_id": "knot[10]@2.8.0",
-     "source": "_pooled-afrinic-arin",
-     "observable": "ds_prev",
-     "percentile": 98.3,
-     "p_two_sided": 0.034,
-     "p_rank": 0.034483,
-     "in_expected_direction": false
-    },
-    {
-     "rank": 2,
      "row_id": "d15-dnssec-policy-default-ecdsap256",
      "source": "nu",
      "observable": "ds_prev",
@@ -46703,7 +47102,7 @@
      "in_expected_direction": false
     },
     {
-     "rank": 3,
+     "rank": 2,
      "row_id": "knot[9]@2.7.5",
      "source": "_pooled-afrinic-arin",
      "observable": "ds_prev",
@@ -46713,7 +47112,7 @@
      "in_expected_direction": true
     },
     {
-     "rank": 4,
+     "rank": 3,
      "row_id": "d15-dnssec-policy-default-ecdsap256",
      "source": "nu",
      "observable": "dnskey_prev",
@@ -46723,17 +47122,7 @@
      "in_expected_direction": false
     },
     {
-     "rank": 5,
-     "row_id": "knot[10]@2.8.0",
-     "source": "se",
-     "observable": "ds_prev",
-     "percentile": 98.3,
-     "p_two_sided": 0.034,
-     "p_rank": 0.071429,
-     "in_expected_direction": false
-    },
-    {
-     "rank": 6,
+     "rank": 4,
      "row_id": "d15-dnssec-policy-default-ecdsap256",
      "source": "nu",
      "observable": "rrsig_prev",
@@ -46743,7 +47132,7 @@
      "in_expected_direction": false
     },
     {
-     "rank": 7,
+     "rank": 5,
      "row_id": "knot[9]@2.7.5",
      "source": "nu",
      "observable": "ds_prev",
@@ -46753,7 +47142,7 @@
      "in_expected_direction": true
     },
     {
-     "rank": 8,
+     "rank": 6,
      "row_id": "d15-dnssec-policy-default-ecdsap256",
      "source": "_pooled-afrinic-arin",
      "observable": "ds_prev",
@@ -46761,558 +47150,30 @@
      "p_two_sided": 0.194,
      "p_rank": 0.183908,
      "in_expected_direction": false
+    },
+    {
+     "rank": 7,
+     "row_id": "knot[9]@2.7.5",
+     "source": "se",
+     "observable": "ds_prev",
+     "percentile": 87.8,
+     "p_two_sided": 0.244,
+     "p_rank": 0.25,
+     "in_expected_direction": true
+    },
+    {
+     "rank": 8,
+     "row_id": "knot[1]@2.0.0",
+     "source": "_pooled-afrinic-arin",
+     "observable": "ds_prev",
+     "percentile": 13.6,
+     "p_two_sided": 0.272,
+     "p_rank": 0.275862,
+     "in_expected_direction": false
     }
    ],
    "multiple_testing_note": "p_rank is the exact two-sided rank p against the finite set of placebo months, 2*min(below+1, above+1)/(n+1). With at most 148 placebo months its floor is 2/149 = 0.013, above the rank-1 Benjamini-Hochberg threshold of 0.10/n, so no test can reach q < 0.10 and bh_q carries no evidence. The family is judged by counts against their expectation under the discrete placebo null.",
    "events": [
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2017-01..2017-12",
-     "after_labels": "2018-01..2018-12",
-     "share_last_before": 51.017829,
-     "raw_mean_before": 52.269197,
-     "raw_mean_after": 51.876822,
-     "observed": 0.765949,
-     "band_lo": -1.323985,
-     "band_hi": 0.926583,
-     "percentile": 91.6,
-     "p_two_sided": 0.168,
-     "p_rank": 0.205882,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 48,
-     "nonoverlap_percentile": 95.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2017-01..2017-12",
-     "after_labels": "2018-01..2018-12",
-     "share_last_before": 32.543079,
-     "raw_mean_before": 34.243568,
-     "raw_mean_after": 33.995513,
-     "observed": -1.571036,
-     "band_lo": -3.661349,
-     "band_hi": 2.250203,
-     "percentile": 10.6,
-     "p_two_sided": 0.212,
-     "p_rank": 0.235294,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 48,
-     "nonoverlap_percentile": 0.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2017-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2017-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2017-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2017-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2017-01..2017-12",
-     "after_labels": "2018-01..2018-12",
-     "share_last_before": 51.016371,
-     "raw_mean_before": 52.267865,
-     "raw_mean_after": 51.830809,
-     "observed": 0.715131,
-     "band_lo": -0.743568,
-     "band_hi": 0.886847,
-     "percentile": 90.5,
-     "p_two_sided": 0.19,
-     "p_rank": 0.205882,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 48,
-     "nonoverlap_percentile": 96.8,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2017-01..2017-12",
-     "after_labels": "2018-01..2018-12",
-     "share_last_before": 32.541574,
-     "raw_mean_before": 34.241337,
-     "raw_mean_after": 33.973633,
-     "observed": -1.579902,
-     "band_lo": -3.663687,
-     "band_hi": 1.871543,
-     "percentile": 11.1,
-     "p_two_sided": 0.222,
-     "p_rank": 0.235294,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 48,
-     "nonoverlap_percentile": 0.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2017-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2017-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2017-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2016-01"
-    },
-    {
-     "program": "bind9",
-     "row_id": "d06-keygen-no-default-alg",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v9.12.0",
-     "timing_date": "2018-01-17",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2017-01"
-    },
     {
      "program": "bind9",
      "row_id": "d15-dnssec-policy-default-ecdsap256",
@@ -47346,7 +47207,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 26.4,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.69173
+     "bh_q": 0.571429
     },
     {
      "program": "bind9",
@@ -47381,7 +47242,7 @@
      "nonoverlap_placebo_months": 43,
      "nonoverlap_percentile": 19.5,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.835783
+     "bh_q": 0.887574
     },
     {
      "program": "bind9",
@@ -47416,7 +47277,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 0.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.273811
+     "bh_q": 0.250002
     },
     {
      "program": "bind9",
@@ -47486,7 +47347,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 100.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.638888
+     "bh_q": 0.478632
     },
     {
      "program": "bind9",
@@ -47692,7 +47553,7 @@
      "nonoverlap_placebo_months": 137,
      "nonoverlap_percentile": 6.1,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.528735
+     "bh_q": 0.429119
     },
     {
      "program": "bind9",
@@ -47762,7 +47623,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 20.7,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.616072
+     "bh_q": 0.450001
     },
     {
      "program": "bind9",
@@ -47797,7 +47658,7 @@
      "nonoverlap_placebo_months": 43,
      "nonoverlap_percentile": 20.2,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.835783
+     "bh_q": 0.887574
     },
     {
      "program": "bind9",
@@ -47832,7 +47693,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 0.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.273811
+     "bh_q": 0.250002
     },
     {
      "program": "bind9",
@@ -47902,7 +47763,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 100.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.638888
+     "bh_q": 0.478632
     },
     {
      "program": "bind9",
@@ -47937,7 +47798,7 @@
      "nonoverlap_placebo_months": 32,
      "nonoverlap_percentile": 77.9,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.895769
+     "bh_q": 0.887574
     },
     {
      "program": "bind9",
@@ -48108,7 +47969,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 20.9,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.616072
+     "bh_q": 0.450001
     },
     {
      "program": "bind9",
@@ -48143,7 +48004,7 @@
      "nonoverlap_placebo_months": 43,
      "nonoverlap_percentile": 20.2,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.835783
+     "bh_q": 0.887574
     },
     {
      "program": "bind9",
@@ -48178,7 +48039,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 0.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.273811
+     "bh_q": 0.250002
     },
     {
      "program": "bind9",
@@ -48248,7 +48109,7 @@
      "nonoverlap_placebo_months": 23,
      "nonoverlap_percentile": 100.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.638888
+     "bh_q": 0.478632
     },
     {
      "program": "bind9",
@@ -48283,7 +48144,7 @@
      "nonoverlap_placebo_months": 32,
      "nonoverlap_percentile": 77.1,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.895769
+     "bh_q": 0.887574
     },
     {
      "program": "bind9",
@@ -48692,7 +48553,7 @@
      "nonoverlap_placebo_months": 137,
      "nonoverlap_percentile": 8.3,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.616072
+     "bh_q": 0.450001
     },
     {
      "program": "knot",
@@ -49238,7 +49099,7 @@
      "nonoverlap_placebo_months": 36,
      "nonoverlap_percentile": 100.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.616072
+     "bh_q": 0.450001
     },
     {
      "program": "knot",
@@ -49308,7 +49169,7 @@
      "nonoverlap_placebo_months": 36,
      "nonoverlap_percentile": 100.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.469387
+     "bh_q": 0.4
     },
     {
      "program": "knot",
@@ -49343,7 +49204,7 @@
      "nonoverlap_placebo_months": 43,
      "nonoverlap_percentile": 100.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
+     "bh_q": 0.887574
     },
     {
      "program": "knot",
@@ -49395,7 +49256,7 @@
      "nonoverlap_placebo_months": 36,
      "nonoverlap_percentile": 0.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
+     "bh_q": 0.887574
     },
     {
      "program": "knot",
@@ -49566,7 +49427,7 @@
      "nonoverlap_placebo_months": 137,
      "nonoverlap_percentile": 100.0,
      "nonoverlap_outside_90_band": true,
-     "bh_q": 0.273811
+     "bh_q": 0.250002
     },
     {
      "program": "knot",
@@ -49601,1371 +49462,7 @@
      "nonoverlap_placebo_months": 144,
      "nonoverlap_percentile": 77.2,
      "nonoverlap_outside_90_band": false,
-     "bh_q": 0.895769
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2017-03..2019-02",
-     "after_labels": "2019-03..2020-02",
-     "share_last_before": 50.742456,
-     "raw_mean_before": 48.69555,
-     "raw_mean_after": 53.181875,
-     "observed": 4.877342,
-     "band_lo": -3.017113,
-     "band_hi": 4.41105,
-     "percentile": 98.3,
-     "p_two_sided": 0.034,
-     "p_rank": 0.071429,
-     "outside_90_band": true,
-     "in_expected_direction": false,
-     "testable_months_in_series": 56,
-     "placebo_months": 55,
-     "nonoverlap_placebo_months": 34,
-     "nonoverlap_percentile": 100.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.273811
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2018-03..2019-02",
-     "after_labels": "2019-03..2020-02",
-     "share_last_before": 50.742456,
-     "raw_mean_before": 49.096083,
-     "raw_mean_after": 53.181875,
-     "observed": 1.096867,
-     "band_lo": -0.671934,
-     "band_hi": 1.000772,
-     "percentile": 96.8,
-     "p_two_sided": 0.064,
-     "p_rank": 0.088235,
-     "outside_90_band": true,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 43,
-     "nonoverlap_percentile": 97.5,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2017-03..2019-02",
-     "after_labels": "2019-03..2020-02",
-     "share_last_before": 39.067428,
-     "raw_mean_before": 30.365871,
-     "raw_mean_after": 42.675172,
-     "observed": 6.172563,
-     "band_lo": -4.130161,
-     "band_hi": 9.076228,
-     "percentile": 82.8,
-     "p_two_sided": 0.344,
-     "p_rank": 0.357143,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 56,
-     "placebo_months": 55,
-     "nonoverlap_placebo_months": 34,
-     "nonoverlap_percentile": 100.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.631868
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2018-03..2019-02",
-     "after_labels": "2019-03..2020-02",
-     "share_last_before": 39.067428,
-     "raw_mean_before": 32.638812,
-     "raw_mean_after": 42.675172,
-     "observed": 0.283189,
-     "band_lo": -2.465875,
-     "band_hi": 1.864279,
-     "percentile": 79.1,
-     "p_two_sided": 0.418,
-     "p_rank": 0.441176,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 43,
-     "nonoverlap_percentile": 93.2,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.895769
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2017-03"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "tested",
-     "before_labels": "2018-03..2019-02",
-     "after_labels": "2019-03..2020-02",
-     "share_last_before": 20.431997,
-     "raw_mean_before": 20.71909,
-     "raw_mean_after": 20.299612,
-     "observed": 0.020387,
-     "band_lo": -18.904343,
-     "band_hi": 0.072839,
-     "percentile": 77.0,
-     "p_two_sided": 0.46,
-     "p_rank": 0.491228,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 57,
-     "placebo_months": 56,
-     "nonoverlap_placebo_months": 34,
-     "nonoverlap_percentile": 79.5,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.895769
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2017-03"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2018-03"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2017-03"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2018-03"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2017-03"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2018-03"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "reverse_panel",
-     "source": "_pooled-afrinic-arin",
-     "status": "tested",
-     "before_labels": "2017-04..2019-03",
-     "after_labels": "2019-04..2020-03",
-     "share_last_before": 0.244242,
-     "raw_mean_before": 0.19361,
-     "raw_mean_after": 0.319894,
-     "observed": 0.078747,
-     "band_lo": -0.0478,
-     "band_hi": 0.05585,
-     "percentile": 98.3,
-     "p_two_sided": 0.034,
-     "p_rank": 0.034483,
-     "outside_90_band": true,
-     "in_expected_direction": false,
-     "testable_months_in_series": 174,
-     "placebo_months": 173,
-     "nonoverlap_placebo_months": 137,
-     "nonoverlap_percentile": 100.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.273811
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[10]@2.8.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v2.8.0",
-     "timing_date": "2019-03-05",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "ds_prev",
-     "expected_direction": -1,
-     "relation": "ds-automation",
-     "corpus": "reverse_panel",
-     "source": "_pooled-afrinic-arin",
-     "status": "tested",
-     "before_labels": "2018-04..2019-03",
-     "after_labels": "2019-04..2020-03",
-     "share_last_before": 0.244242,
-     "raw_mean_before": 0.206937,
-     "raw_mean_after": 0.319894,
-     "observed": 0.001302,
-     "band_lo": -0.003422,
-     "band_hi": 0.005522,
-     "percentile": 69.6,
-     "p_two_sided": 0.608,
-     "p_rank": 0.60355,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 169,
-     "placebo_months": 168,
-     "nonoverlap_placebo_months": 144,
-     "nonoverlap_percentile": 73.9,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.947368
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2018-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 56.90703,
-     "raw_mean_before": 55.638492,
-     "raw_mean_after": 57.223258,
-     "observed": -0.816205,
-     "band_lo": -3.15841,
-     "band_hi": 6.318591,
-     "percentile": 45.5,
-     "p_two_sided": 0.91,
-     "p_rank": 0.928571,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 56,
-     "placebo_months": 55,
-     "nonoverlap_placebo_months": 19,
-     "nonoverlap_percentile": 40.9,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 1.0
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 56.90703,
-     "raw_mean_before": 56.142276,
-     "raw_mean_after": 57.223258,
-     "observed": 0.050603,
-     "band_lo": -1.22016,
-     "band_hi": 0.926583,
-     "percentile": 43.1,
-     "p_two_sided": 0.862,
-     "p_rank": 0.911765,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 43,
-     "nonoverlap_percentile": 44.7,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.947368
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2018-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 55.974609,
-     "raw_mean_before": 51.354828,
-     "raw_mean_after": 58.147422,
-     "observed": -2.821314,
-     "band_lo": -9.558272,
-     "band_hi": 16.95894,
-     "percentile": 26.3,
-     "p_two_sided": 0.526,
-     "p_rank": 0.571429,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 56,
-     "placebo_months": 55,
-     "nonoverlap_placebo_months": 19,
-     "nonoverlap_percentile": 0.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.69173
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 55.974609,
-     "raw_mean_before": 54.216655,
-     "raw_mean_after": 58.147422,
-     "observed": 0.031162,
-     "band_lo": -3.661349,
-     "band_hi": 2.140131,
-     "percentile": 53.8,
-     "p_two_sided": 0.924,
-     "p_rank": 0.941176,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 43,
-     "nonoverlap_percentile": 49.9,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.947368
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "tested",
-     "before_labels": "2018-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 20.900286,
-     "raw_mean_before": 21.105906,
-     "raw_mean_after": 20.548458,
-     "observed": -0.1179,
-     "band_lo": -0.720227,
-     "band_hi": 43.432562,
-     "percentile": 53.3,
-     "p_two_sided": 0.934,
-     "p_rank": 0.977778,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 45,
-     "placebo_months": 44,
-     "nonoverlap_placebo_months": 14,
-     "nonoverlap_percentile": 77.7,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 1.0
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 20.900286,
-     "raw_mean_before": 20.969985,
-     "raw_mean_after": 20.548458,
-     "observed": -0.023373,
-     "band_lo": -19.034874,
-     "band_hi": 0.082615,
-     "percentile": 46.3,
-     "p_two_sided": 0.926,
-     "p_rank": 0.912281,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 57,
-     "placebo_months": 56,
-     "nonoverlap_placebo_months": 32,
-     "nonoverlap_percentile": 59.0,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.947368
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2018-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 12.890124,
-     "raw_mean_before": 9.841098,
-     "raw_mean_after": 15.485712,
-     "observed": 1.049179,
-     "band_lo": 0.0,
-     "band_hi": 1.910334,
-     "percentile": 87.1,
-     "p_two_sided": 0.258,
-     "p_rank": 0.322581,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 31,
-     "placebo_months": 30,
-     "nonoverlap_placebo_months": 14,
-     "nonoverlap_percentile": 100.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2018-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2019-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2018-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2019-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2018-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 56.905698,
-     "raw_mean_before": 55.605229,
-     "raw_mean_after": 57.221152,
-     "observed": -0.85527,
-     "band_lo": -3.063755,
-     "band_hi": 6.263609,
-     "percentile": 43.5,
-     "p_two_sided": 0.87,
-     "p_rank": 0.928571,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 56,
-     "placebo_months": 55,
-     "nonoverlap_placebo_months": 19,
-     "nonoverlap_percentile": 40.9,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 1.0
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 56.905698,
-     "raw_mean_before": 56.138219,
-     "raw_mean_after": 57.221152,
-     "observed": 0.014061,
-     "band_lo": -1.227899,
-     "band_hi": 0.886847,
-     "percentile": 44.4,
-     "p_two_sided": 0.888,
-     "p_rank": 0.852941,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 43,
-     "nonoverlap_percentile": 43.5,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.947368
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2018-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 55.97261,
-     "raw_mean_before": 51.331146,
-     "raw_mean_after": 58.145142,
-     "observed": -2.845077,
-     "band_lo": -9.705531,
-     "band_hi": 17.204078,
-     "percentile": 28.2,
-     "p_two_sided": 0.564,
-     "p_rank": 0.571429,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 56,
-     "placebo_months": 55,
-     "nonoverlap_placebo_months": 19,
-     "nonoverlap_percentile": 0.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.69173
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 55.97261,
-     "raw_mean_before": 54.212483,
-     "raw_mean_after": 58.145142,
-     "observed": 0.029603,
-     "band_lo": -3.980892,
-     "band_hi": 2.258844,
-     "percentile": 54.5,
-     "p_two_sided": 0.91,
-     "p_rank": 0.941176,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 68,
-     "placebo_months": 67,
-     "nonoverlap_placebo_months": 43,
-     "nonoverlap_percentile": 48.4,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.947368
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "tested",
-     "before_labels": "2018-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 20.889262,
-     "raw_mean_before": 21.097246,
-     "raw_mean_after": 20.537302,
-     "observed": -0.115754,
-     "band_lo": -0.756393,
-     "band_hi": 45.10015,
-     "percentile": 49.0,
-     "p_two_sided": 0.98,
-     "p_rank": 1.0,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 45,
-     "placebo_months": 44,
-     "nonoverlap_placebo_months": 14,
-     "nonoverlap_percentile": 70.5,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 1.0
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 20.889262,
-     "raw_mean_before": 20.958898,
-     "raw_mean_after": 20.537302,
-     "observed": -0.020403,
-     "band_lo": -19.053347,
-     "band_hi": 0.076467,
-     "percentile": 46.1,
-     "p_two_sided": 0.922,
-     "p_rank": 0.947368,
-     "outside_90_band": false,
-     "in_expected_direction": true,
-     "testable_months_in_series": 57,
-     "placebo_months": 56,
-     "nonoverlap_placebo_months": 32,
-     "nonoverlap_percentile": 65.3,
-     "nonoverlap_outside_90_band": false,
-     "bh_q": 0.947368
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2018-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "tested",
-     "before_labels": "2019-11..2020-10",
-     "after_labels": "2020-11..2021-10",
-     "share_last_before": 12.889772,
-     "raw_mean_before": 9.840557,
-     "raw_mean_after": 15.485107,
-     "observed": 1.049285,
-     "band_lo": 0.0,
-     "band_hi": 1.910931,
-     "percentile": 85.6,
-     "p_two_sided": 0.288,
-     "p_rank": 0.322581,
-     "outside_90_band": false,
-     "in_expected_direction": false,
-     "testable_months_in_series": 31,
-     "placebo_months": 30,
-     "nonoverlap_placebo_months": 14,
-     "nonoverlap_percentile": 100.0,
-     "nonoverlap_outside_90_band": true,
-     "bh_q": 0.835783
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2018-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2019-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2018-11"
-    },
-    {
-     "program": "knot",
-     "row_id": "knot[12]@3.0.2",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "v3.0.2",
-     "timing_date": "2020-11-11",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "rrsig_prev",
-     "expected_direction": -1,
-     "relation": "signing-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2019-11"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2002-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2003-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2002-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2003-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2002-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2003-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2002-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2003-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2002-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2003-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2002-02"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[0]@2.0.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_0_0_REL",
-     "timing_date": "2004-02-12",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2003-02"
+     "bh_q": 0.887574
     },
     {
      "program": "nsd",
@@ -51214,244 +49711,6 @@
      "timing_date": "2005-01-10",
      "opt_in": true,
      "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2003-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2004-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2003-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2004-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2003-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2004-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2003-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2004-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2003-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2004-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2003-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": -1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2004-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[1]@2.2.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_2_0_REL",
-     "timing_date": "2005-01-10",
-     "opt_in": true,
-     "applies_on_upgrade": true,
      "observable": "rrsig_prev",
      "expected_direction": -1,
      "relation": "serving-default",
@@ -51680,244 +49939,6 @@
      "source": "li",
      "status": "no test",
      "reason": "no before-period: series valid from 2020-05, needs 2004-01"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2003-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2004-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2003-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2004-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2003-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2004-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2003-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2004-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2003-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2004-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2003-05"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[2]@2.3.0",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_2_3_0_REL",
-     "timing_date": "2005-05-02",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2004-05"
     },
     {
      "program": "nsd",
@@ -52166,244 +50187,6 @@
      "timing_date": "2010-07-20",
      "opt_in": false,
      "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2008-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "se",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2009-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2008-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "nu",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2016-06, needs 2009-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2008-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "gov",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2017-05, needs 2009-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "fed.us",
-     "status": "no test",
-     "reason": "no month with at least 30 in the denominator"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2008-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ee",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2019-07, needs 2009-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2008-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "ch",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2009-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2008-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "transient12",
-     "role": "secondary: transient deviation, blind to a lasting step",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
-     "observable": "dnskey_prev",
-     "expected_direction": 1,
-     "relation": "serving-default",
-     "corpus": "forward",
-     "source": "li",
-     "status": "no test",
-     "reason": "no before-period: series valid from 2020-05, needs 2009-07"
-    },
-    {
-     "program": "nsd",
-     "row_id": "nsd[5]@3.2.6",
-     "test": "step12",
-     "role": "primary: departure from the pre-event trend",
-     "timing_tag": "NSD_3_2_6_REL",
-     "timing_date": "2010-07-20",
-     "opt_in": false,
-     "applies_on_upgrade": true,
      "observable": "rrsig_prev",
      "expected_direction": 1,
      "relation": "serving-default",
@@ -52632,6 +50415,896 @@
      "source": "li",
      "status": "no test",
      "reason": "no before-period: series valid from 2020-05, needs 2009-07"
+    }
+   ],
+   "unit_row_x_corpus": {
+    "note": "headline unit: one test per row x corpus, on ds_prev where the row maps to it; the per-test counts in summary are secondary",
+    "step12": {
+     "unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev",
+     "units": 8,
+     "outside_90_band": 2,
+     "expected_discrete": 1.049589,
+     "p_at_least_observed": 0.283204,
+     "in_expected_direction": 1,
+     "units_outside": [
+      "d15-dnssec-policy-default-ecdsap256 .nu ds_prev",
+      "knot[9]@2.7.5 panel ds_prev"
+     ],
+     "dropped_sources": []
+    },
+    "step12_without_gov": {
+     "unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev",
+     "units": 7,
+     "outside_90_band": 2,
+     "expected_discrete": 0.916256,
+     "p_at_least_observed": 0.2305,
+     "in_expected_direction": 1,
+     "units_outside": [
+      "d15-dnssec-policy-default-ecdsap256 .nu ds_prev",
+      "knot[9]@2.7.5 panel ds_prev"
+     ],
+     "dropped_sources": [
+      "gov"
+     ]
+    },
+    "step12_breaks_masked": {
+     "unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev",
+     "units": 3,
+     "outside_90_band": 1,
+     "expected_discrete": 0.344828,
+     "p_at_least_observed": 0.306711,
+     "in_expected_direction": 1,
+     "units_outside": [
+      "knot[9]@2.7.5 panel ds_prev"
+     ],
+     "dropped_sources": []
+    },
+    "transient12": {
+     "unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev",
+     "units": 9,
+     "outside_90_band": 0,
+     "expected_discrete": 1.070817,
+     "p_at_least_observed": 1.0,
+     "in_expected_direction": 0,
+     "units_outside": [],
+     "dropped_sources": []
+    },
+    "transient12_breaks_masked": {
+     "unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev",
+     "units": 4,
+     "outside_90_band": 0,
+     "expected_discrete": 0.449961,
+     "p_at_least_observed": 1.0,
+     "in_expected_direction": 0,
+     "units_outside": [],
+     "dropped_sources": []
+    }
+   },
+   "break_sensitivity": {
+    "per_test": {
+     "step12": {
+      "tested": 14,
+      "outside": 4,
+      "tested_masked": 3,
+      "outside_masked": 1
+     },
+     "transient12": {
+      "tested": 15,
+      "outside": 0,
+      "tested_masked": 6,
+      "outside_masked": 0
+     }
+    },
+    "untestable_when_masked": [
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 ds_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 ds_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 ds_prev forward nu",
+      "was_outside": true
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 ds_prev forward nu",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 ds_prev forward gov",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 dnskey_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 dnskey_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 dnskey_prev forward nu",
+      "was_outside": true
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 dnskey_prev forward nu",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 dnskey_prev forward gov",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 rrsig_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 rrsig_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 rrsig_prev forward nu",
+      "was_outside": true
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 rrsig_prev forward nu",
+      "was_outside": false
+     },
+     {
+      "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 rrsig_prev forward gov",
+      "was_outside": false
+     },
+     {
+      "test": "knot knot[9]@2.7.5 step12 ds_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "knot knot[9]@2.7.5 transient12 ds_prev forward se",
+      "was_outside": false
+     },
+     {
+      "test": "knot knot[9]@2.7.5 step12 ds_prev forward nu",
+      "was_outside": false
+     },
+     {
+      "test": "knot knot[9]@2.7.5 transient12 ds_prev forward nu",
+      "was_outside": false
+     },
+     {
+      "test": "knot knot[9]@2.7.5 transient12 ds_prev forward gov",
+      "was_outside": false
+     }
+    ],
+    "outside_flag_changes": []
+   },
+   "detection_power": {
+    "method": "A lasting step of h pp is added to every month from the event on, and step12 and its placebo null, placebos outside the event's -24..+12 window, are recomputed on the modified series. Columns without prefix use the primary null, every testable month but the event's; nonoverlap_* use only months outside the event's window, which is liberal: with no step at all it already puts many event months above the band. 'percentile' is at the named event month; the share is over every eligible event month of the series. The smallest detectable step is the smallest h that lands above the 90% band at half or more of the event months; None means not even 10 pp.",
+    "rows": [
+     {
+      "series": "ds_prev .se",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "se",
+      "event_month": "2021-06",
+      "step_pp": 0,
+      "statistic": 2.770403,
+      "percentile": 67.7,
+      "above_band": false,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.071429,
+      "nonoverlap_statistic": 2.770403,
+      "nonoverlap_percentile": 47.1,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.160714
+     },
+     {
+      "series": "ds_prev .se",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "se",
+      "event_month": "2021-06",
+      "step_pp": 1,
+      "statistic": 3.770403,
+      "percentile": 85.4,
+      "above_band": false,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.125,
+      "nonoverlap_statistic": 3.770403,
+      "nonoverlap_percentile": 62.9,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.196429
+     },
+     {
+      "series": "ds_prev .se",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "se",
+      "event_month": "2021-06",
+      "step_pp": 2,
+      "statistic": 4.770403,
+      "percentile": 96.7,
+      "above_band": true,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.285714,
+      "nonoverlap_statistic": 4.770403,
+      "nonoverlap_percentile": 89.4,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.232143
+     },
+     {
+      "series": "ds_prev .se",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "se",
+      "event_month": "2021-06",
+      "step_pp": 5,
+      "statistic": 7.770403,
+      "percentile": 100.0,
+      "above_band": true,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.410714,
+      "nonoverlap_statistic": 7.770403,
+      "nonoverlap_percentile": 100.0,
+      "nonoverlap_above_band": true,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.732143
+     },
+     {
+      "series": "ds_prev .se",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "se",
+      "event_month": "2021-06",
+      "step_pp": 10,
+      "statistic": 12.770403,
+      "percentile": 100.0,
+      "above_band": true,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.892857,
+      "nonoverlap_statistic": 12.770403,
+      "nonoverlap_percentile": 100.0,
+      "nonoverlap_above_band": true,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 1.0
+     },
+     {
+      "series": "ds_prev .nu",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "nu",
+      "event_month": "2021-06",
+      "step_pp": 0,
+      "statistic": -2.132663,
+      "percentile": 28.2,
+      "above_band": false,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.053571,
+      "nonoverlap_statistic": -2.132663,
+      "nonoverlap_percentile": 0.0,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.232143
+     },
+     {
+      "series": "ds_prev .nu",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "nu",
+      "event_month": "2021-06",
+      "step_pp": 1,
+      "statistic": -1.132663,
+      "percentile": 58.0,
+      "above_band": false,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.071429,
+      "nonoverlap_statistic": -1.132663,
+      "nonoverlap_percentile": 9.1,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.25
+     },
+     {
+      "series": "ds_prev .nu",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "nu",
+      "event_month": "2021-06",
+      "step_pp": 2,
+      "statistic": -0.132663,
+      "percentile": 74.8,
+      "above_band": false,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.125,
+      "nonoverlap_statistic": -0.132663,
+      "nonoverlap_percentile": 34.6,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.267857
+     },
+     {
+      "series": "ds_prev .nu",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "nu",
+      "event_month": "2021-06",
+      "step_pp": 5,
+      "statistic": 2.867337,
+      "percentile": 79.7,
+      "above_band": false,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.142857,
+      "nonoverlap_statistic": 2.867337,
+      "nonoverlap_percentile": 40.2,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.446429
+     },
+     {
+      "series": "ds_prev .nu",
+      "observable": "ds_prev",
+      "corpus": "forward",
+      "source": "nu",
+      "event_month": "2021-06",
+      "step_pp": 10,
+      "statistic": 7.867337,
+      "percentile": 86.8,
+      "above_band": false,
+      "event_months_tested": 56,
+      "share_of_event_months_above_band": 0.392857,
+      "nonoverlap_statistic": 7.867337,
+      "nonoverlap_percentile": 68.5,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 56,
+      "nonoverlap_share_of_event_months_above_band": 0.607143
+     },
+     {
+      "series": "ds_prev panel",
+      "observable": "ds_prev",
+      "corpus": "reverse_panel",
+      "source": "_pooled-afrinic-arin",
+      "event_month": "2018-06",
+      "step_pp": 0,
+      "statistic": 0.01718,
+      "percentile": 69.2,
+      "above_band": false,
+      "event_months_tested": 174,
+      "share_of_event_months_above_band": 0.045977,
+      "nonoverlap_statistic": 0.01718,
+      "nonoverlap_percentile": 75.2,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 174,
+      "nonoverlap_share_of_event_months_above_band": 0.068966
+     },
+     {
+      "series": "ds_prev panel",
+      "observable": "ds_prev",
+      "corpus": "reverse_panel",
+      "source": "_pooled-afrinic-arin",
+      "event_month": "2018-06",
+      "step_pp": 0.02,
+      "statistic": 0.03718,
+      "percentile": 89.0,
+      "above_band": false,
+      "event_months_tested": 174,
+      "share_of_event_months_above_band": 0.086207,
+      "nonoverlap_statistic": 0.03718,
+      "nonoverlap_percentile": 94.8,
+      "nonoverlap_above_band": false,
+      "nonoverlap_event_months_tested": 174,
+      "nonoverlap_share_of_event_months_above_band": 0.114943
+     },
+     {
+      "series": "ds_prev panel",
+      "observable": "ds_prev",
+      "corpus": "reverse_panel",
+      "source": "_pooled-afrinic-arin",
+      "event_month": "2018-06",
+      "step_pp": 0.05,
+      "statistic": 0.06718,
+      "percentile": 99.4,
+      "above_band": true,
+      "event_months_tested": 174,
+      "share_of_event_months_above_band": 0.448276,
+      "nonoverlap_statistic": 0.06718,
+      "nonoverlap_percentile": 100.0,
+      "nonoverlap_above_band": true,
+      "nonoverlap_event_months_tested": 174,
+      "nonoverlap_share_of_event_months_above_band": 0.390805
+     },
+     {
+      "series": "ds_prev panel",
+      "observable": "ds_prev",
+      "corpus": "reverse_panel",
+      "source": "_pooled-afrinic-arin",
+      "event_month": "2018-06",
+      "step_pp": 0.1,
+      "statistic": 0.11718,
+      "percentile": 100.0,
+      "above_band": true,
+      "event_months_tested": 174,
+      "share_of_event_months_above_band": 0.87931,
+      "nonoverlap_statistic": 0.11718,
+      "nonoverlap_percentile": 100.0,
+      "nonoverlap_above_band": true,
+      "nonoverlap_event_months_tested": 174,
+      "nonoverlap_share_of_event_months_above_band": 0.936782
+     },
+     {
+      "series": "ds_prev panel",
+      "observable": "ds_prev",
+      "corpus": "reverse_panel",
+      "source": "_pooled-afrinic-arin",
+      "event_month": "2018-06",
+      "step_pp": 0.2,
+      "statistic": 0.21718,
+      "percentile": 100.0,
+      "above_band": true,
+      "event_months_tested": 174,
+      "share_of_event_months_above_band": 1.0,
+      "nonoverlap_statistic": 0.21718,
+      "nonoverlap_percentile": 100.0,
+      "nonoverlap_above_band": true,
+      "nonoverlap_event_months_tested": 174,
+      "nonoverlap_share_of_event_months_above_band": 1.0
+     }
+    ],
+    "smallest_detectable_step_pp": {
+     "ds_prev .se": 10,
+     "ds_prev .nu": null,
+     "ds_prev panel": 0.1
+    },
+    "false_positive_share_at_0pp": {
+     "ds_prev .se": 0.071429,
+     "ds_prev .nu": 0.053571,
+     "ds_prev panel": 0.045977
+    },
+    "false_positive_share_at_0pp_nonoverlap": {
+     "ds_prev .se": 0.160714,
+     "ds_prev .nu": 0.232143,
+     "ds_prev panel": 0.068966
+    }
+   },
+   "step12_bands": [
+    {
+     "observable": "ds_prev",
+     "source": "se",
+     "testable_months": 56,
+     "band_lo": -2.874402,
+     "band_hi": 4.428337,
+     "testable_months_breaks_masked": 23,
+     "band_lo_breaks_masked": -3.219018,
+     "band_hi_breaks_masked": 3.469842
+    },
+    {
+     "observable": "ds_prev",
+     "source": "nu",
+     "testable_months": 56,
+     "band_lo": -4.165047,
+     "band_hi": 8.942293,
+     "testable_months_breaks_masked": 23,
+     "band_lo_breaks_masked": -2.220284,
+     "band_hi_breaks_masked": 0.015795
+    },
+    {
+     "observable": "ds_prev",
+     "source": "gov",
+     "testable_months": 45,
+     "band_lo": -0.915004,
+     "band_hi": 42.880176,
+     "testable_months_breaks_masked": 34,
+     "band_lo_breaks_masked": -0.927883,
+     "band_hi_breaks_masked": -0.066606
+    },
+    {
+     "observable": "ds_prev",
+     "source": "ee",
+     "testable_months": 19,
+     "band_lo": -2.760256,
+     "band_hi": -0.372032,
+     "testable_months_breaks_masked": 19,
+     "band_lo_breaks_masked": -2.760256,
+     "band_hi_breaks_masked": -0.372032
+    },
+    {
+     "observable": "ds_prev",
+     "source": "ch",
+     "testable_months": 9,
+     "band_lo": -15.36605,
+     "band_hi": -1.55376,
+     "testable_months_breaks_masked": 9,
+     "band_lo_breaks_masked": -15.36605,
+     "band_hi_breaks_masked": -1.55376
+    },
+    {
+     "observable": "ds_prev",
+     "source": "li",
+     "testable_months": 9,
+     "band_lo": -3.809639,
+     "band_hi": 1.282806,
+     "testable_months_breaks_masked": 9,
+     "band_lo_breaks_masked": -3.809639,
+     "band_hi_breaks_masked": 1.282806
+    },
+    {
+     "observable": "ds_prev",
+     "source": "_pooled-afrinic-arin",
+     "testable_months": 174,
+     "band_lo": -0.048966,
+     "band_hi": 0.057418,
+     "testable_months_breaks_masked": 174,
+     "band_lo_breaks_masked": -0.048966,
+     "band_hi_breaks_masked": 0.057418
+    },
+    {
+     "observable": "dnskey_prev",
+     "source": "se",
+     "testable_months": 56,
+     "band_lo": -3.089208,
+     "band_hi": 6.243924,
+     "testable_months_breaks_masked": 23,
+     "band_lo_breaks_masked": -3.29226,
+     "band_hi_breaks_masked": 2.859951
+    },
+    {
+     "observable": "dnskey_prev",
+     "source": "nu",
+     "testable_months": 56,
+     "band_lo": -9.599917,
+     "band_hi": 17.021534,
+     "testable_months_breaks_masked": 23,
+     "band_lo_breaks_masked": -2.210039,
+     "band_hi_breaks_masked": -0.721526
+    },
+    {
+     "observable": "dnskey_prev",
+     "source": "gov",
+     "testable_months": 45,
+     "band_lo": -0.718746,
+     "band_hi": 42.882173,
+     "testable_months_breaks_masked": 34,
+     "band_lo_breaks_masked": -0.728165,
+     "band_hi_breaks_masked": 0.022463
+    },
+    {
+     "observable": "dnskey_prev",
+     "source": "ee",
+     "testable_months": 19,
+     "band_lo": -2.835052,
+     "band_hi": -0.343839,
+     "testable_months_breaks_masked": 19,
+     "band_lo_breaks_masked": -2.835052,
+     "band_hi_breaks_masked": -0.343839
+    },
+    {
+     "observable": "dnskey_prev",
+     "source": "ch",
+     "testable_months": 9,
+     "band_lo": -15.943439,
+     "band_hi": -2.021335,
+     "testable_months_breaks_masked": 9,
+     "band_lo_breaks_masked": -15.943439,
+     "band_hi_breaks_masked": -2.021335
+    },
+    {
+     "observable": "dnskey_prev",
+     "source": "li",
+     "testable_months": 9,
+     "band_lo": -3.886889,
+     "band_hi": 1.236648,
+     "testable_months_breaks_masked": 9,
+     "band_lo_breaks_masked": -3.886889,
+     "band_hi_breaks_masked": 1.236648
+    },
+    {
+     "observable": "rrsig_prev",
+     "source": "se",
+     "testable_months": 56,
+     "band_lo": -3.086886,
+     "band_hi": 6.28008,
+     "testable_months_breaks_masked": 23,
+     "band_lo_breaks_masked": -3.290344,
+     "band_hi_breaks_masked": 2.842685
+    },
+    {
+     "observable": "rrsig_prev",
+     "source": "nu",
+     "testable_months": 56,
+     "band_lo": -9.557457,
+     "band_hi": 17.022158,
+     "testable_months_breaks_masked": 23,
+     "band_lo_breaks_masked": -2.210881,
+     "band_hi_breaks_masked": -0.722012
+    },
+    {
+     "observable": "rrsig_prev",
+     "source": "gov",
+     "testable_months": 45,
+     "band_lo": -0.75339,
+     "band_hi": 42.878404,
+     "testable_months_breaks_masked": 34,
+     "band_lo_breaks_masked": -0.763087,
+     "band_hi_breaks_masked": 0.037577
+    },
+    {
+     "observable": "rrsig_prev",
+     "source": "ee",
+     "testable_months": 19,
+     "band_lo": -2.836408,
+     "band_hi": -0.343392,
+     "testable_months_breaks_masked": 19,
+     "band_lo_breaks_masked": -2.836408,
+     "band_hi_breaks_masked": -0.343392
+    },
+    {
+     "observable": "rrsig_prev",
+     "source": "ch",
+     "testable_months": 9,
+     "band_lo": -15.945347,
+     "band_hi": -2.022978,
+     "testable_months_breaks_masked": 9,
+     "band_lo_breaks_masked": -15.945347,
+     "band_hi_breaks_masked": -2.022978
+    },
+    {
+     "observable": "rrsig_prev",
+     "source": "li",
+     "testable_months": 9,
+     "band_lo": -3.890229,
+     "band_hi": 1.234165,
+     "testable_months_breaks_masked": 9,
+     "band_lo_breaks_masked": -3.890229,
+     "band_hi_breaks_masked": 1.234165
+    }
+   ]
+  },
+  "break_sensitivity_feature": {
+   "per_test": {
+    "step12": {
+     "tested": 68,
+     "outside": 7,
+     "tested_masked": 49,
+     "outside_masked": 5
+    },
+    "transient12": {
+     "tested": 85,
+     "outside": 6,
+     "tested_masked": 82,
+     "outside_masked": 6
+    }
+   },
+   "untestable_when_masked": [
+    {
+     "test": "bind9 d06-keygen-no-default-alg transient12 alg5 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d06-keygen-no-default-alg transient12 alg5 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d08-rsamd5-removed step12 alg1 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d08-rsamd5-removed transient12 alg1 forward se",
+     "was_outside": true
+    },
+    {
+     "test": "bind9 d08-rsamd5-removed step12 alg1 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d10-dsa-removed step12 alg3_6 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d10-dsa-removed transient12 alg3_6 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d13-ds-cds-sha1-dropped step12 digest1 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d13-ds-cds-sha1-dropped transient12 digest1 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d13-ds-cds-sha1-dropped step12 digest1 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d13-ds-cds-sha1-dropped transient12 digest1 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d13-ds-cds-sha1-dropped step12 digest1 forward gov",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d14-keygen-rsa-zsk-2048 step12 rsa1024 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d14-keygen-rsa-zsk-2048 transient12 rsa1024 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d14-keygen-rsa-zsk-2048 step12 rsa1024 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d14-keygen-rsa-zsk-2048 transient12 rsa1024 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d14-keygen-rsa-zsk-2048 step12 rsa1024 forward gov",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 alg13 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 alg13 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 alg13 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d15-dnssec-policy-default-ecdsap256 transient12 alg13 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d15-dnssec-policy-default-ecdsap256 step12 alg13 forward gov",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d16-dnssec-policy-default-key-size-2048 step12 rsa1024 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d16-dnssec-policy-default-key-size-2048 transient12 rsa1024 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d16-dnssec-policy-default-key-size-2048 step12 rsa1024 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d16-dnssec-policy-default-key-size-2048 transient12 rsa1024 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d16-dnssec-policy-default-key-size-2048 step12 rsa1024 forward gov",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d17-nsec3param-default-in-policy step12 iter5 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "bind9 d17-nsec3param-default-in-policy step12 iter5 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[8]@2.7.0 step12 rsa_lt1024 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[8]@2.7.0 transient12 rsa_lt1024 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[8]@2.7.0 step12 rsa_lt1024 forward nu",
+     "was_outside": true
+    },
+    {
+     "test": "knot knot[8]@2.7.0 transient12 rsa_lt1024 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[8]@2.7.0 transient12 rsa_lt1024 forward gov",
+     "was_outside": true
+    },
+    {
+     "test": "knot knot[10]@2.8.0 step12 cds forward se",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[10]@2.8.0 transient12 cds forward se",
+     "was_outside": true
+    },
+    {
+     "test": "knot knot[10]@2.8.0 step12 cds forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[10]@2.8.0 transient12 cds forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[10]@2.8.0 transient12 cds forward gov",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[11]@2.8.0 step12 digest1 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[11]@2.8.0 transient12 digest1 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[11]@2.8.0 step12 digest1 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[11]@2.8.0 transient12 digest1 forward nu",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[11]@2.8.0 transient12 digest1 forward gov",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[12]@3.0.2 step12 alg5_7 forward se",
+     "was_outside": false
+    },
+    {
+     "test": "knot knot[12]@3.0.2 step12 alg5_7 forward nu",
+     "was_outside": false
+    }
+   ],
+   "outside_flag_changes": [
+    {
+     "test": "bind9 d20-dnssec-cds-sha2-only transient12 digest1 forward nu",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 74.9,
+     "percentile_masked": 98.1
+    },
+    {
+     "test": "bind9 d21-signzone-nsec3-iterations-0 step12 iter0 forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 98.4,
+     "percentile_masked": 94.7
+    },
+    {
+     "test": "knot knot[7]@2.6.0 transient12 alg3_6 forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 4.2,
+     "percentile_masked": 7.6
+    },
+    {
+     "test": "kresd kresd[9]@5.3.1 step12 iter_gt150 forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 5.0,
+     "percentile_masked": 13.7
+    },
+    {
+     "test": "kresd kresd[9]@5.3.1 transient12 iter_gt150 forward se",
+     "was_outside": false,
+     "now_outside": true,
+     "percentile_before": 80.3,
+     "percentile_masked": 100.0
+    },
+    {
+     "test": "pdns-rec nsec3-max-iterations-150 step12 iter_gt150 forward se",
+     "was_outside": true,
+     "now_outside": false,
+     "percentile_before": 4.0,
+     "percentile_masked": 8.1
     }
    ]
   }
@@ -64715,7 +63388,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 250,
@@ -64745,7 +63419,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 251,
@@ -64759,11 +63434,11 @@
      "delta": 18552,
      "level_before": 155336,
      "level_after": 136784,
-     "nearest_relevant_default": "bind9 d06-keygen-no-default-alg 2018-01-17",
-     "lag_months": 5,
+     "nearest_relevant_default": null,
+     "lag_months": null,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "bind9 d06-keygen-no-default-alg 2018-01-17 lag 5",
-     "chance_relevant_default_within_3m": 0.088889,
+     "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 36",
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.12.1-P2 2018-05-16 lag 1",
      "nearest_release_knot": "v2.6.7 2018-05-17 lag 1",
      "nearest_release_kresd": "v2.3.0 2018-04-23 lag 2",
@@ -64775,7 +63450,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 252,
@@ -64789,11 +63465,11 @@
      "delta": 18562,
      "level_before": 137583,
      "level_after": 119021,
-     "nearest_relevant_default": "bind9 d06-keygen-no-default-alg 2018-01-17",
-     "lag_months": 11,
+     "nearest_relevant_default": null,
+     "lag_months": null,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "bind9 d06-keygen-no-default-alg 2018-01-17 lag 11",
-     "chance_relevant_default_within_3m": 0.088889,
+     "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 42",
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.11.5-P1 2018-12-10 lag 0",
      "nearest_release_knot": "v2.7.4 2018-11-13 lag 1",
      "nearest_release_kresd": "v3.2.0 2018-12-17 lag 0",
@@ -64805,7 +63481,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 253,
@@ -64822,7 +63499,7 @@
      "nearest_relevant_default": "knot knot[1]@2.0.0 2015-06-26",
      "lag_months": 50,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "bind9 d06-keygen-no-default-alg 2018-01-17 lag 19",
+     "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 50",
      "chance_relevant_default_within_3m": 0.075472,
      "nearest_release_bind9": "v9.14.5 2019-08-13 lag 0",
      "nearest_release_knot": "v2.8.3 2019-07-16 lag 1",
@@ -64835,7 +63512,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 254,
@@ -64852,7 +63530,7 @@
      "nearest_relevant_default": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12",
      "lag_months": 16,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[12]@3.0.2 2020-11-11 lag 7",
+     "nearest_default_any_direction": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12 lag 16",
      "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.16.18 2021-06-18 lag 0",
      "nearest_release_knot": "v3.0.7 2021-06-16 lag 0",
@@ -64865,7 +63543,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 255,
@@ -64882,7 +63561,7 @@
      "nearest_relevant_default": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12",
      "lag_months": 16,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[12]@3.0.2 2020-11-11 lag 7",
+     "nearest_default_any_direction": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12 lag 16",
      "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.16.18 2021-06-18 lag 0",
      "nearest_release_knot": "v3.0.7 2021-06-16 lag 0",
@@ -64895,7 +63574,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 256,
@@ -64912,7 +63592,7 @@
      "nearest_relevant_default": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12",
      "lag_months": 33,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[12]@3.0.2 2020-11-11 lag 24",
+     "nearest_default_any_direction": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12 lag 33",
      "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.18.9 2022-11-07 lag 0",
      "nearest_release_knot": "v3.2.3 2022-11-20 lag 0",
@@ -64925,7 +63605,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 257,
@@ -64955,7 +63636,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 258,
@@ -64985,7 +63667,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": true
     },
     {
      "n": 259,
@@ -65003,7 +63686,7 @@
      "lag_months": null,
      "relevant_default_within_3m": false,
      "nearest_default_any_direction": "knot knot[9]@2.7.5 2019-01-07 lag 0",
-     "chance_relevant_default_within_3m": 0.044444,
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.11.5-P1 2018-12-10 lag 1",
      "nearest_release_knot": "v2.7.6 2019-01-23 lag 0",
      "nearest_release_kresd": "v3.2.1 2019-01-10 lag 0",
@@ -65015,7 +63698,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 260,
@@ -65045,7 +63729,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 261,
@@ -65075,7 +63760,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 262,
@@ -65093,7 +63779,7 @@
      "lag_months": null,
      "relevant_default_within_3m": false,
      "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 42",
-     "chance_relevant_default_within_3m": 0.044444,
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.11.5-P1 2018-12-10 lag 0",
      "nearest_release_knot": "v2.7.4 2018-11-13 lag 1",
      "nearest_release_kresd": "v3.2.0 2018-12-17 lag 0",
@@ -65105,7 +63791,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 263,
@@ -65122,7 +63809,7 @@
      "nearest_relevant_default": "knot knot[9]@2.7.5 2019-01-07",
      "lag_months": 7,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[10]@2.8.0 2019-03-05 lag 5",
+     "nearest_default_any_direction": "knot knot[9]@2.7.5 2019-01-07 lag 7",
      "chance_relevant_default_within_3m": 0.075472,
      "nearest_release_bind9": "v9.14.5 2019-08-13 lag 0",
      "nearest_release_knot": "v2.8.3 2019-07-16 lag 1",
@@ -65135,7 +63822,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 264,
@@ -65165,7 +63853,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 265,
@@ -65195,7 +63884,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 266,
@@ -65225,7 +63915,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 267,
@@ -65254,7 +63945,8 @@
      "composition": "mostly new signings",
      "new_signings": 176,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 268,
@@ -65284,7 +63976,8 @@
      "composition": "mostly new signings",
      "new_signings": 108,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 269,
@@ -65314,7 +64007,8 @@
      "composition": "mostly new signings",
      "new_signings": 40,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 270,
@@ -65344,7 +64038,8 @@
      "composition": "mostly new signings",
      "new_signings": 54,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 271,
@@ -65373,7 +64068,8 @@
      "composition": "mostly new signings",
      "new_signings": 71,
      "rollovers": 0,
-     "unsignings": 1
+     "unsignings": 1,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 272,
@@ -65402,7 +64098,8 @@
      "composition": "mostly new signings",
      "new_signings": 54,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 273,
@@ -65431,7 +64128,8 @@
      "composition": "mostly new signings",
      "new_signings": 38,
      "rollovers": 1,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 274,
@@ -65460,7 +64158,8 @@
      "composition": "mostly new signings",
      "new_signings": 340,
      "rollovers": 0,
-     "unsignings": 1
+     "unsignings": 1,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 275,
@@ -65490,7 +64189,8 @@
      "composition": "mostly new signings",
      "new_signings": 1014,
      "rollovers": 0,
-     "unsignings": 71
+     "unsignings": 71,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 276,
@@ -65520,7 +64220,8 @@
      "composition": "mostly new signings",
      "new_signings": 160,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 277,
@@ -65550,7 +64251,8 @@
      "composition": "mostly new signings",
      "new_signings": 305,
      "rollovers": 0,
-     "unsignings": 38
+     "unsignings": 38,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 278,
@@ -65580,7 +64282,8 @@
      "composition": "mostly new signings",
      "new_signings": 300,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 279,
@@ -65597,7 +64300,7 @@
      "nearest_relevant_default": "knot knot[9]@2.7.5 2019-01-07",
      "lag_months": 4,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[10]@2.8.0 2019-03-05 lag 2",
+     "nearest_default_any_direction": "knot knot[9]@2.7.5 2019-01-07 lag 4",
      "chance_relevant_default_within_3m": 0.067416,
      "nearest_release_bind9": "v9.14.2 2019-05-10 lag 0",
      "nearest_release_knot": "v2.7.7 2019-04-15 lag 1",
@@ -65610,7 +64313,8 @@
      "composition": "mostly new signings",
      "new_signings": 559,
      "rollovers": 0,
-     "unsignings": 5
+     "unsignings": 5,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 280,
@@ -65627,7 +64331,7 @@
      "nearest_relevant_default": "knot knot[9]@2.7.5 2019-01-07",
      "lag_months": 11,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[10]@2.8.0 2019-03-05 lag 9",
+     "nearest_default_any_direction": "knot knot[9]@2.7.5 2019-01-07 lag 11",
      "chance_relevant_default_within_3m": 0.067416,
      "nearest_release_bind9": "v9.14.9 2019-12-12 lag 0",
      "nearest_release_knot": "v2.9.2 2019-12-12 lag 0",
@@ -65640,7 +64344,8 @@
      "composition": "mostly new signings",
      "new_signings": 356,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 281,
@@ -65669,7 +64374,8 @@
      "composition": "mostly new signings",
      "new_signings": 82,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 282,
@@ -65698,7 +64404,8 @@
      "composition": "mostly new signings",
      "new_signings": 48,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": true
     },
     {
      "n": 283,
@@ -65727,7 +64434,8 @@
      "composition": "mostly new signings",
      "new_signings": 39,
      "rollovers": 1,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 284,
@@ -65756,7 +64464,8 @@
      "composition": "mostly new signings",
      "new_signings": 181,
      "rollovers": 0,
-     "unsignings": 12
+     "unsignings": 12,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 285,
@@ -65786,7 +64495,8 @@
      "composition": "mostly new signings",
      "new_signings": 91,
      "rollovers": 0,
-     "unsignings": 3
+     "unsignings": 3,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 286,
@@ -65803,7 +64513,7 @@
      "nearest_relevant_default": "knot knot[9]@2.7.5 2019-01-07",
      "lag_months": 4,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[10]@2.8.0 2019-03-05 lag 2",
+     "nearest_default_any_direction": "knot knot[9]@2.7.5 2019-01-07 lag 4",
      "chance_relevant_default_within_3m": 0.060302,
      "nearest_release_bind9": "v9.14.2 2019-05-10 lag 0",
      "nearest_release_knot": "v2.7.7 2019-04-15 lag 1",
@@ -65816,7 +64526,8 @@
      "composition": "mostly new signings",
      "new_signings": 405,
      "rollovers": 1,
-     "unsignings": 1
+     "unsignings": 1,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 287,
@@ -65846,7 +64557,8 @@
      "composition": "mostly new signings",
      "new_signings": 276,
      "rollovers": 0,
-     "unsignings": 3
+     "unsignings": 3,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 288,
@@ -65864,7 +64576,7 @@
      "lag_months": null,
      "relevant_default_within_3m": false,
      "nearest_default_any_direction": null,
-     "chance_relevant_default_within_3m": 0.020101,
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.9.2-P1 2012-10-26 lag 1",
      "nearest_release_knot": "v1.1.2 2012-11-21 lag 0",
      "nearest_release_nsd": "NSD_3_2_14_REL 2012-10-24 lag 1",
@@ -65875,7 +64587,8 @@
      "composition": "mostly unsignings",
      "new_signings": 2,
      "rollovers": 0,
-     "unsignings": 46
+     "unsignings": 46,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 289,
@@ -65905,7 +64618,8 @@
      "composition": "mostly new signings",
      "new_signings": 32,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 290,
@@ -65935,7 +64649,8 @@
      "composition": "mostly new signings",
      "new_signings": 104,
      "rollovers": 0,
-     "unsignings": 14
+     "unsignings": 14,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 291,
@@ -65963,7 +64678,8 @@
      "composition": "mostly new signings",
      "new_signings": 33,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 292,
@@ -65991,7 +64707,8 @@
      "composition": "mostly new signings",
      "new_signings": 109,
      "rollovers": 0,
-     "unsignings": 2
+     "unsignings": 2,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 293,
@@ -66020,7 +64737,8 @@
      "composition": "mostly new signings",
      "new_signings": 61,
      "rollovers": 3,
-     "unsignings": 16
+     "unsignings": 16,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 294,
@@ -66049,7 +64767,8 @@
      "composition": "mostly new signings",
      "new_signings": 76,
      "rollovers": 14,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 295,
@@ -66078,7 +64797,8 @@
      "composition": "mostly new signings",
      "new_signings": 69,
      "rollovers": 0,
-     "unsignings": 2
+     "unsignings": 2,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 296,
@@ -66107,7 +64827,8 @@
      "composition": "mostly new signings",
      "new_signings": 183,
      "rollovers": 0,
-     "unsignings": 4
+     "unsignings": 4,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 297,
@@ -66136,7 +64857,8 @@
      "composition": "mostly new signings",
      "new_signings": 329,
      "rollovers": 5,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 298,
@@ -66166,7 +64888,8 @@
      "composition": "mostly new signings",
      "new_signings": 63,
      "rollovers": 0,
-     "unsignings": 0
+     "unsignings": 0,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 299,
@@ -66184,7 +64907,7 @@
      "lag_months": null,
      "relevant_default_within_3m": false,
      "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 3",
-     "chance_relevant_default_within_3m": 0.020101,
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.9.8 2015-09-09 lag 0",
      "nearest_release_knot": "v2.0.1 2015-09-02 lag 0",
      "nearest_release_nsd": "NSD_4_1_5_REL 2015-09-21 lag 0",
@@ -66195,7 +64918,8 @@
      "composition": "mostly unsignings",
      "new_signings": 0,
      "rollovers": 0,
-     "unsignings": 1777
+     "unsignings": 1777,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 300,
@@ -66225,7 +64949,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 301,
@@ -66255,7 +64980,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 302,
@@ -66269,11 +64995,11 @@
      "delta": 18542,
      "level_before": 155263,
      "level_after": 136721,
-     "nearest_relevant_default": "bind9 d06-keygen-no-default-alg 2018-01-17",
-     "lag_months": 5,
+     "nearest_relevant_default": "nsd nsd[1]@2.2.0 2005-01-10",
+     "lag_months": 161,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "bind9 d06-keygen-no-default-alg 2018-01-17 lag 5",
-     "chance_relevant_default_within_3m": 0.088889,
+     "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 36",
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.12.1-P2 2018-05-16 lag 1",
      "nearest_release_knot": "v2.6.7 2018-05-17 lag 1",
      "nearest_release_kresd": "v2.3.0 2018-04-23 lag 2",
@@ -66285,7 +65011,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 303,
@@ -66299,11 +65026,11 @@
      "delta": 18561,
      "level_before": 137470,
      "level_after": 118909,
-     "nearest_relevant_default": "bind9 d06-keygen-no-default-alg 2018-01-17",
-     "lag_months": 11,
+     "nearest_relevant_default": "nsd nsd[1]@2.2.0 2005-01-10",
+     "lag_months": 167,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "bind9 d06-keygen-no-default-alg 2018-01-17 lag 11",
-     "chance_relevant_default_within_3m": 0.088889,
+     "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 42",
+     "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.11.5-P1 2018-12-10 lag 0",
      "nearest_release_knot": "v2.7.4 2018-11-13 lag 1",
      "nearest_release_kresd": "v3.2.0 2018-12-17 lag 0",
@@ -66315,7 +65042,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 304,
@@ -66332,7 +65060,7 @@
      "nearest_relevant_default": "knot knot[1]@2.0.0 2015-06-26",
      "lag_months": 50,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "bind9 d06-keygen-no-default-alg 2018-01-17 lag 19",
+     "nearest_default_any_direction": "knot knot[1]@2.0.0 2015-06-26 lag 50",
      "chance_relevant_default_within_3m": 0.075472,
      "nearest_release_bind9": "v9.14.5 2019-08-13 lag 0",
      "nearest_release_knot": "v2.8.3 2019-07-16 lag 1",
@@ -66345,7 +65073,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 305,
@@ -66362,7 +65091,7 @@
      "nearest_relevant_default": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12",
      "lag_months": 16,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[12]@3.0.2 2020-11-11 lag 7",
+     "nearest_default_any_direction": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12 lag 16",
      "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.16.18 2021-06-18 lag 0",
      "nearest_release_knot": "v3.0.7 2021-06-16 lag 0",
@@ -66375,7 +65104,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 306,
@@ -66392,7 +65122,7 @@
      "nearest_relevant_default": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12",
      "lag_months": 16,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[12]@3.0.2 2020-11-11 lag 7",
+     "nearest_default_any_direction": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12 lag 16",
      "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.16.18 2021-06-18 lag 0",
      "nearest_release_knot": "v3.0.7 2021-06-16 lag 0",
@@ -66405,7 +65135,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     },
     {
      "n": 307,
@@ -66422,7 +65153,7 @@
      "nearest_relevant_default": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12",
      "lag_months": 33,
      "relevant_default_within_3m": false,
-     "nearest_default_any_direction": "knot knot[12]@3.0.2 2020-11-11 lag 24",
+     "nearest_default_any_direction": "bind9 d15-dnssec-policy-default-ecdsap256 2020-02-12 lag 33",
      "chance_relevant_default_within_3m": 0.0,
      "nearest_release_bind9": "v9.18.9 2022-11-07 lag 0",
      "nearest_release_knot": "v3.2.3 2022-11-20 lag 0",
@@ -66435,7 +65166,8 @@
      "composition": "not determinable: forward per-zone records are not in the repository",
      "new_signings": null,
      "rollovers": null,
-     "unsignings": null
+     "unsignings": null,
+     "reverses_dip_within_2m": false
     }
    ],
    "chance": [
@@ -66445,7 +65177,7 @@
      "corpus": "forward",
      "source": "se",
      "months": 90,
-     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0;nsd[0]@2.0.0;nsd[2]@2.3.0;nsd[5]@3.2.6",
+     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0",
      "chance_relevant_default_within_3m": 0.044444
     },
     {
@@ -66454,8 +65186,8 @@
      "corpus": "forward",
      "source": "se",
      "months": 90,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.088889
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "dnskey_prev",
@@ -66463,7 +65195,7 @@
      "corpus": "forward",
      "source": "nu",
      "months": 90,
-     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0;nsd[0]@2.0.0;nsd[2]@2.3.0;nsd[5]@3.2.6",
+     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0",
      "chance_relevant_default_within_3m": 0.044444
     },
     {
@@ -66472,8 +65204,8 @@
      "corpus": "forward",
      "source": "nu",
      "months": 90,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.088889
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "dnskey_prev",
@@ -66481,7 +65213,7 @@
      "corpus": "forward",
      "source": "gov",
      "months": 79,
-     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0;nsd[0]@2.0.0;nsd[2]@2.3.0;nsd[5]@3.2.6",
+     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0",
      "chance_relevant_default_within_3m": 0.050633
     },
     {
@@ -66490,8 +65222,8 @@
      "corpus": "forward",
      "source": "gov",
      "months": 79,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.101266
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "dnskey_prev",
@@ -66499,7 +65231,7 @@
      "corpus": "forward",
      "source": "ee",
      "months": 53,
-     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0;nsd[0]@2.0.0;nsd[2]@2.3.0;nsd[5]@3.2.6",
+     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0",
      "chance_relevant_default_within_3m": 0.075472
     },
     {
@@ -66508,8 +65240,8 @@
      "corpus": "forward",
      "source": "ee",
      "months": 53,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.075472
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "dnskey_prev",
@@ -66517,7 +65249,7 @@
      "corpus": "forward",
      "source": "ch",
      "months": 43,
-     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0;nsd[0]@2.0.0;nsd[2]@2.3.0;nsd[5]@3.2.6",
+     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0",
      "chance_relevant_default_within_3m": 0.0
     },
     {
@@ -66526,8 +65258,8 @@
      "corpus": "forward",
      "source": "ch",
      "months": 43,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.093023
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "dnskey_prev",
@@ -66535,7 +65267,7 @@
      "corpus": "forward",
      "source": "li",
      "months": 43,
-     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0;nsd[0]@2.0.0;nsd[2]@2.3.0;nsd[5]@3.2.6",
+     "relevant_rows": "d15-dnssec-policy-default-ecdsap256;knot[1]@2.0.0",
      "chance_relevant_default_within_3m": 0.0
     },
     {
@@ -66544,8 +65276,8 @@
      "corpus": "forward",
      "source": "li",
      "months": 43,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.093023
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66562,8 +65294,8 @@
      "corpus": "forward",
      "source": "se",
      "months": 90,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.044444
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66580,8 +65312,8 @@
      "corpus": "forward",
      "source": "nu",
      "months": 90,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.044444
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66598,8 +65330,8 @@
      "corpus": "forward",
      "source": "gov",
      "months": 79,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.050633
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66616,7 +65348,7 @@
      "corpus": "forward",
      "source": "ee",
      "months": 53,
-     "relevant_rows": "knot[10]@2.8.0",
+     "relevant_rows": "",
      "chance_relevant_default_within_3m": 0.0
     },
     {
@@ -66634,7 +65366,7 @@
      "corpus": "forward",
      "source": "ch",
      "months": 43,
-     "relevant_rows": "knot[10]@2.8.0",
+     "relevant_rows": "",
      "chance_relevant_default_within_3m": 0.0
     },
     {
@@ -66652,7 +65384,7 @@
      "corpus": "forward",
      "source": "li",
      "months": 43,
-     "relevant_rows": "knot[10]@2.8.0",
+     "relevant_rows": "",
      "chance_relevant_default_within_3m": 0.0
     },
     {
@@ -66670,8 +65402,8 @@
      "corpus": "reverse",
      "source": "afrinic",
      "months": 199,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.020101
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66688,8 +65420,8 @@
      "corpus": "reverse",
      "source": "apnic",
      "months": 178,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.022472
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66706,8 +65438,8 @@
      "corpus": "reverse",
      "source": "arin",
      "months": 199,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.020101
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66724,8 +65456,8 @@
      "corpus": "reverse",
      "source": "lacnic",
      "months": 199,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.020101
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "ds_prev",
@@ -66742,8 +65474,8 @@
      "corpus": "reverse",
      "source": "ripe",
      "months": 199,
-     "relevant_rows": "knot[10]@2.8.0",
-     "chance_relevant_default_within_3m": 0.020101
+     "relevant_rows": "",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "rrsig_prev",
@@ -66760,8 +65492,8 @@
      "corpus": "forward",
      "source": "se",
      "months": 90,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.088889
+     "relevant_rows": "nsd[1]@2.2.0",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "rrsig_prev",
@@ -66778,8 +65510,8 @@
      "corpus": "forward",
      "source": "nu",
      "months": 90,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.088889
+     "relevant_rows": "nsd[1]@2.2.0",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "rrsig_prev",
@@ -66796,8 +65528,8 @@
      "corpus": "forward",
      "source": "gov",
      "months": 79,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.101266
+     "relevant_rows": "nsd[1]@2.2.0",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "rrsig_prev",
@@ -66814,8 +65546,8 @@
      "corpus": "forward",
      "source": "ee",
      "months": 53,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.075472
+     "relevant_rows": "nsd[1]@2.2.0",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "rrsig_prev",
@@ -66832,8 +65564,8 @@
      "corpus": "forward",
      "source": "ch",
      "months": 43,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.093023
+     "relevant_rows": "nsd[1]@2.2.0",
+     "chance_relevant_default_within_3m": 0.0
     },
     {
      "observable": "rrsig_prev",
@@ -66850,8 +65582,8 @@
      "corpus": "forward",
      "source": "li",
      "months": 43,
-     "relevant_rows": "d06-keygen-no-default-alg;knot[12]@3.0.2;nsd[1]@2.2.0",
-     "chance_relevant_default_within_3m": 0.093023
+     "relevant_rows": "nsd[1]@2.2.0",
+     "chance_relevant_default_within_3m": 0.0
     }
    ],
    "alignment_vs_chance": [
@@ -66861,7 +65593,7 @@
      "direction": -1,
      "spikes": 2,
      "aligned_within_3m": 0,
-     "expected_aligned": 0.177778,
+     "expected_aligned": 0.0,
      "p_at_least_observed": 1.0,
      "beats_chance": false
     },
@@ -66881,7 +65613,7 @@
      "direction": -1,
      "spikes": 2,
      "aligned_within_3m": 0,
-     "expected_aligned": 0.088888,
+     "expected_aligned": 0.0,
      "p_at_least_observed": 1.0,
      "beats_chance": false
     },
@@ -66901,7 +65633,7 @@
      "direction": -1,
      "spikes": 2,
      "aligned_within_3m": 0,
-     "expected_aligned": 0.040202,
+     "expected_aligned": 0.0,
      "p_at_least_observed": 1.0,
      "beats_chance": false
     },
@@ -66921,7 +65653,7 @@
      "direction": -1,
      "spikes": 2,
      "aligned_within_3m": 0,
-     "expected_aligned": 0.177778,
+     "expected_aligned": 0.0,
      "p_at_least_observed": 1.0,
      "beats_chance": false
     },
@@ -66939,8 +65671,12 @@
    "summary": {
     "spikes": 59,
     "aligned_within_3m": 3,
-    "expected_aligned": 3.184896,
-    "cells_beating_chance": []
+    "expected_aligned": 2.70025,
+    "cells_beating_chance": [],
+    "dip_reversals": 2,
+    "spikes_excluding_dip_reversals": 57,
+    "aligned_excluding_dip_reversals": 2,
+    "expected_excluding_dip_reversals": 2.551059
    }
   }
  },

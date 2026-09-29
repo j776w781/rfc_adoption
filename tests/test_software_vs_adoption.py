@@ -390,14 +390,10 @@ def test_reverse_has_no_dnskey_or_rrsig(mod, doc):
 PINNED_PREV_MAP = {
     ("d15-dnssec-policy-default-ecdsap256", "ds_prev", 1), ("d15-dnssec-policy-default-ecdsap256", "dnskey_prev", 1),
     ("d15-dnssec-policy-default-ecdsap256", "rrsig_prev", 1),
-    ("d06-keygen-no-default-alg", "dnskey_prev", -1), ("d06-keygen-no-default-alg", "rrsig_prev", -1),
     ("knot[1]@2.0.0", "ds_prev", 1), ("knot[1]@2.0.0", "dnskey_prev", 1), ("knot[1]@2.0.0", "rrsig_prev", 1),
-    ("knot[9]@2.7.5", "ds_prev", 1), ("knot[10]@2.8.0", "ds_prev", -1),
-    ("knot[12]@3.0.2", "dnskey_prev", -1), ("knot[12]@3.0.2", "rrsig_prev", -1),
-    ("nsd[0]@2.0.0", "dnskey_prev", 1), ("nsd[0]@2.0.0", "rrsig_prev", 1),
-    ("nsd[1]@2.2.0", "dnskey_prev", -1), ("nsd[1]@2.2.0", "rrsig_prev", -1),
-    ("nsd[2]@2.3.0", "dnskey_prev", 1), ("nsd[2]@2.3.0", "rrsig_prev", 1),
-    ("nsd[5]@3.2.6", "dnskey_prev", 1), ("nsd[5]@3.2.6", "rrsig_prev", 1),
+    ("knot[9]@2.7.5", "ds_prev", 1),
+    ("nsd[0]@2.0.0", "rrsig_prev", 1), ("nsd[1]@2.2.0", "rrsig_prev", -1),
+    ("nsd[2]@2.3.0", "rrsig_prev", 1), ("nsd[5]@3.2.6", "rrsig_prev", 1),
 }
 
 
@@ -411,6 +407,12 @@ def test_prevalence_mapping_table(doc):
     exc = {r["row_id"]: r["reason"] for r in m["rows_excluded"]}
     for rid in ("d01-validation-default-yes", "unbound[0]@0.5", "kresd[6]@4.0.0", "root-ds-38696"):
         assert exc[rid].startswith("validator-only")
+    # one rule for the configuration-now-fails class, and knot[10] out
+    for rid in ("d06-keygen-no-default-alg", "knot[12]@3.0.2", "knot[8]@2.7.0", "knot[15]@3.2.0",
+                "pdns-auth[9]@4.0.0", "l02-nsec3-max-iterations-50"):
+        assert exc[rid].startswith("configuration-now-fails class"), rid
+    assert exc["knot[10]@2.8.0"].startswith("CDS/CDNSKEY narrowed")
+    assert len(m["rows_excluded"]) == 147 and len({r["row_id"] for r in m["rows_included"]}) == 7
 
 
 def test_hand_knot9_ds_prevalence_on_panel(doc):
@@ -439,6 +441,38 @@ def test_prevalence_family_is_separate(doc):
     pa = doc["q1_per_program_releases"]["prevalence"]["aggregate"]["step12"]
     assert (pa["tested"], pa["mean_outside_90pct_null"]) == (70, 12)
     ps = doc["q2_default_change_events"]["prevalence"]["summary"]["step12"]
-    assert (ps["n_tests"], ps["n_outside_band"]) == (23, 6)
+    assert (ps["n_tests"], ps["n_outside_band"]) == (14, 4)
     assert doc["q4_spikes"]["prevalence"]["summary"]["spikes"] == 59
     assert "nsd" in doc["q1_per_program_releases"]["prevalence"]["per_program"]
+
+
+
+def test_prevalence_unit_of_comparison(doc):
+    """Program x corpus (Q1) and row x corpus (Q2), one series each, are the headline units."""
+    u1 = doc["q1_per_program_releases"]["prevalence"]["aggregate"]["unit_program_x_corpus"]
+    assert (u1["step12"]["units"], u1["step12"]["outside_90pct_null"]) == (28, 4)
+    assert u1["step12"]["p_at_least_observed"] == pytest.approx(0.358, abs=0.001)
+    assert (u1["step12_without_gov"]["units"], u1["step12_without_gov"]["outside_90pct_null"]) == (21, 3)
+    assert u1["step12_without_gov"]["p_at_least_observed"] == pytest.approx(0.399, abs=0.001)
+    u2 = doc["q2_default_change_events"]["prevalence"]["unit_row_x_corpus"]
+    assert (u2["step12"]["units"], u2["step12"]["outside_90_band"]) == (8, 2)
+    assert (u2["step12_breaks_masked"]["units"], u2["step12_breaks_masked"]["outside_90_band"]) == (3, 1)
+
+
+def test_measurement_breaks(mod, doc):
+    """The .gov and .se/.nu breaks are named, and a masked series drops every break-affected window."""
+    br = {b["source"]: b for b in doc["notes"]["measurement_breaks"]}
+    assert (br["gov"]["first"], br["nu"]["first"], br["se"]["last"]) == ("2018-02", "2018-10", "2019-02")
+    s = mod.Series(mod.Data(), "ds_prev", "forward", "gov")
+    before = s.at("step12", mod.m2i("2019-06"))
+    assert before > 20       # the .gov break alone lifts step12 by tens of points
+    s.apply_break_mask()
+    assert np.isnan(s.at("step12", mod.m2i("2019-06"))) and not np.isnan(s.at("step12", mod.m2i("2020-06")))
+    assert doc["q2_default_change_events"]["break_sensitivity_feature"]["per_test"]["step12"]["tested"] == 68
+
+
+def test_prevalence_power_and_dips(doc):
+    dp = doc["q2_default_change_events"]["prevalence"]["detection_power"]
+    assert dp["smallest_detectable_step_pp"] == {"ds_prev .se": 10, "ds_prev .nu": None, "ds_prev panel": 0.1}
+    q4 = doc["q4_spikes"]["prevalence"]["summary"]
+    assert (q4["aligned_within_3m"], q4["dip_reversals"], q4["aligned_excluding_dip_reversals"]) == (3, 2, 2)

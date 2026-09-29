@@ -4,6 +4,7 @@ bind9,d02-keygen-default-alg-rsasha1,dnskey,2010-02-16,sets which algorithm dnss
 bind9,d03-signzone-nsec3-iterations-100-to-10,nsec3-iterations,2010-02-16,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 bind9,d04-root-trust-anchor-builtin,trust-anchor-5011,2011-02-21,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
 bind9,d05-builtin-root-ksk-2017,trust-anchor-5011,2017-03-29,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
+bind9,d06-keygen-no-default-alg,dnskey,2018-01-17,"configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-keygen without -a fails)"
 bind9,d07-validation-auto-default,trust-anchor-5011,2019-03-20,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
 bind9,d08-rsamd5-removed,dnskey,2019-03-20,removes an algorithm that no corpus zone uses as its only one
 bind9,d09-gost-removed,alg-gost,2019-03-20,removes an algorithm absent from every corpus
@@ -22,7 +23,7 @@ bind9,d22-cdns-cdnskey-options,cds-cdnskey,2024-07-08,not a default change: CDS 
 bind9,d23-bindkeys-revoked-key-removed,trust-anchor-5011,2019-04-06,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
 bind9,d24-bindkeys-root-2025-ds,trust-anchor-5011,2024-12-03,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
 bind9,l01-nsec3-max-iterations-150,nsec3-iterations,2021-05-12,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
-bind9,l02-nsec3-max-iterations-50,nsec3-iterations,2024-07-08,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+bind9,l02-nsec3-max-iterations-50,nsec3-iterations,2024-07-08,"configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (dnssec-policy and signzone refuse iterations above 50)"
 bind9,l03-keytrap-validation-limits-9.16-9.18,validation,2024-02-11,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
 bind9,l04-max-validations-per-fetch,validation,2024-07-08,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
 bind9,d29-trust-anchor-telemetry-default-yes,trust-anchor-5011,2016-09-29,"validator-only: validation defaults, trust anchors and validator limits do not change what zones publish"
@@ -34,11 +35,13 @@ knot,knot[4]@2.3.0,nsec3,2016-08-09,"changes a parameter of zones that are signe
 knot,knot[5]@2.4.0,dnskey,2017-01-18,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 knot,knot[6]@2.5.5,rrsig,2017-09-29,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 knot,knot[7]@2.6.0,other,2017-09-29,"removes DSA, used by a handful of zones at most"
-knot,knot[8]@2.7.0,alg-rsa-sha2,2018-08-03,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+knot,knot[8]@2.7.0,alg-rsa-sha2,2018-08-03,"configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (RSA keys under 1024 bits rejected)"
+knot,knot[10]@2.8.0,cds-cdnskey,2019-03-05,"CDS/CDNSKEY narrowed from always to rollover: they are still published during KSK submission, when a parent adds the first DS, so the share of domains with a DS is not affected. Its mirror, Knot 2.5.0's default-always CDS publication, is recorded as support-added and is not in the normalised table; both are left out"
 knot,knot[11]@2.8.0,ds-digest,2019-03-05,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+knot,knot[12]@3.0.2,other,2020-11-11,"configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (RSASHA1 refused under a SHA-1-disabling crypto policy; its effect could not begin before RHEL 9, 2022-05)"
 knot,knot[13]@3.1.0,nsec3,2021-08-01,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 knot,knot[14]@3.2.0,nsec3-iterations,2022-08-22,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
-knot,knot[15]@3.2.0,rrsig,2022-08-22,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+knot,knot[15]@3.2.0,rrsig,2022-08-22,"configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (too-low rrsig-refresh makes zone signing fail)"
 knot,knot[16]@3.3.3,rrsig,2023-12-13,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 knot,knot[17]@3.4.0,validation,2024-09-02,"validation of the zone Knot signs; failing zones are refused, rare and not a default to publish"
 knot,knot[18]@3.5.0,nsec3,2025-09-18,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
@@ -87,7 +90,7 @@ pdns-auth,pdns-auth[3]@3.4.0,nsec3-iterations,2014-09-30,"changes a parameter of
 pdns-auth,pdns-auth[4]@3.4.7,nsec3-iterations,2015-11-03,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 pdns-auth,pdns-auth[7]@4.0.0,alg-ecdsa,2016-07-08,changes the default algorithm of a key the operator asks for
 pdns-auth,pdns-auth[8]@4.0.0,alg-ecdsa,2016-07-08,"changes the default algorithm of secure-zone, which the operator still has to run"
-pdns-auth,pdns-auth[9]@4.0.0,dnskey,2016-07-08,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
+pdns-auth,pdns-auth[9]@4.0.0,dnskey,2016-07-08,"configuration-now-fails class, excluded by one rule: the default makes signing fail for some configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix the configuration (addKey without a size throws for RSA)"
 pdns-auth,pdns-auth[10]@4.5.0,nsec3-iterations,2021-07-12,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 pdns-auth,pdns-auth[11]@4.6.0,nsec3,2022-01-24,"changes a parameter of zones that are signed anyway, such as algorithm, digest, key size, NSEC3 settings, signature timing or TTLs, not whether a zone is signed or has a DS"
 pdns-rec,dnssec-setting-introduced,validation,2016-07-08,not a default change (is_default_change false)

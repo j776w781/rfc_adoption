@@ -72,6 +72,7 @@ ALL_STABLE = "all stable public releases"
 FEATURE_SET = "x.y.0 feature releases"
 FEATURE_TAG = re.compile(r"v9\.\d+\.0")
 Q2_MIN_PLACEBOS = 24    # q2: placebo months outside the event's window needed for a test
+SENS_MIN = 12           # break sensitivity only: masking the .se/.nu break leaves 23 testable step months
 Q2_TESTS = ("step12", "transient12")
 TEST_ROLE = {"step12": "primary: departure from the pre-event trend",
              "transient3": "secondary: transient deviation, blind to a lasting step",
@@ -494,6 +495,22 @@ class Series:
         self.stat = {"transient3": window_stat(det, Q1_W), "transient12": window_stat(det, Q2_W),
                      "step12": step_stat(sh)}
 
+    def apply_break_mask(self) -> int:
+        """Set every event statistic to NaN whose window overlaps a measurement break of this source,
+        so break-affected events and placebos drop out. Returns the number of masked cells."""
+        n = 0
+        for br in MEASUREMENT_BREAKS:
+            if br["source"] != self.source:
+                continue
+            lo, hi = m2i(br["first"]) - 1 - self.start, m2i(br["last"]) - self.start
+            for key, (before, after) in STAT_SPAN.items():
+                arr = self.stat[key]
+                for k in range(len(arr)):
+                    if k - before <= hi and k + after - 1 >= lo and not math.isnan(arr[k]):
+                        arr[k] = np.nan
+                        n += 1
+        return n
+
     def idx(self, month_i: int) -> int:
         return month_i + self.lag - self.start
 
@@ -696,36 +713,45 @@ PREV_ROW_MAP = {
     "d15-dnssec-policy-default-ecdsap256": [
         (o, +1, "signing-default", "built-in dnssec-policy 'default' makes signing a one-line configuration "
                                    "with automatic key management") for o in PREV_OBS],
-    "d06-keygen-no-default-alg": [
-        (o, -1, "signing-default", "dnssec-keygen without -a now fails, so scripts that relied on the RSASHA1 "
-                                   "default stop producing keys") for o in ("dnskey_prev", "rrsig_prev")],
     "knot[1]@2.0.0": [
         (o, +1, "signing-default", "first built-in KASP policy: Knot generates and manages keys itself instead "
                                    "of needing keys made with another tool") for o in PREV_OBS],
     "knot[9]@2.7.5": [
         ("ds_prev", +1, "ds-automation", "a keymgr-generated KSK is ready at once, so DS submission can proceed "
-                                         "immediately")],
-    "knot[10]@2.8.0": [
-        ("ds_prev", -1, "ds-automation", "CDS/CDNSKEY published only during KSK submission instead of always, "
-                                         "fewer chances for a parent that scans CDS to add a DS")],
-    "knot[12]@3.0.2": [
-        (o, -1, "signing-default", "libdnssec refuses algorithms the system crypto policy disables, so RSASHA1 "
-                                   "zones on such systems can no longer be signed") for o in ("dnskey_prev", "rrsig_prev")],
+                                         "immediately; a weak effect, only for KSKs made by hand with keymgr")],
+    # NSD serves an ordinary DNSKEY RRset even without DNSSEC compiled in; only the RRSIGs it adds for
+    # a DO query depend on the build, so the NSD serving rows map to rrsig_prev only.
     "nsd[0]@2.0.0": [
-        (o, +1, "serving-default", "DNSSEC answer composition compiled in by default: signed zones are served "
-                                   "with their DNSKEY and RRSIG records") for o in ("dnskey_prev", "rrsig_prev")],
+        ("rrsig_prev", +1, "serving-default", "DNSSEC answer composition compiled in by default: RRSIGs are "
+                                              "added to answers for DO queries")],
     "nsd[1]@2.2.0": [
-        (o, -1, "serving-default", "DNSSEC compiled out by default on trunk") for o in ("dnskey_prev", "rrsig_prev")],
+        ("rrsig_prev", -1, "serving-default", "DNSSEC compiled out by default on trunk")],
     "nsd[2]@2.3.0": [
-        (o, +1, "serving-default", "DNSSEC compiled in by default again") for o in ("dnskey_prev", "rrsig_prev")],
+        ("rrsig_prev", +1, "serving-default", "DNSSEC compiled in by default again")],
     "nsd[5]@3.2.6": [
-        (o, +1, "serving-default", "--disable-dnssec removed: every NSD build serves DNSSEC") for o in
-        ("dnskey_prev", "rrsig_prev")],
+        ("rrsig_prev", +1, "serving-default", "--disable-dnssec removed: every NSD build serves DNSSEC")],
 }
+#: One rule for the "configuration now fails" class: a default that makes signing fail for some
+#: configuration shows up in prevalence only if operators then give up DNSSEC instead of fixing the
+#: configuration, which is not the adoption mechanism asked about. Every such row is excluded.
+_FAILS = ("configuration-now-fails class, excluded by one rule: the default makes signing fail for some "
+          "configurations; it would show in prevalence only if operators gave up DNSSEC rather than fix "
+          "the configuration")
 #: Candidate rows considered and left out, with the reason.
 PREV_EXCLUDED_ROW = {
     "d02-keygen-default-alg-rsasha1": "sets which algorithm dnssec-keygen uses when -a is omitted; keys still had "
                                       "to be made and a zone signed by hand",
+    "d06-keygen-no-default-alg": _FAILS + " (dnssec-keygen without -a fails)",
+    "knot[12]@3.0.2": _FAILS + " (RSASHA1 refused under a SHA-1-disabling crypto policy; its effect could not "
+                               "begin before RHEL 9, 2022-05)",
+    "knot[8]@2.7.0": _FAILS + " (RSA keys under 1024 bits rejected)",
+    "knot[15]@3.2.0": _FAILS + " (too-low rrsig-refresh makes zone signing fail)",
+    "pdns-auth[9]@4.0.0": _FAILS + " (addKey without a size throws for RSA)",
+    "l02-nsec3-max-iterations-50": _FAILS + " (dnssec-policy and signzone refuse iterations above 50)",
+    "knot[10]@2.8.0": "CDS/CDNSKEY narrowed from always to rollover: they are still published during KSK "
+                      "submission, when a parent adds the first DS, so the share of domains with a DS is not "
+                      "affected. Its mirror, Knot 2.5.0's default-always CDS publication, is recorded as "
+                      "support-added and is not in the normalised table; both are left out",
     "d17-nsec3param-default-in-policy": "changes the denial type of zones that are signed anyway",
     "d22-cdns-cdnskey-options": "not a default change: CDS and CDNSKEY publication was already on",
     "d08-rsamd5-removed": "removes an algorithm that no corpus zone uses as its only one",
@@ -743,6 +769,22 @@ PREV_EXCLUDED_ROW = {
     "knot[17]@3.4.0": "validation of the zone Knot signs; failing zones are refused, rare and not a default "
                       "to publish",
 }
+#: Measurement breaks in the forward prevalence series: months in which the measured population
+#: changed, not signing. A step or transient window overlapping [first-1, last] is break-affected.
+MEASUREMENT_BREAKS = [
+    {"source": "gov", "first": "2018-02", "last": "2018-03",
+     "description": ".gov NS denominator from 1,234 in 2018-01 to 5,553 in 2018-02; DS share 88.7% to 31.2%, "
+                    "then 21.3% as the mean daily share catches up. The measured population widened; signing "
+                    "did not collapse"},
+    {"source": "nu", "first": "2018-10", "last": "2019-02",
+     "description": ".nu NS denominator from 413,121 in 2018-09 to 363,900 in 2018-10 and 232,995 in 2019-02, "
+                    "-44%, while the DS count also fell, 127,794 to 92,722; DS share rose 33% to 39% as "
+                    "unsigned names left the measured set"},
+    {"source": "se", "first": "2018-10", "last": "2019-02",
+     "description": ".se NS denominator from 1,621,745 in 2018-09 to 1,338,823 in 2019-01; DS count and share "
+                    "dip, 44.98% in 2018-12 and 43.68% in 2019-01, back to 50.74% in 2019-02; signed zones dip "
+                    "too, 821,692 to 745,073"},
+]
 PREV_VALIDATOR_MECH = {"validation", "trust-anchor", "trust-anchor-5011"}
 
 
@@ -812,7 +854,7 @@ def check_prevalence(data) -> dict:
 # -------------------------------------------------------------------- q1 --
 
 
-def q1(rows, releases, data, family: str = "feature"):
+def q1(rows, releases, data, family: str = "feature", mask_breaks: bool = False):
     """family "feature": the observables each program's mapped rows touch. family "prevalence": the
     three prevalence observables for every program, whatever its rows."""
     by_prog = {}
@@ -840,6 +882,8 @@ def q1(rows, releases, data, family: str = "feature"):
             prog_tab["observables"][obs] = sorted(obs_map[obs])
             for corpus, src in corpora_for(obs):
                 s = Series(data, obs, corpus, src)
+                if mask_breaks and s.ok:
+                    s.apply_break_mask()
                 for test in Q1_TESTS:
                     key = (f"q1|{test}|{prog}|{obs}|{corpus}|{src}" if event_set == ALL_STABLE
                            else f"q1|{test}|{prog}|x.y.0|{obs}|{corpus}|{src}")
@@ -865,9 +909,10 @@ def q1(rows, releases, data, family: str = "feature"):
                     L = b - a + 1
                     in_win = [mm for mm in rel_months if a <= mm <= b and not math.isnan(s.at(test, mm))]
                     occ = len(in_win) / L
-                    if L < Q1_MIN_WINDOW or occ > Q1_MAX_OCC:
-                        why = (f"the testable window {i2m(a)}..{i2m(b)} is {L} months, fewer than {Q1_MIN_WINDOW}"
-                               if L < Q1_MIN_WINDOW else
+                    min_win = SENS_MIN if mask_breaks else Q1_MIN_WINDOW
+                    if L < min_win or occ > Q1_MAX_OCC:
+                        why = (f"the testable window {i2m(a)}..{i2m(b)} is {L} months, fewer than {min_win}"
+                               if L < min_win else
                                f"release months fill {len(in_win)} of the {L} months of the testable window "
                                f"{i2m(a)}..{i2m(b)}, more than {Q1_MAX_OCC:.0%}; a shifted schedule then covers "
                                f"almost the same months and the test has no contrast")
@@ -994,7 +1039,7 @@ def bh_q(ps: list) -> list:
     return out.tolist()
 
 
-def q2(rows, data, family: str = "feature"):
+def q2(rows, data, family: str = "feature", mask_breaks: bool = False):
     mapped = mapping_table(rows)[0] if family == "feature" else prevalence_mapping(rows)[0]
     out = []
     series_cache = {}
@@ -1004,6 +1049,8 @@ def q2(rows, data, family: str = "feature"):
             sk = (m["observable"], corpus, src)
             if sk not in series_cache:
                 series_cache[sk] = Series(data, *sk)
+                if mask_breaks and series_cache[sk].ok:
+                    series_cache[sk].apply_break_mask()
             s = series_cache[sk]
             for test in Q2_TESTS:
                 base = {"program": m["program"], "row_id": m["row_id"], "test": test, "role": TEST_ROLE[test],
@@ -1028,10 +1075,11 @@ def q2(rows, data, family: str = "feature"):
                                           f"{i2m(e + s.lag - before)}..{i2m(e + s.lag + after - 1)}"})
                     continue
                 tm = s.testable_months(test)
-                if len(tm) < Q2_MIN_PLACEBOS:
+                min_tm = SENS_MIN if mask_breaks else Q2_MIN_PLACEBOS
+                if len(tm) < min_tm:
                     out.append({**base, "status": "no test", "testable_months_in_series": int(len(tm)),
                                 "reason": f"only {len(tm)} testable months in this series, fewer than "
-                                          f"{Q2_MIN_PLACEBOS}"})
+                                          f"{min_tm}"})
                     continue
                 elig = placebo_months(tm, e, 0, 0)          # primary: every testable month but the event's
                 far = placebo_months(tm, e, before, after)   # sensitivity: outside the event's window
@@ -1166,17 +1214,17 @@ def _step_test_at(st: np.ndarray, k: int, rng, nonoverlap: bool) -> tuple | None
     return float(st[k]), pct_rank(null, st[k]), float(lo), float(hi)
 
 
-def detection_power(data) -> dict:
+def detection_power(data, cases=None) -> dict:
     """Inject a lasting step of h pp into a real series from the event on and recompute the whole
     step12 test, null included. Reported at one named event month, and as the share of all eligible
     event months of the series at which the injected step lands above the 90% band."""
     rows, smallest = [], {}
-    for obs, corpus, src, month in POWER_CASES:
+    for obs, corpus, src, month in (POWER_CASES if cases is None else cases):
         s = Series(data, obs, corpus, src)
         x = s.share.to_numpy(dtype=float)
         base_tm = np.flatnonzero(~np.isnan(s.stat["step12"]))
         name = f"{obs} {src_label(src)}"
-        for h in POWER_STEPS:
+        for h in (POWER_STEPS if cases is None else PREV_POWER_STEPS.get(name, POWER_STEPS)):
             k = s.idx(m2i(month))
             y = x.copy()
             y[k:] += h
@@ -1772,6 +1820,118 @@ def coverage_facts(data: Data) -> dict:
     return f
 
 
+# ------------------------------------------- prevalence: units, breaks, power --
+
+PREV_POWER_CASES = [("ds_prev", "forward", "se", "2021-06"), ("ds_prev", "forward", "nu", "2021-06"),
+                    ("ds_prev", "reverse_panel", PANEL, "2018-06")]
+#: the panel's DS share is 0.1 to 0.9%, so its injected steps are hundredths of a point
+PREV_POWER_STEPS = {"ds_prev .se": POWER_STEPS, "ds_prev .nu": POWER_STEPS,
+                    "ds_prev panel": (0, 0.02, 0.05, 0.1, 0.2)}
+
+
+def binom_tail(k: int, n: int, p: float) -> float:
+    return float(sum(math.comb(n, i) * p ** i * (1 - p) ** (n - i) for i in range(k, n + 1)))
+
+
+def q1_unit(summ: list, test: str, rate: float, drop_sources=()) -> dict:
+    """Program x corpus as the unit, one series per unit: ds_prev, the only prevalence series defined in
+    every corpus. Every stable release as the event set."""
+    t = [r for r in summ if r["status"] == "tested" and r["test"] == test and r["event_set"] == ALL_STABLE
+         and r["observable"] == "ds_prev" and r["source"] not in drop_sources]
+    k = sum(1 for r in t if r["beats_chance_mean"])
+    return {"unit": "program x corpus, ds_prev", "units": len(t), "outside_90pct_null": k,
+            "rate": rate, "expected": r6(rate * len(t)), "p_at_least_observed": r6(binom_tail(k, len(t), rate)),
+            "units_outside": sorted(f"{r['program']} {src_label(r['source'])}" for r in t if r["beats_chance_mean"]),
+            "dropped_sources": list(drop_sources)}
+
+
+def q2_unit(events: list, test: str = "step12", drop_sources=()) -> dict:
+    """Row x corpus as the unit, one series per unit: ds_prev where the row maps to it, else dnskey_prev,
+    else rrsig_prev. Expected count under the discrete placebo null."""
+    t = [e for e in events if e["status"] == "tested" and e["test"] == test and e["source"] not in drop_sources]
+    pick = {}
+    for e in t:
+        key = (e["row_id"], e["source"])
+        if key not in pick or PREV_OBS.index(e["observable"]) < PREV_OBS.index(pick[key]["observable"]):
+            pick[key] = e
+    units = [pick[k] for k in sorted(pick)]
+    probs = [discrete_outside_prob(u["placebo_months"]) for u in units]
+    k = sum(1 for u in units if u["outside_90_band"])
+    return {"unit": "row x corpus, ds_prev else dnskey_prev else rrsig_prev", "units": len(units),
+            "outside_90_band": k, "expected_discrete": r6(sum(probs)),
+            "p_at_least_observed": r6(poisson_binomial_tail(probs, k)),
+            "in_expected_direction": sum(1 for u in units if u["outside_90_band"] and u["in_expected_direction"]),
+            "units_outside": [f"{u['row_id']} {src_label(u['source'])} {u['observable']}" for u in units
+                              if u["outside_90_band"]],
+            "dropped_sources": list(drop_sources)}
+
+
+def test_key(r: dict) -> tuple:
+    return tuple(r.get(k) for k in ("event_set", "program", "row_id", "test", "observable", "corpus", "source"))
+
+
+def break_changes(base: list, masked: list) -> dict:
+    """Tests whose result changes when break-affected windows are dropped."""
+    mk = {test_key(r): r for r in masked}
+    flag = "beats_chance_mean" if base and "beats_chance_mean" in {k for r in base for k in r} else "outside_90_band"
+    lost, flipped = [], []
+    for r in base:
+        if r["status"] != "tested":
+            continue
+        m = mk[test_key(r)]
+        name = " ".join(str(x) for x in test_key(r) if x not in (None, ALL_STABLE))
+        if m["status"] != "tested":
+            lost.append({"test": name, "was_outside": bool(r.get(flag))})
+        elif bool(m.get(flag)) != bool(r.get(flag)):
+            flipped.append({"test": name, "was_outside": bool(r.get(flag)), "now_outside": bool(m.get(flag)),
+                            "percentile_before": r["percentile"], "percentile_masked": m["percentile"]})
+    per_test = {}
+    for test in sorted({r["test"] for r in base}):
+        b = [r for r in base if r["test"] == test and r["status"] == "tested" and r.get("event_set", ALL_STABLE) == ALL_STABLE]
+        mm = [r for r in masked if r["test"] == test and r["status"] == "tested" and r.get("event_set", ALL_STABLE) == ALL_STABLE]
+        per_test[test] = {"tested": len(b), "outside": sum(bool(r.get(flag)) for r in b),
+                          "tested_masked": len(mm), "outside_masked": sum(bool(r.get(flag)) for r in mm)}
+    return {"per_test": per_test, "untestable_when_masked": lost, "outside_flag_changes": flipped}
+
+
+def mark_dip_reversals(spikes: list) -> int:
+    """Flag a spike that reverses an opposite spike of the same series starting 1 or 2 months before
+    and at least half its size: the second half of a one- or two-month measurement dip."""
+    n = 0
+    for sp in spikes:
+        sp["reverses_dip_within_2m"] = False
+        for o in spikes:
+            if (o is not sp and o["observable"] == sp["observable"] and o["source"] == sp["source"]
+                    and o["direction"] == -sp["direction"] and 1 <= m2i(sp["start"]) - m2i(o["start"]) <= 2
+                    and abs(o["delta"]) >= 0.5 * abs(sp["delta"])):
+                sp["reverses_dip_within_2m"] = True
+                n += 1
+                break
+    return n
+
+
+def step_bands(data) -> list:
+    """The step12 90% band of each prevalence series over its testable months, with and without breaks."""
+    out = []
+    for obs in PREV_OBS:
+        for corpus, src in corpora_for(obs):
+            s = Series(data, obs, corpus, src)
+            if not s.ok:
+                continue
+            v = s.stat["step12"][~np.isnan(s.stat["step12"])]
+            if len(v) == 0:
+                continue
+            row = {"observable": obs, "source": src, "testable_months": int(len(v)),
+                   "band_lo": r6(np.percentile(v, 5)), "band_hi": r6(np.percentile(v, 95))}
+            s.apply_break_mask()
+            vm = s.stat["step12"][~np.isnan(s.stat["step12"])]
+            row.update({"testable_months_breaks_masked": int(len(vm)),
+                        "band_lo_breaks_masked": r6(np.percentile(vm, 5)) if len(vm) else None,
+                        "band_hi_breaks_masked": r6(np.percentile(vm, 95)) if len(vm) else None})
+            out.append(row)
+    return out
+
+
 def save(doc: dict):
     JSON_OUT.write_text(json.dumps(doc, indent=1, sort_keys=False, default=r6) + "\n", "utf-8")
 
@@ -1845,6 +2005,7 @@ def main(argv=None) -> int:
                          "Phase 4 timing_* columns, which already apply first_public_tag",
     }
     doc["notes"]["prevalence_check"] = check_prevalence(data)   # raises on any mismatch
+    doc["notes"]["measurement_breaks"] = MEASUREMENT_BREAKS
     p_inc, p_exc = prevalence_mapping(rows)
     doc["observable_mapping"]["prevalence"] = {
         "observables": {k: {"label": v["label"], "forward": _spec_text(v["fwd"]),
@@ -1865,6 +2026,19 @@ def main(argv=None) -> int:
         pres, psumm, pper = q1(rows, releases, data, "prevalence")
         res["prevalence"] = {"observables": list(PREV_OBS), "per_program": pres["per_program"],
                              "aggregate": pres["aggregate"]}
+        _, psumm_m, _ = q1(rows, releases, data, "prevalence", mask_breaks=True)
+        _, fsumm_m, _ = q1(rows, releases, data, "feature", mask_breaks=True)
+        rate = calibration()["q1_coverage_window_shift_rejection_rate"]
+        pres["aggregate"]["unit_program_x_corpus"] = {
+            "note": ("headline unit: DS, DNSKEY and RRSIG prevalence are nearly one series, so each program x "
+                     "corpus pair is counted once, on ds_prev; the per-test counts above are secondary"),
+            "step12": q1_unit(psumm, "step12", rate),
+            "step12_without_gov": q1_unit(psumm, "step12", rate, ("gov",)),
+            "step12_breaks_masked": q1_unit(psumm_m, "step12", rate),
+            "transient3": q1_unit(psumm, "transient3", 0.10),
+            "transient3_breaks_masked": q1_unit(psumm_m, "transient3", 0.10)}
+        res["prevalence"]["break_sensitivity"] = break_changes(psumm, psumm_m)
+        res["break_sensitivity_feature"] = break_changes(summ, fsumm_m)
         save(doc)
         append_csv("q1", psumm)
         append_csv("q1_releases", pper)
@@ -1878,8 +2052,22 @@ def main(argv=None) -> int:
         write_csv("power", res["detection_power"]["rows"])
         pres, precs = q2(rows, data, "prevalence")
         res["prevalence"] = {k: v for k, v in pres.items() if k not in ("forward_note", "verifier_focus_events")}
+        _, precs_m = q2(rows, data, "prevalence", mask_breaks=True)
+        _, frecs_m = q2(rows, data, "feature", mask_breaks=True)
+        res["prevalence"]["unit_row_x_corpus"] = {
+            "note": ("headline unit: one test per row x corpus, on ds_prev where the row maps to it; the "
+                     "per-test counts in summary are secondary"),
+            "step12": q2_unit(precs), "step12_without_gov": q2_unit(precs, drop_sources=("gov",)),
+            "step12_breaks_masked": q2_unit(precs_m),
+            "transient12": q2_unit(precs, "transient12"),
+            "transient12_breaks_masked": q2_unit(precs_m, "transient12")}
+        res["prevalence"]["break_sensitivity"] = break_changes(precs, precs_m)
+        res["prevalence"]["detection_power"] = detection_power(data, PREV_POWER_CASES)
+        res["prevalence"]["step12_bands"] = step_bands(data)
+        res["break_sensitivity_feature"] = break_changes(recs, frecs_m)
         save(doc)
         append_csv("q2", precs)
+        write_csv("power_prevalence", res["prevalence"]["detection_power"]["rows"])
         print("q2 prevalence", {k: (v["n_tests"], v["n_outside_band"]) for k, v in pres["summary"].items()})
         print("q2 saved", {k: (v["n_tests"], v["n_outside_band"]) for k, v in res["summary"].items()})
     if "q3" in todo:
@@ -1896,16 +2084,24 @@ def main(argv=None) -> int:
         write_csv("q4_alignment", res["alignment_vs_chance"])
         pres, precs = q4(rows, releases, data, "prevalence", n0=len(recs))
         al = pres["alignment_vs_chance"]
+        append_csv("q4", precs)
+        append_csv("q4_alignment", al)
+        n_rev = mark_dip_reversals(precs)
+        keep = [x for x in precs if not x["reverses_dip_within_2m"]]
         res["prevalence"] = {"spikes": pres["spikes"], "chance": pres["chance"], "alignment_vs_chance": al,
                              "summary": {"spikes": len(precs),
                                          "aligned_within_3m": int(sum(x["relevant_default_within_3m"] for x in precs)),
                                          "expected_aligned": r6(sum(float(x["chance_relevant_default_within_3m"])
                                                                     for x in precs)),
                                          "cells_beating_chance": [f"{x['observable']} {x['corpus']} {x['direction']}"
-                                                                  for x in al if x["beats_chance"]]}}
+                                                                  for x in al if x["beats_chance"]],
+                                         "dip_reversals": n_rev,
+                                         "spikes_excluding_dip_reversals": len(keep),
+                                         "aligned_excluding_dip_reversals":
+                                             int(sum(x["relevant_default_within_3m"] for x in keep)),
+                                         "expected_excluding_dip_reversals":
+                                             r6(sum(float(x["chance_relevant_default_within_3m"]) for x in keep))}}
         save(doc)
-        append_csv("q4", precs)
-        append_csv("q4_alignment", al)
         print("q4 saved", len(recs), "spikes")
     if "q5" in todo:
         res, recs = q5(data)
