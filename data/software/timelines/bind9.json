@@ -57169,6 +57169,1665 @@
    "latency_days": -12,
    "differs_from_inventory": false,
    "verify": "git -C out/software_repos/bind9.git show v9.20.23:doc/changelog/changelog-9.20.23.rst | grep -n -F CVE-2026-5950"
+  },
+  {
+   "cve": "CVE-2006-5989",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Fix off-by-one bug in ISC SPNEGO implementation",
+   "inventory_fix_release": "9.11.29",
+   "inventory_fix_sha": "abed9404d11049a9e6db5fcf9c13b986f6bfe5f2",
+   "candidates": {
+    "commit-containment": "v9.16.12"
+   },
+   "first_stable_tag": "v9.16.12",
+   "basis": "commit-containment",
+   "commits": [
+    {
+     "sha": "abed9404d11049a9e6db5fcf9c13b986f6bfe5f2",
+     "short": "abed9404d1",
+     "committed": "2021-02-17T21:46:14Z",
+     "subject": "Fix off-by-one bug in ISC SPNEGO implementation",
+     "source": "grep"
+    },
+    {
+     "sha": "b04cb88462863d762093760ffcfe1946200e30f5",
+     "short": "b04cb88462",
+     "committed": "2021-02-17T21:36:08Z",
+     "subject": "Fix off-by-one bug in ISC SPNEGO implementation",
+     "source": "grep"
+    },
+    {
+     "sha": "28d78beb6ce59aecbf58b5c0466972e4ac5c1636",
+     "short": "28d78beb6c",
+     "committed": "2021-02-03T22:26:40Z",
+     "subject": "Fix off-by-one bug in ISC SPNEGO implementation",
+     "source": "grep"
+    },
+    {
+     "sha": "9ae91744a4938049246b269476280c8fdb809ead",
+     "short": "9ae91744a4",
+     "committed": "2021-02-03T22:20:42Z",
+     "subject": "Fix off-by-one bug in ISC SPNEGO implementation",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 4,
+   "attribution": "commit-verified: fix in BIND's own lib/dns/spnego.c (der_get_oid malloc((len + 1) ...)); commit messages (9ae91744a4 and cherry-picks) name CVE-2006-5989, but CHANGES 5562 in v9.16.12 and v9.11.28 names CVE-2020-8625 [GL #2354], so no CVE-2006-5989 text exists in CHANGES/notes; the mod_auth_kerb flaw was never fixed in BIND's SPNEGO copy until 2021",
+   "same_day_tags": [
+    "v9.16.12",
+    "v9.11.28"
+   ],
+   "earliest_tag_per_branch": {
+    "9.16": "v9.16.12",
+    "9.11": "v9.11.28"
+   },
+   "fix_release_date": "2021-02-04",
+   "fix_release_commit": "aeb943df66f7db58fa7ff814a84fd25b8a6c8379",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git log --all -F --grep=CVE-2006-5989 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 9ae91744a4 | grep -x v9.16.12; git -C out/software_repos/bind9.git show v9.16.12:CHANGES | grep -n -i -A1 spnego   # CHANGES 5562 names CVE-2020-8625, not CVE-2006-5989; git -C out/software_repos/bind9.git log -1 --format=%cI v9.16.12^{commit}"
+  },
+  {
+   "cve": "CVE-2015-3193",
+   "nvd_published": null,
+   "description": "No NVD description in the inventory. Fix commit 559236b5e4: 'Update allowed OpenSSL versions as named is potentially vulnerable to CVE-2015-3193' (CHANGES 4270).",
+   "inventory_fix_release": null,
+   "inventory_fix_sha": "559236b5e4444a6d6f99d99c9446c52dcbc6dd22",
+   "candidates": {},
+   "first_stable_tag": null,
+   "basis": null,
+   "commits": [
+    {
+     "sha": "559236b5e4444a6d6f99d99c9446c52dcbc6dd22",
+     "short": "559236b5e4",
+     "committed": "2015-12-03T23:46:37Z",
+     "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
+     "source": "grep"
+    },
+    {
+     "sha": "ab89bacceed30388eaf6834d5a09466f7b3f7db5",
+     "short": "ab89baccee",
+     "committed": "2015-12-03T23:39:54Z",
+     "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
+     "source": "grep"
+    },
+    {
+     "sha": "47ef11c1b2790429ba11de290982b5ae0f36aeab",
+     "short": "47ef11c1b2",
+     "committed": "2015-12-03T23:36:42Z",
+     "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
+     "source": "grep"
+    },
+    {
+     "sha": "9168a218714110f1320c15ff0ef6b7e4c5b37cf0",
+     "short": "9168a21871",
+     "committed": "2015-12-03T23:29:13Z",
+     "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
+     "source": "grep"
+    },
+    {
+     "sha": "10d7ab44cc72170c527dde8cc9e049e046342769",
+     "short": "10d7ab44cc",
+     "committed": "2015-12-03T23:28:22Z",
+     "subject": "4270.   [security]      Update allowed OpenSSL versions as named is                         potentially vulnerable to CVE-2015-3193.",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 5,
+   "status": "not-applicable-or-not-bind9-release",
+   "attribution": "n/a",
+   "reason": "CVE-2015-3193 is an OpenSSL bug (BN_mod_exp carry). BIND's only change (CHANGES 4270, commit 559236b5e4 and cherry-picks) edits configure / configure.in to widen the OpenSSL version check (accept >= 1.0.2e, reject 1.0.2 through 1.0.2d, and similar for 1.0.1); no BIND product source file (lib/, bin/) changed. Dependency version gate only, so not a BIND 9 code fix. Tags carrying CHANGES 4270 (earliest v9.9.8-P2) are recorded in verify for reference.",
+   "fix_release_date": null,
+   "latency_days": null,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show 559236b5e4 --stat --format=%s   # CHANGES, configure, configure.in only; git -C out/software_repos/bind9.git show 559236b5e4 -- configure.in   # OpenSSL version gate; git -C out/software_repos/bind9.git log --all -F --grep=CVE-2015-3193 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git show v9.9.8-P2:CHANGES | grep -n -F CVE-2015-3193; git -C out/software_repos/bind9.git log -1 --format=%cI v9.9.8-P2^{commit}"
+  },
+  {
+   "cve": "CVE-2024-0760",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Malicious DNS client that sends many queries over",
+   "inventory_fix_release": "9.18.28",
+   "inventory_fix_sha": "3492c0deda5091a582ae46b60613ccfdb0e950b1",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.0",
+    "commit-containment": "v9.20.0",
+    "kept-changelog-entry": "v9.20.0"
+   },
+   "first_stable_tag": "v9.20.0",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "5a688130e543912ba2e6ae50435d251d0273a051",
+     "short": "5a688130e5",
+     "committed": "2025-01-31T11:27:51Z",
+     "subject": "chg: nil: Update CVE checklist",
+     "source": "grep"
+    },
+    {
+     "sha": "90fbe91997ac5ffe9f61979339d0669bd7320aa0",
+     "short": "90fbe91997",
+     "committed": "2024-12-06T09:26:40Z",
+     "subject": "Fix nsupdate hang when processing a large update",
+     "source": "grep"
+    },
+    {
+     "sha": "a7b291adc76f81f238974055f19d76058c16d3fd",
+     "short": "a7b291adc7",
+     "committed": "2024-12-06T08:31:19Z",
+     "subject": "Fix nsupdate hang when processing a large update",
+     "source": "grep"
+    },
+    {
+     "sha": "aa24b77d8ba9ba2c55b71f18f54e19f71a200491",
+     "short": "aa24b77d8b",
+     "committed": "2024-12-05T14:40:48Z",
+     "subject": "Fix nsupdate hang when processing a large update",
+     "source": "grep"
+    },
+    {
+     "sha": "ec3e15da3aa553def575addfcf84e821de0af120",
+     "short": "ec3e15da3a",
+     "committed": "2024-07-03T15:51:09Z",
+     "subject": "Merge branch 'tcp-reset-connection-on-failed-send-9.18' into 'v9.18.28-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "99309ce8aeb6fce7a6cbbb99cdea87d1491d4042",
+     "short": "99309ce8ae",
+     "committed": "2024-07-03T15:50:58Z",
+     "subject": "Merge branch 'tcp-reset-connection-on-failed-send' into 'v9.20.0-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "b8522e5b8eb039a0a9a86824e569b8ec22d1f051",
+     "short": "b8522e5b8e",
+     "committed": "2024-06-25T08:54:47Z",
+     "subject": "Merge branch 'tcp-do-not-unthrottle-on_isc_nm_read' into 'v9.20.0-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "90be23f030556009e265c99cf11188e47c4b7cf1",
+     "short": "90be23f030",
+     "committed": "2024-06-25T08:48:37Z",
+     "subject": "Merge branch 'tcp-do-not-unthrottle-on_isc_nm_read-v9.18' into 'v9.18.28-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "3492c0deda5091a582ae46b60613ccfdb0e950b1",
+     "short": "3492c0deda",
+     "committed": "2024-06-10T16:47:06Z",
+     "subject": "Merge branch '4481-security-tcp-flood-9.18' into 'v9.18.28-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "0b44383c5b8694e5e415df1752f785f6a2e65bfc",
+     "short": "0b44383c5b",
+     "committed": "2024-06-10T14:53:12Z",
+     "subject": "Merge branch '4481-security-tcp-flood' into 'v9.20.0-release'",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 10,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.0",
+    "v9.18.28"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.0",
+    "9.18": "v9.18.28"
+   },
+   "fix_release_date": "2024-07-08",
+   "fix_release_commit": "14bbdfc7b9db0870a0b8941ca8812d9983fdba1a",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.0:CHANGES | grep -n -F CVE-2024-0760   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2024-0760 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 5a688130e5 | grep -x v9.20.0; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.0^{commit}"
+  },
+  {
+   "cve": "CVE-2024-11187",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Limit the additional processing for large RDATA sets. ``4d3d17c344f``",
+   "inventory_fix_release": "9.18.33",
+   "inventory_fix_sha": "c6e6a7af8ac6b575dd3657b0f5cf4248d734c2b0",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.5",
+    "commit-containment": "v9.20.5",
+    "kept-changelog-entry": "v9.20.5"
+   },
+   "first_stable_tag": "v9.20.5",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "ddef4aa7f01ef632138c5e5dc74dc550c65ce34d",
+     "short": "ddef4aa7f0",
+     "committed": "2025-01-20T16:17:36Z",
+     "subject": "[9.11] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets",
+     "source": "grep"
+    },
+    {
+     "sha": "4aa5ace95d1742f856ef2e9e5b590127d17a6fdb",
+     "short": "4aa5ace95d",
+     "committed": "2025-01-20T16:17:08Z",
+     "subject": "[9.16] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets",
+     "source": "grep"
+    },
+    {
+     "sha": "c6e6a7af8ac6b575dd3657b0f5cf4248d734c2b0",
+     "short": "c6e6a7af8a",
+     "committed": "2025-01-15T13:27:08Z",
+     "subject": "[9.18] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets",
+     "source": "grep"
+    },
+    {
+     "sha": "4d3d17c344f8b26ae6a313773aff07ab79c30bda",
+     "short": "4d3d17c344",
+     "committed": "2025-01-15T13:08:50Z",
+     "subject": "[9.20] [CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets",
+     "source": "grep"
+    },
+    {
+     "sha": "4d054cca7a006edbaafffa0aa2ebe4b47fb8db35",
+     "short": "4d054cca7a",
+     "committed": "2025-01-15T11:56:06Z",
+     "subject": "[CVE-2024-11187] sec: usr: Limit the additional processing for large RDATA sets",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 5,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.5",
+    "v9.18.33"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.5",
+    "9.18": "v9.18.33"
+   },
+   "fix_release_date": "2025-01-20",
+   "fix_release_commit": "5464a5d46ad245413185cfd3cd612c12fab2317b",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.5:doc/changelog/changelog-9.20.5.rst | grep -n -F CVE-2024-11187   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2024-11187 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains ddef4aa7f0 | grep -x v9.20.5; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.5^{commit}"
+  },
+  {
+   "cve": "CVE-2024-12705",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] DNS-over-HTTP(s) flooding fixes. ``51900adf29c``",
+   "inventory_fix_release": "9.18.33",
+   "inventory_fix_sha": "e733e624147155d6cbee7f0f150c79c7ac6b54bb",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.5",
+    "commit-containment": "v9.20.5",
+    "kept-changelog-entry": "v9.20.5"
+   },
+   "first_stable_tag": "v9.20.5",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "8cc425a5bb0fc0af1aa5226bdef14bbe4cdd7662",
+     "short": "8cc425a5bb",
+     "committed": "2025-03-03T10:47:50Z",
+     "subject": "[9.20] fix: dev: Post [CVE-2024-12705] Performance Drop Fixes, Part 2",
+     "source": "grep"
+    },
+    {
+     "sha": "e811f444b718c361f7bb256a4a07669b68f04f73",
+     "short": "e811f444b7",
+     "committed": "2025-03-03T10:43:50Z",
+     "subject": "[9.18] fix: dev: Post [CVE-2024-12705] Performance Drop Fixes, Part 2",
+     "source": "grep"
+    },
+    {
+     "sha": "c8104daf8deba370630c197d7d9b63da4010843e",
+     "short": "c8104daf8d",
+     "committed": "2025-03-03T10:10:33Z",
+     "subject": "fix: dev: Post [CVE-2024-12705] Performance Drop Fixes, Part 2",
+     "source": "grep"
+    },
+    {
+     "sha": "9d4aa15c1f3367cca361656f20aef457a3b6e5ee",
+     "short": "9d4aa15c1f",
+     "committed": "2025-02-19T19:28:34Z",
+     "subject": "[9.20] fix: dev: Post [CVE-2024-12705] Performance Drop Fixes",
+     "source": "grep"
+    },
+    {
+     "sha": "8d96ff01d47df83942bdadc7ab21ea524f69c4eb",
+     "short": "8d96ff01d4",
+     "committed": "2025-02-19T18:59:51Z",
+     "subject": "[9.18] fix: dev: Post [CVE-2024-12705] Performance Drop Fixes",
+     "source": "grep"
+    },
+    {
+     "sha": "3033d127d2fa57de8b3907d90108ef0c007da85a",
+     "short": "3033d127d2",
+     "committed": "2025-02-19T16:39:36Z",
+     "subject": "fix: dev: Post [CVE-2024-12705] Performance Drop Fixes",
+     "source": "grep"
+    },
+    {
+     "sha": "e733e624147155d6cbee7f0f150c79c7ac6b54bb",
+     "short": "e733e62414",
+     "committed": "2025-01-15T16:03:28Z",
+     "subject": "[9.18] [CVE-2024-12705] sec: usr: DNS-over-HTTP(s) flooding fixes",
+     "source": "grep"
+    },
+    {
+     "sha": "51900adf29c57b65185bc1367360375c0939e036",
+     "short": "51900adf29",
+     "committed": "2025-01-15T15:40:42Z",
+     "subject": "[9.20] [CVE-2024-12705] sec: usr: DNS-over-HTTP(s) flooding fixes",
+     "source": "grep"
+    },
+    {
+     "sha": "bddaff32104aa1163c5787bce35b58fe7dc27e85",
+     "short": "bddaff3210",
+     "committed": "2025-01-15T14:42:44Z",
+     "subject": "[CVE-2024-12705] sec: usr: DNS-over-HTTP(s) flooding fixes",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 9,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.5",
+    "v9.18.33"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.5",
+    "9.18": "v9.18.33"
+   },
+   "fix_release_date": "2025-01-20",
+   "fix_release_commit": "5464a5d46ad245413185cfd3cd612c12fab2317b",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.5:doc/changelog/changelog-9.20.5.rst | grep -n -F CVE-2024-12705   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2024-12705 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 8cc425a5bb | grep -x v9.20.5; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.5^{commit}"
+  },
+  {
+   "cve": "CVE-2024-1737",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Excessively large rdatasets can slow down database",
+   "inventory_fix_release": "9.18.28",
+   "inventory_fix_sha": "050a88898a4d88267b85b39f9bdceeaa8f4855bc",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.0",
+    "commit-containment": "v9.20.0",
+    "kept-changelog-entry": "v9.20.0"
+   },
+   "first_stable_tag": "v9.20.0",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "51f86ded38ab7e72f90f630ea4df091cf1acff13",
+     "short": "51f86ded38",
+     "committed": "2024-07-24T11:14:10Z",
+     "subject": "[9.16][CVE-2024-1737 (part 2)] Be smarter about refusing to add many RR types to the database",
+     "source": "grep"
+    },
+    {
+     "sha": "f8e5f90aad3f741d2ecc163f50e7dd1a019d24f1",
+     "short": "f8e5f90aad",
+     "committed": "2024-07-24T10:10:27Z",
+     "subject": "[9.11][CVE-2024-1737 (part 2)] Be smarter about refusing to add many RR types to the database",
+     "source": "grep"
+    },
+    {
+     "sha": "5360c90612abf51deb4a80b30e1da84fd61212a5",
+     "short": "5360c90612",
+     "committed": "2024-07-24T10:09:58Z",
+     "subject": "[9.16][CVE-2024-1737] Add a limit to the number of RRs in RRSets",
+     "source": "grep"
+    },
+    {
+     "sha": "5f25fd9462437e5f954627977785678f82dbcedb",
+     "short": "5f25fd9462",
+     "committed": "2024-07-24T08:55:54Z",
+     "subject": "[9.11][CVE-2024-1737] Add a limit to the number of RRs in RRSets",
+     "source": "grep"
+    },
+    {
+     "sha": "050a88898a4d88267b85b39f9bdceeaa8f4855bc",
+     "short": "050a88898a",
+     "committed": "2024-07-02T11:05:57Z",
+     "subject": "Merge branch '3405-security-limit-the-number-of-resource-records-in-rrset-nxdomain-9.18' into 'v9.18.28-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "92a73bca2d0140feb9bad334cd13dfee25388341",
+     "short": "92a73bca2d",
+     "committed": "2024-07-02T11:05:37Z",
+     "subject": "Merge branch '3405-security-limit-the-number-of-resource-records-in-rrset-nxdomain' into 'v9.20.0-release'",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 6,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.0",
+    "v9.18.28"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.0",
+    "9.18": "v9.18.28"
+   },
+   "fix_release_date": "2024-07-08",
+   "fix_release_commit": "14bbdfc7b9db0870a0b8941ca8812d9983fdba1a",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.0:CHANGES | grep -n -F CVE-2024-1737   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2024-1737 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 51f86ded38 | grep -x v9.20.0; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.0^{commit}"
+  },
+  {
+   "cve": "CVE-2024-1975",
+   "nvd_published": "2024-07-23",
+   "description": "If a server hosts a zone containing a \"KEY\" Resource Record, or a resolver DNSSEC-validates a \"KEY\" Resource Record from a DNSSEC-signed domain in cache, a client can exhaust resolver CPU resources by sending a stream of SIG(0) signed requests.\nThis ",
+   "inventory_fix_release": "9.18.28",
+   "inventory_fix_sha": "1e6cf868dd01c1979bf83d2151e3dfe53fcf8e60",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.0",
+    "commit-containment": "v9.20.0",
+    "kept-changelog-entry": "v9.20.0"
+   },
+   "first_stable_tag": "v9.20.0",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "7933d0dcd8e4adb5670ded09165aa5c87c82ec72",
+     "short": "7933d0dcd8",
+     "committed": "2024-07-24T11:51:02Z",
+     "subject": "[9.16] [CVE-2024-1975] Remove support for SIG(0) message verification",
+     "source": "grep"
+    },
+    {
+     "sha": "225f2861920b8f8d42a0ea6c34dd1faa93aa8726",
+     "short": "225f286192",
+     "committed": "2024-07-24T11:14:16Z",
+     "subject": "[9.11] [CVE-2024-1975] Remove support for SIG(0) message verification",
+     "source": "grep"
+    },
+    {
+     "sha": "1e6cf868dd01c1979bf83d2151e3dfe53fcf8e60",
+     "short": "1e6cf868dd",
+     "committed": "2024-06-10T17:17:52Z",
+     "subject": "Merge branch 'security-4480-drop-sig0-support' into 'v9.18.28-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "b2cfdba56536baf9dd53eadbdce8b54e11d7dc91",
+     "short": "b2cfdba565",
+     "committed": "2024-06-10T15:44:34Z",
+     "subject": "Merge branch '4480-sig0-can-be-used-to-exhaust-cpu-resources-v6' into 'v9.20.0-release'",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 4,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.0",
+    "v9.18.28"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.0",
+    "9.18": "v9.18.28"
+   },
+   "fix_release_date": "2024-07-08",
+   "fix_release_commit": "14bbdfc7b9db0870a0b8941ca8812d9983fdba1a",
+   "latency_days": -15,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.0:CHANGES | grep -n -F CVE-2024-1975   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2024-1975 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 7933d0dcd8 | grep -x v9.20.0; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.0^{commit}"
+  },
+  {
+   "cve": "CVE-2024-4076",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] qctx-zversion was not being cleared when it should have",
+   "inventory_fix_release": "9.18.28",
+   "inventory_fix_sha": "5b83419fa9789ca9723a5b50edbd8a9aa70629f5",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.0",
+    "commit-containment": "v9.20.0",
+    "kept-changelog-entry": "v9.20.0"
+   },
+   "first_stable_tag": "v9.20.0",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "6fceea4244034ba2b310aa2b1af15c8f4fe7ace6",
+     "short": "6fceea4244",
+     "committed": "2024-07-24T12:43:19Z",
+     "subject": "[9.16] [CVE-2024-4076] serve-stale zversion crash",
+     "source": "grep"
+    },
+    {
+     "sha": "5b83419fa9789ca9723a5b50edbd8a9aa70629f5",
+     "short": "5b83419fa9",
+     "committed": "2024-06-10T17:27:54Z",
+     "subject": "Merge branch '4507-confidential-clear-zversion-v9_18' into 'v9.18.28-release'",
+     "source": "grep"
+    },
+    {
+     "sha": "f149ecc81a34006ade2a02d1936ffbf7b1e45b12",
+     "short": "f149ecc81a",
+     "committed": "2024-06-10T15:51:03Z",
+     "subject": "Merge branch '4507-confidential-clear-zversion' into 'v9.20.0-release'",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 3,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.0",
+    "v9.18.28"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.0",
+    "9.18": "v9.18.28"
+   },
+   "fix_release_date": "2024-07-08",
+   "fix_release_commit": "14bbdfc7b9db0870a0b8941ca8812d9983fdba1a",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.0:CHANGES | grep -n -F CVE-2024-4076   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2024-4076 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 6fceea4244 | grep -x v9.20.0; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.0^{commit}"
+  },
+  {
+   "cve": "CVE-2025-13878",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Fix incorrect length checks for BRID and HHIT records. ``d4c0d61701``",
+   "inventory_fix_release": "9.18.44",
+   "inventory_fix_sha": "d556bde1231edf81427d577e35f48f764b6a37b8",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.18",
+    "commit-containment": "v9.20.18",
+    "kept-changelog-entry": "v9.20.18"
+   },
+   "first_stable_tag": "v9.20.18",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "ecbe2b7da3b6e4a2ba479497415213d9693364a5",
+     "short": "ecbe2b7da3",
+     "committed": "2026-02-05T19:58:07Z",
+     "subject": "[9.18] [CVE-2025-13878] sec: test: Add a regression test for the BRID/HHIT crash",
+     "source": "grep"
+    },
+    {
+     "sha": "4a5406241a2c0cd641af84b91cff509eb0d38a98",
+     "short": "4a5406241a",
+     "committed": "2026-02-05T19:04:10Z",
+     "subject": "[9.20] [CVE-2025-13878] sec: test: Add a regression test for the BRID/HHIT crash",
+     "source": "grep"
+    },
+    {
+     "sha": "42ab76d9e113008cebba551f0c35992cd89a1a85",
+     "short": "42ab76d9e1",
+     "committed": "2026-02-05T18:23:20Z",
+     "subject": "[CVE-2025-13878] sec: test: Add a regression test for the BRID/HHIT crash",
+     "source": "grep"
+    },
+    {
+     "sha": "d556bde1231edf81427d577e35f48f764b6a37b8",
+     "short": "d556bde123",
+     "committed": "2026-01-08T11:48:47Z",
+     "subject": "[9.18] [CVE-2025-13878] sec: usr: Fix incorrect length checks for BRID and HHIT records",
+     "source": "grep"
+    },
+    {
+     "sha": "d4c0d617015625330f08a3f86a10a533cec0f6ec",
+     "short": "d4c0d61701",
+     "committed": "2026-01-08T11:48:20Z",
+     "subject": "[9.20] [CVE-2025-13878] sec: usr: Fix incorrect length checks for BRID and HHIT records",
+     "source": "grep"
+    },
+    {
+     "sha": "7bf83f69a80bdc6094c2adee3595e28b1b3e19ea",
+     "short": "7bf83f69a8",
+     "committed": "2026-01-08T11:32:38Z",
+     "subject": "[CVE-2025-13878] sec: usr: Fix incorrect length checks for BRID and HHIT records",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 6,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.18",
+    "v9.18.44"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.18",
+    "9.18": "v9.18.44"
+   },
+   "fix_release_date": "2026-01-09",
+   "fix_release_commit": "0d2e0d8fac7533145533c4e9942322c229a422c3",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.18:doc/changelog/changelog-9.20.18.rst | grep -n -F CVE-2025-13878   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2025-13878 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains ecbe2b7da3 | grep -x v9.20.18; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.18^{commit}"
+  },
+  {
+   "cve": "CVE-2025-40775",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Prevent assertion when processing TSIG algorithm. ``b8c198ac5ca``",
+   "inventory_fix_release": "9.20.9",
+   "inventory_fix_sha": "b8c198ac5cae674acf96e2c0f3be9abe5b630ede",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.9",
+    "commit-containment": "v9.20.9",
+    "kept-changelog-entry": "v9.20.9"
+   },
+   "first_stable_tag": "v9.20.9",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "5f4ce118eaae6e547fef2f6c074935dc379f4c9e",
+     "short": "5f4ce118ea",
+     "committed": "2025-05-23T15:12:22Z",
+     "subject": "[9.18] [CVE-2025-40775] sec: test: Add a bad TSIG algorithm hypothesis python test",
+     "source": "grep"
+    },
+    {
+     "sha": "2592fb319ef391eefc3db21943078cc9f4408a8e",
+     "short": "2592fb319e",
+     "committed": "2025-05-23T12:10:31Z",
+     "subject": "[9.20] [CVE-2025-40775] sec: test: Add a bad TSIG algorithm hypothesis python test",
+     "source": "grep"
+    },
+    {
+     "sha": "94c4181442bc5a844f38978e535b79d0c0387f2d",
+     "short": "94c4181442",
+     "committed": "2025-05-23T11:30:58Z",
+     "subject": "[CVE-2025-40775] sec: test: Add a bad TSIG algorithm hypothesis python test",
+     "source": "grep"
+    },
+    {
+     "sha": "1665e05438a97061e9e9266acf755d48e3604bbf",
+     "short": "1665e05438",
+     "committed": "2025-05-08T20:45:48Z",
+     "subject": "[CVE-2025-40775] sec: usr: Prevent assertion when processing TSIG algorithm",
+     "source": "grep"
+    },
+    {
+     "sha": "b8c198ac5cae674acf96e2c0f3be9abe5b630ede",
+     "short": "b8c198ac5c",
+     "committed": "2025-05-07T11:46:13Z",
+     "subject": "[9.20] [CVE-2025-40775] sec: usr: Prevent assertion when processing TSIG algorithm",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 5,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.9"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.9",
+    "9.18": "v9.18.38"
+   },
+   "fix_release_date": "2025-05-08",
+   "fix_release_commit": "98f2a5b7f486829b5644e5e9d6119c8cfefcdf70",
+   "latency_days": null,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.9:doc/changelog/changelog-9.20.9.rst | grep -n -F CVE-2025-40775   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2025-40775 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 5f4ce118ea | grep -x v9.20.9; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.9^{commit}"
+  },
+  {
+   "cve": "CVE-2025-40777",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Fix a possible assertion failure when using the 'stale-answer-client-timeout 0' option. ``055a592fd97``",
+   "inventory_fix_release": "9.20.11",
+   "inventory_fix_sha": "055a592fd97ce6c94db7f9718da2873524262e16",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.11",
+    "commit-containment": "v9.20.11",
+    "kept-changelog-entry": "v9.20.11"
+   },
+   "first_stable_tag": "v9.20.11",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "055a592fd97ce6c94db7f9718da2873524262e16",
+     "short": "055a592fd9",
+     "committed": "2025-07-03T12:17:14Z",
+     "subject": "[9.20] [CVE-2025-40777] sec: usr: Fix a possible assertion failure when using the 'stale-answer-client-timeout 0' option",
+     "source": "grep"
+    },
+    {
+     "sha": "7fafa0e48f84e90cb14e2b19cfc20b544d21e1de",
+     "short": "7fafa0e48f",
+     "committed": "2025-07-03T10:52:28Z",
+     "subject": "[CVE-2025-40777] sec: usr: Fix a possible assertion failure when using the 'stale-answer-client-timeout 0' option",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 2,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.11"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.11"
+   },
+   "fix_release_date": "2025-07-04",
+   "fix_release_commit": "c6b2e3128e974e3fef994841b3cd1dc607e4e20a",
+   "latency_days": null,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.11:doc/changelog/changelog-9.20.11.rst | grep -n -F CVE-2025-40777   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2025-40777 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 055a592fd9 | grep -x v9.20.11; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.11^{commit}"
+  },
+  {
+   "cve": "CVE-2025-40778",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Address various spoofing attacks. ``23de94fd236``",
+   "inventory_fix_release": "9.18.44",
+   "inventory_fix_sha": "92907ffa146c026b04bbf85d9c0cfe0f1e2344aa",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.15",
+    "commit-containment": "v9.20.15",
+    "kept-changelog-entry": "v9.20.15"
+   },
+   "first_stable_tag": "v9.20.15",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "d6f230bc1aad0448c51bbc92ab2db3da4aad94fe",
+     "short": "d6f230bc1a",
+     "committed": "2025-12-22T12:42:21Z",
+     "subject": "[9.18] [CVE-2025-40778] sec: test: Add various bailiwick-related tests",
+     "source": "grep"
+    },
+    {
+     "sha": "7861d0264c4a78365cfc4de06772c5235616f7eb",
+     "short": "7861d0264c",
+     "committed": "2025-12-22T12:42:18Z",
+     "subject": "[9.20] [CVE-2025-40778] sec: test: Add various bailiwick-related tests",
+     "source": "grep"
+    },
+    {
+     "sha": "66662e51dadfe6d94d716eda4d30c4f803268c6d",
+     "short": "66662e51da",
+     "committed": "2025-12-22T12:04:29Z",
+     "subject": "Test that unsolicited NS in positive answer cannot overwrite current NS",
+     "source": "grep"
+    },
+    {
+     "sha": "92907ffa146c026b04bbf85d9c0cfe0f1e2344aa",
+     "short": "92907ffa14",
+     "committed": "2025-12-22T12:04:29Z",
+     "subject": "Test that positive answer cannot overwrite sibling NS RRs",
+     "source": "grep"
+    },
+    {
+     "sha": "c4036326815749b16e33c1463e295cdf50aaeb89",
+     "short": "c403632681",
+     "committed": "2025-12-22T12:04:29Z",
+     "subject": "Add a common base for CVE-2025-40778 tests",
+     "source": "grep"
+    },
+    {
+     "sha": "ae0afc1d424e56893b24c625b00cb636ff83dd3f",
+     "short": "ae0afc1d42",
+     "committed": "2025-12-22T11:47:26Z",
+     "subject": "Test that unsolicited NS in positive answer cannot overwrite current NS",
+     "source": "grep"
+    },
+    {
+     "sha": "0a00d3c2c928199b3d9c8010e378a8c51900f94c",
+     "short": "0a00d3c2c9",
+     "committed": "2025-12-22T11:47:26Z",
+     "subject": "Test that positive answer cannot overwrite sibling NS RRs",
+     "source": "grep"
+    },
+    {
+     "sha": "f5b5a94439408ba51b93a463125c949f25eeaa4c",
+     "short": "f5b5a94439",
+     "committed": "2025-12-22T11:47:26Z",
+     "subject": "Add a common base for CVE-2025-40778 tests",
+     "source": "grep"
+    },
+    {
+     "sha": "44306329154bb8cc476afc3b3035ee509f2cb238",
+     "short": "4430632915",
+     "committed": "2025-12-22T11:44:38Z",
+     "subject": "[CVE-2025-40778] sec: test: Add various bailiwick-related tests",
+     "source": "grep"
+    },
+    {
+     "sha": "658d2e9f8ec8408f227af034bd87cf4ff3189a88",
+     "short": "658d2e9f8e",
+     "committed": "2025-12-22T10:58:39Z",
+     "subject": "Test that unsolicited NS in positive answer cannot overwrite current NS",
+     "source": "grep"
+    },
+    {
+     "sha": "26eed16d619f9957d0d252ceda06a2b4ea67b6d4",
+     "short": "26eed16d61",
+     "committed": "2025-12-22T10:58:39Z",
+     "subject": "Test that positive answer cannot overwrite sibling NS RRs",
+     "source": "grep"
+    },
+    {
+     "sha": "607974b1bcb08334f2f5ab0efcc069ba69eb3130",
+     "short": "607974b1bc",
+     "committed": "2025-12-22T10:58:39Z",
+     "subject": "Add a common base for CVE-2025-40778 tests",
+     "source": "grep"
+    },
+    {
+     "sha": "5ff00f4441260fa8cad2b18a7f9347c2969ab45f",
+     "short": "5ff00f4441",
+     "committed": "2025-11-25T15:04:57Z",
+     "subject": "Increase the threshold for respdiff-third-party",
+     "source": "grep"
+    },
+    {
+     "sha": "d9aeef89e9a5b409aa3c93e22d7a143f38ff8698",
+     "short": "d9aeef89e9",
+     "committed": "2025-11-25T15:01:47Z",
+     "subject": "Increase the threshold for respdiff-third-party",
+     "source": "grep"
+    },
+    {
+     "sha": "d682f897d9583bcec9d5d4dd2b0c9d0255aed509",
+     "short": "d682f897d9",
+     "committed": "2025-11-25T14:57:47Z",
+     "subject": "Increase the threshold for respdiff-third-party",
+     "source": "grep"
+    },
+    {
+     "sha": "4a6f9c5900adc49a3216a9b8bf1ceda3948c3a51",
+     "short": "4a6f9c5900",
+     "committed": "2025-11-25T14:55:37Z",
+     "subject": "Increase the threshold for respdiff-third-party",
+     "source": "grep"
+    },
+    {
+     "sha": "bcc4369b0bf243433ca5334cdce3982a15ce4027",
+     "short": "bcc4369b0b",
+     "committed": "2025-11-25T14:05:16Z",
+     "subject": "Increase the threshold for respdiff-third-party",
+     "source": "grep"
+    },
+    {
+     "sha": "9ff9b88a6f38c71727614ce08c3a51860b5ed542",
+     "short": "9ff9b88a6f",
+     "committed": "2025-10-22T16:48:06Z",
+     "subject": "[9.11] [CVE-2025-40778] sec: usr: Address various spoofing attacks",
+     "source": "grep"
+    },
+    {
+     "sha": "aba2fa7e355be5a5c25d61c51238ea16d231b577",
+     "short": "aba2fa7e35",
+     "committed": "2025-10-22T16:41:51Z",
+     "subject": "[9.16] [CVE-2025-40778] sec: usr: Address various spoofing attacks",
+     "source": "grep"
+    },
+    {
+     "sha": "4c99ba5a462d01aa88a5d975e82550df53228000",
+     "short": "4c99ba5a46",
+     "committed": "2025-10-02T11:45:32Z",
+     "subject": "[9.18] [CVE-2025-40778] sec: usr: Address various spoofing attacks",
+     "source": "grep"
+    },
+    {
+     "sha": "23de94fd236070857a088dc32a4e4895c987f75d",
+     "short": "23de94fd23",
+     "committed": "2025-10-02T11:45:26Z",
+     "subject": "[9.20] [CVE-2025-40778] sec: usr: Address various spoofing attacks",
+     "source": "grep"
+    },
+    {
+     "sha": "7b95c382dbd6b016d11ab3c7d547a3e17153d065",
+     "short": "7b95c382db",
+     "committed": "2025-10-02T11:24:53Z",
+     "subject": "[CVE-2025-40778] sec: usr: Address various spoofing attacks",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 22,
+   "attribution": "commit/changelog-verified; note: the inventory sha (92907ffa14) is a test-only commit; the code fix is the 'Address various spoofing attacks' commit 4c99ba5a46 / 23de94fd23 (9.18 / 9.20, 2025-10-02) shipped in v9.20.15 and v9.18.41",
+   "same_day_tags": [
+    "v9.20.15",
+    "v9.18.41"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.15",
+    "9.18": "v9.18.41"
+   },
+   "fix_release_date": "2025-10-18",
+   "fix_release_commit": "0c0fcf7b2bc64432aa175b75f79e670dd894735d",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.15:doc/changelog/changelog-9.20.15.rst | grep -n -F CVE-2025-40778   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2025-40778 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains d6f230bc1a | grep -x v9.20.15; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.15^{commit}"
+  },
+  {
+   "cve": "CVE-2025-40780",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Cache-poisoning due to weak pseudo-random number generator. ``34af35c2df8``",
+   "inventory_fix_release": "9.18.41",
+   "inventory_fix_sha": "f74fb05265be32a8c9de31ec7298deba4a07d893",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.15",
+    "commit-containment": "v9.20.15",
+    "kept-changelog-entry": "v9.20.15"
+   },
+   "first_stable_tag": "v9.20.15",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "86ad6866eeb955d63a232e53bba1cd0d61b051e1",
+     "short": "86ad6866ee",
+     "committed": "2026-07-23T17:04:50Z",
+     "subject": "[9.20] fix: dev: Restore arc4random() detection dropped in the v9.21.14 merge",
+     "source": "grep"
+    },
+    {
+     "sha": "3eb9fde6d7cbde6a144e31827f78425f328162d0",
+     "short": "3eb9fde6d7",
+     "committed": "2026-07-23T16:24:10Z",
+     "subject": "fix: dev: Restore arc4random() detection dropped in the v9.21.14 merge",
+     "source": "grep"
+    },
+    {
+     "sha": "261b14bc8bbe68a4061f7c5b5cd90cadd282fc27",
+     "short": "261b14bc8b",
+     "committed": "2026-07-23T16:22:06Z",
+     "subject": "Restore arc4random() detection dropped in the v9.21.14 merge",
+     "source": "grep"
+    },
+    {
+     "sha": "e7d6f50c79b539d1cdc25c932f0b95186e454598",
+     "short": "e7d6f50c79",
+     "committed": "2026-07-23T14:53:11Z",
+     "subject": "Restore arc4random() detection dropped in the v9.20.15 merge",
+     "source": "grep"
+    },
+    {
+     "sha": "dd614497470c6ae9cd8a963e5a0f1cc177ee7b86",
+     "short": "dd61449747",
+     "committed": "2025-10-22T16:45:05Z",
+     "subject": "[9.16] [CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator",
+     "source": "grep"
+    },
+    {
+     "sha": "f74fb05265be32a8c9de31ec7298deba4a07d893",
+     "short": "f74fb05265",
+     "committed": "2025-10-02T12:26:41Z",
+     "subject": "[9.18] [CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator",
+     "source": "grep"
+    },
+    {
+     "sha": "34af35c2df85cb25e5f1d66ea8ae06a8ca440b1e",
+     "short": "34af35c2df",
+     "committed": "2025-10-02T12:26:38Z",
+     "subject": "[9.20] [CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator",
+     "source": "grep"
+    },
+    {
+     "sha": "6876753c7ccd67d445a6a2341219fe79cff6c77f",
+     "short": "6876753c7c",
+     "committed": "2025-10-02T12:17:17Z",
+     "subject": "[CVE-2025-40780] sec: usr: Cache-poisoning due to weak pseudo-random number generator",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 8,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.15",
+    "v9.18.41"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.15",
+    "9.18": "v9.18.41"
+   },
+   "fix_release_date": "2025-10-18",
+   "fix_release_commit": "0c0fcf7b2bc64432aa175b75f79e670dd894735d",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.15:doc/changelog/changelog-9.20.15.rst | grep -n -F CVE-2025-40780   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2025-40780 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 86ad6866ee | grep -x v9.20.15; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.15^{commit}"
+  },
+  {
+   "cve": "CVE-2025-8677",
+   "nvd_published": "2025-10-22",
+   "description": "Querying for records within a specially crafted zone containing certain malformed DNSKEY records can lead to CPU exhaustion.\nThis issue affects BIND 9 versions 9.18.0 through 9.18.39, 9.20.0 through 9.20.13, 9.21.0 through 9.21.12, 9.18.11-S1 through",
+   "inventory_fix_release": "9.18.41",
+   "inventory_fix_sha": "85d08e068316fc9530965b56b3d99833d501ea12",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.15",
+    "commit-containment": "v9.20.15",
+    "kept-changelog-entry": "v9.20.15"
+   },
+   "first_stable_tag": "v9.20.15",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "9102415e79db1f6b3638e6fb67e232df9ecf8ce8",
+     "short": "9102415e79",
+     "committed": "2026-01-05T15:51:49Z",
+     "subject": "[9.18] [CVE-2025-8677] sec: test: Test that DNSSEC validation is aborted on malformed DNSKEY",
+     "source": "grep"
+    },
+    {
+     "sha": "e7e111e635818b4a8ab403450da1d2ae73f036ec",
+     "short": "e7e111e635",
+     "committed": "2026-01-05T15:13:07Z",
+     "subject": "Test zone with truncated revoked DNSKEY",
+     "source": "grep"
+    },
+    {
+     "sha": "04b4ff606d5ece0f52bf91fd04b651d438c082b9",
+     "short": "04b4ff606d",
+     "committed": "2026-01-05T14:41:19Z",
+     "subject": "[9.20] [CVE-2025-8677] sec: test: Test that DNSSEC validation is aborted on malformed DNSKEY",
+     "source": "grep"
+    },
+    {
+     "sha": "ccfe50a9b1c6a6ebb63b0bb23c24a7d6a0537763",
+     "short": "ccfe50a9b1",
+     "committed": "2026-01-05T14:02:51Z",
+     "subject": "Test zone with truncated revoked DNSKEY",
+     "source": "grep"
+    },
+    {
+     "sha": "849c17abe55c495b92a70202e866a28828b0031e",
+     "short": "849c17abe5",
+     "committed": "2026-01-05T13:45:06Z",
+     "subject": "[CVE-2025-8677] sec: test: Test that DNSSEC validation is aborted on malformed DNSKEY",
+     "source": "grep"
+    },
+    {
+     "sha": "0ddfa108a730f38c8f23430506ac5398a08112ca",
+     "short": "0ddfa108a7",
+     "committed": "2026-01-05T13:04:58Z",
+     "subject": "Test zone with truncated revoked DNSKEY",
+     "source": "grep"
+    },
+    {
+     "sha": "85d08e068316fc9530965b56b3d99833d501ea12",
+     "short": "85d08e0683",
+     "committed": "2025-10-02T10:58:05Z",
+     "subject": "[9.18] [CVE-2025-8677] sec: usr: DNSSEC validation fails if matching but invalid DNSKEY is found",
+     "source": "grep"
+    },
+    {
+     "sha": "0d676bf9f23b1441f6697f1d6b25b4744dacda52",
+     "short": "0d676bf9f2",
+     "committed": "2025-10-02T10:58:01Z",
+     "subject": "[9.20] [CVE-2025-8677] sec: usr: DNSSEC validation fails if matching but invalid DNSKEY is found",
+     "source": "grep"
+    },
+    {
+     "sha": "1d851c235291da1262e6e1254c2b5017253e0242",
+     "short": "1d851c2352",
+     "committed": "2025-10-02T10:53:46Z",
+     "subject": "[CVE-2025-8677] sec: usr: DNSSEC validation fails if matching but invalid DNSKEY is found",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 9,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.15",
+    "v9.18.41"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.15",
+    "9.18": "v9.18.41"
+   },
+   "fix_release_date": "2025-10-18",
+   "fix_release_commit": "0c0fcf7b2bc64432aa175b75f79e670dd894735d",
+   "latency_days": -4,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.15:doc/changelog/changelog-9.20.15.rst | grep -n -F CVE-2025-8677   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2025-8677 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 9102415e79 | grep -x v9.20.15; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.15^{commit}"
+  },
+  {
+   "cve": "CVE-2026-10723",
+   "nvd_published": "2026-07-22",
+   "description": "BIND may accept incorrect child-zone NSEC3 records as valid, which could allow an attacker to forge authenticated NXDOMAIN responses.\nThis issue affects BIND 9 versions 9.18.0 through 9.18.50, 9.20.0 through 9.20.24, 9.21.0 through 9.21.23, 9.11.3-S1",
+   "inventory_fix_release": null,
+   "inventory_fix_sha": "441e64d00961532a3c03d015d46822024f23d546",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "441e64d00961532a3c03d015d46822024f23d546",
+     "short": "441e64d009",
+     "committed": "2026-07-10T08:18:42Z",
+     "subject": "[9.11] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name",
+     "source": "grep"
+    },
+    {
+     "sha": "fa35651811e0de51091df0005b0abddc3ccfaa90",
+     "short": "fa35651811",
+     "committed": "2026-07-10T08:15:14Z",
+     "subject": "[9.16] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name",
+     "source": "grep"
+    },
+    {
+     "sha": "348fd47f7636f610a39ba98427fcacab8e62389b",
+     "short": "348fd47f76",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name",
+     "source": "grep"
+    },
+    {
+     "sha": "df3abfc3184295edff164db1f6c9346d2a531801",
+     "short": "df3abfc318",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name",
+     "source": "grep"
+    },
+    {
+     "sha": "66822f731d2d1c36b70cc1ae540d4e9d6406e277",
+     "short": "66822f731d",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "[CVE-2026-10723] sec: usr: Correct verification of NSEC3 signer name",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 5,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": -2,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-10723   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-10723 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 441e64d009 | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-10822",
+   "nvd_published": "2026-07-22",
+   "description": "If BIND encounters a particular invalid data structure in a DNS record, it will accept the invalid data, and may subsequently abort and exit.\n\nBIND will first need to store a DNS record for a key (KEY, DNSKEY, etc.). That key must specify a PRIVATEDN",
+   "inventory_fix_release": null,
+   "inventory_fix_sha": "c5d2fc706ca3635d9928c1cc68db73bffb35d772",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "c5d2fc706ca3635d9928c1cc68db73bffb35d772",
+     "short": "c5d2fc706c",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-10822] sec: usr: Fix dns_name_fromwire to record boundaries",
+     "source": "grep"
+    },
+    {
+     "sha": "a1777ce7ee0a464f1e3ef4625b8c63802d0439b1",
+     "short": "a1777ce7ee",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-10822] sec: usr: Malformed DNSKEY records could trigger an assertion",
+     "source": "grep"
+    },
+    {
+     "sha": "f8baa18e2444cdd549e6b2d63ed456a34c3d07e5",
+     "short": "f8baa18e24",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "[CVE-2026-10822] sec: usr: Malformed DNSKEY records could trigger an assertion",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 3,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": -2,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-10822   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-10822 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains c5d2fc706c | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-11331",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Fix handling of rpz CNAME expansion that returns name too long. ``b950da5f625``",
+   "inventory_fix_release": null,
+   "inventory_fix_sha": "bdc56d93f7efbfb0de9bbe01e9fdd9a9adfce823",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "bdc56d93f7efbfb0de9bbe01e9fdd9a9adfce823",
+     "short": "bdc56d93f7",
+     "committed": "2026-07-10T08:15:14Z",
+     "subject": "[9.16] [CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long",
+     "source": "grep"
+    },
+    {
+     "sha": "4fd0755bdd08471f74e6e4c76cd2326f356e0a61",
+     "short": "4fd0755bdd",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long",
+     "source": "grep"
+    },
+    {
+     "sha": "b950da5f625488e2b84575f75052c5f366a4cb06",
+     "short": "b950da5f62",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long",
+     "source": "grep"
+    },
+    {
+     "sha": "71a8a3fa1d5c59affaeb56b1dcc4a0dcaaeb8ebc",
+     "short": "71a8a3fa1d",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "[CVE-2026-11331] sec: usr: Fix handling of rpz CNAME expansion that returns name too long",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 4,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": null,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-11331   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-11331 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains bdc56d93f7 | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-11605",
+   "nvd_published": "2026-07-22",
+   "description": "The issue is a resource exhaustion vulnerability associated with DNSSEC validation. BIND always validates all RRSIG records in an answer, even if they are not strictly needed. A query to an authoritative server/zone which returns many valid but super",
+   "inventory_fix_release": "9.20.26",
+   "inventory_fix_sha": "5f1bb0aad09c0657094b1f36685176a8c9ce1ee0",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "5f1bb0aad09c0657094b1f36685176a8c9ce1ee0",
+     "short": "5f1bb0aad0",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-11605] sec: usr: Prevent excessive validation work from crafted negative responses",
+     "source": "grep"
+    },
+    {
+     "sha": "d60c0ae61d1e85a21b6faefc979bb317933b32c3",
+     "short": "d60c0ae61d",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "[CVE-2026-11605] sec: usr: Prevent excessive validation work from crafted negative responses",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 2,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": -2,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-11605   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-11605 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 5f1bb0aad0 | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-11622",
+   "nvd_published": "2026-07-22",
+   "description": "A DNSSEC validating resolver that is under a random subdomain attack against a DNSSEC-signed zone can suffer from runaway memory usage. The attacker needs to be able to send queries faster than the resolver can perform validation. The increased memor",
+   "inventory_fix_release": null,
+   "inventory_fix_sha": "6e3c70a733744f3b18874249794a6cf55e951510",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "d76328bfc76c9db0a07b2ad095b2dd7bae9a2238",
+     "short": "d76328bfc7",
+     "committed": "2026-08-05T08:55:36Z",
+     "subject": "Revert \"[9.20] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack\"",
+     "source": "grep"
+    },
+    {
+     "sha": "007d7af5aa181d63ea74f24acff19f9d8003fb47",
+     "short": "007d7af5aa",
+     "committed": "2026-07-13T10:40:29Z",
+     "subject": "Add release note for CVE-2026-11622",
+     "source": "grep"
+    },
+    {
+     "sha": "6e3c70a733744f3b18874249794a6cf55e951510",
+     "short": "6e3c70a733",
+     "committed": "2026-07-10T08:18:42Z",
+     "subject": "[9.11] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack",
+     "source": "grep"
+    },
+    {
+     "sha": "8572cb15c037111a407b6b9f61bf23e0892f053d",
+     "short": "8572cb15c0",
+     "committed": "2026-07-10T08:15:14Z",
+     "subject": "[9.16] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack",
+     "source": "grep"
+    },
+    {
+     "sha": "14d23a4955c62efe974266a8e96a8c5d7caad040",
+     "short": "14d23a4955",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack",
+     "source": "grep"
+    },
+    {
+     "sha": "410aa215eab4a6dc13f8f80f6351550b278319f5",
+     "short": "410aa215ea",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-11622] sec: usr: Prevent cache exhaustion under sustained attack",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 6,
+   "attribution": "commit/changelog-verified; note: the [9.20] fix commit 410aa215eab was reverted on 2026-08-05 (d76328bfc7, after v9.20.26); v9.20.26 (2026-07-20) is the first tag carrying it and its changelog names the CVE",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": -2,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-11622   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-11622 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains d76328bfc7 | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-11721",
+   "nvd_published": "2026-07-22",
+   "description": "It is possible for an attacker's zone to respond to a query with an RRSIG that has a smaller number of labels than the zone in which the RRSIG is contained. This causes `named` to produce a wildcard name for a zone that is shorter than the attacker's",
+   "inventory_fix_release": "9.21.24",
+   "inventory_fix_sha": "2dbb7461ce35baa2663e169a5b8d93edd8457c54",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "2492b944cbd199dae7566f7f0c03673dc884d5d9",
+     "short": "2492b944cb",
+     "committed": "2026-09-25T14:13:45Z",
+     "subject": "Add the dnssec_py rrsig_labels_signer test from bind-9.20",
+     "source": "grep"
+    },
+    {
+     "sha": "c63f11976ffe6e0285e0a9a3524a53420786d50e",
+     "short": "c63f11976f",
+     "committed": "2026-07-10T08:18:42Z",
+     "subject": "[9.11] [CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted",
+     "source": "grep"
+    },
+    {
+     "sha": "e7227767881d9810d5c3b70ce8b59c847a9e4dec",
+     "short": "e722776788",
+     "committed": "2026-07-10T08:15:14Z",
+     "subject": "[9.16] [CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted",
+     "source": "grep"
+    },
+    {
+     "sha": "58812f64bf14b3930f5bb90a2d0e1f59bc8260b4",
+     "short": "58812f64bf",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted",
+     "source": "grep"
+    },
+    {
+     "sha": "f875d6b246ec662bb03985addf448a831dbd3e96",
+     "short": "f875d6b246",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] fix: nil: Add missing dumpnode call in dnssec-signzone",
+     "source": "grep"
+    },
+    {
+     "sha": "249752cd72df4aa4b29f018ff3c5f2e41258ba9c",
+     "short": "249752cd72",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted",
+     "source": "grep"
+    },
+    {
+     "sha": "cb0a00c83774abe6dfd7845f7d1b5140c3daf0e9",
+     "short": "cb0a00c837",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "fix: nil: Add missing dumpnode call in dnssec-signzone",
+     "source": "grep"
+    },
+    {
+     "sha": "2dbb7461ce35baa2663e169a5b8d93edd8457c54",
+     "short": "2dbb7461ce",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "[CVE-2026-11721] sec: usr: Invalid signed wildcard records were being accepted",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 8,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": -2,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-11721   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-11721 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 2492b944cb | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-12617",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Do no assert for some specifics CNAME and DNAME queries. ``d75d1e93958``",
+   "inventory_fix_release": null,
+   "inventory_fix_sha": "bb92832fb6ae899bee7206c2d8966258461c2f71",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "5a0cef5bdb077df73fa59504efb8ca4c8b0a84c5",
+     "short": "5a0cef5bdb",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-12617] sec: usr: Do no assert for some specifics CNAME and DNAME queries",
+     "source": "grep"
+    },
+    {
+     "sha": "bb92832fb6ae899bee7206c2d8966258461c2f71",
+     "short": "bb92832fb6",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "Reproducer for #5946 (assertion in some CNAME/DNAME queries)",
+     "source": "grep"
+    },
+    {
+     "sha": "d75d1e939584ea6e130776e440e5c589a5a568fd",
+     "short": "d75d1e9395",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[CVE-2026-12617] sec: usr: Do no assert for some specifics CNAME and DNAME queries",
+     "source": "grep"
+    },
+    {
+     "sha": "e88271f2e584010157b068cc998dd76451273562",
+     "short": "e88271f2e5",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "Reproducer for #5946 (assertion in some CNAME/DNAME queries)",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 4,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": null,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-12617   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-12617 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 5a0cef5bdb | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-13204",
+   "nvd_published": "2026-07-22",
+   "description": "If a provably insecure domain is covered by both an NSEC and NSEC3 record at the parent, and there exist an RRSIG for only one of these types, then BIND may exit unexpectedly with an assertion while validating this proof.\nThis issue affects BIND 9 ve",
+   "inventory_fix_release": "9.20.26",
+   "inventory_fix_sha": "ad393b0923262b5425fea38823367a6f56aa85a6",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "7c80f9d258c6ade983da3b08fdf9839a4a917d67",
+     "short": "7c80f9d258",
+     "committed": "2026-07-10T08:18:42Z",
+     "subject": "[9.11] [CVE-2026-13204] fix: usr: Prevent crash from malformed NSEC/NSEC3 response",
+     "source": "grep"
+    },
+    {
+     "sha": "ddf620ab16204198953ab711d001cc8893cac4e5",
+     "short": "ddf620ab16",
+     "committed": "2026-07-10T08:15:14Z",
+     "subject": "[9.16] [CVE-2026-13204] fix: usr: Prevent crash from malformed NSEC/NSEC3 response",
+     "source": "grep"
+    },
+    {
+     "sha": "b9ff2c9a36bb678fd1393d4f932b35a6882cd2a8",
+     "short": "b9ff2c9a36",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-13204] fix: usr: Prevent crash from malformed NSEC/NSEC3 response",
+     "source": "grep"
+    },
+    {
+     "sha": "ad393b0923262b5425fea38823367a6f56aa85a6",
+     "short": "ad393b0923",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-13204] fix: usr: Prevent crash from malformed NSEC/NSEC3 response",
+     "source": "grep"
+    },
+    {
+     "sha": "a15f86b758f7b6057a48176c2687f66f42f7c416",
+     "short": "a15f86b758",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "[CVE-2026-13204] fix: usr: Prevent crash from malformed NSEC/NSEC3 response",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 5,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": -2,
+   "differs_from_inventory": false,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-13204   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-13204 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 7c80f9d258 | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
+  },
+  {
+   "cve": "CVE-2026-13321",
+   "nvd_published": null,
+   "description": "[no NVD description in inventory] Fix DNSSEC validation bypass via out-of-zone NSEC Next Field. ``6fbc963d4af``",
+   "inventory_fix_release": "9.21.24",
+   "inventory_fix_sha": "07455c02d7dde705d06a0a74ac1a8d2644267949",
+   "candidates": {
+    "changelog-or-notes-mention": "v9.20.26",
+    "commit-containment": "v9.20.26",
+    "kept-changelog-entry": "v9.20.26"
+   },
+   "first_stable_tag": "v9.20.26",
+   "basis": "changelog-or-notes-mention",
+   "commits": [
+    {
+     "sha": "79c79406ce211d30d7d0857af305be6d1bf8d14d",
+     "short": "79c79406ce",
+     "committed": "2026-07-10T08:18:42Z",
+     "subject": "[9.11] [CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field",
+     "source": "grep"
+    },
+    {
+     "sha": "861ca6ff58aeb48394335a71f3d06c799599051e",
+     "short": "861ca6ff58",
+     "committed": "2026-07-10T08:15:14Z",
+     "subject": "[9.16] [CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field",
+     "source": "grep"
+    },
+    {
+     "sha": "36f3d50f9c8ebc8d25ee033e707ca502e20b083f",
+     "short": "36f3d50f9c",
+     "committed": "2026-07-10T07:41:01Z",
+     "subject": "[9.18] [CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field",
+     "source": "grep"
+    },
+    {
+     "sha": "6fbc963d4aff102ed6cc2b4273ea8f77e3b87878",
+     "short": "6fbc963d4a",
+     "committed": "2026-07-10T07:33:40Z",
+     "subject": "[9.20] [CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field",
+     "source": "grep"
+    },
+    {
+     "sha": "07455c02d7dde705d06a0a74ac1a8d2644267949",
+     "short": "07455c02d7",
+     "committed": "2026-07-10T07:26:46Z",
+     "subject": "[CVE-2026-13321] sec: usr: Fix DNSSEC validation bypass via out-of-zone NSEC Next Field",
+     "source": "grep"
+    }
+   ],
+   "n_commits_found": 5,
+   "attribution": "commit/changelog-verified",
+   "same_day_tags": [
+    "v9.20.26"
+   ],
+   "earliest_tag_per_branch": {
+    "9.20": "v9.20.26"
+   },
+   "fix_release_date": "2026-07-20",
+   "fix_release_commit": "5a605f835e9a7f245d412410ef3836db9be14f34",
+   "latency_days": null,
+   "differs_from_inventory": true,
+   "verify": "git -C out/software_repos/bind9.git show v9.20.26:doc/changelog/changelog-9.20.26.rst | grep -n -F CVE-2026-13321   # also: git -C out/software_repos/bind9.git log --all -F --grep=CVE-2026-13321 --format='%H|%ct|%s'; git -C out/software_repos/bind9.git tag --contains 79c79406ce | grep -x v9.20.26; git -C out/software_repos/bind9.git log -1 --format=%cI v9.20.26^{commit}"
   }
  ],
  "news_edits": [
@@ -57291,7 +58950,8 @@
   "total_entries counts entries after cross-branch de-duplication: an entry already attributed to an earlier-dated tag on another branch is not counted again (v9.16.1 records 6; a raw CHANGES diff against v9.16.0 gives 8 because 5357 and 5358 shipped first in v9.11.17). v9.4.0 records 180 where the Phase 3 raw diff reproduced 156; not reconciled. (Phase 3.)",
   "rst era (per-release doc/changelog/changelog-<ver>.rst): 150 changelog lines appear under two or three releases (e.g. 'Update bind.keys with the new 2025 IANA root key' under v9.21.3, v9.20.4 and v9.18.32). The earliest-dated-final-tag rule stated in branch_note was not applied to rst-era entries. (Phase 3.)",
   "released is the committer-local calendar date of <tag>^{commit}, not the UTC date; about 60 rows differ (e.g. v9.9.1 released 2012-05-10, instant 2012-05-09T22:39:51Z). Earliest-tag choices use the UTC instant after Phase 3. (Phase 3.)",
-  "Public announcement dates of embargoed releases (e.g. v9.4.2-P1, v9.3.5-P1, v9.5.0-P1: tag commits 2008-05-28, ISC public 2008-07-08) are outside the clone; d01's date and the CVE-2008-1447 latency of -41 days use the tag commit date. (Phase 3.)"
+  "Public announcement dates of embargoed releases (e.g. v9.4.2-P1, v9.3.5-P1, v9.5.0-P1: tag commits 2008-05-28, ISC public 2008-07-08) are outside the clone; d01's date and the CVE-2008-1447 latency of -41 days use the tag commit date. (Phase 3.)",
+  "23 further inventory CVEs (fixes.bind9 git-scrape rows without NVD product tags) were appended to cve_fixes after the first 184: 22 have a first stable tag (21 commit/changelog-verified via CHANGES / doc/changelog / doc/notes mention plus commit containment; CVE-2006-5989 by commit containment only, since CHANGES 5562 names CVE-2020-8625 instead) and 1 (CVE-2015-3193, an OpenSSL bug; BIND only widened the OpenSSL version gate in configure) is not-applicable-or-not-bind9-release. 13 of the 22 name an earlier tag than the inventory fix_release. nvd_published is null unless the inventory by_keyword list carries it (CVE-2024-1975, CVE-2025-8677, CVE-2026-10723, -10822, -11605, -11622, -11721, -13204); the 184-row counts in the `verification` block and in the gaps above do not include these 23. No 9.18 (>= 9.18.51), 9.16 or 9.11 tag exists after the July 2026 fixes, so the 2026 CVEs first ship in v9.20.26."
  ],
  "verification": {
   "default_changes": 28,

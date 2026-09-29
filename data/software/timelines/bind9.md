@@ -507,7 +507,7 @@ Items d01-d04 predate 2012-03 (cvs2git-manufactured tags): `git tag --contains` 
 
 ## CVE fixes
 
-184 CVEs are attributed to BIND by the inventory. 127 have a first stable tag; 31 are not BIND 9 stable-release issues; 26 are not found. `first stable tag` = earliest stable non-Windows tag (by UTC instant of the tag commit; Phase 3 corrected six rows that had been ordered by committer-local time) that (a) contains a commit naming the CVE or a cherry-pick sibling of one, (b) has the CVE id in CHANGES / release notes, or (c) carries a kept stage-2 changelog entry naming it; same-day tags on other branches are in the `same day` column. `approx` = version taken from the NVD text (tag exists, fix commit not located). Latency = tag date minus NVD published date (negative = fixed first). `inv` = the inventory `fix_release` when it differs.
+184 CVEs are attributed to BIND by the inventory. 127 have a first stable tag; 31 are not BIND 9 stable-release issues; 26 are not found. A further 23 CVEs come from the inventory's fixes.bind9 git scrape and have no NVD product tag: 22 have a first stable tag (basis `changelog` = CVE id in CHANGES / release notes, `commit` = commit containment only, CVE-2006-5989) and 1 (CVE-2015-3193, OpenSSL version gate in configure only) is not a BIND 9 code fix; NVD published and latency are filled only where the inventory keyword lists carry the date (`-` otherwise). `first stable tag` = earliest stable non-Windows tag (by UTC instant of the tag commit; Phase 3 corrected six rows that had been ordered by committer-local time) that (a) contains a commit naming the CVE or a cherry-pick sibling of one, (b) has the CVE id in CHANGES / release notes, or (c) carries a kept stage-2 changelog entry naming it; same-day tags on other branches are in the `same day` column. `approx` = version taken from the NVD text (tag exists, fix commit not located). Latency = tag date minus NVD published date (negative = fixed first). `inv` = the inventory `fix_release` when it differs.
 
 ```
 C=out/software_repos/bind9.git
@@ -521,6 +521,7 @@ git -C $C tag --contains <commit> | grep -x <tag>          # commit basis
 | CVE-2006-0987 | 2006-03-03 | v9.4.1-P1 | 2007-07-09 | 493 | approx (NVD) |  |  |
 | CVE-2006-4095 | 2006-09-06 | v9.3.2-P1 | 2006-08-17 | -20 | approx (NVD) |  |  |
 | CVE-2006-4096 | 2006-09-06 | v9.3.2-P1 | 2006-08-17 | -20 | approx (NVD) |  |  |
+| CVE-2006-5989 | - | v9.16.12 | 2021-02-04 |  | commit | v9.11.28 | 9.11.29 |
 | CVE-2008-0122 | 2008-01-16 | v9.3.5 | 2008-04-03 | 78 | changelog |  | 9.4.3 |
 | CVE-2008-1447 | 2008-07-08 | v9.4.2-P1 | 2008-05-28 | -41 | approx (NVD) |  |  |
 | CVE-2009-0696 | 2009-07-29 | v9.4.3-P3 | 2009-07-28 | -1 | approx (NVD) |  |  |
@@ -634,6 +635,18 @@ git -C $C tag --contains <commit> | grep -x <tag>          # commit basis
 | CVE-2023-5517 | 2024-02-13 | v9.18.24 | 2024-02-11 | -2 | changelog | v9.16.48 | 9.16.48 |
 | CVE-2023-5679 | 2024-02-13 | v9.18.24 | 2024-02-11 | -2 | changelog | v9.16.48 | 9.16.48 |
 | CVE-2023-6516 | 2024-02-13 | v9.16.48 | 2024-02-11 | -2 | changelog |  |  |
+| CVE-2024-0760 | - | v9.20.0 | 2024-07-08 |  | changelog | v9.18.28 | 9.18.28 |
+| CVE-2024-1737 | - | v9.20.0 | 2024-07-08 |  | changelog | v9.18.28 | 9.18.28 |
+| CVE-2024-1975 | 2024-07-23 | v9.20.0 | 2024-07-08 | -15 | changelog | v9.18.28 | 9.18.28 |
+| CVE-2024-4076 | - | v9.20.0 | 2024-07-08 |  | changelog | v9.18.28 | 9.18.28 |
+| CVE-2024-11187 | - | v9.20.5 | 2025-01-20 |  | changelog | v9.18.33 | 9.18.33 |
+| CVE-2024-12705 | - | v9.20.5 | 2025-01-20 |  | changelog | v9.18.33 | 9.18.33 |
+| CVE-2025-8677 | 2025-10-22 | v9.20.15 | 2025-10-18 | -4 | changelog | v9.18.41 | 9.18.41 |
+| CVE-2025-13878 | - | v9.20.18 | 2026-01-09 |  | changelog | v9.18.44 | 9.18.44 |
+| CVE-2025-40775 | - | v9.20.9 | 2025-05-08 |  | changelog |  |  |
+| CVE-2025-40777 | - | v9.20.11 | 2025-07-04 |  | changelog |  |  |
+| CVE-2025-40778 | - | v9.20.15 | 2025-10-18 |  | changelog | v9.18.41 | 9.18.44 |
+| CVE-2025-40780 | - | v9.20.15 | 2025-10-18 |  | changelog | v9.18.41 | 9.18.41 |
 | CVE-2026-1519 | 2026-03-25 | v9.20.21 | 2026-03-13 | -12 | changelog | v9.18.47 | 9.18.47 |
 | CVE-2026-3039 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog | v9.18.49 |  |
 | CVE-2026-3104 | 2026-03-25 | v9.20.21 | 2026-03-13 | -12 | changelog |  |  |
@@ -644,6 +657,15 @@ git -C $C tag --contains <commit> | grep -x <tag>          # commit basis
 | CVE-2026-5946 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog | v9.18.49 | 9.20.26 |
 | CVE-2026-5947 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog |  | 9.21.22 |
 | CVE-2026-5950 | 2026-05-20 | v9.20.23 | 2026-05-08 | -12 | changelog | v9.18.49 |  |
+| CVE-2026-10723 | 2026-07-22 | v9.20.26 | 2026-07-20 | -2 | changelog |  |  |
+| CVE-2026-10822 | 2026-07-22 | v9.20.26 | 2026-07-20 | -2 | changelog |  |  |
+| CVE-2026-11331 | - | v9.20.26 | 2026-07-20 |  | changelog |  |  |
+| CVE-2026-11605 | 2026-07-22 | v9.20.26 | 2026-07-20 | -2 | changelog |  |  |
+| CVE-2026-11622 | 2026-07-22 | v9.20.26 | 2026-07-20 | -2 | changelog |  |  |
+| CVE-2026-11721 | 2026-07-22 | v9.20.26 | 2026-07-20 | -2 | changelog |  | 9.21.24 |
+| CVE-2026-12617 | - | v9.20.26 | 2026-07-20 |  | changelog |  |  |
+| CVE-2026-13204 | 2026-07-22 | v9.20.26 | 2026-07-20 | -2 | changelog |  |  |
+| CVE-2026-13321 | - | v9.20.26 | 2026-07-20 |  | changelog |  | 9.21.24 |
 
 ### CVEs without a tag
 
@@ -697,6 +719,7 @@ git -C $C tag --contains <commit> | grep -x <tag>          # commit basis
 | CVE-2011-2465 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
 | CVE-2012-1033 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
 | CVE-2013-5661 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
+| CVE-2015-3193 | not-applicable-or-not-bind9-release | CVE-2015-3193 is an OpenSSL bug (BN_mod_exp carry). BIND's only change (CHANGES 4270, commit 559236b5e4 and cherry-picks) edits configure / configure.in to widen the OpenSSL version check (accept >= 1.0.2e, reject 1.0.2 through 1.0.2d, and similar for 1.0.1); no BIND product source file (lib/, bin/) changed. Dependency version gate only, so not a BIND 9 code fix. Tags carrying CHANGES 4270 (earliest v9.9.8-P2) are recorded in verify for reference. |
 | CVE-2016-1284 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
 | CVE-2016-2848 | not-found | no fix commit, no CVE-id mention in CHANGES/notes at any tag, and no fixed-version in NVD text |
 | CVE-2018-5734 | not-applicable-or-not-bind9-release | description names only BIND 4/8, other vendors/libc, Windows-only, Supported Preview (-S) or Red Hat builds; no v9.x sta |
@@ -1582,3 +1605,4 @@ git -C $C tag --contains <commit> | grep -x <tag>          # commit basis
 * rst era (per-release doc/changelog/changelog-<ver>.rst): 150 changelog lines appear under two or three releases (e.g. 'Update bind.keys with the new 2025 IANA root key' under v9.21.3, v9.20.4 and v9.18.32). The earliest-dated-final-tag rule stated in branch_note was not applied to rst-era entries. (Phase 3.)
 * released is the committer-local calendar date of <tag>^{commit}, not the UTC date; about 60 rows differ (e.g. v9.9.1 released 2012-05-10, instant 2012-05-09T22:39:51Z). Earliest-tag choices use the UTC instant after Phase 3. (Phase 3.)
 * Public announcement dates of embargoed releases (e.g. v9.4.2-P1, v9.3.5-P1, v9.5.0-P1: tag commits 2008-05-28, ISC public 2008-07-08) are outside the clone; d01's date and the CVE-2008-1447 latency of -41 days use the tag commit date. (Phase 3.)
+* 23 further inventory CVEs (fixes.bind9 git-scrape rows without NVD product tags) were appended to cve_fixes after the first 184: 22 have a first stable tag (21 commit/changelog-verified via CHANGES / doc/changelog / doc/notes mention plus commit containment; CVE-2006-5989 by commit containment only, since CHANGES 5562 names CVE-2020-8625 instead) and 1 (CVE-2015-3193, an OpenSSL bug; BIND only widened the OpenSSL version gate in configure) is not-applicable-or-not-bind9-release. 13 of the 22 name an earlier tag than the inventory fix_release. nvd_published is null unless the inventory by_keyword list carries it (CVE-2024-1975, CVE-2025-8677, CVE-2026-10723, -10822, -11605, -11622, -11721, -13204); the 184-row counts in the `verification` block and in the gaps above do not include these 23. No 9.18 (>= 9.18.51), 9.16 or 9.11 tag exists after the July 2026 fixes, so the 2026 CVEs first ship in v9.20.26.
