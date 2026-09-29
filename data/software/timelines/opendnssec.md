@@ -66,9 +66,9 @@ git -C $C diff <prev>:conf/kasp.xml.in <tag>:conf/kasp.xml.in   # template defau
 | version | date | change | before | after | on upgrade | opt-in | commits | attribution |
 |---|---|---|---|---|---|---|---|---|
 | 1.0.0b2 | 2009-10-09 | example policy: signature validity for denial RRs 14 -> 7 days, ZSK lifetime 14 -> 30 days | <Validity><Denial>P14D; ZSK <Lifetime>P14D (conf/kasp.xml.in@1.0.0b1) | <Validity><Denial>P7D; ZSK <Lifetime>P30D (conf/kasp.xml.in@1.0.0b2) | no | no | 3a83b287b5, 5f25bcedc3 | exact |
-| 1.0.0b8 | 2009-11-23 | example policy: RRSIG inception offset 5 min -> 1 h | <InceptionOffset>PT300S (conf/kasp.xml.in@1.0.0b7) | <InceptionOffset>PT3600S (conf/kasp.xml.in@1.0.0b8:29) | no | no | f7fad72703 | exact |
+| 1.0.0b8 | 2009-11-23 | example policy: RRSIG inception offset 5 min -> 1 h | <InceptionOffset>PT300S (conf/kasp.xml.in@1.0.0b7) | <InceptionOffset>PT3600S (conf/kasp.xml.in@1.0.0b8:28) | no | no | f7fad72703 | exact |
 | 1.0.0b8 | 2009-11-23 | KSK rollover waits for the operator (ds-seen) before the new key goes active | KSK rollover proceeded automatically once timers expired | KSK rollover halts with the new key in READY state until "ods-ksmutil ds-seen" (renamed ksk-roll in 1.0.0b9, back to ds-seen in 1.1.0) is issued | yes | no | df60b95811, a2537c7c9d | exact |
-| 1.1.0rc1 | 2010-04-22 | example policy: NSEC3 Opt-Out off | <NSEC3><OptOut/> active (conf/kasp.xml.in@1.0.0:34) | <!-- <OptOut/> --> (conf/kasp.xml.in@1.1.0rc1); Opt-Out zones become opt-in | no | no | ceba527456 | exact |
+| 1.1.0rc1 | 2010-04-22 | example policy: NSEC3 Opt-Out off | <NSEC3><OptOut/> active (conf/kasp.xml.in@1.0.0:33) | <!-- <OptOut/> --> (conf/kasp.xml.in@1.1.0rc1); Opt-Out zones become opt-in | no | no | ceba527456 | exact |
 | 1.1.1 | 2010-07-08 | example policy: no standby keys | <Standby>1 for KSK and ZSK (conf/kasp.xml.in@1.1.0) | <Standby>0 for KSK and ZSK (conf/kasp.xml.in@1.1.1); 1.2.0b1 then drops the element (63d1facd "make Standby keys optional") | no | no | 980c9d0a33 | exact |
 | 1.2.0b1 | 2010-10-18 | example policy: default signing algorithm 7 (RSASHA1-NSEC3-SHA1) -> 8 (RSASHA256) | <Algorithm length="2048">7 (KSK) and <Algorithm length="1024">7 (ZSK) (conf/kasp.xml.in@1.1.3) | <Algorithm length="2048">8 (KSK) and <Algorithm length="1024">8 (ZSK) (conf/kasp.xml.in@1.2.0b1); unchanged through 2.1.14 (conf/kasp.xml.in@2.1.14:53,60) | no | no | 00ac6896dd | exact |
 | 1.3.11 | 2012-11-13 | NSEC3PARAM RR published with TTL 0 | NSEC3PARAM TTL taken from the zone default/SOA minimum | NSEC3PARAM TTL 0 (OPENDNSSEC-330); 1.3.16 makes it configurable via kasp.xml <NSEC3><TTL>, default still PT0S | yes | no | 1459ca16c1 | exact |
@@ -77,7 +77,7 @@ git -C $C diff <prev>:conf/kasp.xml.in <tag>:conf/kasp.xml.in   # template defau
 | 1.3.17 | 2014-05-06 | NSEC3 records also emitted for empty non-terminals above unsigned delegations | no NSEC3 for ENTs whose only descendants are insecure (opt-out) delegations, per RFC 5155 errata 3441 | such ENTs get NSEC3 RRs, for resolvers/servers that pre-date errata 3441 (OPENDNSSEC-550) | yes | no | 95ca9be254 | exact |
 | 1.4.4 | 2014-03-25 | NSEC3 records also emitted for empty non-terminals above unsigned delegations (1.4 line) | no NSEC3 for such ENTs (errata 3441 behaviour) | NSEC3 RRs emitted for them (OPENDNSSEC-549) | yes | no | 7d014cc924 | exact |
 | 2.0.0a3 | 2012-06-18 | example policy gains <MaxZoneTTL> | no MaxZoneTTL element (1.4.x template) | <Signatures><MaxZoneTTL>PT1D (default policy) / PT300S (lab policy) (conf/kasp.xml.in@2.0.0a3); P1D from 2.0.0a5 | no | no | 1b11a04053 | exact |
-| 2.0.2 | 2016-09-27 | MaxZoneTTL default when the element is absent | NEWS: 1 day | NEWS: 0. NOT confirmed from code: the only MaxZoneTTL change in 2.0.1..2.0.2 is 847e9e39 (restores PR #508 "drifting_time"), whose policy_ext.c hunk replaces "set 0 when updated" with "set 86400 if != 86400", and enforcer/src/db/policy.c@2.0.2:490 still initialises signatures_max_zone_ttl = 86400 | yes | no | 847e9e391a | approximate |
+| 2.0.2 | 2016-09-27 | MaxZoneTTL default when the element is absent | 0 s when <MaxZoneTTL> absent (policy_ext.c@2.0.1:1178) | 86400 s / 1 day (policy_ext.c@2.0.2:1173; NEWS names the bug, not the fix) | yes | no | 847e9e391a | approximate |
 | 2.1.0 | 2017-02-22 | key export prints SHA-256 DS only (SHA-1 DS no longer printed by default) | "ods-enforcer key export --ds" printed both SHA-1 (digest 1) and SHA-256 (digest 2) DS records | SHA-256 DS only; --sha1 restores the SHA-1 DS; SHA-1 declared deprecated (64a6d9cc "Depracation notice of sha1") | yes | no | b6bfbe1c71, 64a6d9cc55 | exact |
 | 2.1.3 | 2017-08-10 | TTLs above MaxZoneTTL are warned about instead of capped | signer capped RR TTLs to the policy MaxZoneTTL | signer leaves TTLs as in the input zone and logs a warning (OPENDNSSEC-908 "Capping to MaxZoneTTL breaks IXFR") | yes | no | f5ed360d4c | exact |
 
@@ -319,6 +319,23 @@ The inventory attributes exactly one CVE to OpenDNSSEC (keyword search "OpenDNSS
 | 20190904 | 20190904 | 2019-09-04 | no | 0 | 0 | 2.2.0-dev test drop ("code drop"/"testing release" tag message; version.m4 = 2.2.0-dev); never released as a n |
 | fastupdates/pre | fastupdates/pre | 2018-04-19 | no | 0 | 0 | "Temporary tag on the global repository marking the beginning of changes on behalf of fast updates" (tag messa |
 
+## Verification
+
+Phase 3 adversarial check: **PASS WITH CORRECTIONS** (219 checks, 14 failed, 6 corrections applied 2026-09-29). Report: `docs/handoff/verify/opendnssec.md`.
+
+Eight default-change rows are pinned to the pre-release tag where the change first shipped; the earliest stable tag for each (JSON `first_stable_tag`) is:
+
+| pre-release where it first shipped | earliest stable tag | stable date |
+|---|---|---|
+| 1.0.0b2 (example policy: signature validity for d) | 1.0.0 | 2010-02-28 |
+| 1.0.0b8 (example policy: RRSIG inception offset 5) | 1.0.0 | 2010-02-28 |
+| 1.0.0b8 (KSK rollover waits for the operator (ds-) | 1.0.0 | 2010-02-28 |
+| 1.1.0rc1 (example policy: NSEC3 Opt-Out off) | 1.1.0 | 2010-05-26 |
+| 1.2.0b1 (example policy: default signing algorith) | 1.2.0 | 2011-03-18 |
+| 1.4.0b2 (NSEC3PARAM RR published with TTL 0 (1.4 ) | 1.4.0 | 2013-04-22 |
+| 1.4.0a2 (example policy: signature validity 7 -> ) | 1.4.0 | 2013-04-22 |
+| 2.0.0a3 (example policy gains <MaxZoneTTL>) | 2.0.0 | 2016-07-06 |
+
 ## Gaps
 
 - CVE-2012-5582 (the only inventory CVE) has no fix commit in the clone. The vulnerable eppclient (opt-in build) stayed unchanged on the 1.3 line through 1.3.18 and was deleted from the tree in 1.4.0rc1 (feee7499). fix_tag is null; the removal is recorded instead. Whether distributions patched CURLOPT_SSL_VERIFYHOST to 2 is outside the clone.
@@ -326,7 +343,7 @@ The inventory attributes exactly one CVE to OpenDNSSEC (keyword search "OpenDNSS
 - The default signing algorithm switch 7 -> 8 (1.2.0b1, 00ac6896) and the 1.4.0a2 validity/lifetime change (627d8279) have no NEWS line; they are recorded from conf/kasp.xml.in diffs only.
 - The 2048-bit ZSK default (aa6aa1a5, 2019-11-14) exists only on the develop branch; no released tag ships it, so 2.1.14 (2024-08-22) still installs a 1024-bit RSA ZSK example policy. Not recorded as a default change.
 - NSEC3 iterations/salt in the shipped policy (Iterations 5, Salt length 8, Resalt P100D, hash alg 1) never changed between 1.0a1 and 2.1.14; the only commit that touched them ("shorter salt and less iterations" 8a21f7cb, 10/160 -> 5/8) predates the first tag. OpenDNSSEC never enforces an iteration cap; 2.1.10 and 2.1.13 only add ods-kaspcheck warnings (rows are limit-changed, advisory).
-- OPENDNSSEC-843 (2.0.2 "MaxZoneTTL defaults to 0 instead of 1 day"): the code hunk in the only candidate commit (847e9e39) sets 86400, and policy.c keeps 86400 through 2.1.14; before/after taken from NEWS with attribution "approximate".
+- OPENDNSSEC-843 (2.0.2 MaxZoneTTL): resolved on verification -- the NEWS line is the bug title; code shows 0 -> 86400 s (847e9e391a).
 - Algorithm support arrives in layers: libhsm signing/keygen (RSA/SHA-2 1.0.0b2; DSA+GOST 1.4.0a1; ECDSA keygen 2.0.0a5; EdDSA 2.1.7) versus enforcer key generation (RSA only until 2.1.0, which adds DSA/GOST/ECDSA via hsm_key_factory.c; EdDSA 2.1.7). Rows exist for both layers; the enforcer-level date is the one a signing operator can use.
 - RFC 5011: only the 1.4 line implements it (1.4.8, <RFC5011/> per KSK, opt-in). git grep -i rfc5011 on 2.1.14 finds it only in kasp.rnc/kasp2html.xsl/signconf.rnc and enforcer db fields; whether the 2.x enforcer honours the flag was not verified here.
 - Pre-release tags (a/b/rc/s1, -rc3, 2.0.2-rel, 1.4.7-tcp_queue_fix, fastupdates/pre, the six 2018-2019 date tags) are stable=false. Where the rc NEWS section is renamed to the final version at the final tag, entries are attributed to the final; where the pre-release section persists (1.0.0b1..rc4, 1.1.0rc1..rc3, 1.2.0b1..rc3, 1.3.0b1..rc3, 1.4.0a1..rc3, 2.0.0a3/a5/b1) entries stay on the pre-release row.
