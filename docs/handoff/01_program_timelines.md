@@ -13,9 +13,9 @@ Generated 2026-09-29 by `scripts/build_timeline_index.py` from `data/software/ti
 | Knot Resolver | `kresd` | validating resolver | 98 (89 stable) | 2015-10-08 .. 2026-08-05 | 136 | 18 | 16 | complete | verified + corrected (220 checks, 5 correction items) |
 | OpenDNSSEC | `opendnssec` | signer (KASP enforcer + signer engine; no validation) | 144 (65 stable) | 2009-07-30 .. 2024-08-22 | 379 | 15 | 1 | complete | verified + corrected (219 checks, 6 correction items) |
 | PowerDNS Authoritative | `pdns-auth` | authoritative (signer; no validation) | 196 (132 stable) | 2002-11-28 .. 2026-08-03 | 329 | 12 | 15 | complete | verified + corrected (261 checks, 7 correction items, 26dbf70b) |
-| PowerDNS Recursor | `pdns-rec` | validating resolver | 262 (176 stable) | 2006-04-20 .. 2026-09-02 | 255 | 21 | 52 | complete | NOT verified |
+| PowerDNS Recursor | `pdns-rec` | validating resolver | 262 (176 stable) | 2006-04-20 .. 2026-09-02 | 255 | 22 | 52 | complete | verified + corrected (144 checks, 9 correction items) |
 
-7 of 8 timelines are complete and verified: every default-change and CVE row was re-derived from the bare clone by a fresh agent, and corrections were applied by the session in a pass that asserts each pre-change value and writes nothing on failure. Not yet verified: pdns-rec.
+8 of 8 timelines are complete and verified: every default-change and CVE row was re-derived from the bare clone by a fresh agent, and corrections were applied by the session in a pass that asserts each pre-change value and writes nothing on failure.
 
 ## What verification established that downstream must respect
 
@@ -42,6 +42,9 @@ Generated 2026-09-29 by `scripts/build_timeline_index.py` from `data/software/ti
   OpenDNSSEC `first_stable_tag`, pdns-auth `stable_tag`, whose row `released` is the first
   pre-release date). Release-event analysis must use the stable release; the field mapping
   per program is in `04_phase4_brief.md`.
+- **Some stable tags were never released publicly.** PowerDNS Recursor rec-4.5.0, rec-4.5.3
+  and rec-5.0.0 were tagged but never shipped; rows citing them carry `first_public_tag` /
+  `first_public_released`. Use the public release for deployment timing.
 - **`total_entries` is not comparable across programs.** bind9 de-duplicates across
   branches; pdns-auth counts prose paragraphs.
 
@@ -157,9 +160,8 @@ Gaps:
   - Ed448 (algorithm 16) validation: optional libdecaf build (decafsigners.cc under 'if LIBDECAF' in recursordist/Makefile.am at rec-4.0.6) and absent from the Meson build seen at rec-5.4.0; the first tag supporting it and its status in ship...
   - The initial appearance of algorithms/validation code before 12ce523e7 (Dec 2015) and the exact per-commit split between CVE pairs marked attribution 'approximate' (e.g. CVE-2018-10851/14626/14644, CVE-2020-10030/10995/12244, CVE-2025-590...
   - No rec-3.1.3, rec-3.1.5 or rec-3.1.6 tags exist in the clone, and rec-3.1.7.2 has a tree identical to rec-3.1.7.1 (git rev-parse rec-3.1.7.1^{tree} rec-3.1.7.2^{tree}). CVE-2008-1637 / CVE-2008-3217 (real fix releases 3.1.5 and 3.1.6, Ma...
-  - ... 6 more in the JSON
+  - ... 8 more in the JSON
 
 ## Not yet done
 
-- Phase 3 verification and corrections for: pdns-rec.
 - Phase 4 onward per `RESUME.md`.

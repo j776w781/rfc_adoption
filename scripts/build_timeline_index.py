@@ -29,6 +29,7 @@ VERIFIED: dict[str, tuple[int, int, str]] = {
     "opendnssec": (219, 6, ""),
     "bind9": (254, 9, "e0cb29de"),
     "pdns-auth": (261, 7, "26dbf70b"),
+    "pdns-rec": (144, 9, ""),
 }
 GAPS_SHOWN = 6
 CLIP = 240
@@ -59,6 +60,9 @@ LESSONS = """\
   OpenDNSSEC `first_stable_tag`, pdns-auth `stable_tag`, whose row `released` is the first
   pre-release date). Release-event analysis must use the stable release; the field mapping
   per program is in `04_phase4_brief.md`.
+- **Some stable tags were never released publicly.** PowerDNS Recursor rec-4.5.0, rec-4.5.3
+  and rec-5.0.0 were tagged but never shipped; rows citing them carry `first_public_tag` /
+  `first_public_released`. Use the public release for deployment timing.
 - **`total_entries` is not comparable across programs.** bind9 de-duplicates across
   branches; pdns-auth counts prose paragraphs.
 """
