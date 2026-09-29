@@ -232,7 +232,7 @@ def test_hand_bind9_signzone_iterations_zero_on_se(doc):
     e = q2_event(doc, "d21-signzone-nsec3-iterations-0", "iter0", "se")
     assert e["observed"] == pytest.approx(step, abs=1e-5)
     assert step == pytest.approx(2.639849, abs=1e-5)
-    assert e["outside_90_band"] and e["percentile"] > 95
+    assert e["outside_90_band"] and e["percentile"] == pytest.approx(98.4)
     t = q2_event(doc, "d21-signzone-nsec3-iterations-0", "iter0", "se", "transient12")
     assert t["observed"] == pytest.approx(trans, abs=1e-5)
     assert trans == pytest.approx(0.039922, abs=1e-5)
@@ -263,21 +263,76 @@ def test_step_statistic_sees_a_step_the_transient_does_not(mod):
 # ---------------------------------------------------------- calibration --
 
 def test_null_calibration_on_synthetic_data(mod, doc):
-    """No effect: rejection at the 90% band is about 10%. The old whole-span shift was conservative."""
+    """No effect: the primary nulls reject near 10% at the 90% band, separately for q1 and q2. The old
+    whole-span shift was conservative; the non-overlapping placebo null is far too liberal, which is
+    why it is only a sensitivity column."""
     cal = doc["notes"]["calibration"]
     assert cal["reps"] == 1000
-    assert 0.07 <= cal["q2_step12_rejection_rate"] <= 0.13
+    assert (cal["q2_step12_rejection_rate"], cal["q1_coverage_window_shift_rejection_rate"]) == (0.13, 0.108)
+    assert 0.07 <= cal["q2_step12_rejection_rate"] <= 0.15
     assert 0.07 <= cal["q1_coverage_window_shift_rejection_rate"] <= 0.14
-    assert cal["q1_whole_span_shift_rejection_rate"] < cal["q1_coverage_window_shift_rejection_rate"]
+    assert cal["q1_whole_span_shift_rejection_rate"] < 0.06
+    assert cal["q2_step12_nonoverlap_null_rejection_rate"] > 0.25
+    assert cal["q1_nonoverlap_shift_rejection_rate"] > 0.25
     small = mod.calibration(200)
-    assert 0.04 <= small["q2_step12_rejection_rate"] <= 0.16
+    assert 0.04 <= small["q2_step12_rejection_rate"] <= 0.18
     assert 0.04 <= small["q1_coverage_window_shift_rejection_rate"] <= 0.18
 
 
-def test_q1_null_is_calibrated_on_the_real_schedules(doc):
+def test_q1_null_is_calibrated_on_the_real_schedules(mod, doc):
     """With the coverage-window shift, mean p over the program tests is near 0.5, not 0.63."""
-    for test, agg in doc["q1_per_program_releases"]["aggregate"].items():
+    for test in mod.Q1_TESTS:
+        agg = doc["q1_per_program_releases"]["aggregate"][test]
         assert 0.44 <= agg["mean_p_two_sided"] <= 0.58, test
+
+
+def test_q2_placebos_exclude_the_event_and_need_24_months(doc):
+    """The event month is never its own placebo, and a series with fewer than 24 testable months gets
+    no test: the .ch and .li step tests with 9 testable months are gone."""
+    for e in doc["q2_default_change_events"]["events"]:
+        if e["status"] == "tested":
+            assert e["placebo_months"] == e["testable_months_in_series"] - 1
+            assert e["testable_months_in_series"] >= 24
+    e = q2_event(doc, "d21-signzone-nsec3-iterations-0", "iter0", "ch")
+    assert e["status"] == "no test" and e["reason"].startswith("only 9 testable months")
+
+
+def test_q2_counts_against_the_discrete_null(doc):
+    """knot[14] in .se is the most extreme step test; d21 in .se is fourth; neither count beats chance."""
+    q2 = doc["q2_default_change_events"]
+    top = q2["most_extreme_step_tests"]
+    assert (top[0]["row_id"], top[0]["source"]) == ("knot[14]@3.2.0", "se")
+    f = {x["row_id"]: x for x in q2["verifier_focus_events"]}
+    assert f["d21-signzone-nsec3-iterations-0"]["rank_by_p"] == 4
+    assert f["knot[14]@3.2.0"]["expected_at_least_as_extreme_by_chance"] == pytest.approx(1.76, abs=0.01)
+    for x in f.values():
+        assert x["p_count_at_least_observed"] > 0.10
+    assert q2["summary"]["step12"]["smallest_p_rank"] > q2["summary"]["step12"]["bh_rank1_threshold_q_0.10"]
+
+
+def test_detection_power(doc):
+    """An injected step moves the statistic by exactly its size; with no step the primary null fires at
+    about 5% of event months on the upper side, the non-overlapping null far more often."""
+    dp = doc["q2_default_change_events"]["detection_power"]
+    rows = {(r["series"], r["step_pp"]): r for r in dp["rows"]}
+    for series in ("alg13 .se", "alg13 panel", "digest1 .nu"):
+        assert rows[(series, 10)]["statistic"] == pytest.approx(rows[(series, 0)]["statistic"] + 10, abs=1e-5)
+        assert dp["false_positive_share_at_0pp"][series] < 0.08
+        assert dp["false_positive_share_at_0pp_nonoverlap"][series] > dp["false_positive_share_at_0pp"][series]
+    assert dp["smallest_detectable_step_pp"] == {"alg13 .se": None, "alg13 panel": 10, "digest1 .nu": None}
+
+
+def test_bind9_feature_release_schedule(doc):
+    """Every stable release gives BIND 9 no Q1 test; its x.y.0 feature releases do."""
+    per = doc["q1_per_program_releases"]["per_program"]
+    assert all(t["status"] != "tested" for t in per["bind9"]["tests"])
+    feat = per["bind9_feature_releases"]
+    assert feat["event_set"] == "x.y.0 feature releases" and feat["stable_public_releases"] == 17
+    agg = doc["q1_per_program_releases"]["aggregate"]["bind9_feature_releases"]["step12"]
+    assert (agg["tested"], agg["mean_outside_90pct_null"]) == (31, 2)
+    t = next(x for x in feat["tests"] if x["test"] == "step12" and x["observable"] == "alg13" and x["source"] == "se")
+    assert t["status"] == "tested" and t["release_months_tested"] == 3 and t["release_share_of_window"] < 0.1
+    assert not t["beats_chance_mean"]
 
 
 def test_q4_spike_rule_is_the_program_rfc_cases_rule(mod):
