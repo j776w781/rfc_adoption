@@ -47,13 +47,15 @@ BIND odd minors >= 9.13 are development (`stable: false` already).
 | opendnssec | index + `version` | `first_stable_tag` | `first_stable_released` |
 | pdns-auth | index + `version` | `stable_tag` | releases[stable_tag].released. **Not** row `released`: that is the first pre-release date |
 | unbound | index + `version` | `tag` | releases[tag].released (= row `released`) |
-| pdns-rec | `key` | `tag` | releases[tag].released (= row `released`; all 21 rows checked stable). `first_tags_any` holds the first pre-release tag |
+| pdns-rec | `key` | `tag` | releases[tag].released (= row `released`). Three rows cite tags never released publicly (rec-4.5.0, rec-5.0.0) and carry `first_public_tag` / `first_public_released`: report both dates and use the public one for any timing comparison. `first_tags_any` holds the first pre-release tag |
 
 Assert for every row that the tag exists in `releases[]` with `stable: true`; list any
 row that fails instead of guessing.
 
 `mechanism` vocabulary in use: `alg-ecdsa, alg-rsa-sha2, alg-gost, ds-digest, dnskey,
-rrsig, nsec3, nsec3-iterations, validation, trust-anchor-5011, cds-cdnskey, other`.
+rrsig, nsec3, nsec3-iterations, validation, trust-anchor-5011, trust-anchor, cds-cdnskey, other`.
+`trust-anchor` (pdns-rec only) is a static built-in or configured anchor; the Recursor has
+no RFC 5011 rollover. Group both labels under the root-trust-anchor topic in question 3.
 `kind` differs by program (`default-changed, limit-changed, support-added, removed`, ...);
 bind9 also has `value_changed` and `default_related` -- rows with `value_changed: false`
 are not default changes. Keep `opt_in` exactly as recorded, and note that pdns-auth's
