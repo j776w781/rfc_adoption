@@ -1074,8 +1074,11 @@ DS.
 code(r"""
 say("**Measurement breaks.** " + ("; ".join(f"{SRC.get(b_['source'], b_['source'])} {b_['first']} to {b_['last']}"
                                            for b_ in BREAKS) if BREAKS else NA)
-    + ". In these months the list of zones being measured changed (the .gov list grew several-fold; .se and .nu lost "
-    "many unsigned zones), so the adoption share jumped or dipped without any domain being signed. A test whose "
+    + ". In these months the list of zones being measured changed ("
+    + "; ".join(f"{SRC.get(b_['source'], b_['source'])} {b_['first'][:4]}: "
+                f"{'grew' if b_.get('denominator_change', 0) > 0 else 'shrank'} "
+                f"{abs(b_.get('denominator_change', 0)):.0%}" for b_ in BREAKS)
+    + "), so the adoption share jumped or dipped without any domain being signed. A test whose "
     "window crosses such a break can look unusual for that reason alone. Phase 7 therefore reruns every test with the "
     "break months left out; both versions are given below.")
 """)
