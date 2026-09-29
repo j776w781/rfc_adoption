@@ -58,14 +58,15 @@
       "1918"
      ],
      "cves": [],
-     "kind": "default-changed",
-     "is_default_change": true,
+     "kind": "other",
+     "is_default_change": false,
      "section": "3.0",
      "evidence": {
       "changelog_line": "**Warning**: Because of recent DNS based denial of service attacks, running an open recursor has become a security risk. Therefore, unless configured otherwise this version of PowerDNS will only listen on localhost, which means it does not resolve for hosts on your network. To fix, configure the **local-address** setting with all addresses you want to listen on. Additionally, by default service is restricted to RFC 1918 private IP addresses. Use **allow-from** to selectively open up the recursor for your own network. See setting-allow-from for details.",
       "changelog_ref": "master:pdns/recursordist/docs/changelog/pre-4.0.rst [section 3.0]",
       "commits": []
-     }
+     },
+     "correction": "Phase 3: keyword hit on an RFC 1918 warning, not a DNSSEC default."
     }
    ],
    "changelog_released_text": "20th of April 2006."
@@ -1073,7 +1074,7 @@
       "DNSSEC",
       "trust anchor"
      ],
-     "mechanism": "trust-anchor-5011",
+     "mechanism": "trust-anchor",
      "rfcs": [],
      "cves": [],
      "kind": "other",
@@ -1091,7 +1092,7 @@
      "keyword_match": [
       "trust anchor"
      ],
-     "mechanism": "trust-anchor-5011",
+     "mechanism": "trust-anchor",
      "rfcs": [],
      "cves": [],
      "kind": "support-added",
@@ -1411,7 +1412,7 @@
      "keyword_match": [
       "trust anchor"
      ],
-     "mechanism": "trust-anchor-5011",
+     "mechanism": "trust-anchor",
      "rfcs": [],
      "cves": [],
      "kind": "other",
@@ -2453,7 +2454,7 @@
      "keyword_match": [
       "trust anchor"
      ],
-     "mechanism": "trust-anchor-5011",
+     "mechanism": "trust-anchor",
      "rfcs": [],
      "cves": [],
      "kind": "other",
@@ -5473,7 +5474,8 @@
    "changelog_source_tag": "master",
    "total_entries": 1,
    "changelog_entries": [],
-   "changelog_released_text": "Never released publicly."
+   "changelog_released_text": "Never released publicly.",
+   "stability_note": "Tagged but never released publicly (master:pdns/recursordist/docs/changelog/4.5.rst: 'Never released publicly.'). Phase 3."
   },
   {
    "version": "4.5.1",
@@ -5599,7 +5601,8 @@
    "changelog_path": null,
    "changelog_source_tag": null,
    "total_entries": 0,
-   "changelog_entries": []
+   "changelog_entries": [],
+   "stability_note": "Tagged but never released publicly (master:pdns/recursordist/docs/changelog/4.5.rst: '4.5.3 was never released publicly.'). Phase 3."
   },
   {
    "version": "4.5.4",
@@ -7378,7 +7381,8 @@
    "changelog_path": null,
    "changelog_source_tag": null,
    "total_entries": 0,
-   "changelog_entries": []
+   "changelog_entries": [],
+   "stability_note": "Tagged but never released publicly (master:pdns/recursordist/docs/changelog/5.0.rst: 'Version 5.0.0 was never released publicly.'). Phase 3."
   },
   {
    "version": "5.0.1",
@@ -8256,7 +8260,7 @@
      "keyword_match": [
       "trust anchor"
      ],
-     "mechanism": "trust-anchor-5011",
+     "mechanism": "trust-anchor",
      "rfcs": [],
      "cves": [],
      "kind": "support-added",
@@ -8294,7 +8298,7 @@
      "keyword_match": [
       "trust anchor"
      ],
-     "mechanism": "trust-anchor-5011",
+     "mechanism": "trust-anchor",
      "rfcs": [],
      "cves": [],
      "kind": "support-added",
@@ -9452,7 +9456,7 @@
      "keyword_match": [
       "trust anchor"
      ],
-     "mechanism": "trust-anchor-5011",
+     "mechanism": "trust-anchor",
      "rfcs": [],
      "cves": [],
      "kind": "other",
@@ -9553,13 +9557,13 @@
    "tag": "rec-4.0.0",
    "released": "2016-07-08",
    "kind": "support-added",
-   "title": "dnssec setting introduced; default \"process\"",
+   "title": "dnssec setting introduced (default \"process\" in the 4.0.0 alphas only)",
    "mechanism": "validation",
    "before": "rec-3.x: no DNSSEC handling in the Recursor",
-   "after": "dnssec=process: send DO, return DNSSEC records when the client asks, validate only when the client sets AD or DO",
+   "after": "dnssec setting with modes off / process-no-validate / process / log-fail / validate. The alphas defaulted to process; stable rec-4.0.0 ships process-no-validate (row dnssec-default-process-no-validate).",
    "applies_on_upgrade": true,
    "opt_in": false,
-   "is_default_change": true,
+   "is_default_change": false,
    "commits": [
     {
      "commit": "12ce523e77d7738d78e436a9fe1dd25818a8f2cd",
@@ -9600,7 +9604,8 @@
    ],
    "cves": [],
    "attribution": "exact",
-   "note": "Alpha-only default: replaced by process-no-validate in rec-4.0.0-beta1 (next row), so no stable release ever shipped \"process\" as default until 4.5.0."
+   "note": "Alpha-only default: replaced by process-no-validate in rec-4.0.0-beta1 (next row), so no stable release ever shipped \"process\" as default until 4.5.0.",
+   "correction": "Phase 3: stable rec-4.0.0 defaults to process-no-validate; process was the default only in rec-4.0.0-alpha1..alpha3."
   },
   {
    "key": "dnssec-default-process-no-validate",
@@ -9695,7 +9700,10 @@
    ],
    "cves": [],
    "attribution": "exact",
-   "note": "The default has NEVER been \"validate\" (validate-all): mode \"validate\" is still opt-in at rec-5.5.0-alpha1 (rec-rust-lib/table.py default \"process\"). applies_on_upgrade true for anyone on 4.4.x and earlier without an explicit dnssec= setting."
+   "note": "The default has NEVER been \"validate\" (validate-all): mode \"validate\" is still opt-in at rec-5.5.0-alpha1 (rec-rust-lib/table.py default \"process\"). applies_on_upgrade true for anyone on 4.4.x and earlier without an explicit dnssec= setting.",
+   "first_public_tag": "rec-4.5.1",
+   "first_public_released": "2021-05-10",
+   "public_note": "rec-4.5.0 was tagged but never released publicly; the first public release carrying this is rec-4.5.1 (2021-05-10)."
   },
   {
    "key": "trust-anchor-ta-nta-management",
@@ -9704,7 +9712,7 @@
    "released": "2016-07-08",
    "kind": "support-added",
    "title": "Positive and negative trust anchor management (configured TAs, runtime add-ta/add-nta)",
-   "mechanism": "trust-anchor-5011",
+   "mechanism": "trust-anchor",
    "before": "only the built-in root DS was usable",
    "after": "trust anchors and negative trust anchors configurable via Lua config and rec_control (runtime, volatile); not RFC 5011",
    "applies_on_upgrade": false,
@@ -9844,7 +9852,7 @@
    "released": "2017-06-13",
    "kind": "default-changed",
    "title": "Built-in root trust anchor gains the 2017 KSK (key tag 20326)",
-   "mechanism": "trust-anchor-5011",
+   "mechanism": "trust-anchor",
    "before": "rootDSs = {19036}",
    "after": "rootDSs = {19036, 20326}",
    "applies_on_upgrade": true,
@@ -10020,6 +10028,41 @@
    "note": "Row tag is rec-4.2.0 where the default is 60; rec-4.1.5 added the setting with default 0."
   },
   {
+   "key": "root-ds-19036-removed",
+   "version": "4.2.0",
+   "tag": "rec-4.2.0",
+   "released": "2019-07-12",
+   "kind": "default-changed",
+   "title": "Built-in root trust anchor drops the 2010 KSK (key tag 19036)",
+   "mechanism": "trust-anchor",
+   "before": "rootDSs = {19036, 20326}",
+   "after": "rootDSs = {20326}",
+   "applies_on_upgrade": true,
+   "opt_in": false,
+   "is_default_change": true,
+   "commits": [
+    {
+     "commit": "7790329318a27dc6bf33606b3ce0270b31e77cbd",
+     "commit_date": "2018-10-11T20:32:07+02:00",
+     "subject": "rec: remove the old dnssec root key, goodbye 19036 ....",
+     "product_files": [
+      "pdns/root-dnssec.hh"
+     ],
+     "first_tag": "rec-4.2.0-alpha1",
+     "first_stable_tag": "rec-4.2.0",
+     "tag_contains_confirmed": true
+    }
+   ],
+   "first_tags_any": [
+    "rec-4.2.0-alpha1"
+   ],
+   "documentation": "commit subject; rec-4.1.17 still carries 19036",
+   "rfcs": [],
+   "cves": [],
+   "attribution": "exact",
+   "correction": "Phase 3: row added; found by the verifier."
+  },
+  {
    "key": "aggressive-nsec-cache",
    "version": "4.5.0",
    "tag": "rec-4.5.0",
@@ -10055,6 +10098,19 @@
      ],
      "tag_contains_confirmed": true,
      "verify": "git -C out/software_repos/pdns.git tag --contains edcf680eb166 'rec-*' | grep -x rec-4.5.0-alpha2"
+    },
+    {
+     "commit": "f24887cd86daf726b2248e9f84ac19311bb8b7ba",
+     "commit_date": "2021-02-24T11:34:19+01:00",
+     "subject": "rec: Enable the aggressive NSEC cache by default, if DNSSEC is enabled",
+     "product_files": [
+      "pdns/pdns_recursor.cc",
+      "pdns/recursordist/docs/settings.rst"
+     ],
+     "first_tag": "rec-4.5.0-alpha2",
+     "first_stable_tag": "rec-4.5.0",
+     "tag_contains_confirmed": true,
+     "note": "This commit sets aggressive-nsec-cache-size default 100000; edcf680eb had introduced the setting with default 0."
     }
    ],
    "first_tags_any": [
@@ -10066,7 +10122,11 @@
    ],
    "cves": [],
    "attribution": "exact",
-   "note": "Only effective when validation runs, which since 4.5.0 is on client request (dnssec=process)."
+   "note": "Only effective when validation runs, which since 4.5.0 is on client request (dnssec=process).",
+   "correction": "Phase 3: added f24887cd8, the commit that sets the 100000 default.",
+   "first_public_tag": "rec-4.5.1",
+   "first_public_released": "2021-05-10",
+   "public_note": "rec-4.5.0 was tagged but never released publicly; the first public release carrying this is rec-4.5.1 (2021-05-10)."
   },
   {
    "key": "nsec3-max-iterations-150",
@@ -10249,7 +10309,10 @@
    ],
    "cves": [],
    "attribution": "exact",
-   "note": "Not backported: rec-4.9.x and 4.8.x keep 150. The commit is first contained by rec-5.0.0-rc1 and rec-5.1.0-alpha0 (tag names in first_tags_any); rec-5.0.0 is the first stable tag. RFC 9276 inferred from the value (RFC 9276 recommends 0 and a low validator cap); commit cites neither."
+   "note": "Not backported: rec-4.9.x and 4.8.x keep 150. The commit is first contained by rec-5.0.0-rc1 and rec-5.1.0-alpha0 (tag names in first_tags_any); rec-5.0.0 is the first stable tag. RFC 9276 inferred from the value (RFC 9276 recommends 0 and a low validator cap); commit cites neither.",
+   "first_public_tag": "rec-5.0.1",
+   "first_public_released": "2024-01-09",
+   "public_note": "rec-5.0.0 was tagged but never released publicly; the first public release carrying this is rec-5.0.1 (2024-01-09)."
   },
   {
    "key": "keytrap-max-rrsigs-per-record",
@@ -11331,12 +11394,12 @@
   },
   {
    "key": "root-ds-38696",
-   "version": "5.0.10",
-   "tag": "rec-5.0.10",
-   "released": "2025-04-08",
+   "version": "5.2.0",
+   "tag": "rec-5.2.0",
+   "released": "2025-01-10",
    "kind": "default-changed",
    "title": "Built-in root trust anchor gains the new KSK (key tag 38696)",
-   "mechanism": "trust-anchor-5011",
+   "mechanism": "trust-anchor",
    "before": "rootDSs = {20326}",
    "after": "rootDSs = {20326, 38696}",
    "applies_on_upgrade": true,
@@ -11412,7 +11475,8 @@
    "rfcs": [],
    "cves": [],
    "attribution": "exact",
-   "note": "Static addition, no RFC 5011: with docs/dnssec.rst \"no support for RFC 5011 key rollover\". Master carries it from rec-5.2.0-alpha1. Older releases (4.x, and 5.0.0-5.0.9 / 5.1.0-5.1.3) lack it."
+   "note": "Static addition, no RFC 5011: with docs/dnssec.rst \"no support for RFC 5011 key rollover\". Master carries it from rec-5.2.0-alpha1. Older releases (4.x, and 5.0.0-5.0.9 / 5.1.0-5.1.3) lack it.",
+   "correction": "Phase 3: first stable tag is rec-5.2.0 (2025-01-10, contains master commit 0bbbdd60a); rec-5.0.10 and rec-5.1.4 (2025-04-08) are the later branch backports."
   },
   {
    "key": "revoked-dnskey-rejected",
@@ -11578,14 +11642,19 @@
    "shipping_tags": [
     "rec-3.1.7.1"
    ],
-   "latency_days": 487,
+   "latency_days": null,
    "inventory_fix_release": null,
    "inventory_fix_sha": null,
    "applicable": true,
    "dnssec_related": false,
    "mechanism": "other",
    "note": "Fixed in Recursor 3.1.5 (31 March 2008, pre-4.0 changelog) but the clone has NO rec-3.1.5 or rec-3.1.6 tag; the first rec- tag after them is rec-3.1.7.1. 4b3fbfd32 (AES/dns_random import, 2008-03-16) is the candidate commit by subject and date; per-commit attribution is approximate.",
-   "attribution": "approximate"
+   "attribution": "approximate",
+   "latency_days_tag_artifact": 487,
+   "latency_approximate": true,
+   "public_release_date": "2008-03-31",
+   "public_release_source": "rec-3.2:pdns/docs/pdns.sgml, 3.1.5 'Released on the 31st of March 2008'; the fixing release has no tag, or its tag has the predecessor's tree",
+   "latency_days_public": -2
   },
   {
    "cve": "CVE-2008-3217",
@@ -11624,14 +11693,19 @@
    "shipping_tags": [
     "rec-3.1.7.1"
    ],
-   "latency_days": 380,
+   "latency_days": null,
    "inventory_fix_release": null,
    "inventory_fix_sha": null,
    "applicable": true,
    "dnssec_related": false,
    "mechanism": "other",
    "note": "Fixed in 3.1.6 (1 May 2008; NVD ref changeset 1179). No rec-3.1.6 tag exists; first rec- tag containing 13f1ecb52 \"further randomisation improvements\" (2008-04-25) is rec-3.1.7.1. Commit chosen by subject/date; approximate.",
-   "attribution": "approximate"
+   "attribution": "approximate",
+   "latency_days_tag_artifact": 380,
+   "latency_approximate": true,
+   "public_release_date": "2008-05-01",
+   "public_release_source": "rec-3.2:pdns/docs/pdns.sgml, 3.1.6 'Released on the 1st of May 2008'; the fixing release has no tag, or its tag has the predecessor's tree",
+   "latency_days_public": -78
   },
   {
    "cve": "CVE-2009-4009",
@@ -11647,14 +11721,19 @@
    "first_tag_any_prerelease_or_stable": null,
    "fix_commits": [],
    "shipping_tags": [],
-   "latency_days": 57,
+   "latency_days": null,
    "inventory_fix_release": null,
    "inventory_fix_sha": null,
    "applicable": true,
    "dnssec_related": false,
    "mechanism": "other",
    "note": "Fixed in 3.1.7.2 per advisory 2010-01. rec-3.1.7.2 has a tree IDENTICAL to rec-3.1.7.1 (git rev-parse rec-3.1.7.1^{tree} rec-3.1.7.2^{tree} equal; its single commit 514472d39 is an SVN \"branch\" copy), so that tag cannot be the first tag containing fix code. rec-3.2 changelog says \"All security fixes from 3.1.7.2 are included\": rec-3.2 is the first tag that demonstrably contains the fix. Fix commit itself not found.",
-   "attribution": "approximate"
+   "attribution": "approximate",
+   "latency_days_tag_artifact": 57,
+   "latency_approximate": true,
+   "public_release_date": "2010-01-06",
+   "public_release_source": "rec-3.2:pdns/docs/pdns.sgml, 3.1.7.2 'Released on the 6th of January 2010'; the fixing release has no tag, or its tag has the predecessor's tree",
+   "latency_days_public": -2
   },
   {
    "cve": "CVE-2009-4010",
@@ -11670,14 +11749,19 @@
    "first_tag_any_prerelease_or_stable": null,
    "fix_commits": [],
    "shipping_tags": [],
-   "latency_days": 57,
+   "latency_days": null,
    "inventory_fix_release": null,
    "inventory_fix_sha": null,
    "applicable": true,
    "dnssec_related": true,
    "mechanism": "other",
    "note": "Advisory 2010-02 (spoofing via crafted zones), same release as CVE-2009-4009 and the same mis-imported rec-3.1.7.2 tag (tree identical to rec-3.1.7.1); first demonstrable tag rec-3.2. Fix commit not found.",
-   "attribution": "approximate"
+   "attribution": "approximate",
+   "latency_days_tag_artifact": 57,
+   "latency_approximate": true,
+   "public_release_date": "2010-01-06",
+   "public_release_source": "rec-3.2:pdns/docs/pdns.sgml, 3.1.7.2 'Released on the 6th of January 2010'; the fixing release has no tag, or its tag has the predecessor's tree",
+   "latency_days_public": -2
   },
   {
    "cve": "CVE-2014-8601",
@@ -15022,17 +15106,19 @@
  },
  "gaps": [
   "news_edits[] left empty: not determinable. Since rec-4.1.0 the changelog file at a release tag is frozen at the alpha/beta state and point-release sections are written on master only (and for 4.0.3..4.0.9 / 3.6.3 / 3.6.4 / 3.7.2 / 3.7.3 the section does not exist at its own tag), so there is no contemporaneous text to diff against the current text.",
-  "Stage-2 changelog_entries are kept unchanged but are incomplete for default/limit changes: the keyword filter is case-sensitive, so 4.5.2 'Change nsec3-max-iterations default to 150.' (PR 10477) and rec-5.0.0-rc1 'Change default of nsec3-max-iterations to 50.' (PR 13478) were dropped (rec-4.5.2 total_entries 6, kept 2), and the KeyTrap lines 'Security advisory 2024-01: CVE-2023-50387 and CVE-2023-50868' for 4.8.6, 4.9.3 and 5.0.2 were not parsed (total_entries 1, kept 0; the .rst lines are indented one space short). The evidence for these rows is therefore in default_changes[].documentation, not in releases[].changelog_entries.",
+  "Stage-2 changelog_entries are kept unchanged but are incomplete for default/limit changes: the keyword filter is case-sensitive, so 4.5.2 'Change nsec3-max-iterations default to 150.' (PR 10477) and rec-5.0.0-rc1 'Change default of nsec3-max-iterations to 50.' (PR 13478) were dropped (rec-4.5.2 total_entries 6, kept 2), and the KeyTrap lines 'Security advisory 2024-01: CVE-2023-50387 and CVE-2023-50868' for 4.8.6, 4.9.3 and 5.0.2 were not parsed (total_entries 1, kept 0; the .rst lines are indented one space short). The evidence for these rows is therefore in default_changes[].documentation, not in releases[].changelog_entries. Phase 3: fixable rather than undeterminable; the dropped lines are at master:pdns/recursordist/docs/changelog/4.5.rst:272 and 5.0.rst:318 (nsec3), and 5.0.rst carries the KeyTrap advisory line.",
   "RFC 5011: no automated trust-anchor rollover was found at any tag. docs/dnssec.rst at rec-5.4.0 states 'it has no support for RFC 5011 key rollover and does not persist a changed root trust anchor to disk'. Only the REVOKE-bit rejection (6f2088b4f, rec-4.4.0-alpha2) and static root-DS additions (2017 KSK 20326, 2018 removal of 19036, 2025 KSK 38696) were found. An absence claim is bounded by the greps done (docs/dnssec.rst, pdns/validate.cc, root-dnssec.hh); the whole tree was not audited at every tag.",
   "Ed448 (algorithm 16) validation: optional libdecaf build (decafsigners.cc under 'if LIBDECAF' in recursordist/Makefile.am at rec-4.0.6) and absent from the Meson build seen at rec-5.4.0; the first tag supporting it and its status in shipped packages were not determined, so no Ed448 row. ECDSA (algorithm 13/14) is present from rec-4.0.0-alpha1 (OpenSSL) but its introducing commit was not searched. GOST (algorithm 12) was not investigated beyond the 4.1.0-rc1 crash-fix changelog line. No algorithm other than 5/7 (auto-switch-off, rec-4.9.0) was found disabled by default.",
-  "The initial appearance of algorithms/validation code before 12ce523e7 (Dec 2015) and the exact per-commit split between CVE pairs marked attribution 'approximate' (e.g. CVE-2018-10851/14626/14644, CVE-2020-10030/10995/12244, CVE-2025-59023/59024, CVE-2026-0398/24027, CVE-2026-33258/59/61/33600/33601) rest on advisory version lists plus commit subjects; the advisories do not name commits. The fix TAG is exact for these, the fix COMMIT is a best match.",
-  "No rec-3.1.3, rec-3.1.5 or rec-3.1.6 tags exist in the clone, and rec-3.1.7.2 has a tree identical to rec-3.1.7.1 (git rev-parse rec-3.1.7.1^{tree} rec-3.1.7.2^{tree}). CVE-2008-1637 / CVE-2008-3217 (real fix releases 3.1.5 and 3.1.6, March/May 2008) therefore show rec-3.1.7.1 (2009-08-02) as the first tag containing the code, and CVE-2009-4009/4010 show rec-3.2; their latencies (487, 380, 57 days) are artefacts of the missing tags. CVE-2006-4252 and CVE-2009-4009/4010 have no identifiable fix commit.",
+  "The initial appearance of algorithms/validation code before 12ce523e7 (Dec 2015) and the exact per-commit split between CVE pairs marked attribution 'approximate' (e.g. CVE-2018-10851/14626/14644, CVE-2020-10030/10995/12244, CVE-2025-59023/59024, CVE-2026-0398/24027, CVE-2026-33258/59/61/33600/33601) rest on advisory version lists plus commit subjects; the advisories do not name commits. The fix TAG is exact for these, the fix COMMIT is a best match. Phase 3: ECDSA validation first appears in rec-4.0.0-alpha1 (stable rec-4.0.0) via e2fec75a5.",
+  "No rec-3.1.3, rec-3.1.5 or rec-3.1.6 tags exist in the clone, and rec-3.1.7.2 has a tree identical to rec-3.1.7.1 (git rev-parse rec-3.1.7.1^{tree} rec-3.1.7.2^{tree}). CVE-2008-1637 / CVE-2008-3217 (real fix releases 3.1.5 and 3.1.6, March/May 2008) therefore show rec-3.1.7.1 (2009-08-02) as the first tag containing the code, and CVE-2009-4009/4010 show rec-3.2; their latencies (487, 380, 57 days) are artefacts of the missing tags. CVE-2006-4252 and CVE-2009-4009/4010 have no identifiable fix commit. Phase 3: latency_days for CVE-2008-1637/3217 and CVE-2009-4009/4010 set to null (tag artefacts 487/380/57/57); latency_days_public from the rec-3.2 pdns.sgml release dates is -2/-78/-2/-2.",
   "Security-release tag commits precede public release: rec-5.0.2 / 4.8.6 / 4.9.3 tags are dated 2024-02-06 but the changelog says 'Released 13th of February 2024' (embargo; NVD 2024-02-14), so latency_days -8 is against the commit date; against the changelog date it is -1. Every cve_fixes row carries fix_changelog_released_text so the same check can be made for other security releases (e.g. rec-5.3.1 tag dated 2025-10-22).",
   "CVE-2024-25583 and CVE-2024-25590 are attributed to the Recursor only via inventory fixes.pdns-rec (not in by_product.pdns-rec), so their NVD publication dates and latency are absent (null). CVE-2025-30195 (rec-5.2.1, advisory 2025-01) and CVE-2016-6172 (rec-4.0.1 changelog; NVD attributes it to the Authoritative Server) appear in changelogs but not in by_product.pdns-rec; not added.",
-  "Recursor DNSSEC validation CVEs present in the tree's security advisories but NOT yet in cve_inventory.json (NVD lag): CVE-2026-52688 'RRSIGs with too few labels can lead to bypass of DNSSEC wildcard validation' and CVE-2026-52686 'Wildcard CNAME proof validation bypass' (advisory 2026-10, fixed 5.2.12 / 5.3.9 / 5.4.4), CVE-2026-42390 ZONEMD validation bypass and CVE-2026-33612 ZoneToCache poisoning (advisory 2026-08, fixed 5.2.11 / 5.3.8 / 5.4.3), CVE-2026-52682 (advisory 2026-11, fixed 5.2.13 / 5.3.10 / 5.4.5). Not emitted as cve_fixes rows because the inventory does not attribute them; fix tags come from the advisories only and were not commit-verified.",
+  "Recursor DNSSEC validation CVEs present in the tree's security advisories but NOT yet in cve_inventory.json (NVD lag): CVE-2026-52688 'RRSIGs with too few labels can lead to bypass of DNSSEC wildcard validation' and CVE-2026-52686 'Wildcard CNAME proof validation bypass' (advisory 2026-10, fixed 5.2.12 / 5.3.9 / 5.4.4), CVE-2026-42390 ZONEMD validation bypass and CVE-2026-33612 ZoneToCache poisoning (advisory 2026-08, fixed 5.2.11 / 5.3.8 / 5.4.3), CVE-2026-52682 (advisory 2026-11, fixed 5.2.13 / 5.3.10 / 5.4.5). Not emitted as cve_fixes rows because the inventory does not attribute them; fix tags come from the advisories only and were not commit-verified. Phase 3: the tree holds 13 Recursor advisory CVEs with no inventory row, not five (list in docs/handoff/verify/pdns-rec.md). Earliest-UTC fix tags for the DNSSEC ones: rec-5.4.4 (CVE-2026-52688/52686), rec-5.3.8 (CVE-2026-42390/33612), rec-5.4.5 (CVE-2026-52682). Not added as rows, consistent with Unbound's post-inventory CVEs.",
   "inventory fixes.pdns-rec disagrees with the tags found for: CVE-2023-50387/50868 (inventory 5.1.0; earliest stable tag rec-5.0.2, also 4.8.6 and 4.9.3), CVE-2020-25829 (inventory 4.2.5; rec-4.1.18 is earlier), CVE-2024-25590 and CVE-2026-33257/33260 (inventory shas are merges/auth-branch commits contained by no rec- tag), CVE-2015-1868 (inventory sha not in any rec- tag). The inventory also lists dnsdist/auth-only CVEs under fixes.pdns-rec (CVE-2009-4492, CVE-2012-0206, CVE-2018-1046, CVE-2019-9512/9514/9515, CVE-2023-6193, CVE-2026-33608..33611, CVE-2026-49975); they are not Recursor fixes and are not emitted.",
   "CVE-2017-15093 (api-config-dir, 3.x also affected up to 3.7.4) and CVE-2016-7068 on the 3.7 line: no rec-3.7.x tag after 3.7.4 carries a fix for 15093; only the 4.0.7 fix is recorded.",
-  "Default-change rows cover settings found by scanning rec-main.cc / pdns_recursor.cc / table.py defaults at every non-alias release tag for: dnssec, nsec3-max-iterations, dnssec-disabled-algorithms, aggressive-nsec-cache-size, aggressive-cache-min-nsec3-hit-ratio, signature-inception-skew, max-cache-bogus-ttl, allow-trust-anchor-query, trustanchorfile(-interval), dnssec-log-bogus and the seven KeyTrap limits. aggressive-cache-min-nsec3-hit-ratio (2000, 4.9.0-alpha1), max-cache-bogus-ttl (3600, 4.2.0-beta1) and allow-trust-anchor-query (no) were seen but given no row because they are cache tuning / diagnostics rather than validation-outcome defaults. Other DNSSEC-relevant defaults (root-nx-trust, ECS/DNSSEC interplay, x-dnssec-names) were not analysed."
+  "Default-change rows cover settings found by scanning rec-main.cc / pdns_recursor.cc / table.py defaults at every non-alias release tag for: dnssec, nsec3-max-iterations, dnssec-disabled-algorithms, aggressive-nsec-cache-size, aggressive-cache-min-nsec3-hit-ratio, signature-inception-skew, max-cache-bogus-ttl, allow-trust-anchor-query, trustanchorfile(-interval), dnssec-log-bogus and the seven KeyTrap limits. aggressive-cache-min-nsec3-hit-ratio (2000, 4.9.0-alpha1), max-cache-bogus-ttl (3600, 4.2.0-beta1) and allow-trust-anchor-query (no) were seen but given no row because they are cache tuning / diagnostics rather than validation-outcome defaults. Other DNSSEC-relevant defaults (root-nx-trust, ECS/DNSSEC interplay, x-dnssec-names) were not analysed. Phase 3: this is a scope decision, not an inability to determine.",
+  "Tags rec-4.5.0, rec-4.5.3 and rec-5.0.0 were never released publicly (changelog). Rows citing 4.5.0 or 5.0.0 carry first_public_tag / first_public_released (rec-4.5.1, rec-5.0.1); use those for deployment timing. (Phase 3.)",
+  "mechanism 'trust-anchor' in this file means static built-in or configured anchors; the Recursor has no RFC 5011 rollover. Other programs use 'trust-anchor-5011' for rows that do include 5011 behaviour. (Phase 3.)"
  ],
  "stages_complete": [
   1,
@@ -15049,5 +15135,27 @@
   },
   "cve_fix_rows": 52,
   "cve_dnssec_related": 14
+ },
+ "verification": {
+  "phase3": {
+   "report": "docs/handoff/verify/pdns-rec.md",
+   "verdict": "PASS WITH CORRECTIONS",
+   "corrections_applied": [
+    ".md 38696 table row",
+    ".md 38696 note",
+    ".md dnssec intro title",
+    ".md aggr note",
+    ".md insert 19036 row",
+    ".md CVE-2008-1637",
+    ".md CVE-2008-3217",
+    ".md CVE-2009-4009",
+    ".md CVE-2009-4010",
+    ".md relabel 6",
+    "relabel trust-anchor-5011 -> trust-anchor: 7 entries, 3 default rows (no pdns-rec row concerns RFC 5011)",
+    "dnssec-default-process: first_public_tag rec-4.5.1 2021-05-10",
+    "aggressive-nsec-cache: first_public_tag rec-4.5.1 2021-05-10",
+    "nsec3-max-iterations-50: first_public_tag rec-5.0.1 2024-01-09"
+   ]
+  }
  }
 }
