@@ -70,12 +70,19 @@ usable -- each writes the release list first): bind9, pdns-auth (pdns-auth.json 
 appearing), pdns-rec. Check `ls data/software/timelines/`; a missing .md means re-run
 with the Phase 1 brief. Keep concurrency at three.
 
-Inventory corrections queued (apply to data/software/cve_inventory.json only when no
-builder is running, since they read it): kresd CVE-2021-40083 fix -> 5.3.2; nsd
-CVE-2019-13207 published 2019-07-03; unbound CVE-2017-15105 fix release 1.6.8
-(2018-01-19), CVE-2024-1931 -> 1.19.2, CVE-2024-8508 -> 1.21.1, CVE-2019-16866 -> 1.9.4.
+Inventory corrections APPLIED (9cd7b41d): all six, each row carrying a `correction` field
+naming its verify report. Do not re-apply; the pass asserts pre-change values and would refuse.
+out/analysis/cve_crossref.json and its CSVs are deliberately NOT regenerated until the last
+three timelines are verified, so the latency figures move once.
 Pattern behind five of the six: the NVD scrape names the next MASTER release because
 branch point releases never touch doc/Changelog; the branch tag shipped the fix earlier.
+
+## Update 2026-09-29, fifth resume
+
+- pdns-auth stage 1 (196 releases with dates) committed as 3b0f2e37; its builder resumed for
+  stages 2-4 on top of it. bind9 (4th attempt) and pdns-rec (3rd) builders re-spawned with the
+  instruction to write the release list FIRST and save after every stage.
+- Three builders running; nothing else can proceed until they report.
 
 ## Next steps, in order
 
