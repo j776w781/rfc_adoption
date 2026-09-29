@@ -84,6 +84,18 @@ branch point releases never touch doc/Changelog; the branch tag shipped the fix 
   instruction to write the release list FIRST and save after every stage.
 - Three builders running; nothing else can proceed until they report.
 
+## Update 2026-09-29, sixth resume -- Fable monthly spend limit
+
+- Fable's MONTHLY spend cap now rejects new subagents on that model (not a session window;
+  it will not reset in hours). Owner chose to run the remaining builders on Sonnet.
+- All eight programs now have dated release lists AND changelog entries on disk (a67d7b72):
+  bind9 852 releases / 1,383 entries, pdns-auth 196 / 330, pdns-rec 262 / 255. Only
+  default_changes[] and cve_fixes[] are missing for those three.
+- Phase 2 index written: `01_program_timelines.md` (51466e9d). Task #2 done.
+- Three Sonnet builders spawned for bind9 / pdns-auth / pdns-rec stages 3-4, each told to
+  keep the existing rows untouched and save after every stage. Their verifiers (Phase 3)
+  should also run on Sonnet if Fable is still capped.
+
 ## Next steps, in order
 
 1. `git status`; commit any timeline / verify files the agents left, as wip.
