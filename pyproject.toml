@@ -30,6 +30,7 @@ dashboard = ["streamlit>=1.30", "plotly>=5.18"]
 test = ["pytest>=7.4"]
 extras = ["polars>=0.20", "pandera>=0.18", "rich>=13.0", "networkx>=3.0"]
 parallel-effort = ["statsmodels>=0.14", "matplotlib>=3.8"]
+notebooks = ["nbformat>=5.9", "nbclient>=0.9", "ipykernel>=6.29"]
 
 [project.scripts]
 openintel-rfc = "openintel_rfc.cli:main"

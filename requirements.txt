@@ -8,6 +8,9 @@ pydantic>=2.5          # Typed models for checklists, signals, matches, reasonin
 streamlit>=1.30        # Multipage management + visualization dashboard
 plotly>=5.18           # Interactive charts inside the dashboard
 pytest>=7.4            # Test suite
+nbformat>=5.9
+nbclient>=0.9
+ipykernel>=6.29
 
 # --- parallel_effort (src/parallel_effort) -- standalone adoption-analysis POC ---
 statsmodels>=0.14      # Segmented regression (OLS + HAC-corrected standard errors)
