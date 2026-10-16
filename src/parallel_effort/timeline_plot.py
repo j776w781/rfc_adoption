@@ -26,6 +26,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Sequence
 
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -116,6 +117,15 @@ def plot_tld_timeline(
             )
 
     axes[-1].set_xlabel("month")
+    # Explicit month ticks instead of matplotlib's default (which collapses to
+    # bare years over a long span). The interval scales with the span so a
+    # multi-decade plot still gets month-labelled ticks without cramming in
+    # one per calendar month.
+    span_months = max(len(tld_df), 1)
+    interval = max(1, round(span_months / 20))
+    for ax in axes:
+        ax.xaxis.set_major_locator(mdates.MonthLocator(interval=interval))
+    axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
     fig.autofmt_xdate()
     plt.tight_layout()
 
