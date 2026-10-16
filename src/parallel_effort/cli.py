@@ -335,6 +335,7 @@ def cmd_timeline(args: argparse.Namespace) -> int:
         args.tld,
         metrics=args.metrics if args.metrics else tp.DEFAULT_METRICS,
         checklist_path=args.checklist,
+        software_support_path=args.software_support,
         out_path=args.out,
     )
     print(f"Saved plot to {out_path}")
@@ -426,7 +427,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     timeline_parser = subparsers.add_parser(
         "timeline",
         help="Plot DS/DNSKEY/RRSIG prevalence over time for one TLD, with RFC "
-        "publication dates marked.",
+        "publication and software-support dates marked.",
     )
     timeline_parser.add_argument(
         "--input", required=True, help="Path to the per-(tld, month) table (from `rollup`)."
@@ -437,6 +438,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=None,
         help="Path to an RFC checklist JSON (default: the project's bundled "
         "dnssec_rfc_checklists.json).",
+    )
+    timeline_parser.add_argument(
+        "--software-support",
+        default=None,
+        help="Path to a software_support.json (default: the project's bundled "
+        "data/software/software_support.json).",
     )
     timeline_parser.add_argument(
         "--metrics",
