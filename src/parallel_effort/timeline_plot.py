@@ -64,6 +64,19 @@ __all__ = [
 
 DEFAULT_METRICS: tuple[str, ...] = ("ds_prevalence", "dnskey_prevalence", "rrsig_prevalence")
 
+#: Point size of an event label and the DPI it's rendered/saved at -- shared by
+#: the lane-assignment math below (which needs to know how many pixels a
+#: label actually occupies) and the final plt.savefig call, so the two never
+#: silently disagree about scale.
+LABEL_FONTSIZE: int = 6
+SAVE_DPI: int = 150
+
+#: Per-attempt downward nudge when resolving a label collision, as a fraction
+#: of the axis's y-range, and how many times to try before giving up and
+#: accepting the overlap (a pathological cluster, not a crash).
+LABEL_NUDGE_FRACTION: float = 0.015
+MAX_LABEL_NUDGES: int = 150
+
 #: These three live under data/software/, not openintel_rfc, so (unlike
 #: DEFAULT_CHECKLIST_PATH) their defaults live here rather than in that
 #: package's config.
@@ -209,6 +222,11 @@ def load_cve_events(
     return events
 
 
+def _overlaps(a, b) -> bool:
+    """Whether two matplotlib display-space bounding boxes intersect."""
+    return a.x0 < b.x1 and b.x0 < a.x1 and a.y0 < b.y1 and b.y0 < a.y1
+
+
 def plot_tld_timeline(
     input_path: Path | str,
     tld: str,
@@ -260,7 +278,7 @@ def plot_tld_timeline(
     # more horizontal room for labels to spread out, instead of staying as
     # cramped as a 2-year plot would be.
     fig_width = max(11.0, span_months * 0.18)
-    fig, axes = plt.subplots(len(metrics), 1, figsize=(fig_width, 3 * len(metrics)), sharex=True)
+    fig, axes = plt.subplots(len(metrics), 1, figsize=(fig_width, 4.5 * len(metrics)), sharex=True)
     if len(metrics) == 1:
         axes = [axes]
 
@@ -268,19 +286,6 @@ def plot_tld_timeline(
         ax.plot(tld_df["month"], tld_df[metric], "o-", markersize=3, linewidth=1, color="tab:blue")
         ax.set_title(f"{tld}: {metric}")
         ax.set_ylabel("prevalence")
-        bottom, top = ax.get_ylim()
-        # Labels cycle through a few heights so events landing close together
-        # in time (close enough for their rotated text to overlap) don't get
-        # stacked at the same height -- not true collision detection, just
-        # enough to keep a dense stretch legible.
-        height_levels = [top, top - 0.12 * (top - bottom), top - 0.24 * (top - bottom)]
-        for i, (when, label, category) in enumerate(categorized):
-            color = EVENT_COLORS[category]
-            ax.axvline(when, color=color, linestyle="--", linewidth=0.8, alpha=0.7)
-            ax.text(
-                when, height_levels[i % len(height_levels)], label, rotation=90, fontsize=6,
-                color=color, ha="right", va="top",
-            )
 
     axes[-1].set_xlabel("month")
     # Explicit month ticks instead of matplotlib's default (which collapses to
@@ -292,9 +297,48 @@ def plot_tld_timeline(
         ax.xaxis.set_major_locator(mdates.MonthLocator(interval=interval))
     axes[-1].xaxis.set_major_formatter(mdates.DateFormatter("%Y-%m"))
     fig.autofmt_xdate()
+    # Finalize the layout (axis positions, margins) before placing event
+    # labels below -- ax.text() annotations don't participate in tight_layout
+    # at all, so doing this first means the collision detection measures
+    # against the exact geometry the figure will actually be saved with,
+    # rather than an approximation that layout could still shift afterward.
     plt.tight_layout()
 
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+
+    for ax in axes:
+        bottom, top = ax.get_ylim()
+        step = LABEL_NUDGE_FRACTION * (top - bottom)
+        placed_boxes: list = []
+        for when, label, category in categorized:
+            color = EVENT_COLORS[category]
+            ax.axvline(when, color=color, linestyle="--", linewidth=0.8, alpha=0.7)
+            y = top
+            text_obj = ax.text(
+                when, y, label, rotation=90, fontsize=LABEL_FONTSIZE,
+                color=color, ha="right", va="top",
+            )
+            # Real collision avoidance: nudge the label down, by an amount
+            # measured against its *actual rendered size* (not an estimate of
+            # how many pixels a label "should" take), until it clears every
+            # label already placed on this axis or we run out of room/patience
+            # -- at which point the overlap is accepted as the least-bad
+            # option for however dense that stretch genuinely is.
+            bbox = text_obj.get_window_extent(renderer=renderer)
+            attempts = 0
+            while (
+                any(_overlaps(bbox, other) for other in placed_boxes)
+                and y - step > bottom
+                and attempts < MAX_LABEL_NUDGES
+            ):
+                y -= step
+                text_obj.set_position((when, y))
+                bbox = text_obj.get_window_extent(renderer=renderer)
+                attempts += 1
+            placed_boxes.append(bbox)
+
     out_path = Path(out_path) if out_path else Path(f"{tld}_timeline.png")
-    plt.savefig(out_path, dpi=150)
+    plt.savefig(out_path, dpi=SAVE_DPI)
     plt.close(fig)
     return out_path
