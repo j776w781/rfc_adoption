@@ -45,6 +45,7 @@ from openintel_rfc.utils import PipelineError, get_logger, warn
 from . import presence_table as pt
 from . import prevalence as pv
 from . import segmented_regression as sr
+from . import timeline_plot as tp
 
 LOGGER = get_logger(__name__)
 
@@ -328,6 +329,18 @@ def cmd_regress(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_timeline(args: argparse.Namespace) -> int:
+    out_path = tp.plot_tld_timeline(
+        args.input,
+        args.tld,
+        metrics=args.metrics if args.metrics else tp.DEFAULT_METRICS,
+        checklist_path=args.checklist,
+        out_path=args.out,
+    )
+    print(f"Saved plot to {out_path}")
+    return 0
+
+
 def cmd_run(args: argparse.Namespace) -> int:
     scan_rc = cmd_scan(args)
     if scan_rc != 0:
@@ -409,6 +422,33 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--out", default=None, help="Output PNG path (default: <tld>_segmented_regression.png)."
     )
     regress_parser.set_defaults(func=cmd_regress)
+
+    timeline_parser = subparsers.add_parser(
+        "timeline",
+        help="Plot DS/DNSKEY/RRSIG prevalence over time for one TLD, with RFC "
+        "publication dates marked.",
+    )
+    timeline_parser.add_argument(
+        "--input", required=True, help="Path to the per-(tld, month) table (from `rollup`)."
+    )
+    timeline_parser.add_argument("--tld", required=True, help="Which TLD to plot.")
+    timeline_parser.add_argument(
+        "--checklist",
+        default=None,
+        help="Path to an RFC checklist JSON (default: the project's bundled "
+        "dnssec_rfc_checklists.json).",
+    )
+    timeline_parser.add_argument(
+        "--metrics",
+        nargs="+",
+        default=None,
+        help="Which prevalence columns to plot (default: ds_prevalence dnskey_prevalence "
+        "rrsig_prevalence).",
+    )
+    timeline_parser.add_argument(
+        "--out", default=None, help="Output PNG path (default: <tld>_timeline.png)."
+    )
+    timeline_parser.set_defaults(func=cmd_timeline)
 
     return parser
 
