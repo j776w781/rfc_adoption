@@ -40,7 +40,7 @@ import json
 import os
 import time
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Any, Mapping, Sequence
 
@@ -68,6 +68,8 @@ __all__ = [
     "merge_domain_month_table_by_source",
     "combine_source_tables",
     "merge_domain_month_table_hierarchical",
+    "merge_domain_month_table_by_period",
+    "merge_domain_month_table_hierarchical_by_period",
 ]
 
 LOGGER = get_logger(__name__)
@@ -828,6 +830,206 @@ def merge_domain_month_table_hierarchical(
         sources=sources,
         start=start,
         end=end,
+        resume=resume,
+        threads=threads,
+        memory_limit=memory_limit,
+        temp_directory=temp_directory,
+    )
+    return combine_source_tables(
+        intermediate_dir,
+        output_path,
+        csv=csv,
+        threads=threads,
+        memory_limit=memory_limit,
+        temp_directory=temp_directory,
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Hierarchical merge, chunked by calendar period instead of by source
+# --------------------------------------------------------------------------- #
+#
+# Splitting by source isn't enough on its own: one source can carry enough
+# history by itself to overwhelm a one-shot merge (a long-running, large TLD
+# is its own multi-year corpus). This chunks by calendar date range instead --
+# usable together with a `sources` filter to split one source's own history,
+# or on its own to chunk the whole corpus by time. Stage B is the exact same
+# `combine_source_tables` used for the by-source split: it does not care why
+# its input files are small, only that they are.
+
+
+def _discover_date_range(
+    checkpoint_dir: Path | str,
+    *,
+    sources: Sequence[str] | None,
+    start: date | None,
+    end: date | None,
+) -> tuple[date, date] | None:
+    """The earliest/latest day among checkpoints matching the given filter."""
+    directory = Path(checkpoint_dir) / "days"
+    wanted_sources = set(sources) if sources is not None else None
+    earliest: date | None = None
+    latest: date | None = None
+    for status_path in directory.glob(f"*{_STATUS_SUFFIX}"):
+        status = _read_status(status_path)
+        if status is None or not status.get("complete"):
+            continue
+        if wanted_sources is not None and str(status.get("source")) not in wanted_sources:
+            continue
+        try:
+            day_value = date.fromisoformat(str(status.get("date")))
+        except ValueError:
+            continue
+        if start is not None and day_value < start:
+            continue
+        if end is not None and day_value > end:
+            continue
+        if earliest is None or day_value < earliest:
+            earliest = day_value
+        if latest is None or day_value > latest:
+            latest = day_value
+    return None if earliest is None or latest is None else (earliest, latest)
+
+
+def _add_months(day: date, months: int) -> date:
+    month_index = day.year * 12 + (day.month - 1) + months
+    year, month0 = divmod(month_index, 12)
+    return date(year, month0 + 1, 1)
+
+
+def _period_windows(min_date: date, max_date: date, chunk_months: int) -> list[tuple[date, date]]:
+    """Calendar-aligned [start, end] windows of ``chunk_months`` wide, covering the range.
+
+    Aligned to the calendar (e.g. Jan-Dec for ``chunk_months=12``) rather than
+    rolling from ``min_date``, so window labels/log lines read naturally
+    ("2017-01..2017-12") regardless of which day the data happens to start on.
+    """
+    if chunk_months < 1:
+        raise PipelineError(f"chunk_months must be >= 1, got {chunk_months}.")
+
+    start_index = min_date.year * 12 + (min_date.month - 1)
+    aligned_index = (start_index // chunk_months) * chunk_months
+    aligned_year, aligned_month0 = divmod(aligned_index, 12)
+    cursor = date(aligned_year, aligned_month0 + 1, 1)
+
+    windows: list[tuple[date, date]] = []
+    while cursor <= max_date:
+        window_end = _add_months(cursor, chunk_months) - timedelta(days=1)
+        windows.append((cursor, window_end))
+        cursor = _add_months(cursor, chunk_months)
+    return windows
+
+
+def merge_domain_month_table_by_period(
+    checkpoint_dir: Path | str,
+    intermediate_dir: Path | str,
+    *,
+    sources: Sequence[str] | None = None,
+    start: date | None = None,
+    end: date | None = None,
+    chunk_months: int = 12,
+    resume: bool = True,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
+) -> list[MergeSummary]:
+    """Stage A, chunked by calendar period instead of by source.
+
+    Logs the exact date range before each window starts and its row count
+    after, so a failed run names which stretch of time it died in rather than
+    leaving a single opaque query running with no visibility.
+    """
+    span = _discover_date_range(checkpoint_dir, sources=sources, start=start, end=end)
+    if span is None:
+        raise PipelineError(
+            f"No day-checkpoints matched the requested sources/date range under "
+            f"{Path(checkpoint_dir) / 'days'}."
+        )
+    windows = _period_windows(span[0], span[1], chunk_months)
+
+    intermediate_dir = Path(intermediate_dir)
+    ensure_dir(intermediate_dir)
+
+    results: list[MergeSummary] = []
+    total = len(windows)
+    for index, (window_start, window_end) in enumerate(windows, start=1):
+        label = f"{window_start.isoformat()}_{window_end.isoformat()}"
+        part_path = intermediate_dir / f"{label}.parquet"
+
+        if resume and part_path.is_file():
+            LOGGER.info("[%d/%d] Reusing existing merge for %s", index, total, label)
+            results.append(
+                MergeSummary(
+                    day_checkpoints_used=0,
+                    output_path=part_path,
+                    row_count=int(describe_parquet(part_path)["row_count"]),
+                    warnings=[],
+                )
+            )
+            continue
+
+        # Cheap pre-check (reads status.json files only, no DuckDB) so a
+        # calendar window with no actual data -- a real possibility given
+        # measurement gaps -- is skipped rather than treated as a failure.
+        probe_warnings: list[str] = []
+        matched = _select_day_checkpoints(
+            Path(checkpoint_dir),
+            sources=sources,
+            start=window_start,
+            end=window_end,
+            warnings=probe_warnings,
+        )
+        if not matched:
+            LOGGER.info("[%d/%d] %s: no checkpoints in this window, skipping", index, total, label)
+            continue
+
+        LOGGER.info(
+            "[%d/%d] Merging %s (%d day-checkpoint(s))", index, total, label, len(matched)
+        )
+        result = merge_domain_month_table(
+            checkpoint_dir,
+            part_path,
+            sources=sources,
+            start=window_start,
+            end=window_end,
+            csv=False,
+            threads=threads,
+            memory_limit=memory_limit,
+            temp_directory=temp_directory,
+        )
+        LOGGER.info("[%d/%d] %s: %d row(s)", index, total, label, result.row_count)
+        results.append(result)
+    return results
+
+
+def merge_domain_month_table_hierarchical_by_period(
+    checkpoint_dir: Path | str,
+    intermediate_dir: Path | str,
+    output_path: Path | str,
+    *,
+    sources: Sequence[str] | None = None,
+    start: date | None = None,
+    end: date | None = None,
+    chunk_months: int = 12,
+    csv: bool = False,
+    resume: bool = True,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
+) -> MergeSummary:
+    """Merge in two stages, chunked by calendar period instead of by source.
+
+    Same correctness guarantee as :func:`merge_domain_month_table_hierarchical`
+    -- Stage B re-aggregates rather than concatenates -- useful when even a
+    single source's own history is too large for a one-shot merge.
+    """
+    merge_domain_month_table_by_period(
+        checkpoint_dir,
+        intermediate_dir,
+        sources=sources,
+        start=start,
+        end=end,
+        chunk_months=chunk_months,
         resume=resume,
         threads=threads,
         memory_limit=memory_limit,

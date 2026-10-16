@@ -168,16 +168,31 @@ def _add_merge_strategy_args(parser: argparse.ArgumentParser) -> None:
         "network-mounted --temp-directory.",
     )
     parser.add_argument(
+        "--by-period",
+        action="store_true",
+        help="Merge in two stages -- one small merge per calendar period, then a cheap "
+        "final combine -- instead of one query over the whole date range at once. "
+        "Combine with --source to chunk a single source's own history when even that "
+        "alone is too large for a one-shot merge. Cannot be used with --by-source.",
+    )
+    parser.add_argument(
+        "--chunk-months",
+        type=int,
+        default=12,
+        help="Width of each --by-period window, in months (default: 12, i.e. yearly; "
+        "use 6 for half-year chunks).",
+    )
+    parser.add_argument(
         "--intermediate-dir",
         default=None,
-        help="Where --by-source writes its per-source tables "
-        "(default: <checkpoint-dir>/by_source).",
+        help="Where --by-source/--by-period write their intermediate tables "
+        "(default: <checkpoint-dir>/by_source or .../by_period).",
     )
     parser.add_argument(
         "--no-merge-resume",
         dest="merge_resume",
         action="store_false",
-        help="With --by-source, recompute every source's table even if one already "
+        help="With --by-source/--by-period, recompute every batch even if one already "
         "exists under --intermediate-dir.",
     )
     parser.set_defaults(merge_resume=True)
@@ -219,6 +234,35 @@ def cmd_scan(args: argparse.Namespace) -> int:
 
 
 def cmd_merge(args: argparse.Namespace) -> int:
+    if args.by_source and args.by_period:
+        print("error: --by-source and --by-period cannot be used together.", file=sys.stderr)
+        return 2
+
+    if args.by_period:
+        intermediate_dir = args.intermediate_dir or str(Path(args.checkpoint_dir) / "by_period")
+        result = pt.merge_domain_month_table_hierarchical_by_period(
+            args.checkpoint_dir,
+            intermediate_dir,
+            args.out,
+            sources=args.sources,
+            start=_parse_date(args.start),
+            end=_parse_date(args.end),
+            chunk_months=args.chunk_months,
+            csv=args.csv,
+            resume=args.merge_resume,
+            threads=args.threads,
+            memory_limit=args.memory_limit,
+            temp_directory=args.temp_directory,
+        )
+        for message in result.warnings:
+            print(f"warning: {message}", file=sys.stderr)
+        print(
+            f"Wrote {result.row_count} row(s) to {result.output_path} "
+            f"by combining {result.day_checkpoints_used} period table(s) "
+            f"from {intermediate_dir}."
+        )
+        return 0
+
     if args.by_source:
         intermediate_dir = args.intermediate_dir or str(Path(args.checkpoint_dir) / "by_source")
         result = pt.merge_domain_month_table_hierarchical(
