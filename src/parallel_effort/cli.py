@@ -336,6 +336,9 @@ def cmd_timeline(args: argparse.Namespace) -> int:
         metrics=args.metrics if args.metrics else tp.DEFAULT_METRICS,
         checklist_path=args.checklist,
         software_support_path=args.software_support,
+        distro_ships_path=args.distro_ships,
+        cve_path=args.cve_inventory,
+        cve_min_severity=args.cve_min_severity,
         out_path=args.out,
     )
     print(f"Saved plot to {out_path}")
@@ -444,6 +447,25 @@ def build_arg_parser() -> argparse.ArgumentParser:
         default=None,
         help="Path to a software_support.json (default: the project's bundled "
         "data/software/software_support.json).",
+    )
+    timeline_parser.add_argument(
+        "--distro-ships",
+        default=None,
+        help="Path to a distro_ships.json (default: the project's bundled "
+        "data/software/distro_ships.json).",
+    )
+    timeline_parser.add_argument(
+        "--cve-inventory",
+        default=None,
+        help="Path to a cve_inventory.json (default: the project's bundled "
+        "data/software/cve_inventory.json).",
+    )
+    timeline_parser.add_argument(
+        "--cve-min-severity",
+        default="CRITICAL",
+        choices=["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+        help="Minimum CVE severity to mark (default: CRITICAL -- the inventory has 344 "
+        "entries total, most of them too dense to overlay).",
     )
     timeline_parser.add_argument(
         "--metrics",
