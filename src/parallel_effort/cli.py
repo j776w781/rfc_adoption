@@ -155,6 +155,32 @@ def _add_merge_only_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--start", default=None)
     parser.add_argument("--end", default=None)
     _add_duckdb_tuning_args(parser)
+    _add_merge_strategy_args(parser)
+
+
+def _add_merge_strategy_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--by-source",
+        action="store_true",
+        help="Merge in two stages -- one small merge per source, then a cheap final "
+        "combine -- instead of one query over every day-checkpoint at once. Use this "
+        "if a one-shot merge runs out of scratch space or hits an I/O limit on a "
+        "network-mounted --temp-directory.",
+    )
+    parser.add_argument(
+        "--intermediate-dir",
+        default=None,
+        help="Where --by-source writes its per-source tables "
+        "(default: <checkpoint-dir>/by_source).",
+    )
+    parser.add_argument(
+        "--no-merge-resume",
+        dest="merge_resume",
+        action="store_false",
+        help="With --by-source, recompute every source's table even if one already "
+        "exists under --intermediate-dir.",
+    )
+    parser.set_defaults(merge_resume=True)
 
 
 def cmd_scan(args: argparse.Namespace) -> int:
@@ -193,6 +219,30 @@ def cmd_scan(args: argparse.Namespace) -> int:
 
 
 def cmd_merge(args: argparse.Namespace) -> int:
+    if args.by_source:
+        intermediate_dir = args.intermediate_dir or str(Path(args.checkpoint_dir) / "by_source")
+        result = pt.merge_domain_month_table_hierarchical(
+            args.checkpoint_dir,
+            intermediate_dir,
+            args.out,
+            sources=args.sources,
+            start=_parse_date(args.start),
+            end=_parse_date(args.end),
+            csv=args.csv,
+            resume=args.merge_resume,
+            threads=args.threads,
+            memory_limit=args.memory_limit,
+            temp_directory=args.temp_directory,
+        )
+        for message in result.warnings:
+            print(f"warning: {message}", file=sys.stderr)
+        print(
+            f"Wrote {result.row_count} row(s) to {result.output_path} "
+            f"by combining {result.day_checkpoints_used} per-source table(s) "
+            f"from {intermediate_dir}."
+        )
+        return 0
+
     result = pt.merge_domain_month_table(
         args.checkpoint_dir,
         args.out,
@@ -273,6 +323,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     run_parser.add_argument(
         "--csv", action="store_true", help="Also write a CSV copy next to the Parquet output."
     )
+    _add_merge_strategy_args(run_parser)
     run_parser.set_defaults(func=cmd_run)
 
     rollup_parser = subparsers.add_parser(

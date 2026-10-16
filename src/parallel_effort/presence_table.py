@@ -65,6 +65,9 @@ __all__ = [
     "process_day",
     "scan_cache",
     "merge_domain_month_table",
+    "merge_domain_month_table_by_source",
+    "combine_source_tables",
+    "merge_domain_month_table_hierarchical",
 ]
 
 LOGGER = get_logger(__name__)
@@ -627,4 +630,214 @@ def merge_domain_month_table(
         output_path=output_path,
         row_count=row_count,
         warnings=warnings,
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Hierarchical merge: one small merge per source, then a cheap final combine
+# --------------------------------------------------------------------------- #
+#
+# For a large checkpoint set, the single query in `merge_domain_month_table`
+# has to hold every source's temp spill and open file handles at once, which is
+# what a constrained or uncooperative scratch filesystem (a network mount, a
+# small local disk) can fail on. This splits that one query into one per
+# source -- each touching only a fraction of the day-checkpoints -- followed by
+# a cheap re-aggregation over the small per-source results.
+#
+# Stage B re-aggregates rather than just concatenating the per-source files,
+# which matters for correctness, not just tidiness: a source-day's checkpoint
+# can carry rows for more than one output `tld` if the underlying OpenINTEL
+# `source` column relabels a zone for part of a month (observed for .ch/.li
+# sharing a `closedcc` label in 2022-04). Filtering Stage A by the
+# cache-inventory source name does not guarantee every row in a batch shares
+# one `tld` value, so a stray row can land in the "wrong" source's output file.
+# Re-running the same GROUP BY in Stage B over the combined (already small)
+# per-source outputs reunites any such rows under their real `tld` and produces
+# exactly the result a one-shot merge would have -- Stage A's split is a
+# performance decision, not a correctness one.
+
+
+def _discover_sources(checkpoint_dir: Path | str) -> list[str]:
+    """Every distinct day-checkpoint ``source`` under ``checkpoint_dir``."""
+    directory = Path(checkpoint_dir) / "days"
+    sources: set[str] = set()
+    for status_path in directory.glob(f"*{_STATUS_SUFFIX}"):
+        status = _read_status(status_path)
+        if status and status.get("complete"):
+            name = str(status.get("source") or "").strip()
+            if name:
+                sources.add(name)
+    return sorted(sources)
+
+
+def merge_domain_month_table_by_source(
+    checkpoint_dir: Path | str,
+    intermediate_dir: Path | str,
+    *,
+    sources: Sequence[str] | None = None,
+    start: date | None = None,
+    end: date | None = None,
+    resume: bool = True,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
+) -> list[MergeSummary]:
+    """Stage A: one small call to :func:`merge_domain_month_table` per source.
+
+    Writes ``<intermediate_dir>/<source>.parquet`` for each source. With
+    ``resume=True``, a source whose output file already exists is reused as-is
+    (the file is only ever written by an atomic rename, so its mere presence
+    means it finished) -- useful when a prior attempt got partway through
+    before hitting a scratch-space or I/O problem on one source. Reusing a
+    stale file from a run with *different* ``sources``/``start``/``end``
+    filters is the caller's responsibility to avoid, e.g. by pointing a
+    differently-filtered run at a fresh ``intermediate_dir``.
+    """
+    wanted = list(sources) if sources is not None else _discover_sources(checkpoint_dir)
+    if not wanted:
+        raise PipelineError(f"No sources discovered under {Path(checkpoint_dir) / 'days'}.")
+
+    intermediate_dir = Path(intermediate_dir)
+    ensure_dir(intermediate_dir)
+
+    results: list[MergeSummary] = []
+    for source in wanted:
+        part_path = intermediate_dir / f"{source}.parquet"
+        if resume and part_path.is_file():
+            LOGGER.info("Reusing existing per-source merge for %s", source)
+            results.append(
+                MergeSummary(
+                    day_checkpoints_used=0,
+                    output_path=part_path,
+                    row_count=int(describe_parquet(part_path)["row_count"]),
+                    warnings=[],
+                )
+            )
+            continue
+
+        LOGGER.info("Merging source %s", source)
+        results.append(
+            merge_domain_month_table(
+                checkpoint_dir,
+                part_path,
+                sources=[source],
+                start=start,
+                end=end,
+                csv=False,
+                threads=threads,
+                memory_limit=memory_limit,
+                temp_directory=temp_directory,
+            )
+        )
+    return results
+
+
+def combine_source_tables(
+    intermediate_dir: Path | str,
+    output_path: Path | str,
+    *,
+    csv: bool = False,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
+) -> MergeSummary:
+    """Stage B: re-aggregate Stage A's small per-source tables into the final one.
+
+    Deliberately a real ``GROUP BY``, not a plain concatenation -- see the
+    module-level note above on why a stray cross-source row needs this to end
+    up correctly merged rather than duplicated.
+    """
+    directory = Path(intermediate_dir)
+    parts = sorted(directory.glob("*.parquet"))
+    if not parts:
+        raise PipelineError(f"No per-source tables found under {directory}.")
+
+    output_path = Path(output_path)
+    ensure_dir(output_path.parent)
+    connection = duckdb.connect(database=":memory:")
+    _configure_connection(
+        connection, threads=threads, memory_limit=memory_limit, temp_directory=temp_directory
+    )
+    try:
+        literal = ", ".join(quote_string(p.as_posix()) for p in parts)
+        merge_sql = (
+            "SELECT\n"
+            "  month,\n"
+            "  domain,\n"
+            "  tld,\n"
+            "  CAST(max(ds_present) AS TINYINT) AS ds_present,\n"
+            "  CAST(max(dnskey_present) AS TINYINT) AS dnskey_present,\n"
+            "  CAST(max(rrsig_present) AS TINYINT) AS rrsig_present\n"
+            f"FROM read_parquet([{literal}], union_by_name = true)\n"
+            "GROUP BY month, domain, tld"
+        )
+        tmp = output_path.with_suffix(output_path.suffix + ".tmp")
+        if tmp.exists():
+            tmp.unlink()
+        try:
+            connection.execute(f"COPY ({merge_sql}) TO {quote_string(str(tmp))} (FORMAT PARQUET)")
+        except Exception as exc:  # DuckDB raises its own error hierarchy
+            raise PipelineError(f"DuckDB failed combining per-source tables: {exc}") from exc
+        os.replace(tmp, output_path)
+        row_count = int(describe_parquet(output_path)["row_count"])
+
+        if csv:
+            csv_path = output_path.with_suffix(".csv")
+            csv_tmp = csv_path.with_suffix(csv_path.suffix + ".tmp")
+            if csv_tmp.exists():
+                csv_tmp.unlink()
+            connection.execute(
+                f"COPY (SELECT * FROM read_parquet({quote_string(str(output_path))})) "
+                f"TO {quote_string(str(csv_tmp))} (FORMAT CSV, HEADER)"
+            )
+            os.replace(csv_tmp, csv_path)
+    finally:
+        connection.close()
+
+    return MergeSummary(
+        day_checkpoints_used=len(parts),  # here: count of per-source tables combined
+        output_path=output_path,
+        row_count=row_count,
+        warnings=[],
+    )
+
+
+def merge_domain_month_table_hierarchical(
+    checkpoint_dir: Path | str,
+    intermediate_dir: Path | str,
+    output_path: Path | str,
+    *,
+    sources: Sequence[str] | None = None,
+    start: date | None = None,
+    end: date | None = None,
+    csv: bool = False,
+    resume: bool = True,
+    threads: int | None = None,
+    memory_limit: str | None = None,
+    temp_directory: str | Path | None = None,
+) -> MergeSummary:
+    """Merge a large checkpoint set in two stages instead of one.
+
+    Produces the same result :func:`merge_domain_month_table` would (same
+    (month, domain, tld) grouping, re-applied in Stage B), but no single query
+    ever touches more than one source's day-checkpoints at once.
+    """
+    merge_domain_month_table_by_source(
+        checkpoint_dir,
+        intermediate_dir,
+        sources=sources,
+        start=start,
+        end=end,
+        resume=resume,
+        threads=threads,
+        memory_limit=memory_limit,
+        temp_directory=temp_directory,
+    )
+    return combine_source_tables(
+        intermediate_dir,
+        output_path,
+        csv=csv,
+        threads=threads,
+        memory_limit=memory_limit,
+        temp_directory=temp_directory,
     )
