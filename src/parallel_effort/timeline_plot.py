@@ -230,6 +230,7 @@ def plot_tld_timeline(
     tld_df["month"] = pd.PeriodIndex(tld_df["month"], freq="M").to_timestamp()
     tld_df = tld_df.sort_values("month").reset_index(drop=True)
     window_start, window_end = tld_df["month"].min(), tld_df["month"].max()
+    span_months = max(len(tld_df), 1)
 
     # One combined, time-sorted list across every category, so the height
     # staggering below (which exists to keep close-together labels legible)
@@ -254,7 +255,12 @@ def plot_tld_timeline(
     categorized.sort(key=lambda item: item[0])
 
     metrics = list(metrics)
-    fig, axes = plt.subplots(len(metrics), 1, figsize=(11, 3 * len(metrics)), sharex=True)
+    # Width scales with the data's actual time span (not a fixed 11in) so a
+    # multi-year timeline with a dense stretch of events gets proportionally
+    # more horizontal room for labels to spread out, instead of staying as
+    # cramped as a 2-year plot would be.
+    fig_width = max(11.0, span_months * 0.18)
+    fig, axes = plt.subplots(len(metrics), 1, figsize=(fig_width, 3 * len(metrics)), sharex=True)
     if len(metrics) == 1:
         axes = [axes]
 
@@ -281,7 +287,6 @@ def plot_tld_timeline(
     # bare years over a long span). The interval scales with the span so a
     # multi-decade plot still gets month-labelled ticks without cramming in
     # one per calendar month.
-    span_months = max(len(tld_df), 1)
     interval = max(1, round(span_months / 20))
     for ax in axes:
         ax.xaxis.set_major_locator(mdates.MonthLocator(interval=interval))
