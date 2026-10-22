@@ -19,6 +19,9 @@ a vertical line for every event that falls within the plotted date range:
 * every CVE in ``data/software/cve_inventory.json`` at or above
   ``cve_min_severity`` (default "CRITICAL" -- the inventory has 344 entries
   total, most of them not overlay-sized).
+* every entry in ``data/sentiments/positive_sentiments.json`` and
+  ``negative_sentiments.json`` -- publication dates of articles/events judged
+  to have moved DNSSEC's public legitimacy up or down.
 
 Event categories each get one fixed color from EVENT_COLORS, so a reader can
 tell "this is an RFC" from "this is a CVE" at a glance, however many
@@ -53,12 +56,16 @@ __all__ = [
     "DEFAULT_SOFTWARE_SUPPORT_PATH",
     "DEFAULT_DISTRO_SHIPS_PATH",
     "DEFAULT_CVE_INVENTORY_PATH",
+    "DEFAULT_POSITIVE_SENTIMENTS_PATH",
+    "DEFAULT_NEGATIVE_SENTIMENTS_PATH",
     "CVE_SEVERITY_ORDER",
     "EVENT_COLORS",
     "load_rfc_events",
     "load_software_support_events",
     "load_distro_ship_events",
     "load_cve_events",
+    "load_positive_sentiment_events",
+    "load_negative_sentiment_events",
     "plot_tld_timeline",
 ]
 
@@ -87,18 +94,30 @@ DEFAULT_DISTRO_SHIPS_PATH: Path = config.PROJECT_ROOT / "data" / "software" / "d
 DEFAULT_CVE_INVENTORY_PATH: Path = (
     config.PROJECT_ROOT / "data" / "software" / "cve_inventory.json"
 )
+DEFAULT_POSITIVE_SENTIMENTS_PATH: Path = (
+    config.PROJECT_ROOT / "data" / "sentiments" / "positive_sentiments.json"
+)
+DEFAULT_NEGATIVE_SENTIMENTS_PATH: Path = (
+    config.PROJECT_ROOT / "data" / "sentiments" / "negative_sentiments.json"
+)
 
 #: Low-to-high, matching the strings cve_inventory.json uses.
 CVE_SEVERITY_ORDER: tuple[str, ...] = ("LOW", "MEDIUM", "HIGH", "CRITICAL")
 
 #: One fixed color per event category. Keep existing entries where they are so
 #: a category already in use never changes color just because another one was
-#: added.
+#: added. "sentiment_positive" is deliberately not tab:blue -- that's already
+#: the prevalence line's own color, and reusing it would make an event marker
+#: hard to tell apart from the data at a glance. "sentiment_negative" is
+#: deliberately not a plain yellow -- yellow text on a white plot background
+#: is a legibility problem, not just an aesthetic one.
 EVENT_COLORS: dict[str, str] = {
     "rfc": "tab:red",
     "software_support": "tab:purple",
     "distro_ship": "tab:green",
     "cve": "tab:orange",
+    "sentiment_positive": "tab:cyan",
+    "sentiment_negative": "tab:olive",
 }
 
 
@@ -222,6 +241,49 @@ def load_cve_events(
     return events
 
 
+def _load_sentiment_entries(path: Path) -> list[tuple[pd.Timestamp, str]]:
+    """Shared loader for positive_sentiments.json / negative_sentiments.json.
+
+    Both files share one schema, but the hand-maintained date field's name
+    isn't even consistent *within* one file: negative_sentiments.json spells
+    it "Publicatiion Date" (double i) for its first entry and "Publiction
+    Date" (the same typo positive_sentiments.json uses throughout) for the
+    rest. Every plausible spelling is tried per entry rather than assuming
+    one -- a KeyError here would silently drop the whole file's events.
+    """
+    if not path.is_file():
+        raise PipelineError(f"Sentiments file not found: {path}")
+    payload = json.loads(path.read_text(encoding="utf-8"))
+
+    date_keys = ("Publiction Date", "Publicatiion Date", "Publication Date")
+    by_date: dict[pd.Timestamp, list[str]] = defaultdict(list)
+    for entry in payload.get("sentiments", []):
+        raw_date = next((entry[key] for key in date_keys if key in entry), None)
+        if raw_date is None:
+            raise PipelineError(
+                f"Sentiment entry {entry.get('sentimentID', '?')!r} in {path} has none of "
+                f"the expected date fields {date_keys}."
+            )
+        day = pd.Timestamp(raw_date)
+        label = str(entry.get("sentimentID") or entry.get("Title") or "?")
+        by_date[day].append(label)
+    return [(day, "; ".join(labels)) for day, labels in sorted(by_date.items())]
+
+
+def load_positive_sentiment_events(
+    path: Path | str | None = None,
+) -> list[tuple[pd.Timestamp, str]]:
+    """Every positive_sentiments.json entry's (publication date, label)."""
+    return _load_sentiment_entries(Path(path) if path else DEFAULT_POSITIVE_SENTIMENTS_PATH)
+
+
+def load_negative_sentiment_events(
+    path: Path | str | None = None,
+) -> list[tuple[pd.Timestamp, str]]:
+    """Every negative_sentiments.json entry's (publication date, label)."""
+    return _load_sentiment_entries(Path(path) if path else DEFAULT_NEGATIVE_SENTIMENTS_PATH)
+
+
 def _overlaps(a, b) -> bool:
     """Whether two matplotlib display-space bounding boxes intersect."""
     return a.x0 < b.x1 and b.x0 < a.x1 and a.y0 < b.y1 and b.y0 < a.y1
@@ -237,6 +299,8 @@ def plot_tld_timeline(
     distro_ships_path: Path | str | None = None,
     cve_path: Path | str | None = None,
     cve_min_severity: str = "CRITICAL",
+    positive_sentiments_path: Path | str | None = None,
+    negative_sentiments_path: Path | str | None = None,
     out_path: Path | str | None = None,
 ) -> Path:
     """Plot DS/DNSKEY/RRSIG prevalence over time for one TLD, events marked."""
@@ -268,6 +332,14 @@ def plot_tld_timeline(
     ] + [
         (when, label, "cve")
         for when, label in load_cve_events(cve_path, min_severity=cve_min_severity)
+        if window_start <= when <= window_end
+    ] + [
+        (when, label, "sentiment_positive")
+        for when, label in load_positive_sentiment_events(positive_sentiments_path)
+        if window_start <= when <= window_end
+    ] + [
+        (when, label, "sentiment_negative")
+        for when, label in load_negative_sentiment_events(negative_sentiments_path)
         if window_start <= when <= window_end
     ]
     categorized.sort(key=lambda item: item[0])

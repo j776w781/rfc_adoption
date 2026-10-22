@@ -339,6 +339,8 @@ def cmd_timeline(args: argparse.Namespace) -> int:
         distro_ships_path=args.distro_ships,
         cve_path=args.cve_inventory,
         cve_min_severity=args.cve_min_severity,
+        positive_sentiments_path=args.positive_sentiments,
+        negative_sentiments_path=args.negative_sentiments,
         out_path=args.out,
     )
     print(f"Saved plot to {out_path}")
@@ -466,6 +468,18 @@ def build_arg_parser() -> argparse.ArgumentParser:
         choices=["LOW", "MEDIUM", "HIGH", "CRITICAL"],
         help="Minimum CVE severity to mark (default: CRITICAL -- the inventory has 344 "
         "entries total, most of them too dense to overlay).",
+    )
+    timeline_parser.add_argument(
+        "--positive-sentiments",
+        default=None,
+        help="Path to a positive_sentiments.json (default: the project's bundled "
+        "data/sentiments/positive_sentiments.json).",
+    )
+    timeline_parser.add_argument(
+        "--negative-sentiments",
+        default=None,
+        help="Path to a negative_sentiments.json (default: the project's bundled "
+        "data/sentiments/negative_sentiments.json).",
     )
     timeline_parser.add_argument(
         "--metrics",

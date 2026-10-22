@@ -1,0 +1,35 @@
+{
+    "description": "Publication dates of pivotal articles/events that negatively impacted the legitimacy of DNSSEC",
+    "sentiments": [
+        {
+            "sentimentID": "DNSSEC claims",
+            "Title": "DNSSEC claims another victim as entire TLD disappears",
+            "Publication Date": "2022-03-09",
+            "Site": "domainincite.com"
+        },
+        {
+            "sentimentID": "Another DNSSEC",
+            "Title": "Another DNSSEC screw-up takes down thousands of .au domains",
+            "Publication Date": "2022-03-09",
+            "Site": "domainincite.com"
+        },
+        {
+            "sentimentID": "DNSSEC is",
+            "Title": "DNSSEC is notorious for breaking things.",
+            "Publication Date": "2022-05-17",
+            "Site": "news.ycombinator.com"
+        },
+        {
+            "sentimentID": "Calling time",
+            "Title": "Calling time on DNSSEC?",
+            "Publication Date": "2024-05-28",
+            "Site": "apnic.net"
+        },
+        {
+            "sentimentID": "Against DNSSEC",
+            "Title": "Against DNSSEC",
+            "Publication Date": "2015-01-15",
+            "Site": "sockpuppet.org"
+        }
+    ]
+}

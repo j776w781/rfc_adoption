@@ -1,0 +1,23 @@
+{
+    "description": "Publication dates of pivotal articles/events that postively impacted the legitimacy of DNSSEC",
+    "sentiments": [
+        {
+            "sentimentID": "For DNSSEC",
+            "Title": "For DNSSEC",
+            "Publication Date": "2015-08-06",
+            "Site": "easydns.com"
+        },
+        {
+            "sentimentID": "For DNSSEC2",
+            "Title": "For DNSSEC and Why DANE Is Needed",
+            "Publication Date": "2023-05-14",
+            "Site": "technitium.com"
+        },
+        {
+            "sentimentID": "ICANN",
+            "Title": "ICANN Calls for Full DNSSEC Deployment, Promotes Community Collaboration to Protect the Internet",
+            "Publication Date": "2019-02-22",
+            "Site": "icann.org"
+        }
+    ]
+}
