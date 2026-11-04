@@ -5,31 +5,43 @@
             "sentimentID": "DNSSEC claims",
             "Title": "DNSSEC claims another victim as entire TLD disappears",
             "Publication Date": "2022-03-09",
-            "Site": "domainincite.com"
+            "Site": "domainincite.com",
+            "Link": "https://domainincite.com/27628-dnssec-claims-another-victim-as-entire-tld-disappears"
         },
         {
             "sentimentID": "Another DNSSEC",
             "Title": "Another DNSSEC screw-up takes down thousands of .au domains",
             "Publication Date": "2022-03-09",
-            "Site": "domainincite.com"
+            "Site": "domainincite.com",
+            "Link": "https://domainincite.com/27675-another-dnssec-screw-up-takes-down-thousands-of-au-domains"
         },
         {
             "sentimentID": "DNSSEC is",
             "Title": "DNSSEC is notorious for breaking things.",
             "Publication Date": "2022-05-17",
-            "Site": "news.ycombinator.com"
+            "Site": "news.ycombinator.com",
+            "Link": "https://news.ycombinator.com/item?id=31410439"
         },
         {
             "sentimentID": "Calling time",
             "Title": "Calling time on DNSSEC?",
             "Publication Date": "2024-05-28",
-            "Site": "apnic.net"
+            "Site": "apnic.net",
+            "Link": "https://blog.apnic.net/2024/05/28/calling-time-on-dnssec/"
         },
         {
             "sentimentID": "Against DNSSEC",
             "Title": "Against DNSSEC",
             "Publication Date": "2015-01-15",
-            "Site": "sockpuppet.org"
+            "Site": "sockpuppet.org",
+            "Link": "https://sockpuppet.org/blog/2015/01/15/against-dnssec/"
+        },
+        {
+            "sentimentID": "KeyTrap",
+            "Title": "KeyTrap algorithmic complexity attacks exploit fundamental design flaw in DNSSEC",
+            "Publication Date": "2024-02-19",
+            "Site": "blog.apnic.net",
+            "Link": "https://blog.apnic.net/2024/02/19/keytrap-algorithmic-complexity-attacks-exploit-fundamental-design-flaw-in-dnssec/"
         }
     ]
 }
