@@ -192,7 +192,7 @@ def load_distro_ship_events(path: Path | str | None = None) -> list[tuple[pd.Tim
 def load_cve_events(
     path: Path | str | None = None,
     *,
-    min_severity: str = "CRITICAL",
+    min_severity: str = "HIGH",
 ) -> list[tuple[pd.Timestamp, str]]:
     """Every CVE in cve_inventory.json at or above ``min_severity``.
 

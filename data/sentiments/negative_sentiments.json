@@ -42,6 +42,13 @@
             "Publication Date": "2024-02-19",
             "Site": "blog.apnic.net",
             "Link": "https://blog.apnic.net/2024/02/19/keytrap-algorithmic-complexity-attacks-exploit-fundamental-design-flaw-in-dnssec/"
+        },
+        {
+            "sentimentID": "KeyTrap Paper",
+            "Title": "The Harder You Try, The Harder You Fail: The KeyTrap Denial-of-Service Algorithmic Complexity Attacks on DNSSEC",
+            "Publication Date": "2024-10-14",
+            "Site": "arxiv.org",
+            "Link": "https://arxiv.org/abs/2406.03133"
         }
     ]
 }
