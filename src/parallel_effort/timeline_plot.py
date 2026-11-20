@@ -5,9 +5,9 @@ produces for one TLD and draws a connected line per record type (the actual
 monthly values -- no fitting, unlike ``segmented_regression``), then overlays
 a vertical line for every event that falls within the plotted date range:
 
-* every RFC publication date (from the project's RFC checklist,
-  ``openintel_rfc.checklist_loader``) -- RFCs sharing a publication month are
-  combined onto one line/label rather than drawn on top of each other;
+* every RFC publication month in ``data/dnssec_rfc_categories.csv``, labelled
+  with its category -- RFCs sharing a publication month are combined onto one
+  line/label rather than drawn on top of each other;
 * every ``data/software/software_support.json`` entry -- the date each DNS
   implementation first supported/signed/validated a capability tied to one of
   those RFCs. Entries sharing an exact release date are likewise combined.
@@ -28,6 +28,8 @@ tell "this is an RFC" from "this is a CVE" at a glance, however many
 categories eventually overlay onto the same timeline (CVEs are meant to join
 later). Labels from every category share one height-staggering pass so two
 events close in time -- whichever categories they belong to -- don't overlap.
+``plot_tld_timeline(events=...)`` restricts the overlay to a chosen subset of
+those categories (e.g. RFCs only, or sentiments only).
 
 Uses a real date axis, not the categorical string-month axis
 ``segmented_regression`` uses -- that one can get away with it only because it
@@ -38,21 +40,22 @@ of whether the exact month it falls in has an observed data point.
 
 from __future__ import annotations
 
+import csv
 import json
 from collections import defaultdict
 from pathlib import Path
-from typing import Sequence
+from typing import Callable, Sequence
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
 
 from openintel_rfc import config
-from openintel_rfc.checklist_loader import load_checklist_db
 from openintel_rfc.utils import PipelineError
 
 __all__ = [
     "DEFAULT_METRICS",
+    "DEFAULT_RFC_CATEGORIES_PATH",
     "DEFAULT_SOFTWARE_SUPPORT_PATH",
     "DEFAULT_DISTRO_SHIPS_PATH",
     "DEFAULT_CVE_INVENTORY_PATH",
@@ -60,6 +63,9 @@ __all__ = [
     "DEFAULT_NEGATIVE_SENTIMENTS_PATH",
     "CVE_SEVERITY_ORDER",
     "EVENT_COLORS",
+    "EVENT_ALIASES",
+    "expand_event_names",
+    "default_timeline_filename",
     "load_rfc_events",
     "load_software_support_events",
     "load_distro_ship_events",
@@ -84,9 +90,9 @@ SAVE_DPI: int = 150
 LABEL_NUDGE_FRACTION: float = 0.015
 MAX_LABEL_NUDGES: int = 150
 
-#: These three live under data/software/, not openintel_rfc, so (unlike
-#: DEFAULT_CHECKLIST_PATH) their defaults live here rather than in that
-#: package's config.
+#: These aren't part of openintel_rfc's own inputs, so their defaults live
+#: here rather than in that package's config.
+DEFAULT_RFC_CATEGORIES_PATH: Path = config.PROJECT_ROOT / "data" / "dnssec_rfc_categories.csv"
 DEFAULT_SOFTWARE_SUPPORT_PATH: Path = (
     config.PROJECT_ROOT / "data" / "software" / "software_support.json"
 )
@@ -121,29 +127,48 @@ EVENT_COLORS: dict[str, str] = {
 }
 
 
-def _rfc_sort_key(rfc_id: str) -> int:
-    try:
-        return int(rfc_id.rsplit(" ", 1)[-1])
-    except ValueError:
-        return 0
+def _format_rfc_month_label(rfcs: list[tuple[int, str]]) -> str:
+    """One month's RFCs as a label, grouped by category.
+
+    ``rfcs`` is (rfc_number, category) pairs; an empty category gets no
+    bracket. Groups are ordered by their lowest RFC number, e.g.
+    [(4033, "validation"), (4034, "signing"), (4035, "validation")] ->
+    "RFC 4033/4035 [validation], 4034 [signing]".
+    """
+    by_category: dict[str, list[int]] = defaultdict(list)
+    for number, category in sorted(rfcs):
+        by_category[category].append(number)
+    parts = [
+        "/".join(str(n) for n in numbers) + (f" [{category}]" if category else "")
+        for category, numbers in by_category.items()
+    ]
+    return "RFC " + ", ".join(parts)
 
 
-def load_rfc_events(checklist_path: Path | str | None = None) -> list[tuple[pd.Timestamp, str]]:
+def load_rfc_events(path: Path | str | None = None) -> list[tuple[pd.Timestamp, str]]:
     """Every RFC's (publication month, label), one entry per distinct month.
 
-    RFCs sharing a publication month (three triples do: 4033/4034/4035,
-    7583/7671/7672, 9904/9905/9906) are combined into one label
-    ("RFC 4033/4034/4035") instead of three overlapping lines at one date.
+    Reads a CSV with ``rfc_number``, ``release_date`` (YYYY-MM) and
+    ``category`` columns. RFCs sharing a publication month (e.g.
+    4033/4034/4035) are combined into one label instead of overlapping lines
+    at one date; see ``_format_rfc_month_label`` for the label format.
     """
-    db = load_checklist_db(checklist_path or config.DEFAULT_CHECKLIST_PATH)
-    by_month: dict[pd.Timestamp, list[str]] = defaultdict(list)
-    for entry in db.rfcs:
-        month = pd.Timestamp(entry.publication_date).replace(day=1)
-        by_month[month].append(entry.rfc_id)
-    return [
-        (month, "/".join(sorted(ids, key=_rfc_sort_key)))
-        for month, ids in sorted(by_month.items())
-    ]
+    file_path = Path(path) if path else DEFAULT_RFC_CATEGORIES_PATH
+    if not file_path.is_file():
+        raise PipelineError(f"RFC categories file not found: {file_path}")
+
+    by_month: dict[pd.Timestamp, list[tuple[int, str]]] = defaultdict(list)
+    with file_path.open(newline="", encoding="utf-8-sig") as handle:
+        for row in csv.DictReader(handle):
+            number = (row.get("rfc_number") or "").strip()
+            raw_date = (row.get("release_date") or "").strip()
+            if not number or not raw_date:
+                raise PipelineError(
+                    f"Row {row!r} in {file_path} is missing rfc_number or release_date."
+                )
+            month = pd.Timestamp(raw_date).replace(day=1)
+            by_month[month].append((int(number), (row.get("category") or "").strip()))
+    return [(month, _format_rfc_month_label(rfcs)) for month, rfcs in sorted(by_month.items())]
 
 
 def load_software_support_events(
@@ -284,6 +309,54 @@ def load_negative_sentiment_events(
     return _load_sentiment_entries(Path(path) if path else DEFAULT_NEGATIVE_SENTIMENTS_PATH)
 
 
+#: Shorthands accepted wherever event categories are chosen by name.
+EVENT_ALIASES: dict[str, tuple[str, ...]] = {
+    "all": tuple(EVENT_COLORS),
+    "sentiment": ("sentiment_positive", "sentiment_negative"),
+}
+
+
+def expand_event_names(names: Sequence[str]) -> list[str]:
+    """Resolve aliases ("all", "sentiment") into EVENT_COLORS keys, deduplicated.
+
+    Returned in EVENT_COLORS order, so the same selection always yields the
+    same default filename regardless of the order it was typed in.
+    """
+    wanted: set[str] = set()
+    for name in names:
+        if name in EVENT_ALIASES:
+            wanted.update(EVENT_ALIASES[name])
+        elif name in EVENT_COLORS:
+            wanted.add(name)
+        else:
+            raise PipelineError(
+                f"Unknown event category {name!r}; expected one of "
+                f"{list(EVENT_COLORS) + list(EVENT_ALIASES)}."
+            )
+    return [name for name in EVENT_COLORS if name in wanted]
+
+
+def default_timeline_filename(tld: str, events: Sequence[str]) -> str:
+    """``<tld>_timeline.png`` for every category, else a suffix naming the subset.
+
+    E.g. RFCs + both sentiment kinds -> ``se_timeline_rfc_sentiment.png``, so
+    plots of different subsets don't overwrite each other.
+    """
+    chosen = [name for name in EVENT_COLORS if name in set(events)]
+    if chosen == list(EVENT_COLORS):
+        return f"{tld}_timeline.png"
+    if not chosen:
+        return f"{tld}_timeline_no_events.png"
+    tokens: list[str] = []
+    for name in chosen:
+        if name.startswith("sentiment_") and set(EVENT_ALIASES["sentiment"]) <= set(chosen):
+            if "sentiment" not in tokens:
+                tokens.append("sentiment")
+        else:
+            tokens.append(name)
+    return f"{tld}_timeline_{'_'.join(tokens)}.png"
+
+
 def _overlaps(a, b) -> bool:
     """Whether two matplotlib display-space bounding boxes intersect."""
     return a.x0 < b.x1 and b.x0 < a.x1 and a.y0 < b.y1 and b.y0 < a.y1
@@ -294,7 +367,8 @@ def plot_tld_timeline(
     tld: str,
     *,
     metrics: Sequence[str] = DEFAULT_METRICS,
-    checklist_path: Path | str | None = None,
+    events: Sequence[str] | None = None,
+    rfc_categories_path: Path | str | None = None,
     software_support_path: Path | str | None = None,
     distro_ships_path: Path | str | None = None,
     cve_path: Path | str | None = None,
@@ -303,7 +377,19 @@ def plot_tld_timeline(
     negative_sentiments_path: Path | str | None = None,
     out_path: Path | str | None = None,
 ) -> Path:
-    """Plot DS/DNSKEY/RRSIG prevalence over time for one TLD, events marked."""
+    """Plot DS/DNSKEY/RRSIG prevalence over time for one TLD, events marked.
+
+    ``events`` picks which EVENT_COLORS categories to overlay (None = all of
+    them; an empty sequence = data lines only). Unselected categories' source
+    files aren't read at all.
+    """
+    selected = list(EVENT_COLORS) if events is None else list(dict.fromkeys(events))
+    unknown = [name for name in selected if name not in EVENT_COLORS]
+    if unknown:
+        raise PipelineError(
+            f"Unknown event categories {unknown}; expected some of {list(EVENT_COLORS)}."
+        )
+
     df = pd.read_parquet(input_path)
     tld_df = df[df["tld"] == tld].copy()
     if tld_df.empty:
@@ -317,29 +403,18 @@ def plot_tld_timeline(
     # One combined, time-sorted list across every category, so the height
     # staggering below (which exists to keep close-together labels legible)
     # sees all of them together rather than restarting per category.
+    loaders: dict[str, Callable[[], list[tuple[pd.Timestamp, str]]]] = {
+        "rfc": lambda: load_rfc_events(rfc_categories_path),
+        "software_support": lambda: load_software_support_events(software_support_path),
+        "distro_ship": lambda: load_distro_ship_events(distro_ships_path),
+        "cve": lambda: load_cve_events(cve_path, min_severity=cve_min_severity),
+        "sentiment_positive": lambda: load_positive_sentiment_events(positive_sentiments_path),
+        "sentiment_negative": lambda: load_negative_sentiment_events(negative_sentiments_path),
+    }
     categorized: list[tuple[pd.Timestamp, str, str]] = [
-        (when, label, "rfc")
-        for when, label in load_rfc_events(checklist_path)
-        if window_start <= when <= window_end
-    ] + [
-        (when, label, "software_support")
-        for when, label in load_software_support_events(software_support_path)
-        if window_start <= when <= window_end
-    ] + [
-        (when, label, "distro_ship")
-        for when, label in load_distro_ship_events(distro_ships_path)
-        if window_start <= when <= window_end
-    ] + [
-        (when, label, "cve")
-        for when, label in load_cve_events(cve_path, min_severity=cve_min_severity)
-        if window_start <= when <= window_end
-    ] + [
-        (when, label, "sentiment_positive")
-        for when, label in load_positive_sentiment_events(positive_sentiments_path)
-        if window_start <= when <= window_end
-    ] + [
-        (when, label, "sentiment_negative")
-        for when, label in load_negative_sentiment_events(negative_sentiments_path)
+        (when, label, category)
+        for category in selected
+        for when, label in loaders[category]()
         if window_start <= when <= window_end
     ]
     categorized.sort(key=lambda item: item[0])
@@ -410,7 +485,7 @@ def plot_tld_timeline(
                 attempts += 1
             placed_boxes.append(bbox)
 
-    out_path = Path(out_path) if out_path else Path(f"{tld}_timeline.png")
+    out_path = Path(out_path) if out_path else Path(default_timeline_filename(tld, selected))
     plt.savefig(out_path, dpi=SAVE_DPI)
     plt.close(fig)
     return out_path

@@ -334,7 +334,8 @@ def cmd_timeline(args: argparse.Namespace) -> int:
         args.input,
         args.tld,
         metrics=args.metrics if args.metrics else tp.DEFAULT_METRICS,
-        checklist_path=args.checklist,
+        events=tp.expand_event_names(args.events),
+        rfc_categories_path=args.rfc_categories,
         software_support_path=args.software_support,
         distro_ships_path=args.distro_ships,
         cve_path=args.cve_inventory,
@@ -439,10 +440,21 @@ def build_arg_parser() -> argparse.ArgumentParser:
     )
     timeline_parser.add_argument("--tld", required=True, help="Which TLD to plot.")
     timeline_parser.add_argument(
-        "--checklist",
+        "--events",
+        nargs="+",
+        default=["all"],
+        choices=[*tp.EVENT_COLORS, *tp.EVENT_ALIASES],
+        metavar="EVENT",
+        help="Which event categories to overlay: any of "
+        f"{', '.join([*tp.EVENT_COLORS, *tp.EVENT_ALIASES])} ('sentiment' = both "
+        "sentiment kinds). Default: all. Without --out, a subset gets its own "
+        "filename, e.g. <tld>_timeline_rfc_sentiment.png.",
+    )
+    timeline_parser.add_argument(
+        "--rfc-categories",
         default=None,
-        help="Path to an RFC checklist JSON (default: the project's bundled "
-        "dnssec_rfc_checklists.json).",
+        help="Path to an RFC categories CSV with rfc_number,release_date,category "
+        "columns (default: the project's data/dnssec_rfc_categories.csv).",
     )
     timeline_parser.add_argument(
         "--software-support",
@@ -489,7 +501,10 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "rrsig_prevalence).",
     )
     timeline_parser.add_argument(
-        "--out", default=None, help="Output PNG path (default: <tld>_timeline.png)."
+        "--out",
+        default=None,
+        help="Output PNG path (default: <tld>_timeline.png, or a subset-named "
+        "variant when --events isn't 'all').",
     )
     timeline_parser.set_defaults(func=cmd_timeline)
 
